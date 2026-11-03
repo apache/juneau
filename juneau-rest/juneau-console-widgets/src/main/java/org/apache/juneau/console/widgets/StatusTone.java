@@ -33,7 +33,7 @@ import java.util.stream.*;
  * <p>
  * {@link Badge#tone} uses this same enum and serializes it as the enum name.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>boolean</jk> <jv>ok</jv> = StatusTone.<jsm>isValid</jsm>(<js>"warning"</js>);  <jc>// true</jc>
  * 	String <jv>token</jv> = StatusTone.<jsf>WARNING</jsf>.wire();  <jc>// "warning"</jc>

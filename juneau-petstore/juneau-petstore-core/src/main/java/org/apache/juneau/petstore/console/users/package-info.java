@@ -17,7 +17,7 @@
 /**
  * Petstore console users page and its JSON endpoints.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/console"</js>, children={UsersRest.<jk>class</jk>})
  * 	<jk>public class</jk> PetstoreConsoleResource <jk>extends</jk> PetstoreConsolePage {}

@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
  * that content. It is commonly used for sidebars, pull quotes, advertisements, navigation links,
  * or other content that is related but not essential to the main content.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -96,9 +96,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#aside(Object...) aside(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

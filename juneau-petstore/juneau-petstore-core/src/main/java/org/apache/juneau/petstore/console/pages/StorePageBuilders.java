@@ -29,7 +29,7 @@ import org.apache.juneau.console.widgets.*;
 /**
  * Builder twin of the Store page (P1, {@code store.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, StorePageBuilders.<jsm>store</jsm>(QuickStats.<jsm>of</jsm>(store())));
  * </p>
@@ -44,7 +44,7 @@ public final class StorePageBuilders {
 	/**
 	 * The Store page's quick-stat tiles, shared by both render paths.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jk>var</jk> <jv>qs</jv> = QuickStats.<jsm>of</jsm>(<jv>store</jv>);
 	 * </p>

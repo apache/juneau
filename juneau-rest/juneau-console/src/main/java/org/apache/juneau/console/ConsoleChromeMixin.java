@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.util.*;
  * selected stock theme's override block if one other than {@code open} was selected, appended as
  * {@code html:root{}} blocks.
  *
- * <h5 class='section'>Mount styles:</h5>
+ * <h2 class='section'>Mount styles:</h2>
  * <p>
  * Both of the following arrangements serve the stylesheets at the {@link #CHROME_CSS_PATH} / {@link #THEME_CSS_DIR}
  * URLs with no path juggling by the host resource:
@@ -62,11 +62,11 @@ import org.apache.juneau.rest.server.util.*;
  * Each operation below therefore declares <i>both</i> its prefixed path and the same path minus the
  * {@code /juneau-console} prefix, so whichever one the arrangement leaves to be matched resolves.
  *
- * <h5 class='section'>Theme precedence</h5>
+ * <h2 class='section'>Theme precedence</h2>
  * <p>{@link Builder#theme(String)} if set, else {@link Theme#OPEN}. {@link Theme#OPEN}'s block is always appended
  * first; a selected non-{@code open} stock theme adds exactly one more block.
  *
- * <h5 class='section'>Stylesheet load-order band:</h5>
+ * <h2 class='section'>Stylesheet load-order band:</h2>
  * <p>
  * At equal cascade specificity, whichever of {@code juneau-views.css} and this class's {@code chrome.css} is
  * declared later in a page's {@code <head>} wins &mdash; the exact ambiguity the {@code overrideBlock} theme block
@@ -86,7 +86,7 @@ import org.apache.juneau.rest.server.util.*;
  * {@code juneau-views.css} in either order, which is precisely why the {@code html:root} fix exists: so the
  * active theme wins regardless of which order the consumer's links happen to appear in.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Stock chrome.css (Theme.OPEN tokens), mounted standalone at /juneau-console/*.</jc>
  * 	<ja>@Rest</ja>(mixins=ConsoleChromeMixin.<jk>class</jk>)
@@ -719,7 +719,7 @@ public class ConsoleChromeMixin {
 	 * carry one). This method is public so the FreeMarker {@code <@theme>} directive renders its inline block with
 	 * the same code that serves {@code chrome.css}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Theme <jv>theme</jv> = Theme.<jsm>create</jsm>(<js>"corporate"</js>)
 	 * 		.token(<js>"--jc-accent"</js>, <js>"#b45309"</js>)
@@ -770,7 +770,7 @@ public class ConsoleChromeMixin {
 	 * piece is {@link #SCHEME_SCRIPT} (stamped with the request's CSP nonce when one is set) followed by a link to the
 	 * shipped dark layer.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SchemeHead <jv>h</jv> = ConsoleChromeMixin.<jsm>schemeHead</jsm>(<jv>req</jv>, <js>"auto"</js>, <jk>true</jk>);
 	 * 	<jk>var</jk> <jv>attrs</jv> = <jv>h</jv>.htmlAttributes().isEmpty() ? <js>""</js> : <js>" "</js> + <jv>h</jv>.htmlAttributes();
@@ -848,7 +848,7 @@ public class ConsoleChromeMixin {
 	 * as {@link Theme.Builder}: the name shape, the reserved {@code --jc-chrome-*} namespace, the value grammar, and
 	 * one channel per name.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	String <jv>css</jv> = ConsoleChromeMixin.<jsm>schemeOverrideBlock</jsm>(
 	 * 		Map.<jsm>of</jsm>(<js>"--jc-link"</js>, <js>"#6cb4ff"</js>), Map.<jsm>of</jsm>(<js>"--jc-focus"</js>, <js>"var(--jc-accent)"</js>));

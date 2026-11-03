@@ -46,7 +46,7 @@
  * {@link org.apache.juneau.rest.server.view.jsp.JspViewRenderer JspViewRenderer.class} explicitly in its own
  * {@code @Rest(responseProcessors=...)}.
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixinDefs=<ja>@Mixin</ja>(type=JspMixin.<jk>class</jk>, mergeIntoHost=<jk>true</jk>))
@@ -65,7 +65,7 @@
  * 	}
  * </p>
  *
- * <h5 class='section'>Engine-agnostic packaging:</h5>
+ * <h2 class='section'>Engine-agnostic packaging:</h2>
  *
  * <p>
  * The bridge module's main POM declares <b>only</b> the JSP API + JSTL impl in {@code provided}
@@ -86,7 +86,7 @@
  * missing dependency and linking to the "Choosing a JSP engine" matrix in
  * {@code JspViewSupport.md}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.View}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

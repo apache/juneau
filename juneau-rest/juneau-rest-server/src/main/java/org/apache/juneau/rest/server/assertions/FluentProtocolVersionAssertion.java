@@ -27,8 +27,7 @@ import org.apache.juneau.bct.assertions.*;
 /**
  * Used for fluent assertion calls against {@link HttpProtocolVersion} objects.
  *
- * <h5 class='topic'>Test Methods</h5>
- * <p>
+ * <h2 class='topic'>Test Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -47,8 +46,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
- * <p>
+ * <h2 class='topic'>Transform Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentProtocolVersionAssertion}
  * 	<ul class='javatreec'>
@@ -65,8 +63,7 @@ import org.apache.juneau.bct.assertions.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
- * <p>
+ * <h2 class='topic'>Configuration Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -77,7 +74,7 @@ import org.apache.juneau.bct.assertions.*;
  * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
  * </ul>
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *

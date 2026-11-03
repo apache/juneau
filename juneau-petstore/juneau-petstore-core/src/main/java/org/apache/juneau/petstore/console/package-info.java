@@ -21,7 +21,7 @@
  * Every page is a FreeMarker template rendered inside the {@code base.ftlh} console chrome, mounted beside the
  * unchanged {@code /petstore} API and sharing its {@link org.apache.juneau.petstore.service.PetStore}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(children={PetStoreResource.<jk>class</jk>, PetstoreConsoleResource.<jk>class</jk>})
  * 	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {}

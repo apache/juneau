@@ -53,7 +53,7 @@ import org.apache.juneau.commons.beanquery.*;
  * {@code Object}, {@code Map} types a {@link LinkedHashMap} is not assignable to (such as {@code TreeMap}) and types
  * that cannot be planned get none, and {@code find}/{@code stream} then throw {@link IllegalStateException}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Custom mapper.</jc>
  * 	SqlRowMapper&lt;Person&gt; <jv>mapper</jv> = (<jv>rs</jv>, <jv>columns</jv>) -&gt; <jk>new</jk> Person(
@@ -91,7 +91,7 @@ public interface SqlRowMapper<T> {
 	 * {@code SELECT} order, with each value read via {@link ResultSet#getObject(int)} (the driver's natural type;
 	 * <jk>null</jk> for SQL {@code NULL}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SqlRowMapper&lt;Map&lt;String,Object&gt;&gt; <jv>mapper</jv> = SqlRowMapper.<jsm>map</jsm>();
 	 * </p>
@@ -119,7 +119,7 @@ public interface SqlRowMapper<T> {
 	 * A failure reading or setting a column throws a {@link BeanQueryExecutionException} naming the column.  The
 	 * returned mapper is thread-safe.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>record</jk> Task(String name, <jk>int</jk> age) {}
 	 * 	SqlRowMapper&lt;Task&gt; <jv>mapper</jv> = SqlRowMapper.<jsm>bean</jsm>(Task.<jk>class</jk>);
@@ -144,7 +144,7 @@ public interface SqlRowMapper<T> {
 	 * Same as {@link #bean(Class)}, but follows the bean rules of existing bean metadata, for example the metadata of
 	 * the serializer that renders the rows, so column names match the property names it emits.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BeanConfigContext <jv>config</jv> = BeanConfigContext.<jsm>create</jsm>().propertyNamer(PropertyNamerDLC.<jsf>INSTANCE</jsf>).build();
 	 * 	SqlRowMapper&lt;Task&gt; <jv>mapper</jv> = SqlRowMapper.<jsm>bean</jsm>(BeanMeta.<jsm>of</jsm>(Task.<jk>class</jk>, <jv>config</jv>));

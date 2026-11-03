@@ -32,7 +32,7 @@ import org.apache.juneau.commons.lang.*;
  * <p>
  * Provides assertions for various common POJO types.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
  *
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.lang.*;
  * <p>
  * Provides simple testing that {@link Throwable Throwables} are being thrown correctly.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
  *
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.lang.*;
  * 		.message().contains(<js>"Bad thing happened."</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
@@ -73,7 +73,7 @@ public class Assertions {
 	 * Various transform methods such as {@link FluentListAssertion#asItem(int)} and {@link FluentBeanAssertion#asProperty(String)}
 	 * return generic any-assertions so that they can be easily transformed into other assertion types.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -101,7 +101,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on an array of POJOs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -129,7 +129,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Java bean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -158,7 +158,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a list of Java beans.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -187,7 +187,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Boolean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -213,7 +213,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a boolean array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -245,7 +245,7 @@ public class Assertions {
 	 * more tied to general byte arrays and the latter returns an assertion more tied to dealing with binary streams
 	 * that can be decoded or transformed into a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -277,7 +277,7 @@ public class Assertions {
 	 * more tied to general byte arrays and the latter returns an assertion more tied to dealing with binary streams
 	 * that can be decoded or transformed into a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -303,7 +303,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on the contents of an input stream.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -331,7 +331,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a char array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -357,7 +357,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a collection of POJOs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -389,7 +389,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Comparable.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -416,7 +416,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Date.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -442,7 +442,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a double array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -469,7 +469,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a float array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -496,7 +496,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on an int array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -523,7 +523,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on an Integer.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -549,7 +549,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a list of POJOs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -577,7 +577,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a stream of POJOs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -605,7 +605,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Long.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -633,7 +633,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a long array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -660,7 +660,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a map.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -689,7 +689,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Java Object.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -718,7 +718,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Java Object wrapped in an Optional.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -747,7 +747,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on the contents of a Reader.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -775,7 +775,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a short array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -802,7 +802,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a String.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -831,7 +831,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a list of Strings.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -860,7 +860,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Throwable.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -888,7 +888,7 @@ public class Assertions {
 	/**
 	 * Executes an arbitrary snippet of code and captures anything thrown from it as a Throwable assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -916,7 +916,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a Version.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -942,7 +942,7 @@ public class Assertions {
 	/**
 	 * Performs an assertion on a ZonedDateTime.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *

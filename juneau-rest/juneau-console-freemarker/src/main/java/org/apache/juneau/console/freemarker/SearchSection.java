@@ -25,7 +25,7 @@ import java.util.*;
  * Publishes {@code {schemaVersion:1, viewId, search}} on Enter and after a 250 ms pause in typing.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	SearchSection.<jsm>create</jsm>().placeholder(<js>"status:open"</js>).publishes(Topics.<jsm>filter</jsm>(<js>"search"</js>));
  * </p>

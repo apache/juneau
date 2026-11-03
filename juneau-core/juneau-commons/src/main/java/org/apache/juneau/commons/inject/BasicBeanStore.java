@@ -44,7 +44,7 @@ import org.apache.juneau.commons.settings.*;
  * <p>
  * This implementation is thread-safe and supports parent bean stores for hierarchical bean resolution.
  *
- * <h5 class='section'>Resolution order:</h5>
+ * <h2 class='section'>Resolution order:</h2>
  * <p>
  * Bean lookups consult the following sources in this order, returning the first match:
  * <ol>
@@ -54,7 +54,7 @@ import org.apache.juneau.commons.settings.*;
  * 	<li>Local default suppliers added via {@link #addDefaultSupplier(Class,Supplier) addDefaultSupplier} (memoizer-backed framework defaults).
  * </ol>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanStore} - Read-only bean lookup interface
  * 	<li class='jc'>{@link WritableBeanStore} - Writable bean store interface
  * </ul>
@@ -724,7 +724,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * without {@link Bean @Bean} is never invoked, even when <c>filter</c> is <jk>null</jk>.
 	 * Non-public methods are made accessible before invocation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource {
 	 * 		<ja>@Bean</ja>

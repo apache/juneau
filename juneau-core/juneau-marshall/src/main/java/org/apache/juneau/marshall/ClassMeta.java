@@ -750,12 +750,12 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * The function is only invoked once per property name per {@link ClassMeta} instance. Subsequent calls
 	 * with the same name will return the cached value without re-invoking the function.
 	 *
-	 * <h5 class='section'>Thread Safety:</h5>
+	 * <h4 class='section'>Thread Safety:</h4>
 	 * <p>
 	 * This method is thread-safe. If multiple threads call this method simultaneously with the same property name,
 	 * the function may be invoked multiple times, but only one result will be cached and returned.
 	 *
-	 * <h5 class='section'>Usage:</h5>
+	 * <h4 class='section'>Usage:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Compute and cache an expensive property</jc>
 	 * 	Optional&lt;String&gt; <jv>computedValue</jv> = classMeta.<jsm>getProperty</jsm>(<js>"expensiveProperty"</js>, cm -&gt; {
@@ -869,7 +869,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * 	<li>All other types: empty array.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><c>ClassMeta&lt;Optional&lt;Integer&gt;&gt;</c> → <c>[Integer]</c>
 	 * 	<li><c>ClassMeta&lt;List&lt;Integer&gt;&gt;</c> → <c>[Integer]</c>

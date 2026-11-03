@@ -34,7 +34,7 @@
  * and Reactive-Streams {@code Publisher} support without duplicating any of the streaming / buffering /
  * SSE / NDJSON plumbing.
  *
- * <h5 class='topic'>Key types</h5>
+ * <h2 class='topic'>Key types</h2>
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor ReactiveResponseProcessor} &mdash; the response processor
  * 		(auto-registered via {@code ServiceLoader}, front-loaded ahead of {@code AsyncResponseProcessor}).
@@ -43,7 +43,7 @@
  * 	<li>{@link org.apache.juneau.rest.server.reactive.Adaptation Adaptation} &mdash; the single-value / streaming result of an adapter.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerReactive">Reactive-Streams Returns</a>
  * 	<li class='link'><a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>

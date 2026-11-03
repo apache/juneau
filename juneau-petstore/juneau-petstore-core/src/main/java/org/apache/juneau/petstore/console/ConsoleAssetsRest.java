@@ -29,13 +29,13 @@ import org.apache.juneau.rest.server.servlet.*;
  * a host that mounts {@link PetstoreConsoleResource} must also mount this resource as a sibling child for the pages
  * to be styled and for the console shell to start in a browser.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(children={PetstoreConsoleResource.<jk>class</jk>, ConsoleAssetsRest.<jk>class</jk>})
  * 	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ConsoleChromeMixin}
  * </ul>
  *

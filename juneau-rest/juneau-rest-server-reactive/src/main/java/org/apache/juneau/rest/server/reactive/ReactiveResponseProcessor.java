@@ -43,7 +43,7 @@ import jakarta.servlet.http.*;
  * Response processor that bridges <a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>
  * return values from {@code @RestOp} handlers to Juneau's response pipeline.
  *
- * <h5 class='topic'>Activation (opt-in)</h5>
+ * <h2 class='topic'>Activation (opt-in)</h2>
  * <p>
  * This processor ships in the opt-in {@code juneau-rest-server-reactive} module and is <b>not</b> wired
  * into {@code DefaultConfig}. A bare {@code juneau-rest-server} has zero reactive behavior. When the
@@ -52,7 +52,7 @@ import jakarta.servlet.http.*;
  * by {@code RestContext} via {@link ServiceLoader} and this processor is front-loaded ahead of
  * {@code AsyncResponseProcessor} in the chain &mdash; no {@code @Rest(responseProcessors=...)} entry required.
  *
- * <h5 class='topic'>What it handles</h5>
+ * <h2 class='topic'>What it handles</h2>
  * <p>
  * This is the single, shared spine for all reactive return-type support. It natively understands the
  * JDK type {@link java.util.concurrent.Flow.Publisher Flow.Publisher&lt;T&gt;} (no external dependency
@@ -66,7 +66,7 @@ import jakarta.servlet.http.*;
  * and collapse onto the existing {@link AsyncResponseProcessor} async path, inheriting its timeout,
  * completion-executor ({@code @Rest(asyncCompletionExecutor)}), and MDC bridging behavior for free.
  *
- * <h5 class='topic'>Response shapes for multi-value streams</h5>
+ * <h2 class='topic'>Response shapes for multi-value streams</h2>
  * <p>
  * A streaming publisher is rendered as one of three shapes, selected by the negotiated response media
  * type (the handler's {@link RestResponse#setContentType(String) Content-Type}, then the request
@@ -87,7 +87,7 @@ import jakarta.servlet.http.*;
  * 		so a slow producer never blocks the request thread.
  * </ul>
  *
- * <h5 class='topic'>Backpressure</h5>
+ * <h2 class='topic'>Backpressure</h2>
  * <p>
  * Streaming subscribers request one element at a time ({@code request(1)} on subscribe and again after
  * each frame is written and flushed). Because writing to the servlet output stream blocks until the
@@ -95,7 +95,7 @@ import jakarta.servlet.http.*;
  * client's drain rate and the server-side buffer does not grow without bound. Buffer-shape subscribers
  * request {@link Long#MAX_VALUE} since the collection is bounded by the publisher's own completion.
  *
- * <h5 class='topic'>Threading, executors, and MDC</h5>
+ * <h2 class='topic'>Threading, executors, and MDC</h2>
  * <p>
  * Buffer-shape responses route through {@link AsyncResponseProcessor} and therefore honor
  * {@code @Rest(asyncCompletionExecutor)} and the SLF4J MDC bridge. Streaming-shape
@@ -105,7 +105,7 @@ import jakarta.servlet.http.*;
  * {@code onNext} / terminal callback via {@link MdcAsyncListener} so log statements emitted while writing
  * a frame see the request's diagnostic context.
  *
- * <h5 class='topic'>Synchronous fallback</h5>
+ * <h2 class='topic'>Synchronous fallback</h2>
  * <p>
  * In environments where {@link HttpServletRequest#startAsync()} is unsupported (notably Juneau's
  * {@code MockServletRequest}), streaming subscribes synchronously and blocks the request thread until

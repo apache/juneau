@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link #init() init} time), or by registering an {@link McpServerConfig} bean in their {@code RestContext}
  * bean store.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/mcp")
  * public class MyMcpServlet extends org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet {

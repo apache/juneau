@@ -29,7 +29,7 @@ import java.util.function.*;
  * Only elements that pass the filter (i.e., the predicate returns <jk>true</jk>) are actually stored in
  * the underlying list.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Flexible Filtering:</b> Use any {@link Predicate} to filter elements based on any criteria
  * 	<li><b>Optional Filter:</b> Filter is optional when using the builder - defaults to accepting all elements
@@ -41,7 +41,7 @@ import java.util.function.*;
  * 	<li><b>Filter on Add:</b> Filtering happens when elements are added via {@link #add(Object)}, {@link #addAll(Collection)}, etc.
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a filtered list that only accepts non-null values</jc>
  * 	FilteredList&lt;String&gt; <jv>list</jv> = FilteredList
@@ -56,7 +56,7 @@ import java.util.function.*;
  * 	<jc>// list now contains: ["value1", "value3"]</jc>
  * </p>
  *
- * <h5 class='section'>Example - Custom List Type:</h5>
+ * <h2 class='section'>Example - Custom List Type:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a filtered ArrayList that only accepts positive numbers</jc>
  * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
@@ -70,7 +70,7 @@ import java.util.function.*;
  * 	<jv>list</jv>.add(10);  <jc>// Added</jc>
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>Filtering is applied to all element addition methods: {@link #add(Object)}, {@link #addAll(Collection)}, etc.
  * 	<li>If the filter returns <jk>false</jk>, the element is silently ignored (not added)
@@ -80,12 +80,12 @@ import java.util.function.*;
  * 	<li>The underlying list type is determined by the <c>inner</c> method (defaults to {@link ArrayList})
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe unless the underlying list is thread-safe. If thread safety is required,
  * use a thread-safe list type (e.g., {@link java.util.concurrent.CopyOnWriteArrayList}) via the <c>inner</c> method.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -100,7 +100,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	/**
 	 * Builder for creating {@link FilteredList} instances.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -131,7 +131,7 @@ public class FilteredList<E> extends AbstractList<E> {
 		 * This method can be called multiple times. When called multiple times, all filters are combined
 		 * using AND logic - an element must pass all filters to be added to the list.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Filter out null values</jc>
 		 * 	Builder&lt;String&gt; <jv>b</jv> = FilteredList.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -162,7 +162,7 @@ public class FilteredList<E> extends AbstractList<E> {
 		 * <p>
 		 * If not specified, a new {@link ArrayList} will be created during {@link #build()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Use a LinkedList</jc>
 		 * 	Builder&lt;String&gt; <jv>b</jv> = FilteredList.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -194,7 +194,7 @@ public class FilteredList<E> extends AbstractList<E> {
 		 * this function before being added to the list. If not specified, elements must already be of the
 		 * correct type (or <c>Object.class</c> is used if types were not specified, which accepts any type).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 		 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -254,7 +254,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * allowing any element types to be added. However, the generic type parameter should still be
 	 * specified for type safety.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Explicitly specify generic types using diamond operator</jc>
 	 * 	<jk>var</jk> <jv>list</jv> = FilteredList
@@ -352,7 +352,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * adding it to the list. This is useful for validation, debugging, or pre-checking elements before
 	 * attempting to add them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -379,7 +379,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * The returned predicate is the combined filter used internally by this list. If multiple filters
 	 * were set via the builder, they are combined using AND logic.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -496,25 +496,25 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * the type (if element type was specified when creating the list). After conversion and validation,
 	 * the element is added using the standard {@link #add(Object)} method, which applies the filter.
 	 *
-	 * <h5 class='section'>Type Conversion:</h5>
+	 * <h4 class='section'>Type Conversion:</h4>
 	 * <ul>
 	 * 	<li>If an element function is configured, the element is converted by applying the function
 	 * 	<li>If no function is configured, the object is used as-is (but may be validated if types were specified)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Type Validation:</h5>
+	 * <h4 class='section'>Type Validation:</h4>
 	 * <ul>
 	 * 	<li>If element type was specified (via {@link #create(Class)}), the converted element must be an instance of that type
 	 * 	<li>If {@link #create()} was used (no types specified), <c>Object.class</c> is used, which accepts any type
 	 * </ul>
 	 *
-	 * <h5 class='section'>Return Value:</h5>
+	 * <h4 class='section'>Return Value:</h4>
 	 * <ul>
 	 * 	<li>If the element is added successfully, returns <jk>true</jk>
 	 * 	<li>If the element is filtered out, returns <jk>false</jk>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -541,7 +541,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * This method iterates over all elements in the source collection and adds each one using {@link #addConverted(Object)},
 	 * which applies conversion and validation before adding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -579,7 +579,7 @@ public class FilteredList<E> extends AbstractList<E> {
 	 * Each element from the collections/arrays will be added using {@link #add(Object)}, which applies
 	 * conversion and filtering.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)

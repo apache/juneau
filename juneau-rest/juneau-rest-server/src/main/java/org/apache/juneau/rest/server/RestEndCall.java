@@ -46,7 +46,7 @@ import jakarta.servlet.http.*;
  * 	<li><js>"ExecTime"</js> - Execution time of the request.
  * </ul>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(...)
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
@@ -64,7 +64,7 @@ import jakarta.servlet.http.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
  * 	<li class='note'>
@@ -83,7 +83,7 @@ import jakarta.servlet.http.*;
  * 		overridden by the child class.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */

@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * and can be presented in the Swagger-UI for convenience. This includes the title, version, description, terms of service,
  * contact information, and license.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Info Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>license</c> ({@link License}) - License information for the exposed API
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Info <jv>info</jv> = <jsm>info</jsm>(<js>"Swagger Sample App"</js>, <js>"1.0.1"</js>)
@@ -82,7 +82,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#info-object">Swagger 2.0 Specification &gt; Info Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/api-general-info/">Swagger API General Info</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Session object for {@link JcsSerializer} that produces RFC 8785 canonical JSON.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * </ul>
  */

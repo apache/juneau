@@ -57,7 +57,7 @@ import org.apache.juneau.beanquery.sql.*;
  * 		ASCII; non-ASCII Unicode spaces are not trimmed.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Register Postgres as the dialect for a JDBC-backed context.</jc>
  * 	SqlBeanQueryContext&lt;Task&gt; <jv>ctx</jv> = SqlBeanQueryContext.<jsm>create</jsm>(Task.<jk>class</jk>)

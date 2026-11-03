@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.parser.*;
  * the whole object graph.  This is a format-neutral surface; the same cursor methods work across
  * every Juneau format that implements {@link TokenReadable} (the structural-token role).
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Tokenize a JSON document without materializing it.</jc>
  * 	<jk>try</jk> (TokenReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readTokens(<js>"{\"a\":1,\"b\":[true,null]}"</js>)) {
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.parser.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Contract:</h5>
+ * <h2 class='section'>Contract:</h2>
  * <ul>
  * 	<li>The cursor is <b>purely structural</b>.  It bypasses object swaps and {@code @Schema}
  * 		annotations &mdash; that is the role of the POJO databind path on
@@ -58,7 +58,7 @@ import org.apache.juneau.marshall.parser.*;
  * 	<li>Concrete implementations are not required to be thread-safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link TokenWriter} &mdash; the push-side counterpart.
  * 	<li>{@link TokenType} &mdash; the format-neutral token vocabulary.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

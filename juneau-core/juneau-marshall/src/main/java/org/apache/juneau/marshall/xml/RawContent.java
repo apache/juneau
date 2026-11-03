@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.xml;
  * parses via a StAX {@link javax.xml.stream.XMLStreamReader}, content containing a raw <js>'&lt;'</js> or a bare
  * <js>'&amp;'</js> will serialize correctly (browser-safe) but will NOT round-trip back through Juneau's parser.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jf'>{@link XmlFormat#RAWTEXT}
  * </ul>
  */

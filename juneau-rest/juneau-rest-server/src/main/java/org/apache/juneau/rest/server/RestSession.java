@@ -40,7 +40,7 @@ import jakarta.servlet.http.*;
 /**
  * Represents a single HTTP request.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

@@ -1578,6 +1578,40 @@ class TestPushPlanTestPyRows:
         assert "handoff(reserve=len(TEST_PY_NUMBERED_STEPS))" in (SCRIPTS_DIR / "push.py").read_text(encoding="utf-8")
 
 
+class TestJavadocHtmlStep:
+    def test_summary_parses_clean_and_counts(self, push_module):
+        assert push_module.javadoc_html_summary("Ignored 1.\njavadoc html check: clean.\n") == "clean"
+        assert push_module.javadoc_html_summary("javadoc html check: 12 diagnostics in 3 kinds.") == "12 diagnostics"
+        assert push_module.javadoc_html_summary("nope") is None
+        assert push_module.javadoc_html_summary(None) is None
+
+    def test_plan_lists_the_row_between_bom_and_build_only_when_the_script_exists(self, push_module, tmp_path):
+        scripts = tmp_path / "scripts"
+        scripts.mkdir()
+        (scripts / "test.py").write_text("", encoding="utf-8")
+        args = argparse.Namespace(test_only=True, tracker_audit=False, skip_tests=False)
+        plan = lambda: [i for i, _ in push_module.push_plan(args, scripts, tmp_path / "juneau", False)]
+        assert "javadoc-html" not in plan()
+        (scripts / "check-javadoc-html.py").write_text("", encoding="utf-8")
+        ids = plan()
+        assert ids.index("javadoc-html") < ids.index("build")
+        args.skip_tests = True
+        assert "javadoc-html" not in plan()
+
+    def test_command_passes_java_home_when_it_has_javadoc(self, push_module, tmp_path, monkeypatch):
+        (tmp_path / "bin").mkdir()
+        (tmp_path / "bin" / "javadoc").write_text("", encoding="utf-8")
+        monkeypatch.setenv("JAVA_HOME", str(tmp_path))
+        cmd = push_module.javadoc_html_command(Path("x.py"))
+        assert cmd[-2:] == ["--java-home", str(tmp_path)]
+        monkeypatch.setenv("JAVA_HOME", str(tmp_path / "missing"))
+        assert "--java-home" not in push_module.javadoc_html_command(Path("x.py"))
+
+    def test_push_runs_the_check_before_test_py(self):
+        src = (SCRIPTS_DIR / "push.py").read_text(encoding="utf-8")
+        assert src.index('"javadoc-html", "Javadoc HTML"') < src.index("Running tests via test.py")
+
+
 # ---------------------------------------------------------------------------------------
 # Workflow YAML guard: a .github/workflows file GitHub cannot parse refuses before the build and before the commit.
 # ---------------------------------------------------------------------------------------
@@ -1670,3 +1704,76 @@ class TestWorkflowYamlGuard:
         assert status == "error"
         assert _run(repo, "git", "ls-remote", "origin", "master").split()[0] == remote_head
         assert "not valid YAML" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------------------
+# AI-artifacts guard: stale juneau-docs static/ai refuses at the Prechecks row, not at the docs stage.
+# ---------------------------------------------------------------------------------------
+def _write_ai_check(docs_repo: Path, exit_code: int, text: str = "") -> None:
+    """Stub juneau-docs/scripts/check-ai-artifacts.py that records its argv, prints `text` and exits `exit_code`."""
+    script = docs_repo / "scripts" / "check-ai-artifacts.py"
+    script.write_text(
+        "import pathlib, sys\n"
+        "pathlib.Path(__file__).with_name('ai-argv.txt').write_text(' '.join(sys.argv[1:]))\n"
+        f"print({text!r})\nsys.exit({exit_code})\n", encoding="utf-8")
+
+
+class TestAiArtifactsCheck:
+    def test_prechecks_list_it_and_a_fresh_result_passes(self, push_module, docs_repo, juneau_root):
+        _write_ai_check(docs_repo, 0)
+        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
+
+        verdict = push_module.toolkit("checks").evaluate(listed["ai artifacts"])
+
+        assert verdict.status == "pass"
+        assert (docs_repo / "scripts" / "ai-argv.txt").read_text() == f"--juneau-root {juneau_root}"
+
+    def test_stale_artifacts_fail_and_name_the_regenerate_command(self, push_module, docs_repo, juneau_root):
+        _write_ai_check(docs_repo, 1, "- generate-ai-artifacts.py --check failed")
+        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
+        checks = push_module.toolkit("checks")
+
+        verdict = checks.evaluate(listed["ai artifacts"])
+
+        assert verdict.status == "fail"
+        hint = " ".join(verdict.hint)
+        assert "python3 scripts/generate-ai-artifacts.py" in hint and "--check failed" in hint
+        assert checks.evaluate(listed["ai artifacts"], dry_run=True).status == "warn"
+
+    def test_it_runs_even_when_juneau_docs_is_idle(self, push_module, docs_repo, juneau_root):
+        _write_ai_check(docs_repo, 1)
+        assert push_module.docs_active(docs_repo) is False
+
+        names = [c.name for c in push_module.prechecks(juneau_root)]
+
+        assert "ai artifacts" in names
+
+    def test_never_regenerates(self, push_module, docs_repo, juneau_root):
+        _write_ai_check(docs_repo, 1)
+        (docs_repo / "scripts" / "generate-ai-artifacts.py").write_text(
+            "open('regenerated', 'w').write('x')\n", encoding="utf-8")
+        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
+
+        push_module.toolkit("checks").evaluate(listed["ai artifacts"])
+
+        assert not (docs_repo / "regenerated").exists() and not (docs_repo / "scripts" / "regenerated").exists()
+
+    def test_missing_sibling_is_skipped_with_a_note(self, push_module, tmp_path):
+        lone = tmp_path / "lone" / "juneau"
+        lone.mkdir(parents=True)
+
+        verdict = push_module.toolkit("checks").evaluate(
+            push_module.ai_artifacts_check(lone, lone.parent / "juneau-docs"))
+
+        assert verdict.status == "pass" and "no juneau-docs sibling" in verdict.reason
+
+    def test_a_docs_checkout_without_the_script_is_skipped(self, push_module, docs_repo, juneau_root):
+        verdict = push_module.toolkit("checks").evaluate(
+            push_module.ai_artifacts_check(juneau_root, docs_repo))
+
+        assert verdict.status == "pass" and "skipped" in verdict.reason
+
+    def test_docs_only_prechecks_include_it(self, push_module, docs_repo, juneau_root):
+        names = [c.name for c in push_module.docs_only_prechecks(juneau_root, docs_repo)]
+
+        assert names == [*DOCS_CHECKS, "ai artifacts"]

@@ -31,13 +31,13 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Serializes POJO models to Hjson (Human JSON).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>application/hjson, application/hjson+json</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/hjson</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Hjson is a syntax extension of JSON designed for human-friendly configuration files and hand-edited data.
  * This serializer produces output that is valid Hjson and can be parsed back by {@link HjsonParser}.
@@ -70,7 +70,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * {@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...) MarshallingContext.Builder.swaps(Class...)} method.
  * Several default transforms are provided for transforming Dates, Enums, Iterators, etc.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -82,7 +82,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	<jv>compact</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.copy().useMultilineStrings(<jk>true</jk>).build();
  * </p>
  *
- * <h5 class='figure'>Example output - readable mode (Map of name/age):</h5>
+ * <h2 class='figure'>Example output - readable mode (Map of name/age):</h2>
  * <p class='bjson'>
  * 	{
  * 	  name: Alice
@@ -90,12 +90,12 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	}
  * </p>
  *
- * <h5 class='figure'>Example output - compact mode:</h5>
+ * <h2 class='figure'>Example output - compact mode:</h2>
  * <p class='bjson'>
  * 	{name:Alice,age:30}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>String values equal to <c>true</c>, <c>false</c>, <c>null</c>, or parseable as numbers
  * 		are automatically serialized in double quotes to prevent parse ambiguity.
  * 	<li class='note'>Empty strings are always serialized as <c>""</c>.
@@ -108,7 +108,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Hjson">Hjson</a>
  * 	<li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  * </ul>

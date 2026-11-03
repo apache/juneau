@@ -30,7 +30,7 @@ import org.apache.juneau.terminal.report.*;
  * {@code allowPopulators("terminal-view")}, and carries every setting as a flat {@code params} scalar.  It never sets
  * {@code dataUrl} or {@code refreshMs} on the region: the terminal view owns its own polling loop.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RegionDef <jv>region</jv> = TerminalViewDef.<jsm>create</jsm>(<js>"run"</js>)
  * 		.eventsUrl(<js>"/runs/42/events"</js>)

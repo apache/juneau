@@ -25,7 +25,7 @@ import java.util.*;
  * The single public parser for the {@code $}-search language (design §5.1).  Engines call it; a {@link BeanQuery}
  * itself carries only the raw strings.
  *
- * <h5 class='section'>Grammar</h5>
+ * <h2 class='section'>Grammar</h2>
  * <p>
  * A column's expression is one of:
  * <ul>
@@ -41,26 +41,26 @@ import java.util.*;
  * 		{@code $not} combine within one column.
  * </ul>
  *
- * <h5 class='section'>Literal dollar</h5>
+ * <h2 class='section'>Literal dollar</h2>
  * <p>
  * {@code $$} is a literal {@code $} everywhere.  A token that starts with {@code $$} is always a pattern (never an
  * operator), and every {@code $$} inside a literal decodes to a single {@code $}.  So {@code $$eq(x)} is the literal
  * text {@code $eq(x)}, while {@code $eq(x)} is the operator.
  *
- * <h5 class='section'>Quoting</h5>
+ * <h2 class='section'>Quoting</h2>
  * <p>
  * A quoted literal argument (design §5.1) may contain its own delimiter by doubling it &mdash; {@code ""} inside a
  * double-quoted value, or {@code ''} inside a single-quoted value, decodes to one literal quote character of that
  * same kind.  So {@code $eq("a""b")} is the literal text {@code a"b}.  This doubling decode is independent of, and
  * composes with, the {@code $$} &rarr; {@code $} decoding above.
  *
- * <h5 class='section'>Errors</h5>
+ * <h2 class='section'>Errors</h2>
  * <p>
  * An unknown {@code $name(...)}, a malformed expression (unclosed/unbalanced parentheses, junk after the close paren,
  * a stray comma, a wrong argument count), or an empty expression throws {@link BeanQuerySyntaxException}.  There is no
  * "incomplete draft" state on the server: a request-facing adapter catches the exception and surfaces the message.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> {
  * 		SearchExpression <jv>node</jv> = SearchExpressionParser.<jsm>parse</jsm>(<js>"$gt(10)"</js>, SearchOperatorSet.<jsm>standard</jsm>());

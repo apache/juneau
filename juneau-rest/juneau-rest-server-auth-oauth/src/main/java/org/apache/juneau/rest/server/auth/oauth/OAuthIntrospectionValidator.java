@@ -45,7 +45,7 @@ import com.nimbusds.oauth2.sdk.token.*;
  * round-trip and the JSON parsing.  A {@link TokenCache} (default: bounded LRU cache) short-circuits
  * the round-trip on repeated lookups within the configured TTL window.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jk>var</jk> validator = OAuthIntrospectionValidator.<jsm>create</jsm>()
@@ -56,14 +56,14 @@ import com.nimbusds.oauth2.sdk.token.*;
  * 		.build();
  * </p>
  *
- * <h5 class='topic'>Defaults</h5>
+ * <h2 class='topic'>Defaults</h2>
  * <ul>
  * 	<li>Cache TTL: 5 minutes, capped at 1 hour.
  * 	<li>Cache size: 1000 entries.
  * 	<li>Required scopes: none (scope enforcement lives on the validator, not the filter).
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link OAuthFilter}
  * 	<li class='jc'>{@link TokenValidator}

@@ -154,7 +154,7 @@ public class Entry {
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
@@ -187,7 +187,7 @@ public class Entry {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
@@ -286,7 +286,7 @@ public class Entry {
 	 * <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga in base 2.
 	 * <br><js>"k"</js>, <js>"m"</js>, and <js>"g"</js> can be used to identify kilo, mega, and giga in base 10.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
@@ -362,7 +362,7 @@ public class Entry {
 	 * <js>"K"</js>, <js>"M"</js>, <js>"G"</js>, <js>"T"</js>, and <js>"P"</js> can be used to identify kilo, mega, giga, tera, and penta in base 2.
 	 * <br><js>"k"</js>, <js>"m"</js>, <js>"g"</js>, <js>"t"</js>, and <js>"p"</js> can be used to identify kilo, mega, giga, tera, and p in base 10.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<code><js>"100K"</js> -&gt; 1024000</code>

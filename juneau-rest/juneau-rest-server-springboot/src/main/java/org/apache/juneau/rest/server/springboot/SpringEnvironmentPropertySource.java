@@ -38,7 +38,7 @@ import org.springframework.core.env.*;
  * {@code application.properties}, command-line args, environment variables, and any custom
  * {@code org.springframework.core.env.PropertySource} that Spring loads.
  *
- * <h5 class='section'>Lifecycle:</h5>
+ * <h2 class='section'>Lifecycle:</h2>
  * <p>
  * {@link SpringBeanStore} registers one instance per {@link org.springframework.context.ApplicationContext} in
  * {@link org.apache.juneau.commons.settings.Settings Settings}, shared by every store on that context.  It is removed
@@ -47,7 +47,7 @@ import org.springframework.core.env.*;
  * want explicit lifecycle control can construct the source directly and add it via {@code Settings.get().addSource(...)};
  * such instances are not shared.
  *
- * <h5 class='section'>Miss cache:</h5>
+ * <h2 class='section'>Miss cache:</h2>
  * <p>
  * Juneau's builder keys (e.g. {@code MarshallingContext.unsortedProperties}) are not valid Spring Boot property names,
  * so Spring walks every raw property source for each of them.  This source remembers up to 4096 such keys that were
@@ -58,14 +58,14 @@ import org.springframework.core.env.*;
  * call {@link #invalidate()} after such a change.  Setting {@code juneau.spring.missCache.disable=true} in the Spring
  * Environment before the first lookup turns the cache off.
  *
- * <h5 class='section'>Lazy resolution:</h5>
+ * <h2 class='section'>Lazy resolution:</h2>
  * <p>
  * The {@code Environment} is resolved lazily on the first {@link #get(String)} call so that
  * constructors that build the source from an {@code ApplicationContext} do not interact with the
  * context until a lookup actually happens.  This matters for tests that mock the context and assert
  * "no interactions" until a Spring-side bean is requested.
  *
- * <h5 class='section'>Ordering:</h5>
+ * <h2 class='section'>Ordering:</h2>
  * <p>
  * Because {@code Settings} walks property sources in reverse insertion order, the Spring
  * {@code Environment} bridge — registered when Spring creates the bean store — shadows any
@@ -73,7 +73,7 @@ import org.springframework.core.env.*;
  * {@code ConfigPropertySourceProvider}.  Programmatic {@code addSource()} calls made after the
  * Spring context is built (e.g. from a user-provided microservice {@code Config}) still win.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">@Value Annotation Basics</a>
  * 	<li class='jc'>{@link SpringBeanStore}
  * </ul>

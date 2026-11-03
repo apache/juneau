@@ -65,7 +65,7 @@ import jakarta.servlet.http.*;
  * {@code AuthFilterChain} itself implements {@link Filter} so it can be registered with a servlet container as a
  * single filter at {@code "/*"} and delegate internally to its composed {@link AuthFilter} entries.
  *
- * <h5 class='topic'>Registration</h5>
+ * <h2 class='topic'>Registration</h2>
  *
  * <p>
  * The preferred registration path is via {@code @Bean}; {@code JettyServerComponent} auto-mounts an
@@ -81,7 +81,7 @@ import jakarta.servlet.http.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='jc'>{@link AuthResult}
  * 	<li class='jc'>{@link AuthenticatedRequestWrapper}

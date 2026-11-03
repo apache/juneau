@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * <p>
  * The date and time that the message was sent (in "HTTP-date" format as defined by RFC 7231).
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Date general-header field represents the date and time at which the message was originated, having the same
  * semantics as orig-date in RFC 822.
@@ -79,7 +79,7 @@ import org.apache.juneau.http.*;
  * In practice, the date can be generated at any time during the message origination without affecting its semantic
  * value.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

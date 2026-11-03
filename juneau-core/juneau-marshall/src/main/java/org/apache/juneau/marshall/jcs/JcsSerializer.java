@@ -28,12 +28,12 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to canonical JSON per RFC 8785 (JCS).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * 	Produces media type: <bc>application/jcs+json</bc>
  * </p>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * 	JCS (JSON Canonicalization Scheme) produces a deterministic, byte-for-byte canonical
  * 	representation of JSON, enabling reliable cryptographic operations such as hashing and
@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Array element order is preserved (not sorted).
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a bean.</jc>
  * 	MyBean <jv>bean</jv> = <jk>new</jk> MyBean().name(<js>"Alice"</js>).age(30);
@@ -62,17 +62,17 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>json</jv> = Jcs.<jsm>of</jsm>(<jv>bean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bjson'>
  * 	{<jok>"age"</jok>:<jov>30</jov>,<jok>"name"</jok>:<jov>"Alice"</jov>}
  * </p>
  *
- * <h5 class='figure'>Example output with nested object:</h5>
+ * <h2 class='figure'>Example output with nested object:</h2>
  * <p class='bjson'>
  * 	{<jok>"address"</jok>:{<jok>"city"</jok>:<jov>"Denver"</jov>,<jok>"zip"</jok>:<jov>"80201"</jov>},<jok>"name"</jok>:<jov>"Alice"</jov>}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * 	<li class='note'>
  * 		JCS output is valid JSON and can be parsed using the standard {@link JsonParser}.
@@ -92,7 +92,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		<c>Accept: application/jcs+json</c> for canonical output.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Jcs">JCS</a>
  * 	<li class='jc'>{@link Jcs}

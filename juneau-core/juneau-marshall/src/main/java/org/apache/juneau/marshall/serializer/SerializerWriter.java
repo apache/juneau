@@ -31,12 +31,12 @@ import org.apache.juneau.marshall.*;
  * Modeled after the Java ProcessBuilder class so that you can chain commands to reduce the need for string
  * concatenation for performance reasons.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>writer</jv>.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

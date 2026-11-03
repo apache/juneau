@@ -27,7 +27,7 @@
  * {@code juneau-rest-server-mcp-v20250618}), and a consumer binds one
  * at compile time by extending that revision's abstract servlet or composing its endpoint mixin.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerMcp">juneau-rest-server-mcp</a>
  * </ul>
  */

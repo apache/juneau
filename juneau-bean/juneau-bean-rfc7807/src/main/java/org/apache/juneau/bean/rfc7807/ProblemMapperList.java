@@ -46,7 +46,7 @@ import java.util.*;
  * and the server-side processor picks it up via {@code BeanStore.getBean(ProblemMapper.class)} without
  * needing a list wrapper.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ProblemMapper}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">RFC 7807 / 9457 Problem Details</a>
  * </ul>

@@ -29,7 +29,7 @@ import java.util.*;
  * single central interception point ({@link RichLogger#log(java.util.logging.LogRecord)}), not per logger instance.  The
  * "on {@link RichLogger}" framing is about API home ({@link RichLogger#context()}), not about per-instance scoping.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> (LogContext.Scope <jv>c</jv> = RichLogger.<jsm>context</jsm>().with(<js>"requestId"</js>, <jv>id</jv>)) {
  * 		<jc>// Every record logged in this scope automatically carries requestId.</jc>
@@ -37,33 +37,33 @@ import java.util.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Nesting semantics:</h5>
+ * <h2 class='section'>Nesting semantics:</h2>
  * <p>
  * Classic MDC save/restore: {@link #with(String, Object)} records the key's <i>previous</i> value (or "absent") before
  * overwriting, and {@link Scope#close()} restores exactly that prior state &mdash; never a blanket clear.  Nested scopes on
  * the same key are safe: closing the inner scope restores the outer value, not the empty state.  {@link #with(Map)}
  * restores all entries in one {@link Scope#close()}.
  *
- * <h5 class='section'>Null policy:</h5>
+ * <h2 class='section'>Null policy:</h2>
  * <p>
  * {@link #with(String, Object)} rejects a <jk>null</jk> key.  A <jk>null</jk> value means "remove this key for the scope's
  * duration" &mdash; a <jk>null</jk> is never stored, so {@link #snapshot()} (an immutable {@link Map#copyOf(Map) copy}) never
  * blows up on a null key or value.
  *
- * <h5 class='section'>Thread confinement (v1):</h5>
+ * <h2 class='section'>Thread confinement (v1):</h2>
  * <p>
  * This context is <b>thread-confined only</b>.  It is not inherited by child threads, not propagated across executor or
  * {@link java.util.concurrent.CompletableFuture} boundaries, and is <b>not</b> SLF4J MDC and is <b>not</b> restored by
  * {@code MdcAsyncListener}.  Apps that rely on SLF4J MDC on an async-completion thread keep it; apps that rely on
  * {@code LogContext} do not (except the REST debug-pipeline completion record, which carries it explicitly).
  *
- * <h5 class='section'>Scope discipline:</h5>
+ * <h2 class='section'>Scope discipline:</h2>
  * <p>
  * A {@link Scope} must be closed on the same thread that opened it (use try-with-resources).  A forgotten
  * {@link Scope#close()} leaves the entry live on that thread and is visible on the next {@link #get(String)} on the same
  * thread &mdash; the leak is the caller's, not the framework's.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RichLogger#context()}
  * 	<li class='jc'>{@link LogRecordContext}
  * </ul>

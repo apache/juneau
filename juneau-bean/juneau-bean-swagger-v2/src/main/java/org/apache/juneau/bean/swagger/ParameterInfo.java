@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * defined by a combination of a name and location (in). Parameters can be passed in various locations including
  * the path, query string, headers, body, or form data.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Parameter Object supports the following fields:
  * <ul class='spaced-list'>
@@ -94,7 +94,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	</li>
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ParameterInfo <jv>info</jv> = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
@@ -113,7 +113,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#parameter-object">Swagger 2.0 Specification &gt; Parameter Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-parameters/">Swagger Describing Parameters</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -491,7 +491,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The name of the parameter.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Parameter names are case sensitive.
 	 * 	<li class='note'>

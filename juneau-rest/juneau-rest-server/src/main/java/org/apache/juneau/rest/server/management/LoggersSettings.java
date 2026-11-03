@@ -27,7 +27,7 @@ package org.apache.juneau.rest.server.management;
  * no such bean is present, {@link LoggersManager} resolves the default (writes disabled) and the set-level
  * endpoints respond {@code 403 Forbidden}.
  *
- * <h5 class='topic'>Backend selection (explicit)</h5>
+ * <h2 class='topic'>Backend selection (explicit)</h2>
  *
  * <p>
  * The {@code /loggers} endpoint drives a {@link LogBackend}.  By default that is
@@ -36,7 +36,7 @@ package org.apache.juneau.rest.server.management;
  * {@link Builder#backend(LogBackend)} &mdash; the endpoint never classpath-scans for, and then drives, a backend
  * the operator did not choose.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LoggersManager}
  * 	<li class='jc'>{@link LogBackend}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>

@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link InfoMixin mixin} flavor uses, so the two forms cannot drift.  Extends {@link BasicRestResource} so
  * the returned bean serializes via the {@code BasicUniversalConfig} set (mirrors {@code HealthResource}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link InfoMixin}
  * 	<li class='jc'>{@link InfoManager}
  * </ul>

@@ -30,7 +30,7 @@ import org.apache.juneau.petstore.service.*;
  * Formatting happens here, once, so the three engines differ only in markup and the flavor tests can compare their
  * cells exactly.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	List&lt;Map&lt;String,String&gt;&gt; <jv>rows</jv> = FlavorPets.<jsm>rows</jsm>(<jv>store</jv>);
  * 	<jv>rows</jv>.get(0).get(<js>"name"</js>);   <jc>// "Mr. Frisky"</jc>

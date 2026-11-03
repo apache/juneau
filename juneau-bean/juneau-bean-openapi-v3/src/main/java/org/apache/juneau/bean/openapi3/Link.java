@@ -33,7 +33,7 @@ import org.apache.juneau.commons.collections.*;
  * the caller's ability to successfully invoke it, rather it provides a known relationship and traversal mechanism
  * between responses and other operations.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Link Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>server</c> ({@link Server}) - A server object to be used by the target operation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a link to another operation</jc>
  * 	Link <jv>link</jv> = <jk>new</jk> Link()
@@ -56,7 +56,7 @@ import org.apache.juneau.commons.collections.*;
  * 		.setDescription(<js>"The id value returned in the response can be used as userId parameter in GET /users/{userId}"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#link-object">OpenAPI Specification &gt; Link Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/links/">OpenAPI Links</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

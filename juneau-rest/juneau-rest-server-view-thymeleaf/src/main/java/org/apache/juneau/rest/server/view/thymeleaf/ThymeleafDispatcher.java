@@ -42,7 +42,7 @@ import org.thymeleaf.templateresolver.*;
  * engine-resolution logic. Each flavor independently holds an instance of this worker and delegates
  * to it, so no flavor is another flavor's worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThymeleafMixin}
  * 	<li class='jc'>{@link ThymeleafServlet}
  * 	<li class='jc'>{@link ThymeleafResource}

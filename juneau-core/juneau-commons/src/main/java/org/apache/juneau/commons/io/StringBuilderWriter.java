@@ -28,7 +28,7 @@ import java.io.*;
  * {@link StringBuffer} to avoid synchronization overhead. This makes it more efficient for
  * single-threaded use cases where thread-safety is not required.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>No synchronization overhead - uses {@link StringBuilder} instead of {@link StringBuffer}
  * 	<li>Efficient string building - optimized for single-threaded string construction
@@ -37,7 +37,7 @@ import java.io.*;
  * 	<li>No-op close/flush - close and flush operations do nothing
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Building strings efficiently in single-threaded contexts
  * 	<li>Capturing output from APIs that require a Writer
@@ -45,7 +45,7 @@ import java.io.*;
  * 	<li>Performance-critical string building where synchronization is not needed
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
  * 	StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter();
@@ -63,7 +63,7 @@ import java.io.*;
  * 	<jc>// sb now contains "test"</jc>
  * </p>
  *
- * <h5 class='section'>Comparison with StringWriter:</h5>
+ * <h2 class='section'>Comparison with StringWriter:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>StringWriter:</b> Uses {@link StringBuffer} (thread-safe, synchronized)
  * 	<li><b>StringBuilderWriter:</b> Uses {@link StringBuilder} (not thread-safe, faster)
@@ -71,13 +71,13 @@ import java.io.*;
  * 	<li><b>StringBuilderWriter:</b> Suitable for single-threaded scenarios where performance matters
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is <b>not thread-safe</b>. It uses a {@link StringBuilder} internally, which is not
  * synchronized. If multiple threads need to write to the same StringBuilderWriter instance,
  * external synchronization is required.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
  */
@@ -94,7 +94,7 @@ public class StringBuilderWriter extends Writer {
 	 * <p>
 	 * Creates a new StringBuilderWriter with the default initial capacity (16 characters).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter();
 	 * 	<jv>writer</jv>.write(<js>"Hello"</js>);
@@ -113,7 +113,7 @@ public class StringBuilderWriter extends Writer {
 	 * performance if you know approximately how large the resulting string will be, avoiding
 	 * multiple buffer reallocations.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Pre-allocate buffer for known size</jc>
 	 * 	StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter(1000);
@@ -122,7 +122,7 @@ public class StringBuilderWriter extends Writer {
 	 *
 	 * @param initialSize The initial capacity of the internal StringBuilder in characters.
 	 *                    Must be non-negative.
-	 * @throws IllegalArgumentException If <tt>initialSize</tt> is negative.
+	 * @throws IllegalArgumentException If <c>initialSize</c> is negative.
 	 */
 	public StringBuilderWriter(int initialSize) {
 		req(initialSize >= 0, "Argument 'initialSize' cannot be negative.");
@@ -138,7 +138,7 @@ public class StringBuilderWriter extends Writer {
 	 * this writer will be appended to the provided StringBuilder. This is useful when you
 	 * want to write to a StringBuilder that you already have a reference to.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<js>"Prefix: "</js>);
 	 * 	StringBuilderWriter <jv>writer</jv> = <jk>new</jk> StringBuilderWriter(<jv>sb</jv>);

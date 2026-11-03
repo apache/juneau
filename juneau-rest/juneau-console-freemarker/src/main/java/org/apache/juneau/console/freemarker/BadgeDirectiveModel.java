@@ -41,7 +41,7 @@ import freemarker.template.*;
  * together, and {@code scopeBy} must be spelled {@code nav} or {@code view}, where the Java form defaults a missing
  * {@code by} to {@code nav}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@badge id="health" src="/rest/health" refreshMs=30000 tone="warning"&gt;
  * 	  {"visibleWhen": [{"field": "status", "op": "eq", "value": "degraded"}]}

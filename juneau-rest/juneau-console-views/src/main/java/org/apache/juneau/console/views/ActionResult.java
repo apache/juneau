@@ -31,7 +31,7 @@ import org.apache.juneau.commons.bean.*;
  * the {@code juneau-views.js} runtime can paint what actually happened (success, failure, a <i>named</i> refusal, or
  * an honest unknown) rather than what the request asked for.
  *
- * <h5 class='section'>Its own, independent contract version</h5>
+ * <h2 class='section'>Its own, independent contract version</h2>
  * <p>
  * The action-result is a <b>third</b> independently-versioned wire contract, alongside {@code VIEW_META}
  * and the FTL card/slot envelope.  Its
@@ -39,7 +39,7 @@ import org.apache.juneau.commons.bean.*;
  * {@code VIEW_META}: aliasing a per-view contract's version onto a separate contract couples two
  * unrelated client/server locksteps, so this contract versions itself.
  *
- * <h5 class='section'>Refusals are an opaque, namespaced code &mdash; not a framework-closed enum</h5>
+ * <h2 class='section'>Refusals are an opaque, namespaced code &mdash; not a framework-closed enum</h2>
  * <p>
  * A refusal's {@link #refusalCode} is an <b>opaque namespaced string</b>, not a framework-closed enum and not a
  * free-text message.  Refusals span two independent sources, and the framework must be able to render a refusal it
@@ -57,14 +57,14 @@ import org.apache.juneau.commons.bean.*;
  * The runtime renders ANY code as a visible <i>named</i> refusal without the framework needing to know consumer
  * concepts exist.
  *
- * <h5 class='section'>Reserved async terminal outcomes</h5>
+ * <h2 class='section'>Reserved async terminal outcomes</h2>
  * <p>
  * {@link Outcome#CANCELLED cancelled} and {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} are
  * <b>reserved from day one</b> (as {@code VIEW_META} reserved {@code rowActions} before it was implemented), even
  * though a synchronous write never emits them.  A future async/streaming variant can therefore emit them without a
  * second result-contract bump and a three-sided lockstep.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A success carrying the authoritative row read back from the remote system.</jc>
  * 	ActionResult <jv>ok</jv> = ActionResult.<jsm>success</jsm>(<jv>incidentReadBack</jv>);
@@ -76,7 +76,7 @@ import org.apache.juneau.commons.bean.*;
  * 	ActionResult <jv>again</jv> = ActionResult.<jsm>success</jsm>(<jv>incidentReadBack</jv>).replay(<jk>true</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link RowAction}
  * 	<li class='jc'>{@link org.apache.juneau.console.widgets.ModalDef}
@@ -174,20 +174,20 @@ public class ActionResult {
 	/**
 	 * The follow-up <b>read-only</b> form-source URL a receipt is painted from; omitted from the wire when unset.
 	 *
-	 * <h5 class='section'>Honored on {@link Outcome#SUCCESS success} only</h5>
+	 * <h4 class='section'>Honored on {@link Outcome#SUCCESS success} only</h4>
 	 * <p>
 	 * This is the mechanical form of <i>a receipt must never look like a receipt for a write that didn't happen</i>.
 	 * On a failure, a refusal, an unknown, or a transport failure this field is <b>ignored</b>, no follow-up GET is
 	 * issued, and nothing is swapped &mdash; so no result host can appear for a write that did not commit.
 	 *
-	 * <h5 class='section'>The served payload must not carry a form</h5>
+	 * <h4 class='section'>The served payload must not carry a form</h4>
 	 * <p>
 	 * The URL serves a {@code ModalDef}, and that payload <b>must not</b> declare a {@code form}.  A result host is
 	 * terminal by definition: the write already committed, so there is nothing left to gate.  A payload carrying
 	 * inputs is refused <i>visibly</i> rather than rendered read-only or silently stripped, because it is a consumer
 	 * authoring bug and should be visible as one.
 	 *
-	 * <h5 class='section'>It is a swap, not a new dialog</h5>
+	 * <h4 class='section'>It is a swap, not a new dialog</h4>
 	 * <p>
 	 * The runtime paints the receipt into the dialog that is <b>already open</b>, at the same layer depth, and only
 	 * when that dialog opted in with {@code ModalDef.keepOpenOnSubmit}.  Set on a result whose dialog did not opt in,
@@ -214,7 +214,7 @@ public class ActionResult {
 	 * Readability alias for {@link #success(Object) success(null)} &mdash; a {@link Outcome#SUCCESS success} result
 	 * that carries no row (e.g. a delete, or a navigate/redraw action).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Equivalent to ActionResult.success(null).message(...)</jc>
 	 * 	<jk>return</jk> ActionResult.<jsm>ok</jsm>().message(<js>"Deleted"</js>);
@@ -229,7 +229,7 @@ public class ActionResult {
 	/**
 	 * Readability alias for {@link #success(Object)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>return</jk> ActionResult.<jsm>ok</jsm>(<jv>store</jv>.updatePet(<jv>pet</jv>)).message(<js>"Saved"</js>);
 	 * </p>

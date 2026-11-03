@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.xml.*;
 /**
  * Parent class for all Juneau parsers.
  *
- * <h5 class='topic'>Valid data conversions</h5>
+ * <h2 class='topic'>Valid data conversions</h2>
  * <p>
  * Parsers can parse any parsable POJO types, as specified in the <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">POJO Categories</a>.
  *
@@ -51,6 +51,7 @@ import org.apache.juneau.marshall.xml.*;
  * Some examples of conversions are shown below...
  * </p>
  * <table class='styled'>
+ * 	<caption>Supported input data types</caption>
  * 	<tr>
  * 		<th>Data type</th>
  * 		<th>Class type</th>
@@ -119,6 +120,7 @@ import org.apache.juneau.marshall.xml.*;
  * If <code>Object.<jk>class</jk></code> is specified as the target type, then the parser automatically determines the
  * data types and generates the following object types...
  * <table class='styled'>
+ * 	<caption>JSON types and the object types they produce</caption>
  * 	<tr><th>JSON type</th><th>Class type</th></tr>
  * 	<tr><td>object</td><td>{@link JsonMap}</td></tr>
  * 	<tr><td>array</td><td>{@link JsonList}</td></tr>
@@ -128,11 +130,11 @@ import org.apache.juneau.marshall.xml.*;
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  * </ul>
@@ -213,7 +215,7 @@ public class Parser extends MarshallingContextable {
 		 * When enabled, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
 		 * after parsing is complete.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -275,7 +277,7 @@ public class Parser extends MarshallingContextable {
 		 * When parse errors occur, this specifies the number of lines of input before and after the
 		 * error location to be printed as part of the exception message.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -336,7 +338,7 @@ public class Parser extends MarshallingContextable {
 		 * <p>
 		 * Class used to listen for errors and warnings that occur during parsing.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Define our parser listener.</jc>
 		 * 	<jc>// Simply captures all unknown bean property events.</jc>
@@ -395,7 +397,7 @@ public class Parser extends MarshallingContextable {
 		 * Applied as the fallback when no per-property
 		 * {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Substitute the empty value for any property whose wire value is null.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -430,7 +432,7 @@ public class Parser extends MarshallingContextable {
 		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 		 * the POJO.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser with trim-strings enabled.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
@@ -474,7 +476,7 @@ public class Parser extends MarshallingContextable {
 		 * because it may contain multiple independent POJOs to parse.
 		 * <br>Buffering would cause the parser to read past the current POJO in the stream.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser.
@@ -492,7 +494,7 @@ public class Parser extends MarshallingContextable {
 		 * 	MyBean <jv>myBean2</jv> = <jv>session</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		This only allows for multi-input streams for the following parsers:
 		 * 		<ul>
@@ -699,7 +701,7 @@ public class Parser extends MarshallingContextable {
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
@@ -758,7 +760,7 @@ public class Parser extends MarshallingContextable {
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
@@ -787,7 +789,7 @@ public class Parser extends MarshallingContextable {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>

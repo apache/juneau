@@ -23,11 +23,11 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Parent class for all classes that traverse POJOs.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -100,7 +100,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * <br>If the stack is exhausted before <c>maxDepth</c> is reached, the resulting {@link StackOverflowError} is
 		 * 	converted to a {@link MarshallingRecursionException MarshallingRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * 	<li class='note'>
@@ -109,7 +109,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 		silently truncated at {@link #maxDepth(int) maxDepth} (see the {@link ParentProperty} Javadoc).
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -172,7 +172,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 	{A:{B:{C:<jk>null</jk>}}}
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * 	<li class='note'>
@@ -180,7 +180,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 		references) by emitting the repeated node as <jk>null</jk> so the output round-trips cleanly.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer ignores recursions.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -225,7 +225,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * <p>
 		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -261,7 +261,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * with a {@link MarshallingRecursionException}, or {@link #ignoreRecursions()} to emit repeated nodes as
 		 * <jk>null</jk> so the output round-trips cleanly.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that truncates output beyond a depth of 20.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -270,7 +270,7 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link Builder#maxDepth(int)}
 		 * </ul>
 		 *

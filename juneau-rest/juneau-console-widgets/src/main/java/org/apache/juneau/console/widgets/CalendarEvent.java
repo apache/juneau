@@ -31,7 +31,7 @@ import org.apache.juneau.commons.http.*;
  * Bean-only ({@code juneau-console-widgets}): the emitter and runtime live in {@code juneau-console-views}.
  * Titles, tooltips, and labels are painted with {@code textContent} by the runtime, never as markup.
  *
- * <h5 class='section'>{@code end} is layout-significant, with split inclusivity:</h5>
+ * <h2 class='section'>{@code end} is layout-significant, with split inclusivity:</h2>
  * <ul>
  * 	<li><b>All-day (date-only {@code end}):</b> <b>inclusive</b>.  {@code start=2026-03-02}, {@code end=2026-03-04}
  * 		occupies <b>three</b> day cells.
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.http.*;
  * 		{@code start} is zero-duration and is rejected, as is any {@code end} before {@code start}.
  * </ul>
  *
- * <h5 class='section'>All-day agreement and the malformed set:</h5>
+ * <h2 class='section'>All-day agreement and the malformed set:</h2>
  * <p>
  * Agreement between {@code allDay} and the shape of {@code end} is decided by {@link #effectiveAllDay()}, never by
  * the raw {@link #allDay} field, so a <jk>null</jk> {@code allDay} paired with matching {@code start}/{@code end}
@@ -62,7 +62,7 @@ import org.apache.juneau.commons.http.*;
  * through {@link #retainWellFormed(Collection)} &mdash; the same rule on both paths.  Neither fails the whole
  * definition nor the whole month payload.  An omitted {@code end} is <b>not</b> malformed.
  *
- * <h5 class='section'>Timezone contract:</h5>
+ * <h2 class='section'>Timezone contract:</h2>
  * <p>
  * {@code start}/{@code end} are interpreted as an ISO-8601 local date ({@code yyyy-MM-dd}) or local date-time
  * ({@code yyyy-MM-ddTHH:mm}).  A trailing offset or {@code Z} is <b>fail-soft ignored, never rejected</b> &mdash; a

@@ -41,7 +41,7 @@ import org.apache.juneau.rest.server.guard.*;
  * <b>Why a guard rather than a filter chain?</b>  {@code AuthFilterChain} composes several mechanisms and is
  * fail-open by design, so a downstream guard decides.  With one mechanism, the op-level guard is the whole story.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// One bean gates every op on the resource.</jc>
  * 	<ja>@Bean</ja>

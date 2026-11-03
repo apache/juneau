@@ -28,7 +28,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This class wraps an underlying map and provides a fluent API for adding entries. All methods return
  * <c>this</c> to allow method chaining. The underlying map can be any {@link Map} implementation.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Fluent API:</b> All methods return <c>this</c> for method chaining
  * 	<li><b>Arbitrary Map Support:</b> Works with any map implementation
@@ -36,7 +36,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li><b>Transparent Interface:</b> Implements the full {@link Map} interface, so it can be used anywhere a map is expected
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a FluentMap wrapping a LinkedHashMap</jc>
  * 	FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;());
@@ -52,7 +52,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jv>map</jv>.aa(<jv>other</jv>);
  * </p>
  *
- * <h5 class='section'>Example - Conditional Building:</h5>
+ * <h2 class='section'>Example - Conditional Building:</h2>
  * <p class='bjava'>
  * 	<jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
  * 	<jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;
@@ -64,7 +64,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.ai(<jv>includeTest</jv>, <js>"test"</js>, <js>"true"</js>);    <jc>// Not added</jc>
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>All map operations are delegated to the underlying map
  * 	<li>The fluent methods ({@link #a(Object, Object)}, {@link #aa(Map)}, {@link #ai(boolean, Object, Object)}) return <c>this</c> for chaining
@@ -72,12 +72,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>The underlying map is stored by reference (not copied), so modifications affect the original map
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe unless the underlying map is thread-safe. If thread safety is required,
  * use a thread-safe map type (e.g., {@link java.util.concurrent.ConcurrentHashMap}).
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -108,7 +108,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * This is a convenience method that calls {@link #put(Object, Object)} and returns <c>this</c>
 	 * for method chaining.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;());
 	 * 	<jv>map</jv>.a(<js>"key1"</js>, <js>"value1"</js>).a(<js>"key2"</js>, <js>"value2"</js>);
@@ -130,7 +130,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * This is a convenience method that calls {@link #putAll(Map)} and returns <c>this</c>
 	 * for method chaining. If the specified map is <jk>null</jk>, this is a no-op.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;());
 	 * 	Map&lt;String, String&gt; <jv>other</jv> = Map.of(<js>"key1"</js>, <js>"value1"</js>, <js>"key2"</js>, <js>"value2"</js>);
@@ -154,7 +154,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * If the condition is <jk>false</jk>, the entry is not added and this method returns <c>this</c>
 	 * without modifying the map.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
 	 * 	<jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;
@@ -185,7 +185,7 @@ public class FluentMap<K,V> extends AbstractMap<K,V> {
 	 * If the predicate returns <jk>false</jk>, the entry is not added and this method returns <c>this</c>
 	 * without modifying the map.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentMap&lt;String, String&gt; <jv>map</jv> = <jk>new</jk> FluentMap&lt;&gt;(<jk>new</jk> LinkedHashMap&lt;&gt;())
 	 * 		.a(<js>"host"</js>, <js>"localhost"</js>)

@@ -32,13 +32,13 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Serializes POJO models to HOCON (Human-Optimized Config Object Notation).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Accepts <c>Accept</c> types:  <bc>application/hocon</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/hocon</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * HOCON is a superset of JSON used extensively in the JVM ecosystem for configuration files.
  * This serializer produces output that is valid HOCON and can be parsed back by {@link HoconParser}.
@@ -66,8 +66,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 		Non-primitive types (e.g. {@link Date Date}, {@link URI URI}) → converted via {@link ObjectSwap} before serialization.
  * </ul>
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
- * <p>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  * <ul class='spaced-list'>
  * 	<li>
  * 		{@link #DEFAULT} — readable, unquoted keys/values, <c>=</c> separator, root braces omitted (config-file style).
@@ -77,7 +76,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 		{@link #DEFAULT_COMPACT} — single-line compact output, JSON-compatible.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean</jc>
  * 	String <jv>hocon</jv> = HoconSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -87,7 +86,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	String <jv>hocon2</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean, root braces omitted):</h5>
+ * <h2 class='figure'>Example output (bean, root braces omitted):</h2>
  * <p class='bjson'>
  * name = myapp
  * port = 8080
@@ -99,7 +98,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * tags = [web, api, rest]
  * </p>
  *
- * <h5 class='figure'>Example output (with root braces — DEFAULT_BRACES):</h5>
+ * <h2 class='figure'>Example output (with root braces — DEFAULT_BRACES):</h2>
  * <p class='bjson'>
  * {
  *   name = myapp
@@ -108,18 +107,18 @@ import org.apache.juneau.marshall.swap.spi.*;
  * }
  * </p>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li class='note'>Substitutions (<c>${var}</c>) are never emitted — the serializer always writes resolved (concrete) values.
  * 	<li class='note'>Value concatenation is never emitted — the serializer always writes complete strings.
  * 	<li class='note'>Path expressions (<c>a.b.c = value</c>) are never emitted — the serializer always uses nested-brace form.
  * 	<li class='note'><c>include</c> directives are never emitted — these require file-system access outside the scope of a serializer.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HoconSupport">HOCON</a>
  * </ul>
  */

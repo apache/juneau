@@ -43,7 +43,7 @@ import org.apache.juneau.commons.lang.*;
  * 	<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>AND operations take precedence over OR operations (as expected).
  * 	<li class='note'>Whitespace is ignored.
  * 	<li class='note'><jk>null</jk> or empty expressions always match as <jk>false</jk>.

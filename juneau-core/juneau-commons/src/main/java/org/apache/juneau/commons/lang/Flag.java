@@ -29,7 +29,7 @@ import org.apache.juneau.commons.function.*;
  * where atomic operations are not required. It is useful in situations where you need to pass a mutable boolean
  * reference to lambdas, inner classes, or methods.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link java.util.concurrent.atomic.AtomicBoolean} instead.
  * 	<li class='note'>
@@ -37,7 +37,7 @@ import org.apache.juneau.commons.function.*;
  * 		(<c>true</c>/<c>false</c>/<c>null</c>), use {@link BooleanHolder} instead.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a flag to track if an operation was performed</jc>
  * 	Flag <jv>processed</jv> = Flag.<jsm>create</jsm>();
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.function.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * 	<li class='jc'>{@link BooleanHolder}
  * </ul>
@@ -65,7 +65,7 @@ public class Flag {
 	/**
 	 * Creates a new flag initialized to <jk>false</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
 	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
@@ -80,7 +80,7 @@ public class Flag {
 	/**
 	 * Creates a new flag with the specified initial state.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
@@ -102,7 +102,7 @@ public class Flag {
 	/**
 	 * Sets the flag to <jk>true</jk> and returns the previous value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
 	 * 	<jk>boolean</jk> <jv>wasSet</jv> = <jv>flag</jv>.getAndSet();  <jc>// Returns false, flag is now true</jc>
@@ -120,7 +120,7 @@ public class Flag {
 	/**
 	 * Sets the flag to <jk>false</jk> and returns the previous value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jk>boolean</jk> <jv>wasSet</jv> = <jv>flag</jv>.getAndUnset();  <jc>// Returns true, flag is now false</jc>
@@ -142,7 +142,7 @@ public class Flag {
 	 * This method is useful for conditional execution based on the flag state, particularly in lambda expressions
 	 * or method chains.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>initialized</jv> = Flag.<jsm>create</jsm>();
 	 *
@@ -169,7 +169,7 @@ public class Flag {
 	 * This method is useful for conditional execution based on the flag state, particularly in lambda expressions
 	 * or method chains.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>hasErrors</jv> = Flag.<jsm>create</jsm>();
 	 *
@@ -189,7 +189,7 @@ public class Flag {
 	/**
 	 * Returns <jk>true</jk> if the flag is set.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isSet());
@@ -202,7 +202,7 @@ public class Flag {
 	/**
 	 * Returns <jk>true</jk> if the flag is not set.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
 	 * 	<jsm>assertTrue</jsm>(<jv>flag</jv>.isUnset());
@@ -215,7 +215,7 @@ public class Flag {
 	/**
 	 * Sets the flag to <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
 	 * 	<jv>flag</jv>.set();
@@ -236,7 +236,7 @@ public class Flag {
 	 * This method uses a logical OR operation, so once the flag is set, it remains set regardless of subsequent
 	 * calls with <jk>false</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>create</jsm>();
 	 * 	<jv>flag</jv>.setIf(<jk>false</jk>);  <jc>// Flag remains false</jc>
@@ -255,7 +255,7 @@ public class Flag {
 	/**
 	 * Sets the flag to <jk>false</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Flag <jv>flag</jv> = Flag.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jv>flag</jv>.unset();

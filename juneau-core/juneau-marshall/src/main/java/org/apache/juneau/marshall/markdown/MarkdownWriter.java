@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Extends {@link SerializerWriter} to provide Markdown-specific output helpers for headings,
  * tables, lists, and inline formatting.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

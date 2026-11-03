@@ -30,7 +30,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * and optional handling for missing files. It's particularly useful when you need to read files
  * with specific encodings or handle cases where files may not exist.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Fluent API - all methods return <c>this</c> for method chaining
  * 	<li>Character encoding support - specify custom charset for file reading
@@ -38,7 +38,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Multiple file specification methods - accept File, String path, or Path
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Reading files with specific character encodings (UTF-8, ISO-8859-1, etc.)
  * 	<li>Handling optional configuration files that may not exist
@@ -46,7 +46,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Reading files where encoding must be explicitly specified
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
  * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
@@ -67,13 +67,13 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Character Encoding:</h5>
+ * <h2 class='section'>Character Encoding:</h2>
  * <p>
  * By default, the builder uses the system's default charset ({@link Charset#defaultCharset()}).
  * You can specify a custom charset using {@link #charset(Charset)} or {@link #charset(String)}.
  * This is important when reading files that were written with a specific encoding.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FileWriterBuilder} - Builder for file writers
  * 	<li class='jc'>{@link PathReaderBuilder} - Builder for Path-based readers
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
@@ -87,7 +87,7 @@ public class FileReaderBuilder {
 	/**
 	 * Creates a new builder.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"data.txt"</js>)
@@ -103,7 +103,7 @@ public class FileReaderBuilder {
 	/**
 	 * Creates a new builder initialized with the specified file.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	File <jv>file</jv> = <jk>new</jk> File(<js>"config.properties"</js>);
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>(<jv>file</jv>)
@@ -132,7 +132,7 @@ public class FileReaderBuilder {
 	 * method will return a {@link StringReader} with empty content instead of throwing a
 	 * {@link FileNotFoundException}. This is useful for optional configuration files.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Without allowNoFile - throws exception if file doesn't exist</jc>
 	 * 	Reader <jv>reader1</jv> = FileReaderBuilder.<jsm>create</jsm>()
@@ -158,7 +158,7 @@ public class FileReaderBuilder {
 	 * <p>
 	 * Boolean-arg form of {@link #allowNoFile()}, useful when the setting is conditional.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"optional.txt"</js>)
@@ -182,7 +182,7 @@ public class FileReaderBuilder {
 	 * this method returns an empty {@link StringReader}. Otherwise, it creates an
 	 * {@link InputStreamReader} with the specified character encoding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> (Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"data.txt"</js>)
@@ -213,7 +213,7 @@ public class FileReaderBuilder {
 	 * Specifying the encoding is important when reading files that were written with a specific
 	 * character encoding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"data.txt"</js>)
@@ -236,7 +236,7 @@ public class FileReaderBuilder {
 	 * This is a convenience method that accepts a charset name string and converts it to a
 	 * {@link Charset} using {@link Charset#forName(String)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"data.txt"</js>)
@@ -257,7 +257,7 @@ public class FileReaderBuilder {
 	/**
 	 * Sets the file to read from.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	File <jv>f</jv> = <jk>new</jk> File(<js>"config.properties"</js>);
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
@@ -276,7 +276,7 @@ public class FileReaderBuilder {
 	/**
 	 * Sets the file path to read from.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"/path/to/file.txt"</js>)
@@ -298,7 +298,7 @@ public class FileReaderBuilder {
 	 * Convenience overload for callers working with the NIO {@link Path} API, consistent with
 	 * {@link PathReaderBuilder#path(Path)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = FileReaderBuilder.<jsm>create</jsm>()
 	 * 		.file(Paths.<jsm>get</jsm>(<js>"/path/to/file.txt"</js>))

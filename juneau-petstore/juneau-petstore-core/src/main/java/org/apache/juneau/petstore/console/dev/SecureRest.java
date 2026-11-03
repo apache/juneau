@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * token or a wrong token, and shows the status and body inline.  The demo tokens come from
  * {@code StubBearerTokenValidator}: {@code petstore-user} (alice) and {@code petstore-admin} (admin).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bftl'>
  * 	&lt;@page tab="dev/secure" init=["/console/dev/secure/secure.js"]&gt;
  * 	&lt;@card id="try" title="Try it"&gt;

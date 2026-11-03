@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * (e.g. {@code /threads}) &mdash; eliminating the path-doubling that mixin-shaped ops would produce
  * when the servlet itself is mounted at {@code /admin/*}.
  *
- * <h5 class='section'>Default-deny security posture:</h5>
+ * <h2 class='section'>Default-deny security posture:</h2>
  *
  * <p>
  * Like the mixin, this servlet is annotated {@link Rest#guards() @Rest(guards=DenyAllGuard.class)},
@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link RestGuardList} factory. Pair the servlet with whatever authentication / authorization
  * story your service uses.
  *
- * <h5 class='figure'>Microservice registration:</h5>
+ * <h2 class='figure'>Microservice registration:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Bean</ja> Servlet admin() {
@@ -54,7 +54,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='jc'>{@link AdminProvider}
  * 	<li class='jc'>{@link DenyAllGuard}

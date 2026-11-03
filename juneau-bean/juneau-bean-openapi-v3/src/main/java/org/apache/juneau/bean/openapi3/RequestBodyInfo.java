@@ -31,7 +31,7 @@ import org.apache.juneau.commons.collections.*;
  * The Request Body Object describes a single request body that can be sent to an API operation. It includes
  * a description, whether the request body is required, and the content (media types) that the request body can contain.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Request Body Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -40,7 +40,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>required</c> (boolean) - Determines if the request body is required in the request (default is <jk>false</jk>)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a request body for JSON content</jc>
  * 	RequestBodyInfo <jv>requestBody</jv> = <jk>new</jk> RequestBodyInfo()
@@ -56,7 +56,7 @@ import org.apache.juneau.commons.collections.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#request-body-object">OpenAPI Specification &gt; Request Body Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-request-body/">OpenAPI Describing Request Body</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

@@ -43,7 +43,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * check (the returned document's {@code issuer} must exactly equal the requested issuer).  The metadata is fetched on
  * each call to {@link #discover()}; the result is not cached internally &mdash; callers cache themselves if needed.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jk>var</jk> oidc = OidcDiscoveryClient.<jsm>create</jsm>()

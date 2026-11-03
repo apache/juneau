@@ -37,7 +37,7 @@ import org.apache.juneau.commons.utils.*;
  * It supports various pattern formats for identifying classes and their members, with intelligent
  * matching that handles inner classes, method signatures, and field names.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a map that associates visibility levels with specific classes/methods</jc>
  * 	ReflectionMap&lt;Visibility&gt; <jv>map</jv> = ReflectionMap
@@ -52,7 +52,7 @@ import org.apache.juneau.commons.utils.*;
  * 	Stream&lt;Visibility&gt; <jv>methodVisibility</jv> = <jv>map</jv>.find(<jv>secretMethod</jv>);
  * </p>
  *
- * <h5 class='section'>Supported Pattern Formats:</h5>
+ * <h2 class='section'>Supported Pattern Formats:</h2>
  *
  * <p>
  * The following pattern formats are supported for mapping keys:
@@ -160,7 +160,7 @@ import org.apache.juneau.commons.utils.*;
  * 		</ul>
  * </ul>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>Method and constructor patterns without parentheses match any method signature.
  * 	<li>Method and constructor argument types can be specified with simple or fully qualified names.
@@ -169,7 +169,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Patterns are case-sensitive.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul class='seealso'>
  * 	<li class='jc'>{@link ClassInfo}
  * 	<li class='jc'>{@link MethodInfo}
@@ -187,7 +187,7 @@ public class ReflectionMap<V> {
 	/**
 	 * Builder for creating {@link ReflectionMap} instances.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -222,7 +222,7 @@ public class ReflectionMap<V> {
 		 * and associates them with the specified value. Multiple patterns can be specified in a single
 		 * key using comma-delimited format.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	Builder&lt;String&gt; <jv>builder</jv> = ReflectionMap.<jsm>create</jsm>(String.<jk>class</jk>);
 		 *
@@ -501,7 +501,7 @@ public class ReflectionMap<V> {
 	/**
 	 * Creates a new builder for constructing a {@link ReflectionMap}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -641,7 +641,7 @@ public class ReflectionMap<V> {
 	 * This method searches for mappings that match the given class, including patterns for
 	 * the fully qualified name, simple name, inner class names, and wildcard patterns.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -668,7 +668,7 @@ public class ReflectionMap<V> {
 	 * This method searches for mappings that match the given constructor, considering both
 	 * the declaring class and parameter types.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -694,7 +694,7 @@ public class ReflectionMap<V> {
 	 * This method searches for mappings that match the given field, considering both
 	 * the declaring class and field name.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -720,7 +720,7 @@ public class ReflectionMap<V> {
 	 * This method searches for mappings that match the given method, considering the
 	 * declaring class, method name, and parameter types.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>)

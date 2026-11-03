@@ -51,7 +51,7 @@ import org.apache.juneau.commons.bean.*;
  * or one a DataTables extension adds (SearchBuilder's {@code searchBuilder}, SearchPanes' {@code searchPanes}) - is
  * collected into {@link #getExtra()} instead of failing the parse.  The adapter ignores it.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(<js>"/releases/query"</js>)
  * 	<jk>public</jk> DataTablesResults&lt;Release&gt; queryReleases(<ja>@Content</ja> DataTablesRequest <jv>request</jv>) {

@@ -29,21 +29,21 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO metadata to HTTP responses as JSON-Schema.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Accept</c> types:  <bc>application/json+schema, text/json+schema</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/json</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
 
  * </ul>
@@ -104,7 +104,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * The description is the result of calling {@link ClassMeta#getName()}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...) JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -131,7 +131,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -151,7 +151,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions() JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
@@ -168,7 +168,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
@@ -189,7 +189,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 * <p>
 		 * This setting is ignored if {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs() JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class) JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 		 * </ul>
 		 *

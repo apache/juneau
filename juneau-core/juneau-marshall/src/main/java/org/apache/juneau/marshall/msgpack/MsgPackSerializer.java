@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to MessagePack.
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  *
  * Handles <c>Accept</c> types:  <bc>application/msgpack, octal/msgpack</bc>
  * <p>
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.stream.*;
  * backward-compatibility alias. The <c>Content-Type</c> emitted by the serializer is always the
  * RFC-standard <bc>application/msgpack</bc> value.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Java-to-MessagePack type mapping:
  * <ul class='spaced-list'>
@@ -60,11 +60,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>All other types → fallback to {@code toString()} as string
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackSupport">MessagePack</a>
 
  * </ul>

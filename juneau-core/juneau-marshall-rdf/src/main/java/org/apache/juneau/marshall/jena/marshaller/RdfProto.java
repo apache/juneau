@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * A pairing of {@link RdfProtoSerializer} and {@link RdfProtoParser} for RDF/PROTO binary format.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean or map to RDF/PROTO bytes</jc>
  * 	byte[] <jv>bytes</jv> = RdfProto.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jk>byte</jk>[] <jv>bytes</jv> = RdfProto.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

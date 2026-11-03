@@ -29,7 +29,7 @@ import org.apache.juneau.console.views.ActionResult.*;
  * A single in-memory, one-shot async job &mdash; the streamed-progress + terminal-result unit of a future async write
  * variant.
  *
- * <h5 class='section'>The stream URL IS the capability</h5>
+ * <h2 class='section'>The stream URL IS the capability</h2>
  * <p>
  * A job is addressed by its {@link #id() id}, an unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit
  * {@link java.security.SecureRandom} token minted by the {@link AsyncJobRegistry}, matching
@@ -39,7 +39,7 @@ import org.apache.juneau.console.views.ActionResult.*;
  * id</b> &mdash; there is no session cookie and no CSRF-on-GET.  Consequently the id is a secret:
  * {@link #toString()} never renders it.
  *
- * <h5 class='section'>Server-side hard limits (a data-egress disclosure bound)</h5>
+ * <h2 class='section'>Server-side hard limits (a data-egress disclosure bound)</h2>
  * <p>
  * A job caps its own streamed output at {@link #maxOutputBytes} bytes and terminates itself when that is exceeded,
  * and it terminates itself once past its {@link #deadline() hard-timeout deadline}.  Both are enforced <b>here</b>,
@@ -48,14 +48,14 @@ import org.apache.juneau.console.views.ActionResult.*;
  * subscribers is capped at {@link #maxSubscribers} (a browser reload plus one straggler), enforced through
  * {@link #acquireSubscriber()} / {@link #releaseSubscriber()}.
  *
- * <h5 class='section'>Progress buffer and resume</h5>
+ * <h2 class='section'>Progress buffer and resume</h2>
  * <p>
  * Progress events are kept, in order, for the job's whole life (bounded by the output cap) and are never trimmed, so
  * the position of an event never changes: {@code events[i]} is streamed with SSE id {@code i+1}.  A subscriber that
  * reconnects with a {@code Last-Event-ID} resumes exactly after the last event it saw; a fresh subscriber is
  * live-only (see {@link #resumeCursor(String)}).
  *
- * <h5 class='section'>Terminal outcomes reuse the frozen {@link ActionResult} contract</h5>
+ * <h2 class='section'>Terminal outcomes reuse the frozen {@link ActionResult} contract</h2>
  * <p>
  * A job settles exactly once, to an {@link ActionResult}: a producer-supplied {@link #complete(ActionResult)
  * success/failure/refusal/unknown}, a {@link #cancel() cancellation} (distinguishing {@link Outcome#CANCELLED
@@ -64,12 +64,12 @@ import org.apache.juneau.console.views.ActionResult.*;
  * off the frozen {@link Outcome} enum via its public {@code outcome} field &mdash; this contract is reused, never
  * re-versioned.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread-safe: a producer thread appends progress and settles the job while
  * 		subscriber threads drain it through {@link #awaitUpdate(int, Duration)}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link AsyncJobRegistry}
  * 	<li class='jc'>{@link AsyncJobsMixin}

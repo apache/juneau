@@ -32,7 +32,7 @@ import org.apache.juneau.rest.client.*;
  * Register one or more route handlers, or a catch-all handler, and the transport will dispatch
  * each {@link TransportRequest} to the appropriate handler without any real network activity.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>transport</jv> = MockHttpTransport.<jsm>builder</jsm>()
  * 		.on(<js>"GET"</js>, <js>"/hello"</js>, req -&gt; TransportResponse.<jsm>builder</jsm>()
@@ -48,7 +48,7 @@ import org.apache.juneau.rest.client.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

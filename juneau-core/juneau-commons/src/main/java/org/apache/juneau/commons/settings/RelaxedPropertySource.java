@@ -29,7 +29,7 @@ import java.util.concurrent.*;
  * environment variable such as {@code MY_SECTION_MY_KEY} satisfy a lookup for {@code MySection/myKey}, or
  * {@code MY_PROP} satisfy {@code my.prop} / {@code myProp}.
  *
- * <h5 class='section'>Candidate order</h5>
+ * <h2 class='section'>Candidate order</h2>
  * <p>
  * The requested name is always tried <b>verbatim first</b>, so exact-match behavior is preserved unchanged (an
  * already-canonical key resolves with no transformation, and a source that defines the literal name wins).  Only on a
@@ -52,7 +52,7 @@ import java.util.concurrent.*;
  * logical key and the decorator generates the environment-convention spellings to probe.  It never tries to reverse a
  * flat env name back into a {@code section/key} pair.
  *
- * <h5 class='section'>Usage</h5>
+ * <h2 class='section'>Usage</h2>
  * <p class='bjava'>
  * 	<jc>// Wrap the system-env source so env vars bind relaxedly.</jc>
  * 	<jv>settings</jv> = Settings.<jsm>create</jsm>().addSource(<jk>new</jk> RelaxedPropertySource(Settings.<jsf>SYSTEM_ENV_SOURCE</jsf>)).build();

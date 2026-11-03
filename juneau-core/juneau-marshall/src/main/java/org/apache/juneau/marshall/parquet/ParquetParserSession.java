@@ -178,7 +178,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Buffered array-element {@link RecordReader} for Parquet, bound to this live session.  Calls
 	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
 	 *
-	 * <h5 class='section'>Why this stays buffered (not O(1) streaming):</h5>
+	 * <h4 class='section'>Why this stays buffered (not O(1) streaming):</h4>
 	 * <p>
 	 * Although a Parquet file is logically row-shaped, it is <b>not</b> a forward, element-at-a-time
 	 * wire format.  Its metadata footer (schema + row-group/column-chunk offsets) lives at the

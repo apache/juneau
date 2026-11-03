@@ -22,7 +22,7 @@
  * INI is a classic configuration file format with sections (<c>[sectionName]</c>) and key-value pairs.
  * Beans map to INI with simple properties as key-value pairs and nested beans as named sections.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	String ini = IniSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  * 	MyBean bean = IniParser.<jsf>DEFAULT</jsf>.read(<jv>ini</jv>, MyBean.<jk>class</jk>);
@@ -32,7 +32,7 @@
  * 	MyBean bean = Ini.<jsf>to</jsf>(<jv>ini</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Ini">INI Basics</a>
  * </ul>
  */

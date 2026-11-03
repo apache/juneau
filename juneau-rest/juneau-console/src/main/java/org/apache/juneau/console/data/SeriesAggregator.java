@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.*;
  * A group value is the text of the row's value, or null (JSON <jk>null</jk>) when the row has none, so a missing
  * value and the text <js>"null"</js> are different groups.  The null group sorts first within its bucket.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/series/aggregate"</js>)
  * 	<jk>public void</jk> aggregate(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {

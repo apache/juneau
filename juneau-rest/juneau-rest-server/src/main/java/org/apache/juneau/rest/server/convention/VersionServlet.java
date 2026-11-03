@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * into a host at {@code /}, this companion declares the mount at the class level
  * ({@link Rest#paths() @Rest(paths="/version/*")}) and pins the op at {@code /*}.
  *
- * <h5 class='figure'>Microservice registration:</h5>
+ * <h2 class='figure'>Microservice registration:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Bean</ja> Servlet version() {
@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='jc'>{@link VersionProvider}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

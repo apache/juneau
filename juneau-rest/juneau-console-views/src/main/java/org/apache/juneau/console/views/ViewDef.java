@@ -32,14 +32,14 @@ import org.apache.juneau.commons.beanquery.*;
  * {@link Column#searchMeta(SearchOperatorSet)}).  A column that supplies its own set entirely replaces the
  * table-level set for that column.
  *
- * <h5 class='section'>Mutability</h5>
+ * <h2 class='section'>Mutability</h2>
  * <p>
  * Deliberately mutable, like {@link Column} and {@link RegionDef}: a {@link ViewDef} is a server-side authoring
  * bean built up once via fluent setters and {@link #column(Column)} calls while constructing a view,
  * not an immutable value object.  Callers must not mutate one concurrently from more than one
  * thread, and must not reuse one across requests unless every request treats it as read-only after construction.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A view with a table-level $eq-only default, and one column ("status") that replaces it with $in-only.</jc>
  * 	ViewDef <jv>view</jv> = ViewDef.<jsm>create</jsm>(<js>"releases"</js>)
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.beanquery.*;
  * 			.operators(SearchOperatorSet.<jsm>of</jsm>(SearchOperatorSet.<jsm>standard</jsm>().get(<js>"$in"</js>))));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link Column}
  * </ul>

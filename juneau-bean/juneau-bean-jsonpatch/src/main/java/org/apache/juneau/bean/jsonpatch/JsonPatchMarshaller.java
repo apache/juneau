@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.serializer.*;
  * via the RFC 6902 {@code "op"} member rather than the default {@code "_type"} property. This class hand-wires
  * that configuration once so callers don't have to repeat it.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	JsonPatchMarshaller <jv>m</jv> = <jk>new</jk> JsonPatchMarshaller();
@@ -54,12 +54,12 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = JsonPatchMarshaller.<jsm>of</jsm>(<jv>patch</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output:</h5>
+ * <h2 class='figure'>Example output:</h2>
  * <p class='bjson'>
  * 	[{<js>"op"</js>:<js>"add"</js>,<js>"path"</js>:<js>"/a/b/c"</js>,<js>"value"</js>:<js>"foo"</js>},{<js>"op"</js>:<js>"remove"</js>,<js>"path"</js>:<js>"/a/b/c"</js>}]
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonPatch">juneau-bean-jsonpatch</a>
  * </ul>

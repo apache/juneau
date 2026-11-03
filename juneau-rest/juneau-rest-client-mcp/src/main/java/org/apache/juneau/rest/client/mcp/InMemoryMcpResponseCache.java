@@ -28,7 +28,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * Entries are partitioned by {@code scope}, so the same {@code key} in two different scopes never collides.
  * A non-positive {@code ttlMs} passed to {@link #put(String, String, Object, long)} means the entry never expires.
  *
- * <h5 class='section'>Size bound / eviction policy:</h5>
+ * <h2 class='section'>Size bound / eviction policy:</h2>
  * <p>
  * The cache is bounded at {@link #DEFAULT_MAX_ENTRIES} total entries (across all scopes combined) by default,
  * overridable via {@link #InMemoryMcpResponseCache(int)}. Once the cap is reached, inserting one more entry

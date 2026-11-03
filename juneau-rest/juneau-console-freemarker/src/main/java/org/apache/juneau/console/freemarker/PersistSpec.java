@@ -31,7 +31,7 @@ import java.util.regex.*;
  * shape changes; saved state of another version is deleted.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	PersistSpec.<jsm>page</jsm>(<js>"app.orders"</js>).version(1)
  * 		.topics(Topics.<jsm>filter</jsm>(<js>"range"</js>), Topics.<jsm>zoom</jsm>(<js>"daily"</js>))

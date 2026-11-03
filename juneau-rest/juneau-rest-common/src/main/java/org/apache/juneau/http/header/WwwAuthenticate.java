@@ -27,7 +27,7 @@ import java.util.function.*;
  * <p>
  * Indicates the authentication scheme that should be used to access the requested entity.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -131,7 +131,7 @@ public class WwwAuthenticate extends HttpStringHeader {
 	 * presets ({@link #basic(String)} / {@link #bearer()} / {@link #digest()}) overwrite the scheme; auth-param setters
 	 * overwrite a previously-set param of the same name while preserving its original position.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = WwwAuthenticate.<jsm>create</jsm>()
 	 * 		.digest()
@@ -143,7 +143,7 @@ public class WwwAuthenticate extends HttpStringHeader {
 	 * 	<jc>// =&gt; "Digest realm=\"http-auth@example.org\", qop=\"auth,auth-int\", nonce=\"...\", algorithm=SHA-256"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link WwwAuthenticate}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7235'>RFC 7235 - HTTP/1.1 Authentication</a>
 	 * </ul>

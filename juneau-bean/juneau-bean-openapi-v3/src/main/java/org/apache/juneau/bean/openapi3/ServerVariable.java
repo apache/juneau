@@ -29,7 +29,7 @@ import org.apache.juneau.commons.collections.*;
  * used to define different server environments (e.g., development, staging, production) with different base URLs,
  * ports, or other variable parts of the server URL.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The ServerVariable Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -38,7 +38,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>description</c> (string) - An optional description for the server variable. CommonMark syntax MAY be used for rich text representation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ServerVariable <jv>x</jv> = <jsm>serverVariable</jsm>()
@@ -61,7 +61,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#server-variable-object">OpenAPI Specification &gt; Server Variable Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-host-and-base-path/">OpenAPI API Host and Base Path</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
@@ -105,12 +105,12 @@ public class ServerVariable extends OpenApiElement {
 	 * 		<li><code>Object</code>
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	enum_(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	enum_(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
@@ -148,7 +148,7 @@ public class ServerVariable extends OpenApiElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<js>"default"</js> has no meaning for required items.
@@ -209,7 +209,7 @@ public class ServerVariable extends OpenApiElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<js>"default"</js> has no meaning for required items.

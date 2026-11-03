@@ -45,7 +45,7 @@
  * {@code SqlDialect} hook under {@code org.apache.juneau.beanquery.sql}.  Commons
  * carries the query API only, not the SQL dialect types.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>static final</jk> InMemoryBeanQueryContext&lt;Person&gt; <jsf>PEOPLE</jsf> = InMemoryBeanQueryContext
  * 		.<jsm>create</jsm>(Person.<jk>class</jk>)

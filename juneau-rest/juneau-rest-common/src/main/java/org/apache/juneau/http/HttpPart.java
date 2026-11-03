@@ -23,7 +23,7 @@ package org.apache.juneau.http;
  * Implementations may supply their value eagerly or lazily (via a {@link java.util.function.Supplier}).
  * A {@code null} value signals that the part should be omitted from the request.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

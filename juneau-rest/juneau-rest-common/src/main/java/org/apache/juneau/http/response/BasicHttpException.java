@@ -45,7 +45,7 @@ import org.apache.juneau.http.header.*;
  * root — JLS &sect;8.1.2 forbids a generic {@code Throwable}.  The funnel therefore returns the base type and each leaf
  * keeps its covariant setter overrides.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

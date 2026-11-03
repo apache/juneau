@@ -25,7 +25,7 @@ import org.apache.juneau.commons.inject.*;
 /**
  * A list of {@link RestConverter} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */

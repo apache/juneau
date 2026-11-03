@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.*;
 /**
  * Basic implementation of a {@link SwaggerProvider}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */

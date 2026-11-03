@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * or perform other interactive functions. Unlike input elements, buttons can contain rich content
  * including text, images, and other HTML elements.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple submit button</jc>
  * 	Button <jv>btn1</jv> = <jsm>button</jsm>().type(<js>"submit"</js>).text(<js>"Submit Form"</js>);
@@ -67,9 +67,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#button(String, Object...) button(String, Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

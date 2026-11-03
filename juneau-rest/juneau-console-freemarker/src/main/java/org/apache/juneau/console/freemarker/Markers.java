@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.collections.*;
  * The built-in {@code markers} decorator: vertical mark lines at x values from a list, a same-origin {@code src}, a
  * {@code data:} topic, or the current time.  The lines ride a carrier series {@code juneau-markers-<n>}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Markers.<jsm>from</jsm>(<js>"/rest/releases"</js>).at(<js>"date"</js>).label(<js>"name"</js>).onClick(Topics.<jsm>custom</jsm>(<js>"app"</js>, <js>"release"</js>));
  * 	Markers.<jsm>now</jsm>(<js>"Today"</js>);

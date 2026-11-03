@@ -59,7 +59,7 @@ public class BeanAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jm'>{@code MarshallingContext.Builder<?>#annotations(Annotation...)}
 	 * </ul>
 	 */
@@ -238,7 +238,7 @@ public class BeanAnnotation {
 	 * <p>
 	 * Bridge and synthetic methods always return {@link Optional#empty()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> Parent {
 	 * 		<ja>@Bean</ja>(name=<js>"db"</js>)

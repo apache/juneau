@@ -25,7 +25,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal {@link ActionResult} when
  * the write is asynchronous.
  *
- * <h5 class='section'>Why this is not a new {@code RowAction} wire field</h5>
+ * <h2 class='section'>Why this is not a new {@code RowAction} wire field</h2>
  * <p>
  * Whether an action is asynchronous is a property of the <b>response</b>, not of the declared action: the same
  * {@link RowAction} POST returns either a terminal {@link ActionResult} (synchronous) or this pointer (asynchronous).
@@ -33,14 +33,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * {@code juneau-views.js} runtime routes to the streaming path purely by recognizing a {@link #streamUrl} in the 2xx
  * body.  It carries no data to render, only capability pointers, so it needs no version handshake of its own.
  *
- * <h5 class='section'>The URLs are capabilities</h5>
+ * <h2 class='section'>The URLs are capabilities</h2>
  * <p>
  * {@link #streamUrl} points at the SSE progress stream and {@link #cancelUrl} at the cancel endpoint; both embed the
  * job's unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit id (see {@link AsyncJob}), which is the whole of the
  * access control.  The browser {@code EventSource} that consumes {@link #streamUrl} cannot set a CSRF header,
  * which is precisely why the id must be unguessable rather than CSRF-gated.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link AsyncJobsMixin}
  * 	<li class='jc'>{@link AsyncJob}

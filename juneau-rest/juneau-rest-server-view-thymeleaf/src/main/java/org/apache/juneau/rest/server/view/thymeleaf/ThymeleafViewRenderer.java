@@ -38,7 +38,7 @@ import org.thymeleaf.context.*;
  * their own
  * {@link Rest#responseProcessors() responseProcessors} list.
  *
- * <h5 class='section'>Behavior:</h5>
+ * <h2 class='section'>Behavior:</h2>
  *
  * <ol class='spaced-list'>
  * 	<li>Inspect the response content. If the value is not a {@link ThymeleafView}, return
@@ -58,7 +58,7 @@ import org.thymeleaf.context.*;
  * 		dependency.
  * </ol>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThymeleafMixin}
  * 	<li class='jc'>{@link ThymeleafView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>

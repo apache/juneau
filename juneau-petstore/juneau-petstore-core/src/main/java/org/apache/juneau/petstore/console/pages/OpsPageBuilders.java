@@ -28,7 +28,7 @@ import org.apache.juneau.console.views.TableSpec.*;
 /**
  * Builder twins of the Operations pages: P6 Jobs ({@code jobs.ftlh}) and P7 Audit ({@code audit.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, OpsPageBuilders.<jsm>audit</jsm>());
  * </p>

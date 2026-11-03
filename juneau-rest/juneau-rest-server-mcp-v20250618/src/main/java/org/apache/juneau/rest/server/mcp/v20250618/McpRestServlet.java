@@ -25,7 +25,7 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  * Subclass this (rather than {@link McpRestServlet}) to expose a {@code 2025-06-18} endpoint; the
  * revision binding is a compile-time choice made by which class you extend.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/mcp")
  * public class MyMcpServlet extends McpRestServlet {

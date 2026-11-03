@@ -29,7 +29,7 @@ import java.util.function.*;
  * {@link RuntimeException}, making it compatible with standard {@link Consumer} usage while still allowing
  * the implementation to throw checked exceptions via {@link #acceptThrows(Object)}.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Exception support - allows checked exceptions to be thrown via {@link #acceptThrows(Object)}
@@ -37,7 +37,7 @@ import java.util.function.*;
  * 	<li>Dual interface - can be used as both Consumer and ThrowingConsumer
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Operations that may throw I/O exceptions (file writing, network operations)
  * 	<li>Validation operations that may throw validation exceptions
@@ -45,7 +45,7 @@ import java.util.function.*;
  * 	<li>Operations that need to propagate checked exceptions
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda with exception</jc>
  * 	ThrowingConsumer&lt;String&gt; <jv>fileWriter</jv> = (<jv>content</jv>) -&gt; {
@@ -63,7 +63,7 @@ import java.util.function.*;
  * 	<jv>fileWriter</jv>.accept(<js>"Hello World"</js>);  <jc>// May throw RuntimeException</jc>
  * </p>
  *
- * <h5 class='section'>Exception Handling:</h5>
+ * <h2 class='section'>Exception Handling:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@link #acceptThrows(Object)} - Throws checked exceptions directly
  * 	<li>{@link #accept(Object)} - Wraps checked exceptions in {@link RuntimeException}
@@ -71,7 +71,7 @@ import java.util.function.*;
  * 	<li>Use {@code accept} when you want standard Consumer behavior
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThrowingSupplier} - Supplier that throws exceptions
  * 	<li class='jc'>{@link ThrowingFunction} - Function that throws exceptions
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons</a>
@@ -111,7 +111,7 @@ public interface ThrowingConsumer<T> extends Consumer<T> {
 	 * This is the functional method that implementations must provide. It allows checked exceptions
 	 * to be thrown directly, unlike the standard {@link Consumer#accept(Object)} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ThrowingConsumer&lt;String&gt; <jv>validator</jv> = (<jv>value</jv>) -&gt; {
 	 * 		<jk>if</jk> (<jv>value</jv> == <jk>null</jk> || <jv>value</jv>.isEmpty()) {

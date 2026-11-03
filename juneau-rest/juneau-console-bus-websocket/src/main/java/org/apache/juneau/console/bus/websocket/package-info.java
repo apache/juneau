@@ -24,7 +24,7 @@
  * The servlet container supplies the implementation (for example Jetty's {@code jetty-ee11-websocket-jakarta-server}
  * or Tomcat's {@code tomcat-embed-websocket}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jk>public void</jk> contextInitialized(ServletContextEvent <jv>e</jv>) {
  *     BusWebSockets.<jsm>register</jsm>(<jv>e</jv>.getServletContext(), JobsRest.<jsf>BUS</jsf>);   <jc>// "/juneau-bus/ws/{sessionId}"</jc>

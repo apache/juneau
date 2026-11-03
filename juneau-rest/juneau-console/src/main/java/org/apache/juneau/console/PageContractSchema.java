@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.collections.*;
  * the cross-reference rules R-1..R-4 the schema cannot express. Used by {@code PageCapture} in dev
  * mode and by {@code PageContractAssert} in tests.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	List&lt;String&gt; <jv>errors</jv> = PageContractSchema.<jsm>get</jsm>().validate(<jv>contractJson</jv>);
  * 	<jk>if</jk> (! <jv>errors</jv>.isEmpty())

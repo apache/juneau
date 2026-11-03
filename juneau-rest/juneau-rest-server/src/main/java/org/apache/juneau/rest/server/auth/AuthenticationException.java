@@ -40,7 +40,7 @@ import org.apache.juneau.http.response.*;
  * response &mdash; clients use the challenge string to discover which authentication schemes the server
  * supports and to format their next request. AuthN guards in this package set it on every rejection.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Unauthorized}
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link ApiKeyGuard}

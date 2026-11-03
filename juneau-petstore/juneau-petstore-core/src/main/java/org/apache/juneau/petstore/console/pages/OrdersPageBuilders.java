@@ -26,7 +26,7 @@ import org.apache.juneau.console.views.TableSpec.*;
 /**
  * Builder twin of the Orders page (P5, {@code orders.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, OrdersPageBuilders.<jsm>orders</jsm>());
  * </p>

@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.*;
  * events on the calling writer.  No raw bytes are written by the walker; per-format encoding is
  * the {@link TokenWriter}'s job.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li>Object swaps and {@code @Schema} annotations <em>are</em> applied during the walk via
  * 		{@link MarshallingContext#toBeanMap(Object)} (e.g. {@code java.time} types are emitted as
  * 		ISO-8601 strings).  This is the explicit carve-out from the cursor's "purely structural"

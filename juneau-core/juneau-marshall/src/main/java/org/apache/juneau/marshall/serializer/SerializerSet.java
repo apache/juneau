@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Provides the following features:
  * <ul class='spaced-list'>
@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.*;
  * 		Clones existing groups and all serializers within the group in a single method call.
  * </ul>
  *
- * <h5 class='topic'>Match ordering</h5>
+ * <h2 class='topic'>Match ordering</h2>
  *
  * Serializers are matched against <c>Accept</c> strings in the order they exist in this group.
  *
@@ -57,7 +57,7 @@ import org.apache.juneau.marshall.*;
  * For example, calling <code>g.append(S1.<jk>class</jk>,S2.<jk>class</jk>).append(S3.<jk>class</jk>,S4.<jk>class</jk>)</code>
  * will result in the order <c>S3, S4, S1, S2</c>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>();
@@ -76,11 +76,11 @@ import org.apache.juneau.marshall.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>addressBook</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  * </ul>
@@ -185,7 +185,7 @@ public class SerializerSet {
 		 * <p>
 		 * The {@link NoInherit} class can be used to clear out the existing list of serializers before adding the new entries.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	SerializerSet.Builder <jv>builder</jv> = SerializerSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
@@ -376,7 +376,7 @@ public class SerializerSet {
 		 * <p>
 		 * The {@link Inherit} class can be used to insert existing entries in this group into the position specified.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	SerializerSet.Builder <jv>builder</jv> = SerializerSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *

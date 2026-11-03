@@ -25,7 +25,7 @@ import java.util.*;
  * Pass one or more {@link ConversionFinder} instances to the constructor. Finders are consulted in order before
  * falling back to the built-in {@link BasicConverter} reflection logic.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ConfigurableConverter <jv>converter</jv> = <jk>new</jk> ConfigurableConverter(
  * 		(<jv>in</jv>, <jv>out</jv>) -> <jv>in</jv> == String.<jk>class</jk> &amp;&amp; <jv>out</jv> == MyBean.<jk>class</jk>
@@ -36,7 +36,7 @@ import java.util.*;
  * 	MyBean <jv>bean</jv> = <jv>converter</jv>.to(<js>"value"</js>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BasicConverter}
  * 	<li class='jc'>{@link ConversionFinder}
  * 	<li class='jc'>{@link Conversion}

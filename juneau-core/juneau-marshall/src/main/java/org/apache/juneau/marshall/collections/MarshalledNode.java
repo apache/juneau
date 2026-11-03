@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.*;
  * <i>in place</i> — callers holding the underlying map/list see the change. Use {@link #copy()} for an independent
  * deep-copy snapshot.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Build a tree fluently (mutates a backing JsonMap/JsonList in place).</jc>
  * 	MarshalledNode <jv>node</jv> = MarshalledNode.<jsm>objectNode</jsm>()
@@ -56,7 +56,7 @@ import org.apache.juneau.marshall.*;
  * 	String <jv>x</jv> = <jv>node</jv>.get(<js>"b"</js>).get(0).asString();  <jc>// "x"</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

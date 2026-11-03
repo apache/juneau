@@ -33,7 +33,7 @@ import java.util.jar.*;
  * Wraps a {@link Manifest} so callers can read main-attribute and per-section entries via an
  * {@link Optional}-returning API without depending on the marshalling stack.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Load the manifest of the jar containing this class.</jc>
  * 	ManifestFile <jv>mf</jv> = <jk>new</jk> ManifestFile(MyClass.<jk>class</jk>);
@@ -45,7 +45,7 @@ import java.util.jar.*;
  * 	String <jv>sectionAttr</jv> = <jv>mf</jv>.get(<js>"my-section"</js>, <js>"some-key"</js>).orElse(<jk>null</jk>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is immutable and thread-safe once constructed.
  * </ul>
  */

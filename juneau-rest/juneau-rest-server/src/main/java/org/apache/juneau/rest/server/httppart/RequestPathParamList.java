@@ -48,7 +48,7 @@ import org.apache.juneau.rest.server.util.*;
  * 	<jk>public</jk> Object myMethod(RequestPathParamList <jv>path</jv>) {...}
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RequestPathParamList <jv>path</jv>) {
@@ -97,7 +97,7 @@ import org.apache.juneau.rest.server.util.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RequestPathParam}
  * 	<li class='ja'>{@link Path}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
@@ -400,6 +400,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * <p>
 	 * The behavior of path remainder is shown below given the path pattern "/foo/*":
 	 * <table class='styled'>
+	 * 	<caption>Path remainder behavior</caption>
 	 * 	<tr>
 	 * 		<th>URL</th>
 	 * 		<th>Path Remainder</th>
@@ -434,7 +435,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * 	</tr>
 	 * </table>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// REST method</jc>
 	 * 	<ja>@RestGet</ja>(<js>"/foo/{bar}/*"</js>)

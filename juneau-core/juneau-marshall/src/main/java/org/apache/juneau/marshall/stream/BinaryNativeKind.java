@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.stream;
  * Each enum value names the concrete native concept it represents.  New values may be added in
  * future minor releases as additional formats expose native opt-in metadata.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link TokenReader} &mdash; the cursor that exposes this discriminant.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>

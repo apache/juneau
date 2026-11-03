@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.*;
  * The License Object provides license information for the exposed API. This information helps clients understand
  * the terms under which the API can be used, including any restrictions or requirements.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The License Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.*;
  * 	<li><c>url</c> (string) - A URL to the license used for the API
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	License <jv>x</jv> = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
@@ -60,7 +60,7 @@ import org.apache.juneau.marshall.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#license-object">OpenAPI Specification &gt; License Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-general-info/">OpenAPI API General Info</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

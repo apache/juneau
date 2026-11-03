@@ -35,7 +35,7 @@ import jakarta.websocket.server.*;
  * {@code CsrfBoundary}, and {@code BusPolicy.allowedOrigins} when the policy has no boundary.  Any other boundary
  * type is refused: the handshake cannot apply a boundary it does not know.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// In a ServletContextListener (or the microservice's start hook):</jc>
  *   <jk>public void</jk> contextInitialized(ServletContextEvent <jv>e</jv>) {

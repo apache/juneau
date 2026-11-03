@@ -34,7 +34,7 @@ import org.apache.juneau.commons.collections.*;
  * <c>name</c> field since the header name is specified in the key, and it does not have a <c>required</c> field
  * since headers are always optional in HTTP.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Header Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>examples</c> (map of {@link Example}) - Examples of the header's potential value
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	HeaderInfo <jv>x</jv> = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
@@ -69,7 +69,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#header-object">OpenAPI Specification &gt; Header Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Distinct from the text-format {@link Prototext} marshaller (<c>text/protobuf</c>):  this marshaller emits the compact,
  * non-self-describing protobuf binary wire format and requires the target type on read.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using static convenience methods</jc>
  * 	byte[] <jv>protobuf</jv> = Protobuf.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jk>byte</jk>[] <jv>bytes</jv> = Protobuf.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * </ul>

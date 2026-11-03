@@ -33,7 +33,7 @@ import java.util.function.*;
  * collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. It's particularly
  * useful when you need to construct lists dynamically with conditional elements or from multiple sources.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Fluent API - all methods return <c>this</c> for method chaining
  * 	<li>Multiple add methods - single elements, varargs, collections, arrays
@@ -46,7 +46,7 @@ import java.util.function.*;
  * 	<li>Custom conversion functions - type conversion via {@link #elementFunction(Function)}
  * </ul>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
  * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -96,12 +96,12 @@ import java.util.function.*;
  * 		.buildFiltered();
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
  * properly synchronized.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">Collections Package</a>
  * 	<li class='jc'>{@link Maps}
  * 	<li class='jc'>{@link Sets}
@@ -120,7 +120,7 @@ public class Lists<E> {
 	/**
 	 * Creates a new list builder for the specified element type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
 	 * 		.add(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>)
@@ -217,7 +217,7 @@ public class Lists<E> {
 	 * 	<li>Convertible types - converted using {@link #elementFunction(Function)}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Mix different input types</jc>
 	 * 	List&lt;Integer&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -321,7 +321,7 @@ public class Lists<E> {
 	 * <p>
 	 * This is a convenience method that calls {@link #build()} and wraps the result in a {@link FluentList}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -340,7 +340,7 @@ public class Lists<E> {
 	/**
 	 * Builds the list as a {@link FilteredList}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -408,7 +408,7 @@ public class Lists<E> {
 	 * 	<li>Empty {@link Collection Collections}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -450,7 +450,7 @@ public class Lists<E> {
 	 * <p>
 	 * Note: Filtering is applied at build time, not when adding elements.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -536,7 +536,7 @@ public class Lists<E> {
 	 * The list will be wrapped using {@link Collections#synchronizedList(List)} to provide thread-safety.
 	 * This is useful when the list needs to be accessed from multiple threads.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a thread-safe list</jc>
 	 * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -559,7 +559,7 @@ public class Lists<E> {
 	 * When <c>true</c>, the list will be wrapped using {@link Collections#synchronizedList(List)} to provide thread-safety.
 	 * This is useful when the list needs to be accessed from multiple threads.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Conditionally create a thread-safe list</jc>
 	 * 	List&lt;String&gt; <jv>list</jv> = Lists.<jsm>create</jsm>(String.<jk>class</jk>)

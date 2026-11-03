@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * <p>
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Swagger</ja>(
  * 		license=<ja>@License</ja>(
@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>
 
@@ -60,7 +60,7 @@ public @interface License {
 	/**
 	 * <mk>name</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
@@ -74,7 +74,7 @@ public @interface License {
 	/**
 	 * <mk>url</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#licenseObject">Swagger License Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>

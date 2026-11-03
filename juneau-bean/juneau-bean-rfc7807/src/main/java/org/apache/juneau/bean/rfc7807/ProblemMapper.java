@@ -27,7 +27,7 @@ package org.apache.juneau.bean.rfc7807;
  * the resource's bean store); the server-side processor picks it up automatically when an opted-in operation
  * throws or returns a matching exception.
  *
- * <h5 class='section'>Discovery model</h5>
+ * <h2 class='section'>Discovery model</h2>
  * <p>
  * The processor collects all {@code ProblemMapper} beans visible from the resource's bean store, then picks the
  * <b>most-specific</b> mapper for the exception class hierarchy (a mapper whose {@link #getExceptionType()} is the
@@ -36,7 +36,7 @@ package org.apache.juneau.bean.rfc7807;
  * mapper is tried, finally falling back to the default {@code ProblemAdapters.fromException(...)} adaptation in
  * {@code juneau-rest-common} for {@code BasicHttpException} subclasses.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyDomainProblemMapper <jk>implements</jk> ProblemMapper&lt;MyDomainException&gt; {
  *
@@ -68,7 +68,7 @@ package org.apache.juneau.bean.rfc7807;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Problem}
  * 	<li class='jc'>{@link ProblemException}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">RFC 7807 / 9457 Problem Details</a>

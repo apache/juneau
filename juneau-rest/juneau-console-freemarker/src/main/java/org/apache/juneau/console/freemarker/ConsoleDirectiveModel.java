@@ -39,7 +39,7 @@ import freemarker.template.*;
  * {@code #juneau-page} contract island, one {@code <template>} per markup body, the {@code juneau-console.js} shell,
  * and the server-emitted scripts. The shell renders the header, nav, cards and footer from the contract.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@console brand="Release Manager" icon="/app/logo.svg" title="Releases"&gt;
  * 	  &lt;@navigation&gt;

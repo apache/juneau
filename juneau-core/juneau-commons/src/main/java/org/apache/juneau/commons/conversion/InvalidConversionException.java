@@ -23,7 +23,7 @@ package org.apache.juneau.commons.conversion;
  * This is an unchecked exception. Callers that are uncertain whether a conversion is possible should
  * call {@link Converter#canConvert(Class, Class)} first, or catch this exception and handle accordingly.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> {
  * 		Integer <jv>x</jv> = BasicConverter.<jsf>INSTANCE</jsf>.to(<js>"hello"</js>, Integer.<jk>class</jk>);

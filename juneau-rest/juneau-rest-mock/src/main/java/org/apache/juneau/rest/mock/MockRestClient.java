@@ -43,7 +43,7 @@ import jakarta.servlet.*;
  * resource classes.  Requests are dispatched directly to the {@link RestContext} without any network activity,
  * making tests fast and self-contained.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyResource {
@@ -60,7 +60,7 @@ import jakarta.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -217,7 +217,7 @@ public final class MockRestClient implements Closeable {
 		 * Setting this disables the per-resource {@link RestContext} cache for the duration of this
 		 * build, so the overlay is not silently shared with a previously-cached instance.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore().override(MyService.<jk>class</jk>, mockSvc);
 		 * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>)
@@ -246,7 +246,7 @@ public final class MockRestClient implements Closeable {
 		 * so the server must be able to produce that content type.  Omit this (the default) when the target
 		 * resource does not have a JSON serializer configured.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyJsonResource.<jk>class</jk>)
 		 * 			.defaultParser(JsonParser.<jsf>DEFAULT</jsf>)
@@ -272,7 +272,7 @@ public final class MockRestClient implements Closeable {
 		 * Opt-in only; no other builder option turns it on. The one-line access record is still logged.  To do the
 		 * same for a single call, use {@link RestRequest#noTrace()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>).noTrace().build()) {
 		 * 		<jv>client</jv>.get(<js>"/missing"</js>).run().assertStatus().is(404);

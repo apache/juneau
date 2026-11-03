@@ -19,7 +19,7 @@
  * Metrics SPI for {@code juneau-rest-server} &mdash; per-request observability hook backed by a
  * caller-supplied {@link org.apache.juneau.rest.server.metrics.MetricsRecorder MetricsRecorder} bean.
  *
- * <h5 class='topic'>Opt-in</h5>
+ * <h2 class='topic'>Opt-in</h2>
  *
  * <p>
  * The SPI is off by default. A fresh {@code RestContext} built without any
@@ -35,7 +35,7 @@
  * 		intentionally has no Micrometer / OpenTelemetry dependency on the core surface.
  * </ul>
  *
- * <h5 class='topic'>Event shape</h5>
+ * <h2 class='topic'>Event shape</h2>
  *
  * <p>
  * Every {@code @RestOp} invocation fires exactly one
@@ -44,7 +44,7 @@
  * template (so consumers can use it as a bounded-cardinality {@code uri} tag), the response status
  * code, the wall-clock elapsed time, and the thrown {@code Throwable} (or {@code null} on success).
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder MetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.NoOpMetricsRecorder NoOpMetricsRecorder}

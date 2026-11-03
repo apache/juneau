@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * 	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
@@ -57,6 +57,7 @@ import java.lang.annotation.*;
  * 	The following table shows the behavioral differences between <ja>@HasFormData</ja> and <ja>@FormData</ja>:
  * </p>
  * <table class='styled w400'>
+ * 	<caption>Body content to return value</caption>
  * 	<tr>
  * 		<th><c>Body content</c></th>
  * 		<th><c><ja>@HasFormData</ja>(<js>"a"</js>)</c></th>
@@ -84,7 +85,7 @@ import java.lang.annotation.*;
  * 	</tr>
  * </table>
  *
- * <h5 class='topic'>Important note concerning FORM posts</h5>
+ * <h2 class='topic'>Important note concerning FORM posts</h2>
  * <p>
  * 	This annotation should not be combined with the {@link Content @Content} annotation or {@code RestRequest.getContent()} method
  * 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet API to
@@ -95,7 +96,6 @@ import java.lang.annotation.*;
  * 	without triggering the servlet to drain the body content.
  * </p>
  *
- * <p>
  */
 @Documented
 @Target({ PARAMETER })
@@ -116,7 +116,7 @@ public @interface HasFormData {
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>

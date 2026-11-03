@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * Tooltips depend on the existence of the <c>tooltip</c> and <c>tooltiptext</c> styles that should be present in the stylesheet for the document.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlWidgets">Widgets</a>
  * </ul>

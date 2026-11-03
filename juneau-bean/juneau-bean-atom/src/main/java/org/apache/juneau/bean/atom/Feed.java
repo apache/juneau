@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.xml.*;
  * The feed is the fundamental unit of syndication in Atom and is used to aggregate entries that
  * share a common purpose, such as a blog, podcast channel, or news source.
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomFeed =
  * 		element atom:feed {
@@ -58,7 +58,7 @@ import org.apache.juneau.marshall.xml.*;
  * 		}
  * </p>
  *
- * <h5 class='section'>Required Elements:</h5>
+ * <h2 class='section'>Required Elements:</h2>
  * <p>
  * Per RFC 4287, the following elements are required in a feed:
  * <ul class='spaced-list'>
@@ -67,7 +67,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li><c>atom:updated</c> - The most recent instant in time when the feed was modified.
  * </ul>
  *
- * <h5 class='section'>Recommended Elements:</h5>
+ * <h2 class='section'>Recommended Elements:</h2>
  * <p>
  * The following elements are recommended but not required:
  * <ul class='spaced-list'>
@@ -75,7 +75,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li><c>atom:link</c> - Links associated with the feed (should include a "self" link).
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a feed using fluent-style setters</jc>
  * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(
@@ -100,12 +100,12 @@ import org.apache.juneau.marshall.xml.*;
  * 	String <jv>atomXml</jv> = XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>.write(<jv>feed</jv>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomFeed</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.1">RFC 4287 - Section 4.1.1</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
@@ -223,7 +223,7 @@ public class Feed extends CommonEntry<Feed> {
 	 * <p>
 	 * Sets the individual entries contained within this feed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
 	 * 		.setEntries(
@@ -260,7 +260,7 @@ public class Feed extends CommonEntry<Feed> {
 	 * <p>
 	 * Identifies the software agent used to generate the feed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
 	 * 		.setGenerator(
@@ -286,7 +286,7 @@ public class Feed extends CommonEntry<Feed> {
 	 * <p>
 	 * Identifies a small image that provides iconic visual identification for the feed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
 	 * 		.setIcon(<jk>new</jk> Icon(<js>"http://example.org/icon.png"</js>));
@@ -308,7 +308,7 @@ public class Feed extends CommonEntry<Feed> {
 	 * <p>
 	 * Identifies a larger image that provides visual identification for the feed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
 	 * 		.setLogo(<jk>new</jk> Logo(<js>"http://example.org/logo.png"</js>));
@@ -346,7 +346,7 @@ public class Feed extends CommonEntry<Feed> {
 	 * <p>
 	 * Sets a human-readable description or subtitle for the feed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
 	 * 		.setSubtitle(

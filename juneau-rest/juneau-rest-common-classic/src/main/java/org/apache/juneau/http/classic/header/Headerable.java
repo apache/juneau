@@ -25,7 +25,7 @@ import org.apache.http.*;
  * Typically used on {@link NameValuePair} classes to allow them to be easily converted to {@link Header}
  * objects in a controlled way.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

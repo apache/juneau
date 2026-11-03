@@ -26,7 +26,7 @@ import java.util.*;
  * Every column in it is allowed, every expression is parsed, depth-checked and type-checked, the limit is clamped,
  * and {@link #counts()} is never {@link CountPolicy#IF_REQUESTED}.  Engines never see raw request strings.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Validate without executing, e.g. to fail fast or to inspect what a request will do.</jc>
  * 	ResolvedQuery <jv>q</jv> = <jv>context</jv>.resolve(BeanQuery.<jsm>create</jsm>().gt(<js>"age"</js>, 21).sortDesc(<js>"name"</js>).build());

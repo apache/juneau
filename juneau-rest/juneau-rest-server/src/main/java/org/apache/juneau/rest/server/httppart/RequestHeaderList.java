@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.*;
  * 	<jk>public</jk> Object myMethod(RequestHeaderList <jv>headers</jv>) {...}
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestHeaderList <jv>headers</jv>) {
@@ -99,7 +99,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Entries are stored in a case-insensitive map unless overridden via the constructor.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RequestHeader}
  * 	<li class='ja'>{@link Header}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>

@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.serializer.*;
  * it can be safely resent (e.g. for a future auto-retry).  {@link #getContentLength()} returns {@code -1} (the
  * transport uses chunked transfer encoding).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

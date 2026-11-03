@@ -19,7 +19,7 @@
  * integration for {@code juneau-rest-server} &mdash; declarative validation of request beans via
  * {@code jakarta.validation.constraints.*} annotations.
  *
- * <h5 class='topic'>Off by default &mdash; opt in per parameter</h5>
+ * <h2 class='topic'>Off by default &mdash; opt in per parameter</h2>
  * <p>
  * Validation is <b>off by default and never runs automatically</b>. A {@link org.apache.juneau.rest.server.validation.BeanValidator BeanValidator}
  * is only constructed when an arg resolver sees a {@code @jakarta.validation.Valid} (or Spring
@@ -36,7 +36,7 @@
  * via {@code @Valid}. This is a deliberate behavior difference from Spring MVC (which auto-validates beans whose
  * type carries constraint annotations) and from the standard Jakarta cascade rules.
  *
- * <h5 class='topic'>Dependency stance</h5>
+ * <h2 class='topic'>Dependency stance</h2>
  * <p>
  * {@code juneau-rest-server} declares {@code jakarta.validation:jakarta.validation-api} in {@code provided}
  * scope. A concrete provider (e.g. {@code org.hibernate.validator:hibernate-validator}) is <b>not</b> bundled
@@ -44,7 +44,7 @@
  * runtime, the integration degrades to a no-op &mdash; the request bean is returned unmodified and a warning is
  * logged on first attempted use.
  *
- * <h5 class='topic'>Failure handling</h5>
+ * <h2 class='topic'>Failure handling</h2>
  * <p>
  * A constraint violation throws {@link org.apache.juneau.rest.server.validation.ValidationException ValidationException} (a 400 Bad Request
  * subclass) carrying the list of {@link org.apache.juneau.rest.server.validation.ValidationViolation ValidationViolation} details. The
@@ -56,7 +56,7 @@
  * 		{@code { "status":400, "errors":[ ... ] }} envelope.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>
  * </ul>
  *

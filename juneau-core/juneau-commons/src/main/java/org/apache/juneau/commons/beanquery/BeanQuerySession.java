@@ -38,7 +38,7 @@ import java.util.stream.*;
  * overrides replace the context's values for this session (so they can also raise or remove a cap); they are for
  * trusted server-side callers only, never request data.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Shortcut: the context's settings as-is.</jc>
  * 	<jk>try</jk> (InMemoryBeanQuerySession&lt;Person&gt; <jv>session</jv> = <jv>context</jv>.getSession(<jv>rows</jv>)) {

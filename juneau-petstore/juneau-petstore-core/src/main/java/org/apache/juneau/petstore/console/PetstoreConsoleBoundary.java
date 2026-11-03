@@ -36,7 +36,7 @@ import jakarta.servlet.http.*;
  * the token to the page renderer, which stamps it on {@code <body data-juneau-csrf>} for the console toolkit to send
  * back.
  *
- * <h5 class='section'>The effective method</h5>
+ * <h2 class='section'>The effective method</h2>
  * <p>
  * A request is judged on the method it claims, not only on its request line.  A {@code method} query parameter or
  * an {@code X-Method}, {@code X-HTTP-Method-Override}, {@code X-HTTP-Method} or {@code X-Method-Override} header
@@ -44,7 +44,7 @@ import jakarta.servlet.http.*;
  * honour that override.  So {@code GET /console/pets/1?method=DELETE} needs the same Origin and token a real
  * {@code DELETE} does, and a later change to a resource's allowed method overrides cannot open a hole here.
  *
- * <h5 class='section'>The API's token</h5>
+ * <h2 class='section'>The API's token</h2>
  * <p>
  * The {@code /petstore} API is not covered by this boundary: it sits behind its own, {@link PetstoreApiBoundary},
  * which has a different token.  The console's one write to the API, its photo upload
@@ -63,12 +63,12 @@ import jakarta.servlet.http.*;
  * only its own token attributes, so on that rare path the API's token can still be emitted, possibly without
  * {@code no-store}.  That is accepted, as {@link PetstoreApiBoundary} describes.
  *
- * <h5 class='section'>What is outside</h5>
+ * <h2 class='section'>What is outside</h2>
  * <p>
  * The {@code /petstore-ui} app (which only reads) is covered by neither boundary.  The Jetty deployment puts the
  * microservice admin resources behind a third boundary of their own.
  *
- * <h5 class='section'>The authority</h5>
+ * <h2 class='section'>The authority</h2>
  * <p>
  * The single accepted {@code Host} is the {@value #AUTHORITY_PROPERTY} setting when set, else
  * {@code localhost:<port>} with the port the request arrived on.  It is fixed on the first console request, after
@@ -86,7 +86,7 @@ import jakarta.servlet.http.*;
  * demo does not configure the framework boundary's {@code CONTAINER} origin source, so behind a TLS-terminating proxy
  * the API refuses writes too (see {@link PetstoreApiBoundary}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>var</jk> <jv>reg</jv> = <jk>new</jk> FilterRegistrationBean&lt;&gt;(<jk>new</jk> PetstoreConsoleBoundary(<jv>apiBoundary</jv>));
  * 	<jv>reg</jv>.addUrlPatterns(PetstoreConsoleBoundary.<jsf>URL_PATTERN</jsf>);

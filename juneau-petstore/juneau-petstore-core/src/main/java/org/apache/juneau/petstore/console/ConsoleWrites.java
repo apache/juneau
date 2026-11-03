@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.auth.*;
  * The console's write gate.  Console writes are open by default; with {@code -Dpetstore.secure=true} each one
  * needs the demo bearer token ({@link StubBearerTokenValidator#DEFAULT_TOKENS}).  Also names the audit actor.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(path=<js>"/"</js>)
  * 	<jk>public</jk> Pet create(RestRequest <jv>req</jv>, <ja>@Content</ja> Pet <jv>pet</jv>) {

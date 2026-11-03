@@ -29,7 +29,7 @@ import java.util.function.*;
  * similar to {@link Optional}. The key difference is that this interface is lazy - the value is only computed when
  * {@link #get()} is called, and the null-safe methods operate on that computed value.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Extends Supplier - can be used anywhere a Supplier is expected
  * 	<li>Null-safe API - provides isPresent(), isEmpty(), map(), orElse(), etc.
@@ -37,7 +37,7 @@ import java.util.function.*;
  * 	<li>Null-safe - handles null values gracefully
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create from a supplier</jc>
  * 	NullableSupplier&lt;String&gt; <jv>supplier</jv> = NullableSupplier.<jsm>of</jsm>(() -&gt; <js>"value"</js>);
@@ -54,7 +54,7 @@ import java.util.function.*;
  * 	String <jv>result</jv> = <jv>supplier</jv>.orElse(<js>"default"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Supplier} - Base functional interface
  * 	<li class='jc'>{@link Optional} - Java's Optional class
  * </ul>

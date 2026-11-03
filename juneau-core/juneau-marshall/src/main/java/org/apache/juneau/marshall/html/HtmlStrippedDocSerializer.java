@@ -21,23 +21,23 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Serializes POJOs to HTTP responses as stripped HTML.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Accept</c> types:  <bc>text/html+stripped</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Produces the same output as {@link HtmlDocSerializer}, but without the header and body tags and page title and
  * description.
  * Used primarily for JUnit testing the {@link HtmlDocSerializer} class.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
 
  * </ul>

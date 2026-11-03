@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Extends {@link SerializerWriter} with HOCON-specific methods for unquoted strings,
  * triple-quoted strings ("""), equals sign separator, and formatting options.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */

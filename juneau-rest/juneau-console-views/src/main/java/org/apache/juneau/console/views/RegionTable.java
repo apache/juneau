@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * {@code data-juneau-region} container plus <b>one sidecar per host</b> carrying every region descriptor that host
  * declares.
  *
- * <h5 class='section'>The container carries identity; the sidecar carries configuration:</h5>
+ * <h2 class='section'>The container carries identity; the sidecar carries configuration:</h2>
  * <p>
  * The container is deliberately empty and deliberately attribute-only &mdash; id, type, and the handshake stamp and
  * nothing else. Configuration (the populator name, {@code dataUrl}, {@code params}, {@code renderer}, {@code lazy},
@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * <b>One sidecar per host, not per region.</b> One {@code <script>} per card in a twelve-card grid is twelve parses;
  * the existing pattern is one sidecar per view / page / header / bar, and this follows it.
  *
- * <h5 class='section'>Two sidecar forms, and why the second exists:</h5>
+ * <h2 class='section'>Two sidecar forms, and why the second exists:</h2>
  * <p>
  * {@link #sidecar(String, List)} stamps a document-unique HTML {@code id}, for an ordinary once-per-response host
  * (a page, a card grid). {@link #detailSidecar(List)} ships {@code id}-less and is found by attribute instead,

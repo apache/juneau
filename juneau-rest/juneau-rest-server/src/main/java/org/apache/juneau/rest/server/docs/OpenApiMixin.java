@@ -56,7 +56,7 @@ import org.apache.juneau.rest.server.*;
  * requested via {@code Accept}. Sub-context inheritance (per the mixin sub-context model) confines this
  * contribution to this mixin's endpoints &mdash; the host's other endpoints retain their own serializer set.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount prefix {@code /openapi} can be overridden via the SVL variable
@@ -72,7 +72,7 @@ import org.apache.juneau.rest.server.*;
  * Override accepts bare token ({@code openapi}), leading slash ({@code /openapi}), trailing slash
  * ({@code openapi/}), or wildcard suffix ({@code /openapi/*}) &mdash; all resolve to the same mount.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The three mount paths
@@ -81,7 +81,7 @@ import org.apache.juneau.rest.server.*;
  * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern (see
  * {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/myresource"</js>, mixins=OpenApiMixin.<jk>class</jk>)
@@ -90,7 +90,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SwaggerMixin}
  * 	<li class='jc'>{@link SwaggerUiMixin}
  * 	<li class='jc'>{@link RedocMixin}

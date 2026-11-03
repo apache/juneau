@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This class extends {@link AppliedAnnotationObject} to provide both string-based targeting (via {@link #on()})
  * and type-safe class-based targeting (via {@link #onClass()}).
  *
- * <h5 class='section'>Difference between <c>on</c> and <c>onClass</c>:</h5>
+ * <h2 class='section'>Difference between <c>on</c> and <c>onClass</c>:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>{@link #on()}</b> - Returns string-based targets (e.g., <js>"com.example.MyClass"</js>)
  * 		<br>Useful for:
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		</ul>
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Using onClass() for type-safe targeting</jc>
  * 	MarshalledAnnotation <jv>annotation</jv> = MarshalledAnnotation
@@ -69,7 +69,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The {@link #on()} method returns string representations of ALL targets (both string-based and class-based)
  * 	<li>The {@link #onClass()} method returns only the Class object targets
@@ -77,7 +77,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>When using {@link AppliedAnnotationObject.BuilderT#onClass(Class...) BuilderT.onClass(Class...)}, classes are stored as Class objects in {@link #onClass()}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AppliedAnnotationObject} - Parent class documentation
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>

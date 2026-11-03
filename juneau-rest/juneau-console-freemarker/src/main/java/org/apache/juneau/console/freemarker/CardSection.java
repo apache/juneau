@@ -26,7 +26,7 @@ import java.util.*;
  * {@code PageSpec.dashboard(...)}.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	CardSection.<jsm>of</jsm>(ChartDef.<jsm>donut</jsm>(<js>"share"</js>).src(<js>"/stats/share"</js>).label(<js>"reason"</js>).value(<js>"count"</js>));
  * </p>

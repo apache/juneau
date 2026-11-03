@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.stream.*;
  * token-shaped (major-type encoded data items), so this cursor maps almost directly onto
  * {@link CborInputStream#readDataType()}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li>The cursor is a true O(1)-memory streaming cursor ({@link #isStreaming()} == <jk>true</jk>).
  * 	<li>The cursor is purely structural; object swaps and {@code @Schema} annotations have no

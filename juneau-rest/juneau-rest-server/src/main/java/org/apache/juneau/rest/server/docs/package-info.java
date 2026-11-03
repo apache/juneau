@@ -36,7 +36,7 @@
  * 		HTML-first mount at {@code /redoc}, transitively pulls in {@code OpenApiMixin}.
  * </ul>
  *
- * <h5 class='section'>Composition examples:</h5>
+ * <h2 class='section'>Composition examples:</h2>
  *
  * <p class='bjava'>
  * 	<jc>// OpenAPI 3.1 spec only — /openapi, /openapi.json, /openapi.yaml.</jc>
@@ -69,7 +69,7 @@
  * pin is robust against {@code Accept: text/html} or any other request media type.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>
  *

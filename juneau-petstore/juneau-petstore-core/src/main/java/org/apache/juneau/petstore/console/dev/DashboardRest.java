@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code [start, end)}, filtered by {@code reasons}, {@code q} and {@code lateOnly}; {@code /requests} counts the series
  * requests, so a test can see Refresh and Clear cache reach the server.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	GET /console/dev/dashboard?variant=slow
  * 	GET /console/dev/dashboard/series/ok?start=2026-10-01T00:00:00Z&amp;end=2026-10-08T00:00:00Z&amp;reasons=late

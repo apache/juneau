@@ -86,7 +86,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * Instances of this class are created by the various creator methods on the {@link RestClient} class.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a request and automatically close it.</jc>
  * 	<jk>try</jk> (<jv>RestRequest</jv> <jv>req</jv> = <jv>client</jv>.get(<js>"/myResource"</js>)) {
@@ -100,14 +100,14 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * The {@link #close()} method will automatically close any associated {@link RestResponse} if one was created via {@link #run()}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li class='note'>This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.
  * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability,
  * 		while catching and logging checked exceptions to follow AutoCloseable best practices.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
  */
@@ -300,7 +300,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * The header will be appended to the end of the list.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>{@link #header(Header)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *
@@ -317,7 +317,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 *
 	 * The header will be appended to the end of the list.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>{@link #header(String,Object)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *
@@ -349,7 +349,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * <p>
 	 * This method is idempotent and can be called multiple times without side effects.
 	 *
-	 * <h5 class='section'>Implementation Notes:</h5>
+	 * <h4 class='section'>Implementation Notes:</h4>
 	 * <p>
 	 * This implementation represents a compromise between strict AutoCloseable compliance and debuggability:
 	 * <ul>
@@ -383,11 +383,11 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * Attempts to call any of the methods on the response object that retrieve the body (e.g. {@link ResponseContent#asReader()}
 	 * will cause a {@link RestCallException} to be thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *  <jc>// Get the response code.
 	 *  // No need to call close() on the RestResponse object.</jc>
@@ -416,7 +416,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Same as {@link #complete()} but allows you to run the call asynchronously.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Future&lt;RestResponse&gt; <jv>future</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).completeFuture();
 	 *
@@ -425,7 +425,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	<jk>int</jk> <jv>rc</jv> = <jv>future</jv>.get().getResponseStatus();
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
 	 * 		executor service used for creating {@link Future Futures}.
 	 * 	<li class='note'>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
@@ -622,7 +622,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends multiple form-data parameters to the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Appends two form-data parameters to the request.</jc>
 	 * 	<jv>client</jv>
@@ -647,7 +647,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Adds a form-data parameter to the request body.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds form data parameter "foo=bar".</jc>
 	 * 	<jv>client</jv>
@@ -673,7 +673,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends multiple form-data parameters to the request from properties defined on a Java bean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyFormData {
 	 * 		<jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
@@ -701,7 +701,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Adds form-data parameters as the entire body of the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Creates form data "foo=bar&amp;baz=qux".</jc>
 	 * 	<jv>client</jv>
@@ -753,7 +753,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Adds form-data parameters to the request body using free-form key/value pairs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Creates form data "key1=val1&amp;key2=val2".</jc>
 	 * 	<jv>client</jv>
@@ -963,7 +963,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Returns the original request URI.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>URI remains unchanged in the course of request execution and is not updated if the request is redirected to another location.
 	 * </ul>
 	 *
@@ -984,7 +984,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends a header to the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	<jv>client</jv>
@@ -1005,7 +1005,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends a header to the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds header "Foo: bar".</jc>
 	 * 	<jv>client</jv>
@@ -1050,7 +1050,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends multiple headers to the request using freeform key/value pairs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds headers "Foo: bar" and "Baz: qux".</jc>
 	 * 	<jv>client</jv>
@@ -1077,7 +1077,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends multiple headers to the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Appends two headers to the request.</jc>
 	 * 	<jv>client</jv>
@@ -1105,7 +1105,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * <p>
 	 * Uses {@link PropertyNamerDUCS} for resolving the header names from property names.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Marshalled</ja>
 	 * 	<jk>public class</jk> MyHeaders {
@@ -1555,7 +1555,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Sets or replaces multiple path parameters on the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Appends two path parameters to the request.</jc>
 	 * 	<jv>client</jv>
@@ -1580,7 +1580,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Sets or replaces a path parameter of the form <js>"{name}"</js> in the URI.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Sets path to "/bar".</jc>
 	 * 	<jv>client</jv>
@@ -1606,7 +1606,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Sets multiple path parameters to the request from properties defined on a Java bean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyPathVars {
 	 * 		<jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
@@ -1634,7 +1634,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Replaces path parameters of the form <js>"{name}"</js> in the URI using free-form key/value pairs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Sets path to "/baz/qux".</jc>
 	 * 	<jv>client</jv>
@@ -1824,7 +1824,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Adds a free-form custom query.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds query parameter "foo=bar&amp;baz=qux".</jc>
 	 * 	<jv>client</jv>
@@ -1867,7 +1867,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends multiple query parameters to the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Appends two query parameters to the request.</jc>
 	 * 	<jv>client</jv>
@@ -1892,7 +1892,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends a query parameter to the URI of the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds query parameter "foo=bar".</jc>
 	 * 	<jv>client</jv>
@@ -1918,7 +1918,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Appends multiple query parameters to the request from properties defined on a Java bean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyQuery {
 	 * 		<jk>public</jk> String getFooBar() { <jk>return</jk> <js>"baz"</js>; }
@@ -1946,7 +1946,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Adds query parameters to the URI query using free-form key/value pairs..
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Adds query parameters "foo=bar&amp;baz=qux".</jc>
 	 * 	<jv>client</jv>
@@ -2025,7 +2025,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Runs this request and returns the resulting response object.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> {
 	 * 		<jk>int</jk> <jv>rc</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).execute().getResponseStatus();
@@ -2035,7 +2035,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Calling this method multiple times will return the same original response object.
 	 * 	<li class='note'>You must close the returned object if you do not consume the response or execute a method that consumes
 	 * 		the response.
@@ -2414,7 +2414,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Same as {@link #run()} but allows you to run the call asynchronously.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Future&lt;RestResponse&gt; <jv>future</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).runFuture();
 	 *
@@ -2428,7 +2428,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
 	 * 		executor service used for creating {@link Future Futures}.
 	 * </ul>

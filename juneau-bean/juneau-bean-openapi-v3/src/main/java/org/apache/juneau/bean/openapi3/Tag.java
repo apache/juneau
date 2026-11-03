@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * to have a Tag Object per tag used there, but it can be useful for providing additional information about tags
  * such as descriptions and external documentation.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Tag Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -41,7 +41,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation for this tag
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Tag <jv>x</jv> = <jsm>tag</jsm>()
@@ -62,7 +62,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#tag-object">OpenAPI Specification &gt; Tag Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/grouping-operations-with-tags/">OpenAPI Grouping Operations with Tags</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

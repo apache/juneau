@@ -33,11 +33,11 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Session object that lives for the duration of a single use of {@link CborParser}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  * </ul>
  */
@@ -110,10 +110,10 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	 * (<c>0x9F</c> / <c>0xBF</c>) are handled by tracking a sentinel element-count of -1 on the
 	 * container stack and emitting END_* on encountering the BREAK byte.
 	 *
-	 * <h5 class='section'>Builder properties honored:</h5>
+	 * <h4 class='section'>Builder properties honored:</h4>
 	 * <c>autoCloseStreams</c>, <c>unbuffered</c>.
 	 *
-	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <h4 class='section'>Builder properties NOT honored:</h4>
 	 * <c>listener</c>, <c>debugOutputLines</c>, <c>consumes</c>, swaps, {@code @Schema}.
 	 *
 	 * @param input The input.

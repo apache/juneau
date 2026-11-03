@@ -22,12 +22,12 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 /**
  * Interface for the resolution of vars that consist of a comma-delimited list.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<js>"$X{foo, bar, baz}"</js>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */

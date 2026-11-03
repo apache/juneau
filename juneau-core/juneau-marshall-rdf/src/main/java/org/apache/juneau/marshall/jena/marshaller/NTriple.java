@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	NTriple <jv>nTriple</jv> = <jk>new</jk> NTriple();
@@ -41,13 +41,13 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = NTriple.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bcode'>
  * 	&lt;...&gt; &lt;.../name&gt; "Alice" .
  * 	&lt;...&gt; &lt;.../age&gt; "30"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt; .
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bcode'>
  * 	&lt;...&gt; &lt;.../name&gt; "Alice" .
  * 	&lt;...&gt; &lt;.../age&gt; "30"^^... .
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = NTriple.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

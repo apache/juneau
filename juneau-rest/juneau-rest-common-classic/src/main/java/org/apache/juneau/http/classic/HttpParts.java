@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Standard predefined HTTP parts.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */
@@ -275,8 +275,8 @@ public class HttpParts {
 	 * <p>
 	 * Looks for one of the following constructors:
 	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * 	<li class='jm'><c><jk>public</jk> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm'><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
 	 * </ul>
 	 *
 	 * @param type The header type to find the constructor on.

@@ -64,7 +64,7 @@ public class ClassUtils {
 	 * <p>
 	 * Results are cached for performance, so repeated calls for the same collection type are very fast.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Modifiable collections</jc>
 	 * 	canAddTo(<jk>new</jk> ArrayList&lt;&gt;());        <jc>// true</jc>
@@ -103,7 +103,7 @@ public class ClassUtils {
 	 * <p>
 	 * Results are cached for performance, so repeated calls for the same map type are very fast.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Modifiable maps</jc>
 	 * 	canPutTo(<jk>new</jk> HashMap&lt;&gt;());          <jc>// true</jc>
@@ -135,7 +135,7 @@ public class ClassUtils {
 	 * <p>
 	 * This method returns the canonical JVM class name including the full package path.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular classes</jc>
 	 * 	className(String.<jk>class</jk>);                  <jc>// "java.lang.String"</jc>
@@ -177,7 +177,7 @@ public class ClassUtils {
 	 * This method returns only the simple class name without any package or outer class information.
 	 * For inner classes, only the innermost class name is returned.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular classes</jc>
 	 * 	simpleClassName(String.<jk>class</jk>);            <jc>// "String"</jc>
@@ -220,7 +220,7 @@ public class ClassUtils {
 	 * Inner class separators ($) are replaced with dots (.).
 	 * Array types are properly formatted with brackets.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular classes</jc>
 	 * 	simpleQualifiedClassName(String.<jk>class</jk>);                     <jc>// "String"</jc>
@@ -289,7 +289,7 @@ public class ClassUtils {
 	 * missing or extra arguments are provided. This is particularly useful for reflective method/constructor
 	 * invocation where parameter order flexibility is desired.
 	 *
-	 * <h5 class='section'>Matching Rules:</h5>
+	 * <h4 class='section'>Matching Rules:</h4>
 	 * <ul>
 	 * 	<li>If arguments already match parameter types in order and count, they are returned as-is (fast path)
 	 * 	<li>Otherwise, each parameter type is matched with the first compatible argument
@@ -299,7 +299,7 @@ public class ClassUtils {
 	 * 	<li>Type hierarchy is respected (subclasses match parent parameters)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Already in correct order - fast path returns original array</jc>
 	 * 	Class&lt;?&gt;[] types = {String.<jk>class</jk>, Integer.<jk>class</jk>};
@@ -387,7 +387,7 @@ public class ClassUtils {
 	 * 	<li><b>Hibernate lazy proxies</b> - Class name contains <js>"$HibernateProxy$"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get the real class behind a Spring proxy</jc>
 	 * 	<ja>@Service</ja>
@@ -398,7 +398,7 @@ public class ClassUtils {
 	 * 	<jc>// Returns MyService.class instead of the CGLIB proxy class</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>For JDK dynamic proxies, returns the first interface implemented by the proxy
 	 * 	<li>For CGLIB/Javassist/ByteBuddy/Hibernate proxies, returns the superclass

@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * A name for the server.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Server: Apache/2.4.1 (Unix)
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Server response-header field contains information about the software used by the origin server to handle the
  * request.
@@ -58,7 +58,7 @@ import org.apache.juneau.http.*;
  * to attacks against software that is known to contain security holes.
  * Server implementors are encouraged to make this field a configurable option.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

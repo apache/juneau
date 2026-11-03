@@ -34,7 +34,7 @@ import freemarker.template.*;
  * ({@code org/apache/juneau/console/base.ftlh}) &mdash; and the {@code <@tag>} macro it defines &mdash; resolvable
  * from any consumer template, without shadowing the consumer's own {@code basePath}-rooted template tree.
  *
- * <h5 class='section'>Used INSTEAD OF {@link FreemarkerMixin}, not beside it:</h5>
+ * <h2 class='section'>Used INSTEAD OF {@link FreemarkerMixin}, not beside it:</h2>
  * <p>
  * Register it typed as either {@link FreemarkerMixin} or {@code ConsoleFreemarkerMixin} &mdash; both declared
  * return types work. {@code FreemarkerViewRenderer} finds the exact-type {@code FreemarkerMixin} bean when one is
@@ -56,7 +56,7 @@ import freemarker.template.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Consumer {@code /templates} is never shadowed:</h5>
+ * <h2 class='section'>Consumer {@code /templates} is never shadowed:</h2>
  * <p>
  * The augmented {@link Configuration}'s {@code TemplateLoader} tries the consumer's own {@code basePath}-derived
  * loader <b>first</b>; the reserved template is addressed by its full classpath-root-relative path
@@ -68,7 +68,7 @@ import freemarker.template.*;
  * 	&lt;#include "/org/apache/juneau/console/base.ftlh"&gt;
  * </p>
  *
- * <h5 class='section'>Consumer-supplied {@code Configuration} is the same instance, then fill-missing stamped:</h5>
+ * <h2 class='section'>Consumer-supplied {@code Configuration} is the same instance, then fill-missing stamped:</h2>
  * <p>
  * When the request's {@code BeanStore} already has a {@code Configuration} bean (Spring/Spring-Boot autoconfig, or
  * a microservice {@code BasicBeanStore.put}), {@link #resolveConfiguration} still returns that <b>same instance</b>
@@ -436,7 +436,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * Defaults to the {@code juneau.console.devMode} system property. Intended for development and tests; it parses
 		 * and validates the contract on every render.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
 		 * 		<jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>().devMode(<jk>true</jk>).basePath(<js>"/templates/"</js>).build();
@@ -463,7 +463,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * (the last also logs a warning in {@link #devMode(boolean) dev mode}). The URL path itself is never rewritten,
 		 * so any context-path prefix must be added by the template.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<ja>@Bean</ja> <jk>public</jk> FreemarkerMixin freemarker() {
 		 * 		<jk>return</jk> ConsoleFreemarkerMixin.<jsm>create</jsm>()

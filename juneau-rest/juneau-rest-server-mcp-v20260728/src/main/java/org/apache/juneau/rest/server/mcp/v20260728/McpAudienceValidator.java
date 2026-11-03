@@ -32,7 +32,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * {@code aud} or {@code resource} claim contains this server's resource identifier, rejecting a token whose audience
  * targets a different resource.
  *
- * <h5 class='section'>Claims requirement:</h5>
+ * <h2 class='section'>Claims requirement:</h2>
  * <p>
  * Gate-level enforcement applies to a {@link ClaimsPrincipal} (as produced by {@code JwtTokenValidator} and OAuth
  * introspection).  A validator returning a bare {@link Principal} that exposes no claims cannot be checked at the gate;

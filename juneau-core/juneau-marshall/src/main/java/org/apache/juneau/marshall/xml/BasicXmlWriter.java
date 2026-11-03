@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * This is the directly-instantiable form of {@link XmlWriter}, which is itself an abstract CRTP self-type base so it
  * can also be extended (e.g. by {@link org.apache.juneau.marshall.html.HtmlWriter}).
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>

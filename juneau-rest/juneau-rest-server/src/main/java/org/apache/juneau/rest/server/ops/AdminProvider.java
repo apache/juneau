@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * {@code AdminProvider} worker and delegate to it &mdash; so the three deployment forms cannot drift, and no
  * flavor is another flavor's worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='jc'>{@link AdminResource}
  * 	<li class='jc'>{@link AdminServlet}

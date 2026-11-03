@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Limit the number of times the message can be forwarded through proxies or gateways.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Max-Forwards: 10
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Max-Forwards request-header field provides a mechanism with the TRACE (section 9.8) and OPTIONS (section 9.2)
  * methods to limit the number of proxies or gateways that can forward the request to the next inbound server.
@@ -58,7 +58,7 @@ import org.apache.juneau.http.*;
  * The Max-Forwards header field MAY be ignored for all other methods defined by this specification and for any
  * extension methods for which it is not explicitly referred to as part of that method definition.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

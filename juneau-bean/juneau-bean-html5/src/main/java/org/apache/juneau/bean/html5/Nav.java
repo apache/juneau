@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * for accessibility as it helps screen readers identify the main navigation areas of a page.
  * It is commonly used with ul and li elements to create structured navigation menus.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple navigation</jc>
  * 	Nav <jv>simple</jv> = <jsm>nav</jsm>(
@@ -106,9 +106,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#nav(Object...) nav(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

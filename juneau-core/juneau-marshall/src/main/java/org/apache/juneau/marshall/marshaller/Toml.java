@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * TOML marshaller combining {@link TomlSerializer} and {@link TomlParser}.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a config map to TOML</jc>
  * 	Map&lt;String, Object&gt; <jv>config</jv> = Map.of(<js>"name"</js>, <js>"myapp"</js>, <js>"port"</js>, 8080);
@@ -47,13 +47,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	JsonMap <jv>parsed</jv> = <jv>m</jv>.read(<jv>toml</jv>, JsonMap.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bcode'>
  * 	name = "Alice"
  * 	age = 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested table + array):</h5>
+ * <h2 class='figure'>Complex (nested table + array):</h2>
  * <p class='bcode'>
  * 	name = "Alice"
  * 	age = 30
@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Toml.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a href="https://toml.io/en/v1.0.0">TOML v1.0.0 Specification</a>
  * </ul>
  */

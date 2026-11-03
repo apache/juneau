@@ -72,7 +72,7 @@ import org.apache.juneau.console.datatables.*;
  * instead of a generic "Ajax error".  A
  * {@code BeanQueryExecutionException} (a genuine server fault) propagates unchanged to the REST layer's 500 mapping.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// The endpoint shape.</jc>
  * 	<ja>@Rest</ja>(mixins=DataTablesMixin.<jk>class</jk>)

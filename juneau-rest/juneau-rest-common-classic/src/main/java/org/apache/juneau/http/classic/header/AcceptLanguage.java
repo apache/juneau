@@ -28,12 +28,12 @@ import org.apache.juneau.http.*;
  * <p>
  * List of acceptable human languages for response.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Accept-Language: en-US
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Accept-Language request-header field is similar to Accept, but restricts the set of natural languages that are
  * preferred as a response to the request.
@@ -103,7 +103,7 @@ import org.apache.juneau.http.*;
  * British English is not available.
  * A user agent might suggest in such a case to add "en" to get the best matching behavior.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

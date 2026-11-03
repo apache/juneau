@@ -27,7 +27,7 @@ package org.apache.juneau.commons.lang;
  * 	<li>A value that is not set (should inherit from a parent/default)</li>
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// In an annotation</jc>
  * 	<jk>public @interface</jk> MyConfig {

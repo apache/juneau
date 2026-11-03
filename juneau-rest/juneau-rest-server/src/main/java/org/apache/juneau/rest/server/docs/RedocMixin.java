@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.*;
  * pulls in {@code OpenApiMixin} (and its {@code /openapi*} mounts) automatically when this
  * mixin is composed into a host.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /redoc/*} can be overridden via the SVL variable
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.server.*;
  * Override accepts bare token ({@code redoc}), leading slash ({@code /redoc}), trailing slash
  * ({@code redoc/}), or wildcard suffix ({@code /redoc/*}) &mdash; all resolve to the same mount.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -60,7 +60,7 @@ import org.apache.juneau.rest.server.*;
  * {@link #getRedoc}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/myresource"</js>, mixins=RedocMixin.<jk>class</jk>)
@@ -69,7 +69,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Content negotiation:</h5>
+ * <h2 class='section'>Content negotiation:</h2>
  *
  * <p>
  * {@link Rest#defaultAccept() @Rest(defaultAccept="text/html")} causes bare browser requests
@@ -77,7 +77,7 @@ import org.apache.juneau.rest.server.*;
  * (e.g. {@code Accept: application/json}) are honored normally.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SwaggerMixin}
  * 	<li class='jc'>{@link SwaggerUiMixin}
  * 	<li class='jc'>{@link OpenApiMixin}

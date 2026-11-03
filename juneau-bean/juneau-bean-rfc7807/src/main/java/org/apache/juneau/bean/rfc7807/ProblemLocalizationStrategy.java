@@ -28,14 +28,14 @@ import java.util.*;
  * and falls back to {@link #IDENTITY} when none is registered, so the seam is invisible at zero cost on the hot
  * path until a deliberate strategy is contributed.
  *
- * <h5 class='section'>Status</h5>
+ * <h2 class='section'>Status</h2>
  * <p>
  * This interface is shipped in {@code juneau-bean-rfc7807} as the future-work hook for an eventual
  * {@code Messages}-driven (resource-bundle) translation pass. The reference {@code Messages} integration is
  * intentionally out of scope for the v1 RFC 7807 server wiring; the no-op {@link #IDENTITY} default keeps the
  * call site stable so a future implementation can be dropped in without changing the processor contract.
  *
- * <h5 class='section'>Example</h5>
+ * <h2 class='section'>Example</h2>
  * <p class='bjava'>
  * 	<ja>@Bean</ja>
  * 	<jk>public</jk> ProblemLocalizationStrategy localize() {
@@ -46,7 +46,7 @@ import java.util.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Problem}
  * 	<li class='jc'>{@link ProblemMapper}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">RFC 7807 / 9457 Problem Details</a>

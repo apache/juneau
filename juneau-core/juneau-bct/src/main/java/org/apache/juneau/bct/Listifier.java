@@ -26,7 +26,7 @@ import java.util.function.*;
  * objects uniformly during property access and iteration. They convert various iterable
  * structures into a common List format for consistent processing.</p>
  *
- * <h5 class='section'>Common Use Cases:</h5>
+ * <h2 class='section'>Common Use Cases:</h2>
  * <ul>
  *    <li><b>Arrays:</b> Convert primitive and object arrays to lists</li>
  *    <li><b>Streams:</b> Materialize Stream objects to lists</li>
@@ -35,7 +35,7 @@ import java.util.function.*;
  *    <li><b>Iterables:</b> Handle any Iterable implementation</li>
  * </ul>
  *
- * <h5 class='section'>Usage Examples:</h5>
+ * <h2 class='section'>Usage Examples:</h2>
  * <p class='bjava'>
  *    <jc>// Custom collection handling</jc>
  *    Listifier&lt;ResultSet&gt; <jv>resultSetListifier</jv> = (<jp>conv</jp>, <jp>rs</jp>) -&gt; {
@@ -55,7 +55,7 @@ import java.util.function.*;
  *       <jp>tree</jp>.traversePreOrder().collect(toList());
  * </p>
  *
- * <h5 class='section'>Registration:</h5>
+ * <h2 class='section'>Registration:</h2>
  * <p class='bjava'>
  *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
  *       .defaultSettings()
@@ -65,7 +65,7 @@ import java.util.function.*;
  *       .build();
  * </p>
  *
- * <h5 class='section'>Best Practices:</h5>
+ * <h2 class='section'>Best Practices:</h2>
  * <ul>
  *    <li><b>Preserve order</b> when the original collection has meaningful ordering</li>
  *    <li><b>Handle empty cases</b> gracefully (return empty list, not null)</li>

@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
 /**
  * An implementation of {@link StatusLine} that adds assertions methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
  */
@@ -48,7 +48,7 @@ public class ResponseStatusLine implements StatusLine {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response status line.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	<jv>client</jv>

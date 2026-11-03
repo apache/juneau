@@ -22,7 +22,7 @@ import org.apache.juneau.httppart.bean.*;
 /**
  * Represents the metadata about an {@link Request}-annotated argument of a method on a REST proxy class.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>

@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * {@link RouteIndexMixin} ({@code /options}). All three classes live in
  * the {@code org.apache.juneau.rest.server.ops} ops/introspection mixin pack.
  *
- * <h5 class='section'>Default-deny security posture:</h5>
+ * <h2 class='section'>Default-deny security posture:</h2>
  *
  * <p>
  * The mixin is annotated with {@link Rest#guards() @Rest(guards=DenyAllGuard.class)}, so every
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * via {@code @Bean} keeps the override surface narrow &mdash; one factory method on the host
  * &mdash; and matches the way every other Juneau op-context bean is wired.
  *
- * <h5 class='section'>Configurable mount prefix:</h5>
+ * <h2 class='section'>Configurable mount prefix:</h2>
  *
  * <p>
  * The default mount prefix {@code /admin} can be overridden via the SVL variable
@@ -67,7 +67,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * Override accepts bare token ({@code admin}), leading slash ({@code /admin}), trailing slash
  * ({@code admin/}), or wildcard suffix ({@code /admin/*}) &mdash; all resolve to the same mount.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The four mount paths
@@ -76,7 +76,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * on the handler methods; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=AdminMixin.<jk>class</jk>)
@@ -98,7 +98,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Endpoints:</h5>
+ * <h2 class='section'>Endpoints:</h2>
  *
  * <ul class='spaced-list'>
  * 	<li><b>{@code GET /admin/threads}</b> &mdash; emits a JSON list of currently-live threads. The
@@ -128,7 +128,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * All four endpoints carry {@link OpSwagger#ignore() @OpSwagger(ignore=true)} so the admin surface
  * stays out of any generated Swagger / OpenAPI spec.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link EchoMixin}
  * 	<li class='jc'>{@link RouteIndexMixin}
  * 	<li class='jc'>{@link DenyAllGuard}

@@ -25,7 +25,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * The format for this var is <js>"$S{systemProperty[,defaultValue]}"</js>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a variable resolver that resolves system properties (e.g. "$S{java.home}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(SystemPropertiesVar.<jk>class</jk>).build();
@@ -38,7 +38,7 @@ import org.apache.juneau.commons.svl.*;
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */
@@ -67,7 +67,7 @@ public class SystemPropertiesVar extends DefaultingVar {
 	 * as stable in normal application code. This var opts in to compile-time stable-value
 	 * folding.
 	 *
-	 * <h5 class='section'>Caveat:</h5>
+	 * <h4 class='section'>Caveat:</h4>
 	 * <p>
 	 * If a deployment relies on {@link System#setProperty} mutations <i>after</i>
 	 * {@link VarResolver} build, those mutations will <b>not</b> be picked up by templates

@@ -27,7 +27,7 @@ import org.apache.catalina.startup.*;
  * Mirrors {@code org.apache.juneau.marshall.microservice.jetty.JettyServerFactory} but uses the programmatic
  * {@link Tomcat} façade instead of a {@code jetty.xml} document.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat">juneau-microservice-tomcat</a>
  * </ul>
  */

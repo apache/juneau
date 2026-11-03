@@ -33,7 +33,7 @@ import org.apache.juneau.http.*;
  * 	HttpRequestLine <jv>rl2</jv> = HttpRequestLineBean.<jsm>of</jsm>(<js>"POST"</js>, <js>"/api/echo"</js>, HttpProtocolVersion.<jsf>HTTP_2_0</jsf>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

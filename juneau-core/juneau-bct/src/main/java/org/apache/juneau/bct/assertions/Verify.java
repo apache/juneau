@@ -27,7 +27,7 @@ import java.util.function.*;
  * Verifications that pass return a null string.  Verifications that don't pass return a string with a useful
  * error message.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Validates that our POJO is of type MyBean.</jc>
  * 	String <jv>errorMessage</jv> = <jsm>verify</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
@@ -35,7 +35,7 @@ import java.util.function.*;
  * 		<jk>throw new</jk> RuntimeException(<jv>errorMessage</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  */

@@ -32,11 +32,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses Markdown fragment-mode output (tables and lists) back to POJOs.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>text/markdown, text/x-markdown</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Parses Markdown tables and bulleted lists produced by {@link MarkdownSerializer} back into Java objects.
  * The following mappings apply:
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Table cells containing backtick-wrapped JSON5 values are parsed via {@link Json5Parser}.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse a Markdown table to a bean</jc>
  * 	String <jv>md</jv> = <js>"| Property | Value |\n|---|---|\n| name | Alice |\n| age | 30 |"</js>;
@@ -59,7 +59,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	MyBean <jv>parsed</jv> = MarkdownParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li class='note'>Multi-line string values cannot round-trip; newlines in cells are literal {@code <br>} text.
  * 	<li class='note'>The configured null value string (default: {@code *null*}) is interpreted as {@code null}, not as the literal string.
  * 	<li class='note'>Without a target type, table cell values are auto-detected as Integer, Long, Double, Boolean, or String.
@@ -67,7 +67,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown</a>
  * </ul>
  */

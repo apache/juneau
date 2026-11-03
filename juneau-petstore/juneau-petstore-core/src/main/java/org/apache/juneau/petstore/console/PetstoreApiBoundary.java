@@ -41,7 +41,7 @@ import jakarta.servlet.http.*;
  * multipart or {@code text/plain} {@code POST} is refused.  Every refusal names its reason in the
  * {@value RequestBoundaryFilter#REJECTION_HEADER} response header.
  *
- * <h5 class='section'>The token</h5>
+ * <h2 class='section'>The token</h2>
  * <p>
  * The token is per process ({@link CsrfTokens#perProcess()}): the petstore has no login session, and the
  * {@code Origin} check does the real work.  A restart invalidates the token on every open page, so reload them.  A
@@ -61,7 +61,7 @@ import jakarta.servlet.http.*;
  * ever published on console pages, which carry the console's token too, so on every normal path the page is already
  * marked.
  *
- * <h5 class='section'>The host</h5>
+ * <h2 class='section'>The host</h2>
  * <p>
  * The request's own origin is its scheme plus its {@code Host} header; forwarded headers are never read.  By default
  * any {@code Host} is answered, which suits a loopback developer setup.  On a host served over plain HTTP, set
@@ -76,7 +76,7 @@ import jakarta.servlet.http.*;
  * framework boundary's {@link org.apache.juneau.rest.server.filter.CsrfBoundary.OriginSource#CONTAINER CONTAINER} origin source, which this demo does not
  * configure.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p>
  * In a Juneau microservice, contribute a <c>ServletFilterRegistration</c> <c>@Bean</c> just after the console
  * boundary's, sharing the one instance with it:

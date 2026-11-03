@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Ask the client to upgrade to another protocol.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Upgrade: HTTP/2.0, HTTPS/1.3, IRC/6.9, RTA/x11, websocket
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Upgrade general-header allows the client to specify what additional communication protocols it supports and
  * would like to use if the server finds it appropriate to switch protocols.
@@ -81,7 +81,7 @@ import org.apache.juneau.http.*;
  * Any token can be used as a protocol name; however, it will only be useful if both the client and server associate
  * the name with the same protocol.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

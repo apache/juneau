@@ -40,13 +40,13 @@ import freemarker.template.*;
  * theme name are all rejected (fail closed). There is deliberately <b>no</b> {@code default=}: if the tag is
  * present, that <i>is</i> the theme.
  *
- * <h5 class='section'>Nameless form:</h5>
+ * <h2 class='section'>Nameless form:</h2>
  * <p>
  * Without {@code name=}, the directive inherits the page theme as its seed: {@code <@console theme="…">} if given,
  * else the {@link PageSpec#theme(String)} value, else {@code open}. It never conflicts with a page-spec theme, so
  * {@code <@theme><@token …/></@theme>} customises whatever theme the page already selected.
  *
- * <h5 class='section'>Custom tokens:</h5>
+ * <h2 class='section'>Custom tokens:</h2>
  * <p>
  * The named stock palette is the <b>seed</b>: this directive opens a {@link ThemeBuildContext} holding a
  * {@code Theme.Builder} copied from the named stock palette, renders the nested body so each {@code <@token>} folds
@@ -62,7 +62,7 @@ import freemarker.template.*;
  * whose target is not a light-theme token or alias, a {@link Theme#OPEN} token, a chrome role alias or another dark
  * declaration is rejected.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bftl'>
  * 	&lt;#-- Stock palette only: links juneau-theme-light-brown.css, no inline block. --&gt;
  * 	&lt;@theme name="light-brown"/&gt;
@@ -71,7 +71,7 @@ import freemarker.template.*;
  * 	&lt;@theme name="light-brown"&gt;&lt;@token name="--jc-accent-selected" value="#8a5a1a"/&gt;&lt;/@theme&gt;
  * </p>
  *
- * <h5 class='section'>How the link lands:</h5>
+ * <h2 class='section'>How the link lands:</h2>
  * <p>
  * {@code <@theme>} must be nested inside {@code <@console>}; it records the resolved stock-theme URL (via
  * {@link ConsoleChromeMixin#themeAssetUrl(org.apache.juneau.rest.server.RestRequest, String)}) and the optional

@@ -23,7 +23,7 @@
  * {@code juneau-beanquery-postgres}) rather than inside {@code org.apache.juneau.commons.beanquery} - the dialect-
  * agnostic engine and the commons search-expression model must never depend on a specific dialect.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	SqlBeanQueryContext&lt;Task&gt; <jv>ctx</jv> = SqlBeanQueryContext.<jsm>create</jsm>(Task.<jk>class</jk>)
  * 		.dialect(PostgresDialect.<jsf>INSTANCE</jsf>).table(<js>"tasks"</js>)

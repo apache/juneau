@@ -55,7 +55,7 @@ import org.apache.juneau.rest.server.*;
  * 		continues; if no mapper matches, the processor returns {@code NEXT}.
  * </ul>
  *
- * <h5 class='section'>Mapper discovery</h5>
+ * <h2 class='section'>Mapper discovery</h2>
  * <p>
  * The processor pulls registered {@link ProblemMapper}s from the resource's bean store in this order:
  * <ul class='spaced-list'>
@@ -74,7 +74,7 @@ import org.apache.juneau.rest.server.*;
  * and ultimately to the built-in {@link ProblemAdapters#fromException(BasicHttpException)} fallback for
  * {@link BasicHttpException} subclasses.
  *
- * <h5 class='section'>Localization seam</h5>
+ * <h2 class='section'>Localization seam</h2>
  * <p>
  * Before serializing, the processor consults the bean store for a {@link ProblemLocalizationStrategy} bean and
  * passes the resolved {@link Problem} (and {@code RestRequest.getLocale()}) through it. The default behavior is
@@ -92,7 +92,7 @@ import org.apache.juneau.rest.server.*;
  * <b>{@code type} field policy.</b> Serialized as-is. A {@code null} {@code type} is omitted from the JSON output
  * rather than synthesized as {@code "type":"about:blank"} on the wire (preserves the absent-vs-explicit distinction).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Problem}
  * 	<li class='jc'>{@link ProblemException}
  * 	<li class='jc'>{@link ProblemMapper}

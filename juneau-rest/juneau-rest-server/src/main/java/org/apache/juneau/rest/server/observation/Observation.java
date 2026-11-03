@@ -25,7 +25,7 @@ package org.apache.juneau.rest.server.observation;
  * associated HTTP request &mdash; the request-path equivalent is the framework-driven boundary in
  * {@code RestOpInvoker}.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p>
  * The handle is {@link AutoCloseable} and is designed for try-with-resources. On {@link #close()} it
@@ -42,7 +42,7 @@ package org.apache.juneau.rest.server.observation;
  * 	}
  * </p>
  *
- * <h5 class='topic'>No-backend contract</h5>
+ * <h2 class='topic'>No-backend contract</h2>
  *
  * <p>
  * When no metrics recorder / tracer is installed, {@link Observations} hands back

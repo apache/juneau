@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.*;
  * properties; arbitrary <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807#section-3.2">&sect;3.2</a>
  * extension members flatten into the top-level JSON object via a {@link BeanProp @BeanProp("*")} triplet.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Problem <jv>problem</jv> = <jk>new</jk> Problem()
  * 		.setType(<jk>new</jk> URI(<js>"https://example.com/probs/out-of-credit"</js>))
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.*;
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>problem</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The {@code type} field is nullable. {@link #getType()} returns the raw value (possibly {@code null});
  * 		{@link #getTypeOrDefault()} returns the spec default {@code "about:blank"} per
@@ -59,7 +59,7 @@ import org.apache.juneau.marshall.*;
  * 		July 2023, but the data model and the {@code application/problem+json} IANA registration are unchanged.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanRfc7807">juneau-bean-rfc7807</a>
  * </ul>
  */

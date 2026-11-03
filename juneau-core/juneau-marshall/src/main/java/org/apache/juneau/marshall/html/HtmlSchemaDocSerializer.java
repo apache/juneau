@@ -23,13 +23,13 @@ import org.apache.juneau.marshall.jsonschema.*;
 /**
  * Serializes POJO metamodels to HTML.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Accept</c> types:  <bc>text/html+schema</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Essentially the same as {@link HtmlDocSerializer}, except serializes the POJO metamodel instead of the model itself.
  *
@@ -40,11 +40,11 @@ import org.apache.juneau.marshall.jsonschema.*;
  * The easiest way to create instances of this class is through the {@link HtmlSerializer#getSchemaSerializer()},
  * which will create a schema serializer with the same settings as the originating serializer.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
 
  * </ul>
@@ -99,7 +99,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * The description is the result of calling {@link ClassMeta#getName()}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...) JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -126,7 +126,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * 	<li class='ja'>{@link Marshalled#example() Marshalled(example)}
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}
 		 * </ul>
 		 *
@@ -146,7 +146,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * Identifies whether nested descriptions are allowed in schema definitions.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions() JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 		 * </ul>
 		 *
@@ -163,7 +163,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * Identifies whether nested examples are allowed in schema definitions.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() JsonSchemaGenerator.Builder#allowNestedExamples()}
 		 * </ul>
 		 *
@@ -184,7 +184,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 * <p>
 		 * This setting is ignored if {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs() JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class) JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 		 * </ul>
 		 *

@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.collections.*;
  * The built-in {@code bands} decorator: shaded x ranges from a list, a same-origin {@code src}, a {@code data:} topic,
  * or the gaps in the first series ({@link #gaps()}).  The areas ride a carrier series {@code juneau-bands-<n>}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Bands.<jsm>from</jsm>(<js>"/rest/outages"</js>).start(<js>"from"</js>).end(<js>"to"</js>).label(<js>"Outage"</js>);
  * 	Bands.<jsm>gaps</jsm>().label(<js>"No data"</js>);

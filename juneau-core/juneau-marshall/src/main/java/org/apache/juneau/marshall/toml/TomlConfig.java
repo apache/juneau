@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@TomlConfig</ja>(sortKeys=<js>"true"</js>, inlineTableThreshold=<js>"5"</js>, nullValue=<js>"~"</js>)
  * 	<jk>public class</jk> MyRestClass {}
@@ -48,12 +48,12 @@ public @interface TomlConfig {
 	 * An empty value (the default) leaves the builder default of <js>"&lt;NULL&gt;"</js> in place.
 	 * Applied to both {@link TomlSerializer} and {@link TomlParser}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link TomlSerializer.Builder#nullValue(String)}
 	 * 	<li class='jm'>{@link TomlParser.Builder#nullValue(String)}
 	 * </ul>
@@ -68,12 +68,12 @@ public @interface TomlConfig {
 	 * <p>
 	 * An empty value (the default) leaves the builder default in place.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link TomlSerializer.Builder#inlineTableThreshold(int)}
 	 * </ul>
 	 *
@@ -89,12 +89,12 @@ public @interface TomlConfig {
 	 * 	<li><js>"false"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link TomlSerializer.Builder#useInlineTables(boolean)}
 	 * </ul>
 	 *
@@ -110,12 +110,12 @@ public @interface TomlConfig {
 	 * 	<li><js>"false"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link TomlSerializer.Builder#sortKeys(boolean)}
 	 * </ul>
 	 *

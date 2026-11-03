@@ -27,7 +27,7 @@ import org.apache.juneau.commons.*;
  * Provides a {@link Builder} that constructs a synthetic {@link BeanIgnore @BeanIgnore} annotation instance
  * programmatically without requiring it to be declared on a program element at compile time.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanIgnore}
  * 	<li class='jc'>{@link AnnotationObject}
  * </ul>

@@ -32,14 +32,14 @@ import org.apache.juneau.commons.collections.*;
  * responses. The key value used to identify the callback object is an expression, evaluated at runtime, that identifies
  * a URL to use for the callback operation.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Callback Object is composed of the following fields:
  * <ul class='spaced-list'>
  * 	<li><c>callbacks</c> (map of {@link PathItem}) - A map of possible out-of-band callbacks related to the parent operation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Callback <jv>x</jv> = <jsm>callback</jsm>()
@@ -62,7 +62,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#callback-object">OpenAPI Specification &gt; Callback Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/callbacks/">OpenAPI Callbacks</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

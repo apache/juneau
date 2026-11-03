@@ -27,7 +27,7 @@ package org.apache.juneau.rest.client.classic;
  * Note that the {@link RestClient} class itself implements this interface so you can achieve the same results by
  * overriding the methods on the client class as well.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Specialized client that adds a header to every request.</jc>
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
@@ -44,7 +44,7 @@ package org.apache.juneau.rest.client.classic;
  *		.build(MyRestClient.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link RestClient.Builder#interceptors(Object...)}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>

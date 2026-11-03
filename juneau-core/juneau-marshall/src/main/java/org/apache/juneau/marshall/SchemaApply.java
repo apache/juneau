@@ -31,13 +31,13 @@ import org.apache.juneau.commons.*;
  * <b>content</b> concern ({@link #value()}), enabling {@link Schema @Schema} to be a pure data annotation
  * without marshall-specific application machinery.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@SchemaApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@Schema</ja>(format=<js>"date-time"</js>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  * </ul>
  */
@@ -61,7 +61,7 @@ public @interface SchemaApply {
 	 * <p>
 	 * Identifies the targets this annotation applies to using fully-qualified names.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -75,7 +75,7 @@ public @interface SchemaApply {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of strings.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

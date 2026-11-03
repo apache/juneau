@@ -22,7 +22,7 @@
  * TOML (Tom's Obvious Minimal Language) is a configuration file format that maps
  * unambiguously to hash tables. See <a href="https://toml.io/en/v1.0.0">TOML v1.0.0</a>.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	String toml = TomlSerializer.<jsf>DEFAULT</jsf>.write(myBean);
  * 	MyBean bean = TomlParser.<jsf>DEFAULT</jsf>.read(toml, MyBean.<jk>class</jk>);

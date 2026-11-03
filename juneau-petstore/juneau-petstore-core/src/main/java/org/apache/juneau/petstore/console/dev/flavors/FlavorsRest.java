@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.view.*;
  * at {@code /fragment} that the page's {@code html} card loads with {@code src=}.  React is the standalone app at
  * {@code /petstore-ui}, embedded in an iframe.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@card id="flavor" title="Pets" src="/console/dev/flavors/mustache/fragment"/&gt;
  * </p>

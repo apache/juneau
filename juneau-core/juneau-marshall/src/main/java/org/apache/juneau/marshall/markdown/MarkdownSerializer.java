@@ -31,13 +31,13 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to Markdown (fragment mode: tables and lists).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/markdown, text/x-markdown</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/markdown</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * The conversion is as follows:
  * <ul class='spaced-list'>
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Null values are rendered as <js>"*null*"</js> (italic) by default.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use the default serializer to serialize a bean</jc>
  * 	String <jv>md</jv> = MarkdownSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -60,7 +60,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>md</jv> = <jv>serializer</jv>.write(<jv>listOfBeans</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean):</h5>
+ * <h2 class='figure'>Example output (bean):</h2>
  * <p class='bcode'>
  * 	| Property | Value |
  * 	|---|---|
@@ -68,13 +68,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	| age | 30 |
  * </p>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li class='note'>Multi-line string values cannot round-trip; newlines are replaced with {@code <br>}.
  * 	<li class='note'>The configured null value string (default: {@code *null*}) cannot be stored as a literal string value.
  * 	<li class='note'>This serializer is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown</a>
  * </ul>
  */

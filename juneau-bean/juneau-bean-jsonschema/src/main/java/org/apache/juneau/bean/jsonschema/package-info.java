@@ -18,7 +18,7 @@
 /**
  * JSON Schema Data Transfer Objects
  *
- * <h5 class='topic'>Overview</h5>
+ * <h2 class='topic'>Overview</h2>
  *
  * <p>
  * Juneau supports serializing and parsing of JSON Schema documents through the use of beans defined in the
@@ -32,7 +32,7 @@
  * For backward compatibility, deprecated properties from earlier drafts (Draft 04) are still supported.
  * </p>
  *
- * <h5 class='topic'>Bean Classes</h5>
+ * <h2 class='topic'>Bean Classes</h2>
  *
  * <p>
  * The bean classes that make up the model are as follows:
@@ -51,7 +51,7 @@
  * 		<c>JsonSchema</c> beans from Java types via {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator}.
  * </ul>
 
- * <h5 class='topic'>Automatic Schema Generation</h5>
+ * <h2 class='topic'>Automatic Schema Generation</h2>
  *
  * <p>
  * Use {@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator JsonSchemaBeanGenerator} when you want typed DTO output from POJOs
@@ -59,7 +59,7 @@
  * {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator} into <c>JsonSchema</c> beans.
  * </p>
  *
- * <h5 class='topic'>Creating JSON Schema Documents</h5>
+ * <h2 class='topic'>Creating JSON Schema Documents</h2>
  *
  * <p>
  * JSON Schema documents can be constructed using the Juneau JSON Schema beans as a document model object.
@@ -187,7 +187,7 @@
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.write(<jv>schema</jv>);
  * </p>
  *
- * <h5 class='topic'>Serializing to Other Data Types</h5>
+ * <h2 class='topic'>Serializing to Other Data Types</h2>
  *
  * <p>
  * Since the JSON Schema DTOs are simple beans, they can be used to serialize to a variety of other
@@ -195,7 +195,7 @@
  * This also allows JSON Schema documents to be easily served up using the Juneau REST API.
  * </p>
  *
- * <h5 class='topic'>Parsing JSON Schema Documents</h5>
+ * <h2 class='topic'>Parsing JSON Schema Documents</h2>
  *
  * <p>
  * Use the {@link org.apache.juneau.marshall.json.JsonParser} to parse JSON Schema documents into DTOs:
@@ -209,7 +209,7 @@
  * Schema objects can also be constructed from other media types using the appropriate parsers.
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-core.html">JSON Schema 2020-12 Core</a>
  * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>

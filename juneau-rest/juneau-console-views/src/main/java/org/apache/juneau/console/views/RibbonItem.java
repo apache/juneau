@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.collections.*;
  * one) plus a {@code value}, and a group's {@code default} must name a member.  Group members take only
  * {@code id}, {@code title}, {@code symbol}, {@code column}, {@code param} and {@code value}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>table</jv>.ribbon(
  * 		RibbonItem.<jsm>collapseAll</jsm>(),

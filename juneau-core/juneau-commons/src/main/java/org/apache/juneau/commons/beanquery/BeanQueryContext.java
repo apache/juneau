@@ -34,7 +34,7 @@ import java.util.*;
  * The base class owns every engine-independent check (spec §5): the column allow-list, operator/type checks, the
  * regex gate, the size caps, limit clamping and the count policy.  Engines see only a {@link ResolvedQuery}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Once, at startup.</jc>
  * 	InMemoryBeanQueryContext&lt;Person&gt; <jv>people</jv> = InMemoryBeanQueryContext

@@ -25,7 +25,7 @@
  * (signature, {@code iss}, {@code aud}, {@code exp}, {@code nbf}) without bringing the
  * nimbus library into the core {@code juneau-rest-server} jar.
  *
- * <h5 class='topic'>Containment</h5>
+ * <h2 class='topic'>Containment</h2>
  *
  * <p>
  * The {@code nimbus-jose-jwt} dependency is declared in {@code provided} scope on this module's
@@ -38,7 +38,7 @@
  * 		without waiting for a Juneau release.
  * </ul>
  *
- * <h5 class='topic'>Security defaults</h5>
+ * <h2 class='topic'>Security defaults</h2>
  *
  * <p>
  * {@link org.apache.juneau.rest.server.auth.jwt.JwtTokenValidator JwtTokenValidator} ships with secure defaults:
@@ -55,7 +55,7 @@
  * 		down auth for the whole service.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.BearerTokenGuard}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.TokenValidator}

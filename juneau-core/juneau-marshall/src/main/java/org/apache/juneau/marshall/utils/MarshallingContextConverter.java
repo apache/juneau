@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.*;
  * This converter provides a convenient way to convert objects between different types using
  * the same conversion logic that's used throughout the Juneau framework.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Convert a string to an integer</jc>
  * 	Integer <jv>result</jv> = GenericConverter.INSTANCE.convertTo(Integer.<jk>class</jk>, <js>"123"</js>);
@@ -42,11 +42,11 @@ import org.apache.juneau.marshall.*;
  * 	MyBean <jv>bean</jv> = GenericConverter.INSTANCE.convertTo(MyBean.<jk>class</jk>, <jv>map</jv>);
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe. The singleton instance can be safely shared across multiple threads.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link Converter}
  * 	<li class='jm'>{@link MarshallingContext#DEFAULT_SESSION}
  * 	<li class='jm'>{@link MarshallingSession#convertToType(Object, Class)}

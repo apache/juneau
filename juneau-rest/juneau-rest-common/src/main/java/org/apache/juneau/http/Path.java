@@ -38,12 +38,12 @@ import org.apache.juneau.commons.*;
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
+ * <h2 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h2>
  * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a variable
  * in a URL path pattern.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(
@@ -57,22 +57,21 @@ import org.apache.juneau.commons.*;
  * <p>
  * The special name <js>"/*"</js> is used to retrieve the path remainder after the path match (i.e. the part that matches <js>"/*"</js>).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ * <h2 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h2>
  * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Path">@Path</a>
  * </ul>
  *
- * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- * <p>
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h2>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  *
@@ -128,7 +127,7 @@ public @interface Path {
 	 * 		If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be treated as name/value pairs.
 	 *
-	 * 		<h5 class='figure'>Examples:</h5>
+	 * 		<h4 class='figure'>Examples:</h4>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>
@@ -157,7 +156,7 @@ public @interface Path {
 	 * 	<li>
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
-	 * 		<h5 class='figure'>Example:</h5>
+	 * 		<h4 class='figure'>Example:</h4>
 	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
@@ -171,7 +170,7 @@ public @interface Path {
 	 * The name field MUST correspond to the associated <a class="doclink" href="https://swagger.io/specification/v2#pathsPath">path</a> segment from the path field in the <a class="doclink" href="https://swagger.io/specification/v2#pathsObject">Paths Object</a>.
 	 * See <a class="doclink" href="https://swagger.io/specification/v2#pathTemplating">Path Templating</a> for further information.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
@@ -191,7 +190,7 @@ public @interface Path {
 	 * Values specified on this field override values specified on the type, and values specified on child types override values
 	 * specified on parent types.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing and parsing validation.

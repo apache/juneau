@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.springboot.*;
  * Subclasses supply their {@link org.apache.juneau.rest.server.mcp.McpServerConfig} by implementing
  * {@link #getMcpConfig()}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/mcp")
  * public class MyMcpResource extends SpringMcpRestServlet {

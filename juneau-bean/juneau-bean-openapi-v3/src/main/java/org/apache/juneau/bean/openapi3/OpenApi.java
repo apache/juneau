@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.objecttools.*;
  * The OpenAPI Object is the root document that describes an entire API. It contains metadata about the API,
  * available paths and operations, parameters, responses, authentication methods, and other information.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The OpenAPI Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.objecttools.*;
  * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an OpenAPI document</jc>
  * 	OpenApi <jv>doc</jv> = <jk>new</jk> OpenApi()
@@ -68,7 +68,7 @@ import org.apache.juneau.marshall.objecttools.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#openapi-object">OpenAPI Specification &gt; OpenAPI Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/basic-structure/">OpenAPI Basic Structure</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

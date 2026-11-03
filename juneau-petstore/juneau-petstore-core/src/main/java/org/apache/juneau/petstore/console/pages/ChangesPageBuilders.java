@@ -25,7 +25,7 @@ import org.apache.juneau.console.widgets.*;
 /**
  * Builder twin of the Pending changes page (P10, {@code changes.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, ChangesPageBuilders.<jsm>changes</jsm>());
  * </p>

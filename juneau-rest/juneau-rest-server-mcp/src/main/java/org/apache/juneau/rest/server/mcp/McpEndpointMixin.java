@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.*;
  * protocol revision via {@link #revision()}. In practice a consumer implements a revision-specific
  * sub-interface (for example {@code org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint}), which supplies {@link #revision()} for them.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/api")
  * public class MyResource extends BasicRestServlet implements org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint {

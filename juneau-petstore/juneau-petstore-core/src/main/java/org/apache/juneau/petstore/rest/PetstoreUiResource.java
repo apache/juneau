@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.staticfile.*;
  * <p>
  * Lives in {@code juneau-petstore-core} so both the Jetty and Spring Boot deployments inherit it for free.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */

@@ -25,7 +25,7 @@ import java.math.*;
  * Supports conversion between <code>BigDecimal</code> and the 16-byte BSON Decimal128 format.
  * Used by {@link BsonSerializer} and {@link BsonParser} for decimal values.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON</a>
  * 	<li class='link'><a class="doclink" href="https://bsonspec.org/spec.html">BSON Specification</a>
  * </ul>

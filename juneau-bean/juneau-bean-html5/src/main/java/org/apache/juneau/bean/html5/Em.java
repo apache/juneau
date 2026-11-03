@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * purely stylistic italic text. It is commonly used to emphasize words or phrases within sentences
  * to change the meaning or add emphasis to the content.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -79,9 +79,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#em(Object...) em(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

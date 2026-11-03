@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.parser.*;
  * Metadata on bean properties specific to the JSON-Schema pulled from the {@link Schema @Schema} annotation
  * on the bean property.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
 
  * </ul>

@@ -34,7 +34,7 @@ import java.util.*;
  * other: a caller that did not ask for a count gets an empty {@link OptionalLong} back rather than an exception, so
  * "was a count computed" and "read the count" are the same call.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Page&lt;Person&gt; <jv>page</jv> = <jv>session</jv>.find(BeanQuery.<jsm>create</jsm>().counts(CountRequest.<jsf>BOTH</jsf>).build());
  * 	<jk>for</jk> (Person <jv>p</jv> : <jv>page</jv>.rows())

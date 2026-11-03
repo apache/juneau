@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * <p>
  * This annotation allows you to identify other classes that return URIs via <c>toString()</c> as URI objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 
  * </ul>

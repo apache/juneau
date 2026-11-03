@@ -42,7 +42,7 @@ import org.apache.juneau.commons.settings.*;
  * enabled, prints the throwable's stack trace to the logger.  It is <b>not</b> invoked automatically by any
  * factory — callers that want verbose logging at a specific site must call it explicitly.
  *
- * <h5 class='section'>Example — enabling for a single test thread:</h5>
+ * <h2 class='section'>Example — enabling for a single test thread:</h2>
  * <p class='bjava'>
  * 	Settings.<jsm>get</jsm>().setLocal(<js>"juneau.enableVerboseExceptions"</js>, <js>"true"</js>);
  * 	<jk>try</jk> {
@@ -52,7 +52,7 @@ import org.apache.juneau.commons.settings.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsUtils">Utils Package</a>
  * </ul>
  */
@@ -136,7 +136,7 @@ public class ThrowableUtils {
 	 * can cause additional errors due to stack exhaustion. The stack trace will be limited to the specified
 	 * maximum number of elements.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> {
 	 * 		<jc>// Some code that might cause StackOverflowError</jc>
@@ -182,7 +182,7 @@ public class ThrowableUtils {
 	 * <p>
 	 * Same as {@link #printStackTrace(Throwable, PrintWriter, Integer)} but writes to {@link System#err}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> {
 	 * 		<jc>// Some code that might cause StackOverflowError</jc>

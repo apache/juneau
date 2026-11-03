@@ -26,7 +26,7 @@ import freemarker.template.*;
  * One node in the console navigation tree. Nodes nest to any depth; {@code <@node>} directives append
  * to the node returned by {@link PageCapture#navRoot()}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	NavNode <jv>root</jv> = PageCapture.<jsm>of</jsm>(<jv>env</jv>).navRoot();
  * 	NavNode <jv>home</jv> = <jv>root</jv>.add(<js>"home"</js>, <js>"Home"</js>, <js>"/home"</js>);

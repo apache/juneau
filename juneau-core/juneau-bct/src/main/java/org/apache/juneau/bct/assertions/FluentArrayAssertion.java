@@ -30,8 +30,7 @@ import org.apache.juneau.commons.utils.*;
 /**
  * Used for fluent assertion calls against array objects.
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentArrayAssertion}
  * 	<ul class='javatreec'>
@@ -62,8 +61,7 @@ import org.apache.juneau.commons.utils.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentArrayAssertion}
  * 	<ul class='javatreec'>
@@ -85,8 +83,7 @@ import org.apache.juneau.commons.utils.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -98,7 +95,7 @@ import org.apache.juneau.commons.utils.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *
@@ -160,7 +157,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	/**
 	 * Converts this assertion into a {@link FluentBeanListAssertion}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Extracts the 'foo' property from an array of beans and validates their values.</jc>.
 	 * 	<jsm>assertObject</jsm>(<jv>myArrayOfBeans</jv>)

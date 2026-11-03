@@ -35,14 +35,14 @@ import java.util.stream.*;
  * The default is {@link #ISO_CODE} which preserves the historical wire output ({@link Currency#toString()} /
  * {@link Currency#getCurrencyCode()}).
  *
- * <h5 class='topic'>Locale composability</h5>
+ * <h2 class='topic'>Locale composability</h2>
  *
  * <p>
  * {@link #SYMBOL} and {@link #DISPLAY_NAME} are locale-sensitive — they consult the supplied {@link Locale}
  * (typically the {@link MarshallingContext#getLocale()} resolved through the {@link MarshallingSession}).
  * {@link #ISO_CODE} ignores the locale.
  *
- * <h5 class='topic'>Round-trip caveat</h5>
+ * <h2 class='topic'>Round-trip caveat</h2>
  *
  * <p>
  * <b>Round-trip is strictly guaranteed only for {@link #ISO_CODE}.</b>  {@code SYMBOL} parsing of a token
@@ -50,7 +50,7 @@ import java.util.stream.*;
  * locale, and {@code DISPLAY_NAME} parsing is even less reliable ({@code "Dollar"} matches at least eight
  * ISO codes). For machine-to-machine wires, prefer {@link #ISO_CODE}.
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#currencyFormat() @MarshalledProp(currencyFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.
@@ -61,7 +61,7 @@ import java.util.stream.*;
  * 	<li>The default constant ({@link #ISO_CODE}).
  * </ol>
  *
- * <h5 class='topic'>Parser leniency</h5>
+ * <h2 class='topic'>Parser leniency</h2>
  *
  * <p>
  * Parsers SHALL try {@link Currency#getInstance(String)} first regardless of the parser-side
@@ -69,7 +69,7 @@ import java.util.stream.*;
  * {@link #SYMBOL} / {@link #DISPLAY_NAME}, the parser falls back to a best-effort iterate-and-match scan
  * against {@link Currency#getAvailableCurrencies()}.
  *
- * <h5 class='topic'>Binary serializers</h5>
+ * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this
@@ -85,7 +85,7 @@ public enum CurrencyFormat {
 	/**
 	 * ISO 4217 currency code (the default).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	USD
 	 * 	EUR
@@ -100,7 +100,7 @@ public enum CurrencyFormat {
 	/**
 	 * Currency symbol per {@link Currency#getSymbol(Locale)}.
 	 *
-	 * <h5 class='figure'>Example (locale {@code en_US}):</h5>
+	 * <h4 class='figure'>Example (locale {@code en_US}):</h4>
 	 * <p class='bcode'>
 	 * 	$
 	 * 	€
@@ -117,7 +117,7 @@ public enum CurrencyFormat {
 	/**
 	 * Localized display name per {@link Currency#getDisplayName(Locale)}.
 	 *
-	 * <h5 class='figure'>Example (locale {@code en_US}):</h5>
+	 * <h4 class='figure'>Example (locale {@code en_US}):</h4>
 	 * <p class='bcode'>
 	 * 	US Dollar
 	 * 	Euro

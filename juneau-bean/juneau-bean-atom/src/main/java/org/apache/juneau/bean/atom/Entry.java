@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.*;
  * content itself or links to it. Entries are designed to be independently meaningful and may be
  * consumed separately from their containing feed.
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomEntry =
  * 		element atom:entry {
@@ -58,7 +58,7 @@ import org.apache.juneau.marshall.*;
  * 		}
  * </p>
  *
- * <h5 class='section'>Required Elements:</h5>
+ * <h2 class='section'>Required Elements:</h2>
  * <p>
  * Per RFC 4287, the following elements are required in an entry:
  * <ul class='spaced-list'>
@@ -67,7 +67,7 @@ import org.apache.juneau.marshall.*;
  * 	<li><c>atom:updated</c> - The most recent instant in time when the entry was modified.
  * </ul>
  *
- * <h5 class='section'>Recommended Elements:</h5>
+ * <h2 class='section'>Recommended Elements:</h2>
  * <p>
  * The following elements are recommended:
  * <ul class='spaced-list'>
@@ -76,7 +76,7 @@ import org.apache.juneau.marshall.*;
  * 	<li><c>atom:summary</c> - Brief summary of the entry (required if content is not inline).
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an entry</jc>
  * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(
@@ -99,12 +99,12 @@ import org.apache.juneau.marshall.*;
  * 	);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomEntry</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.2">RFC 4287 - Section 4.1.2</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
@@ -208,7 +208,7 @@ public class Entry extends CommonEntry<Entry> {
 	 * <p>
 	 * Sets the content of this entry.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Plain text content</jc>
 	 * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
@@ -249,7 +249,7 @@ public class Entry extends CommonEntry<Entry> {
 	 * <p>
 	 * Sets the time when this entry was first published or made available.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
 	 * 		.setPublished(Calendar.<jsm>getInstance</jsm>());
@@ -271,7 +271,7 @@ public class Entry extends CommonEntry<Entry> {
 	 * <p>
 	 * Sets the time when this entry was first published using an ISO-8601 date string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
 	 * 		.setPublished(<js>"2024-01-15T10:00:00Z"</js>);
@@ -293,7 +293,7 @@ public class Entry extends CommonEntry<Entry> {
 	 * <p>
 	 * Sets metadata about the source feed if this entry was copied from another feed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
 	 * 		.setSource(
@@ -336,7 +336,7 @@ public class Entry extends CommonEntry<Entry> {
 	 * <p>
 	 * Sets a short summary, abstract, or excerpt of the entry.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
 	 * 		.setSummary(

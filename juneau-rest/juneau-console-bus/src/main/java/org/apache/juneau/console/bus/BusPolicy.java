@@ -35,7 +35,7 @@ import jakarta.servlet.http.*;
  * ({@code ns.name:key}, {@code ns.name:*}), a job topic or pattern ({@code job:<id>}, {@code job:*}), or a card command
  * topic ({@code cmd:<cardId>}).  Upstream entries are exact custom topics, each with its {@link UpstreamHandler}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   BusPolicy <jv>p</jv> = BusPolicy.<jsm>create</jsm>()
  *     .downstream(<js>"ops.jobs"</js>, <jk>true</jk>)                       <jc>// retained state</jc>
@@ -221,7 +221,7 @@ public final class BusPolicy {
 	/**
 	 * Builder for {@link BusPolicy}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 *   BusPolicy <jv>p</jv> = BusPolicy.<jsm>create</jsm>()
 	 *     .downstream(<js>"ops.jobs"</js>, <jk>true</jk>)

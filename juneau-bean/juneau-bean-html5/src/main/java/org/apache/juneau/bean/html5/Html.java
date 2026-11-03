@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * and serves as the top-level container for the entire document. The lang attribute is commonly
  * used to specify the primary language of the document for accessibility and SEO purposes.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Basic HTML document structure</jc>
  * 	Html <jv>html1</jv> = <jsm>html</jsm>(
@@ -64,9 +64,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#html(Object...) html(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

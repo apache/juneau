@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.view.*;
  * implementation the {@link MustacheMixin mixin} and {@link MustacheServlet servlet} flavors hold, so the
  * three forms cannot drift.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link MustacheServlet}
  * 	<li class='jc'>{@link ViewResource}

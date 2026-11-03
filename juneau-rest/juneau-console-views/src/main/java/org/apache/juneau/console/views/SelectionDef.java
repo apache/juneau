@@ -24,7 +24,7 @@ import java.util.*;
  * The row-selection opt-in for a {@link ViewTable} &mdash; the first of the view table's two INDEPENDENT
  * opt-ins.
  *
- * <h5 class='section'>Independent from bulk mutation, by construction</h5>
+ * <h2 class='section'>Independent from bulk mutation, by construction</h2>
  * <p>
  * Declaring a {@link SelectionDef} adds a per-row checkbox column (and, when {@link #selectAll()} is set, a
  * select-all header checkbox) to a view table &mdash; nothing else. It does <b>not</b>, by any default or
@@ -36,7 +36,7 @@ import java.util.*;
  * <b>consumes</b> a {@link SelectionDef} (it requires one to be constructed at all) but a {@link SelectionDef}
  * never requires, implies, or references one back.
  *
- * <h5 class='section'>Non-wire: never touches {@code VIEW_META}</h5>
+ * <h2 class='section'>Non-wire: never touches {@code VIEW_META}</h2>
  * <p>
  * A {@link SelectionDef} is deliberately <b>not</b> part of {@code VIEW_META} and never reaches the
  * JSON sidecar. {@link ViewTable} instead stamps it as
@@ -48,7 +48,7 @@ import java.util.*;
  * {@link BulkMutateDef}, whose actual bulk-action list <i>is</i> wire data and therefore carries its own,
  * separate {@link BulkMutateDef#CONTRACT_VERSION}).
  *
- * <h5 class='section'>Selection identity is a stable row id, never a DOM/table index</h5>
+ * <h2 class='section'>Selection identity is a stable row id, never a DOM/table index</h2>
  * <p>
  * {@link #rowIdField()} names the row-data key {@code juneau-views.js} reads to stamp a stable
  * {@code data-juneau-row-id} attribute on each rendered {@code <tr>} (see {@code createdRow} in that runtime).
@@ -58,7 +58,7 @@ import java.util.*;
  * previously-selected id that is no longer present in the newly drawn row set, so a selection whose rows have
  * scrolled off screen or off the current page is never kept as a live, actionable target.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Selectable for export, with NO bulk-mutate capability - satisfies the separability condition by construction.</jc>
  * 	SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>)
@@ -68,7 +68,7 @@ import java.util.*;
  * 		.labelField(<js>"name"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link BulkMutateDef}
  * 	<li class='jc'>{@link ViewTable}

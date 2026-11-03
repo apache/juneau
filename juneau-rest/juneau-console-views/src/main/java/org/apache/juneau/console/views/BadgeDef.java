@@ -29,7 +29,7 @@ import org.apache.juneau.commons.http.*;
  * The endpoint returns {@code {total, mine?, items?[]}}.  The badge is presentation only: the endpoint must
  * still authorize the caller, and a page should not declare a badge for users who cannot read it.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>var</jk> <jv>badge</jv> = BadgeDef
  * 		.<jsm>create</jsm>(<js>"pending"</js>)

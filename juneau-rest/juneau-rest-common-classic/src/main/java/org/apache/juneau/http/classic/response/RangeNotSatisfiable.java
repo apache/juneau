@@ -35,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
  * The client has asked for a portion of the file (byte serving), but the server cannot supply that portion.
  * <br>For example, if the client asked for a part of the file that lies beyond the end of the file.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

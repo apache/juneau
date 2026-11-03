@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses a MessagePack stream into a POJO model.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Content-Type</c> types:  <bc>application/msgpack, octal/msgpack</bc>
  *
@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.stream.*;
  * that existing wire values still decode. New consumers should prefer the RFC-standard
  * <bc>application/msgpack</bc> value.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * MessagePack-to-Java type mapping:
  * <ul class='spaced-list'>
@@ -55,11 +55,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>MessagePack nil → {@code null}
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackSupport">MessagePack</a>
 
  * </ul>

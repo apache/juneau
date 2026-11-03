@@ -44,7 +44,7 @@ import freemarker.template.*;
  * 		{@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration.
  * </ol>
  *
- * <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
+ * <h2 class='section'>Auto-wiring the renderer into the host's own endpoints:</h2>
  *
  * <p>
  * A bare {@code @Rest(mixins=FreemarkerMixin.class)} is enough &mdash; a host whose own {@code @RestOp} method
@@ -79,7 +79,7 @@ import freemarker.template.*;
  * {@code SerializedPojoProcessor} in every case, so the {@link FreemarkerView} bean is dispatched to the
  * FreeMarker engine rather than bean-serialized.
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=FreemarkerMixin.<jk>class</jk>)
@@ -99,7 +99,7 @@ import freemarker.template.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /freemarker/*} can be overridden via the SVL variable
@@ -109,7 +109,7 @@ import freemarker.template.*;
  * ({@code juneau.freemarker.path = views}) to change the runtime mount without subclassing.
  * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -118,7 +118,7 @@ import freemarker.template.*;
  * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin
  * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='section'>Choosing a Configuration:</h5>
+ * <h2 class='section'>Choosing a Configuration:</h2>
  *
  * <p>
  * The {@code juneau-rest-server-view-freemarker} module ships <b>only</b>
@@ -149,7 +149,7 @@ import freemarker.template.*;
  * When no FreeMarker engine is on the classpath, the renderer surfaces
  * {@link FreemarkerViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.
  *
- * <h5 class='section'>Public-field DTOs (getter-only default trap):</h5>
+ * <h2 class='section'>Public-field DTOs (getter-only default trap):</h2>
  *
  * <p>
  * FreeMarker's own version-default {@code ObjectWrapper} exposes only JavaBean getters &mdash; a
@@ -165,7 +165,7 @@ import freemarker.template.*;
  * (e.g. a {@code BeansWrapper} with custom exposure rules). Both knobs only affect the
  * bridge-default {@link Configuration}; a user-supplied {@code @Bean Configuration} is used as-is.
  *
- * <h5 class='section'>Template suffix:</h5>
+ * <h2 class='section'>Template suffix:</h2>
  *
  * <p>
  * FreeMarker's API does not expose a configuration-level resolver suffix &mdash; the literal
@@ -175,14 +175,14 @@ import freemarker.template.*;
  * with it (idempotent), so callers can write {@code FreemarkerView.of("hello")} or request
  * {@code /freemarker/hello} and have it resolve to {@code hello.ftlh} on the classpath.
  *
- * <h5 class='section'>{@code .ftl} vs {@code .ftlh}:</h5>
+ * <h2 class='section'>{@code .ftl} vs {@code .ftlh}:</h2>
  *
  * <p>
  * FreeMarker auto-selects HTML escaping by file extension: {@code .ftlh} templates emit
  * HTML-escaped output; {@code .ftl} templates emit raw output. For HTML responses, prefer
  * {@code .ftlh} so a future attribute-binding change can't introduce an XSS regression.
  *
- * <h5 class='section'>Multiple base paths:</h5>
+ * <h2 class='section'>Multiple base paths:</h2>
  *
  * <p>
  * A host with {@code /templates/} and {@code /admin/templates/} template trees registers two
@@ -191,13 +191,13 @@ import freemarker.template.*;
  * {@code FreemarkerMixin_MockRest_Test} test in {@code juneau-integration-tests} for the canonical
  * pattern.
  *
- * <h5 class='section'>OpenAPI surface:</h5>
+ * <h2 class='section'>OpenAPI surface:</h2>
  *
  * <p>
  * The greedy {@code /*} handler is not API-meaningful and is excluded from generated
  * Swagger / OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FreemarkerView}
  * 	<li class='jc'>{@link FreemarkerViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
@@ -236,7 +236,7 @@ public class FreemarkerMixin {
 	 * freemarker()} was not found and the renderer silently used a plain mixin. Subclasses call this from a static
 	 * initializer.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyMixin <jk>extends</jk> FreemarkerMixin {
 	 * 		<jk>static</jk> { FreemarkerMixin.<jsm>registerSubtype</jsm>(MyMixin.<jk>class</jk>); }

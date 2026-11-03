@@ -33,11 +33,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses CBOR streams (RFC 8949) into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Content-Type</c> types:  <bc>application/cbor</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * CBOR-to-Java type mapping:
  * <ul class='spaced-list'>
@@ -53,7 +53,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>CBOR semantic tag (major type 6) → tag ignored; tagged value parsed normally
  * </ul>
  *
- * <h5 class='section'>Round-trip notes:</h5>
+ * <h2 class='section'>Round-trip notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>Integers (major types 0/1) surface by target type: a {@link BigInteger} field carries the full
  * 		unsigned-64-bit magnitude; any other numeric type keeps the raw 64-bit bits as a {@code long}.
@@ -67,11 +67,11 @@ import org.apache.juneau.marshall.stream.*;
  * 		{@link TokenReader} cursor.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>

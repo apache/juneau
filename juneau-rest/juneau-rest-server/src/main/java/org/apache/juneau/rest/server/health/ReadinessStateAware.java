@@ -26,7 +26,7 @@ package org.apache.juneau.rest.server.health;
  * interface, before the server starts.  A typical use is closing long-lived streaming connections at the start
  * of a graceful shutdown so the drain does not have to wait out its stop timeout for them.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/events"</js>)
  * 	<jk>public class</jk> EventsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> ReadinessStateAware {

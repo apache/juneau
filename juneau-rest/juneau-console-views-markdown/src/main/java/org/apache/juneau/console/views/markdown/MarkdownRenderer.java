@@ -28,7 +28,7 @@ import java.util.*;
  * behind it.  The shipped default is {@link CommonmarkMarkdownRenderer} (commonmark-java with the GFM tables
  * extension enabled), but a consumer can swap in their own parser without the toolkit knowing which library won.
  *
- * <h5 class='section'>Selecting an implementation:</h5>
+ * <h2 class='section'>Selecting an implementation:</h2>
  * <p>
  * {@link #resolve()} returns the active renderer via the standard {@link ServiceLoader} SPI mechanism: if a
  * consumer registers their own provider (a {@code META-INF/services/}
@@ -36,7 +36,7 @@ import java.util.*;
  * that provider wins; otherwise the built-in commonmark-java default is used.  The default is intentionally
  * <b>not</b> registered as a service, so a single consumer-supplied provider is always unambiguous.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Render markdown to an HTML fragment using whichever renderer is active.</jc>
  * 	MarkdownRenderer <jv>renderer</jv> = MarkdownRenderer.<jsm>resolve</jsm>();
@@ -49,7 +49,7 @@ import java.util.*;
  * The row-detail runtime still allowlist-copies the fragment (never {@code innerHTML}) when
  * {@code FieldFormat.MARKDOWN} is set.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link CommonmarkMarkdownRenderer}
  * </ul>

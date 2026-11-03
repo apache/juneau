@@ -50,7 +50,7 @@ package org.apache.juneau.commons.function;
  * the parser's {@code instanceof BeanConsumer} check. Since it extends {@link BeanSupplier}, it
  * also passes the serializer's {@code instanceof BeanSupplier} check — both directions work.
  *
- * <h5 class='section'>Example (DB-backed round-trip channel):</h5>
+ * <h2 class='section'>Example (DB-backed round-trip channel):</h2>
  * <p class='bjava'>
  * 	<ja>@Marshalled</ja>(factory=ItemChannelFactory.<jk>class</jk>)
  * 	<jk>public class</jk> ItemChannel <jk>implements</jk> BeanChannel&lt;Item&gt; {
@@ -85,7 +85,7 @@ package org.apache.juneau.commons.function;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanConsumer} - Parse-only lifecycle interface
  * 	<li class='jc'>{@link BeanSupplier} - Serialize-only lifecycle interface
  * 	<li class='jc'>{@link BeanFactory} - Universal factory for DI framework integration

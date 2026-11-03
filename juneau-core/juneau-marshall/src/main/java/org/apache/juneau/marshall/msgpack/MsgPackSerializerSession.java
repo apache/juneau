@@ -34,11 +34,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackSerializer}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackSupport">MessagePack</a>
 
  * </ul>
@@ -117,12 +117,12 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	 * <b>buffers</b> each open container's body bytes until the matching {@code endXxx} call;
 	 * memory cost is O(largest open container).
 	 *
-	 * <h5 class='section'>Builder properties honored:</h5>
+	 * <h4 class='section'>Builder properties honored:</h4>
 	 * <c>keepNullProperties</c>, <c>trimEmptyMaps</c>, <c>trimEmptyCollections</c>, <c>sortMaps</c>,
 	 * <c>sortCollections</c>, <c>trimStrings</c> &mdash; all flow through to
 	 * {@link TokenWriter#object(Object) object(Object)}.
 	 *
-	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <h4 class='section'>Builder properties NOT honored:</h4>
 	 * <c>useWhitespace</c>, <c>maxIndent</c>, <c>quoteChar</c>, <c>escapeSolidus</c> (binary
 	 * format); <c>uriContext</c>, <c>uriResolution</c>, <c>uriRelativity</c>, <c>listener</c>.
 	 *

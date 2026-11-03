@@ -31,7 +31,7 @@ import org.apache.juneau.commons.collections.*;
  * The Encoding Object is a single encoding definition applied to a single schema property. It allows you to define
  * how a property should be serialized when it's part of a request or response body with a specific media type.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Encoding Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>allowReserved</c> (boolean) - Determines whether the parameter value should allow reserved characters
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Encoding <jv>x</jv> = <jsm>encoding</jsm>()
@@ -65,7 +65,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#encoding-object">OpenAPI Specification &gt; Encoding Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-request-body/">OpenAPI Describing Request Body</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

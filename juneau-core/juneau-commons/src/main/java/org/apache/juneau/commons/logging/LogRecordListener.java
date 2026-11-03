@@ -23,7 +23,7 @@ package org.apache.juneau.commons.logging;
  * Implementations of this interface can be registered with a {@link RichLogger} to receive
  * notifications when log records are logged.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LogRecordCapture}
  * 	<li class='jc'>{@link RichLogger}
  * </ul>

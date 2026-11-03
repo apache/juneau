@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.stream.*;
  * Pairs {@link SseSerializer} and {@link SseParser} into a single class with convenience
  * read/write methods for the <c>text/event-stream</c> wire format.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a list of events using the DEFAULT instance</jc>
  * 	List&lt;SseEvent&gt; <jv>events</jv> = List.<jsm>of</jsm>(
@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Sse.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

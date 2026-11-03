@@ -27,12 +27,12 @@ import org.apache.juneau.http.header.*;
  * <p>
  * Allows a 304 Not Modified to be returned if content is unchanged.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The If-None-Match request-header field is used with a method to make it conditional.
  * A client that has one or more entities previously obtained from the resource can verify that none of those entities
@@ -94,7 +94,7 @@ import org.apache.juneau.http.header.*;
  * The result of a request having both an If-None-Match header field and either an If-Match or an If-Unmodified-Since
  * header fields is undefined by this specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

@@ -24,7 +24,7 @@ package org.apache.juneau.commons.lang;
  * in state machine implementations throughout the Juneau codebase. This eliminates the need
  * to declare local int constants and provides better code readability.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.commons.utils.StateEnum.*;
  *
@@ -35,7 +35,7 @@ package org.apache.juneau.commons.lang;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons</a>
  * </ul>
  */

@@ -37,14 +37,14 @@ import java.util.*;
  * Instances are built with {@link Builder}: {@link #create(String, String)} starts a new custom operator, and
  * {@link #copy()} starts a modified copy of an existing one (built-in or custom).
  *
- * <h5 class='section'>Combinators vs. leaves</h5>
+ * <h2 class='section'>Combinators vs. leaves</h2>
  * <p>
  * {@code $and}/{@code $or}/{@code $not} are {@link #isCombinator() combinators}: their children are sub-expressions,
  * not literal value arguments, and they apply to every type.  Every other operator is a leaf whose arguments are
  * literal values and whose {@link #appliesTo(SearchType) applicability} is a fixed type set (an <b>empty</b> type set
  * means "applies to all types").
  *
- * <h5 class='section'>Example (custom operator, with a typed extension):</h5>
+ * <h2 class='section'>Example (custom operator, with a typed extension):</h2>
  * <p class='bjava'>
  * 	SearchOperator <jv>op</jv> = SearchOperator.<jsm>create</jsm>(<js>"$near"</js>, <js>"Fuzzy match. Example: $near(jhon)"</js>)
  * 		.types(SearchType.<jsf>TEXT</jsf>)
@@ -179,7 +179,7 @@ public final class SearchOperator {
 	 * falls back to.  Custom operators always return non-blank text, because {@link Builder#build()} rejects a custom
 	 * operator without it.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SearchOperator <jv>near</jv> = SearchOperator.<jsm>create</jsm>(<js>"$near"</js>, <js>"Within N units. Example: $near(5)"</js>).build();
 	 * 	<jv>near</jv>.help();                                                <jc>// "Within N units. Example: $near(5)"</jc>

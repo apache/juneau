@@ -26,7 +26,7 @@
  * <p>
  * No <c>.proto</c> schema files are required—Java bean metadata provides the type information.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	String proto = PrototextSerializer.<jsf>DEFAULT</jsf>.write(myBean);
  * 	MyBean bean = PrototextParser.<jsf>DEFAULT</jsf>.read(proto, MyBean.<jk>class</jk>);
@@ -36,7 +36,7 @@
  * 	MyBean bean = Prototext.<jsm>to</jsm>(proto, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Prototext">Protobuf Text Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format Specification</a>
  * </ul>

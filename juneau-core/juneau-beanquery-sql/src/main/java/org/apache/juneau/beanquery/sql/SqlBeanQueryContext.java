@@ -53,7 +53,7 @@ import org.apache.juneau.commons.beanquery.*;
  * generated SQL and binds can be inspected and unit-tested.  A {@link #guard} fragment is AND-ed, in parentheses,
  * into every statement.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	SqlBeanQueryContext&lt;Person&gt; <jv>context</jv> = SqlBeanQueryContext
  * 		.<jsm>create</jsm>(Person.<jk>class</jk>)

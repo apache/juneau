@@ -30,7 +30,7 @@ import org.apache.juneau.commons.utils.*;
  * boolean references to lambdas, inner classes, or methods. Unlike {@link Flag}, this class supports three
  * states: <c>true</c>, <c>false</c>, and <c>null</c>.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link AtomicBoolean} instead.
  * 	<li class='note'>
@@ -38,7 +38,7 @@ import org.apache.juneau.commons.utils.*;
  * 		two states (<c>true</c>/<c>false</c>), consider using {@link Flag} instead.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a boolean value to track if a condition was met</jc>
  * 	BooleanHolder <jv>found</jv> = BooleanHolder.<jsm>create</jsm>();
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * 	<li class='jc'>{@link Flag}
  * </ul>
@@ -68,7 +68,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	/**
 	 * Creates a new boolean value initialized to <c>false</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(<jk>false</jk>, <jv>value</jv>.get());
@@ -83,7 +83,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	/**
 	 * Creates a new boolean value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertEquals</jsm>(<jk>true</jk>, <jv>value</jv>.get());
@@ -111,7 +111,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(<jk>true</jk>));
@@ -136,7 +136,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<jk>true</jk>, <jk>null</jk>));
@@ -158,7 +158,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	/**
 	 * Returns <c>true</c> if the value is not set to <c>true</c> (i.e., it's <c>false</c> or <c>null</c>).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>false</jk>);
 	 * 	<jk>if</jk> (<jv>value</jv>.isNotTrue()) {
@@ -173,7 +173,7 @@ public class BooleanHolder extends Holder<Boolean> {
 	/**
 	 * Returns <c>true</c> if the value is set to <c>true</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BooleanHolder <jv>value</jv> = BooleanHolder.<jsm>of</jsm>(<jk>true</jk>);
 	 * 	<jk>if</jk> (<jv>value</jv>.isTrue()) {

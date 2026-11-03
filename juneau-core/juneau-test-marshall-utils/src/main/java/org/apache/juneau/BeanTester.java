@@ -36,7 +36,7 @@ import org.apache.juneau.bct.*;
  *    <li>toString() method validation
  * </ul>
  *
- * <h5 class='section'>Example Usage:</h5>
+ * <h2 class='section'>Example Usage:</h2>
  * <p class='bjava'>
  *    BeanTester&lt;MyBean&gt; tester = testBean(myBean)
  *       .json("{prop1:'value1',prop2:'value2'}")

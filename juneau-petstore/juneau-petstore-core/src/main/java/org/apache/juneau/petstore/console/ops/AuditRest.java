@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * The table's {@code at} column takes a timestamp range as a column search value; the query layer parses the ISO-8601
  * instants.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// What the table sends as the "at" column search to show one day:</jc>
  * 	<js>"$between(2026-09-30T00:00:00Z,2026-10-01T00:00:00Z)"</js>

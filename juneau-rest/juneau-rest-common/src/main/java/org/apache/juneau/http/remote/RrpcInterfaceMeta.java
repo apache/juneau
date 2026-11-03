@@ -34,7 +34,7 @@ import org.apache.juneau.rest.common.utils.*;
  * Built once per interface class and cached for efficient proxy invocation.
  * Use {@link #of(Class)} to obtain instances.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

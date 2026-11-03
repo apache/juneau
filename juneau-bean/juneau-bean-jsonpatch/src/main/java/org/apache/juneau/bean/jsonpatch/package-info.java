@@ -19,7 +19,7 @@
  * Juneau {@link org.apache.juneau.marshall.Marshalled @Marshalled} types for
  * <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a>.
  *
- * <h5 class='topic'>Overview</h5>
+ * <h2 class='topic'>Overview</h2>
  *
  * <p>
  * A JSON Patch document is a JSON array of operation objects describing changes to apply to a target JSON
@@ -28,7 +28,7 @@
  * member (JSON Pointer per RFC 6901), and op-specific additional members. The matching {@code ContentType}
  * constant is {@code org.apache.juneau.http.header.ContentType#APPLICATION_JSON_PATCH}.
  *
- * <h5 class='topic'>Bean Classes</h5>
+ * <h2 class='topic'>Bean Classes</h2>
  * <ul class='spaced-list'>
  *   <li>{@link org.apache.juneau.bean.jsonpatch.JsonPatchOperation JsonPatchOperation} - Abstract base. Polymorphic dispatch
  *     wired via {@code @Marshalled(typePropertyName="op", dictionary={...})}, so the parser materializes the
@@ -43,7 +43,7 @@
  *     the JSON Patch <i>document</i> serializes as a top-level JSON array (mirrors {@code JsonSchemaArray}).
  * </ul>
  *
- * <h5 class='topic'>Example</h5>
+ * <h2 class='topic'>Example</h2>
  *
  * <p class='bjava'>
  * 	JsonPatch <jv>patch</jv> = <jk>new</jk> JsonPatch()
@@ -58,7 +58,7 @@
  * 	JsonPatch <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, JsonPatch.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a href="https://datatracker.ietf.org/doc/html/rfc6902">RFC 6902 - JSON Patch</a>
  *   <li class='link'><a href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901 - JSON Pointer</a>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonPatch">juneau-bean-jsonpatch</a>

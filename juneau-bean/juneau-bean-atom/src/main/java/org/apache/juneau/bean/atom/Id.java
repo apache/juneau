@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li><b>UUID URN</b> - <c>urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a</c>
  * </ul>
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomId = element atom:id {
  * 		atomCommonAttributes,
@@ -53,7 +53,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Tag URI (recommended)</jc>
  * 	Id <jv>id1</jv> = <jk>new</jk> Id(<js>"tag:example.org,2024:feed"</js>);
@@ -65,12 +65,12 @@ import org.apache.juneau.marshall.xml.*;
  * 	Id <jv>id3</jv> = <jk>new</jk> Id(<js>"urn:uuid:1225c695-cfb8-4ebb-aaaa-80da344efa6a"</js>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomId</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.6">RFC 4287 - Section 4.2.6</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.ietf.org/rfc/rfc4151.txt">RFC 4151 - Tag URI Scheme</a>

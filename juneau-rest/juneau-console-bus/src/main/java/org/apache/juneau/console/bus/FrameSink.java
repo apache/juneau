@@ -33,7 +33,7 @@ package org.apache.juneau.console.bus;
  * {@code bus:unknown-session} (expired), {@code 4409} {@code bus:replaced} (a second connection took over the session)
  * and {@code 4429} {@code bus:slow-consumer}.  A transport without close codes (SSE) ends its response instead.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// A test double that records what the bus sends:</jc>
  *   List&lt;String&gt; <jv>frames</jv> = <jk>new</jk> ArrayList&lt;&gt;();

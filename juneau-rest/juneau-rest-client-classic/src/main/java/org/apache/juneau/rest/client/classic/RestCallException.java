@@ -26,7 +26,7 @@ import org.apache.juneau.http.classic.header.*;
 /**
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
  *

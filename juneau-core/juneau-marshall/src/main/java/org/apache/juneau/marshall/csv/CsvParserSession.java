@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  *   <li>{@code Object} — Returns a {@link JsonList} of {@link JsonMap} entries.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  */

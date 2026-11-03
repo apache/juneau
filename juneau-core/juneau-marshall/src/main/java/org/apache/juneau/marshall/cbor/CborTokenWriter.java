@@ -33,7 +33,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * caller doesn't have to know element counts up front &mdash; a natural fit for streaming
  * generation.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li>{@code byte[]} values dispatch to native CBOR major-type-2 byte strings via
  * 		{@link CborOutputStream#appendBinary(byte[])}, not to a base64 string fallback.

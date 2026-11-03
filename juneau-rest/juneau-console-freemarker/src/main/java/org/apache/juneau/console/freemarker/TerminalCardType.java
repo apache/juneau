@@ -29,7 +29,7 @@ import org.apache.juneau.terminal.region.*;
  * {@link TerminalDef} and emits {@code {terminal: ...}}. {@code id=} is required and {@code src=}/{@code template=}
  * are rejected by {@code <@card>} itself before this handler runs.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@card type="terminal" id="build"&gt;{ contractVersion: '1', terminal: { bytesUrl: '/runs/juneau-terminal/r42/bytes' } }&lt;/@card&gt;
  * </p>

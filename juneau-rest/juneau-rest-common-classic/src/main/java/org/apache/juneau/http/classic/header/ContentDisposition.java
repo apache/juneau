@@ -33,12 +33,12 @@ import org.apache.juneau.http.*;
  * to be displayed inline in the browser, that is, as a Web page or as part of a Web page, or as an attachment, that is
  * downloaded and saved locally.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Content-Disposition: form-data; name="fieldName"; filename="filename.jpg"
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
  * <p class='bcode'>
@@ -51,7 +51,7 @@ import org.apache.juneau.http.*;
  * 	disp-extension-parm = token "=" ( token | quoted-string )
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

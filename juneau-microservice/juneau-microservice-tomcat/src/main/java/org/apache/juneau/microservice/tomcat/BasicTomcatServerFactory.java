@@ -29,7 +29,7 @@ import org.apache.catalina.startup.*;
  * context mounted at <c>""</c> with the base directory as its doc-base.  Auto-deployment is disabled (servlets
  * are mounted explicitly by {@link TomcatServerComponent}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat">juneau-microservice-tomcat</a>
  * </ul>
  */

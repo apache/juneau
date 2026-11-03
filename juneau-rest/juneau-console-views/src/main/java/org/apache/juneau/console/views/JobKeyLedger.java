@@ -31,7 +31,7 @@ import java.util.*;
  * and the submit endpoint calls {@link #verify(String, String, String, String)} (usually through
  * {@link RowJobSubmit#verify(JobKeyLedger, String, String)}).
  *
- * <h5 class='section'>Rules</h5>
+ * <h2 class='section'>Rules</h2>
  * <ul class='spaced-list'>
  * 	<li><b>One refusal for every miss.</b>  Unknown, expired, evicted and mismatched keys all verify empty, and the
  * 		caller answers all of them with {@link #REFUSAL_CODE}, so the answer is no oracle for "this value exists for
@@ -50,7 +50,7 @@ import java.util.*;
  * <p>
  * In-memory and single-process, like {@link AsyncJobRegistry}.  Safe for concurrent use.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>private final</jk> JobKeyLedger <jv>jobKeys</jv> = JobKeyLedger.<jsm>create</jsm>();
  *
@@ -60,7 +60,7 @@ import java.util.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link IdempotencyKey}
  * 	<li class='jc'>{@link RowJobSubmit}

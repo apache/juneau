@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * This class extends {@link Common}, inheriting the <c>xml:base</c> and <c>xml:lang</c> attributes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>

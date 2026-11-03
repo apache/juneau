@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.collections.*;
  * The built-in {@code annotations} decorator: ECharts {@code markPoint} presets (max, min, average) on every series,
  * or explicit points on a carrier series {@code juneau-annotations-<n>}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Annotations.<jsm>max</jsm>().withMin().label(<js>"{name}"</js>);
  * </p>

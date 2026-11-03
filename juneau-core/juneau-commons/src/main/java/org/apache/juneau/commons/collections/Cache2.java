@@ -29,13 +29,13 @@ import org.apache.juneau.commons.function.*;
 /**
  * Simple in-memory cache for storing and retrieving objects by two-part keys.
  *
- * <h5 class='section'>Overview:</h5>
+ * <h2 class='section'>Overview:</h2>
  * <p>
  * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for two-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by two keys.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Thread-safe concurrent access without external synchronization
  * 	<li>Two-part composite key support
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Can be disabled entirely via builder or system property
  * </ul>
  *
- * <h5 class='section'>WEAK Mode Semantics:</h5>
+ * <h2 class='section'>WEAK Mode Semantics:</h2>
  * <p>
  * {@link CacheMode#WEAK} on this class is <b>best-effort</b>, not retention-guaranteed. Each lookup synthesizes
  * an internal {@code Tuple2} composite key that is never exposed to the caller, so that key is reachable only
@@ -58,7 +58,7 @@ import org.apache.juneau.commons.function.*;
  * remains strongly reachable elsewhere. If guaranteed retention is required, use {@link CacheMode#FULL} (the
  * default mode) instead of WEAK. See {@link CacheMode#WEAK} for details.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a cache with default supplier</jc>
  * 	Cache2&lt;ClassLoader,Class&lt;?&gt;,ClassMeta&gt; <jv>metaCache</jv> = Cache2
@@ -74,7 +74,7 @@ import org.apache.juneau.commons.function.*;
  * 	ClassMeta <jv>meta2</jv> = <jv>metaCache</jv>.get(<jv>classLoader</jv>, Integer.<jk>class</jk>, () -&gt; customMeta);
  * </p>
  *
- * <h5 class='section'>Cache Behavior:</h5>
+ * <h2 class='section'>Cache Behavior:</h2>
  * <ul class='spaced-list'>
  * 	<li>When a key pair is requested:
  * 		<ul>
@@ -87,7 +87,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Null keys always bypass the cache and invoke the supplier
  * </ul>
  *
- * <h5 class='section'>Environment Variables:</h5>
+ * <h2 class='section'>Environment Variables:</h2>
  * <p>
  * The following system properties can be used to configure default cache behavior:
  * <ul class='spaced-list'>
@@ -96,14 +96,14 @@ import org.apache.juneau.commons.function.*;
  * 	<li><c>juneau.cache.logOnExit</c> - Log cache statistics on shutdown (default: <jk>false</jk>)
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe and can be safely used from multiple threads without external synchronization.
  * However, note that when the cache is cleared due to exceeding max size, there's a small window where
  * multiple threads might compute the same value. This is acceptable for most use cases as it only affects
  * performance, not correctness.
  *
- * <h5 class='section'>Performance Considerations:</h5>
+ * <h2 class='section'>Performance Considerations:</h2>
  * <ul class='spaced-list'>
  * 	<li>Cache operations are O(1) average time complexity
  * 	<li>The {@link #get(Object, Object, java.util.function.Supplier)} method uses
@@ -113,7 +113,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Statistics tracking uses {@link AtomicInteger} for thread-safe counting without locking
  * </ul>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Simple cache with defaults</jc>
  * 	Cache2&lt;String,String,Config&gt; <jv>cache</jv> = Cache2.<jsm>of</jsm>(String.<jk>class</jk>, String.<jk>class</jk>, Config.<jk>class</jk>).build();
@@ -133,7 +133,7 @@ import org.apache.juneau.commons.function.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link Cache}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
@@ -151,7 +151,7 @@ public class Cache2<K1,K2,V> {
 	/**
 	 * Builder for creating configured {@link Cache2} instances.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2
 	 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>)
@@ -160,7 +160,7 @@ public class Cache2<K1,K2,V> {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
+	 * <h2 class='section'>See Also:</h2>
 	 * <ul>
 	 * 	<li class='jm'>{@link Cache2#of(Class, Class, Class)}
 	 * </ul>
@@ -279,7 +279,7 @@ public class Cache2<K1,K2,V> {
 		 * <p>
 		 * Default value: 1000 (or value of system property <c>juneau.cache.maxSize</c>)
 		 *
-		 * <h5 class='section'>Notes:</h5>
+		 * <h4 class='section'>Notes:</h4>
 		 * <ul>
 		 * 	<li>Setting this too low may cause excessive cache clearing and reduce effectiveness
 		 * 	<li>Setting this too high may consume excessive memory
@@ -302,7 +302,7 @@ public class Cache2<K1,K2,V> {
 		 * Individual lookups can override this supplier using
 		 * {@link Cache2#get(Object, Object, java.util.function.Supplier)}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2
 		 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>)
@@ -370,7 +370,7 @@ public class Cache2<K1,K2,V> {
 	 * This variant allows you to specify the cache's generic types explicitly without passing
 	 * the class objects, which is useful when working with complex parameterized types.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Working with complex generic types</jc>
 	 * 	Cache2&lt;Class&lt;?&gt;,Class&lt;? extends Annotation&gt;,List&lt;Annotation&gt;&gt; <jv>cache</jv> =
@@ -391,7 +391,7 @@ public class Cache2<K1,K2,V> {
 	/**
 	 * Creates a new {@link Builder} for constructing a cache.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2
 	 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>)
@@ -515,7 +515,7 @@ public class Cache2<K1,K2,V> {
 	 * This method uses the default supplier configured via {@link Builder#supplier(Function2)}.
 	 * If no default supplier was configured, this method will throw a {@link NullPointerException}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2
 	 * 		.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>)
@@ -548,7 +548,7 @@ public class Cache2<K1,K2,V> {
 	 * 	<li>Return the value
 	 * </ol>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>If the cache is disabled, always invokes the supplier without caching
 	 * 	<li>If the cache exceeds {@link Builder#maxSize(int)}, clears all entries before storing the new value
@@ -557,7 +557,7 @@ public class Cache2<K1,K2,V> {
 	 * 		(due to {@link ConcurrentHashMap#putIfAbsent(Object, Object)} semantics)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Cache2&lt;String,Integer,User&gt; <jv>cache</jv> = Cache2.<jsm>of</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>, User.<jk>class</jk>).build();
 	 *
@@ -604,7 +604,7 @@ public class Cache2<K1,K2,V> {
 	 * {@link #get(Object, Object, java.util.function.Supplier)} finds an existing cached value
 	 * for the requested key pair, avoiding the need to invoke the supplier.
 	 *
-	 * <h5 class='section'>Cache Effectiveness:</h5>
+	 * <h4 class='section'>Cache Effectiveness:</h4>
 	 * <p>
 	 * You can calculate the cache hit ratio using:
 	 * <p class='bjava'>
@@ -614,7 +614,7 @@ public class Cache2<K1,K2,V> {
 	 * 	<jk>double</jk> <jv>hitRatio</jv> = (<jk>double</jk>) <jv>hits</jv> / <jv>total</jv>;  <jc>// 0.0 to 1.0</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul>
 	 * 	<li>This counter is never reset, even when {@link #clear()} is called
 	 * 	<li>Thread-safe using {@link AtomicInteger}

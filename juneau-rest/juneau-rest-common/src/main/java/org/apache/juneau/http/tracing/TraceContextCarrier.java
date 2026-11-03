@@ -42,7 +42,7 @@ package org.apache.juneau.http.tracing;
  * {@code TraceContexts#inject(TracerHook, TraceContextCarrier)} writing the current trace context
  * into the carrier for a caller to read back).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TraceContextExtractor}
  * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TraceContexts}
  * 	<li class='jc'>{@code org.apache.juneau.rest.server.tracing.TracerHook}

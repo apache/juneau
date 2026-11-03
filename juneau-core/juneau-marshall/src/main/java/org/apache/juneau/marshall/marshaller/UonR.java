@@ -31,20 +31,20 @@ import org.apache.juneau.marshall.stream.*;
  * 	{@link UonSerializer#DEFAULT_READABLE} with {@link UonParser#DEFAULT} and exposes the full
  * 	static shortcut surface bound to its own {@link #DEFAULT} instance.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  *	<jc>// Using static shortcuts.</jc>
  * 	String <jv>uon</jv> = UonR.<jsm>of</jsm>(<jv>myPojo</jv>);
  * 	MyPojo <jv>myPojo</jv> = UonR.<jsm>to</jsm>(<jv>uon</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>Because Java <i>hides</i> (does not override) static members, this class redeclares the
  * 		entire static shortcut surface of {@link Uon} so that every shortcut is bound to this class's
  * 		readable {@link #DEFAULT} rather than the {@link Uon#DEFAULT}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

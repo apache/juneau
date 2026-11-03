@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.*;
  * Both the {@link LoggersMixin mixin} and {@link LoggersResource resource} flavors delegate here, so the
  * two forms cannot drift &mdash; the same pattern the health package uses with its aggregator.
  *
- * <h5 class='section'>Backend</h5>
+ * <h2 class='section'>Backend</h2>
  * <p>
  * The driven backend defaults to {@link JulLogBackend java.util.logging}.  A consumer drives a different backend
  * (e.g. Logback / Log4j2 via {@code juneau-rest-server-management-logging}) by <i>explicitly</i> declaring it on a
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.*;
  * auto-detects.  The response shape (logger name &rarr; configured level, empty string = inherited) is identical
  * across backends.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LogBackend}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>

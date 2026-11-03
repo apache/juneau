@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.view.*;
  * logic. Each flavor independently holds an instance of this worker and delegates to it, so no flavor
  * is another flavor's worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link JspServlet}
  * 	<li class='jc'>{@link JspResource}

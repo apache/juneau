@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * (e.g., JSON maps, XML elements). A common use case is when parsing a map where the map key should be stored
  * as a property on the bean.
  *
- * <h5 class='section'>Requirements:</h5>
+ * <h2 class='section'>Requirements:</h2>
  * <ul class='spaced-list'>
  * 	<li>Must be an <strong>instance</strong> method or field (not static)
  * 	<li>For methods: Must accept exactly one parameter (any type)
@@ -44,7 +44,7 @@ import java.lang.annotation.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link NamePropertyApply @NamePropertyApply}
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// JSON being parsed:</jc>
  * 	<jc>// {</jc>
@@ -74,13 +74,13 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>When It's Called:</h5>
+ * <h2 class='section'>When It's Called:</h2>
  * <ul class='spaced-list'>
  * 	<li>During parsing when an object is created as a value in a map/collection
  * 	<li>The parser automatically calls the setter or sets the field with the key/name from the parent structure
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NamePropertyAnnotation">@NameProperty Annotation</a>
 
  * </ul>

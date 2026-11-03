@@ -27,14 +27,14 @@ import org.apache.juneau.rest.server.converter.*;
  * <p>
  * The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(widgets=QueryMenuItem.<jk>class</jk>)
  * 	<ja>@HtmlDocConfig</ja>(navlinks={<js>"$W{QueryMenuItem}"</js>})
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Queryable}
  * 	<li class='jc'>{@link org.apache.juneau.http.BeanQueryRequest}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlPredefinedWidgets">Predefined Widgets</a>

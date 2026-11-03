@@ -30,17 +30,17 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses YAML text into a POJO model.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/yaml, text/yaml</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This parser uses an indentation-aware state machine to parse YAML directly into POJOs without intermediate
  * DOM objects.  It supports block-style and flow-style mappings and sequences, plain and quoted scalars,
  * comments, document markers, and standard YAML scalar types.
  *
- * <h5 class='section'>Limitations compared to JSON</h5>
+ * <h2 class='section'>Limitations compared to JSON</h2>
  * <p>
  * The YAML parser has some limitations when compared to {@link JsonParser}:
  * <ul class='spaced-list'>
@@ -57,13 +57,13 @@ import org.apache.juneau.marshall.stream.*;
  * 		parsing errors where equivalent JSON would parse successfully.
  * </ul>
  *
- * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <h2 class='figure'>Example input (Map of name/age):</h2>
  * <p class='bcode'>
  * 	name: Alice
  * 	age: 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bcode'>
  * 	name: Alice
  * 	age: 30
@@ -77,11 +77,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	- c
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlSupport">YAML</a>
  * </ul>
  */

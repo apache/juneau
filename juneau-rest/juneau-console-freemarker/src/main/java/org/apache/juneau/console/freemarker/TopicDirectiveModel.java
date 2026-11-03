@@ -31,7 +31,7 @@ import freemarker.template.*;
  * {@code <@topic name="..." retain=true|false publisher="script|server|ribbon"/>}: declares a page-level custom topic
  * in the contract's {@code topics} list.  The FTL twin of {@code PageSpec.topic(TopicDecl)}; the two union.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@page&gt;
  * 	  &lt;@topic name="app.region-picked" retain=true publisher="script"/&gt;

@@ -29,13 +29,13 @@ import org.apache.juneau.marshall.uon.*;
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>application/x-www-form-urlencoded</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * This serializer provides several serialization options.
  * <br>Typically, one of the predefined DEFAULT serializers will be sufficient.
@@ -89,7 +89,7 @@ import org.apache.juneau.marshall.uon.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
@@ -120,11 +120,11 @@ import org.apache.juneau.marshall.uon.*;
  * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding</a>
  * </ul>
  */
@@ -194,14 +194,14 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * <p>
 		 * This option only applies to beans.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
 		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 		 * 		is added to it.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A sample bean.</jc>
 		 * 	<jk>public class</jk> A {

@@ -37,7 +37,7 @@ import org.apache.juneau.console.widgets.*;
  * The Users page and its endpoints.  The password is write-only: every read goes through {@link UserView}, which has
  * no password, so it never leaves the server; an update with no password keeps the stored one.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// The wire shape of a create (JSON5): the password is accepted but never echoed.</jc>
  * 	{ username:<js>'newbie'</js>, firstName:<js>'New'</js>, lastName:<js>'Bie'</js>, password:<js>'s3cret'</js> }
@@ -63,7 +63,7 @@ public class UsersRest extends PetstoreConsolePage {
 	/**
 	 * A user as the console shows it: everything but the password.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bcode'>
 	 * 	{ username:'mwatson', firstName:'Mary', lastName:'Watson', userStatus:'ACTIVE' }
 	 * </p>

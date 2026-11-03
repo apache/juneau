@@ -35,7 +35,7 @@ import org.apache.juneau.commons.function.*;
  * <c>juneau-marshall</c> (see {@code MarshalledAnnotation}) until later phases move that machinery
  * down into <c>juneau-commons</c>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanType}
  * 	<li class='jc'>{@link AnnotationObject}
  * </ul>

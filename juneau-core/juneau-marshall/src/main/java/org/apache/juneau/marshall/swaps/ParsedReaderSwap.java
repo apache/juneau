@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.xml.*;
 /**
  * Transforms the contents of a {@link Reader} into an {@code Object}.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * The {@code Reader} must contain JSON, Juneau-generated XML (output from {@link XmlSerializer}), or Juneau-generated
  * HTML (output from {@link JsonSerializer}) in order to be parsed correctly.
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * This is a one-way transform, since {@code Readers} cannot be reconstituted.
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  *
  * The following direct subclasses are provided for convenience:
  * <ul>
@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li>{@link PlainText} - Parses plain text.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
 
  * </ul>

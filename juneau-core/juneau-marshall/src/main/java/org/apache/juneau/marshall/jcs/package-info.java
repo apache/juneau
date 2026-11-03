@@ -22,6 +22,5 @@
  * <ul>
  * 	<li>{@link org.apache.juneau.marshall.jcs.JcsSerializer JcsSerializer} - RFC 8785 canonical JSON for hashing and signing
  * </ul>
- * </p>
  */
 package org.apache.juneau.marshall.jcs;

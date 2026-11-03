@@ -27,12 +27,12 @@ import org.apache.juneau.commons.utils.*;
  * This class extends {@link Holder}&lt;{@link Character}&gt; and provides a convenient way to pass mutable
  * character references to lambdas, inner classes, or methods.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a character value to track the last character seen</jc>
  * 	CharHolder <jv>lastChar</jv> = CharHolder.<jsm>create</jsm>();
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>log</jsm>(<js>"Last uppercase char: "</js> + <jv>lastChar</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -59,7 +59,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Creates a new character value initialized to <c>'\0'</c> (null character).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>('\0', <jv>value</jv>.get());
@@ -74,7 +74,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Creates a new character value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jsm>assertEquals</jsm>('A', <jv>value</jv>.get());
@@ -99,7 +99,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Adds the specified value to the current value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jv>value</jv>.add((<jk>char</jk>)5);
@@ -118,7 +118,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Adds the specified value to the current value and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>char</jk>)5);  <jc>// Returns 'F'</jc>
@@ -138,7 +138,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Decrements the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jv>value</jv>.decrement();
@@ -156,7 +156,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Decrements the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.decrementAndGet();  <jc>// Returns 'A'</jc>
@@ -175,7 +175,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Increments the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jv>value</jv>.increment();
@@ -193,7 +193,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jk>char</jk> <jv>result</jv> = <jv>value</jv>.incrementAndGet();  <jc>// Returns 'B'</jc>
@@ -215,7 +215,7 @@ public class CharHolder extends Holder<Character> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('A');
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is('A'));
@@ -236,7 +236,7 @@ public class CharHolder extends Holder<Character> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each character.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny('A', 'B', 'C'));
@@ -258,7 +258,7 @@ public class CharHolder extends Holder<Character> {
 	/**
 	 * Checks if the current value matches any character in the specified string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	CharHolder <jv>value</jv> = CharHolder.<jsm>of</jsm>('B');
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(<js>"ABC"</js>));

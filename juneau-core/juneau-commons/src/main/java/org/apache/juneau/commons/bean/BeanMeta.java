@@ -45,14 +45,14 @@ import org.apache.juneau.commons.utils.*;
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link BeanInfo}).
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Uses introspection to find all the properties associated with this class.  If the
  * {@link BeanType @BeanType} annotation is present on the class (or the marshalling-side
  * {@code @Marshalled} sibling), that information is used to determine the properties on the class.
  * Otherwise, the {@code BeanInfo} functionality in Java is used to determine the properties on the class.
  *
- * <h5 class='topic'>Bean property ordering</h5>
+ * <h2 class='topic'>Bean property ordering</h2>
  *
  * The order of the properties is as follows:
  * <ul class='spaced-list'>
@@ -79,7 +79,7 @@ import org.apache.juneau.commons.utils.*;
  * Field order comes from {@link Class#getDeclaredFields()}, which is declaration order on HotSpot and OpenJ9 but is
  * not guaranteed by the JLS.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * Instances are effectively immutable after construction and are safe for concurrent read access.
  * Construction is not thread-safe and should be completed before sharing an instance across threads.
@@ -198,12 +198,12 @@ public class BeanMeta<T> {
 	 * class via {@link BeanMetaInitializer#buildBeanFilter(BeanInfo)}.  See {@link #of(Class, BeanConfigContext)} for
 	 * the pure bean-modeling-side entry point that does not require a {@link BeanInfo}.
 	 *
-	 * <h5 class='section'>Exception handling:</h5>
+	 * <h4 class='section'>Exception handling:</h4>
 	 * <p>
 	 * If a {@link RuntimeException} is thrown during bean metadata creation, it is caught and the exception message
 	 * is returned as the {@code notABeanReason} with <jk>null</jk> for the bean metadata.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create bean metadata for a class via the marshalling-side context.</jc>
 	 * 	BeanInfo&lt;Person&gt; <jv>cm</jv> = <jv>marshallingContext</jv>.getClassMeta(Person.<jk>class</jk>);
@@ -399,7 +399,7 @@ public class BeanMeta<T> {
 	 * iteration; marshalling-aware reads ({@link #getBeanInfo()}, type-resolution on each
 	 * {@link BeanPropertyMeta#getBeanInfo()}, the per-property registry lookup) remain <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BeanMeta&lt;Person&gt; <jv>bm</jv> = BeanMeta.<jsm>of</jsm>(Person.<jk>class</jk>, BeanConfigContext.<jsf>DEFAULT</jsf>);
 	 * 	BeanPropertyMeta <jv>name</jv> = <jv>bm</jv>.getProperties().get(<js>"name"</js>);
@@ -1184,7 +1184,7 @@ public class BeanMeta<T> {
 	 * <p>
 	 * Hidden and excluded properties are not included, since input can never set them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
 	 *

@@ -50,11 +50,11 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * Main configuration API class.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfig">juneau-config</a>
  * </ul>
  */
@@ -481,7 +481,6 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	<li><js>"settings.cfg"</js>
 	 * 	<li><js>"application.properties"</js>
 	 * </ol>
-	 * <p>
 	 *
 	 * @return
 	 * 	A list of candidate file names.
@@ -835,7 +834,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * <p>
 	 * If entry does not exist, returns <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method is equivalent to calling <c>get(<jv>key</jv>).orElse(<jk>null</jk>);</c>.
 	 * </ul>
 	 *
@@ -1001,7 +1000,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	<li>An explicit clear ({@link EntryBuilder#clearComment()}, {@link EntryBuilder#clearPreLines()}) clears that facet.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>config</jv>.entry(<js>"MySection/myKey"</js>)
 	 * 		.comment(<js>"My comment"</js>)

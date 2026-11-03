@@ -29,12 +29,12 @@ import org.apache.juneau.commons.utils.*;
  * This class extends {@link Holder}&lt;{@link Short}&gt; and adds a convenience method for incrementing
  * the value, which is useful for counting operations in lambdas and loops.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link AtomicInteger} instead.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
  * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>create</jsm>();
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>log</jsm>(<js>"Valid items: "</js> + <jv>counter</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -61,7 +61,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Creates a new short value initialized to <c>0</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
@@ -76,7 +76,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Creates a new short value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)42);
 	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
@@ -101,7 +101,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Adds the specified value to the current value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)10);
 	 * 	<jv>value</jv>.add((<jk>short</jk>)5);
@@ -120,7 +120,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Adds the specified value to the current value and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)10);
 	 * 	<jk>short</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>short</jk>)5);  <jc>// Returns 15</jc>
@@ -140,7 +140,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Decrements the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jv>counter</jv>.decrement();
@@ -158,7 +158,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Decrements the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
@@ -177,7 +177,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Returns the current value and then increments it.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jk>short</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
@@ -195,7 +195,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Increments the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jv>counter</jv>.increment();
@@ -213,7 +213,7 @@ public class ShortHolder extends Holder<Short> {
 	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>counter</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jk>short</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
@@ -235,7 +235,7 @@ public class ShortHolder extends Holder<Short> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)42);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is((<jk>short</jk>)42));
@@ -256,7 +256,7 @@ public class ShortHolder extends Holder<Short> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ShortHolder <jv>value</jv> = ShortHolder.<jsm>of</jsm>((<jk>short</jk>)5);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny((<jk>short</jk>)3, (<jk>short</jk>)5, (<jk>short</jk>)7));

@@ -25,7 +25,7 @@ import java.util.function.*;
  * listification. They enable unwrapping, preprocessing, and value extraction from
  * wrapper objects, containers, and lazy evaluation constructs.</p>
  *
- * <h5 class='section'>Key Features:</h5>
+ * <h2 class='section'>Key Features:</h2>
  * <ul>
  *    <li><b>Pre-processing:</b> Transform objects before string/list conversion</li>
  *    <li><b>Wrapper unwrapping:</b> Extract values from Optional, Supplier, Future, etc.</li>
@@ -33,7 +33,7 @@ import java.util.function.*;
  *    <li><b>Type transformation:</b> Convert between related types for better testing</li>
  * </ul>
  *
- * <h5 class='section'>Common Use Cases:</h5>
+ * <h2 class='section'>Common Use Cases:</h2>
  * <ul>
  *    <li><b>Optional unwrapping:</b> Extract values from Optional containers</li>
  *    <li><b>Supplier evaluation:</b> Call get() on Supplier objects</li>
@@ -42,7 +42,7 @@ import java.util.function.*;
  *    <li><b>Value extraction:</b> Pull relevant data from complex wrapper objects</li>
  * </ul>
  *
- * <h5 class='section'>Usage Examples:</h5>
+ * <h2 class='section'>Usage Examples:</h2>
  * <p class='bjava'>
  *    <jc>// Future value extraction</jc>
  *    Swapper&lt;CompletableFuture&gt; <jv>futureSwapper</jv> = (<jp>conv</jp>, <jp>future</jp>) -&gt; {
@@ -62,7 +62,7 @@ import java.util.function.*;
  *       <jk>new</jk> UserDTO(<jp>entity</jp>.getId(), <jp>entity</jp>.getName(), <jp>entity</jp>.getEmail());
  * </p>
  *
- * <h5 class='section'>Registration:</h5>
+ * <h2 class='section'>Registration:</h2>
  * <p class='bjava'>
  *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
  *       .defaultSettings()
@@ -72,7 +72,7 @@ import java.util.function.*;
  *       .build();
  * </p>
  *
- * <h5 class='section'>Execution Flow:</h5>
+ * <h2 class='section'>Execution Flow:</h2>
  * <p>Swappers are applied early in the conversion process:</p>
  * <ol>
  *    <li><b>Object received</b> for conversion</li>
@@ -81,7 +81,7 @@ import java.util.function.*;
  *    <li><b>Chain continues</b> recursively for nested objects</li>
  * </ol>
  *
- * <h5 class='section'>Best Practices:</h5>
+ * <h2 class='section'>Best Practices:</h2>
  * <ul>
  *    <li><b>Handle exceptions</b> gracefully, returning error indicators rather than throwing</li>
  *    <li><b>Preserve semantics</b> - the swapped object should represent the same logical value</li>

@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <c>(fieldNumber &lt;&lt; 3) | wireType</c>.  The wire type tells a decoder how many bytes the value
  * occupies even when it doesn't know the field's specific scalar type.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/programming-guides/encoding/">Protocol Buffers Encoding</a>
  * </ul>

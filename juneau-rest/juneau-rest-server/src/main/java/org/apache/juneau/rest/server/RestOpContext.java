@@ -69,11 +69,11 @@ import jakarta.servlet.http.*;
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpContext">RestOpContext</a>
  * </ul>
  */
@@ -1683,7 +1683,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * wins; otherwise the value is inherited from {@link RestContext#isProblemDetails()} (resource-level
 	 * {@code @Rest(problemDetails)}).
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#problemDetails()}
 	 * 	<li class='ja'>{@link RestOp#problemDetails()}
 	 * </ul>
@@ -1700,7 +1700,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code "false"} opts out, {@code ""} inherits the resource-level {@code @Rest(debugMarshalling)}), independent
 	 * of the JUL logger level.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#debugMarshalling()}
 	 * 	<li class='ja'>{@link RestOp#debugMarshalling()}
 	 * </ul>

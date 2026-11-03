@@ -37,7 +37,7 @@ import org.apache.juneau.console.*;
  * {@link #assertPage(String)} also fails immediately if the contract still carries the pre-rename top-level
  * <c>version</c> key (now <c>contractVersion</c>), even when {@link #isValid()} is never called.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	String <jv>html</jv> = <jv>client</jv>.get(<js>"/slo"</js>).run().getContent().asString();
  * 	PageContractAssert.<jsm>assertPage</jsm>(<jv>html</jv>)

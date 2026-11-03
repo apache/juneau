@@ -23,7 +23,7 @@
  * contract.  The base chrome ({@code base.ftlh}: title, nav, badge, facts, scripts, footer) is not rebuilt: a spec with
  * no page template renders inside the console mixin's chrome template, the same as an FTL page.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/"</js>)
  * 	<jk>public</jk> View page(RestRequest <jv>req</jv>) {

@@ -25,7 +25,7 @@ import org.apache.juneau.console.*;
  * Builds {@code $fn} markers: JSON values the chart glue replaces with a function from {@code JuneauCharts.fn}.
  * Nothing is evaluated from a string; the marker is a name plus JSON arguments.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ChartDef.<jsm>line</jsm>(<js>"t"</js>).src(<js>"/s"</js>).x(<js>"d"</js>).series(<js>"v"</js>, <js>"V"</js>)
  * 		.patch(JsonMap.<jsm>of</jsm>(<js>"tooltip"</js>, JsonMap.<jsm>of</jsm>(<js>"valueFormatter"</js>, Fn.<jsm>ref</jsm>(<js>"compact"</js>))));

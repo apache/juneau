@@ -39,7 +39,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * For better random access performance, consider using {@link SortedArrayList}.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Maintains elements in sorted order automatically
  * 	<li>Allows duplicate elements (unlike {@link TreeSet})
@@ -48,7 +48,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Supports custom comparators or natural ordering
  * </ul>
  *
- * <h5 class='section'>Performance Characteristics:</h5>
+ * <h2 class='section'>Performance Characteristics:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>add(E)</b>: O(n) - linear search to find position + O(1) insertion
  * 	<li><b>get(int)</b>: O(n) - must traverse to index
@@ -57,7 +57,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li><b>set(int, E)</b>: O(n) - may need to re-sort if element order changes
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Natural ordering</jc>
  * 	SortedLinkedList&lt;String&gt; <jv>list</jv> = <jk>new</jk> SortedLinkedList&lt;&gt;();
@@ -74,7 +74,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jc>// list2 contains: ["a", "bb", "ccc"] (sorted by length)</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>All elements must be mutually comparable (or comparable via the comparator)
  * 	<li>Null elements are allowed only if the comparator supports them

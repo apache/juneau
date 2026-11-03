@@ -30,7 +30,7 @@ import org.apache.juneau.commons.function.*;
  * This class extends {@link Memoizer} to provide methods to convert the string value
  * to various types, similar to the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	StringSetting <jv>setting</jv> = Settings.<jsf>get</jsf>().setting(<js>"my.property"</js>);
  * 	Setting&lt;Integer&gt; <jv>intValue</jv> = <jv>setting</jv>.asInteger();

@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.*;
  * {@link Rest#mixins() @Rest(mixins=ThatMixin.class)}. Mixins compose through the existing sub-context
  * model; {@code RestMixin} does <b>not</b> change that composition mechanism.
  *
- * <h5 class='section'>Opt-in, not mandatory:</h5>
+ * <h2 class='section'>Opt-in, not mandatory:</h2>
  *
  * <p>
  * Extending {@code RestMixin} is <b>optional</b>. A bare {@code @Rest} POJO with no base class remains a
@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.*;
  * base-less; the new single-responsibility op-mixins extend this base to make the triad membership
  * explicit.
  *
- * <h5 class='section'>Builder support:</h5>
+ * <h2 class='section'>Builder support:</h2>
  *
  * <p>
  * The fluent programmatic-builder surface ({@link RestBuilder}/ {@link Builder}) lets a mixin be configured
@@ -48,7 +48,7 @@ import org.apache.juneau.rest.server.*;
  * over {@link Rest @Rest} annotation values.  Use {@link #builder(Class)} for the common case, or subclass
  * {@link Builder} for capability mixins that add their own setters.
  *
- * <h5 class='section'>Reaching the host resource:</h5>
+ * <h2 class='section'>Reaching the host resource:</h2>
  *
  * <p>
  * Because a mixin's {@code @RestOp} methods are bound to a per-mixin {@link RestContext} sub-context (the
@@ -64,7 +64,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RestServlet}
  * 	<li class='jc'>{@link RestResource}
  * 	<li class='jm'>{@link #getHostContext()}
@@ -158,7 +158,7 @@ public abstract class RestMixin {
 	 * {@link RestContext#getParentContext() parent linkage}, so it is usable at config time and does not depend
 	 * on an in-flight request.
 	 *
-	 * <h5 class='section'>Edge cases:</h5><ul>
+	 * <h4 class='section'>Edge cases:</h4><ul>
 	 * 	<li class='note'><b>Standalone / no host</b> &mdash; when a {@code RestMixin} subclass is instantiated
 	 * 		directly rather than composed via {@link Rest#mixins() @Rest(mixins=...)}, this returns {@code null},
 	 * 		mirroring {@link RestContext#getParentContext()}'s top-level contract.  Callers needing host-only

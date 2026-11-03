@@ -38,14 +38,14 @@ import org.apache.juneau.rest.server.servlet.*;
  * ({@link Rest#path() @Rest(path="/admin")}) and pins the ops at the bare endpoint names
  * (e.g. {@code /threads}).
  *
- * <h5 class='section'>Default-deny security posture:</h5>
+ * <h2 class='section'>Default-deny security posture:</h2>
  *
  * <p>
  * Like the mixin and servlet flavors, this child is annotated
  * {@link Rest#guards() @Rest(guards=DenyAllGuard.class)}, so every admin path returns
  * {@code 403 Forbidden} until the importer registers a {@link RestGuardList} factory.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='jc'>{@link AdminServlet}
  * 	<li class='jc'>{@link AdminProvider}

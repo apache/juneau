@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.*;
  * {@code /juneau-datatables.js} URL then becomes available alongside the host's own endpoints, so browser pages can
  * load the glue without the application hosting it itself.
  *
- * <h5 class='section'>Where the DataTables library comes from:</h5>
+ * <h2 class='section'>Where the DataTables library comes from:</h2>
  *
  * <p>
  * This module declares the jQuery and DataTables WebJars ({@code org.webjars:jquery},
@@ -53,7 +53,7 @@ import org.apache.juneau.rest.server.*;
  * this mixin and {@code WebJarsMixin} into the host; the page never loads the library by hand.  Outside a console
  * page, wire the assets yourself as below.
  *
- * <h5 class='section'>Wiring the page assets (caller-side {@code @HtmlDocConfig}):</h5>
+ * <h2 class='section'>Wiring the page assets (caller-side {@code @HtmlDocConfig}):</h2>
  *
  * <p>
  * Juneau's {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig} is resolved per endpoint / per
@@ -62,7 +62,7 @@ import org.apache.juneau.rest.server.*;
  * op) that renders the HTML table, referencing your chosen DataTables distribution and this served glue.  The URLs are
  * SVL-resolvable, so the DataTables location can be overridden per environment without code changes.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/releases"</js>, mixins=DataTablesMixin.<jk>class</jk>)
  * 	<ja>@HtmlDocConfig</ja>(
@@ -81,7 +81,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Server-side processing ({@code JuneauDataTables.ajax}):</h5>
+ * <h2 class='section'>Server-side processing ({@code JuneauDataTables.ajax}):</h2>
  *
  * <p>
  * For a large table, let DataTables fetch pages from the server instead of rendering every row.  The served glue
@@ -110,7 +110,7 @@ import org.apache.juneau.rest.server.*;
  * {@link DataTablesTable#of(String, java.util.Collection, Class) DataTablesTable.of}) and the glue wires
  * {@code opts.ajax}/{@code opts.serverSide} automatically on load.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}.  The mount path is pinned at the op level by
@@ -118,7 +118,7 @@ import org.apache.juneau.rest.server.*;
  * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern.  {@code WebJarsMixin} follows the same
  * pattern for {@code /webjars/*}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link DataTablesTable}
  * 	<li class='jc'>{@link DataTablesColumns}
  * 	<li class='jc'>{@link org.apache.juneau.console.datatables.adapter.DataTablesQuery}

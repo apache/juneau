@@ -34,7 +34,7 @@ import java.util.stream.*;
  * grammar for {@link #getSearch() search} and {@link #getOpts() opts} lives <b>inside</b> those single strings and is
  * decoded by a {@link BeanQuerySession session} when the query runs, not by this bean.
  *
- * <h5 class='section'>Fields</h5>
+ * <h2 class='section'>Fields</h2>
  * <ul>
  * 	<li><b>search</b> ({@link String}) &mdash; the one search string.  Top-level commas (outside parentheses) separate
  * 		clauses; the first unescaped {@code =} separates a column from its raw {@code $}-expression
@@ -52,7 +52,7 @@ import java.util.stream.*;
  * <p>
  * Construct with {@link #create()}, which returns a {@link Builder} that assembles these raw strings fluently:
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	BeanQuery <jv>q</jv> = BeanQuery.<jsm>create</jsm>()
  * 		.eq(<js>"status"</js>, <js>"active"</js>)
@@ -268,7 +268,7 @@ public class BeanQuery {
 	 * <p>Exposes the same condition methods as {@link Builder}, minus paging/view/sort/opts, since a group only
 	 * ever contributes conditions to its enclosing level.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	BeanQuery.<jsm>create</jsm>().or(<jv>g</jv> -&gt; <jv>g</jv>.eq(<js>"a"</js>, 1).eq(<js>"b"</js>, 2));
 	 * 	<jc>// -&gt; "$or(a=$eq(\"1\"),b=$eq(\"2\"))"</jc>
@@ -553,7 +553,7 @@ public class BeanQuery {
 	 * <p>Exposes every {@link GroupBuilder} condition method (they add top-level conditions here) plus
 	 * view/sort/paging/opts/counts and {@link #build()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	BeanQuery <jv>q</jv> = BeanQuery.<jsm>create</jsm>().eq(<js>"status"</js>, <js>"active"</js>).build();
 	 * </p>

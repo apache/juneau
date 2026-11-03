@@ -39,7 +39,7 @@ import jakarta.servlet.http.*;
  * 	<li>On lookup miss ({@link Optional#empty()} returned by the store), throws {@link AuthenticationException}.
  * </ol>
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	AuthFilterChain.<jsm>create</jsm>(<jv>bs</jv>)
@@ -50,7 +50,7 @@ import jakarta.servlet.http.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ApiKeyStore}
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='jc'>{@link AuthFilter}

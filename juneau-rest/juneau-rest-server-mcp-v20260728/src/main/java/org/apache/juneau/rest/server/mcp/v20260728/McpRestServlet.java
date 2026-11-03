@@ -46,7 +46,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * notification) renders as a genuinely empty HTTP body instead of the framework's default four-byte
  * {@code null} JSON literal.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/mcp")
  * public class MyMcpServlet extends McpRestServlet {

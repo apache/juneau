@@ -34,7 +34,7 @@ import org.springframework.context.*;
  * This implementation extends {@link BasicBeanStore} and delegates to Spring's {@link ApplicationContext}
  * for bean resolution when beans are not found in the local store or parent stores.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a Spring bean store</jc>
  * 	ApplicationContext <jv>appContext</jv> = ...;
@@ -50,7 +50,7 @@ import org.springframework.context.*;
  * 	Map&lt;String, MyService&gt; <jv>allServices</jv> = <jv>beanStore</jv>.getBeansOfType(MyService.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>
  * 	<li class='jc'>{@link BasicBeanStore}
  * 	<li class='jic'>{@link BeanStore}

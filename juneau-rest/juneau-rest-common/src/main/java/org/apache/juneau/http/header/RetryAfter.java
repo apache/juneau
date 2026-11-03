@@ -32,7 +32,7 @@ import java.util.function.*;
  * <p>
  * Delay before retrying, as a delta-seconds integer or an HTTP-date.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

@@ -60,7 +60,7 @@ import net.shibboleth.shared.xml.impl.*;
  * Both factories return resolvers that are <b>already initialized</b> &mdash; ready to hand to
  * {@link SamlAssertionValidator.Builder#metadataResolver(MetadataResolver)} immediately.
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <p>
  * The URL factory uses the JDK {@link HttpClient} (Java 17) to fetch the metadata blob once at construction
  * time and wraps the parsed DOM in a {@link DOMMetadataResolver}.  No background refresh is performed; applications
@@ -115,7 +115,7 @@ public final class SamlMetadataResolvers {
 	 * periodic refresh should construct an OpenSAML {@code HTTPMetadataResolver} directly with an Apache
 	 * HttpClient.
 	 *
-	 * <h5 class='section'>Transport:</h5>
+	 * <h4 class='section'>Transport:</h4>
 	 * <p>
 	 * The metadata blob supplies the trust-anchor signing certificate, so the transport must not be
 	 * downgradeable by a network intermediary.  The URL must therefore use <js>"https"</js> or target a

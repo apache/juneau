@@ -35,14 +35,14 @@ import java.util.logging.*;
  * {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} (printf-style <js>"%s"</js>/<js>"%d"</js>) for
  * lazy formatting. The message is only formatted when {@link #getMessage()} is actually called.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p>
  * This class is used internally by {@link RichLogger} when logging formatted messages.
  * The formatted message is only computed when the LogRecord's message is actually
  * accessed (e.g., by a Handler or Formatter).
  * </p>
  *
- * <h5 class='section'>Formatting contract:</h5>
+ * <h2 class='section'>Formatting contract:</h2>
  * <p>
  * Juneau {@link RichLogger} patterns are <b>printf-style</b> (rendered here via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}).
  * Because this override returns the already-substituted message, downstream {@link java.util.logging.Handler Handlers} and
@@ -53,7 +53,7 @@ import java.util.logging.*;
  * <c>{0}</c> pattern, so printf patterns are not intended for that scenario.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RichLogger}
  * 	<li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
@@ -142,7 +142,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * 	<li><c>thrown</c> - The throwable object (if any)
 	 * </ol>
 	 *
-	 * <h5 class='section'>Named Placeholders:</h5>
+	 * <h4 class='section'>Named Placeholders:</h4>
 	 * <ul>
 	 * 	<li><js>"{date}"</js> - The date/time formatted using {@link SimpleFormatter SimpleFormatter}'s default date format
 	 * 	<li><js>"{timestamp}"</js> - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)
@@ -155,7 +155,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * 	<li><js>"{thrown}"</js> - The throwable object (if thrown)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Formatter-Style Format Specifiers:</h5>
+	 * <h4 class='section'>Formatter-Style Format Specifiers:</h4>
 	 * <p>
 	 * You can use {@link java.util.Formatter Formatter}-style format specifiers directly in the format string.
 	 * The arguments are passed in the same order as {@link java.util.logging.SimpleFormatter SimpleFormatter}:
@@ -188,7 +188,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * <p>
 	 * The format string can also contain <js>"%n"</js> for newlines.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	LogRecord <jv>record</jv> = <jk>new</jk> LogRecord(Level.INFO, <js>"User {0} logged in"</js>, <js>"John"</js>);
 	 *

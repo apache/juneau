@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * not located in "body" to describe the type of items in an array. This is particularly useful for query parameters,
  * path parameters, and header parameters that accept arrays.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Items Object supports the following fields from JSON Schema:
  * <ul class='spaced-list'>
@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Items <jv>x</jv> = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#items-object">OpenAPI Specification &gt; Items Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
@@ -207,7 +207,7 @@ public class Items extends OpenApiElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<js>"default"</js> has no meaning for required items.
@@ -463,7 +463,7 @@ public class Items extends OpenApiElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		<js>"default"</js> has no meaning for required items.
@@ -506,12 +506,12 @@ public class Items extends OpenApiElement {
 	 * 		<li><code>Object</code>
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	enum_(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	enum_(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>

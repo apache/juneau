@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.util.*;
  * {@link TerminalMixin} delegates to these; an application that wants its own paths writes {@code @RestGet} methods
  * that call them and gets the same validation, cap and headers.
  *
- * <h5 class='section'>Bytes headers:</h5>
+ * <h2 class='section'>Bytes headers:</h2>
  * <ul>
  * 	<li>{@code Term-Next}: the offset to ask for next.
  * 	<li>{@code Term-End}: the source's current end.

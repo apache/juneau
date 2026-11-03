@@ -37,7 +37,7 @@
  * 		{@code factory.compile(templateName).execute(writer, scope)}.
  * </ul>
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=MustacheMixin.<jk>class</jk>)
@@ -57,7 +57,7 @@
  * 	}
  * </p>
  *
- * <h5 class='section'>Engine-agnostic packaging:</h5>
+ * <h2 class='section'>Engine-agnostic packaging:</h2>
  *
  * <p>
  * The bridge module's main POM declares <b>only</b>
@@ -80,7 +80,7 @@
  * the missing dependency and linking to the "Choosing a MustacheFactory" matrix in
  * {@code MustacheViewSupport.md}.
  *
- * <h5 class='section'>Note on Spring Boot's mustache starter:</h5>
+ * <h2 class='section'>Note on Spring Boot's mustache starter:</h2>
  *
  * <p>
  * Spring Boot's {@code spring-boot-starter-mustache} pulls in {@code com.samskivert:jmustache}
@@ -89,7 +89,7 @@
  * {@link org.apache.juneau.rest.server.processor.ResponseProcessor ResponseProcessor} rather than
  * {@link org.apache.juneau.rest.server.view.mustache.MustacheViewRenderer MustacheViewRenderer}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.View}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MustacheViewSupport">Mustache View Support</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

@@ -27,7 +27,7 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Lists the required security schemes for this operation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  * </ul>
  */
@@ -130,7 +130,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * <p>
 	 * This method is equivalent to calling <c>addRequirement(schemeName)</c> with no scopes.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Add API key authentication requirement</jc>
 	 * 	SecurityRequirement <jv>requirement</jv> = <jk>new</jk> SecurityRequirement()
@@ -138,7 +138,7 @@ public class SecurityRequirement extends OpenApiElement {
 	 * 	<jc>// Results in: { "api_key": [] }</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#security-requirement-object">OpenAPI Specification &gt; Security Requirement Object</a>
 	 * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/">OpenAPI Authentication</a>
 	 * </ul>

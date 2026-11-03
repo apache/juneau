@@ -49,7 +49,7 @@ import org.apache.juneau.commons.beanquery.*;
  * ({@code TEXT}, {@code ID}, {@code ENUM}, {@code VERSION}) are always {@link String}.  A malformed value never reaches a
  * renderer; it fails resolution with code {@code BAD_VALUE}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A custom "$even" operator rendered as a modulo check (one bind-free fragment).</jc>
  * 	SearchSqlRenderer <jv>renderer</jv> = (<jv>dialect</jv>, <jv>col</jv>, <jv>type</jv>, <jv>args</jv>) -&gt;

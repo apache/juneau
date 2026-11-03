@@ -41,7 +41,7 @@ import org.apache.juneau.rest.server.*;
  * Provides the same functionality as {@link BasicFileFinder} but adds support for returning files as {@link HttpResource}
  * objects with arbitrary headers.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */

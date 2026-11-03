@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@code /}, this child declares the subtree at the class level
  * ({@link Rest#path() @Rest(path="/version")}) and pins the op at {@code /*}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='jc'>{@link VersionServlet}
  * 	<li class='jc'>{@link VersionProvider}

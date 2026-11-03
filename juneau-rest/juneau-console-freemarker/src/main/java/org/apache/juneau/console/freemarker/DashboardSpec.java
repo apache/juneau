@@ -29,7 +29,7 @@ import org.apache.juneau.console.*;
  * E-77 when the page is built.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>page</jv>.dashboard(DashboardSpec.<jsm>create</jsm>(<js>"orders"</js>).title(<js>"Orders"</js>)
  * 		.rail(Rail.<jsm>left</jsm>().sections(

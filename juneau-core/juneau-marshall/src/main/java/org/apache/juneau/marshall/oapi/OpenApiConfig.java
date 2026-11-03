@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.msgpack.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi</a>
  * </ul>
  */
@@ -58,7 +58,7 @@ public @interface OpenApiConfig {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
 	 * 	<li class='jm'>{@link OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
 	 * </ul>
@@ -91,7 +91,7 @@ public @interface OpenApiConfig {
 	 * 	</ul>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link OpenApiSerializer.Builder#format(HttpPartFormat)}
 	 * 	<li class='jm'>{@link OpenApiParser.Builder#format(HttpPartFormat)}
 	 * </ul>

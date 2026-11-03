@@ -25,7 +25,7 @@
  * Juneau provides {@link org.apache.juneau.marshall.bson.BsonSerializer BsonSerializer} and {@link org.apache.juneau.marshall.bson.BsonParser BsonParser} for
  * serialization and parsing, plus {@link org.apache.juneau.marshall.marshaller.Bson} for a combined API.
  *
- * <h5 class='section'>Type mapping (summary)</h5>
+ * <h2 class='section'>Type mapping (summary)</h2>
  * <ul class='spaced-list'>
  * 	<li>Beans/maps → BSON document (0x03)
  * 	<li>Collections/arrays → BSON array (0x04)
@@ -39,7 +39,7 @@
  * Compared to MsgPack: BSON is length-prefixed and little-endian; supports typed integers (int32/int64),
  * native datetime, and decimal128. Compared to JSON: BSON is binary and more compact for typed data.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON</a>
  * 	<li class='link'><a class="doclink" href="https://bsonspec.org/spec.html">BSON Specification</a>
  * </ul>

@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * <p>
  * Typically used for HTTP method handlers of type <js>"*"</js> (i.e. handle all requests).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, <ja>@Method</ja> String <jv>method</jv>) {
@@ -46,7 +46,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
 
  * </ul>

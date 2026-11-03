@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * A pairing of a {@link TriXSerializer} and {@link TriXParser} into a single class with convenience to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean or map to TriX (RDF/XML-based)</jc>
  * 	String <jv>trix</jv> = TriX.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -40,7 +40,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>trix</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bxml'>
  * 	<xt>&lt;TriX&gt;</xt>
  * 		<xt>&lt;graph&gt;</xt>
@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<xt>&lt;/TriX&gt;</xt>
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bxml'>
  * 	<xt>&lt;TriX&gt;</xt>
  * 		<xt>&lt;graph&gt;</xt>
@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = TriX.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

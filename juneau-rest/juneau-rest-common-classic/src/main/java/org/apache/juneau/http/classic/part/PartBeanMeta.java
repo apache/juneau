@@ -42,8 +42,7 @@ import org.apache.juneau.marshall.httppart.*;
  * 	<li><c><jk>public</jk> X(String <jv>partName</jv>, Object <jv>partValue</jv>)</c>
  * </ul>
  *
- * <p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bjava'>
  * 	<jc>// Our part bean.</jc>
  * 	<ja>@Query</ja>(<js>"foo"</js>)
@@ -59,7 +58,7 @@ import org.apache.juneau.marshall.httppart.*;
  *  FooPart <jv>foo</jv> = <jv>parts</jv>.get(FooPart.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Request only part of an entity. Bytes are numbered from 0.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Range: bytes=500-999
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * Since all HTTP entities are represented in HTTP messages as sequences of bytes, the concept of a byte range is
  * meaningful for any HTTP entity.
@@ -141,7 +141,7 @@ import org.apache.juneau.http.*;
  * entire entity in reply, it SHOULD only return the requested range to its client.
  * It SHOULD store the entire received response in its cache if that is consistent with its cache allocation policies.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

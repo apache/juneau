@@ -27,7 +27,7 @@ import org.apache.juneau.console.widgets.*;
  * One item in a table's quick-stats strip ({@code quickStats.items[]}): a plain tile, a meter (one value against a
  * maximum) or a segmented tile (a proportional bar of labelled counts).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>table</jv>.quickStats(<js>"work-unavailable"</js>,
  * 		QuickStat.<jsm>of</jsm>(<js>"unavailable"</js>, <js>"Work data"</js>, <js>"unavailable"</js>).tone(QuickStat.Tone.<jsf>ERROR</jsf>),

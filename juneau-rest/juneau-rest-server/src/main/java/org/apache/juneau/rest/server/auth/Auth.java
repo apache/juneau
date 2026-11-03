@@ -36,7 +36,7 @@ import java.security.*;
  * request was made on an unguarded path) the resolver returns <jk>null</jk> &mdash; the guard chain is
  * the contract that guarantees a non-null value; this annotation only requests the lookup.
  *
- * <h5 class='section'>Type-driven equivalent:</h5>
+ * <h2 class='section'>Type-driven equivalent:</h2>
  *
  * <p>
  * For convenience, the framework also resolves a bare {@link Principal} (or {@link ClaimsPrincipal})
@@ -44,7 +44,7 @@ import java.security.*;
  * Use {@code @Auth} when you want the intent to be self-documenting on the parameter list or you want
  * to disambiguate against another arg resolver that might claim the parameter first.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/me"</js>)
@@ -58,7 +58,7 @@ import java.security.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AuthArg}
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link ApiKeyGuard}

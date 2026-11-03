@@ -42,7 +42,7 @@ import org.apache.juneau.commons.utils.*;
  * non-flag token becomes a value of the most recently seen flag.  This matches the legacy parsing rule and is
  * preserved for backwards compatibility.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Wrap raw command-line args.</jc>
  * 	Args <jv>args</jv> = <jk>new</jk> Args(<jv>argv</jv>);
@@ -60,7 +60,7 @@ import org.apache.juneau.commons.utils.*;
  * 	Args <jv>strict</jv> = Args.<jsm>create</jsm>().allowEquals(<jk>false</jk>).caseSensitive(<jk>false</jk>).build(<jv>argv</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is immutable and thread-safe once constructed.
  * 	<li class='note'>{@link #get(String)} returns the <i>first</i> value when a flag is repeated; use {@link #getAll(String)} for the full list.
  * </ul>

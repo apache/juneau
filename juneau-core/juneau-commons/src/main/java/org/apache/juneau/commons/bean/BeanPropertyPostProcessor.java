@@ -32,7 +32,7 @@ package org.apache.juneau.commons.bean;
  * The {@code marshallingContext} parameter remains {@link Object} so this commons-side SPI does not depend
  * on marshalling-side runtime types.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Thread safety depends on implementation.
  *
  * @see BeanConfigContext.Builder#beanPropertyPostProcessor(BeanPropertyPostProcessor)

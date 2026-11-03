@@ -37,7 +37,7 @@ import org.apache.juneau.commons.utils.*;
  * <p>
  * See {@link AssertionPredicates} for a set of predefined predicates for common use cases.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Asserts that a bean passes a custom test.</jc>
  * 	<jc>// AssertionError with specified message is thrown otherwise.</jc>
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>assertObject</jsm>(<jv>myBean</jv>).is(<jv>predicate</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>

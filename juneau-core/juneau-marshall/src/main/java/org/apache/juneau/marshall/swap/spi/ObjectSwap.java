@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Used to swap out non-serializable objects with serializable replacements during serialization, and vis-versa during
  * parsing.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * <p>
  * <c>ObjectSwaps</c> are used to extend the functionality of the serializers and parsers to be able to handle
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <br>{@link Parser Parsers} use swaps to convert objects of type S into objects of type T, and on calls to
  * {@link BeanMap#put(String,Object)}.
  *
- * <h5 class='topic'>Swap Class Type {@code <S>}</h5>
+ * <h2 class='topic'>Swap Class Type {@code <S>}</h2>
  *
  * <p>
  * For normal serialization, the swapped object representation of an object must be an object type that the serializers can natively convert to
@@ -89,12 +89,12 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * For OpenAPI serialization, the valid swapped types also include <code><jk>byte</jk>[]</code> and <c>Calendar</c>.
  *
- * <h5 class='topic'>Normal Class Type {@code <T>}</h5>
+ * <h2 class='topic'>Normal Class Type {@code <T>}</h2>
  *
  * <p>
  * The normal object representation of an object.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
 
  * </ul>
@@ -163,7 +163,7 @@ public abstract class ObjectSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#mediaTypes() @Swap(mediaTypes)} annotation.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
 	 * </ul>
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
@@ -178,7 +178,7 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Sets the media types that this swap is associated with.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
 	 * </ul>
 	 *
@@ -395,7 +395,7 @@ public abstract class ObjectSwap<T,S> {
 	 * <p>
 	 * This method is the programmatic equivalent to the {@link Swap#template() @Swap(template)} annotation.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *
@@ -408,7 +408,7 @@ public abstract class ObjectSwap<T,S> {
 	/**
 	 * Sets the template string on this swap.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *

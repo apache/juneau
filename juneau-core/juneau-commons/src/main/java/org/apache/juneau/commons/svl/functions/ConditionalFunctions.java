@@ -74,7 +74,7 @@ public final class ConditionalFunctions {
 	 * The last unmatched arg is the default; if the arg count is even (no trailing default),
 	 * an empty string is returned for unmatched values.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h2 class='section'>Examples:</h2>
 	 * <ul>
 	 * 	<li>{@code #{switch(${os}, *win*, Windows, *nix*, Linux, *)}} — glob-routes by substring.
 	 * 	<li>{@code #{switch(${env}, prod, A, dev, B, default)}} — exact equality, three branches.

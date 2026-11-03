@@ -141,13 +141,14 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	on this interface to be overridden by annotations defined on the implemented class.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
+ * 	<li>Related base classes:
  * 	<ul class='javatreec'>
  * 		<li class='jc'>{@link BasicRestServlet}
  * 		<li class='jc'>{@link BasicRestServletGroup}
  * 		<li class='jc'>{@link BasicRestResource}
  * 		<li class='jc'>{@link BasicRestResourceGroup}
- *	</ul>
+ * 	</ul>
  * 	<li class='link'>{doc jrs.AnnotatedClasses}
  * </ul>
  */

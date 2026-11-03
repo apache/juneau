@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * consistent with {@code micrometer-core} being {@code provided} and the registry choice being the
  * consumer's.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MetricsManager}
  * 	<li class='jc'>{@link MicrometerMetricsRecorder}
  * </ul>

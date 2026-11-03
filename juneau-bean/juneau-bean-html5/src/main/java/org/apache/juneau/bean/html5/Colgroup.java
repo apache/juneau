@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * define a group of columns without explicitly listing each one. This element is typically placed
  * immediately after the opening table tag and before any thead, tbody, or tr elements.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -79,9 +79,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#colgroup(Object...) colgroup(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

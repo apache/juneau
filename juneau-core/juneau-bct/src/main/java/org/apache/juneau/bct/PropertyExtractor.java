@@ -23,14 +23,14 @@ package org.apache.juneau.bct;
  * field navigation (e.g., {@code "user.address.city"}). The framework uses a chain-of-responsibility
  * pattern, trying each registered extractor until one can handle the property access.</p>
  *
- * <h5 class='section'>Extraction Strategy:</h5>
+ * <h2 class='section'>Extraction Strategy:</h2>
  * <p>The two-phase approach ensures efficient and flexible property access:</p>
  * <ol>
  *    <li><b>{@link #canExtract(BeanConverter, Object, String)}:</b> Quick check if this extractor can handle the property</li>
  *    <li><b>{@link #extract(BeanConverter, Object, String)}:</b> Perform the actual property extraction</li>
  * </ol>
  *
- * <h5 class='section'>Common Use Cases:</h5>
+ * <h2 class='section'>Common Use Cases:</h2>
  * <ul>
  *    <li><b>JavaBean properties:</b> Standard getter methods and public fields</li>
  *    <li><b>Map-style access:</b> Key-based property retrieval from Map objects</li>
@@ -39,7 +39,7 @@ package org.apache.juneau.bct;
  *    <li><b>Dynamic properties:</b> Computed or cached property values</li>
  * </ul>
  *
- * <h5 class='section'>Implementation Example:</h5>
+ * <h2 class='section'>Implementation Example:</h2>
  * <p class='bjava'>
  *    <jc>// Custom extractor for database entities</jc>
  *    <jk>public class</jk> DatabaseEntityExtractor <jk>implements</jk> PropertyExtractor {
@@ -62,7 +62,7 @@ package org.apache.juneau.bct;
  *    }
  * </p>
  *
- * <h5 class='section'>Registration and Usage:</h5>
+ * <h2 class='section'>Registration and Usage:</h2>
  * <p class='bjava'>
  *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
  *       .defaultSettings() <jc>// Adds standard extractors</jc>
@@ -77,7 +77,7 @@ package org.apache.juneau.bct;
  *       .build();
  * </p>
  *
- * <h5 class='section'>Best Practices:</h5>
+ * <h2 class='section'>Best Practices:</h2>
  * <ul>
  *    <li><b>Fast canExtract() checks:</b> Use efficient type checking and avoid expensive operations</li>
  *    <li><b>Handle edge cases:</b> Gracefully handle null objects and invalid property names</li>

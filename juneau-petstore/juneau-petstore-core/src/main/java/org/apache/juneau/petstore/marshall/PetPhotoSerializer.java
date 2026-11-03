@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.serializer.*;
  * {@code juneau-examples-core}) so {@code juneau-petstore-core} stays free of any dependency on the examples
  * modules.  Wired into {@link org.apache.juneau.petstore.rest.PetStoreResource#getPetPhoto(long)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */

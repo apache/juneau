@@ -113,7 +113,7 @@ import jakarta.servlet.http.*;
  * the REST resource's bean store. Where direct construction is needed (test rigs, mock clients, embedded usage),
  * the public constructor takes a {@link RestContext.Args} record carrying the bootstrap state.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/myresource"</js>, serializers=JsonSerializer.<jk>class</jk>, parsers=JsonParser.<jk>class</jk>)
  * 	<jk>public class</jk> MyResource {
@@ -133,11 +133,11 @@ import jakarta.servlet.http.*;
  * See <a class="doclink" href="https://juneau.apache.org/docs/topics/V10MigrationGuide">v10.0 Migration Guide</a>
  * for replacement recipes.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
  * </ul>
  */
@@ -182,7 +182,7 @@ public class RestContext extends Context {
 	 * (above the resource's local {@code @Bean} factory entries and the Spring bridge).  This is the
 	 * canonical Mode INJECT wiring point for {@code juneau-junit5}'s {@code TestBeanStore}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jk>var</jk> <jv>ctx</jv> = <jk>new</jk> RestContext(<jk>new</jk> RestContext.Args(MyResource.<jk>class</jk>, () -&gt; <jk>new</jk> MyResource()));
 	 * </p>
@@ -3972,7 +3972,7 @@ public class RestContext extends Context {
 	/**
 	 * Allowed header URL parameters.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#allowedHeaderParams}
 	 * </ul>
 	 *
@@ -3985,7 +3985,7 @@ public class RestContext extends Context {
 	/**
 	 * Allowed method headers.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#allowedMethodHeaders}
 	 * </ul>
 	 *
@@ -3998,7 +3998,7 @@ public class RestContext extends Context {
 	/**
 	 * Allowed method URL parameters.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#allowedMethodParams}
 	 * </ul>
 	 *
@@ -4055,7 +4055,7 @@ public class RestContext extends Context {
 	 * {@link RestDebugFormatter} bean registered in the bean store (or a {@link Bean @Bean}-annotated factory method)
 	 * &gt; {@link BasicRestDebugFormatter}.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
 	 * </ul>
 	 *
@@ -4087,7 +4087,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the name of the client version header name used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#clientVersionHeader}
 	 * </ul>
 	 *
@@ -4127,7 +4127,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the default request attributes for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
 	 *
@@ -4140,7 +4140,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the default request headers for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#defaultRequestHeaders()}
 	 * </ul>
 	 *
@@ -4153,7 +4153,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the default response headers for this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#defaultResponseHeaders()}
 	 * </ul>
 	 *
@@ -4177,7 +4177,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#path()}
 	 * </ul>
 	 *
@@ -4264,7 +4264,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * If path is not specified, returns <js>""</js>.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#path()}
 	 * </ul>
 	 *
@@ -4297,7 +4297,7 @@ public class RestContext extends Context {
 	 * {@code JettyServerComponent}, and Spring Boot's {@code ServletRegistrationBean} wiring &mdash; should
 	 * consume when mounting the resource at the top level.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Returns an empty array (not {@code null}) when none of the rungs resolve. Hosting runtimes interpret
 	 * 		an empty array as &quot;no top-level mounts&quot; and surface a clear error naming the resource.
@@ -4305,7 +4305,7 @@ public class RestContext extends Context {
 	 * 		The scalar {@link #getPath()} accessor remains orthogonal to this method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#paths()}
 	 * </ul>
 	 *
@@ -4363,7 +4363,7 @@ public class RestContext extends Context {
 	 * Returned in the order they're invoked by {@link #processResponse(RestOpSession)}.
 	 * The returned array is the live backing array — callers must not mutate it.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#responseProcessors}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
 	 * </ul>
@@ -4382,7 +4382,7 @@ public class RestContext extends Context {
 	 * (see {@link #findRestOperationArgs(Method, BeanStore)}); this getter returns the class list
 	 * that drives that resolution.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#restOpArgs}
 	 * </ul>
 	 *
@@ -4443,7 +4443,7 @@ public class RestContext extends Context {
 	 * 	<li>Beans flow down only: a child's beans are never visible to its parent or its siblings.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(children={PetResource.<jk>class</jk>, OrderResource.<jk>class</jk>})
 	 * 	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
@@ -4531,7 +4531,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the Swagger provider used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#swaggerProvider()}
 	 * </ul>
 	 *
@@ -4567,7 +4567,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the OpenAPI 3.1 provider used by this resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#openApiProvider()}
 	 * </ul>
 	 *
@@ -4589,7 +4589,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the authority path of the resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#uriAuthority()}
 	 * </ul>
 	 *
@@ -4604,7 +4604,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the context path of the resource.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#uriContext()}
 	 * </ul>
 	 *
@@ -4619,7 +4619,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the setting on how relative URIs should be interpreted as relative to.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#uriRelativity()}
 	 * </ul>
 	 *
@@ -4632,7 +4632,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns the setting on how relative URIs should be resolved.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#uriResolution()}
 	 * </ul>
 	 *
@@ -4650,7 +4650,7 @@ public class RestContext extends Context {
 	 * They can be nested arbitrarily deep.
 	 * They can also return values that themselves contain other variables.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
@@ -4687,7 +4687,7 @@ public class RestContext extends Context {
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest <jv>req</jv>, <ja>@Path</ja> String <jv>name</jv>) <jk>throws</jk> Exception {
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * </ul>
 	 *
@@ -4716,7 +4716,7 @@ public class RestContext extends Context {
 	 * <c>PUT</c>/<c>POST</c> requests, so a simple cross-origin <c>GET</c> can't use it to smuggle a body past
 	 * an endpoint's real <c>Content-Type</c> gate.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#disableContentParam()}
 	 * </ul>
 	 *
@@ -4755,7 +4755,7 @@ public class RestContext extends Context {
 	 * 		{@code Accept} header matches {@code application/problem+json} (or {@code *&#47;*}).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#problemDetails()}
 	 * </ul>
 	 *
@@ -4772,7 +4772,7 @@ public class RestContext extends Context {
 	 * handle requests &mdash; engaging recursion-detection-that-throws, parse-input buffering, and stack-trace-prefixed
 	 * marshalling exceptions. This is independent of the JUL logger level.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#debugMarshalling()}
 	 * </ul>
 	 *
@@ -4902,7 +4902,7 @@ public class RestContext extends Context {
 	/**
 	 * Returns whether framework beans and operation/child contexts are eagerly initialized at construction time.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#eagerInit()}
 	 * </ul>
 	 *
@@ -4922,7 +4922,7 @@ public class RestContext extends Context {
 	 *   <li>{@code RestContext.lazyChildren} env-driven default (default {@code false}).</li>
 	 * </ol>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#lazyChildren()}
 	 * 	<li class='jm'>{@link Builder#lazyChildInit(boolean)}
 	 * </ul>

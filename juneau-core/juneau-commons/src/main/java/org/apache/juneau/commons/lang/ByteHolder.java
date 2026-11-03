@@ -27,12 +27,12 @@ import org.apache.juneau.commons.utils.*;
  * This class extends {@link Holder}&lt;{@link Byte}&gt; and adds convenience methods for incrementing,
  * decrementing, and testing byte values, which are useful in lambdas and byte manipulation operations.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use synchronization or atomic classes.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
  * 	ByteHolder <jv>counter</jv> = ByteHolder.<jsm>create</jsm>();
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>log</jsm>(<js>"Count: "</js> + <jv>counter</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -59,7 +59,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Creates a new byte value initialized to <c>0</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>counter</jv> = ByteHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
@@ -74,7 +74,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Creates a new byte value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>value</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)42);
 	 * 	<jsm>assertEquals</jsm>(42, <jv>value</jv>.get());
@@ -106,7 +106,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Adds the specified value to the current value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>value</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)10);
 	 * 	<jv>value</jv>.add((<jk>byte</jk>)5);
@@ -125,7 +125,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Adds the specified value to the current value and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>value</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)10);
 	 * 	<jk>byte</jk> <jv>result</jv> = <jv>value</jv>.addAndGet((<jk>byte</jk>)5);  <jc>// Returns 15</jc>
@@ -145,7 +145,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Decrements the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>counter</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)5);
 	 * 	<jv>counter</jv>.decrement();
@@ -163,7 +163,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Decrements the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>counter</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)5);
 	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
@@ -182,7 +182,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Increments the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>counter</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)5);
 	 * 	<jv>counter</jv>.increment();
@@ -200,7 +200,7 @@ public class ByteHolder extends Holder<Byte> {
 	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>counter</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)5);
 	 * 	<jk>byte</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
@@ -222,7 +222,7 @@ public class ByteHolder extends Holder<Byte> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>value</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)42);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is((<jk>byte</jk>)42));
@@ -243,7 +243,7 @@ public class ByteHolder extends Holder<Byte> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ByteHolder <jv>value</jv> = ByteHolder.<jsm>of</jsm>((<jk>byte</jk>)5);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny((<jk>byte</jk>)3, (<jk>byte</jk>)5, (<jk>byte</jk>)7));

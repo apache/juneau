@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.springboot.*;
  * {@link #getMcpConfig()}, and may optionally override {@link McpEndpoint#getMcpOptions()} to customize
  * capabilities/instructions/cache/mrtr/subscriptions/broker behavior.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/mcp")
  * public class MyMcpResource extends SpringMcpRestServlet {

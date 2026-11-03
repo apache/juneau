@@ -25,7 +25,7 @@ import org.apache.juneau.commons.bean.*;
  * every selected row's stable id, plus a client-generated idempotency key so a retried submit (e.g. after a
  * dropped connection) never double-applies.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(path=<js>"/changes/abort"</js>)
  * 	<jk>public</jk> BulkResult abortChanges(<ja>@Content</ja> BulkRequest <jv>request</jv>) {

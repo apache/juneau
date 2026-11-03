@@ -29,7 +29,7 @@ import java.util.stream.*;
  * a single set, without actually copying the elements. Modifications made through the iterator affect
  * the underlying collections.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Zero-Copy Composition:</b> No data is copied when creating a MultiSet; it simply wraps the provided collections
  * 	<li><b>Transparent Iteration:</b> Iterating over a MultiSet seamlessly traverses all underlying collections in order
@@ -38,7 +38,7 @@ import java.util.stream.*;
  * 	<li><b>Enumeration Support:</b> Provides an {@link Enumeration} view via {@link #enumerator()}
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a MultiSet from three separate collections</jc>
  * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);
@@ -64,7 +64,7 @@ import java.util.stream.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The order of iteration follows the order of collections as provided in the constructor
  * 	<li>Within each collection, iteration order is determined by that collection's iterator
@@ -74,12 +74,12 @@ import java.util.stream.*;
  * 	<li>The {@link #size()} method recomputes the sum each time it's called (not cached)
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not inherently thread-safe. If the underlying collections are modified concurrently
  * during iteration, the behavior is undefined. Synchronization must be handled externally if needed.
  *
- * <h5 class='section'>Example - Processing Multiple Data Sources:</h5>
+ * <h2 class='section'>Example - Processing Multiple Data Sources:</h2>
  * <p class='bjava'>
  * 	<jc>// Combine results from database, cache, and defaults</jc>
  * 	List&lt;User&gt; <jv>dbUsers</jv> = fetchFromDatabase();
@@ -92,7 +92,7 @@ import java.util.stream.*;
  * 	<jv>allUsers</jv>.forEach(user -&gt; processUser(user));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -119,7 +119,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * The collections are stored by reference (not copied), so modifications made through the
 	 * MultiSet's iterator will affect the original collections.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"a"</js>, <js>"b"</js>));
 	 * 	List&lt;String&gt; <jv>list2</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"c"</js>, <js>"d"</js>));
@@ -147,7 +147,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * This is useful for compatibility with legacy APIs that require an {@link Enumeration}
 	 * rather than an {@link Iterator}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	MultiSet&lt;String&gt; <jv>multiSet</jv> = <jk>new</jk> MultiSet&lt;&gt;(list1, list2);
 	 * 	Enumeration&lt;String&gt; <jv>enumeration</jv> = <jv>multiSet</jv>.enumerator();
@@ -176,7 +176,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * The returned iterator supports the {@link Iterator#remove()} operation, which removes
 	 * the current element from its underlying collection.
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Elements from the first collection are iterated first, then the second, and so on
 	 * 	<li>If a collection is empty, it is skipped during iteration
@@ -187,7 +187,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * 		in a row may throw {@link IllegalStateException} (behavior depends on underlying collection)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"a"</js>, <js>"b"</js>));
 	 * 	List&lt;String&gt; <jv>list2</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"c"</js>, <js>"d"</js>));
@@ -254,7 +254,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * underlying collection. The size is recalculated each time this method is called
 	 * (it is not cached).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);        <jc>// size = 2</jc>
 	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>, <js>"e"</js>); <jc>// size = 3</jc>
@@ -280,7 +280,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 * The format is <c>"[[...],[...],...]"</c> where each <c>[...]</c> is the standard
 	 * standard string representation of each underlying collection (as returned by {@link Object#toString()}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);
 	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>);

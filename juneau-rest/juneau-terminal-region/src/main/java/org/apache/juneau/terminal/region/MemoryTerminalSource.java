@@ -31,7 +31,7 @@ import java.util.logging.*;
  * been written, the oldest bytes are overwritten; a reader asking for them gets a {@code truncated} chunk that starts
  * at the oldest offset still held.  All methods are thread-safe.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	MemoryTerminalSource <jv>term</jv> = MemoryTerminalSource.<jsm>create</jsm>(4 * 1024 * 1024, 120, 40);
  * 	<jv>term</jv>.write(<jv>bytes</jv>, 0, <jv>bytes</jv>.length);

@@ -19,7 +19,7 @@
  * Tracing SPI for {@code juneau-rest-server} &mdash; per-request span hook backed by a
  * caller-supplied {@link org.apache.juneau.rest.server.tracing.TracerHook TracerHook} bean.
  *
- * <h5 class='topic'>Opt-in</h5>
+ * <h2 class='topic'>Opt-in</h2>
  *
  * <p>
  * The SPI is off by default. A fresh {@code RestContext} built without any
@@ -37,7 +37,7 @@
  * 		OpenTelemetry dependency on the core surface.
  * </ul>
  *
- * <h5 class='topic'>Lifecycle</h5>
+ * <h2 class='topic'>Lifecycle</h2>
  *
  * <p>
  * For every {@code @RestOp} invocation, the framework opens a {@link org.apache.juneau.rest.server.tracing.Scope Scope}
@@ -52,7 +52,7 @@
  * neutral carrier type. Server-only tracing SPI types ({@code TraceContextExtractor},
  * {@code TraceOperation}, {@code TraceContexts}) remain in this package.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook TracerHook}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.Scope Scope}

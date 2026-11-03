@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * A subclass of {@link Marshaller} for character-based serializers and parsers.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */
@@ -55,7 +55,7 @@ public class CharMarshaller extends Marshaller {
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	Marshaller <jv>marshaller</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *

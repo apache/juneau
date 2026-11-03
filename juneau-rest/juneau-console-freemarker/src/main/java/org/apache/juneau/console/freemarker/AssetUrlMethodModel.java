@@ -38,7 +38,7 @@ import freemarker.template.*;
  * A path that already has a query string, is not context-root-absolute (e.g. an external URL), or names no bundled
  * resource is returned unchanged; the last case also logs a warning once per path when dev mode is on.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;script src="${assetUrl('/js/app.js')}"&gt;&lt;/script&gt;   &lt;#-- /js/app.js?v=1a2b3c4d --&gt;
  * </p>

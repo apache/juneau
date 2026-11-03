@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.*;
  * 	<jk>public</jk> Object myMethod(RequestQueryParamList <jv>query</jv>) {...}
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestQueryParamList <jv>query</jv>) {
@@ -105,7 +105,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Entries are stored in a case-sensitive map unless overridden via the constructor.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RequestQueryParam}
  * 	<li class='ja'>{@link Query}
  * 	<li class='ja'>{@link HasQuery}

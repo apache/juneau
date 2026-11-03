@@ -45,7 +45,7 @@ import jakarta.servlet.http.*;
  * The methods under "transport SPI" are public for {@link BusEventsMixin} and {@code BusWebSockets}; application code
  * does not call them.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// One per application (or per resource), shared by the REST resource and any background work.</jc>
  *   ServerBus <jv>bus</jv> = ServerBus.<jsm>create</jsm>(BusPolicy.<jsm>create</jsm>()

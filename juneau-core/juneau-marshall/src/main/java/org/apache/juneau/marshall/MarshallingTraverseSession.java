@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.collections.*;
  * 		Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

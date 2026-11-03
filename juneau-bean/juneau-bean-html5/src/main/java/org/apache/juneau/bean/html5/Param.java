@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * to the embedded content, such as Flash applications or other plugins. The name attribute
  * specifies the parameter name, and the value attribute provides the parameter value.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -63,9 +63,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#param() param()}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

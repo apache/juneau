@@ -34,7 +34,7 @@ import jakarta.servlet.*;
  * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
  * about the servlet.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
  * 	<li class='note'>

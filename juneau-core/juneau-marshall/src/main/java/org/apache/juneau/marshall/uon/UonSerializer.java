@@ -34,13 +34,13 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/uon</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/uon</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This serializer provides several serialization options.
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
@@ -96,17 +96,17 @@ import org.apache.juneau.marshall.stream.*;
  * 	)
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bcode'>
  * 	(name=Alice,age=30)
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bcode'>
  * 	(name=Alice,age=30,address=(street=123+Main+St,city=Boston,state=MA),tags=@(a,b,c))
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
  * 	Map <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
@@ -138,11 +138,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonSupport">UON</a>
 
  * </ul>
@@ -256,7 +256,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * <br>Set to <jk>false</jk> if parameter value is being passed to some other code that will already perform
 		 * URL-encoding of non-valid URI characters.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a non-encoding UON serializer.</jc>
 		 * 	UonSerializer <jv>serializer1</jv> = UonSerializer.
@@ -314,7 +314,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * <p>
 		 * Specifies the format to use for URL GET parameter keys and values.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a normal UON serializer.</jc>
 		 * 	UonSerializer <jv>serializer1</jv> = UonSerializer
@@ -339,7 +339,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.write(<jv>map</jv>)
 		 * </p>
 		 *
-		 * <p>
 		 * <ul class='values javatree'>
 		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
 		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
@@ -362,7 +361,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * <p>
 		 * Specifies plain-text for the format to use for URL GET parameter keys and values.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a plain-text UON serializer.</jc>
 		 * 	UonSerializer <jv>serializer</jv> = UonSerializer

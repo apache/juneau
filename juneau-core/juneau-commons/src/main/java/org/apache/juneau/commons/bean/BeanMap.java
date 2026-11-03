@@ -30,7 +30,7 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * Java bean wrapper class.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * A wrapper that wraps Java bean instances inside of a {@link Map} interface that allows properties on the wrapped
  * object can be accessed using the {@link Map#get(Object) get()} and {@link Map#put(Object,Object) put()} methods.
@@ -40,7 +40,7 @@ import org.apache.juneau.commons.reflect.*;
  * {@link BeanMap#of(Object, BeanMeta)}; the marshalling layer's {@code MarshallingSession#toBeanMap(Object)}
  * additionally wires a {@link BeanSession} into the resulting map for session-aware behavior.
  *
- * <h5 class='topic'>Bean property order</h5>
+ * <h2 class='topic'>Bean property order</h2>
  *
  * The order of the properties returned by the {@link Map#keySet() keySet()} and {@link Map#entrySet() entrySet()}
  * methods is as follows:
@@ -57,13 +57,13 @@ import org.apache.juneau.commons.reflect.*;
  * 		Otherwise, properties are returned in alphabetical order.
  * </ul>
  *
- * <h5 class='topic'>POJO swaps</h5>
+ * <h2 class='topic'>POJO swaps</h2>
  *
  * If {@code ObjectSwap} transforms are defined on the class types of the properties of this bean or the bean properties
  * themselves, the {@link #get(Object)} and {@link #put(String, Object)} methods will automatically transform the
  * property value to and from the serialized form.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * Instances are not thread-safe.
  * This type is mutable (wrapped bean reference, property caches, and optional session pointer) and does not perform
@@ -161,7 +161,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * A property counts as written once {@link #put(String, Object)} (or a collection {@code add}) has been called for
 	 * it, even with a <jk>null</jk> value.  Parsers call this once per bean, before the bean is constructed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// MyBean has @BeanProp(required=true) on 'name' and 'zip'.</jc>
 	 * 	BeanMap&lt;MyBean&gt; <jv>m</jv> = <jv>session</jv>.newBeanMap(MyBean.<jk>class</jk>);
@@ -403,7 +403,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * {@code @Swap(value)} annotation, this method will return a String containing an
 	 * ISO8601 date-time string value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
@@ -732,7 +732,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * {@code @Swap(value)} annotation, the value being passed in must be
 	 * a String containing an ISO8601 date-time string value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person();

@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.SystemUtils.*;
  * <p>
  * This is not intended to be used as strong encryption.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ModdedEntries">Modded/Encoded Entries</a>
  * </ul>
  */

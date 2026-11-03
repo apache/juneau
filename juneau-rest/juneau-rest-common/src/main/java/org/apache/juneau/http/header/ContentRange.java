@@ -26,7 +26,7 @@ import java.util.function.*;
  * <p>
  * Where in a full body message this partial message belongs.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -98,7 +98,7 @@ public class ContentRange extends HttpStringHeader {
 	 * <c>complete-length</c> (or <c>*</c> when unknown) — into forms such as <c>bytes 0-1023/2048</c>,
 	 * <c>bytes 0-1023/&#42;</c>, and <c>bytes &#42;/2048</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = ContentRange.<jsm>create</jsm>()
 	 * 		.range(0, 1023)
@@ -107,7 +107,7 @@ public class ContentRange extends HttpStringHeader {
 	 * 	<jc>// =&gt; "bytes 0-1023/2048"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link ContentRange}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7233'>RFC 7233 - HTTP/1.1 Range Requests</a>
 	 * </ul>

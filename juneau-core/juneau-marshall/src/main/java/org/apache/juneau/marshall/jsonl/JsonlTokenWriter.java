@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.stream.*;
  * "top-level value" boundary is detected by tracking when an emit returns the cursor to
  * {@code depth == 0}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  */

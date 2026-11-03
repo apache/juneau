@@ -28,7 +28,7 @@ import java.io.*;
  * &mdash; buffered via {@link RecordAdapter#arrayReader}).  Capability is detected via
  * {@code instanceof}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link ArrayRecordWritable} &mdash; the symmetric writer role.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>

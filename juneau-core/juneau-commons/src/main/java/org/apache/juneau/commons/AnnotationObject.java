@@ -36,7 +36,7 @@ import org.apache.juneau.commons.utils.*;
  * program elements at compile-time. It allows annotations to be constructed using a builder pattern and
  * follows all standard Java annotation semantics for equality, hashcode, and string representation.
  *
- * <h5 class='section'>Overview:</h5>
+ * <h2 class='section'>Overview:</h2>
  * <p>
  * Java annotations are typically declared statically on classes, methods, fields, etc. at compile-time:
  * <p class='bjava'>
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.utils.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Equality and Hashcode:</h5>
+ * <h2 class='section'>Equality and Hashcode:</h2>
  * <p>
  * Follows the standard Java conventions for annotation equality and hashcode calculation as defined in
  * {@link Annotation#equals(Object)} and {@link Annotation#hashCode()}. This ensures that programmatically-created
@@ -71,7 +71,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>assertEquals</jsm>(<jv>declared</jv>.hashCode(), <jv>programmatic</jv>.hashCode());  <jc>// true</jc>
  * </p>
  *
- * <h5 class='section'>Hashcode Caching:</h5>
+ * <h2 class='section'>Hashcode Caching:</h2>
  * <p>
  * For performance reasons, the hashcode is calculated once and cached on first access.
  * The hash is computed lazily when {@link #hashCode()} is first called and then stored for subsequent calls.
@@ -83,7 +83,7 @@ import org.apache.juneau.commons.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Builder Pattern:</h5>
+ * <h2 class='section'>Builder Pattern:</h2>
  * <p>
  * Subclasses should provide a nested {@link Builder} class that extends {@link AnnotationObject.Builder}
  * to construct instances using a fluent builder pattern. The builder should:
@@ -93,7 +93,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Provide a {@code build()} method that constructs the final annotation object
  * </ul>
  *
- * <h5 class='section'>Example Implementation:</h5>
+ * <h2 class='section'>Example Implementation:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyAnnotationObject <jk>extends</jk> AnnotationObject <jk>implements</jk> MyAnnotation {
  *
@@ -128,7 +128,7 @@ import org.apache.juneau.commons.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AppliedAnnotationObject} - For annotations with dynamic targeting support
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>

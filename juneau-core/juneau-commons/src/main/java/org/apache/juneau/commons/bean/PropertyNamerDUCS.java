@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 /**
  * Converts property names to dashed-upper-case-start format.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <ul>
  * 	<li><js>"fooBar"</js> -&gt; <js>"Foo-Bar"</js>
  * 	<li><js>"fooBarURL"</js> -&gt; <js>"Foo-Bar-Url"</js>

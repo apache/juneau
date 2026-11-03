@@ -76,8 +76,9 @@ import org.apache.juneau.marshall.yaml.*;
  * 	<ul>
  * 		<li>This bean is non-thread-safe and meant for one-time use.
  * 	</ul>
+ * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -331,7 +332,7 @@ public abstract class Context {
 		 * 	<li>A comma-delimited list of anything on this list.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig}
 		 * </ul>
 		 *
@@ -366,7 +367,7 @@ public abstract class Context {
 		 * An {@link AnnotationWork} consists of a single pair of {@link AnnotationInfo} that represents an annotation instance,
 		 * and {@link AnnotationApplier} which represents the code used to apply the values in that annotation to a specific builder.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
 		 * 	<ja>@MarshalledConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
@@ -466,7 +467,7 @@ public abstract class Context {
 		 * <p>
 		 * The default var resolver {@link VarResolver#DEFAULT} is used to resolve any variables in annotation field values.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
 		 * 	<ja>@MarshalledConfig</ja>(unsortedProperties=<js>"$S{unsortedProperties,false}"</js>)
@@ -499,6 +500,7 @@ public abstract class Context {
 		 * 		<li>{@link Method}
 		 * 		<li>{@link MethodInfo}
 		 *		<li>A collection/stream/array of anything on this list.
+		 * 	</ul>
 		 * 	<br>Cannot contain <jk>null</jk> values.
 		 * @return This object.
 		 */
@@ -541,7 +543,7 @@ public abstract class Context {
 		 * and cast it accordingly. Returns an empty {@link Optional} if this builder is not an instance
 		 * of the specified subtype.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	Builder <jv>b</jv> = JsonSerializer.<jsm>create</jsm>();
 		 * 	Optional&lt;JsonSerializer.Builder&lt;?&gt;&gt; <jv>jsonBuilder</jv> = <jv>b</jv>.asSubtype(JsonSerializer.Builder.<jk>class</jk>);
@@ -653,7 +655,7 @@ public abstract class Context {
 		 * 		in order to determine how that method was invoked.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with debug enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -672,7 +674,7 @@ public abstract class Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>bean</jv>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#debug()}
 		 * 	<li class='jm'>{@link ContextSession.Builder#debug(Boolean)}
 		 * </ul>

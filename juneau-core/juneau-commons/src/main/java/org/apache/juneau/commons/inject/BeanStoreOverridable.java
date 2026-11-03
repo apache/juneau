@@ -41,7 +41,7 @@ package org.apache.juneau.commons.inject;
  * <b>Mode INJECT</b> wiring pattern in the test-injection model &mdash; the overlay is installed before the SUT
  * exists.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore().override(MyService.<jk>class</jk>, <jv>mockSvc</jv>);
  * 	<jk>var</jk> <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>()
@@ -50,7 +50,7 @@ package org.apache.juneau.commons.inject;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Why a self-typed interface:</h5>
+ * <h2 class='section'>Why a self-typed interface:</h2>
  * <p>
  * The {@code B extends BeanStoreOverridable<B>} self-type lets the method return the concrete builder
  * type rather than {@code BeanStoreOverridable<?>}, preserving the fluent chain at the call site:
@@ -61,7 +61,7 @@ package org.apache.juneau.commons.inject;
  * 		.add(JsonSerializer.<jk>class</jk>);     <jc>// fluent chain preserved</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanStore} - The base lookup interface this layer extends.
  * 	<li class='jc'>{@link BasicBeanStore} - The default writable implementation with the {@code overridingParent} slot.
  * </ul>

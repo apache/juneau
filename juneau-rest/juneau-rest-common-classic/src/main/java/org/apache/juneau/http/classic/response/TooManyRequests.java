@@ -35,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
  * The user has sent too many requests in a given amount of time.
  * <br>Intended for use with rate-limiting schemes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

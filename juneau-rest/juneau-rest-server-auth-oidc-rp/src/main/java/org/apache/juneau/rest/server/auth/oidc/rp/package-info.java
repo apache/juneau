@@ -29,7 +29,7 @@
  * The {@code com.nimbusds:oauth2-oidc-sdk} dependency is {@code provided}-scoped and contained at the
  * module boundary &mdash; it never leaks transitively.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oidc.rp.OidcRelyingParty OidcRelyingParty}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)</a>
  * 	<li class='link'><a class="doclink" href="https://openid.net/specs/openid-connect-core-1_0.html">OpenID Connect Core 1.0</a>

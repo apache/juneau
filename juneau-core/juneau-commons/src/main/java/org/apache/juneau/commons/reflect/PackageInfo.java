@@ -37,7 +37,7 @@ import org.apache.juneau.commons.utils.*;
  * This class provides a cached wrapper around Java {@link Package} objects, extending the standard API with
  * convenient methods for accessing package annotations and metadata. Instances are cached and reused for efficiency.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Cached instances - package info objects are cached and reused
  * 	<li>Annotation support - get annotations declared on the package
@@ -45,14 +45,14 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Thread-safe - instances are immutable and safe for concurrent access
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Accessing package-level annotations
  * 	<li>Working with package metadata
  * 	<li>Building frameworks that need to analyze package information
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Get PackageInfo from a class</jc>
  * 	PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -65,7 +65,7 @@ import org.apache.juneau.commons.utils.*;
  * 		<jv>pi</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ClassInfo} - Class introspection
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
@@ -223,7 +223,7 @@ public class PackageInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Package#getName()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(String.<jk>class</jk>);
 	 * 	String <jv>name</jv> = <jv>pi</jv>.getName();  <jc>// "java.lang"</jc>
@@ -350,7 +350,7 @@ public class PackageInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Package#toString()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(String.<jk>class</jk>);
 	 * 	String <jv>s</jv> = <jv>pi</jv>.toString();  <jc>// "package java.lang"</jc>

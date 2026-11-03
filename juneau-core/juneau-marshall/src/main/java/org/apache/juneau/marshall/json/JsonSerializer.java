@@ -39,13 +39,13 @@ import org.apache.juneau.marshall.swap.spi.*;
  * Produces strict JSON with double-quoted strings by default. For JSON5-style output (single quotes,
  * etc.), use {@link Json5Serializer}.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/json</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * The conversion is as follows...
  * <ul class='spaced-list'>
@@ -80,7 +80,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
@@ -90,7 +90,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 		{@link org.apache.juneau.marshall.json5.Json5Serializer.Readable Json5Serializer.Readable} - Default serializer, single quotes, simple mode, with whitespace.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -105,21 +105,21 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bjson'>
  * 	{<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30}
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bjson'>
  * 	{<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30,<js>"address"</js>:{<js>"street"</js>:<js>"123 Main St"</js>,<js>"city"</js>:<js>"Boston"</js>,<js>"state"</js>:<js>"MA"</js>},<js>"tags"</js>:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
  * 	<li class='link'>{@link Json5Serializer} - For JSON5-style output (single quotes, etc.)
  * </ul>
@@ -232,7 +232,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * <br>However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 		 * <xt>&lt;\/script&gt;</xt>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = Json5Serializer

@@ -24,7 +24,7 @@ package org.apache.juneau.commons.function;
  * but your code may throw checked exceptions. Unlike {@link Runnable}, the {@link #run()} method can throw any
  * {@link Throwable}, making it suitable for exception testing and fluent API patterns.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Exception support - allows checked exceptions to be thrown
@@ -32,7 +32,7 @@ package org.apache.juneau.commons.function;
  * 	<li>Testing support - useful for exception testing scenarios
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Exception testing - verifying that code throws expected exceptions
  * 	<li>Fluent interfaces - passing code snippets to builder methods
@@ -40,7 +40,7 @@ package org.apache.juneau.commons.function;
  * 	<li>Error handling - passing error-prone code to handlers
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Exception testing</jc>
  * 	Snippet <jv>code</jv> = () -&gt; {
@@ -64,7 +64,7 @@ package org.apache.juneau.commons.function;
  * 	}
  * </p>
  *
- * <h5 class='section'>Comparison with Runnable:</h5>
+ * <h2 class='section'>Comparison with Runnable:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Runnable:</b> Cannot throw checked exceptions (must catch and wrap)
  * 	<li><b>Snippet:</b> Can throw any {@link Throwable} (checked or unchecked)
@@ -72,7 +72,7 @@ package org.apache.juneau.commons.function;
  * 	<li><b>Snippet:</b> Used for exception testing and fluent APIs
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  */
@@ -88,7 +88,7 @@ public interface Snippet {
 	 * This method is the functional method of this interface. It can throw any {@link Throwable},
 	 * including checked exceptions, which distinguishes it from {@link Runnable#run()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Snippet <jv>snippet</jv> = () -&gt; {
 	 * 		<jc>// Code that may throw exceptions</jc>

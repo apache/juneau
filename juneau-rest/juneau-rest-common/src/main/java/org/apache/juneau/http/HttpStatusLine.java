@@ -23,7 +23,7 @@ package org.apache.juneau.http;
  * Mirrors the semantics of {@code org.apache.http.StatusLine} without the Apache HttpCore dependency.
  * The default immutable implementation is {@link org.apache.juneau.http.response.HttpStatusLineBean}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

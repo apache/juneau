@@ -23,15 +23,14 @@ import java.util.function.*;
 /**
  * Used for assertion calls against throwable objects.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
  * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
  * </p>
  *
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -50,8 +49,7 @@ import java.util.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentThrowableAssertion}
  * 	<ul class='javatreec'>
@@ -73,8 +71,7 @@ import java.util.function.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -86,7 +83,7 @@ import java.util.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *

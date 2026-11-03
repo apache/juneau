@@ -27,7 +27,7 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  * ({@link McpRestServlet}) are at parity: both bind the revision at compile time and both
  * expose the same {@link #capabilities()} hook.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/api")
  * public class MyResource extends BasicRestServlet implements McpEndpoint {

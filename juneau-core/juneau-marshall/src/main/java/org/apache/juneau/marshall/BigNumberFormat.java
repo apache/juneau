@@ -33,7 +33,7 @@ import java.math.*;
  * <p>
  * The default is {@link #NUMBER} which preserves the historical wire output (a bare numeric token).
  *
- * <h5 class='topic'>JS-interop motivation</h5>
+ * <h2 class='topic'>JS-interop motivation</h2>
  *
  * <p>
  * JavaScript's {@code Number.MAX_SAFE_INTEGER} is {@code 2^53 − 1} (= {@code 9007199254740991}).
@@ -42,7 +42,7 @@ import java.math.*;
  * for values that are JS-safe and {@link #STRING} for everything else — the typical "safe default" for
  * services that may be consumed by both JVM and browser clients.
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#bigNumberFormat() @MarshalledProp(bigNumberFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#bigNumberFormat() @Marshalled(bigNumberFormat=…)} on the bean class.
@@ -53,13 +53,13 @@ import java.math.*;
  * 	<li>The default constant ({@link #NUMBER}).
  * </ol>
  *
- * <h5 class='topic'>Parser leniency</h5>
+ * <h2 class='topic'>Parser leniency</h2>
  *
  * <p>
  * Parsers SHALL accept both bare numeric and quoted-string input regardless of the parser-side
  * {@code BigNumberFormat} setting. The configured constant is informational only.
  *
- * <h5 class='topic'>Binary serializers</h5>
+ * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native numeric types regardless of the
@@ -75,7 +75,7 @@ public enum BigNumberFormat {
 	/**
 	 * Bare numeric token (the default).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	12345678901234567890
 	 * </p>
@@ -88,7 +88,7 @@ public enum BigNumberFormat {
 	/**
 	 * Quoted-string form for lossless precision.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	"12345678901234567890"
 	 * </p>

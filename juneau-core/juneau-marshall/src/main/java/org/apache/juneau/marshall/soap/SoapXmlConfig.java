@@ -49,7 +49,7 @@ public @interface SoapXmlConfig {
 	/**
 	 * The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link SoapXmlSerializer.Builder#soapAction(String)}
 	 * </ul>
 	 *

@@ -102,7 +102,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * <p>
 		 * If not specified, defaults to {@link MarshallingContext.Builder#locale(Locale)}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#locale(Locale)}
 		 * </ul>
@@ -126,7 +126,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * <p>
 		 * If not specified, defaults to {@link MarshallingContext.Builder#mediaType(MediaType)}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#mediaType(MediaType)}
 		 * </ul>
@@ -167,7 +167,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * This is a per-call override.  If not set, the value from
 		 * {@link MarshallingContext.Builder#activeView(String)} is used.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledProp#view()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#activeView(String)}
 		 * </ul>
@@ -211,7 +211,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		 * <p>
 		 * If not specified, defaults to {@link MarshallingContext.Builder#timeZone(TimeZone)}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#timeZone(TimeZone)}
 		 * </ul>
@@ -359,6 +359,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * The following conversions are valid:
 	 * <table class='styled'>
+	 * 	<caption>Valid conversions</caption>
 	 * 	<tr><th>Convert to type</th><th>Valid input value types</th><th>Notes</th></tr>
 	 * 	<tr>
 	 * 		<td>
@@ -644,7 +645,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
 	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
@@ -902,8 +903,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	/**
 	 * Find fluent setters.
 	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
+	 * <h4 class='section'>Description:</h4>
 	 *
 	 * @see MarshallingContext.Builder#findFluentSetters()
 	 * @return
@@ -1008,7 +1008,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * Creates a new empty bean of the specified type, except used for instantiating inner member classes that must
 	 * be instantiated within another class instance.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
 	 * 	Person <jv>person</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
@@ -1060,7 +1060,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * If object is not a true bean, then throws a {@link BeanRuntimeException} with an explanation of why it's not a
 	 * bean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
@@ -1143,7 +1143,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * If object is already a {@link BeanMap}, simply returns the same object.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
@@ -1170,7 +1170,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
 	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
@@ -1210,7 +1210,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * <p>
 	 * Same as {@link #toBeanMap(Object)} but allows you to specify a property namer instance.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);

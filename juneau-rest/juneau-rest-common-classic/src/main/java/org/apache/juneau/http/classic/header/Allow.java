@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Valid methods for a specified resource. To be used for a 405 Method not allowed.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Allow: GET, HEAD
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Allow entity-header field lists the set of methods supported by the resource identified by the Request-URI.
  * The purpose of this field is strictly to inform the recipient of valid methods associated with the resource.
@@ -67,7 +67,7 @@ import org.apache.juneau.http.*;
  * user agent might
  * have other means of communicating with the origin server.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

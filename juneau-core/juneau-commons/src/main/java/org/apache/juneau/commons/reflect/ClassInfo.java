@@ -53,7 +53,7 @@ import org.apache.juneau.commons.inject.*;
  * <p>
  * Objects are designed to be lightweight to create and threadsafe.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Wrap our class inside a ClassInfo.</jc>
  * 	ClassInfo <jv>classInfo</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -283,7 +283,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * Using this method directly avoids String allocations when building complex strings.
 	 * The method is recursive to handle nested generic type parameters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringBuilder sb = <jk>new</jk> StringBuilder();
 	 * 	sb.append(<js>"Class: "</js>);
@@ -456,7 +456,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * For null values, returns <jk>true</jk> unless this type is a primitive
 	 * (since primitives cannot accept null values in Java).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>ClassInfo.of(String.class).canAcceptArg("foo")</c> - returns <jk>true</jk>
 	 * 	<li><c>ClassInfo.of(String.class).canAcceptArg(null)</c> - returns <jk>true</jk>
@@ -556,7 +556,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * followed by methods from the immediate parent, then grandparent, etc. Within each class, methods
 	 * are sorted alphabetically.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given class hierarchy:</jc>
 	 * 	<jk>class</jk> Parent {
@@ -575,7 +575,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<jc>//          ^Child methods^   ^Parent methods^</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <h4 class='section'>Comparison with Similar Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #getDeclaredMethods()} - Returns methods declared on this class only (all visibility levels)
 	 * 	<li>{@link #getAllMethods()} - Returns all methods in <b>child-to-parent order</b> ← This method
@@ -583,7 +583,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Unlike Java's {@link Class#getMethods()}, this returns methods of all visibility levels, not just public ones.
 	 * 	<li>Methods from {@link Object} class are excluded from the results.
@@ -612,7 +612,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This ordering is useful for initialization hooks and lifecycle methods where parent methods should execute
 	 * before child methods (e.g., <c>@RestInit</c>, <c>@PostConstruct</c>, etc.).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given class hierarchy:</jc>
 	 * 	<jk>class</jk> Parent {
@@ -631,7 +631,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<jc>//          ^Parent methods^  ^Child methods^</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <h4 class='section'>Comparison with Similar Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #getDeclaredMethods()} - Returns methods declared on this class only (all visibility levels)
 	 * 	<li>{@link #getAllMethods()} - Returns all methods in <b>child-to-parent order</b>
@@ -639,7 +639,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Methods from {@link Object} class are excluded from the results.
 	 * 	<li>Use {@link #getAllMethods()} if you need child methods to appear before parent methods.
@@ -834,7 +834,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * declaration order.  The JLS does not guarantee it, so treat it as an ordering <i>hint</i> only.
 	 * Used by {@code BeanMeta} to seed bean properties in declaration order when unsorted properties are enabled.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public</jk> String <jf>zeta</jf>;
@@ -905,14 +905,14 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This method returns methods of <b>all visibility levels</b> (public, protected, package-private, and private)
 	 * declared directly on this class only (does not include inherited methods).
 	 *
-	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <h4 class='section'>Comparison with Similar Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels) ← This method
 	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels)
 	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Unlike Java's {@link Class#getDeclaredMethods()}, results are filtered to exclude synthetic methods like <c>$jacocoInit</c>.
 	 * </ul>
@@ -932,8 +932,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This method returns the class in which this class is explicitly declared as a member.
 	 * It only returns non-null for <b>member classes</b> (static and non-static nested classes).
 	 *
-	 * <p>
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>class Outer { class Inner {} }</c> - <c>Inner.getDeclaringClass()</c> returns <c>Outer</c>
 	 * 	<li><c>class Outer { static class Nested {} }</c> - <c>Nested.getDeclaringClass()</c> returns <c>Outer</c>
@@ -942,7 +941,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Anonymous class - <c>getDeclaringClass()</c> returns <jk>null</jk>
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link #getEnclosingClass()} - Returns the immediately enclosing class (works for local and anonymous classes too)
 	 * </ul>
 	 *
@@ -969,8 +968,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This method returns the lexically enclosing class, regardless of whether this class is a member,
 	 * local, or anonymous class. Unlike {@link #getDeclaringClass()}, this method works for all types of nested classes.
 	 *
-	 * <p>
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>class Outer { class Inner {} }</c> - <c>Inner.getEnclosingClass()</c> returns <c>Outer</c>
 	 * 	<li><c>class Outer { static class Nested {} }</c> - <c>Nested.getEnclosingClass()</c> returns <c>Outer</c>
@@ -979,13 +977,13 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Top-level class - <c>getEnclosingClass()</c> returns <jk>null</jk>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Differences from {@link #getDeclaringClass()}:</h5>
+	 * <h4 class='section'>Differences from {@link #getDeclaringClass()}:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>getDeclaringClass()</c> - Returns non-null only for member classes (static or non-static nested classes)
 	 * 	<li><c>getEnclosingClass()</c> - Returns non-null for all nested classes (member, local, and anonymous)
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link #getDeclaringClass()} - Returns the declaring class (only for member classes)
 	 * 	<li class='ja'>{@link #getEnclosingConstructor()} - Returns the enclosing constructor (for classes defined in constructors)
 	 * 	<li class='ja'>{@link #getEnclosingMethod()} - Returns the enclosing method (for classes defined in methods)
@@ -1131,7 +1129,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Uses single letters for primitive arrays (e.g., <js>"[I"</js> for <c>int[]</c>)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><js>"java.lang.String"</js> - Normal class
 	 * 	<li><js>"[Ljava.lang.String;"</js> - Array
@@ -1142,7 +1140,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li><js>"[[I"</js> - Multi-dimensional primitive array
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
+	 * <h4 class='section'>See Also:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>{@link #getNameCanonical()}</c> - Java source code format (uses <js>'.'</js> and <js>"[]"</js>)
 	 * 	<li><c>{@link #getNameSimple()}</c> - Simple class name without package
@@ -1188,7 +1186,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This is a unified method that can produce output equivalent to all other name methods
 	 * by varying the parameters.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given: java.util.HashMap&lt;String,Integer&gt;[]</jc>
 	 *
@@ -1213,7 +1211,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<jc>// → "HashMapArray"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Equivalent Methods:</h5>
+	 * <h4 class='section'>Equivalent Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>getName()</c> = <c>getFormattedName(FULL, <jk>false</jk>, '$', JVM)</c>
 	 * 	<li><c>getCanonicalName()</c> = <c>getFormattedName(FULL, <jk>false</jk>, '.', BRACKETS)</c>
@@ -1246,7 +1244,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	/**
 	 * Returns the full name of this class.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><js>"com.foo.MyClass"</js> - Normal class
 	 * 	<li><js>"com.foo.MyClass[][]"</js> - Array.
@@ -1543,7 +1541,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This is useful for annotation processing where you need to traverse the complete type hierarchy
 	 * without duplicates.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Interface hierarchy:</jc>
 	 * 	<jk>interface</jk> ISuperGrandParent {}
@@ -1682,7 +1680,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * Matches any public no-argument method named {@code get<PropertyName>} with a non-void return type,
 	 * or {@code is<PropertyName>} with a {@code boolean}/{@link Boolean} return type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Find the getter for the "name" property on MyBean</jc>
 	 * 	Optional&lt;MethodInfo&gt; <jv>getter</jv> = ClassInfo.<jsm>info</jsm>(MyBean.<jk>class</jk>).findGetter(<js>"name"</js>);
@@ -1702,7 +1700,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * <p>
 	 * Matches any public single-argument method named {@code set<PropertyName>}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Find the setter for the "name" property on MyBean</jc>
 	 * 	Optional&lt;MethodInfo&gt; <jv>setter</jv> = ClassInfo.<jsm>info</jsm>(MyBean.<jk>class</jk>).findSetter(<js>"name"</js>);
@@ -1722,14 +1720,14 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * <p>
 	 * This method returns <b>public methods only</b>, from this class and all parent classes and interfaces.
 	 *
-	 * <h5 class='section'>Comparison with Similar Methods:</h5>
+	 * <h4 class='section'>Comparison with Similar Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #getDeclaredMethods()} - Returns all declared methods on this class only (all visibility levels)
 	 * 	<li>{@link #getAllMethods()} - Returns all declared methods on this class and parents (all visibility levels)
 	 * 	<li>{@link #getPublicMethods()} - Returns public methods only on this class and parents ← This method
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>This method behaves similarly to Java's {@link Class#getMethods()}, returning only public methods from this class and parent classes/interfaces.
 	 * 	<li>Bridge and synthetic methods are included (matching {@link Class#getMethods()} behavior).
@@ -1840,7 +1838,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * (e.g. {@code Integer.class}) wrapped in a {@link ClassInfo}.
 	 * Otherwise, returns this {@link ClassInfo} instance.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>intClass</jv> = ClassInfo.<jsm>of</jsm>(<jk>int</jk>.<jk>class</jk>);
 	 * 	ClassInfo <jv>wrapper</jv> = <jv>intClass</jv>.getWrapperIfPrimitive();  <jc>// Returns ClassInfo for Integer.class</jc>
@@ -2090,7 +2088,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This method returns <jk>true</jk> only if this class is a child of the parent class,
 	 * excluding the case where they are the same class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>child</jv> = ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>);
 	 * 	ClassInfo <jv>parent</jv> = ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>);
@@ -2391,7 +2389,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This method returns <jk>true</jk> only if this class is a parent of the child class,
 	 * excluding the case where they are the same class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>parent</jv> = ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>);
 	 * 	ClassInfo <jv>child</jv> = ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>);
@@ -2437,7 +2435,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * <p>
 	 * Same as {@link #isAssignableFrom(Class)} but takes in a {@link ClassInfo}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>parent</jv> = ClassInfo.<jsm>of</jsm>(List.<jk>class</jk>);
 	 * 	ClassInfo <jv>child</jv> = ClassInfo.<jsm>of</jsm>(ArrayList.<jk>class</jk>);
@@ -2469,7 +2467,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * <p>
 	 * Primitive classes are converted to wrapper classes and compared.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfLenient(String.<jk>class</jk>);  <jc>// true</jc>
 	 * 		ClassInfo.<jsm>of</jsm>(CharSequence.<jk>class</jk>).isParentOfLenient(String.<jk>class</jk>);  <jc>// true</jc>
@@ -2631,7 +2629,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Generic type parameters with bounds (if any)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular class</jc>
 	 * 	ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).toString();
@@ -2660,14 +2658,14 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<jc>// Returns: "public record org.example.MyRecord"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h4 class='section'>Notes:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>For interfaces, the "abstract" modifier is omitted since it's implicit.
 	 * 	<li>For non-class types (e.g., TypeVariable, ParameterizedType), returns the result of {@code Type.toString()}.
 	 * 	<li>Type parameters include bounds when present (e.g., "&lt;T extends Comparable&lt;T&gt;&gt;").
 	 * </ul>
 	 *
-	 * <h5 class='section'>Comparison with Other Methods:</h5>
+	 * <h4 class='section'>Comparison with Other Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #getNameSimple()} - Returns simple class name without package (e.g., "String")
 	 * 	<li>{@link #getNameShort()} - Returns short name with outer classes (e.g., "MyClass$Inner")
@@ -3042,7 +3040,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * This method performs field and method injection based on {@code @Inject} or {@code @Autowired} annotations.
 	 * After all injection is complete, it calls any methods annotated with {@code @PostConstruct}.
 	 *
-	 * <h5 class='section'>Injectable Fields:</h5>
+	 * <h4 class='section'>Injectable Fields:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Must be annotated with {@code @Inject} or {@code @Autowired} (matched by simple class name)
 	 * 	<li>Must not be final
@@ -3050,7 +3048,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Supports the same parameter types as parameter resolution: single beans, {@code Optional}, arrays, {@code List}, {@code Set}, {@code Map}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Injectable Methods:</h5>
+	 * <h4 class='section'>Injectable Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Must be annotated with {@code @Inject} or {@code @Autowired} (matched by simple class name)
 	 * 	<li>Must not be abstract
@@ -3061,7 +3059,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Supports the same parameter types as parameter resolution: single beans, {@code Optional}, arrays, {@code List}, {@code Set}, {@code Map}
 	 * </ul>
 	 *
-	 * <h5 class='section'>PostConstruct Methods:</h5>
+	 * <h4 class='section'>PostConstruct Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Must be annotated with {@code @PostConstruct} (matched by simple class name)
 	 * 	<li>Must return {@code void}
@@ -3073,7 +3071,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 * 	<li>Multiple methods can be annotated, and all will be called in order
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Class with injectable fields and methods</jc>
 	 * 	<jk>public</jk> <jk>class</jk> MyService {

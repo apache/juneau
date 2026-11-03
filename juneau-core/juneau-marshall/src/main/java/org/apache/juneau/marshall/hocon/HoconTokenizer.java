@@ -29,7 +29,7 @@ import java.util.Locale;
  * Handles unquoted strings, quoted strings, triple-quoted strings, numbers, booleans, null,
  * structural tokens, substitutions ({@code ${var}} and {@code ${?var}}), and comments.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */

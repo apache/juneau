@@ -32,14 +32,14 @@ import org.apache.juneau.marshall.parser.*;
  * Reads CBOR-encoded binary data, extracting major types and additional information from
  * initial bytes and decoding values according to RFC 8949.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not intended for external use.
  * 	<li class='note'>Indefinite-length encoding (RFC 8949 §3.2) is supported: arrays/maps decode via the
  * 		BREAK-aware container loop, and chunked text/byte strings (heads <c>0x7F</c>/<c>0x5F</c>) are
  * 		reassembled from their definite-length pieces.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>

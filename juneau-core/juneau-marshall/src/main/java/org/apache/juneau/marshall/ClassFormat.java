@@ -35,7 +35,7 @@ import java.util.function.*;
  * The default is {@link #FQCN} which mirrors the historical {@code ClassSwap} behavior (canonical dotted
  * name with sensible fallback to the JVM binary name).
  *
- * <h5 class='topic'>FQCN vs BINARY_NAME for nested classes</h5>
+ * <h2 class='topic'>FQCN vs BINARY_NAME for nested classes</h2>
  *
  * <p>
  * For nested-type encoding the two forms diverge:
@@ -53,14 +53,14 @@ import java.util.function.*;
  * 	<li>{@link #BINARY_NAME} produces {@code "[I"} / {@code "[Ljava.lang.String;"} (JVM descriptor form).
  * </ul>
  *
- * <h5 class='topic'>SIMPLE_NAME is serialize-only</h5>
+ * <h2 class='topic'>SIMPLE_NAME is serialize-only</h2>
  *
  * <p>
  * {@link #SIMPLE_NAME} discards package and outer-class context and is <b>not round-trip safe</b>. The
  * parser path for this constant throws {@link UnsupportedOperationException}; use {@link #FQCN} or
  * {@link #BINARY_NAME} for round-trippable wires.
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#classFormat() @MarshalledProp(classFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#classFormat() @Marshalled(classFormat=…)} on the bean class.
@@ -71,7 +71,7 @@ import java.util.function.*;
  * 	<li>The default constant ({@link #FQCN}).
  * </ol>
  *
- * <h5 class='topic'>Parser leniency</h5>
+ * <h2 class='topic'>Parser leniency</h2>
  *
  * <p>
  * Parsers SHALL try {@link Class#forName(String, boolean, ClassLoader)} first regardless of the
@@ -85,7 +85,7 @@ import java.util.function.*;
  * — so {@code "int[]"} resolves to {@code int[].class} and {@code "java.lang.String[][]"} resolves to
  * {@code String[][].class}.
  *
- * <h5 class='topic'>Binary serializers</h5>
+ * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this
@@ -103,7 +103,7 @@ public enum ClassFormat {
 	 * Uses {@link Class#getCanonicalName()} when available; falls back to {@link Class#getName()} for
 	 * local / anonymous classes where {@code getCanonicalName()} returns {@code null}.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	java.lang.String
 	 * 	java.util.Map.Entry
@@ -115,7 +115,7 @@ public enum ClassFormat {
 	/**
 	 * JVM binary name per {@link Class#getName()}.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	java.lang.String
 	 * 	java.util.Map$Entry
@@ -132,7 +132,7 @@ public enum ClassFormat {
 	/**
 	 * Unqualified simple name per {@link Class#getSimpleName()}.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	java.lang.String
 	 * 	Entry

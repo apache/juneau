@@ -61,7 +61,7 @@ import org.apache.juneau.marshall.parser.*;
  * <p>
  * Schema objects are created via builders instantiated through the {@link #create()} method.
  *
- * <h5 class='section'>Jakarta Bean Validation Support:</h5>
+ * <h2 class='section'>Jakarta Bean Validation Support:</h2>
  * <p>
  * As of 9.2.0, this class supports Jakarta Bean Validation constraint annotations (e.g., <c>@NotNull</c>, <c>@Size</c>, <c>@Min</c>, <c>@Max</c>).
  * When these annotations are encountered during schema building, they are automatically mapped to corresponding OpenAPI schema properties:
@@ -81,11 +81,11 @@ import org.apache.juneau.marshall.parser.*;
  * This integration uses pure reflection and does not require <c>jakarta.validation-api</c> as a dependency.
  * The annotations are detected and processed automatically when present.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi</a>
  * </ul>
  */
@@ -573,7 +573,7 @@ public class HttpPartSchema {
 		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 		 *
 		 * <ul class='values javatree'>
-		 * 	<ul class='jc'>{@link HttpPartCollectionFormat}
+		 * 	<li class='jc'>{@link HttpPartCollectionFormat}
 		 * 	<ul>
 		 * 		<li>
 		 * 			{@link HttpPartCollectionFormat#CSV CSV} (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
@@ -1069,7 +1069,7 @@ public class HttpPartSchema {
 		 * </ul>
 		 *
 		 * <ul class='values javatree'>
-		 * 	<ul class='jc'>{@link HttpPartFormat}
+		 * 	<li class='jc'>{@link HttpPartFormat}
 		 * 	<ul>
 		 * 		<li class='jf'>
 		 * 			{@link HttpPartFormat#INT32 INT32} - Signed 32 bits.
@@ -1111,7 +1111,7 @@ public class HttpPartSchema {
 		 * 	</ul>
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 		 * </ul>
 		 *
@@ -1181,7 +1181,7 @@ public class HttpPartSchema {
 		 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 		 * </ul>
 		 *
@@ -2330,7 +2330,7 @@ public class HttpPartSchema {
 		 * 	</ul>
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 		 * </ul>
 		 *
@@ -2393,7 +2393,7 @@ public class HttpPartSchema {
 		 * 		<br>This type is currently not supported.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 		 * </ul>
 		 *

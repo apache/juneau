@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.swap.spi;
 /**
  * Abstract subclass for object swaps that swap objects for strings.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A swap that converts byte arrays to BASE64-encoded strings.</jc>
  * 	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
@@ -40,7 +40,7 @@ package org.apache.juneau.marshall.swap.spi;
  * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new byte</jk>[] {1,2,3});  <jc>// Produces "'AQID'"</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>
  *

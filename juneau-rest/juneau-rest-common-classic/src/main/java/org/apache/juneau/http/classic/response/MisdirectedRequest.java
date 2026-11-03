@@ -34,7 +34,7 @@ import org.apache.juneau.http.classic.header.*;
  * <p>
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

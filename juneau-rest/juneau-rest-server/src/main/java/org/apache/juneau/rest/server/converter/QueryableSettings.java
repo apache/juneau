@@ -41,7 +41,7 @@ import org.apache.juneau.commons.beanquery.*;
  * <p>
  * Every setting here is a trusted, server-side cap or default; none of them is ever set from request data.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(converters=Queryable.<jk>class</jk>)
  * 	<jk>public class</jk> PeopleResource <jk>extends</jk> BasicRestServlet {
@@ -59,7 +59,7 @@ import org.apache.juneau.commons.beanquery.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Queryable}
  * 	<li class='jc'>{@link org.apache.juneau.commons.beanquery.BeanQueryContext.Builder BeanQueryContext.Builder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>

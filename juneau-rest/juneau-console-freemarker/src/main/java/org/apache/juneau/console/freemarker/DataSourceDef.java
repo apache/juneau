@@ -33,7 +33,7 @@ import org.apache.juneau.console.*;
  * Add it to a page with {@code PageSpec.data(...)}.  The declaration is checked when it is added: a bad URL, mode,
  * chunking, column type or subscription role is E-76, and a bad parser or builder name is E-74.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>page</jv>.data(DataSourceDef.<jsm>create</jsm>(<js>"orgRequests"</js>)
  * 		.url(<js>"/rest/orgRequests/series"</js>).format(Format.<jsf>CSV</jsf>)

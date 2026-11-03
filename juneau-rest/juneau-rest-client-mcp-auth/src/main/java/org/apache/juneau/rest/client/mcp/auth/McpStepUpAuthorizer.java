@@ -41,7 +41,7 @@ import java.util.concurrent.*;
  * {@code client_credentials} (own-behalf) clients MAY abort immediately rather than attempt step-up
  * ({@link Builder#attemptStepUp(boolean) attemptStepUp(false)}).
  *
- * <h5 class='topic'>Attempt-counter lifetime</h5>
+ * <h2 class='topic'>Attempt-counter lifetime</h2>
  * <p>
  * Per-<code>(resource, operation)</code> attempt counts exist only to bound a single step-up burst.  A counter is
  * <b>cleared automatically</b> when {@link #execute(String, ScopedCall) execute} returns successfully for that operation,

@@ -43,7 +43,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * The write is performed by the terminal {@link #set(Object)} or {@link #set()} method.  The result is identical to the
  * equivalent {@link Config#set(String, Object, Serializer, String, String, List)} call.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Add an entry with a comment and pre-lines.</jc>
  * 	<jv>config</jv>.entry(<js>"MySection/myKey"</js>)
@@ -62,11 +62,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.set();
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This builder is not thread safe and is intended to be used and discarded within a single statement.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfig">juneau-config</a>
  * </ul>
  */

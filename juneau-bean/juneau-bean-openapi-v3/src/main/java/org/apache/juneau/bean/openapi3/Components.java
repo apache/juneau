@@ -31,7 +31,7 @@ import org.apache.juneau.commons.collections.*;
  * This promotes reusability and reduces duplication by allowing common schemas, responses, parameters, and other objects
  * to be defined once and referenced multiple times using the <c>$ref</c> syntax.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Components Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -46,7 +46,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>callbacks</c> (map of {@link Callback}) - Reusable callback definitions
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a Components object with reusable schemas</jc>
  * 	Components <jv>components</jv> = <jk>new</jk> Components()
@@ -74,7 +74,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<jc>// These schemas can then be referenced: "#/components/schemas/Pet"</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#components-object">OpenAPI Specification &gt; Components Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/components/">OpenAPI Components</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

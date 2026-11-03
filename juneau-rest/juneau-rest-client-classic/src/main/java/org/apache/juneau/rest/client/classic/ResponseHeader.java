@@ -43,7 +43,7 @@ import org.apache.juneau.bct.assertions.*;
  * An extension of an HttpClient {@link Header} that provides various support for converting the header to POJOs and
  * other convenience methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
  */
@@ -314,7 +314,7 @@ public class ResponseHeader extends BasicHeader {
 	/**
 	 * Matches the specified pattern against this header value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
@@ -337,7 +337,7 @@ public class ResponseHeader extends BasicHeader {
 	/**
 	 * Matches the specified pattern against this header value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
@@ -360,7 +360,7 @@ public class ResponseHeader extends BasicHeader {
 	/**
 	 * Matches the specified pattern against this header value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
@@ -411,7 +411,7 @@ public class ResponseHeader extends BasicHeader {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	<jv>client</jv>

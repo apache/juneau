@@ -40,7 +40,7 @@ import ch.qos.logback.classic.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Level mapping</h5>
+ * <h2 class='topic'>Level mapping</h2>
  *
  * <p>
  * Levels are Logback level names ({@code "TRACE"}, {@code "DEBUG"}, {@code "INFO"}, {@code "WARN"},

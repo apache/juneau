@@ -48,7 +48,7 @@ import org.apache.juneau.commons.bean.*;
  * 	<li>Both — the class is not a bean and the marshaller emits {@code null}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanIgnore}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation#format-side-marshalledignore">Format Side: @MarshalledIgnore</a>
  * </ul>

@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Utility classes and methods for the {@link OpSwagger @OpSwagger} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
@@ -40,7 +40,7 @@ public class OpSwaggerAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...) MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

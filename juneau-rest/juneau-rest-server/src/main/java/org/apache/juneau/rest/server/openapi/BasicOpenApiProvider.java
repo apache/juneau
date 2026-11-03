@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.*;
  * {@link BasicOpenApiProviderSession} per call, which walks the {@code @Rest} / {@code @RestOp}
  * annotation graph and emits an {@link OpenApi} 3.1 document.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">API-Docs Mixin Pack</a>
  * </ul>
  */

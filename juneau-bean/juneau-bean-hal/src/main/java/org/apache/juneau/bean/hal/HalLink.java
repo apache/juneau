@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * A Link Object describes a hyperlink from the containing resource to another resource. The {@code href} property is
  * the only required field; all other fields are optional.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a href="https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08#section-5">HAL Link Object</a>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHal">juneau-bean-hal</a>
  * </ul>

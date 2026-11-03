@@ -25,7 +25,7 @@ import java.util.function.*;
  * This interface provides write operations for bean stores, allowing beans to be added
  * either as direct instances or as suppliers for lazy initialization.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	WritableBeanStore <jv>beanStore</jv> = ...;
  *
@@ -45,7 +45,7 @@ import java.util.function.*;
  * 	<jv>beanStore</jv>.clear();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanStore} - Read-only bean lookup interface
  * </ul>
  */
@@ -250,7 +250,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * bean store has a per-test overlay pushed at {@code @BeforeEach}, then popped at {@code @AfterEach}, so
 	 * subsequent tests see the original beans again with no rebuild cost.
 	 *
-	 * <h5 class='section'>Composition with {@code overridingParent}:</h5>
+	 * <h4 class='section'>Composition with {@code overridingParent}:</h4>
 	 * <p>
 	 * When this store was constructed with an
 	 * {@linkplain BasicBeanStore#BasicBeanStore(BeanStore, BeanStore) overriding parent} <i>and</i> has overlays

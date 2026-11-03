@@ -51,7 +51,7 @@ import jakarta.servlet.http.Part;
  * 	<jk>public</jk> Object myMethod(RequestFormParamList <jv>formData</jv>) {...}
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestFormParamList <jv>formData</jv>) {
@@ -104,7 +104,7 @@ import jakarta.servlet.http.Part;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RequestFormParam}
  * 	<li class='ja'>{@link FormData}
  * 	<li class='ja'>{@link HasFormData}

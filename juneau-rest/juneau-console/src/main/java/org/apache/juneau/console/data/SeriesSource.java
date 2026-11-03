@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.*;
  * rows and, when more rows exist, writes the truncation sentinel the browser reports as E-JS-102.  Times are written
  * as ISO-8601 UTC; a {@code LocalDate} is the start of that day in UTC, and a {@code LocalDateTime} is read as UTC.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/series"</js>)
  * 	<jk>public void</jk> series(RestResponse <jv>res</jv>) <jk>throws</jk> IOException {

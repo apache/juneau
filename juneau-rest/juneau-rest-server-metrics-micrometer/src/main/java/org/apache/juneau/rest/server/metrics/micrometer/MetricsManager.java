@@ -38,7 +38,7 @@ import io.micrometer.core.instrument.*;
  * <b>not</b> depend on, so its {@code scrape()} method is invoked <b>reflectively</b> &mdash; keeping the
  * registry choice entirely the consumer's, with no extra dependency leaked here.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MicrometerMetricsRecorder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>

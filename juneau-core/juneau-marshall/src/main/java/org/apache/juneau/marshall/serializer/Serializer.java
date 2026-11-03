@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parent class for all Juneau serializers.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Base serializer class that serves as the parent class for all serializers.
  *
@@ -61,11 +61,11 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  * <br>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  * </ul>
@@ -216,7 +216,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -279,7 +279,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that adds _type to root node.</jc>
 		 * 	WriterSerializer <jv>serializer</jv>= JsonSerializer
@@ -372,11 +372,11 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * When enabled, null bean values will be serialized to the output.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that serializes null properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -456,7 +456,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * </ol>
 		 * <jk>null</jk> is resolved by <c>keepNullProperties</c>, not treated as a <c>nonDefault</c> case.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that omits default-valued properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -474,7 +474,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NullAndInclusionPolicies">Null &amp; Inclusion Policies</a>
 		 * </ul>
 		 *
@@ -503,7 +503,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * Class used to listen for errors and warnings that occur during serialization.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Define our serializer listener.</jc>
 		 * 	<jc>// Simply captures all errors.</jc>
@@ -574,7 +574,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * Note that this introduces a performance penalty since it requires copying the existing collection.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -621,7 +621,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * Note that this introduces a performance penalty.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -674,7 +674,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 		Bean properties with empty list values will not be set.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -728,7 +728,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 		Bean properties with empty map values will not be set.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that skips empty maps.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -774,7 +774,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -812,7 +812,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * Bean used for resolution of URIs to absolute or root-relative form.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Our URI contextual information.</jc>
 		 * 	String <jv>authority</jv> = <js>"http://localhost:10000"</js>;
@@ -838,7 +838,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myUrl</jv>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -876,7 +876,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 		- Relative URIs should be considered relative to the request URI.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *
@@ -918,7 +918,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 		- Don't do any URL resolution.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *

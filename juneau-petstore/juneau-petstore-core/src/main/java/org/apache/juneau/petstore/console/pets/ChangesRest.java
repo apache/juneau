@@ -41,7 +41,7 @@ import org.apache.juneau.console.views.*;
  * <b>Discard</b> returns a {@link BulkResult}, a perRow <b>Apply</b> writes each change to its pet, and a perRow
  * <b>Retry</b> re-applies a failed change.  Also the data source of the header pending-changes badge.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	selection: { rowIdField:'id', selectAll:true, scope:'persistent', labelField:'summary',
  * 	             selectableWhen:[{field:'state', op:'eq', value:'PENDING', reason:'Only pending changes can be discarded or applied.'}] },

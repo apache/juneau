@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * The SSE transport writes each frame as {@code event: bus}, {@code id: <seq>}, {@code data: <frame>}; the WebSocket
  * transport sends one frame per text message.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   String <jv>f</jv> = BusFrames.<jsm>pub</jsm>(<js>"ops.jobs"</js>, Json.<jsm>of</jsm>(<jv>payload</jv>), <jk>true</jk>, 7);
  *   <jc>// {"v":1,"type":"pub","topic":"ops.jobs","payload":{...},"retained":true,"seq":7}</jc>

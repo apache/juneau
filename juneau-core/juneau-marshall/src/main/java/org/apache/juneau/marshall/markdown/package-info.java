@@ -25,7 +25,7 @@
  * {@link org.apache.juneau.marshall.markdown.MarkdownDocParser MarkdownDocParser} for reading and writing POJOs
  * as Markdown documents with heading-based structure.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown</a>
  * </ul>
  */

@@ -27,13 +27,13 @@ import java.util.concurrent.*;
  * An in-memory, per-process registry of {@link AsyncJob async jobs} &mdash; the single-process job store a future
  * async write variant runs on.
  *
- * <h5 class='section'>Single-process, by decision</h5>
+ * <h2 class='section'>Single-process, by decision</h2>
  * <p>
  * Job state lives only in this object's heap, which is enough for a single-user loopback console and a documented
  * limitation for anything else: a process restart drops every in-flight job, exactly as a restart invalidates
  * every {@link org.apache.juneau.rest.server.filter.SynchronizerToken}.  There is deliberately no store abstraction.
  *
- * <h5 class='section'>The id is the capability; the caps are load-bearing</h5>
+ * <h2 class='section'>The id is the capability; the caps are load-bearing</h2>
  * <p>
  * Each job is keyed by an unguessable {@value #CAPABILITY_BITS}-bit {@link SecureRandom} id
  * ({@value #CAPABILITY_BYTES} bytes, hex-encoded), matching
@@ -53,7 +53,7 @@ import java.util.concurrent.*;
  * 		{@link AsyncJob#acquireSubscriber()}.
  * </ul>
  *
- * <h5 class='section'>De-duplication by {@link IdempotencyKey}</h5>
+ * <h2 class='section'>De-duplication by {@link IdempotencyKey}</h2>
  * <p>
  * {@link #tryCreate(IdempotencyKey)} / {@link #create(IdempotencyKey)} register a job under an idempotency key's
  * {@link IdempotencyKey#value() value}; submitting again with a key that is already registered returns the
@@ -67,7 +67,7 @@ import java.util.concurrent.*;
  * heap (see {@link #sweepTimeouts()}), its key is forgotten too, and the same key starts a fresh job.  A duplicate
  * never counts against {@link #MAX_CONCURRENT_JOBS}, since it creates nothing.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	AsyncJobRegistry <jv>registry</jv> = <jk>new</jk> AsyncJobRegistry();
  * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mintSelfTargeted</jsm>(<js>"create"</js>);
@@ -77,7 +77,7 @@ import java.util.concurrent.*;
  * 	<jsm>assert</jsm> <jv>first</jv> == <jv>again</jv>;
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link AsyncJob}
  * 	<li class='jc'>{@link AsyncJobsMixin}

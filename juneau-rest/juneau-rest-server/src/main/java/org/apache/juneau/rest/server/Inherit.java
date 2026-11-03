@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server;
 /**
  * Dummy class that indicates that serializers, parsers, or transforms should be inherited from parent-class-to-class or class-to-method.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestOp</ja>(
  *

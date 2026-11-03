@@ -31,7 +31,7 @@ import org.apache.juneau.bct.assertions.*;
  * Typically used in conjunction with the {@link org.apache.juneau.rest.client.classic.RestClient.Builder#console(PrintStream)} to capture console output for
  * testing purposes.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A simple REST API that echos a posted bean.</jc>
  * 	<ja>@Rest</ja>
@@ -78,7 +78,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock</a>
  * </ul>
  */
@@ -113,7 +113,7 @@ public class MockConsole extends PrintStream {
 	/**
 	 * Allows you to perform fluent-style assertions on the contents of this buffer.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	MockConsole <jv>console</jv> = MockConsole.<jsf>create</jsf>();
 	 *
@@ -138,7 +138,7 @@ public class MockConsole extends PrintStream {
 	/**
 	 * Allows you to perform fluent-style assertions on the size of this buffer.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	MockConsole <jv>console</jv> = MockConsole.<jsf>create</jsf>();
 	 *

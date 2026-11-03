@@ -40,7 +40,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li>Other dependency injection frameworks
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	BeanStore <jv>beanStore</jv> = ...;
  *
@@ -57,7 +57,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	Map&lt;String, MyService&gt; <jv>allServices</jv> = <jv>beanStore</jv>.getBeansOfType(MyService.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://docs.spring.io/spring-framework/reference/core/beans.html">Spring Framework - The IoC Container</a>
  * </ul>
  */
@@ -130,7 +130,7 @@ public interface BeanStore {
 	 * (subtype, factory-method names, builder hooks, etc.).  For more control over instantiation,
 	 * use {@link BeanInstantiator#of(Class, BeanStore)} directly.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Instantiate a bean using this store for parameter resolution</jc>
 	 * 	MyService <jv>service</jv> = <jv>beanStore</jv>.instantiate(MyService.<jk>class</jk>);
@@ -201,7 +201,7 @@ public interface BeanStore {
 	 * The default implementation returns {@link Optional#empty()}.
 	 * Override in concrete stores (see {@link BasicBeanStore}) to enable factory-method scanning.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Filter only</jc>
 	 * 	<jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>,
@@ -251,7 +251,7 @@ public interface BeanStore {
 	 * synthetic method, it is an instance method and <c>onClassOrObject</c> is a {@link Class}, or one of its parameters
 	 * cannot be resolved from this store plus <c>extraBeans</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Invoke one specific @Bean factory method, instead of searching by return type.</jc>
 	 * 	MethodInfo <jv>m</jv> = ClassInfo.<jsm>of</jsm>(MyResource.<jk>class</jk>).getDeclaredMethod(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<js>"cacheIndicator"</js>)).get();

@@ -22,7 +22,7 @@ import org.apache.juneau.marshall.collections.*;
  * Handles one upstream topic (page → server, WebSocket bridges only).  Runs on the container's WebSocket thread;
  * keep it short or hand off.  An exception is logged and answered with a generic {@code bus:upstream-failed} frame.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   UpstreamHandler <jv>cancelAll</jv> = (<jv>session</jv>, <jv>topic</jv>, <jv>payload</jv>) -&gt; {
  *     <jv>jobs</jv>.running().forEach(AsyncJob::cancel);

@@ -30,7 +30,7 @@ import freemarker.template.*;
  * last-wins with any other chrome-side facts.  Repeatable; the one strict check against Java-seeded facts happens
  * once, at {@code </@console>}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@facts&gt;{"buildVersion": "1.0"}&lt;/@facts&gt;
  * </p>

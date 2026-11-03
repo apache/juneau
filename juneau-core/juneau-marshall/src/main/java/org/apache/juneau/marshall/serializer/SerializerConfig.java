@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.parser.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
@@ -66,12 +66,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#addBeanTypes()}
 	 * </ul>
 	 *
@@ -102,12 +102,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#addRootType()}
 	 * </ul>
 	 *
@@ -128,12 +128,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"BASE64"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)}
 	 * </ul>
 	 *
@@ -168,14 +168,14 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions() MarshallingTraverseContext.Builder#detectRecursions()}
 	 * </ul>
 	 *
@@ -199,12 +199,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#ignoreRecursions() MarshallingTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
 	 *
@@ -219,7 +219,7 @@ public @interface SerializerConfig {
 	 * The initial indentation level at the root.
 	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: integer
 	 *	<li class='note'>
@@ -228,7 +228,7 @@ public @interface SerializerConfig {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#initialDepth(int) MarshallingTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
 	 *
@@ -254,12 +254,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#keepNullProperties()}
 	 * </ul>
 	 *
@@ -273,7 +273,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#listener(Class)}
 	 * </ul>
 	 *
@@ -288,7 +288,7 @@ public @interface SerializerConfig {
 	 * Abort traversal if specified depth is reached in the POJO tree.
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: integer
 	 * 	<li class='note'>
@@ -297,7 +297,7 @@ public @interface SerializerConfig {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#maxDepth(int) MarshallingTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
 	 *
@@ -311,7 +311,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: integer
 	 * 	<li class='note'>
@@ -322,7 +322,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link WriterSerializer.Builder#maxIndent(int)}
 	 * </ul>
 	 *
@@ -347,12 +347,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#nonDefault()}
 	 * </ul>
 	 *
@@ -367,7 +367,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * This is the character used for quoting attributes and values.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Default: <c>"</c>
 	 * 	<li class='note'>
@@ -376,7 +376,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link WriterSerializer.Builder#quoteChar(char)}
 	 * </ul>
 	 *
@@ -408,12 +408,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#sortCollections()}
 	 * </ul>
 	 *
@@ -435,12 +435,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#sortMaps()}
 	 * </ul>
 	 *
@@ -457,7 +457,7 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#write(Object, Object)}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: string
 	 * 	<li class='note'>
@@ -468,7 +468,7 @@ public @interface SerializerConfig {
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link WriterSerializer.Builder#streamCharset(Charset)}
 	 * </ul>
 	 *
@@ -496,12 +496,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#trimEmptyCollections()}
 	 * </ul>
 	 *
@@ -527,12 +527,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#trimEmptyMaps()}
 	 * </ul>
 	 *
@@ -551,12 +551,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#trimStrings()}
 	 * </ul>
 	 *
@@ -567,18 +567,18 @@ public @interface SerializerConfig {
 	/**
 	 * URI context bean.
 	 *
-	 * <h5 class='section'>Description:</h5>
+	 * <h4 class='section'>Description:</h4>
 	 * <p>
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: JSON object representing a {@link UriContext}
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#uriContext(UriContext)}
 	 * </ul>
 	 *
@@ -602,12 +602,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"PATH_INFO"</js> - Relative URIs should be considered relative to the request URI.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#uriRelativity(UriRelativity)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 	 * </ul>
@@ -633,12 +633,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"NONE"</js> (default) - Don't do any URL resolution.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Serializer.Builder#uriResolution(UriResolution)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 	 * </ul>
@@ -658,12 +658,12 @@ public @interface SerializerConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link WriterSerializer.Builder#useWhitespace()}
 	 * </ul>
 	 *

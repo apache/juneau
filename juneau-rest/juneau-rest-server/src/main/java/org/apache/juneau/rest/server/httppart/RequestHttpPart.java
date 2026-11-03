@@ -46,7 +46,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	<li class='jc'>{@link RequestPathParam}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */
@@ -82,8 +82,8 @@ public class RequestHttpPart {
 	 * If the specified type is an HTTP part type (extends from {@link HttpHeader}/{@link org.apache.juneau.http.HttpPart}), then looks for
 	 * one of the following constructors:
 	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * 	<li class='jm'><c><jk>public</jk> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm'><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -105,8 +105,8 @@ public class RequestHttpPart {
 	 * If the specified type is an HTTP part type (extends from {@link HttpHeader}/{@link org.apache.juneau.http.HttpPart}), then looks for
 	 * one of the following constructors:
 	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * 	<li class='jm'><c><jk>public</jk> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm'><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -245,7 +245,7 @@ public class RequestHttpPart {
 	/**
 	 * Matches the specified pattern against this part value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
 	 * 		.getHeader(<js>"Content-Type"</js>)
@@ -267,7 +267,7 @@ public class RequestHttpPart {
 	/**
 	 * Matches the specified pattern against this part value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
 	 * 		.getHeader(<js>"Content-Type"</js>)
@@ -289,7 +289,7 @@ public class RequestHttpPart {
 	/**
 	 * Matches the specified pattern against this part value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
 	 * 		.getHeader(<js>"Content-Type"</js>)
@@ -312,7 +312,7 @@ public class RequestHttpPart {
 	/**
 	 * Provides the ability to perform fluent-style assertions on comma-separated string parameters.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getQueryParam(<js>"allow"</js>)
@@ -328,7 +328,7 @@ public class RequestHttpPart {
 	/**
 	 * Provides the ability to perform fluent-style assertions on a date parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getQueryParam(<js>"time"</js>)
@@ -344,7 +344,7 @@ public class RequestHttpPart {
 	/**
 	 * Provides the ability to perform fluent-style assertions on an integer parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getQueryParam(<js>"age"</js>)
@@ -360,7 +360,7 @@ public class RequestHttpPart {
 	/**
 	 * Provides the ability to perform fluent-style assertions on a long parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getQueryParam(<js>"length"</js>)
@@ -376,7 +376,7 @@ public class RequestHttpPart {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getQueryParam(<js>"foo"</js>)

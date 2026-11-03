@@ -31,21 +31,21 @@
  * 	<li>Root-braceless objects — top-level content without wrapping <c>{}</c> (parse only)
  * </ul>
  *
- * <h5 class='section'>Syntax summary</h5>
+ * <h2 class='section'>Syntax summary</h2>
  * <p>
  * Strings: quoteless (to end of line), double-quoted, single-quoted, or multiline <c>'''...'''</c>.
  * Numbers, booleans (<c>true</c>/<c>false</c>), and <c>null</c> follow JSON rules.
  * Objects use <c>{}</c> with <c>key: value</c> pairs; arrays use <c>[]</c>.
  * </p>
  *
- * <h5 class='section'>Java mapping</h5>
+ * <h2 class='section'>Java mapping</h2>
  * <p>
  * Objects → <c>JsonMap</c>; arrays → <c>JsonList</c>;
  * strings → <c>String</c>; numbers → <c>Number</c> subclasses; booleans → <c>Boolean</c>; null → <jk>null</jk>.
  * Beans are created when <c>_type</c> is present or when parsing to a specific bean class.
  * </p>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	String <jv>hjson</jv> = HjsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  * 	MyBean <jv>bean</jv> = HjsonParser.<jsf>DEFAULT</jsf>.read(<jv>hjson</jv>, MyBean.<jk>class</jk>);
@@ -55,7 +55,7 @@
  * 	MyBean <jv>bean</jv> = Hjson.<jsf>to</jsf>(<jv>hjson</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Hjson">Hjson</a>
  * 	<li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  * </ul>

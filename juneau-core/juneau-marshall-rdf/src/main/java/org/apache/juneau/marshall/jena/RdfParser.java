@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.xml.*;
 /**
  * Parses RDF into POJOs.
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  * <p>
  * The following direct subclasses are provided for language-specific parsers:
  * <ul class='spaced-list'>
@@ -45,11 +45,11 @@ import org.apache.juneau.marshall.xml.*;
  * 		{@link N3Parser} - N3.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
 
  * </ul>
@@ -240,7 +240,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 		http://www.dajobe.org/2004/01/turtle/
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link RdfParser.Builder#n3()}
 		 * 	<li class='jm'>{@link RdfParser.Builder#ntriple()}
 		 * 	<li class='jm'>{@link RdfParser.Builder#turtle()}
@@ -272,7 +272,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * This setting is typically only useful if the beans being parsed into do not have a bean property
 		 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = RdfSerializer
 		 * 		.<jsm>create</jsm>()
@@ -639,7 +639,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * Sets ARP to look for RDF embedded within an enclosing XML document.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
@@ -656,7 +656,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * Sets ARP to look for RDF embedded within an enclosing XML document.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 		 * </ul>
@@ -685,7 +685,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * 	<li><js>"strict-fatal"</js>
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li>
 		 * 		{doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
 		 * 	<li>
@@ -852,7 +852,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * When enabled, whitespace in text elements will be automatically trimmed.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create an RDF parser that trims whitespace.</jc>
 		 * 	ReaderParser <jv>parser</jv> = RdfParser

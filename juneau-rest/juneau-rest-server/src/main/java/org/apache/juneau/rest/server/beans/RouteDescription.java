@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.html.*;
  * and {@code deprecated} &mdash; preserve the JSON shape emitted by earlier route-index snapshots so existing
  * API clients see an equivalent payload.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RouteDescriptions}
  * 	<li class='jc'>{@link ResourceDescription}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>

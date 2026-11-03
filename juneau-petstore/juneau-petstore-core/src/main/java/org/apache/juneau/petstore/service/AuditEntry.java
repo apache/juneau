@@ -26,7 +26,7 @@ import java.time.*;
  * {@code /petstore} API (actor {@code "api"}) or from the console (actor {@code "console:<user>"}).  Failed mutations
  * append nothing.  The Audit console page lists these entries.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	PetStore <jv>store</jv> = <jk>new</jk> PetStore();
  * 	<jv>store</jv>.createPet(<jk>new</jk> Pet().setName(<js>"Rex"</js>), <js>"console:alice"</js>);

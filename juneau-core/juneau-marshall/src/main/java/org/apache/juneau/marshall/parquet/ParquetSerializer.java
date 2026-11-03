@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.stream.*;
  * Parquet is a columnar format; each bean is one row and each bean property is one column.
  * The serializer accepts a {@link Collection}, array, or single bean at the root.
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  * <p>
  * Produces <c>Content-Type</c>: <bc>application/vnd.apache.parquet</bc>
  */

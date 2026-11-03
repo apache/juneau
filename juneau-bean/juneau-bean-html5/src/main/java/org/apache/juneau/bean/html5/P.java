@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * for structuring text content. Paragraphs are block-level elements that automatically add spacing
  * before and after the content, making them ideal for organizing textual information into readable sections.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple paragraph</jc>
  * 	P <jv>simple</jv> = <jsm>p</jsm>(<js>"This is a simple paragraph of text."</js>);
@@ -71,9 +71,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#p(Object...) p(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

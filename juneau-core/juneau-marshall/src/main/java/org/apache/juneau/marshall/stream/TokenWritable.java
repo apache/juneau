@@ -27,7 +27,7 @@ import java.io.*;
  * free &mdash; the {@link #writeRecords(Object)} default returns
  * {@link #writeTokens(Object)}.  Capability is detected via {@code instanceof}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link TokenReadable} &mdash; the symmetric reader role.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>

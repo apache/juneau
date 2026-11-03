@@ -47,7 +47,7 @@ import org.apache.juneau.bct.assertions.*;
  * This is a self-typed (CRTP) root: a leaf declares <c>class StringResource <jk>extends</jk> BasicResource&lt;StringResource&gt;</c>
  * and inherits leaf-typed fluent setters with no covariant overrides.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *
@@ -272,7 +272,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	/**
 	 * Sets the 'chunked' flag value to <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>
@@ -287,7 +287,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	/**
 	 * Sets the 'chunked' flag value.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>

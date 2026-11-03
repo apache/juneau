@@ -51,7 +51,7 @@ import jakarta.servlet.http.*;
  * {@link AuthFilterChain} (chain mode). In standalone mode, {@link #doFilter} drives the full request lifecycle.
  * In chain mode, {@link AuthFilterChain} calls {@link #authenticate} directly and handles the response itself.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AuthFilterChain}
  * 	<li class='jc'>{@link AuthResult}
  * 	<li class='jc'>{@link AuthenticatedRequestWrapper}

@@ -23,7 +23,7 @@ package org.apache.juneau.marshall.jena;
  * Produces RDF datasets in TriG notation, extending Turtle with support for multiple named graphs.
  * Useful for representing RDF datasets (collections of RDF graphs).
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to TriG string.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
@@ -39,13 +39,13 @@ package org.apache.juneau.marshall.jena;
  * 	String <jv>triG</jv> = <jv>s</jv>.write(<jv>bean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bcode'>
  * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; { &lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 . }
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bcode'>
  * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; { &lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
@@ -54,11 +54,11 @@ package org.apache.juneau.marshall.jena;
  * 		j:city "Boston" ; j:state "MA" . }
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

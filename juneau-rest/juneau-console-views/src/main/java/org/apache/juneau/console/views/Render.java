@@ -41,7 +41,7 @@ import org.apache.juneau.console.widgets.*;
  * <c>meta.field</c> &mdash; e.g. <c>"tag:status"</c> &rarr; <c>{id:"tag", meta:{field:"status"}}</c> and
  * <c>"date"</c> &rarr; <c>{id:"date"}</c>.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link ViewTable}
  * </ul>
@@ -212,7 +212,7 @@ public class Render {
 	 * Equivalent to <c>pill(tone == <jk>null</jk> ? <jk>null</jk> : tone.wire())</c>; a <jk>null</jk> tone is
 	 * omitted from {@code meta}, identical to {@link #pill()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Renders as {id:"pill",meta:{tone:"warning"}}.</jc>
 	 * 	Render <jv>r</jv> = Render.<jsm>pill</jsm>(StatusTone.<jsf>WARNING</jsf>);

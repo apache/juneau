@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * When no {@link org.apache.juneau.commons.runtime.ManifestFile ManifestFile} bean is present the endpoint
  * degrades cleanly to an empty map.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link InfoResource}
  * 	<li class='jc'>{@link InfoManager}
  * </ul>

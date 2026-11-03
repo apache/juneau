@@ -29,7 +29,7 @@ import org.apache.juneau.commons.beanquery.*;
  * the request, with no adapter step.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>private static final</jk> InMemoryBeanQueryContext&lt;Row&gt; <jsf>ROWS</jsf> = InMemoryBeanQueryContext
  * 		.<jsm>create</jsm>(Row.<jk>class</jk>)
@@ -43,7 +43,7 @@ import org.apache.juneau.commons.beanquery.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>How it binds</h5>
+ * <h2 class='section'>How it binds</h2>
  * <p>
  * The type is annotated {@link Request @Request}, so a parameter of this type needs no second <ja>@Request</ja> on the
  * parameter.  Because it is a concrete class, the framework instantiates it with its public no-arg constructor and
@@ -52,25 +52,25 @@ import org.apache.juneau.commons.beanquery.*;
  * {@code search} parameter and one {@code opts} parameter bind &mdash; the {@code $}-language and the
  * {@code key=value} opts bag live <b>inside</b> those single strings and are decoded by the session, not on the wire.
  *
- * <h5 class='section'>Wire names</h5>
+ * <h2 class='section'>Wire names</h2>
  * <p>
  * Every {@code @Query} name equals its Java property name: {@code search}, {@code view}, {@code sort},
  * {@code position}, {@code limit}, {@code opts}.  A resource that wants a different name (or extra parameters)
  * subclasses this bean and redeclares the getter with its own {@link Query @Query} name.
  *
- * <h5 class='section'>Swagger</h5>
+ * <h2 class='section'>Swagger</h2>
  * <p>
  * Each getter carries a {@link Schema @Schema} description, so an operation taking this bean documents all six
  * parameters automatically; {@code position} also declares {@code minimum=0}, so a negative value fails part
  * validation (HTTP&nbsp;400) before the query runs.  {@code limit} has no minimum: the context clamps it instead.
  *
- * <h5 class='section'>Saved-view clash</h5>
+ * <h2 class='section'>Saved-view clash</h2>
  * <p>
  * {@link #getView()} is a <b>column projection</b> (field names), not a saved-view id.  Saved-view CRUD endpoints must
  * <b>not</b> take {@link BeanQueryRequest}; they keep their own {@link Query @Query}(<js>"view"</js>) id parameter, or
  * the wrong meaning of {@code view} would bind.
  *
- * <h5 class='section'>Errors</h5>
+ * <h2 class='section'>Errors</h2>
  * <p>
  * A malformed {@code search} (or any other clause the session rejects) throws {@link BeanQuerySyntaxException},
  * which {@code RestContext.convertThrowable} maps to an HTTP&nbsp;400 carrying an {@value #ERROR_HEADER} header and,
@@ -90,7 +90,7 @@ import org.apache.juneau.commons.beanquery.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanQuery}
  * 	<li class='ja'>{@link Request}
  * 	<li class='ja'>{@link Query}

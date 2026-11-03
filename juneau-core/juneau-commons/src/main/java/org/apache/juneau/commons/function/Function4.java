@@ -28,14 +28,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * four-argument functions. It's useful when you need to pass functions with four parameters to methods
  * that expect functional interfaces, such as in stream operations, builders, or callback patterns.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Composition support - provides {@link #andThen(Function)} for function chaining
  * 	<li>Type-safe - generic type parameters ensure compile-time type safety
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Four-argument transformations in functional programming patterns
  * 	<li>Builder methods that accept four-parameter functions
@@ -43,7 +43,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Callback patterns with four parameters
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda expression</jc>
  * 	Function4&lt;String,Integer,Boolean,Double,String&gt; <jv>format</jv> = (<jv>s</jv>, <jv>i</jv>, <jv>b</jv>, <jv>d</jv>) -&gt;
@@ -56,7 +56,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	String <jv>sum</jv> = <jv>addAndFormat</jv>.apply(5, 3, 2, 1);  <jc>// Returns "11"</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Function2} - Two-argument function
  * 	<li class='jc'>{@link Function3} - Three-argument function
  * 	<li class='jc'>{@link Function5} - Five-argument function
@@ -82,7 +82,7 @@ public interface Function4<A,B,C,D,R> {
 	 * <p>
 	 * This method enables function composition, allowing you to chain multiple transformations together.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Function4&lt;Integer,Integer,Integer,Integer,Integer&gt; <jv>multiply</jv> = (<jv>a</jv>, <jv>b</jv>, <jv>c</jv>, <jv>d</jv>) -&gt; <jv>a</jv> * <jv>b</jv> * <jv>c</jv> * <jv>d</jv>;
 	 * 	Function4&lt;Integer,Integer,Integer,Integer,String&gt; <jv>multiplyAndFormat</jv> = <jv>multiply</jv>.andThen(<jv>n</jv> -&gt; <js>"Result: "</js> + <jv>n</jv>);
@@ -102,7 +102,7 @@ public interface Function4<A,B,C,D,R> {
 	/**
 	 * Applies this function to the given arguments.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Function4&lt;String,Integer,Boolean,Double,String&gt; <jv>format</jv> = (<jv>s</jv>, <jv>n</jv>, <jv>upper</jv>, <jv>mult</jv>) -&gt; {
 	 * 		String <jv>result</jv> = <jv>s</jv>.repeat(<jv>n</jv>);

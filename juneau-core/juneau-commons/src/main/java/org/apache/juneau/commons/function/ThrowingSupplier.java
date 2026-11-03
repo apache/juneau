@@ -25,14 +25,14 @@ package org.apache.juneau.commons.function;
  * suppliers that may throw exceptions (such as I/O operations) to methods that expect functional
  * interfaces.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Exception support - allows checked exceptions to be thrown
  * 	<li>Compatible with Supplier - can be used where Supplier is expected (exceptions are wrapped)
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Suppliers that perform I/O operations (file reading, network calls)
  * 	<li>Suppliers that may throw business logic exceptions
@@ -40,7 +40,7 @@ package org.apache.juneau.commons.function;
  * 	<li>Resource creation that may throw exceptions
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda with exception</jc>
  * 	ThrowingSupplier&lt;String&gt; <jv>fileReader</jv> = () -&gt; {
@@ -58,7 +58,7 @@ package org.apache.juneau.commons.function;
  * 	}
  * </p>
  *
- * <h5 class='section'>Comparison with Supplier:</h5>
+ * <h2 class='section'>Comparison with Supplier:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Supplier:</b> Cannot throw checked exceptions (must catch and wrap)
  * 	<li><b>ThrowingSupplier:</b> Can throw checked exceptions directly
@@ -66,7 +66,7 @@ package org.apache.juneau.commons.function;
  * 	<li><b>ThrowingSupplier:</b> Used when operations may fail with checked exceptions
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThrowingFunction} - Function that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer} - Consumer that throws exceptions
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons</a>
@@ -83,7 +83,7 @@ public interface ThrowingSupplier<T> {
 	/**
 	 * Gets a result, potentially throwing a checked exception.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ThrowingSupplier&lt;String&gt; <jv>supplier</jv> = () -&gt; {
 	 * 		<jk>if</jk> (<jv>fileNotFound</jv>) {

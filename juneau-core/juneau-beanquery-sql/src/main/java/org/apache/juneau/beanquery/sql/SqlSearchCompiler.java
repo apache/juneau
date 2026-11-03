@@ -38,7 +38,6 @@ import org.apache.juneau.commons.beanquery.*;
  * </ul>
  *
  * <p>
- * <p>
  * The SQL result must match the in-memory result, so a built-in the dialect cannot faithfully express is rejected with a
  * {@link BeanQuerySyntaxException} whose code is {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException.Code#BAD_VALUE BAD_VALUE} rather than
  * rendered differently: an operator for which {@link SqlDialect#builtinRenderer(String)} returns <jk>null</jk> (for
@@ -47,7 +46,7 @@ import org.apache.juneau.commons.beanquery.*;
  * {@link SqlDialect#supportsVersionOrdering()} is <jk>false</jk>.  Equality on versions is unaffected.  A custom
  * operator with no usable renderer still raises {@link IllegalStateException}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ResolvedQuery <jv>q</jv> = <jv>context</jv>.resolve(BeanQuery.<jsm>create</jsm>().gt(<js>"age"</js>, 21).eq(<js>"name"</js>, <js>"Bob"</js>).build());
  * 	SqlFragment <jv>where</jv> = SqlSearchCompiler.<jsm>create</jsm>(<jv>dialect</jv>, <jv>context</jv>).compile(<jv>q</jv>.filter());
@@ -92,7 +91,7 @@ public final class SqlSearchCompiler {
 	 * per their own contract &mdash; see {@code SqlBeanQueryContext.appendWhere}, which special-cases an empty
 	 * top-level filter so an unfiltered query's {@code WHERE} clause does not pick up a spurious {@code (1=1)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SqlFragment <jv>where</jv> = SqlSearchCompiler.<jsm>create</jsm>(<jv>dialect</jv>, <jv>columns</jv>)
 	 * 		.compile(<jv>filter</jv>);

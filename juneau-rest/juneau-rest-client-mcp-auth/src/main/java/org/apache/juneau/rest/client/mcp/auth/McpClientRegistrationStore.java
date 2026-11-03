@@ -30,7 +30,7 @@ import java.util.*;
  * AS ({@link InMemoryMcpClientRegistrationStore} keys by {@code issuer.toString()}).  {@link McpClientRegistrationManager}
  * consults a store (if present) to reuse an issuer-keyed entry and to drive re-registration on AS migration.
  *
- * <h5 class='topic'>Security</h5>
+ * <h2 class='topic'>Security</h2>
  * <p>
  * A store holds {@code clientSecret} / registration-access-token material (via {@link McpClientRegistration}).  The
  * default {@link InMemoryMcpClientRegistrationStore} is process-scoped; a durable implementation a caller supplies is

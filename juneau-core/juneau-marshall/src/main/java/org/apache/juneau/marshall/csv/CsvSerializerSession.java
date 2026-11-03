@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Session object that lives for the duration of a single use of {@link CsvSerializer}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

@@ -37,7 +37,7 @@ import java.io.*;
  * Implementations are discovered automatically via {@link HttpTransportProvider} using {@link java.util.ServiceLoader},
  * or set explicitly via {@code RestClient.Builder#transport(HttpTransport)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

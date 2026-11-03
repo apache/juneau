@@ -67,7 +67,7 @@ import org.apache.juneau.microservice.logging.*;
  * Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice
  * jar file if it's an executable jar.
  *
- * <h5 class='topic'>Microservice Configuration</h5>
+ * <h2 class='topic'>Microservice Configuration</h2>
  *
  * This class defines the following method for accessing configuration for your microservice:
  * <ul class='spaced-list'>
@@ -79,7 +79,7 @@ import org.apache.juneau.microservice.logging.*;
  * 		{@link #getManifest()} - The manifest file for the main jar file.
  * </ul>
  *
- * <h5 class='topic'>Lifecycle Methods</h5>
+ * <h2 class='topic'>Lifecycle Methods</h2>
  *
  * Subclasses must implement the following lifecycle methods:
  * <ul class='spaced-list'>
@@ -93,7 +93,7 @@ import org.apache.juneau.microservice.logging.*;
  * 		{@link #kill()} - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  * </ul>
  */
@@ -993,7 +993,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * This method can be called from the class constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bini'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
@@ -1108,7 +1108,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * This method can be called from the class constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
 	 * 	String <jv>mainClass</jv> = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);

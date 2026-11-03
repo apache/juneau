@@ -28,7 +28,7 @@ import java.util.*;
  * <p>
  * Only the fields the client needs are surfaced; unknown fields are preserved in {@link #extras()}.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc9728">RFC 9728</a>
  * </ul>

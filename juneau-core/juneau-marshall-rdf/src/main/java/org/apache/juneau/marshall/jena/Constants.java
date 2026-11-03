@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.jena;
 /**
  * Constants used by the {@link RdfSerializer} and {@link RdfParser} classes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
 
  * </ul>

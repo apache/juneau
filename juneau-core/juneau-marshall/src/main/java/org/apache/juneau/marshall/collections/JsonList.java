@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.serializer.*;
  * JSON array string directly into a {@link List}.  It also contains accessor methods for to avoid common typecasting
  * when accessing elements in a list.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct an empty List</jc>
  * 	JsonList <jv>list</jv> = JsonList.<jsm>of</jsm>();
@@ -88,7 +88,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
@@ -657,7 +657,7 @@ public class JsonList extends MarshalledList {
 	 * <p>
 	 * This method performs a round-trip serialization and deserialization to convert the list into the target type.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>The current implementation uses a serialization round-trip which may be inefficient for
 	 * 		frequent conversions of large objects. Consider caching results or using direct object conversion where possible.
 	 * </ul>

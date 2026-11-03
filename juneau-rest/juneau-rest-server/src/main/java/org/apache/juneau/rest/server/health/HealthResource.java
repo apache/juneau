@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * and force every consumer to re-declare one; deriving from {@code BasicRestResource} keeps the child
  * flavor at parity with its servlet twin.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link HealthServlet}
  * 	<li class='jc'>{@link HealthMixin}
  * 	<li class='jc'>{@link HealthAggregator}

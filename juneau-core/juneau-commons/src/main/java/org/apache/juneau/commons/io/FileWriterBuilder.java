@@ -30,7 +30,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * append mode, and buffering options. It's particularly useful when you need to write files with
  * specific encodings or control whether to append to existing files.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Fluent API - all methods return <c>this</c> for method chaining
  * 	<li>Character encoding support - specify custom charset for file writing
@@ -39,7 +39,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Multiple file specification methods - accept File or String path
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Writing files with specific character encodings (UTF-8, ISO-8859-1, etc.)
  * 	<li>Appending to log files or data files
@@ -47,7 +47,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Writing files where buffering improves performance
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
  * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -69,13 +69,13 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Character Encoding:</h5>
+ * <h2 class='section'>Character Encoding:</h2>
  * <p>
  * By default, the builder uses the system's default charset ({@link Charset#defaultCharset()}).
  * You can specify a custom charset using {@link #charset(Charset)} or {@link #charset(String)}.
  * This is important when writing files that need to be read with a specific encoding.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FileReaderBuilder} - Builder for file readers
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
@@ -89,7 +89,7 @@ public class FileWriterBuilder {
 	/**
 	 * Creates a new builder.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"output.txt"</js>)
@@ -105,7 +105,7 @@ public class FileWriterBuilder {
 	/**
 	 * Creates a new builder initialized with the specified file.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	File <jv>file</jv> = <jk>new</jk> File(<js>"output.txt"</js>);
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>(<jv>file</jv>)
@@ -123,7 +123,7 @@ public class FileWriterBuilder {
 	/**
 	 * Creates a new builder initialized with the specified file path.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>(<js>"/path/to/output.txt"</js>)
 	 * 		.append()
@@ -152,7 +152,7 @@ public class FileWriterBuilder {
 	 * existing file content rather than overwriting it. This is useful for log files or data
 	 * files where you want to preserve existing content.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Append to log file</jc>
 	 * 	Writer <jv>logWriter</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -174,7 +174,7 @@ public class FileWriterBuilder {
 	 * <p>
 	 * Boolean-arg form of {@link #append()}, useful when the setting is conditional.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"app.log"</js>)
@@ -198,7 +198,7 @@ public class FileWriterBuilder {
 	 * {@link BufferedOutputStream}, which can significantly improve performance for multiple
 	 * small writes by batching them together.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Buffered writer for better performance</jc>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -219,7 +219,7 @@ public class FileWriterBuilder {
 	 * <p>
 	 * Boolean-arg form of {@link #buffered()}, useful when the setting is conditional.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"output.txt"</js>)
@@ -243,7 +243,7 @@ public class FileWriterBuilder {
 	 * options. The file will be created if it doesn't exist (unless in append mode, where the
 	 * file must exist or be creatable).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> (Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"output.txt"</js>)
@@ -273,7 +273,7 @@ public class FileWriterBuilder {
 	 * Specifying the encoding is important when writing files that need to be read with a specific
 	 * character encoding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"data.txt"</js>)
@@ -296,7 +296,7 @@ public class FileWriterBuilder {
 	 * This is a convenience method that accepts a charset name string and converts it to a
 	 * {@link Charset} using {@link Charset#forName(String)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"data.txt"</js>)
@@ -317,7 +317,7 @@ public class FileWriterBuilder {
 	/**
 	 * Sets the file to write to.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	File <jv>f</jv> = <jk>new</jk> File(<js>"output.txt"</js>);
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -336,7 +336,7 @@ public class FileWriterBuilder {
 	/**
 	 * Sets the file path to write to.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(<js>"/path/to/output.txt"</js>)
@@ -358,7 +358,7 @@ public class FileWriterBuilder {
 	 * Convenience overload for callers working with the NIO {@link Path} API, consistent with
 	 * {@link PathReaderBuilder#path(Path)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
 	 * 		.file(Paths.<jsm>get</jsm>(<js>"/path/to/output.txt"</js>))

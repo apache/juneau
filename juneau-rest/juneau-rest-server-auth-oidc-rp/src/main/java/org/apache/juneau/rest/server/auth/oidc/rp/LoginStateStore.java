@@ -31,7 +31,7 @@ import java.util.*;
  * without sticky sessions &mdash; the same motivation as a distributed {@link SessionStore}.  When the
  * hook is unused, behavior is identical to the single-node default.
  *
- * <h5 class='section'>Security contract (read before implementing)</h5>
+ * <h2 class='section'>Security contract (read before implementing)</h2>
  *
  * <p>
  * <b>Secret-bearing.</b> A stored entry carries the PKCE {@code code_verifier} (and {@code nonce}).  With a
@@ -63,7 +63,7 @@ import java.util.*;
  * <b>Per-process by default.</b> The shipped default enforces single-use only within one JVM.  Cross-node
  * single-use requires a shared backend with an atomic consume primitive (see {@link #consume(String)}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link InMemoryLoginStateStore}
  * 	<li class='jc'>{@link OidcRelyingParty.Builder#loginStateStore(LoginStateStore)}
  * 	<li class='jc'>{@link SessionStore}

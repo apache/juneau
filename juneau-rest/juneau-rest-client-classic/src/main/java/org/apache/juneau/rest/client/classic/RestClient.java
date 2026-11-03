@@ -120,7 +120,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
  * REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
  * 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
@@ -152,7 +152,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
@@ -193,7 +193,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * Clients are typically created with a root URI so that relative URIs can be used when making requests.
  * This is done using the {@link Builder#rootUrl(Object)} method.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a client where all URIs are relative to localhost.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:5000"</js>).build();
@@ -250,7 +250,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </p>
  *
  *
- * <h4 class='topic'>POJO Marshalling</h4>
+ * <h2 class='topic'>POJO Marshalling</h2>
  *
  * <p>
  * By default, JSON support is provided for HTTP request and response bodies.
@@ -271,7 +271,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON 5 support.</jc>
  * 	<jc>// Typically easier to use when performing unit tests.</jc>
@@ -281,7 +281,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * Clients can also support multiple languages:
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a REST client with support for multiple languages.</jc>
  * 	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
@@ -325,7 +325,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * The {@link Builder} class provides convenience methods for setting common serializer and parser
  * settings.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support.</jc>
  * 	<jc>// Use single-quotes and whitespace.</jc>
@@ -356,7 +356,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </ul>
  *
  *
- * <h4 class='topic'>Request Headers</h4>
+ * <h2 class='topic'>Request Headers</h2>
  * <p>
  * Per-client or per-request headers can be specified using the following methods:
  * <ul class='javatree'>
@@ -382,7 +382,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * which may need to change every few minutes).
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
@@ -392,7 +392,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * The {@link HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on both requests
  * and responses.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>()
@@ -404,13 +404,13 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * The methods with {@link ListOperation} parameters allow you to control whether new headers get appended, prepended, or
  * replace existing headers with the same name.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h3 class='section'>Notes:</h3><ul>
  * 	<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
  * 		<c>NameValuePair</c> objects use the values returned by that bean directly.
  * </ul>
  *
  *
- * <h4 class='topic'>Request Query Parameters</h4>
+ * <h2 class='topic'>Request Query Parameters</h2>
  * <p>
  * Per-client or per-request query parameters can be specified using the following methods:
  * <ul class='javatree'>
@@ -432,7 +432,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
@@ -441,14 +441,14 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getContent().asString();
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h3 class='section'>Notes:</h3><ul>
  * 	<li class='note'>Like header values, dynamic values and OpenAPI schemas are supported.
  * 	<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
  * 		objects use the values returned by that bean directly.
  * </ul>
  *
  *
- * <h4 class='topic'>Request Form Data</h4>
+ * <h2 class='topic'>Request Form Data</h2>
  *
  * <p>
  * Per-client or per-request form-data parameters can be specified using the following methods:
@@ -471,14 +471,14 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h3 class='section'>Notes:</h3><ul>
  * 	<li class='note'>Like header values, dynamic values and OpenAPI schemas are supported.
  * 	<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
  * 		objects use the values returned by that bean directly.
  * </ul>
  *
  *
- * <h4 class='topic'>Request Body</h4>
+ * <h2 class='topic'>Request Body</h2>
  *
  * <p>
  * The request body can either be passed in with the client creator method (e.g. {@link RestClient#post(Object,Object) post(uri,body)}),
@@ -511,14 +511,14 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 			{@link Supplier} - A supplier of anything on this list.
  * 	</ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h3 class='section'>Notes:</h3><ul>
  * 	<li class='note'>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
  * 		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
  * 		POJOs will be converted to strings using {@link ClassMeta#toString(Object)} which typically just calls {@link Object#toString()}.
  * </ul>
  *
  *
- * <h4 class='topic'>Response Status</h4>
+ * <h2 class='topic'>Response Status</h2>
  *
  * <p>
  * After execution using {@link RestRequest#run()} or {@link RestRequest#complete()}, the following methods can be used
@@ -534,7 +534,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Only interested in status code.</jc>
  * 	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
@@ -543,7 +543,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Interested in multiple values.</jc>
  * 	Holder&lt;Integer&gt; <jv>statusCode</jv> = Holder.<jsm>create</jsm>();
@@ -553,7 +553,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h3 class='section'>Notes:</h3><ul>
  * 	<li class='note'>If you are only interested in the response status and not the response body, be sure to use {@link RestRequest#complete()} instead
  * 		of {@link RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
  * 		consume the response yourself.
@@ -562,7 +562,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * The assertion method is provided for quickly asserting status codes in fluent calls.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Status assertion using a static value.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
@@ -578,7 +578,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </p>
  *
  *
- * <h4 class='topic'>Response Headers</h4>
+ * <h2 class='topic'>Response Headers</h2>
  *
  * <p>
  * Response headers are accessed through the following methods:
@@ -599,7 +599,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * The {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)} methods return an empty {@link ResponseHeader} object instead of<jk>null</jk>.
  * This allows it to be used more easily in fluent calls.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// See if response contains Location header.</jc>
  * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
@@ -634,7 +634,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * The {@link ResponseHeader#schema(HttpPartSchema)} method allows you to perform parsing of OpenAPI formats for
  * header parts.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Parse the header "Foo: bar|baz".</jc>
  * 	List&lt;String&gt; <jv>fooHeader</jv> = <jv>client</jv>
@@ -657,7 +657,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * Note how in the following example, the fluent assertion returns control to the {@link RestResponse} object after
  * the assertion has been completed:
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Assert the response content type is any sort of JSON.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
@@ -667,7 +667,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </p>
  *
  *
- * <h4 class='topic'>Response Body</h4>
+ * <h2 class='topic'>Response Body</h2>
  *
  * <p>
  * The response body is accessed through the following method:
@@ -705,7 +705,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  *
  * <br>
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h3 class='figure'>Examples:</h3>
  * <p class='bjava'>
  * 	<jc>// Parse into a linked-list of strings.</jc>
  * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
@@ -767,7 +767,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  *
  * <br>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Assert that the body contains the string "Success".</jc>
  * 	String <jv>body</jv> = <jv>client</jv>
@@ -781,7 +781,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * Object assertions allow you to parse the response body into a POJO and then perform various tests on that resulting
  * POJO.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
  * 	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
@@ -791,7 +791,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </p>
  *
  *
- * <h4 class='topic'>Custom Call Handlers</h4>
+ * <h2 class='topic'>Custom Call Handlers</h2>
  *
  * <p>
  * The {@link RestCallHandler} interface provides the ability to provide custom handling of requests.
@@ -813,7 +813,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * or by defining your own {@link HttpRequestExecutor}.  Using this interface is often simpler though.
  *
  *
- * <h4 class='topic'>Interceptors</h4>
+ * <h2 class='topic'>Interceptors</h2>
  *
  * <p>
  * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
@@ -837,7 +837,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </ul>
  *
  *
- * <h4 class='topic'>Logging / Debugging</h4>
+ * <h2 class='topic'>Logging / Debugging</h2>
  *
  * <p>
  * The following methods provide logging of requests and responses:
@@ -854,7 +854,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * The following example shows the results of logging all requests that end with <c>/bean</c>.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h3 class='figure'>Examples:</h3>
  * <p class='bjava'>
  * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
@@ -913,13 +913,13 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </ul>
  *
  *
- * <h4 class='topic'>REST Proxies</h4>
+ * <h2 class='topic'>REST Proxies</h2>
  *
  * <p>
  * One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
  * arbitrary remote REST resources.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
@@ -974,7 +974,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  *
  * <br>
  * <hr>
- * <h4 class='topic'>Customizing Apache HttpClient</h4>
+ * <h2 class='topic'>Customizing Apache HttpClient</h2>
  *
  * <p>
  * Several methods are provided for customizing the underlying HTTP client and client builder classes:
@@ -991,7 +991,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * <p>
  * Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jc>// Create a client with customized HttpClient settings.</jc>
  * 	MyBean <jv>bean</jv> = RestClient
@@ -1006,13 +1006,13 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * Refer to the {@link HttpClientBuilder HTTP Client Builder API} for more information.
  *
  *
- * <h4 class='topic'>Extending RestClient</h4>
+ * <h2 class='topic'>Extending RestClient</h2>
  *
  * <p>
  * The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
  * The following example that overrides the primary run method shows how this can be done.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h3 class='figure'>Example:</h3>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
@@ -1058,11 +1058,11 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
  * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h3 class='section'>Notes:</h3><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h3 class='section'>See Also:</h3><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
  */
@@ -1206,7 +1206,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -1229,7 +1229,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes() Serializer.Builder#addBeanTypes()}
 		 * </ul>
 		 *
@@ -1243,7 +1243,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Adds this protocol interceptor to the head of the protocol processing list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -1260,7 +1260,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Adds this protocol interceptor to the head of the protocol processing list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -1277,7 +1277,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Adds this protocol interceptor to the tail of the protocol processing list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -1294,7 +1294,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Adds this protocol interceptor to the tail of the protocol processing list.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -1329,7 +1329,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<li class='jf'>{@link #addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -1350,7 +1350,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#addRootType() Serializer.Builder#addRootType()}
 		 * </ul>
 		 *
@@ -1377,7 +1377,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Set up this client to use BASIC auth.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses BASIC authentication.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -1417,7 +1417,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Allows you to provide a custom handler for making HTTP calls.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
 		 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
@@ -1434,7 +1434,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls travels on the request's {@link HttpContext}, and a
 		 * 		custom handler may copy the request, or send it with another context, without it.  So a client with any handler other than
 		 * 		{@link BasicRestCallHandler} itself, or with a {@code BasicRestCallHandler} bound to a different client
@@ -1452,7 +1452,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		in the bean store of this builder (including {@link RestClient} itself).
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jic'>{@link RestCallHandler}
 		 * </ul>
 		 *
@@ -1515,7 +1515,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link HttpClientConnectionManager} instance.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='warn'>This client cannot pin the connections of a connection manager it did not create, so a
 		 * 		client built with one refuses every SSRF-guard-active {@code @Remote} call (one without the
 		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in).  Ordinary requests are unaffected.
@@ -1535,7 +1535,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Defines the connection manager is to be shared by multiple client instances.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
 		 * 		This applies to a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)}
 		 * 		or returned by an overridden {@link #createConnectionManager()} (even one that calls {@code super}, since the
@@ -1573,7 +1573,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Sets maximum time to live for persistent connections.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>It is applied to both pools of the connection manager the default {@link #createConnectionManager()}
 		 * 		builds.  It has no effect on a connection manager supplied through
 		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
@@ -1669,7 +1669,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * When parse errors occur, this specifies the number of lines of input before and after the
 		 * error location to be printed as part of the exception message.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -1690,7 +1690,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	}
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.parser.Parser.Builder#debugOutputLines(int) Parser.Builder#debugOutputLines(int)}
 		 * </ul>
 		 *
@@ -1720,7 +1720,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns default {@link ConnectionConfig}.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>It is applied to both pools of the connection manager the default {@link #createConnectionManager()}
 		 * 		builds.  It has no effect on a connection manager supplied through
 		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
@@ -1792,7 +1792,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns default {@link SocketConfig}.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>It is applied to both pools of the connection manager the default {@link #createConnectionManager()}
 		 * 		builds.  It has no effect on a connection manager supplied through
 		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
@@ -1822,7 +1822,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Automatically enabled with {@link org.apache.juneau.marshall.Context.Builder#debug() Context.Builder#debug()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that logs a message if </jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -1894,12 +1894,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <br>In general, unchecked recursions cause stack-overflow-errors.
 		 * <br>These show up as {@link MarshallingRecursionException MarshallingRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -1925,7 +1925,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *	}
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions() MarshallingTraverseContext.Builder#detectRecursions()}
 		 * </ul>
 		 *
@@ -1939,7 +1939,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Disables authentication scheme caching.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -1976,7 +1976,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Disables automatic content decompression.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -1991,7 +1991,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Disables state (cookie) management.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
@@ -2020,7 +2020,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Defines a predicate to test for error codes.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2043,7 +2043,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Makes this instance of {@link HttpClient} proactively evict expired connections from the connection pool using a background thread.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
 		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
 		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
@@ -2060,7 +2060,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Makes this instance of {@link HttpClient} proactively evict idle connections from the connection pool using a background thread.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
 		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
 		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
@@ -2095,7 +2095,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The default executor service is a single-threaded {@link ThreadPoolExecutor} with a 30 second timeout
 		 * and a queue size of 10.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client with a customized executor service.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2141,7 +2141,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * This is the primary method for accessing the form data parameter list.
 		 * On first call, the builder is created via the method {@link #createFormData()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
 		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
@@ -2169,7 +2169,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 		 *
@@ -2199,7 +2199,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a form-data parameter to all request bodies.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2225,7 +2225,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a form-data parameter with a dynamic value to all request bodies.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2254,7 +2254,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2296,7 +2296,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a header to all requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2322,7 +2322,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a header to all requests using a dynamic value.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2352,7 +2352,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * This is the primary method for accessing the request header list.
 		 * On first call, the builder is created via the method {@link #createHeaderData()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
 		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
@@ -2388,7 +2388,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends multiple headers to all requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
 		 *
@@ -2421,7 +2421,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2541,7 +2541,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(HtmlSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses HTML marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().html().build();
@@ -2586,7 +2586,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(HtmlDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses HTML Doc marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlDoc().build();
@@ -2631,7 +2631,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(HtmlStrippedDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses HTML Stripped Doc marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
@@ -2649,7 +2649,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * This can be used to bypass the client created by {@link #createHttpClient()} method.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses a customized HttpClient.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2684,7 +2684,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * This can be used to bypass the builder created by {@link #createHttpClientBuilder()} method.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses a customized HttpClientBuilder.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2693,7 +2693,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The TLS and connection-pool settings Apache {@link HttpClientBuilder} applies only to a
 		 * 		connection manager it builds itself
 		 * 		({@link HttpClientBuilder#setSSLContext(SSLContext) setSSLContext},
@@ -2750,7 +2750,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link HttpProcessor} instance.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='warn'>The processor replaces all of the client's request interceptors, among them the ones that
 		 * 		enforce the SSRF guard and strip credentials on cross-origin redirects.  So a client with one refuses every
 		 * 		SSRF-guard-active {@code @Remote} call (one without the {@link #allowPrivateUrls(boolean) allowPrivateUrls}
@@ -2776,7 +2776,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
 		 * 	RestClient
@@ -2809,12 +2809,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	{A:{B:{C:<jk>null</jk>}}}
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that ignores recursions.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2836,7 +2836,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#ignoreRecursions() MarshallingTraverseContext.Builder#ignoreRecursions()}
 		 * </ul>
 		 *
@@ -2856,7 +2856,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled and an initial depth of 2.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2877,7 +2877,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#initialDepth(int) MarshallingTraverseContext.Builder#initialDepth(int)}
 		 * </ul>
 		 *
@@ -2897,7 +2897,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Adds an interceptor that can be called to hook into specified events in the lifecycle of a single request.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 *   <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
 		 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
@@ -2926,7 +2926,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link RestClient#onCallInit(RestRequest)}, {@link RestClient#onCallConnect(RestRequest,RestResponse)}, and
 		 * {@link RestClient#onCallClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
@@ -2964,7 +2964,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Adds an interceptor that gets called immediately after a connection is made.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client with a customized interceptor.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2992,7 +2992,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link RestClient#onCallInit(RestRequest)}, {@link RestClient#onCallConnect(RestRequest,RestResponse)}, and
 		 * {@link RestClient#onCallClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
@@ -3062,7 +3062,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses JSON marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build();
@@ -3111,7 +3111,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(Json5Serializer.<jk>class</jk>).parser(Json5Parser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json5().build();
@@ -3159,7 +3159,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Don't close this client when the {@link RestClient#close()} method is called.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3171,7 +3171,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When combined with {@link #connectionManagerShared(boolean) connectionManagerShared(true)}, the
 		 * 		client's internal pool for SSRF-guard-active {@code @Remote} calls (see {@link #createConnectionManager()}) and
 		 * 		the connection manager the default {@code createConnectionManager()} built are not shut down either, and
@@ -3191,11 +3191,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * When enabled, null bean values will be serialized to the output.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3215,7 +3215,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#keepNullProperties() Serializer.Builder#keepNullProperties()}
 		 * </ul>
 		 *
@@ -3238,7 +3238,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	Logger.<jsm>getLogger</jsm>(RestClient.<jk>class</jk>.getName());
 		 * </p>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3318,7 +3318,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Specifies to log messages to the console.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3342,12 +3342,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Shortcut for specifying the serializers and parsers
 		 * using the serializer and parser defined in a marshaller.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
 		 * 	parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshaller.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3373,12 +3373,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Shortcut for specifying the serializers and parsers
 		 * using the serializer and parser defined in a marshaller.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
 		 * 	parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport using existing marshalls.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3401,7 +3401,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns maximum connection per route value.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>A positive value is applied to the connection manager the default
 		 * 		{@link #createConnectionManager()} builds, which is then always a {@link PoolingHttpClientConnectionManager}
 		 * 		(as if {@link #pooled()} had been called), and to its internal pool for SSRF-guard-active {@code @Remote} calls.
@@ -3422,7 +3422,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns maximum total connection value.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>A positive value is applied to the connection manager the default
 		 * 		{@link #createConnectionManager()} builds, which is then always a {@link PoolingHttpClientConnectionManager}
 		 * 		(as if {@link #pooled()} had been called), and to its internal pool for SSRF-guard-active {@code @Remote} calls.
@@ -3453,7 +3453,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that throws an exception if the depth reaches greater than 20.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3463,7 +3463,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#maxDepth(int) MarshallingTraverseContext.Builder#maxDepth(int)}
 		 * </ul>
 		 *
@@ -3483,11 +3483,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Specifies the maximum indentation level in the serialized document.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that indents a maximum of 20 tabs.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3498,7 +3498,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#maxIndent(int) WriterSerializer.Builder#maxIndent(int)}
 		 * </ul>
 		 *
@@ -3597,7 +3597,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
@@ -3636,7 +3636,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link Schema#collectionFormat()} for the
 		 * OpenAPI serializer and parser on this client.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3672,7 +3672,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	</ul>
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat) OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat) OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
 		 * </ul>
@@ -3698,7 +3698,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link Schema#format()} for
 		 * the OpenAPI serializer and parser on this client.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
 		 * 	RestClient <jv>client</jv>  = RestClient
@@ -3731,7 +3731,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	</ul>
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#format(HttpPartFormat) OpenApiSerializer.Builder#format(HttpPartFormat)}
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#format(HttpPartFormat) OpenApiParser.Builder#format(HttpPartFormat)}
 		 * </ul>
@@ -3786,7 +3786,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
@@ -3807,7 +3807,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Specifies the format to use for GET parameter keys and values.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3833,7 +3833,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormat(ParamFormat) UonSerializer.Builder#paramFormat(ParamFormat)}
 		 * </ul>
 		 *
@@ -3855,7 +3855,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Specifies plaintext as the format to use for GET parameter keys and values.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3875,7 +3875,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormatPlain() UonSerializer.Builder#paramFormatPlain()}
 		 * </ul>
 		 *
@@ -3895,12 +3895,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The parser is used to parse the HTTP response body into a POJO.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3927,13 +3927,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The parser is used to parse the HTTP response body into a POJO.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3976,12 +3976,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
 		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4014,13 +4014,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The parser that best matches the <c>Accept</c> header will be used to parse the response body.
 		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #ignoreUnknownBeanProperties()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4060,7 +4060,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4089,7 +4089,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4129,7 +4129,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4158,7 +4158,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4185,7 +4185,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * This is the primary method for accessing the path data parameter list.
 		 * On first call, the builder is created via the method {@link #createFormData()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
 		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
@@ -4213,7 +4213,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Sets multiple path parameters on all requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 		 *
@@ -4243,7 +4243,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a path parameter to all request bodies.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4269,7 +4269,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Sets a path parameter with a dynamic value to all request bodies.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4298,7 +4298,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4353,7 +4353,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
@@ -4369,7 +4369,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * When called, the {@link #createConnectionManager()} method will return a {@link PoolingHttpClientConnectionManager}
 		 * instead of a {@link BasicHttpClientConnectionManager}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses pooled connections.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4388,7 +4388,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns default proxy value.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #routePlanner(HttpRoutePlanner)} method.
 		 * 	<li class='warn'>Through a proxy, the SSRF guard's pin-on-connect would check the proxy's address rather than
 		 * 		the target's, so an SSRF-guard-active {@code @Remote} call (one without the
@@ -4423,7 +4423,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns file containing public suffix matcher.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>Instances of this class can be created with {@link PublicSuffixMatcherLoader}.
 		 * 	<li class='note'>It is used for cookies and, in both pools of the connection manager the default
 		 * 		{@link #createConnectionManager()} builds, by the default hostname verifier (one is used unless
@@ -4449,7 +4449,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * This is the primary method for accessing the query parameter list.
 		 * On first call, the builder is created via the method {@link #createQueryData()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
 		 * 	RestClient.Builder&lt;?&gt; <jv>builder</jv> = RestClient.<jsm>create</jsm>();
@@ -4477,7 +4477,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends multiple query parameters to the URI of all requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 		 *
@@ -4507,7 +4507,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a query parameter to the URI.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4533,7 +4533,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Appends a query parameter with a dynamic value to the URI.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4562,7 +4562,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4655,11 +4655,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Specifies the character to use for quoting attributes and values.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4679,7 +4679,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char) WriterSerializer.Builder#quoteChar(char)}
 		 * </ul>
 		 *
@@ -4696,7 +4696,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link RedirectStrategy} instance.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #disableRedirectHandling()} method.
 		 * </ul>
 		 *
@@ -4726,7 +4726,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link HttpRequestRetryHandler} instance.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #disableAutomaticRetries()} method.
 		 * </ul>
 		 *
@@ -4748,7 +4748,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * will be prefixed with the specified root.
 		 * <br>This root URI is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URI string.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4867,12 +4867,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The serializer is used to serialize POJOs into the HTTP request body.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4900,13 +4900,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * The serializer is used to serialize POJOs into the HTTP request body.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4949,12 +4949,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
 		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -4988,13 +4988,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The serializer that best matches the <c>Content-Type</c> header will be used to serialize the request body.
 		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5144,7 +5144,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Note that this introduces a performance penalty since it requires copying the existing collection.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that sorts arrays and collections before serialization.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5162,7 +5162,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortCollections() Serializer.Builder#sortCollections()}
 		 * </ul>
 		 *
@@ -5182,7 +5182,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Note that this introduces a performance penalty.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that sorts maps before serialization.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5200,7 +5200,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#sortMaps() Serializer.Builder#sortMaps()}
 		 * </ul>
 		 *
@@ -5217,11 +5217,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Specifies to use single quotes for quoting attributes and values.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5241,7 +5241,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#quoteChar(char) WriterSerializer.Builder#quoteChar(char)}
 		 * </ul>
 		 *
@@ -5259,7 +5259,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The context (for example one initialized with a custom trust store) is used for {@code https} connections, with
 		 * the {@link #sslHostnameVerifier(HostnameVerifier) hostname verifier} if one is set, or the default one.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>It is applied to the connection manager the default {@link #createConnectionManager()} builds, for
 		 * 		both ordinary requests and the internal pool for SSRF-guard-active {@code @Remote} calls.  It has no effect on
 		 * 		a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)} or an overridden
@@ -5285,7 +5285,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link HostnameVerifier} instance.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>It is applied to the connection manager the default {@link #createConnectionManager()} builds, for
 		 * 		both ordinary requests and the internal pool for SSRF-guard-active {@code @Remote} calls.  It has no effect on
 		 * 		a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)} or an overridden
@@ -5315,7 +5315,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The factory is used for {@code https} connections, in place of one built from the
 		 * {@link #sslContext(SSLContext) SSL context} and {@link #sslHostnameVerifier(HostnameVerifier) hostname verifier}.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>It is applied to the connection manager the default {@link #createConnectionManager()} builds, for
 		 * 		both ordinary requests and the internal pool for SSRF-guard-active {@code @Remote} calls.  It has no effect on
 		 * 		a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)} or an overridden
@@ -5368,7 +5368,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		Bean properties with empty list values will not be set.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -5387,7 +5387,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyCollections() Serializer.Builder#trimEmptyCollections()}
 		 * </ul>
 		 *
@@ -5411,7 +5411,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		Bean properties with empty map values will not be set.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that skips empty maps.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5431,7 +5431,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimEmptyMaps() Serializer.Builder#trimEmptyMaps()}
 		 * </ul>
 		 *
@@ -5449,7 +5449,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being added to
 		 * the POJO.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5468,7 +5468,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>map</jv>.get(<js>"foo"</js>));
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.parser.Parser.Builder#trimStrings() Parser.Builder#trimStrings()}
 		 * </ul>
 		 *
@@ -5485,7 +5485,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that trims strings before serialization.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5503,7 +5503,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#trimStrings() Serializer.Builder#trimStrings()}
 		 * </ul>
 		 *
@@ -5538,7 +5538,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Similar to calling <c>json().json5().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses universal marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
@@ -5631,7 +5631,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses UON marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
@@ -5649,7 +5649,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * Bean used for resolution of URIs to absolute or root-relative form.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Our URI contextual information.</jc>
 		 * 	String <jv>authority</jv> = <js>"http://localhost:10000"</js>;
@@ -5678,7 +5678,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriContext(UriContext) Serializer.Builder#uriContext(UriContext)}
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
@@ -5713,7 +5713,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		- Relative URIs should be considered relative to the request URI.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriRelativity(UriRelativity) Serializer.Builder#uriRelativity(UriRelativity)}
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
@@ -5752,7 +5752,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		- Don't do any URI resolution.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#uriResolution(UriResolution) Serializer.Builder#uriResolution(UriResolution)}
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
@@ -5800,7 +5800,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
@@ -5827,7 +5827,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link UserTokenHandler} instance.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #disableConnectionState()} method.
 		 * </ul>
 		 *
@@ -5844,7 +5844,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Use system properties when creating and configuring default implementations.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The system properties Apache {@link HttpClientBuilder} reads for its own connection manager
 		 * 		apply to both pools of the connection manager the default {@link #createConnectionManager()} builds, as
 		 * 		Apache applies them: with no {@link #sslContext(SSLContext) sslContext} or
@@ -5872,7 +5872,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5892,7 +5892,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() WriterSerializer.Builder#useWhitespace()}
 		 * </ul>
 		 * @return This object.
@@ -5908,7 +5908,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -5928,7 +5928,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.run();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() WriterSerializer.Builder#useWhitespace()}
 		 * </ul>
 		 *
@@ -5969,7 +5969,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * <p>
 		 * 	Identical to calling <c>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses XML marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
@@ -6046,7 +6046,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * limits such as {@link PoolingHttpClientConnectionManager#setMaxTotal(int) maxTotal} apply to each pool on its
 		 * own, so a client that mixes ordinary and guarded calls can hold up to twice as many open connections.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClientConnectionManager.</jc>
 		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
@@ -6280,7 +6280,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The default implementation returns an instance of {@link HttpClient} using the client builder returned by
 		 * {@link #createHttpClientBuilder()}.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='warn'>SSRF-guard-active {@code @Remote} calls (ones without the
 		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in) are only sent through the client this default
 		 * 		implementation builds, which it wires to the connection manager that pins them.  The client refuses every
@@ -6293,7 +6293,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		returns or decorates nothing but what {@code super} built.  Ordinary requests are unaffected.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClient.</jc>
 		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
@@ -6349,7 +6349,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Subclasses can override this method to provide their own client builder.
 		 * The builder can also be specified using the {@link #httpClientBuilder(HttpClientBuilder)} method.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClientBuilder.</jc>
 		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
@@ -6857,7 +6857,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Executes HTTP request using the default context.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -6880,7 +6880,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Executes HTTP request using the given context.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * 	<li class='note'>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
 	 * 		Subclasses can override these methods for handling requests with and without bodies separately.
@@ -6913,7 +6913,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -6939,7 +6939,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -6961,7 +6961,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Executes HTTP request using the default context.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -6982,7 +6982,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Executes HTTP request using the given context.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -7009,7 +7009,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -7032,7 +7032,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * to the connection manager automatically in all cases relieving individual {@link ResponseHandler ResponseHandlers}
 	 * from having to manage resource deallocation internally.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
@@ -7239,7 +7239,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * If the information is not available to resolve to an absolute URI, a {@link RemoteMetadataException} is thrown.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>package</jk> org.apache.foo;
 	 *
@@ -7272,13 +7272,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * 		.getRemote(MyInterface3.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
 	 * </ul>
 	 *
@@ -7295,7 +7295,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Same as {@link #getRemote(Class)} except explicitly specifies the URI of the REST interface.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
 	 * </ul>
 	 *
@@ -7313,7 +7313,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Same as {@link #getRemote(Class, Object)} but allows you to override the serializer and parser used.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
 	 * </ul>
 
@@ -7418,13 +7418,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * If the information is not available to resolve to an absolute URI, a {@link RemoteMetadataException} is thrown.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
 	 * </ul>
 	 *
@@ -7441,7 +7441,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Same as {@link #getRrpcInterface(Class)} except explicitly specifies the URI of the REST interface.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
 	 * </ul>
 	 *
@@ -7459,7 +7459,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Same as {@link #getRrpcInterface(Class, Object)} but allows you to override the serializer and parser used.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
 	 * </ul>
 	 *
@@ -7694,7 +7694,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)} to set the
 	 * contents on the result object.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
@@ -7720,7 +7720,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	/**
 	 * Perform a <c>POST</c> request against the specified URI.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
@@ -7993,7 +7993,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls travels on the request's {@link HttpContext}, which an
 	 * 		override of {@link RestRequest#run()} in the returned request's class may drop (by copying the request, or
 	 * 		sending it with another context), and depends on this client's connection manager, which a request bound to a different client does not use.  So an SSRF-guard-active
@@ -8179,7 +8179,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * Subclasses can override this method to handle any cleanup operations.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Builder#interceptors(Object...)}
 	 * </ul>
 	 *
@@ -8204,7 +8204,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * Subclasses can override this method to intercept the response and perform special modifications.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Builder#interceptors(Object...)}
 	 * </ul>
 	 *
@@ -8229,7 +8229,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * Subclasses can override this method to intercept the request and perform special modifications.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Builder#interceptors(Object...)}
 	 * </ul>
 	 *
@@ -8305,7 +8305,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls travels on the request's {@code HttpContext}, which this
 	 * 		client cannot guarantee an override passes on unchanged.  So a client whose class overrides this method,
 	 * 		{@link #execute(HttpHost, HttpRequest, HttpContext)} or {@link #execute(HttpUriRequest, HttpContext)} refuses every
@@ -8313,7 +8313,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * 		opt-in).  Ordinary requests are unaffected.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Builder#callHandler()}
 	 * </ul>
 	 *

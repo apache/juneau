@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * Represents the parsed contents of a configuration.
  *
- * <h5 class='section'>Concurrency:</h5>
+ * <h2 class='section'>Concurrency:</h2>
  * <p>
  * The parsed contents are held in a single immutable {@link State} snapshot published through a {@code volatile}
  * reference.  Reads ({@link #getEntry(String,String)}, {@link #getKeys(String)}, {@link #getSections()},

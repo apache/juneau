@@ -38,7 +38,7 @@ import org.apache.juneau.http.response.*;
  * and delegate to it &mdash; so the three deployment forms cannot drift, and no flavor is another
  * flavor's worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link FaviconResource}
  * 	<li class='jc'>{@link FaviconServlet}

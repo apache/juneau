@@ -33,12 +33,12 @@ import java.util.*;
  * and objects. These stringifiers are automatically registered when using
  * {@link BasicBeanConverter.Builder#defaultSettings()}.</p>
  *
- * <h5 class='section'>Purpose:</h5>
+ * <h2 class='section'>Purpose:</h2>
  * <p>Stringifiers convert objects to human-readable string representations for use in BCT
  * assertions and test output. They provide consistent, meaningful string formats across
  * different object types while supporting customization for specific testing needs.</p>
  *
- * <h5 class='section'>Built-in Stringifiers:</h5>
+ * <h2 class='section'>Built-in Stringifiers:</h2>
  * <ul>
  *    <li><b>{@link #mapEntryStringifier()}</b> - Converts {@link java.util.Map.Entry} to <js>"key=value"</js> format</li>
  *    <li><b>{@link #calendarStringifier()}</b> - Converts {@link GregorianCalendar} to ISO-8601 format</li>
@@ -56,7 +56,7 @@ import java.util.*;
  *    <li><b>{@link #mapStringifier()}</b> - Converts {@link Map} to brace-delimited format</li>
  * </ul>
  *
- * <h5 class='section'>Usage Example:</h5>
+ * <h2 class='section'>Usage Example:</h2>
  * <p class='bjava'>
  *    <jc>// Register stringifiers using builder</jc>
  *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
@@ -66,7 +66,7 @@ import java.util.*;
  *       .build();
  * </p>
  *
- * <h5 class='section'>Resource Handling:</h5>
+ * <h2 class='section'>Resource Handling:</h2>
  * <p><b>Warning:</b> Some stringifiers consume or close their input resources:</p>
  * <ul>
  *    <li><b>{@link InputStream}:</b> Stream is consumed and closed during stringification</li>
@@ -74,7 +74,7 @@ import java.util.*;
  *    <li><b>{@link File}:</b> File content is read completely during stringification</li>
  * </ul>
  *
- * <h5 class='section'>Custom Stringifier Development:</h5>
+ * <h2 class='section'>Custom Stringifier Development:</h2>
  * <p>When creating custom stringifiers, follow these patterns:</p>
  * <ul>
  *    <li><b>Null Safety:</b> Handle <jk>null</jk> inputs gracefully</li>
@@ -101,14 +101,14 @@ public class Stringifiers {
 	 * <p>This stringifier provides a consistent way to represent binary data as readable
 	 * hexadecimal strings, useful for testing and debugging binary content.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Hex format:</b> Each byte is represented as two uppercase hex digits</li>
 	 *    <li><b>No separators:</b> Bytes are concatenated without spaces or delimiters</li>
 	 *    <li><b>Empty arrays:</b> Returns empty string for zero-length arrays</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test byte array stringification</jc>
 	 *    <jk>byte</jk>[] <jv>data</jv> = {<jv>0x48</jv>, <jv>0x65</jv>, <jv>0x6C</jv>, <jv>0x6C</jv>, <jv>0x6F</jv>};
@@ -138,14 +138,14 @@ public class Stringifiers {
 	 * <p>This stringifier converts calendar objects to standardized ISO-8601 timestamp format,
 	 * which provides consistent, sortable, and internationally recognized date representations.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> Uses the {@code calendarFormat} setting (default: {@link java.time.format.DateTimeFormatter#ISO_INSTANT})</li>
 	 *    <li><b>Timezone:</b> Respects the calendar's timezone information</li>
 	 *    <li><b>Precision:</b> Includes full precision available in the calendar</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test calendar stringification</jc>
 	 *    <jk>var</jk> <jv>calendar</jv> = <jk>new</jk> GregorianCalendar(<jv>2023</jv>, Calendar.<jsf>JANUARY</jsf>, <jv>15</jv>);
@@ -172,14 +172,14 @@ public class Stringifiers {
 	 * <p>This stringifier provides a simple way to convert char arrays to readable strings,
 	 * useful for testing character-based operations and string utilities.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Direct conversion:</b> Each char is appended directly to the result string</li>
 	 *    <li><b>No formatting:</b> Characters are concatenated without any separators or encoding</li>
 	 *    <li><b>Empty arrays:</b> Returns empty string for zero-length arrays</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test char array stringification</jc>
 	 *    <jk>char</jk>[] <jv>chars</jv> = {<js>'H'</js>, <js>'e'</js>, <js>'l'</js>, <js>'l'</js>, <js>'o'</js>};
@@ -202,7 +202,7 @@ public class Stringifiers {
 	 * <p>This stringifier provides flexible class name formatting, supporting different
 	 * levels of detail from simple names to fully qualified class names.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format options:</b> Controlled by {@code classNameFormat} setting</li>
 	 *    <li><b>Simple format:</b> Class simple name (default)</li>
@@ -210,7 +210,7 @@ public class Stringifiers {
 	 *    <li><b>Full format:</b> Complete class name including package</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with default simple format</jc>
 	 *    <jsm>assertBean</jsm>(String.<jk>class</jk>, <js>"&lt;self&gt;"</js>, <js>"String"</js>);
@@ -237,14 +237,14 @@ public class Stringifiers {
 	 * <p>This stringifier creates human-readable constructor signatures including the
 	 * declaring class name and parameter types, useful for reflection-based testing.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> <js>"{ClassName}({paramType1},{paramType2},...)"</js></li>
 	 *    <li><b>Class names:</b> Uses the configured class name format</li>
 	 *    <li><b>Parameter types:</b> Includes all parameter types in declaration order</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test constructor stringification</jc>
 	 *    <jk>var</jk> <jv>constructor</jv> = String.<jk>class</jk>.getConstructor(<jk>char</jk>[].<jk>class</jk>);
@@ -279,14 +279,14 @@ public class Stringifiers {
 	 * <p>This stringifier converts Date objects to ISO-8601 instant format, providing
 	 * standardized timestamp representations suitable for logging and comparison.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> ISO-8601 instant format (e.g., <js>"2023-01-15T10:30:00Z"</js>)</li>
 	 *    <li><b>Timezone:</b> Always represents time in UTC (Z timezone)</li>
 	 *    <li><b>Precision:</b> Millisecond precision as available in Date objects</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test date stringification</jc>
 	 *    <jk>var</jk> <jv>date</jv> = <jk>new</jk> Date(<jv>1673780400000L</jv>); <jc>// 2023-01-15T10:00:00Z</jc>
@@ -310,14 +310,14 @@ public class Stringifiers {
 	 * <p>This stringifier provides a consistent way to represent enum values as their
 	 * declared constant names, which is typically the most useful format for testing.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Name format:</b> Uses {@link Enum#name()} method for string representation</li>
 	 *    <li><b>Case preservation:</b> Maintains the exact case as declared in enum</li>
 	 *    <li><b>All enum types:</b> Works with any enum implementation</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test enum stringification</jc>
 	 *    <jsm>assertBean</jsm>(Color.<jsf>RED</jsf>, <js>"&lt;self&gt;"</js>, <js>"RED"</js>);
@@ -328,7 +328,7 @@ public class Stringifiers {
 	 *    <jsm>assertBean</jsm>(<jv>task</jv>, <js>"status"</js>, <js>"COMPLETED"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Alternative Formats:</h5>
+	 * <h4 class='section'>Alternative Formats:</h4>
 	 * <p>If you need different enum string representations (like {@link Enum#toString()}
 	 * or custom formatting), register a custom stringifier for specific enum types.</p>
 	 *
@@ -346,14 +346,14 @@ public class Stringifiers {
 	 * <p>This stringifier reads the entire file content and returns it as a string,
 	 * making it useful for testing file-based operations and content verification.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Content reading:</b> Reads the entire file content into memory</li>
 	 *    <li><b>Encoding:</b> Uses the default platform encoding for text files</li>
 	 *    <li><b>Resource management:</b> Properly closes file resources after reading</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test file content</jc>
 	 *    <jk>var</jk> <jv>configFile</jv> = <jk>new</jk> File(<js>"config.properties"</js>);
@@ -364,7 +364,7 @@ public class Stringifiers {
 	 *    <jsm>assertBean</jsm>(<jv>emptyFile</jv>, <js>"&lt;self&gt;"</js>, <js>""</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Important Notes:</h5>
+	 * <h4 class='section'>Important Notes:</h4>
 	 * <ul>
 	 *    <li><b>Memory usage:</b> Large files will consume significant memory</li>
 	 *    <li><b>File existence:</b> Non-existent files will cause exceptions</li>
@@ -385,14 +385,14 @@ public class Stringifiers {
 	 * <p><b>Warning:</b> This stringifier consumes and closes the input stream during conversion.
 	 * After stringification, the stream cannot be used again.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Content reading:</b> Reads all available bytes from the stream</li>
 	 *    <li><b>Hex conversion:</b> Converts bytes to uppercase hexadecimal representation</li>
 	 *    <li><b>Resource management:</b> Automatically closes the stream after reading</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with byte content</jc>
 	 *    <jk>var</jk> <jv>stream</jv> = <jk>new</jk> ByteArrayInputStream(<jk>new</jk> <jk>byte</jk>[]{<jv>0x48</jv>, <jv>0x65</jv>, <jv>0x6C</jv>, <jv>0x6C</jv>, <jv>0x6F</jv>});
@@ -403,7 +403,7 @@ public class Stringifiers {
 	 *    <jsm>assertBean</jsm>(<jv>empty</jv>, <js>"&lt;self&gt;"</js>, <js>""</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Important Notes:</h5>
+	 * <h4 class='section'>Important Notes:</h4>
 	 * <ul>
 	 *    <li><b>One-time use:</b> The stream is consumed and closed during conversion</li>
 	 *    <li><b>Memory usage:</b> All content is loaded into memory for conversion</li>
@@ -423,7 +423,7 @@ public class Stringifiers {
 	 * <p>This stringifier converts lists to bracket-delimited strings with customizable
 	 * separators and prefixes/suffixes, providing consistent list representation across tests.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> <js>"{prefix}{element1}{separator}{element2}...{suffix}"</js></li>
 	 *    <li><b>Separator:</b> Uses {@code fieldSeparator} setting (default: <js>","</js>)</li>
@@ -432,7 +432,7 @@ public class Stringifiers {
 	 *    <li><b>Recursive:</b> Elements are converted using the same converter</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test list stringification</jc>
 	 *    <jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"apple"</js>, <js>"banana"</js>, <js>"cherry"</js>);
@@ -469,14 +469,14 @@ public class Stringifiers {
 	 * <p>This stringifier creates a human-readable representation of map entries by converting
 	 * both the key and value to strings and joining them with the configured entry separator.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> Uses the pattern <js>"{key}{separator}{value}"</js></li>
 	 *    <li><b>Separator:</b> Uses the {@code mapEntrySeparator} setting (default: <js>"="</js>)</li>
 	 *    <li><b>Recursive conversion:</b> Both key and value are converted using the same converter</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test map entry stringification</jc>
 	 *    <jk>var</jk> <jv>entry</jv> = Map.<jsm>entry</jsm>(<js>"name"</js>, <js>"John"</js>);
@@ -504,7 +504,7 @@ public class Stringifiers {
 	 * map to a list of entries and then stringifying each entry, providing consistent
 	 * map representation across tests.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> <js>"{prefix}{entry1}{separator}{entry2}...{suffix}"</js></li>
 	 *    <li><b>Separator:</b> Uses {@code fieldSeparator} setting (default: <js>","</js>)</li>
@@ -513,7 +513,7 @@ public class Stringifiers {
 	 *    <li><b>Entry format:</b> Each entry uses the map entry stringifier</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test map stringification</jc>
 	 *    <jk>var</jk> <jv>map</jv> = Map.<jsm>of</jsm>(<js>"name"</js>, <js>"John"</js>, <js>"age"</js>, <jv>25</jv>);
@@ -524,7 +524,7 @@ public class Stringifiers {
 	 *    <jsm>assertBean</jsm>(<jv>emptyMap</jv>, <js>"&lt;self&gt;"</js>, <js>"{}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Order Considerations:</h5>
+	 * <h4 class='section'>Order Considerations:</h4>
 	 * <p>The order of entries in the string depends on the map implementation's iteration
 	 * order. Use order-independent assertions (like {@code assertMatchesGlob}) for maps where
 	 * order is not guaranteed.</p>
@@ -551,14 +551,14 @@ public class Stringifiers {
 	 * <p>This stringifier creates human-readable method signatures including the method
 	 * name and parameter types, useful for reflection-based testing and debugging.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Format:</b> <js>"{methodName}({paramType1},{paramType2},...)"</js></li>
 	 *    <li><b>Method name:</b> Uses the declared method name</li>
 	 *    <li><b>Parameter types:</b> Includes all parameter types in declaration order</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test method stringification</jc>
 	 *    <jk>var</jk> <jv>method</jv> = String.<jk>class</jk>.getMethod(<js>"substring"</js>, <jk>int</jk>.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
@@ -593,14 +593,14 @@ public class Stringifiers {
 	 * <p><b>Warning:</b> This stringifier consumes and closes the reader during conversion.
 	 * After stringification, the reader cannot be used again.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Content reading:</b> Reads all available characters from the reader</li>
 	 *    <li><b>String conversion:</b> Converts characters directly to string format</li>
 	 *    <li><b>Resource management:</b> Automatically closes the reader after reading</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with string content</jc>
 	 *    <jk>var</jk> <jv>reader</jv> = <jk>new</jk> StringReader(<js>"Hello World"</js>);
@@ -611,7 +611,7 @@ public class Stringifiers {
 	 *    <jsm>assertMatchesGlob</jsm>(<js>"*expected content*"</js>, <jv>fileReader</jv>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Important Notes:</h5>
+	 * <h4 class='section'>Important Notes:</h4>
 	 * <ul>
 	 *    <li><b>One-time use:</b> The reader is consumed and closed during conversion</li>
 	 *    <li><b>Memory usage:</b> All content is loaded into memory for conversion</li>

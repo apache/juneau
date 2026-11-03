@@ -26,7 +26,7 @@ import org.apache.juneau.http.*;
  * <p>
  * Informs the client of proxies through which the response was sent.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
  * </p>
@@ -34,14 +34,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Informs the client of proxies through which the response was sent.
  *
- * <p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
  * </p>
  *
- * <p>
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Via general-header field MUST be used by gateways and proxies to indicate the intermediate protocols and
  * recipients between the user agent and the server on requests, and between the origin server and the client on
@@ -117,7 +115,7 @@ import org.apache.juneau.http.*;
  * hosts have already been replaced by pseudonyms.
  * Applications MUST NOT combine entries which have different received-protocol values.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

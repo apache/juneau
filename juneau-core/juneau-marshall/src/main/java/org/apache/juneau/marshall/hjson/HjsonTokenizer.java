@@ -29,7 +29,7 @@ import java.util.Locale;
  * Handles quoted strings, quoteless strings, multiline strings, comments, numbers, booleans, null,
  * and structural tokens.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  * </ul>
  */

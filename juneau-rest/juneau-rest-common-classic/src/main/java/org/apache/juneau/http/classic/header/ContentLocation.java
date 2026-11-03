@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * <p>
  * An alternate location for the returned data.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Content-Location: /index.htm
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Content-Location entity-header field MAY be used to supply the resource location for the entity enclosed in the
  * message when that entity is accessible from a location separate from the requested resource's URI.
@@ -67,7 +67,7 @@ import org.apache.juneau.http.*;
  * The meaning of the Content-Location header in PUT or POST requests is undefined; servers are free to ignore it in
  * those cases.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

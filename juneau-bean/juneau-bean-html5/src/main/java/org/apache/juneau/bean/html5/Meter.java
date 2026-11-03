@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * of values (use the input element with type="range" for that). It is typically rendered as a
  * visual gauge or bar that shows the current value relative to the minimum and maximum values.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -87,7 +87,7 @@ import org.apache.juneau.marshall.*;
  * 		.max(100);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

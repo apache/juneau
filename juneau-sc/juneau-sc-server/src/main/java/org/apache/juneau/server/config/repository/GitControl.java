@@ -46,7 +46,7 @@ import org.eclipse.jgit.transport.*;
  * The underlying JGit {@link Repository} and {@link Git} handles are opened in the constructor and released by
  * {@link #close()}, so instances must be used with try-with-resources to avoid leaking file/native handles.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SecretStore}
  * 	<li class='jc'>{@link SecretStores}
  * </ul>

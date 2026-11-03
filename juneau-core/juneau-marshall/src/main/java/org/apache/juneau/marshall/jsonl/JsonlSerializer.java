@@ -22,13 +22,13 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Serializes POJO models to JSONL (JSON Lines).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/jsonl</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Serializes POJOs to JSONL format where each top-level value is written as a compact JSON
  * value on its own line.  The conversion is as follows...
@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * Non-JSON-primitive types are transformed through
  * {@link ObjectSwap ObjectSwaps}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use the default serializer to serialize a list of POJOs</jc>
  * 	String <jv>jsonl</jv> = JsonlSerializer.<jsf>DEFAULT</jsf>.write(<jv>myList</jv>);
@@ -60,21 +60,20 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	String <jv>jsonl</jv> = <jv>serializer</jv>.write(<jv>myList</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (List of beans):</h5>
+ * <h2 class='figure'>Example output (List of beans):</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30}
  * {"name":"Bob","age":25}
  * {"name":"Carol","age":35}
  * </p>
  *
- * <h5 class='figure'>Complex (bean with nested object and array):</h5>
+ * <h2 class='figure'>Complex (bean with nested object and array):</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30,"address":{"street":"123 Main St","city":"Boston"},"tags":["a","b","c"]}
  * {"name":"Bob","age":25,"address":{"street":"456 Oak Ave","city":"Portland"},"tags":["d","e"]}
  * </p>
  *
- * <h5 class='section'>Limitations compared to JSON</h5>
- * <p>
+ * <h2 class='section'>Limitations compared to JSON</h2>
  * <ul class='spaced-list'>
  * 	<li><b>No pretty-printing</b>: {@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder#useWhitespace() useWhitespace()}
  * 		is always suppressed.  JSONL requires each JSON value to fit on a single line;
@@ -84,11 +83,11 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 		becomes one line.  A single non-collection object produces one JSONL line.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonlSupport">JSONL</a>
  * </ul>
  */

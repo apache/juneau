@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * {@link StaticFiles} from the bean store at request time &mdash; importer's
  * {@code @Bean StaticFiles} declarations + classpath defaults are picked up automatically.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /static/*} can be overridden via the SVL variable
@@ -57,7 +57,7 @@ import org.apache.juneau.rest.server.*;
  * search root still walks both {@code static/} and {@code htdocs/} directories &mdash; only the
  * URL-side mount is now single.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -67,7 +67,7 @@ import org.apache.juneau.rest.server.*;
  * declaration would be silently ignored under the mixin pattern (see
  * {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<jc>// Vanilla resource gains static-file serving at /static/*.</jc>
@@ -77,7 +77,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Behavior:</h5>
+ * <h2 class='section'>Behavior:</h2>
  *
  * <ul class='spaced-list'>
  * 	<li>GET hits the active {@link StaticFiles} bean (resolved via
@@ -96,7 +96,7 @@ import org.apache.juneau.rest.server.*;
  * 		{@link ResourceSupplier} hook).
  * </ul>
  *
- * <h5 class='section'>Path matching:</h5>
+ * <h2 class='section'>Path matching:</h2>
  *
  * <p>
  * The handler declares {@code @RestGet(path="/${juneau.staticfiles.path:static}/*")} so a single
@@ -108,14 +108,14 @@ import org.apache.juneau.rest.server.*;
  * {@code BasicRestServlet.getHtdoc(...)} accessor).
  * </p>
  *
- * <h5 class='section'>OpenAPI surface:</h5>
+ * <h2 class='section'>OpenAPI surface:</h2>
  *
  * <p>
  * The greedy {@code /*} handler is not API-meaningful and is excluded from generated Swagger /
  * OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BasicStaticFiles}
  * 	<li class='jc'>{@link StaticFiles}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.ops.HtdocMixin} &mdash; legacy fixed {@code /htdocs/*} mount;

@@ -48,7 +48,7 @@ import org.apache.juneau.commons.bean.*;
  * {@link BeanProp @BeanProp} instead. To rename a property, use {@link BeanProp @BeanProp}
  * (e.g. <c>@BeanProp("newName")</c>), not this annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanProp}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanPropAnnotation">@BeanProp Annotation</a>
  * </ul>
@@ -85,7 +85,7 @@ public @interface MarshalledProp {
 	 * Multiple view names are supported — a property tagged {@code view={"summary","detail"}} is included
 	 * when <em>either</em> {@code "summary"} or {@code "detail"} is the active view (union semantics).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -102,7 +102,7 @@ public @interface MarshalledProp {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#activeView(String)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ViewProjection">View-Based Projection</a>
 	 * </ul>
@@ -119,7 +119,7 @@ public @interface MarshalledProp {
 	 * The list of classes that make up the bean dictionary for this bean property, used during
 	 * polymorphic marshalling.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
@@ -164,7 +164,7 @@ public @interface MarshalledProp {
 	 * During parsing, we will attempt to convert the value to the original form by using the
 	 * {@link MarshallingSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@MarshalledProp</ja>(format=<js>"$%.2f"</js>)
 	 * 	<jk>public float</jk> <jf>price</jf>;
@@ -173,7 +173,7 @@ public @interface MarshalledProp {
 	 * <p>
 	 * This annotation can also be used on private fields of a property like so:
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *

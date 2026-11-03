@@ -30,7 +30,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This mirrors how the request path is instrumented (the framework opens / closes the observation around
  * the {@code @RestOp} handler) but lets application code instrument arbitrary work.
  *
- * <h5 class='topic'>Installing a backend</h5>
+ * <h2 class='topic'>Installing a backend</h2>
  *
  * <p>
  * The default observer is {@link Observer#NOOP} until a backend is installed via {@link #install(Observer)}
@@ -56,7 +56,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * (resolved from the {@code RestContext} bean store) and call {@link Observer#start(String, String)} &mdash;
  * this facade is a convenience, not the only entry point.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Observer}
  * 	<li class='jc'>{@link Observation}
  * </ul>

@@ -28,13 +28,13 @@ package org.apache.juneau.commons.lang;
  * Only one listener can be registered per {@link Holder} object. Setting a new listener will replace any
  * previously registered listener.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p>
  * The listener is triggered every time {@link Holder#set(Object)} is called, including when setting
  * to <jk>null</jk>. Other methods like {@link Holder#getAndSet(Object)} also trigger the listener
  * since they call {@code set()} internally.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Simple logging listener</jc>
  * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"initial"</js>);
@@ -63,7 +63,7 @@ package org.apache.juneau.commons.lang;
  * 	<jv>number</jv>.set(5).set(10).set(15);  <jc>// sum = 30</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		The listener is called <b>after</b> the value has been changed, so {@link Holder#get()} will return
  * 		the new value.
@@ -76,7 +76,7 @@ package org.apache.juneau.commons.lang;
  * 		This interface is a functional interface and can be used with lambda expressions or method references.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * 	<li class='jc'>{@link Holder}
  * </ul>
@@ -93,7 +93,7 @@ public interface ValueListener<T> {
 	 * This method is called <b>after</b> the value has been updated, so calling {@link Holder#get()} on the
 	 * associated value object will return the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
 	 * 	<jv>value</jv>.listener((<jv>newValue</jv>) -&gt; {

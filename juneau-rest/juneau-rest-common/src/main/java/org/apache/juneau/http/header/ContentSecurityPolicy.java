@@ -30,7 +30,7 @@ import java.util.function.*;
  * mitigating cross-site-scripting (XSS) and data-injection attacks.  This bean carries an already-rendered policy
  * value; use {@link Builder} to assemble the value from typed directives.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Build a static policy and emit it as a response header.</jc>
  * 	ContentSecurityPolicy <jv>csp</jv> = ContentSecurityPolicy.<jsm>create</jsm>()
@@ -46,7 +46,7 @@ import java.util.function.*;
  * <c>defaultResponseHeaders</c> {@link HttpHeaderList} (e.g. via a <c><ja>@Bean</ja>(name=<js>"defaultResponseHeaders"</js>)</c>
  * factory method) and is emitted through the normal response-header path.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Builder}
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/TR/CSP3/'>Content Security Policy Level 3 (W3C WD)</a>
  * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/TR/CSP2/'>Content Security Policy Level 2 (W3C Rec)</a>
@@ -180,7 +180,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 	 * directives; {@link #directive(String, String...)} is a generic escape hatch so new directives never require an API
 	 * change.  Setting the same directive more than once <b>replaces</b> the previous source list.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = ContentSecurityPolicy.<jsm>create</jsm>()
 	 * 		.defaultSrc(<jsf>SELF</jsf>)
@@ -190,14 +190,14 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 	 * 	<jc>// =&gt; "default-src 'self'; img-src 'self' data:; object-src 'none'"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Nonces:</h5>
+	 * <h2 class='section'>Nonces:</h2>
 	 * <p>
 	 * Source helper {@link #nonce(String)} renders a <c>'nonce-&lt;token&gt;'</c> source expression.  For per-request
 	 * nonces (where the actual token is not known until the response is rendered), use {@link #NONCE_PLACEHOLDER} as the
 	 * token and have the REST layer rewrite it per-response via {@link #resolveNonce(String, String)}; the same nonce is
 	 * then stamped onto the inline <c>&lt;script&gt;</c>/<c>&lt;style&gt;</c> tags the serializer emits.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link ContentSecurityPolicy}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.w3.org/TR/CSP3/'>Content Security Policy Level 3 (W3C WD)</a>
 	 * </ul>

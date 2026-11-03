@@ -40,7 +40,7 @@ import org.apache.juneau.commons.utils.*;
  * {@link Executable} in Java. It extends {@link AccessibleInfo} to provide {@link AccessibleObject}
  * functionality for accessing private methods and constructors.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Parameter introspection - access method/constructor parameters
  * 	<li>Exception handling - get declared exceptions
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Accessibility control - make private executables accessible
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Working with both methods and constructors in a unified way
  * 	<li>Finding methods/constructors that match specific parameter types
@@ -58,7 +58,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Building frameworks that need to analyze executable signatures
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Get ExecutableInfo (could be MethodInfo or ConstructorInfo)</jc>
  * 	MethodInfo <jv>mi</jv> = ...;
@@ -74,7 +74,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jk>boolean</jk> <jv>matches</jv> = <jv>ei</jv>.parameterMatches(String.<jk>class</jk>, Integer.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
  * 	<li class='jc'>{@link ParameterInfo} - Parameter introspection
@@ -147,7 +147,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * implicit outer class instance (e.g., {@code Outer.this}). This method checks against the
 	 * <em>actual</em> parameters including this implicit parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular method</jc>
 	 * 	<jk>public void</jk> foo(String <jv>s</jv>, Integer <jv>i</jv>);
@@ -187,7 +187,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#getAnnotatedExceptionTypes()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get annotated exception types from method: void myMethod() throws @NotNull IOException</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
@@ -208,7 +208,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#getAnnotatedParameterTypes()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get annotated parameter types from method: void myMethod(@NotNull String s, @Range(min=0) int i)</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
@@ -229,7 +229,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#getAnnotatedReceiverType()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get annotated receiver type from method: void myMethod(@MyAnnotation MyClass this)</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>);
@@ -300,7 +300,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	/**
 	 * Returns the full name of this executable.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><js>"com.foo.MyClass.get(java.util.String)"</js> - Method.
 	 * 	<li><js>"com.foo.MyClass(java.util.String)"</js> - Constructor.
@@ -347,7 +347,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * This is a convenience method that extracts the parameter types from {@link #getParameters()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get parameter types: void myMethod(String s, int i)</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
@@ -364,7 +364,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	/**
 	 * Returns the short name of this executable.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><js>"MyClass.get(String)"</js> - Method.
 	 * 	<li><js>"MyClass(String)"</js> - Constructor.
@@ -390,7 +390,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#getTypeParameters()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get type parameters from method: &lt;T extends Number&gt; void myMethod(T value)</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, Number.<jk>class</jk>);
@@ -639,7 +639,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#isSynthetic()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if method is compiler-generated</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"access$000"</js>);
@@ -657,7 +657,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#isVarArgs()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if method accepts varargs</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, String[].<jk>class</jk>);
@@ -786,7 +786,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * <p>
 	 * Same as calling {@link Executable#toGenericString()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get generic string for: public &lt;T&gt; List&lt;T&gt; myMethod(T value) throws IOException</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"myMethod"</js>, Object.<jk>class</jk>);
@@ -815,7 +815,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * 	<li>Throws declarations (if any)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Constructor</jc>
 	 * 	ConstructorInfo <jv>ci</jv> = ConstructorInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>));
@@ -843,7 +843,7 @@ public abstract sealed class ExecutableInfo extends AccessibleInfo permits Const
 	 * 	<jc>// Returns: "public &lt;T extends java.lang.Comparable&lt;T&gt;&gt; void org.example.MyClass.boundedMethod(T)"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison with Other Methods:</h5>
+	 * <h4 class='section'>Comparison with Other Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #getNameShort()} - Returns short name with parameters (e.g., "myMethod(int, String)")
 	 * 	<li>{@link #getNameFull()} - Returns fully qualified name with parameters (e.g., "org.example.MyClass.myMethod(int, java.lang.String)")

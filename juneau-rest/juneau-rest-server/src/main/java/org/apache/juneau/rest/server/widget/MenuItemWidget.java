@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.*;
 /**
  * A subclass of widgets for rendering menu items with drop-down windows.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlPredefinedWidgets">Predefined Widgets</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlWidgets">Widgets</a>
  * </ul>

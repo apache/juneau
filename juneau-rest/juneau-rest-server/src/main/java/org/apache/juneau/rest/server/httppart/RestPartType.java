@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server.httppart;
 /**
  * Represents the possible parameter types as defined by the Swagger 2.0 specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */

@@ -24,7 +24,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * Defines how cache storage is implemented and when cached entries may be evicted.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link Cache}
  * 	<li class='jc'>{@link Cache2}
@@ -120,7 +120,7 @@ public enum CacheMode {
 	 * <p>
 	 * Performs case-insensitive matching against the enum constant names.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	CacheMode.<jsm>parse</jsm>(<js>"none"</js>);  <jc>// Returns NONE</jc>
 	 * 	CacheMode.<jsm>parse</jsm>(<js>"WEAK"</js>);  <jc>// Returns WEAK</jc>

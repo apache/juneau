@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Provides the following features:
  * <ul class='spaced-list'>
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.*;
  * 		Clones existing groups and all parsers within the group in a single method call.
  * </ul>
  *
- * <h5 class='topic'>Match ordering</h5>
+ * <h2 class='topic'>Match ordering</h2>
  *
  * Parsers are matched against <c>Content-Type</c> strings in the order they exist in this group.
  *
@@ -59,7 +59,7 @@ import org.apache.juneau.marshall.*;
  * For example, calling <code>g.append(P1.<jk>class</jk>,P2.<jk>class</jk>).append(P3.<jk>class</jk>,P4.<jk>class</jk>)</code>
  * will result in the order <c>P3, P4, P1, P2</c>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct a new parser group builder</jc>
  * 	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>();
@@ -76,11 +76,11 @@ import org.apache.juneau.marshall.*;
  * 	AddressBook <jv>addressBook</jv> = <jv>parser</jv>.read(<jv>json</jv>, AddressBook.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  * </ul>
@@ -186,7 +186,7 @@ public class ParserSet {
 		 * <p>
 		 * The {@link NoInherit} class can be used to clear out the existing list of parsers before adding the new entries.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	ParserSet.Builder <jv>builder</jv> = ParserSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
@@ -380,7 +380,7 @@ public class ParserSet {
 		 * <p>
 		 * The {@link Inherit} class can be used to insert existing entries in this group into the position specified.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	ParserSet.Builder <jv>builder</jv> = ParserSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *

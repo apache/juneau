@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.processor.*;
 /**
  * Utility classes and methods for the {@link Mixin @Mixin} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Mixin}
  * 	<li class='ja'>{@link Rest#mixinDefs()}
  * </ul>

@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.stream.*;
  * becomes a row and bean properties become columns. The first row typically contains column headers derived
  * from bean property names.
  *
- * <h5 class='section'>JSON Parity Features (opt-in):</h5>
+ * <h2 class='section'>JSON Parity Features (opt-in):</h2>
  * <ul>
  *   <li><b>Type discriminator</b> — {@link CsvSerializer.Builder#addBeanTypes() addBeanTypes()}.{@link CsvSerializer.Builder#addRootType() addRootType()}
  *       adds a {@code _type} column for polymorphic parsing.
@@ -47,30 +47,30 @@ import org.apache.juneau.marshall.stream.*;
  *   <li><b>Null marker</b> — {@link CsvSerializer.Builder#nullValue(String) nullValue("&lt;NULL&gt;")} (default) for unambiguous null.
  * </ul>
  *
- * <h5 class='section'>Data Structures Not Supported:</h5>
+ * <h2 class='section'>Data Structures Not Supported:</h2>
  * <ul>
  *   <li><b>Parent/inherited properties</b> — Hierarchy flattens; may collide with child names.
  *   <li><b>Optional wrappers</b> — May serialize as the inner value; round-trip differs from tree formats.
  * </ul>
  *
- * <h5 class='section'>Best Supported:</h5>
+ * <h2 class='section'>Best Supported:</h2>
  * <p>
  * Collections of flat beans or maps whose properties are primitives, strings, numbers, enums, dates,
  * byte arrays, or (with {@code allowNestedStructures}) nested beans, maps, and lists.
  *
- * <h5 class='figure'>Example output (list of maps with a,b):</h5>
+ * <h2 class='figure'>Example output (list of maps with a,b):</h2>
  * <p class='bcode'>
  * 	a,b
  * 	foo,bar
  * </p>
  *
- * <h5 class='figure'>Complex (list of beans with nested address, flattened):</h5>
+ * <h2 class='figure'>Complex (list of beans with nested address, flattened):</h2>
  * <p class='bcode'>
  * 	name,age,address_street,address_city,address_state,tags
  * 	Alice,30,123 Main St,Boston,MA,"a,b,c"
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

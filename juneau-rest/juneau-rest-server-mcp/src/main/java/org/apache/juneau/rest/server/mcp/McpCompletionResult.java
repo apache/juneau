@@ -29,7 +29,7 @@ import org.apache.juneau.bean.jsonrpc.*;
  * per completion dispatch to obtain the {@link Normalized} shape both dated adapters map to their wire
  * result.
  *
- * <h5 class='section'>Normalization contract:</h5>
+ * <h2 class='section'>Normalization contract:</h2>
  * <p>
  * Applied by {@link #normalize(McpCompletionResult)} before wire mapping:
  * <ul>
@@ -44,7 +44,7 @@ import org.apache.juneau.bean.jsonrpc.*;
  * 		<jk>null</jk> fields) is also an <b>internal handler failure</b>.
  * </ul>
  *
- * <h5 class='section'>Internal handler failure representation:</h5>
+ * <h2 class='section'>Internal handler failure representation:</h2>
  * <p>
  * Each of the three "internal handler failure" cases above is surfaced identically: as an
  * {@link McpException} carrying {@link #CODE_INTERNAL_ERROR} ({@code -32603}), the JSON-RPC 2.0

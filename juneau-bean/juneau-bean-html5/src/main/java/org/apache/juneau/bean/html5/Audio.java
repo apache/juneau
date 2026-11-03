@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * or other audio sources. The browser will choose the most appropriate source based on format
  * support and user preferences.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple audio with single source</jc>
  * 	Audio <jv>audio1</jv> = <jsm>audio</jsm>().src(<js>"audio.mp3"</js>).controls(<jk>true</jk>);
@@ -54,9 +54,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#audio(String) audio(String)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

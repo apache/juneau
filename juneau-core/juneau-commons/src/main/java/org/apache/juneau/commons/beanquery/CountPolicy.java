@@ -26,7 +26,7 @@ package org.apache.juneau.commons.beanquery;
  * statements on a SQL engine), so the default {@link #IF_REQUESTED} lets the caller opt in while the server keeps
  * the final say.  {@link BeanQuerySession#count(BeanQuery)} always computes both counts regardless of the policy.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Always return the matched count, whatever the caller asks for.</jc>
  * 	InMemoryBeanQueryContext&lt;Person&gt; <jv>context</jv> = InMemoryBeanQueryContext

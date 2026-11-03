@@ -29,14 +29,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * writer. This is useful when you need to pass a writer to code that will close it, but you
  * want to keep the underlying writer open for further use.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Prevents closing - {@link #close()} flushes but doesn't close the underlying writer
  * 	<li>Transparent delegation - all other operations pass through to the wrapped writer
  * 	<li>Useful for resource management - allows multiple consumers without premature closing
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Passing writers to APIs that close them, but you need to keep the writer open
  * 	<li>Multiple operations on the same writer where intermediate operations might close it
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Wrapping system writers that should not be closed
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Wrap a writer that should not be closed</jc>
  * 	FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"output.txt"</js>);
@@ -58,14 +58,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jv>fw</jv>.close();  <jc>// Close when actually done</jc>
  * </p>
  *
- * <h5 class='section'>Important Notes:</h5>
+ * <h2 class='section'>Important Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The {@link #close()} method flushes the writer but does not close the underlying writer
  * 	<li>You are responsible for closing the underlying writer when you're done with it
  * 	<li>This wrapper does not prevent resource leaks - ensure the underlying writer is eventually closed
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link NoCloseOutputStream} - OutputStream counterpart
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
@@ -85,7 +85,7 @@ public class NoCloseWriter extends Writer {
 	 * Creates a new NoCloseWriter that wraps the specified Writer. The wrapper will prevent
 	 * the underlying writer from being closed via the {@link #close()} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"file.txt"</js>);
 	 * 	NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);
@@ -119,7 +119,7 @@ public class NoCloseWriter extends Writer {
 	 * This method flushes any buffered data to the underlying writer but does not close it.
 	 * The underlying writer remains open and can continue to be used after this method is called.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FileWriter <jv>fw</jv> = <jk>new</jk> FileWriter(<js>"file.txt"</js>);
 	 * 	NoCloseWriter <jv>wrapper</jv> = <jk>new</jk> NoCloseWriter(<jv>fw</jv>);

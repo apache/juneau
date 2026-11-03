@@ -34,7 +34,7 @@ import jakarta.servlet.http.*;
  * state-changing request came from this application's own page, or from a client that is not a browser, and refuses
  * it when it came from some other site's page.
  *
- * <h5 class='section'>What this answers, and what it does not</h5>
+ * <h2 class='section'>What this answers, and what it does not</h2>
  * <p>
  * This class answers one question:
  * <p class='bcode'>
@@ -49,12 +49,13 @@ import jakarta.servlet.http.*;
  * For an application bound only to the loopback interface, {@link LoopbackBoundary} pins a single known origin and is
  * stricter.  This class is for applications whose own origin is whatever the request's {@code Host} says it is.
  *
- * <h5 class='section'>The checks</h5>
+ * <h2 class='section'>The checks</h2>
  * <p>
  * {@link #check(HttpServletRequest)} runs these steps in order, and the first failure wins.  The method judged is the
  * {@linkplain MethodSafety#effectiveMethod(String, String, java.util.function.UnaryOperator) effective method}, so a
  * {@code method} query parameter or an override header cannot carry a write past them.
  * <table class='styled w800'>
+ * 	<caption>CSRF boundary checks</caption>
  * 	<tr><th>Step</th><th>Applies to</th><th>Refused when</th><th>Reason</th><th>Status</th></tr>
  * 	<tr><td>Allowed hosts</td><td>Every request, when {@link Builder#allowedHosts(String...)} is set</td>
  * 		<td>The request's own host is not listed; or its {@code Host} (on HTTP/2, its {@code :authority}) is missing or
@@ -100,7 +101,7 @@ import jakarta.servlet.http.*;
  * and no leading zero.  Nothing else is re-canonicalized, so {@code 127.1}, {@code [::ffff:127.0.0.1]} and a trailing
  * dot each fail to match any other spelling of the same address.  That is fail-closed, by design.
  *
- * <h5 class='section'>Non-browser clients</h5>
+ * <h2 class='section'>Non-browser clients</h2>
  * <p>
  * A request with neither {@code Origin} nor {@code Sec-Fetch-Site} is handled by {@link Builder#nonBrowser(NonBrowser)}.
  * The default, {@link NonBrowser#ADMIT_NON_SIMPLE}, admits only requests a browser could not have sent cross-site
@@ -108,14 +109,14 @@ import jakarta.servlet.http.*;
  * every non-simple request they issue; current browsers do, and the {@code Origin} check is the real control for
  * them.</b>
  *
- * <h5 class='section'>The token is accepted only in the header</h5>
+ * <h2 class='section'>The token is accepted only in the header</h2>
  * <p>
  * The token is read from the {@link #csrfHeader()} request header and nowhere else: never a query parameter, never a
  * form field.  A plain HTML {@code <form>} cannot set a header, so every HTML form POST, including the application's
  * own, is refused with {@code CSRF_TOKEN_MISSING}.  This boundary is for applications whose writes go through script
  * that sends the header.
  *
- * <h5 class='section'>The request's own origin, and proxies</h5>
+ * <h2 class='section'>The request's own origin, and proxies</h2>
  * <p>
  * By default ({@link OriginSource#HOST_HEADER}) the request's own origin is {@link HttpServletRequest#getScheme()} plus
  * the {@code Host} header (on HTTP/2, the {@code :authority}; see below).  {@code X-Forwarded-*} and {@code Forwarded}
@@ -132,7 +133,7 @@ import jakarta.servlet.http.*;
  * {@code HIGHEST_PRECEDENCE} itself.  The boundary cannot see its own order; a misordered deployment shows up as
  * scheme-mismatch refusals and the warning described below.
  *
- * <h5 class='section'>Trusting a forwarded origin</h5>
+ * <h2 class='section'>Trusting a forwarded origin</h2>
  * <p>
  * If your container cannot rewrite the request itself, or does not do so for WebSocket upgrades, use
  * {@link Builder#trustedForwarding(ForwardedSource)}.  The request's own origin is then the forwarded host
@@ -165,7 +166,7 @@ import jakarta.servlet.http.*;
  * 		behind another untrusted tier is still believed for what it wrote.
  * </ul>
  *
- * <h5 class='section'>HTTP/2 and {@code :authority}</h5>
+ * <h2 class='section'>HTTP/2 and {@code :authority}</h2>
  * <p>
  * An HTTP/2 request has no {@code Host} header; its {@code :authority} pseudo-header plays that part, and servlet
  * containers surface it only through {@link HttpServletRequest#getServerName()} and
@@ -188,7 +189,7 @@ import jakarta.servlet.http.*;
  * proxy that overwrites {@code X-Forwarded-*}, or list the expected hosts with
  * {@link Builder#allowedHosts(String...)}.
  *
- * <h5 class='section'>Non-goals</h5>
+ * <h2 class='section'>Non-goals</h2>
  * <ul>
  * 	<li><b>DNS rebinding</b>, unless {@link Builder#allowedHosts(String...)} is set: a rebound page's {@code Origin} and
  * 		{@code Host} agree.  TLS defeats rebinding; a plain-HTTP intranet application should list its host names.
@@ -203,7 +204,7 @@ import jakarta.servlet.http.*;
  * 		the proxy, and a client behind a listed address (a shared NAT, a sidecar) is believed too.
  * </ul>
  *
- * <h5 class='section'>What an application must do</h5>
+ * <h2 class='section'>What an application must do</h2>
  * <ul>
  * 	<li>Call {@link HttpServletRequest#changeSessionId()} on login.  A per-session token follows the session id, so
  * 		without that a token seen before login stays valid after it.
@@ -211,7 +212,7 @@ import jakarta.servlet.http.*;
  * 	<li>Not use URL rewriting for session ids.
  * </ul>
  *
- * <h5 class='section'>Responses and logging</h5>
+ * <h2 class='section'>Responses and logging</h2>
  * <p>
  * A rejection message names the header at fault and the kind of value expected.  It never echoes a value the request
  * presented, never prints this server's own origin, and never reveals whether a session exists.  Each refusal is
@@ -220,7 +221,7 @@ import jakarta.servlet.http.*;
  * {@code FINEST}, stripped of control characters and truncated.  Three misconfiguration patterns are logged once per process at {@code WARNING}: a scheme-only mismatch, a port-only
  * mismatch, and repeated missing tokens from the application's own origin.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	CsrfBoundary <jv>boundary</jv> = CsrfBoundary.<jsm>create</jsm>()
  * 		.allowedHosts(<js>"app.example.com"</js>)
@@ -229,7 +230,7 @@ import jakarta.servlet.http.*;
  * 		.addMappingForUrlPatterns(<jk>null</jk>, <jk>false</jk>, <js>"/*"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jic'>{@link RequestBoundary}
  * 	<li class='jc'>{@link RequestBoundaryFilter}
  * 	<li class='jc'>{@link CsrfTokens}

@@ -31,7 +31,7 @@ import org.apache.juneau.petstore.dto.*;
  * a REST resource written with Juneau's REST server — the client interface and the server resource live in
  * different modules but share nothing but the wire protocol and the {@link Pet} DTO.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>

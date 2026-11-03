@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.*;
  * visible regardless of whether the record is a base JUL {@link java.util.logging.LogRecord} (as both debug pipelines
  * construct) or the commons {@link LogRecord} subclass.
  *
- * <h5 class='section'>Identity-key invariant (load-bearing):</h5>
+ * <h2 class='section'>Identity-key invariant (load-bearing):</h2>
  * <p>
  * The backing {@link WeakHashMap} behaves as an identity map <b>only because</b> neither base JUL
  * {@link java.util.logging.LogRecord} nor the commons {@link LogRecord} subclass overrides {@code equals}/{@code hashCode}
@@ -35,13 +35,13 @@ import java.util.concurrent.atomic.*;
  * (two distinct records comparing equal would share/overwrite one entry).  A unit test guards this by asserting both
  * record types remain on {@link Object} equality.
  *
- * <h5 class='section'>Framework attach points:</h5>
+ * <h2 class='section'>Framework attach points:</h2>
  * <p>
  * The two {@code attachIfAbsent} overloads are called by {@link RichLogger#log(java.util.logging.LogRecord)} and by the
  * two REST debug pipelines to pre-seed a record's correlation context.  They are <b>not</b> intended as a general
  * application-facing mutator.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LogContext}
  * 	<li class='jc'>{@link RichLogger#log(java.util.logging.LogRecord)}
  * </ul>

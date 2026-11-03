@@ -54,7 +54,7 @@ import org.apache.juneau.console.*;
  * 		{@code present} but {@code dialog} and no {@code onSuccess: "navigate"}.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@card type="chart" id="orders-trend" title="Orders" src="/console/store/stats/daily"&gt;
  * 	{ kind: 'line', x: { field: 'day' }, series: [ { field: 'placed', label: 'Placed' } ] }

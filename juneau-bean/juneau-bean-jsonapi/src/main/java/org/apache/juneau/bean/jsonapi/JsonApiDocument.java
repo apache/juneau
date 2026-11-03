@@ -33,14 +33,14 @@ import org.apache.juneau.marshall.marshaller.*;
  * Carries the standard six top-level members: {@code data}, {@code errors}, {@code meta}, {@code jsonapi},
  * {@code links}, {@code included}.
  *
- * <h5 class='topic'>Mutual exclusion</h5>
+ * <h2 class='topic'>Mutual exclusion</h2>
  *
  * <p>
  * Per spec, a document MUST contain at least one of {@code data}/{@code errors}/{@code meta}, and {@code data}
  * and {@code errors} MUST NOT coexist. The {@link #validate()} helper checks both rules and throws
  * {@link IllegalStateException} on violation.
  *
- * <h5 class='topic'>The polymorphic {@code data} member</h5>
+ * <h2 class='topic'>The polymorphic {@code data} member</h2>
  *
  * <p>
  * The top-level {@code data} can be {@code null}, a single {@link JsonApiResource}, or an array of them. We
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * which value was set. Typed setters {@link #setData(JsonApiResource)} and {@link #setData(List)} are provided
  * for convenience.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  * </ul>
  */

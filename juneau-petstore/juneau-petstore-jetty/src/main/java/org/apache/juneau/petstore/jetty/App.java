@@ -36,7 +36,7 @@ import jakarta.servlet.*;
  * Locates {@code juneau-petstore-jetty.cfg} (in the working directory or on the classpath), wires Jetty via
  * {@link JettyConfiguration}, and mounts {@link RootResources} as the root servlet.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */

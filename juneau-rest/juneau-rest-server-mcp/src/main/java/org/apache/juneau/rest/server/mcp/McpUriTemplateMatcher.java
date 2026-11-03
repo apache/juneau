@@ -43,7 +43,7 @@ import java.util.regex.*;
  * 		an immutable, insertion-ordered, percent-decoded variable map, or <jk>null</jk> if the URI does not match.
  * </ul>
  *
- * <h5 class='section'>Reverse-matchable forms:</h5>
+ * <h2 class='section'>Reverse-matchable forms:</h2>
  * <p>
  * Non-explode, non-prefix simple scalar <c>{var}</c>, reserved scalar <c>{+var}</c>, fragment scalar
  * <c>{#var}</c>, path segments <c>{/var}</c> / <c>{/x,y}</c>, label segments <c>{.var}</c> / <c>{.x,y}</c>, query
@@ -53,7 +53,7 @@ import java.util.regex.*;
  * successfully (so they remain listable and completable) but are never selected for a template-backed read;
  * {@link #match(String)} always returns <jk>null</jk> for them.
  *
- * <h5 class='section'>Percent-encoding normalization:</h5>
+ * <h2 class='section'>Percent-encoding normalization:</h2>
  * <p>
  * Matching and literal-specificity counting follow RFC 3986 percent-normalization implemented fresh by this
  * class: valid <c>%HH</c> triplets are hex-uppercased; triplets that decode to an unreserved octet
@@ -69,7 +69,7 @@ import java.util.regex.*;
  * (<c>+</c> as space) and lack hex-case normalization, reserved-octet preservation, and malformed-escape
  * rejection, all of which contradict the rules above.
  *
- * <h5 class='section'>Ambiguous-capture resolution:</h5>
+ * <h2 class='section'>Ambiguous-capture resolution:</h2>
  * <p>
  * A reversible template compiles to an alternating sequence of literal and capture pieces; because an
  * expression with ambiguous adjacency to another expression is rejected as non-reverse-matchable (see above),
@@ -85,7 +85,7 @@ import java.util.regex.*;
  * intentional and consistent with this matcher covering reliable inversion of a narrow subset, not a complete
  * RFC 6570 engine.
  *
- * <h5 class='section'>Scope:</h5>
+ * <h2 class='section'>Scope:</h2>
  * <p>
  * This matcher is intentionally MCP-local. It is not registered as a general-purpose RFC 3986/6570 utility;
  * if a second real consumer outside MCP resource templates needs equivalent percent-normalization or

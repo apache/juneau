@@ -20,7 +20,7 @@ package org.apache.juneau.marshall.bson;
  * BSON element type codes per the
  * <a class="doclink" href="https://bsonspec.org/spec.html">BSON Specification 1.1</a>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON</a>
  * </ul>
  */

@@ -24,7 +24,7 @@ package org.apache.juneau.commons.beanquery;
  * This is the builder-facing counterpart of the session-side {@link CountPolicy}: {@code CountPolicy}
  * decides whether a session honors a count request at all; {@code CountRequest} is what the request asks for.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	BeanQuery <jv>q</jv> = BeanQuery.<jsm>create</jsm>().counts(CountRequest.<jsf>BOTH</jsf>).build();
  * </p>

@@ -32,13 +32,13 @@ import org.apache.juneau.marshall.xml.*;
 /**
  * Serializes POJO models to HTML.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/html</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * The conversion is as follows...
  * <ul class='spaced-list'>
@@ -62,7 +62,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
@@ -72,7 +72,7 @@ import org.apache.juneau.marshall.xml.*;
  * 		{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -133,11 +133,11 @@ import org.apache.juneau.marshall.xml.*;
  * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.write(<jv>map</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
 
  * </ul>
@@ -245,7 +245,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * <p>
 		 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjson'>
 		 * 	<jc>// Our bean class.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -270,6 +270,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * The following shows the difference between the two generated outputs:
 		 *
 		 * <table class='styled'>
+		 * 	<caption>Serialized output without headers</caption>
 		 * 	<tr>
 		 * 		<th><c>withoutHeaders</c></th>
 		 * 		<th><c>withHeaders</c></th>
@@ -277,12 +278,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<tr>
 		 * 		<td>
 		 * 			<table class='unstyled'>
+		 * 				<caption>Nested table without headers (1)</caption>
 		 * 				<tr><td>f1</td><td>foo</td></tr>
 		 * 				<tr><td>f2</td><td>bar</td></tr>
 		 * 			</table>
 		 * 		</td>
 		 * 		<td>
 		 * 			<table class='unstyled'>
+		 * 				<caption>Nested table without headers (2)</caption>
 		 * 				<tr><th>key</th><th>value</th></tr>
 		 * 				<tr><td>f1</td><td>foo</td></tr>
 		 * 				<tr><td>f2</td><td>bar</td></tr>
@@ -325,7 +328,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * <p>
 		 * The parameter name can be changed via the {@link #labelParameter(String)} property.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjson'>
 		 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -354,6 +357,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * <br>Note that they're both hyperlinks, but the anchor text differs:
 		 *
 		 * <table class='styled'>
+		 * 	<caption>Serialized output with labels</caption>
 		 * 	<tr>
 		 * 		<th><c>withLabels</c></th>
 		 * 		<th><c>withoutLabels</c></th>
@@ -361,12 +365,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<tr>
 		 * 		<td>
 		 * 			<table class='unstyled'>
+		 * 				<caption>Nested table with labels (1)</caption>
 		 * 				<tr><th>key</th><th>value</th></tr>
 		 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
 		 * 			</table>
 		 * 		</td>
 		 * 		<td>
 		 * 			<table class='unstyled'>
+		 * 				<caption>Nested table with labels (2)</caption>
 		 * 				<tr><th>key</th><th>value</th></tr>
 		 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
 		 * 			</table>
@@ -398,7 +404,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
 		 * and make it into a hyperlink based on the rules specified by {@link Builder#uriAnchorText(AnchorText)}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjson'>
 		 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -426,6 +432,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * The following shows the difference between the two generated outputs:
 		 *
 		 * <table class='styled'>
+		 * 	<caption>Serialized output with links</caption>
 		 * 	<tr>
 		 * 		<th><c>withLinks</c></th>
 		 * 		<th><c>withoutLinks</c></th>
@@ -433,12 +440,14 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<tr>
 		 * 		<td>
 		 * 			<table class='unstyled'>
+		 * 				<caption>Nested table with links (1)</caption>
 		 * 				<tr><th>key</th><th>value</th></tr>
 		 * 				<tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
 		 * 			</table>
 		 * 		</td>
 		 * 		<td>
 		 * 			<table class='unstyled'>
+		 * 				<caption>Nested table with links (2)</caption>
 		 * 				<tr><th>key</th><th>value</th></tr>
 		 * 				<tr><td>f1</td><td>http://www.apache.org</td></tr>
 		 * 			</table>
@@ -509,7 +518,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 	<ul>
 		 * 		<li class='jf'>{@link AnchorText#TO_STRING TO_STRING} (default) - Set to whatever is returned by {@link #toString()} on the object.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -524,7 +533,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#PROPERTY_NAME PROPERTY_NAME} - Set to the bean property name.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -539,7 +548,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#URI URI} - Set to the URI value.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -554,7 +563,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#LAST_TOKEN LAST_TOKEN} - Set to the last token of the URI value.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -569,7 +578,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#URI_ANCHOR URI_ANCHOR} - Set to the anchor of the URL.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -584,7 +593,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#CONTEXT_RELATIVE CONTEXT_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a context-relative path.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -605,7 +614,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -626,7 +635,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 			</p>
 		 * 		<li class='jf'>{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.
 		 * 			<br>
-		 * 			<h5 class='section'>Example:</h5>
+		 * 			<h4 class='section'>Example:</h4>
 		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {

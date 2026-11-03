@@ -24,7 +24,7 @@ package org.apache.juneau.commons.inject;
  * factory method is located but throws an exception during invocation.  Wrapping in an unchecked type makes
  * the exception compatible with {@link java.util.Optional} chaining and lambda contexts.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link BeanStore#createBeanFromMethod(Class, Object, java.util.function.Predicate, Object[])}
  * </ul>
  */

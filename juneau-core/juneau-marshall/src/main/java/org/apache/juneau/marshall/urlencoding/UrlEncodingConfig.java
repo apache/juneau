@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding</a>
  * </ul>
  */
@@ -54,7 +54,7 @@ public @interface UrlEncodingConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>
 	 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 	 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
@@ -65,7 +65,7 @@ public @interface UrlEncodingConfig {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link UrlEncodingSerializer.Builder#expandedParams()}
 	 * </ul>
 	 *

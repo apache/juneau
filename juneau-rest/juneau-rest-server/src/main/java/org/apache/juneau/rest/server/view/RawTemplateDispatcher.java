@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.*;
  * binding), resolves it against the implementation's configured base path, and writes the rendered
  * output directly onto the response.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='jic'>{@link ViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

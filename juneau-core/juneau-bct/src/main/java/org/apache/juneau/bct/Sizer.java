@@ -24,7 +24,7 @@ package org.apache.juneau.bct;
  * objects when validating test assertions. This provides a flexible way to compute sizes for custom
  * types without needing to convert them to lists first.
  *
- * <h5 class='section'>Usage Example:</h5>
+ * <h2 class='section'>Usage Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Register a sizer for a custom collection type</jc>
  * 	<jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
@@ -36,7 +36,7 @@ package org.apache.juneau.bct;
  * 	<jk>int</jk> <jv>size</jv> = <jv>converter</jv>.size(<jv>myCustomCollection</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul class='seealso'>
  * 	<li class='jic'>{@link BeanConverter}
  * </ul>

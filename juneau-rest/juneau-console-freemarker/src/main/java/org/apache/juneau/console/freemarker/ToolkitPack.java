@@ -28,7 +28,7 @@ import java.util.*;
  * Register one through {@code ConsoleFreemarkerMixin.Builder.registerToolkitPack(ToolkitPack)}.  A pack registered
  * under an existing name replaces that pack completely, including its {@code dependsOn}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ToolkitPack.<jsm>create</jsm>(<js>"datatables-export"</js>)
  * 		.js(<jv>jszip</jv>, <jv>pdfmake</jv>, <jv>vfsFonts</jv>)

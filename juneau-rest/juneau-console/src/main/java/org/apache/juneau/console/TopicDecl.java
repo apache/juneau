@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * A custom topic declaration, for a card's {@code publishes} or the page's top-level {@code topics}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// Published by this card's JS:</jc>
  *   <jv>card</jv>.publishes(TopicDecl.<jsm>of</jsm>(<js>"ssc.focus"</js>).retain(<jk>true</jk>));

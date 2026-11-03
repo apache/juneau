@@ -26,7 +26,7 @@ import java.util.*;
  * A server-minted idempotency key for a row-action submit, bound at mint time to the {@code (action, targetId)} pair
  * it was issued for.
  *
- * <h5 class='section'>Why the key is server-minted and bound, not a client UUID</h5>
+ * <h2 class='section'>Why the key is server-minted and bound, not a client UUID</h2>
  * <p>
  * The key is minted <b>when the modal opens</b> &mdash; the server is already in the loop then, since the modal-open
  * confirmation is server-rendered against the current record &mdash; so a double-click, an impatient re-submit and a
@@ -40,13 +40,13 @@ import java.util.*;
  * {@code (action, targetId)} does not {@link #matches(String, String) match} the binding is a <b>named refusal</b>,
  * never a replayed success.
  *
- * <h5 class='section'>Unforgeability</h5>
+ * <h2 class='section'>Unforgeability</h2>
  * <p>
  * The key value is {@value #KEY_BYTES} random bytes ({@value #KEY_BITS}&nbsp;bits) from {@link SecureRandom},
  * hex-encoded &mdash; well beyond the ≥128-bit bar, matching {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s
  * 256-bit reference.  The binding is what makes it safe; the width is what makes it unguessable.
  *
- * <h5 class='section'>Example &mdash; the artifact-bound pattern (the default):</h5>
+ * <h2 class='section'>Example &mdash; the artifact-bound pattern (the default):</h2>
  * <p class='bjava'>
  * 	<jc>// At modal-open: mint a key bound to this action + this row.</jc>
  * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mint</jsm>(<js>"ack"</js>, <jv>incidentId</jv>);
@@ -57,7 +57,7 @@ import java.util.*;
  * 		<jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"write-guard:idempotency-binding-mismatch"</js>);
  * </p>
  *
- * <h5 class='section'>The row-less, self-targeted pattern (the opt-in)</h5>
+ * <h2 class='section'>The row-less, self-targeted pattern (the opt-in)</h2>
  * <p>
  * A dialog opened from a view's <b>ribbon</b> has no row, so at mint time there is no artifact id to bind to.
  * {@link #mintSelfTargeted(String)} mints a key whose {@link #targetId()} <b>is its own {@link #value()}</b>, and
@@ -77,7 +77,7 @@ import java.util.*;
  * 		per-dialog opt-in rather than a blanket client-side precedence rule.
  * </ul>
  *
- * <h5 class='section'>Example &mdash; the self-targeted pattern:</h5>
+ * <h2 class='section'>Example &mdash; the self-targeted pattern:</h2>
  * <p class='bjava'>
  * 	<jc>// At modal-open on a ribbon-hosted dialog: there is no row, so the key targets itself.</jc>
  * 	IdempotencyKey <jv>key</jv> = IdempotencyKey.<jsm>mintSelfTargeted</jsm>(<js>"create"</js>);
@@ -88,7 +88,7 @@ import java.util.*;
  * 		<jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"write-guard:idempotency-binding-mismatch"</js>);
  * </p>
  *
- * <h5 class='section'>What a self-targeted key does and does not guarantee</h5>
+ * <h2 class='section'>What a self-targeted key does and does not guarantee</h2>
  * <p>
  * A self-targeted key binds to {@code (action, one-opened-dialog)} &mdash; <b>not</b> {@code (action, artifact)}.
  * It is minted per modal-open, and it is <b>single-execution, replay-on-duplicate</b>: it stops one opened dialog's
@@ -101,7 +101,7 @@ import java.util.*;
  * the unchanged {@link #mint(String, String)} binds to a real artifact identity, and that guarantee is strictly
  * stronger; it stays available to any consumer that has an artifact to bind to.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.console.widgets.ModalDef}
  * 	<li class='jc'>{@link ActionResult}

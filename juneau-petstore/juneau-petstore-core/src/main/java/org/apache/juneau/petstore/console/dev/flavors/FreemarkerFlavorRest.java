@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
 /**
  * The Freemarker rendering flavor: the pet list rendered from {@code fragments/pets.ftlh}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A FreemarkerView with no &lt;@page&gt; renders as a plain fragment, even through the console mixin.</jc>
  * 	<jk>return</jk> FreemarkerView.<jsm>of</jsm>(<js>"fragments/pets.ftlh"</js>).attr(<js>"pets"</js>, FlavorPets.<jsm>rows</jsm>(store()));

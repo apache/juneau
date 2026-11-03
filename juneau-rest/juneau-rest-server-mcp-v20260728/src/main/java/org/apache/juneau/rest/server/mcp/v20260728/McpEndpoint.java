@@ -34,7 +34,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * at compile time and both read the same {@link McpOptions} shape for behavior configuration
  * (capabilities/instructions/cache/mrtr/subscriptions/broker) via a single override.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * &#64;Rest(path="/api")
  * public class MyResource extends BasicRestServlet implements McpEndpoint {

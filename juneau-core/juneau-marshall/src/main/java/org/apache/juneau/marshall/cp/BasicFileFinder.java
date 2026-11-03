@@ -38,7 +38,7 @@ import org.apache.juneau.commons.io.*;
  * <p>
  * Specialized behavior can be implemented by overridding the {@link #find(String, Locale)} method.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
  * 		<ja>@Override</ja>

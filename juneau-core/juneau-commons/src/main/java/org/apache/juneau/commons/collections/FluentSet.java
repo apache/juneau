@@ -27,7 +27,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This class wraps an underlying set and provides a fluent API for adding elements. All methods return
  * <c>this</c> to allow method chaining. The underlying set can be any {@link Set} implementation.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Fluent API:</b> All methods return <c>this</c> for method chaining
  * 	<li><b>Arbitrary Set Support:</b> Works with any set implementation
@@ -36,7 +36,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li><b>Automatic Deduplication:</b> Duplicate elements are automatically handled by the underlying set
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a FluentSet wrapping a LinkedHashSet</jc>
  * 	FluentSet&lt;String&gt; <jv>set</jv> = <jk>new</jk> FluentSet&lt;&gt;(<jk>new</jk> LinkedHashSet&lt;&gt;());
@@ -52,7 +52,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jv>set</jv>.aa(<jv>other</jv>);
  * </p>
  *
- * <h5 class='section'>Example - Conditional Building:</h5>
+ * <h2 class='section'>Example - Conditional Building:</h2>
  * <p class='bjava'>
  * 	<jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
  * 	<jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;
@@ -64,7 +64,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.ai(<jv>includeTest</jv>, <js>"test"</js>);    <jc>// Not added</jc>
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>All set operations are delegated to the underlying set
  * 	<li>The fluent methods ({@link #a(Object)}, {@link #aa(Collection)}, {@link #ai(boolean, Object)}) return <c>this</c> for chaining
@@ -73,12 +73,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Duplicate elements are automatically handled by the underlying set (only one occurrence is stored)
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe unless the underlying set is thread-safe. If thread safety is required,
  * use a thread-safe set type (e.g., {@link java.util.concurrent.CopyOnWriteArraySet}).
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -109,7 +109,7 @@ public class FluentSet<E> extends AbstractSet<E> {
 	 * for method chaining. If the element already exists in the set, it is not added again
 	 * (sets do not allow duplicates).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentSet&lt;String&gt; <jv>set</jv> = <jk>new</jk> FluentSet&lt;&gt;(<jk>new</jk> LinkedHashSet&lt;&gt;());
 	 * 	<jv>set</jv>.a(<js>"item1"</js>).a(<js>"item2"</js>);
@@ -131,7 +131,7 @@ public class FluentSet<E> extends AbstractSet<E> {
 	 * for method chaining. If the specified collection is <jk>null</jk>, this is a no-op.
 	 * Duplicate elements in the collection are automatically handled (only one occurrence is stored).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentSet&lt;String&gt; <jv>set</jv> = <jk>new</jk> FluentSet&lt;&gt;(<jk>new</jk> LinkedHashSet&lt;&gt;());
 	 * 	List&lt;String&gt; <jv>other</jv> = List.of(<js>"item1"</js>, <js>"item2"</js>);
@@ -155,7 +155,7 @@ public class FluentSet<E> extends AbstractSet<E> {
 	 * If the condition is <jk>false</jk>, the element is not added and this method returns <c>this</c>
 	 * without modifying the set.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
 	 * 	<jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;

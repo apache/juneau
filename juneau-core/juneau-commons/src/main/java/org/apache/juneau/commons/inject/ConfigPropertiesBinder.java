@@ -36,12 +36,12 @@ import org.apache.juneau.commons.settings.*;
  * nested type is only materialized if at least one key resolves anywhere under its sub-prefix; otherwise the field
  * is left <jk>null</jk>.
  *
- * <h5 class='section'>Usage</h5>
+ * <h2 class='section'>Usage</h2>
  * <p class='bjava'>
  * 	MyServiceProperties <jv>props</jv> = ConfigPropertiesBinder.<jsm>of</jsm>(<jk>new</jk> MyServiceProperties(), <js>"MyService"</js>).run();
  * </p>
  *
- * <h5 class='section'>Precedence (candidate-major)</h5>
+ * <h2 class='section'>Precedence (candidate-major)</h2>
  * <p>
  * Precedence is <b>candidate-major</b>: each spelling (in {@link RelaxedPropertySource#candidates(String)} order —
  * verbatim, upper-underscore, lower-dotted) is resolved through the full {@link Settings} source chain before the
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.settings.*;
  * first.
  * </p>
  *
- * <h5 class='section'>Caller-scoped sources</h5>
+ * <h2 class='section'>Caller-scoped sources</h2>
  * <p>
  * When a {@link #beanStore(BeanStore)} is supplied, its {@link PropertySource}-typed beans are
  * consulted <b>ahead of</b> the global {@link Settings} chain for each candidate key, but <b>after</b> any
@@ -62,7 +62,7 @@ import org.apache.juneau.commons.settings.*;
  * beans, resolution is identical to binding against {@link #settings(Settings)} alone.
  * </p>
  *
- * <h5 class='section'>Limitation — raw-type conversion only</h5>
+ * <h2 class='section'>Limitation — raw-type conversion only</h2>
  * <p>
  * Unlike {@link Value @Value}, conversion here is keyed on the field's <b>raw</b> {@link Class} (via
  * {@link FieldInfo#getFieldType()}), not its full generic {@link java.lang.reflect.Type}. Generic container types
@@ -70,7 +70,7 @@ import org.apache.juneau.commons.settings.*;
  * field types; use a plain field type instead.
  * </p>
  *
- * <h5 class='section'>Nested fields and circular nesting</h5>
+ * <h2 class='section'>Nested fields and circular nesting</h2>
  * <p>
  * A field whose type is itself {@code @ConfigProperties}-annotated is bound recursively under
  * {@code prefix.fieldName}. The set of nested types along the active recursion path is tracked, and re-entering a
@@ -79,7 +79,7 @@ import org.apache.juneau.commons.settings.*;
  * constructor; if it doesn't, materialization throws a {@link RuntimeException} naming the offending field.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigProperties">@ConfigProperties Annotation Basics</a>
  * </ul>
  *

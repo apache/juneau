@@ -40,7 +40,7 @@ import freemarker.template.utility.*;
  * directive in the render shares one instance. {@code <@console>} serializes it as the {@code #juneau-page}
  * contract.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Inside a custom directive that contributes a card:</jc>
  * 	<jk>public void</jk> execute(Environment <jv>env</jv>, Map <jv>params</jv>, TemplateModel[] <jv>loop</jv>,
@@ -75,7 +75,7 @@ public final class PageCapture {
 	/**
 	 * Mutable header fields; mirrors {@code $defs/header}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jv>page</jv>.header(<jv>h</jv> -&gt; <jv>h</jv>.title(<js>"My App"</js>).logo(<js>"/img/logo.svg"</js>, <js>"/"</js>, <js>"My App"</js>).chrome(<jk>true</jk>));
 	 * </p>
@@ -107,7 +107,7 @@ public final class PageCapture {
 	/**
 	 * Mutable footer fields; mirrors {@code $defs/footer}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jv>page</jv>.footer(<jv>f</jv> -&gt; <jv>f</jv>.text(<js>"Sandbox Support Console"</js>).link(<js>"Docs"</js>, <js>"/docs"</js>));
 	 * </p>

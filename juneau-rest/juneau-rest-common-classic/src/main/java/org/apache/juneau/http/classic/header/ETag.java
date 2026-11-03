@@ -27,12 +27,12 @@ import org.apache.juneau.http.header.*;
  * <p>
  * An identifier for a specific version of a resource, often a message digest.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	ETag: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The ETag response-header field provides the current value of the entity tag for the requested variant.
  * The headers used with entity tags are described in sections 14.24, 14.26 and 14.44.
@@ -50,7 +50,7 @@ import org.apache.juneau.http.header.*;
  * 	ETag: ""
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

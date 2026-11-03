@@ -38,13 +38,13 @@ import org.apache.juneau.console.widgets.Op;
  * present}/{@link Op#ABSENT absent} operators test only whether {@code row[field]} is non-null/non-empty and
  * therefore <b>omit</b> {@code value} from the wire.
  *
- * <h5 class='section'>Presentation only, never the authorization gate:</h5>
+ * <h2 class='section'>Presentation only, never the authorization gate:</h2>
  * <p>
  * A row whose field does not satisfy this rule renders its {@link RowAction} present but disabled, carrying
  * {@link #reason} as a tooltip and {@code aria-describedby} text.  The endpoint behind the action must still
  * perform its own real check and refuse on its own authority; this rule is never a substitute for that check.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link RowAction}
  * </ul>

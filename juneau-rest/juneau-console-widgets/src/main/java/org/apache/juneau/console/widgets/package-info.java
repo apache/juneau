@@ -28,7 +28,7 @@
  * {@link org.apache.juneau.console.widgets.CalendarDef CalendarDef} carries no HTML-emitter code &mdash; pages mount an
  * empty {@code data-juneau-calendar} marker and {@code juneau-calendar.js} hydrates it.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.console.widgets.Widget Widget}
  * 	<li class='jc'>{@link org.apache.juneau.console.widgets.BarSlot BarSlot}

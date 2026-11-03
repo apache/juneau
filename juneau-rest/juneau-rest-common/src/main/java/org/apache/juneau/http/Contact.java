@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * <p>
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Swagger</ja>(
  * 		contact=<ja>@Contact</ja>(
@@ -40,7 +40,7 @@ import java.lang.annotation.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#contactObject">Swagger Contact Object</a>
 
@@ -64,7 +64,7 @@ public @interface Contact {
 	 * <p>
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is an email string.
 	 * 	<li class='note'>
@@ -81,7 +81,7 @@ public @interface Contact {
 	 * <p>
 	 * The identifying name of the contact person/organization.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 	<li class='note'>
@@ -98,7 +98,7 @@ public @interface Contact {
 	 * <p>
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a URL string.
 	 * 	<li class='note'>

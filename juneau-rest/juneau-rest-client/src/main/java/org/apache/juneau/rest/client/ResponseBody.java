@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Obtain instances via {@link RestResponse#body()}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -258,7 +258,7 @@ public final class ResponseBody {
 	 * Transport-specific release behavior varies: this API guarantees that both the response and reader are closed in
 	 * the above order, but the exact connection-release mechanism is determined by the active transport.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li>This cursor is not thread-safe, except for using {@link SseEventReader#close()} as a cancellation signal from another thread.
 	 * 	<li>Mid-stream read failures are surfaced as {@link UncheckedIOException} from {@link SseEventReader#hasNext()} / {@link SseEventReader#next()} (per {@link SseEventReader} contract).
 	 * 	<li>Iterating after close throws.

@@ -23,7 +23,7 @@
  * error carrier. This module carries no protocol-specific knowledge of any kind: it is the shared
  * envelope layer beneath protocol-specific bean modules such as {@code juneau-bean-mcp-v20250618}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonRpc">juneau-bean-jsonrpc</a>
  * </ul>
  */

@@ -32,11 +32,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses Protobuf Text Format into a POJO model.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>text/protobuf, text/x-protobuf</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This parser uses a tokenizer to parse protobuf text format without requiring an intermediate DOM
  * representation.
@@ -74,7 +74,7 @@ import org.apache.juneau.marshall.stream.*;
  * If a <c>_type</c> field is present, an attempt is made to convert the message to the specified
  * Java bean class.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use the default parser to parse into a bean</jc>
  * 	MyBean <jv>bean</jv> = PrototextParser.<jsf>DEFAULT</jsf>.read(<jv>input</jv>, MyBean.<jk>class</jk>);
@@ -87,7 +87,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>input</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Prototext">Protobuf Text Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format Specification</a>
  * </ul>

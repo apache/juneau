@@ -32,7 +32,7 @@ import org.apache.juneau.console.*;
  * {@code {gauge:{species, low, high, dataUrl}}}, which the {@code inventory-gauge} handler in {@code petstore-cards.js}
  * draws.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bftl'>
  * 	&lt;@card id="gauge" type="inventory-gauge" title="Dog inventory"&gt;{species:'DOG', low:20, high:120}&lt;/@card&gt;
  * </p>

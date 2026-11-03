@@ -27,7 +27,7 @@ import freemarker.template.*;
  * The {@code jcHasToolkit(name)} FreeMarker method: whether the current {@code <@page toolkit=…>} lists
  * {@code name}. Lets a chrome check which toolkits are active so it can emit toolkit-specific markup.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;#if jcHasToolkit("views")&gt;
  * 	  &lt;link rel="stylesheet" href="/app/views-extras.css"&gt;

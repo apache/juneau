@@ -23,7 +23,7 @@ package org.apache.juneau.marshall.jena;
  * Accepts RDF in JSON notation and converts it to Java beans, maps, collections, and primitive types.
  * Date/time literals are parsed via ISO 8601.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse RDF/JSON string into a bean.</jc>
  * 	String <jv>rdfJson</jv> = ...;  <jc>// RDF/JSON content</jc>
@@ -43,13 +43,13 @@ package org.apache.juneau.marshall.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>rdfJson</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example input (bean with name/age):</h5>
+ * <h2 class='figure'>Example input (bean with name/age):</h2>
  * <p class='bjson'>
  * 	{ <js>"&lt;subject&gt;"</js>: { <js>"&lt;.../name&gt;"</js>: [{ <js>"value"</js>: <js>"Alice"</js> }],
  * 		<js>"&lt;.../age&gt;"</js>: [{ <js>"value"</js>: 30, <js>"type"</js>: <js>"literal"</js> }] } }
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bjson'>
  * 	{ <js>"&lt;...&gt;"</js>: { <js>"&lt;.../name&gt;"</js>: [{ <js>"value"</js>: <js>"Alice"</js> }],
  * 		<js>"&lt;.../address&gt;"</js>: [{ <js>"type"</js>: <js>"uri"</js>, <js>"value"</js>: <js>".../address"</js> }] },
@@ -57,11 +57,11 @@ package org.apache.juneau.marshall.jena;
  * 		<js>"&lt;.../city&gt;"</js>: [{ <js>"value"</js>: <js>"Boston"</js> }], <js>"&lt;.../state&gt;"</js>: [{ <js>"value"</js>: <js>"MA"</js> }] } }
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

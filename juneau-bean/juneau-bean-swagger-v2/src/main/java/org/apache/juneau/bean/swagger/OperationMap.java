@@ -31,7 +31,7 @@ import org.apache.juneau.commons.utils.*;
  * It forces entries to be sorted in a specific order to ensure consistent output. This map is used within PathItem
  * objects to define the HTTP methods and their corresponding operations.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The OperationMap represents the operations field in a Path Item Object, where each key is an HTTP method and each
  * value is an Operation object. The supported HTTP methods are:
@@ -58,7 +58,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Everything else.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	OperationMap <jv>operations</jv> = <jsm>operationMap</jsm>()
@@ -79,7 +79,7 @@ import org.apache.juneau.commons.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#path-item-object">Swagger 2.0 Specification &gt; Path Item Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

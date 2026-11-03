@@ -23,7 +23,7 @@ package org.apache.juneau.marshall.swap.spi;
  * This interface has no methods to implement.
  * <br>It's purpose is to identify a class as a builder when it's used on a constructor of the built class.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders">POJO Builders</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>

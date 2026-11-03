@@ -27,20 +27,17 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * Base class for all assertion objects.
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li>None
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li>None
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -104,7 +101,7 @@ public class Assertion {
 	 * <p>
 	 * String can contain <js>"{msg}"</js> to represent the original message.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *
@@ -171,7 +168,7 @@ public class Assertion {
 	 * <p>
 	 * If the throwable cannot be instantiated, a {@link RuntimeException} is thrown instead.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 	 *

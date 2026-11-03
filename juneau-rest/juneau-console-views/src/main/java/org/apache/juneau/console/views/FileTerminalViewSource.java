@@ -59,7 +59,7 @@ import org.apache.juneau.terminal.report.*;
  * Only complete lines are read, so a partially written last line never appears.  Keep <b>one instance per file</b>;
  * a new instance re-indexes the file from byte 0.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	FileTerminalViewSource <jv>src</jv> = FileTerminalViewSource.<jsm>create</jsm>(<jv>root</jv>.resolve(<js>"run-42.jsonl"</js>))
  * 		.terminal(() -&gt; <jv>run</jv>.isFinished())

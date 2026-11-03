@@ -26,7 +26,7 @@ import org.apache.juneau.http.*;
  * <p>
  * Specifies to enable debug mode on the current request.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Debug: true
  * </p>
@@ -35,7 +35,7 @@ import org.apache.juneau.http.*;
  * Not part of the RFC2616 specification, but provided to allow for debugging of HTTP requests.
  * <br>It's up to the server to decide whether to honor this header.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

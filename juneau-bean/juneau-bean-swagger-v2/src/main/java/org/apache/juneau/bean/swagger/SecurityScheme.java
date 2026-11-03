@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * Supported schemes are basic authentication, an API key (either as a header or as a query parameter) and OAuth2's
  * common flows (implicit, password, application and access code).
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Security Scheme Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li><c>scopes</c> (map of string) - The available scopes for the OAuth2 security scheme (for <js>"oauth2"</js> type)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjson'>
  * 	<jc>// Basic authentication sample</jc>
  * 	{
@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#security-scheme-object">Swagger 2.0 Specification &gt; Security Scheme Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/authentication/">Swagger Authentication</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

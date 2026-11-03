@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * Responses are returned based on the HTTP status code, with the most common being success responses (2xx), redirects (3xx),
  * client errors (4xx), and server errors (5xx).
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Response Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>links</c> (map of {@link Link}) - A map of operations links that can be followed from the response
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a successful response with JSON content</jc>
  * 	Response <jv>response</jv> = <jk>new</jk> Response()
@@ -66,7 +66,7 @@ import org.apache.juneau.commons.collections.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#response-object">OpenAPI Specification &gt; Response Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-responses/">OpenAPI Describing Responses</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

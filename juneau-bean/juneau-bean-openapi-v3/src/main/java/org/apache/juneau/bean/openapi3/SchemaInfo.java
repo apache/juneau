@@ -34,7 +34,7 @@ import org.apache.juneau.commons.collections.*;
  * This object is an extended subset of the JSON Schema Specification Draft 4, with additional extensions provided
  * by the OpenAPI Specification to allow for more complete documentation.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Schema Object supports all properties from JSON Schema Draft 4, including but not limited to:
  * <ul class='spaced-list'>
@@ -74,7 +74,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>deprecated</c> (boolean) - Specifies that the schema is deprecated (OpenAPI extension)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a schema for a Pet object</jc>
  * 	SchemaInfo <jv>schema</jv> = <jk>new</jk> SchemaInfo()
@@ -89,7 +89,7 @@ import org.apache.juneau.commons.collections.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#schema-object">OpenAPI Specification &gt; Schema Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/data-models/">OpenAPI Data Models</a>
  * 	<li class='link'><a class="doclink" href="https://json-schema.org/">JSON Schema Specification</a>
@@ -201,12 +201,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Object</code>
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	allOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
@@ -229,12 +229,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Object</code>
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	anyOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	anyOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
@@ -257,12 +257,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Object</code>
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	enum_(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	enum_(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
@@ -285,12 +285,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Object</code>
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	oneOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	oneOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
@@ -328,12 +328,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<ul>
 	 * 		<li><code>Collection&lt;String&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
-	 * 			<h5 class='figure'>Example:</h5>
+	 * 			<h4 class='figure'>Example:</h4>
 	 * 			<p class='bcode'>
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
 	 * 			</p>

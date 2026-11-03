@@ -31,7 +31,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * {@code params._meta}) without that adapter depending on OpenTelemetry. The adapter depends only on
  * this class and the installed {@link TracerHook}.
  *
- * <h5 class='topic'>Off-by-default contract</h5>
+ * <h2 class='topic'>Off-by-default contract</h2>
  *
  * <p>
  * {@link #inject(TracerHook, TraceContextCarrier)} does nothing but null-check its arguments and
@@ -41,7 +41,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * OpenTelemetry bridge in {@code juneau-rest-server-tracing-otel}) writes {@code traceparent} /
  * {@code tracestate} / {@code baggage} keys.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link TraceContextCarrier}
  * 	<li class='jc'>{@link TracerHook}
  * 	<li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>

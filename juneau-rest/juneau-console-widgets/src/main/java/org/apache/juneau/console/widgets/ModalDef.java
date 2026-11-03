@@ -26,13 +26,13 @@ import org.apache.juneau.commons.bean.*;
  * The declarative modal (dialog) a {@code present=dialog} row action opens &mdash; the payload the
  * <b>modal-open confirmation fetch</b> returns.
  *
- * <h5 class='section'>A widget contract driven by a view-module runtime</h5>
+ * <h2 class='section'>A widget contract driven by a view-module runtime</h2>
  * <p>
  * This bean is a general widget contract and lives in this module, but the browser runtime that paints it ships with
  * the rich-view module (it is part of that module's {@code juneau-views.js} monolith, which is not split apart here).
  * So a page that opens one of these dialogs loads the view runtime; nothing in this module reaches back to it.
  *
- * <h5 class='section'>Safe-by-construction confirmation body</h5>
+ * <h2 class='section'>Safe-by-construction confirmation body</h2>
  * <p>
  * The confirmation body is <b>typed structured fields</b> ({@link #fields}: incident #, title, service, current
  * status &mdash; the confirmation field set), server-rendered against the current, authoritative record and
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.*;
  * origin holds the CSRF token, so an HTML sink here would be stored-XSS&nbsp;&rarr;&nbsp;token-theft&nbsp;&rarr;
  * arbitrary-write; typed fields painted with {@code textContent} close that off by construction.
  *
- * <h5 class='section'>The idempotency key rides here</h5>
+ * <h2 class='section'>The idempotency key rides here</h2>
  * <p>
  * {@link #idempotencyKey} is a server-minted key value, minted at modal-open and bound to
  * {@code (action, targetId)}.  The runtime carries it verbatim on the submit so a double-click / re-submit / browser
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.bean.*;
  * refusal, never a replayed success.  The minting/binding helper itself is a table-and-row-action concern and stays
  * in the rich-view module, which is why this field is a plain {@code String} rather than that helper's type.
  *
- * <h5 class='section'>{@link #selfTargeted} &mdash; the opt-in for a key that targets itself</h5>
+ * <h2 class='section'>{@link #selfTargeted} &mdash; the opt-in for a key that targets itself</h2>
  * <p>
  * A dialog opened where there is <b>no row</b> (a ribbon-hosted dialog whose submit creates the thing it is about)
  * has no artifact id to bind its key to at modal-open.  The rich-view module's key helper can mint a key whose
@@ -66,7 +66,7 @@ import org.apache.juneau.commons.bean.*;
  * Set it <b>only</b> on a modal whose key came from the self-targeted mint helper.  Setting it on a modal carrying
  * an artifact-bound key silently discards the real target and makes the server's binding check vacuous.
  *
- * <h5 class='section'>{@link #keepOpenOnSubmit} &mdash; the opt-in for an in-dialog result receipt</h5>
+ * <h2 class='section'>{@link #keepOpenOnSubmit} &mdash; the opt-in for an in-dialog result receipt</h2>
  * <p>
  * By default the runtime closes a dialog at confirm-click time and then submits, so every dialog is gone before its
  * result exists.  {@link #keepOpenOnSubmit} suppresses that close, and the runtime instead paints the write's
@@ -85,7 +85,7 @@ import org.apache.juneau.commons.bean.*;
  * Additive, and named degradation, accepted: an older runtime ignoring this flag closes the dialog and drops the
  * receipt.  The write still happens; the receipt is simply not shown.
  *
- * <h5 class='section'>{@link #childActions} &mdash; the dialog-scoped child-action catalog</h5>
+ * <h2 class='section'>{@link #childActions} &mdash; the dialog-scoped child-action catalog</h2>
  * <p>
  * A {@code type="action"} form input names an action id, and the runtime resolves it against the enclosing view's
  * row-action catalog.  A <b>stacked</b> step reached from inside an already-open dialog (a Review step in a wizard)
@@ -97,7 +97,7 @@ import org.apache.juneau.commons.bean.*;
  * rot.  Resolution precedence is likewise fail-safe: the existing row-action check runs <b>first</b> and unchanged,
  * so a served payload can never shadow &mdash; and thereby bypass the gating of &mdash; a declared row action.
  *
- * <h5 class='section'>{@link #chrome} and {@link #steps} &mdash; dialog styling and a built-in wizard</h5>
+ * <h2 class='section'>{@link #chrome} and {@link #steps} &mdash; dialog styling and a built-in wizard</h2>
  * <p>
  * {@link #chrome} names a dialog chrome the page script registered with the runtime; the runtime hands that chrome the
  * freshly built dialog parts so it can restyle them.  An unregistered name is ignored and the default chrome is kept.
@@ -106,7 +106,7 @@ import org.apache.juneau.commons.bean.*;
  * buttons, and the last step's button is the dialog's own confirm.  Both are additive-only and omitted from the wire
  * when unset, so neither bumps {@link #CONTRACT_VERSION}.
  *
- * <h5 class='section'>{@link #nav} &mdash; the inner-navigation style</h5>
+ * <h2 class='section'>{@link #nav} &mdash; the inner-navigation style</h2>
  * <p>
  * {@link #nav} picks how the runtime draws the section strip of a {@link FormDef#sections sectioned} form:
  * {@link #NAV_PILL} (the default) or {@link #NAV_FOLDER} (square-topped folder tabs).  A wizard needs no value here:
@@ -114,14 +114,14 @@ import org.apache.juneau.commons.bean.*;
  * strip.  {@link #validate()} rejects any other value; the runtime still treats an unknown one as {@link #NAV_PILL}.
  * Additive-only and omitted from the wire when unset, so it does not bump {@link #CONTRACT_VERSION}.
  *
- * <h5 class='section'>Not a new row-action wire field</h5>
+ * <h2 class='section'>Not a new row-action wire field</h2>
  * <p>
  * This is the response a row action's form-source URL returns, <b>not</b> a new field on the frozen row-action wire
  * schema: the modal's declaration lives in this separately-served payload so the row-action contract stays frozen.
  * The same reasoning is why {@link #keepOpenOnSubmit} and {@link #childActions} land here rather than on
  * {@code RowAction} / {@code RibbonAction}, which stay frozen and untouched.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ModalDef <jv>modal</jv> = ModalDef.<jsm>create</jsm>(<js>"Acknowledge this incident?"</js>)
  * 		.field(<js>"Incident"</js>, <jv>incidentNumber</jv>)
@@ -132,13 +132,13 @@ import org.apache.juneau.commons.bean.*;
  * 		.idempotencyKey(<jv>keyValue</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link FormDef}
  * 	<li class='jc'>{@link Widget}
  * </ul>
  *
- * <h5 class='section'>The third named bar-slot host</h5>
+ * <h2 class='section'>The third named bar-slot host</h2>
  * <p>
  * {@link #barSlot} is the <i>third</i> named {@link BarSlot} attachment &mdash; alongside the rich-view module's page
  * and row-detail hosts (that module never depends on this one, so they are not linked here).  Unlike those two
@@ -328,12 +328,12 @@ public class ModalDef implements Widget {
 	 * One entry in a dialog's {@link ModalDef#childActions} catalog &mdash; a stacked step a {@code type="action"}
 	 * input inside <i>this</i> dialog's form may open.
 	 *
-	 * <h5 class='section'>Dialog-presenting by construction</h5>
+	 * <h2 class='section'>Dialog-presenting by construction</h2>
 	 * <p>
 	 * A child action carries no {@code present} field: opening a stacked dialog is the only thing it does.  A child
 	 * with no {@link #form} is a legal confirm-only child dialog.
 	 *
-	 * <h5 class='section'>No gating vocabulary, on purpose</h5>
+	 * <h2 class='section'>No gating vocabulary, on purpose</h2>
 	 * <p>
 	 * There is deliberately no {@code enabledWhen} here, for three independent reasons.  The rule type lives in the
 	 * rich-view module, which this module must not reference.  A dialog opened where there is no row has no row data

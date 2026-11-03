@@ -39,11 +39,11 @@ import org.apache.juneau.marshall.stream.*;
  * comments, trailing commas, and unquoted keys are rejected. For JSON5 syntax (single quotes, comments,
  * etc.), use {@link Json5Parser}.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/json, text/json, application/jcs+json</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * time that it takes the built-in Java DOM parsers to parse equivalent XML.
@@ -102,21 +102,21 @@ import org.apache.juneau.marshall.stream.*;
  * JsonList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  *
- * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <h2 class='figure'>Example input (Map of name/age):</h2>
  * <p class='bjson'>
  * 	{<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30}
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bjson'>
  * 	{<js>"name"</js>:<js>"Alice"</js>,<js>"age"</js>:30,<js>"address"</js>:{<js>"street"</js>:<js>"123 Main St"</js>,<js>"city"</js>:<js>"Boston"</js>,<js>"state"</js>:<js>"MA"</js>},<js>"tags"</js>:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
  * 	<li class='link'>{@link Json5Parser} - For JSON5 syntax (single quotes, comments, etc.)
  * </ul>
@@ -202,7 +202,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenR
 		 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
 		 * the stream consists of only comments or whitespace.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser.

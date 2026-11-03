@@ -29,12 +29,12 @@ import org.apache.juneau.commons.utils.*;
  * This class extends {@link Holder}&lt;{@link Long}&gt; and adds a convenience method for incrementing
  * the value, which is useful for counting operations in lambdas and loops.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link AtomicLong} instead.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
  * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>create</jsm>();
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>log</jsm>(<js>"Valid items: "</js> + <jv>counter</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -61,7 +61,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Creates a new long value initialized to <c>0</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0L, <jv>counter</jv>.get());
@@ -76,7 +76,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Creates a new long value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(42L);
 	 * 	<jsm>assertEquals</jsm>(42L, <jv>counter</jv>.get());
@@ -101,7 +101,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Adds the specified value to the current value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(10L);
 	 * 	<jv>value</jv>.add(5L);
@@ -120,7 +120,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Adds the specified value to the current value and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(10L);
 	 * 	<jk>long</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5L);  <jc>// Returns 15L</jc>
@@ -140,7 +140,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Decrements the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jv>counter</jv>.decrement();
@@ -158,7 +158,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Decrements the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jk>long</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4L</jc>
@@ -177,7 +177,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Returns the current value and then increments it.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jk>long</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5L</jc>
@@ -195,7 +195,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Increments the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jv>counter</jv>.increment();
@@ -213,7 +213,7 @@ public class LongHolder extends Holder<Long> {
 	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>counter</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jk>long</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6L</jc>
@@ -235,7 +235,7 @@ public class LongHolder extends Holder<Long> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(42L);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(42L));
@@ -256,7 +256,7 @@ public class LongHolder extends Holder<Long> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LongHolder <jv>value</jv> = LongHolder.<jsm>of</jsm>(5L);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3L, 5L, 7L));

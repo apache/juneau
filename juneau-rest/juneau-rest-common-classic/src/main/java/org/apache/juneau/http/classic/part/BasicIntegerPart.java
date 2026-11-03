@@ -26,7 +26,7 @@ import org.apache.juneau.bct.assertions.*;
 /**
  * A {@link NameValuePair} that consists of a single integer value.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

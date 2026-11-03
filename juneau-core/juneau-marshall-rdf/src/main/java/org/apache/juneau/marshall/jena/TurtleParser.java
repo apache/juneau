@@ -23,7 +23,7 @@ package org.apache.juneau.marshall.jena;
  * Accepts RDF in W3C Turtle format and converts it to Java beans, maps, collections, and primitive
  * types. Date/time literals are parsed via ISO 8601.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse Turtle string into a bean.</jc>
  * 	String <jv>turtle</jv> = ...;  <jc>// Turtle content</jc>
@@ -43,13 +43,13 @@ package org.apache.juneau.marshall.jena;
  * 	MyBean <jv>bean</jv> = <jv>p</jv>.read(<jv>turtle</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example input (bean with name/age):</h5>
+ * <h2 class='figure'>Example input (bean with name/age):</h2>
  * <p class='bcode'>
  * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 .
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bcode'>
  * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
@@ -58,11 +58,11 @@ package org.apache.juneau.marshall.jena;
  * 		j:city "Boston" ; j:state "MA" .
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

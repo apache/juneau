@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.utils.*;
  * <p>
  * All serializers and parsers use this context so that they can handle POJOs using a common framework.
  *
- * <h5 class='topic'>Bean Contexts</h5>
+ * <h2 class='topic'>Bean Contexts</h2>
  *
  * <p>
  * Bean contexts are created through the {@link MarshallingContext#create() MarshallingContext.create()} and {@link Builder#build()} methods.
@@ -85,7 +85,7 @@ import org.apache.juneau.marshall.utils.*;
  * classes only needs to be calculated once.
  * Because of this, many of the properties defined on the {@link MarshallingContext} class cannot be overridden on the session.
  *
- * <h5 class='topic'>Bean Sessions</h5>
+ * <h2 class='topic'>Bean Sessions</h2>
  *
  * <p>
  * Whereas <c>MarshallingContext</c> objects are permanent, unchangeable, cached, and thread-safe,
@@ -93,7 +93,7 @@ import org.apache.juneau.marshall.utils.*;
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
  * {@link BeanMap} objects can only be created through the session.
  *
- * <h5 class='topic'>MarshallingContext configuration properties</h5>
+ * <h2 class='topic'>MarshallingContext configuration properties</h2>
  *
  * <p>
  * <c>BeanContexts</c> have several configuration properties that can be used to tweak behavior on how beans are
@@ -113,7 +113,7 @@ import org.apache.juneau.marshall.utils.*;
  * <p>
  * Some settings (e.g. {@link Builder#beanMapPutReturnsOldValue()}) change the runtime behavior of bean maps.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  *
  * <p class='bjava'>
  * 	<jc>// Construct a context from scratch.</jc>
@@ -124,7 +124,7 @@ import org.apache.juneau.marshall.utils.*;
  * 		.build();
  * </p>
  *
- * <h5 class='topic'>Bean Maps</h5>
+ * <h2 class='topic'>Bean Maps</h2>
  *
  * <p>
  * {@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
@@ -139,7 +139,7 @@ import org.apache.juneau.marshall.utils.*;
  * 		{@code Map} wrapper.
  * </ol>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  *
  * <p class='bjava'>
  * 	<jc>// A sample bean class</jc>
@@ -165,11 +165,11 @@ import org.apache.juneau.marshall.utils.*;
  * 	Person <jv>person</jv> = <jv>map2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContexts">Bean Contexts</a>
  * </ul>
  */
@@ -434,7 +434,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * will not be interpreted as a bean class and be serialized as a string.
 		 * Use this setting to reduce the visibility requirement.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected class and one field.</jc>
 		 * 	<jk>protected class</jk> MyBean {
@@ -451,12 +451,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a non-public bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanClassVisibility()}
 		 * </ul>
 		 *
@@ -481,7 +481,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This setting affects the logic for finding no-arg constructors for bean.  Normally, only <jk>public</jk> no-arg
 		 * constructors are used.  Use this setting if you want to reduce the visibility requirement.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected constructor and one field.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -500,12 +500,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanCtor @BeanCtor} annotation can also be used to expose a non-public constructor.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanConstructorVisibility()}
 		 * </ul>
 		 *
@@ -575,7 +575,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>Any array or collection of the objects above.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
 		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
@@ -625,7 +625,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	Body <jv>body</jv> = <jv>parser</jv>.read(<js>"&lt;body&gt;&lt;ul&gt;&lt;li&gt;foo&lt;/li&gt;&lt;li&gt;bar&lt;/li&gt;&lt;/ul&gt;"</js>, Body.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 		 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
@@ -668,7 +668,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This affects which fields on a bean class are considered bean properties.  Normally only <jk>public</jk> fields are considered.
 		 * Use this setting if you want to reduce the visibility requirement.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected field.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -696,12 +696,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used to expose a non-public field.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanFieldVisibility()}
 		 * </ul>
 		 *
@@ -722,7 +722,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Interceptor that strips out sensitive information.</jc>
 		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
@@ -756,7 +756,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> Address());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jc'>{@link BeanInterceptor}
 		 * 	<li class='ja'>{@link Marshalled#interceptor() @Marshalled(interceptor)}
 		 * </ul>
@@ -784,7 +784,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Disabled by default because it introduces a slight performance penalty during serialization.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a context that creates BeanMaps with normal put() behavior.</jc>
 		 * 	MarshallingContext <jv>context</jv> = MarshallingContext
@@ -797,7 +797,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	Object <jv>oldValue</jv> = <jv>myBeanMap</jv>.put(<js>"foo"</js>, <js>"baz"</js>);  <jc>// oldValue == "bar"</jc>
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanMapPutReturnsOldValue()}
 		 * </ul>
 		 *
@@ -828,7 +828,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This affects which methods are detected as getters and setters on a bean class. Normally only <jk>public</jk> getters and setters are considered.
 		 * Use this setting if you want to reduce the visibility requirement.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected getter.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -846,12 +846,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used to expose a non-public method.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beanMethodVisibility()}
 		 * </ul>
 		 *
@@ -886,7 +886,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -912,7 +912,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#properties()}/{@link BeanType#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -949,7 +949,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -975,7 +975,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#properties()} / {@link BeanType#p()}- On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -1013,7 +1013,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1039,7 +1039,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#properties()} / {@link BeanType#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
@@ -1069,7 +1069,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1095,7 +1095,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
@@ -1124,7 +1124,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1150,7 +1150,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
@@ -1180,7 +1180,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1206,7 +1206,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#excludeProperties()} / {@link BeanType#xp()}
 		 * </ul>
 		 *
@@ -1233,7 +1233,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 		 * for both serializers and parsers.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1266,7 +1266,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
@@ -1291,7 +1291,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 		 * for both serializers and parsers.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1324,7 +1324,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
@@ -1350,7 +1350,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 		 * for both serializers and parsers.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1383,7 +1383,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#readOnlyProperties()} / {@link BeanType#ro()}
 		 * </ul>
 		 *
@@ -1408,7 +1408,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 		 * for both serializers and parsers.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1440,7 +1440,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
@@ -1465,7 +1465,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 		 * for both serializers and parsers.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1497,7 +1497,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
@@ -1523,7 +1523,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Note that this is different from the {@link #beanProperties(Class,String) beanProperties}/{@link #beanPropertiesExcludes(Class,String) beanPropertiesExcludes} settings which include or exclude properties
 		 * for both serializers and parsers.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1555,7 +1555,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link BeanType#writeOnlyProperties()} / {@link BeanType#wo()}
 		 * </ul>
 		 *
@@ -1578,7 +1578,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, a Java class must implement a default no-arg constructor to be considered a bean.
 		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean without a no-arg constructor.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1607,12 +1607,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beansRequireDefaultConstructor()}
 		 * </ul>
 		 *
@@ -1640,7 +1640,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, a Java class must implement the {@link Serializable} interface to be considered a bean.
 		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean without a Serializable interface.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1664,12 +1664,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on a bean class to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#beansRequireSerializable()}
 		 * </ul>
 		 *
@@ -1696,7 +1696,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * When enabled, ignore read-only properties (properties with getters but not setters).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean without a Serializable interface.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1719,7 +1719,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can be used on the getter to override this setting.
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
@@ -1754,7 +1754,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Typically set to a {@code SpringBeanStore} wrapping the application's
 		 * {@code ApplicationContext} so that Spring-managed factories are resolved automatically.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>public class</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
 		 * 		<ja>@Autowired</ja> ApplicationContext <jv>ctx</jv>;
@@ -1801,7 +1801,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This is identical to {@link #beanDictionary(Class...)}, but specifies a dictionary within the context of
 		 * a single class as opposed to globally.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
 		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
@@ -1827,7 +1827,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * This is functionally equivalent to the {@link Marshalled#dictionary()} annotation.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jma'>{@link Marshalled#dictionary()}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
@@ -1853,7 +1853,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * The {@link Bean @Marshalled} annotation can be used on a class to override this setting when <jk>true</jk>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with no properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1869,12 +1869,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link Bean @Marshalled} annotation can be used on the class to force it to be recognized as a bean class
 		 * 		even if it has no properties.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableBeansRequireSomeProperties()}
 		 * </ul>
 		 *
@@ -1902,7 +1902,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, trying to set a value on a bean property without a setter will throw a {@link BeanRuntimeException}.
 		 * Otherwise, it will be silently ignored.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1921,11 +1921,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreMissingSetters()}
 		 * </ul>
 		 *
@@ -1952,7 +1952,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a transient field.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -1969,11 +1969,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreTransientFields()}
 		 * </ul>
 		 *
@@ -2001,7 +2001,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@link BeanRuntimeException}.
 		 * Otherwise it will be silently ignored.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2018,7 +2018,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:null}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableIgnoreUnknownNullBeanProperties()}
 		 * </ul>
 		 *
@@ -2047,7 +2047,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * {@link InvocationHandler} if there is no other way of instantiating them.
 		 * Otherwise, throws a {@link BeanRuntimeException}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#disableInterfaceProxies()}
 		 * </ul>
 		 *
@@ -2080,7 +2080,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Setting applies to specified class and all subclasses.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -2103,7 +2103,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link MarshallingSession} argument.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#example()}
 		 * </ul>
 		 *
@@ -2127,7 +2127,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Examples are used in cases such as POJO examples in Swagger documents.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -2142,7 +2142,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(Json5.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
 		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
 		 * </ul>
@@ -2183,7 +2183,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>Return the bean itself.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a fluent setter.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2200,12 +2200,12 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>);
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanProp @BeanProp} annotation can also be used on methods to individually identify them as fluent setters.
 		 * 	<li class='note'>The {@link BeanType#findFluentSetters() @BeanType.findFluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#findFluentSetters()}
 		 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
 		 * </ul>
@@ -2233,7 +2233,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a fluent setter.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2250,11 +2250,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>);
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This method is functionally equivalent to using the {@link BeanType#findFluentSetters()} annotation.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#findFluentSetters()}
 		 * 	<li class='jm'>{@link #findFluentSetters()}
 		 * </ul>
@@ -2347,14 +2347,14 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This value can be overridden per serialization or parse call via the session builder (e.g.
 		 * {@link MarshallingSession.Builder#activeView(String)}).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>()
 		 * 		.activeView(<js>"summary"</js>)
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledProp#view()}
 		 * 	<li class='jm'>{@link MarshallingSession.Builder#activeView(String)}
 		 * </ul>
@@ -2377,7 +2377,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Calling this method reverses the policy: untagged properties are <em>excluded</em> when any active view
 		 * is set.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledProp#view()}
 		 * 	<li class='jm'>{@link #activeView(String)}
 		 * </ul>
@@ -2408,7 +2408,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, errors thrown when calling bean getter methods will silently be ignored.
 		 * Otherwise, a {@code BeanRuntimeException} is thrown.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a property that throws an exception.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2427,7 +2427,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnGetters()}
 		 * </ul>
 		 *
@@ -2455,7 +2455,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, errors thrown when calling bean setter methods will silently be ignored.
 		 * Otherwise, a {@code BeanRuntimeException} is thrown.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a property that throws an exception.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2474,7 +2474,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreInvocationExceptionsOnSetters()}
 		 * </ul>
 		 *
@@ -2502,7 +2502,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * When enabled, trying to set a value on a non-existent bean property will silently be ignored.
 		 * Otherwise, a {@code BeanRuntimeException} is thrown.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2519,7 +2519,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.read(<js>"{foo:'foo',bar:'bar'}"</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownBeanProperties()}
 		 * </ul>
 		 *
@@ -2558,7 +2558,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * If {@code juneau-bean-jsonschema} is not on the classpath, this flag becomes a silent no-op.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a length-constrained property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2572,7 +2572,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<jv>p</jv>.read(<js>"{name:'a'}"</js>, MyBean.<jk>class</jk>);  <jc>// throws ParseException - too short</jc>
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#validateSchema()}
 		 * </ul>
 		 *
@@ -2601,7 +2601,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * When enabled, unknown enum values will be set to <jk>null</jk> instead of throwing an exception.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownEnumValues()}
 		 * </ul>
 		 *
@@ -2630,7 +2630,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 		 * parse).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean interface.</jc>
 		 * 	<jk>public interface</jk> MyBean {
@@ -2672,7 +2672,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 		 * parse).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public interface</jk> MyBean {
@@ -2737,7 +2737,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 		 * individually on the child classes.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
@@ -2786,7 +2786,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This annotation can be used on the parent class so that it filters to all child classes, or can be set
 		 * individually on the child classes.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanType#interfaceClass() @BeanType(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
@@ -2811,7 +2811,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and
 		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
@@ -2831,7 +2831,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#locale()}
 		 * 	<li class='jm'>{@link MarshallingSession.Builder#locale(Locale)}
 		 * </ul>
@@ -2855,7 +2855,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * and <js>"application/json+foo"</js> slightly differently even though they're both being handled by the same JSON
 		 * serializer or parser.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
@@ -2874,7 +2874,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#mediaType()}
 		 * 	<li class='jm'>{@link MarshallingSession.Builder#mediaType(MediaType)}
 		 * </ul>
@@ -2929,7 +2929,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>Arrays and collections of classes.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -2950,11 +2950,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanIgnore}
 		 * 	<li class='ja'>{@link BeanConfig#notBeanClasses()}
 		 * </ul>
@@ -3030,7 +3030,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>Arrays and collections of strings.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -3061,7 +3061,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -3079,7 +3079,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#propertyNamer() @BeanType(propertyNamer)}
 		 * 	<li class='jm'>{@link #propertyNamer(Class)}
 		 * </ul>
@@ -3112,7 +3112,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>{@link PropertyNamerULC} - Dashed-upper-case names.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -3147,7 +3147,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * By default, all bean properties are serialized and accessed in alphabetical order.
 		 * Calling this method opts out of that behavior so that declaration order is used instead: record component order for records, field declaration order (superclass first) for other classes, then method-only properties alphabetically.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
@@ -3166,7 +3166,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link BeanType#unsorted() @BeanType.unsorted()} annotation can also be used to opt out of sorting on a single class.
 		 * </ul>
 		 *
@@ -3195,7 +3195,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * records keep their component (declaration) order, even when other beans are sorted.  Non-record beans are
 		 * unaffected.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>public record</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {}
 		 *
@@ -3208,7 +3208,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> Person(<js>"Alice"</js>, 30));
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jm'>{@link #unsortedProperties()} (declaration order for every bean, records included)
 		 * 	<li class='ja'>{@link BeanConfig#recordComponentOrder()}
 		 * </ul>
@@ -3237,7 +3237,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Applies the {@link BeanType#unsorted() @BeanType(unsorted=true)} annotation to the specified classes,
 		 * overriding the default sorted behavior for those specific beans.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#unsorted() @BeanType(unsorted)}
 		 * </ul>
 		 *
@@ -3263,7 +3263,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * For example, in the following class hierarchy, instances of <c>C3</c> will include property <c>p3</c>,
 		 * but not <c>p1</c> or <c>p2</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>public class</jk> C1 {
 		 * 		<jk>public int</jk> getP1();
@@ -3303,7 +3303,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		/**
 		 * A shortcut for defining a {@link FunctionalSwap}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -3333,7 +3333,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		/**
 		 * A shortcut for defining a {@link FunctionalSwap}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -3419,7 +3419,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	<li>Any array or collection of the objects above.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 		 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
@@ -3461,7 +3461,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
 		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
 		 * </ul>
@@ -3492,7 +3492,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * objects to strings by accessing it via the session passed into the {@link ObjectSwap#swap(MarshallingSession, Object)} and
 		 * {@link ObjectSwap#unswap(MarshallingSession, Object, ClassMeta, String)} methods.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
@@ -3511,7 +3511,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#timeZone()}
 		 * 	<li class='jm'>{@link MarshallingSession.Builder#timeZone(TimeZone)}
 		 * </ul>
@@ -3794,7 +3794,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * It is also used to specify element names in XML.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
 		 * 	<jk>public class</jk> MyBean {...}
@@ -3809,11 +3809,11 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>Equivalent to the {@link Marshalled#typeName() @Marshalled(typeName)} annotation.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='jc'>{@link Marshalled#typeName() @Marshalled(typeName)}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
@@ -3838,7 +3838,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * <p>
 		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
 		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
@@ -3862,7 +3862,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean());
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#typePropertyName() @Marshalled(typePropertyName)}
 		 * </ul>
 		 *
@@ -3887,7 +3887,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 		 * parser knows the data type to reconstruct.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Marshalled(name) annotations.</jc>
 		 * 	<ja>@Marshalled</ja>(typeName=<js>"foo"</js>)
@@ -3921,7 +3921,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#typePropertyName()}
 		 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
 		 * </ul>
@@ -3944,7 +3944,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 		 * <br>Most {@link Bean @Marshalled} annotations will be ignored.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -4882,7 +4882,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><code>getClassMeta(String.<jk>class</jk>);</code> - A normal type.
 	 * 	<li><code>getClassMeta(List.<jk>class</jk>);</code> - A list containing objects.
@@ -5085,8 +5085,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	/**
 	 * Find fluent setters.
 	 *
-	 * <h5 class='section'>Description:</h5>
-	 * <p>
+	 * <h4 class='section'>Description:</h4>
 	 *
 	 * @see MarshallingContext.Builder#findFluentSetters()
 	 * @return
@@ -5203,7 +5202,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * <p>
 	 * This is a shortcut for the following code:  <c>createSession().build().newBeanMap(<jv>_class</jv>);</c>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
@@ -5226,7 +5225,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * <p>
 	 * This is a shortcut for the following code:  <c>createSession().build().toBeanMap(<jv>object</jv>);</c>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
 	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = MarshallingContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());

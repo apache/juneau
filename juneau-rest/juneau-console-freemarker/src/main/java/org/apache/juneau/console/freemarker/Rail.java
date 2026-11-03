@@ -28,7 +28,7 @@ import java.util.*;
  * as a collapsible "Filters" disclosure.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Rail.<jsm>left</jsm>().width(280).sections(SearchSection.<jsm>create</jsm>().publishes(Topics.<jsm>filter</jsm>(<js>"search"</js>)));
  * </p>

@@ -43,7 +43,7 @@ import java.lang.annotation.*;
  * 	<li><b>CONSTRUCTOR</b> — excludes the constructor from constructor detection.
  * </ul>
  *
- * <h5 class='section'>Java Records:</h5>
+ * <h2 class='section'>Java Records:</h2>
  * <p>
  * Ignoring individual record components is not supported during parsing. Because records are
  * immutable, all components must be provided to the canonical constructor. Applying this
@@ -51,7 +51,7 @@ import java.lang.annotation.*;
  * output, but the parser will be unable to instantiate the record if the component value is missing
  * from the input.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanIgnoreAnnotation">@BeanIgnore Annotation</a>
  * </ul>
  */

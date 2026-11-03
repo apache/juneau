@@ -32,7 +32,7 @@ import org.apache.juneau.http.classic.*;
  * In a GET request, the response will contain an entity corresponding to the requested resource.
  * In a POST request, the response will contain an entity describing or containing the result of the action.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

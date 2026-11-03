@@ -32,7 +32,7 @@ import org.junit.jupiter.api.extension.*;
  * {@link Microservice} (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with
  * {@link TestBean @TestBean} mock-bean injection and convenience parameter resolution.
  *
- * <h5 class='topic'>Lifecycle (per class)</h5>
+ * <h2 class='topic'>Lifecycle (per class)</h2>
  *
  * <p>
  * The microservice is built + {@link Microservice#start() started} once in {@code beforeAll} and
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.extension.*;
  * one-way, the bean store is closed, and each {@code start()} adds a JVM shutdown hook). The bound port is read
  * from the live {@link ServerConnector} (never hard-coded), mirroring the established fixture pattern.
  *
- * <h5 class='topic'>Mock-bean injection</h5>
+ * <h2 class='topic'>Mock-bean injection</h2>
  *
  * <p>
  * {@link TestBean @TestBean} declarations are discovered via
@@ -50,7 +50,7 @@ import org.junit.jupiter.api.extension.*;
  * them from startup. <b>Mode OVERLAY</b> pushes the overrides onto the booted instance's bean store for the
  * class duration and pops them in teardown.
  *
- * <h5 class='topic'>Parameter resolution</h5>
+ * <h2 class='topic'>Parameter resolution</h2>
  *
  * <p>
  * Resolves {@link RestClient} (bound to the booted root URL), {@link Microservice}, {@link WritableBeanStore},

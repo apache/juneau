@@ -29,8 +29,7 @@ import org.apache.juneau.commons.function.*;
 /**
  * Used for fluent assertion calls against byte arrays.
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentPrimitiveArrayAssertion}
  * 	<ul class='javatreec'>
@@ -61,8 +60,7 @@ import org.apache.juneau.commons.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentByteArrayAssertion}
  * 	<ul class='javatreec'>
@@ -86,8 +84,7 @@ import org.apache.juneau.commons.function.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -99,7 +96,7 @@ import org.apache.juneau.commons.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *
@@ -146,7 +143,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	/**
 	 * Converts this byte array to a base-64 encoded string and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asBase64().is(<js>"Zm9v"</js>);
@@ -161,7 +158,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	/**
 	 * Converts this byte array to hexadecimal and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asHex().is(<js>"666F6F"</js>);
@@ -176,7 +173,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	/**
 	 * Converts this byte array to spaced hexadecimal and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asSpacedHex().is(<js>"66 6F 6F"</js>);
@@ -191,7 +188,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	/**
 	 * Converts this byte array to a UTF-8 encoded string and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar".</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString().is(<js>"foobar"</js>);
@@ -207,7 +204,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	/**
 	 * Converts this byte array to a string and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar" encoded in ASCII.</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);

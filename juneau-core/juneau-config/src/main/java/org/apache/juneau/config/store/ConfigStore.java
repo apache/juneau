@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.*;
  * 	<li class='jm'>{@link #write(String,String,String)} - Store a config file.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
 */

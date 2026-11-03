@@ -31,7 +31,7 @@
  * compile-time dependency on a specific engine, and lets host code interoperate with multiple
  * bridge modules in the same application.
  *
- * <h5 class='topic'>Renderer auto-prepend</h5>
+ * <h2 class='topic'>Renderer auto-prepend</h2>
  *
  * <p>
  * Any {@link org.apache.juneau.rest.server.processor.ResponseProcessor ResponseProcessor} implementing

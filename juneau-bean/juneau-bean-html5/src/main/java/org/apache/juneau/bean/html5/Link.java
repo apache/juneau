@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.*;
  * prefetch resources, define alternate versions of the document, and more. Link elements are typically
  * placed in the head section of an HTML document.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Stylesheet link</jc>
  * 	Link <jv>stylesheet</jv> = <jsm>link</jsm>()
@@ -82,9 +82,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#link() link()}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

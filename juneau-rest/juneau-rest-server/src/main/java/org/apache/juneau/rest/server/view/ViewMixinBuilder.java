@@ -44,7 +44,7 @@ package org.apache.juneau.rest.server.view;
  * settings) outside this bridge's control. See each {@code *Mixin.Builder#cacheTemplates(boolean)}
  * override's own Javadoc for the exact per-engine behavior.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>
  *

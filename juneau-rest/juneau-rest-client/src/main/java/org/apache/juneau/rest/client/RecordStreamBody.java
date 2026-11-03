@@ -41,14 +41,14 @@ import org.apache.juneau.marshall.stream.*;
  * that backs the cursor is supplied directly (defaulting to {@link JsonSerializer#DEFAULT}).  The body's
  * {@link #getContentType()} reflects that serializer's media type.
  *
- * <h5 class='section'>Repeatability:</h5>
+ * <h2 class='section'>Repeatability:</h2>
  * <p>
  * Streaming bodies are <b>non-repeatable</b> by default ({@link #isRepeatable()} returns {@code false}) because the
  * caller's consumer may be backed by a one-shot source.  A non-repeatable body fails fast (throws {@link IOException})
  * if a resend is required (i.e. {@link #writeTo(OutputStream)} is invoked more than once).  Callers whose consumer can
  * be replayed safely may opt in via {@link #repeatable()}.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<ja>@Remote</ja>
  * 	<jk>public interface</jk> MyApi {
@@ -64,7 +64,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	}));
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

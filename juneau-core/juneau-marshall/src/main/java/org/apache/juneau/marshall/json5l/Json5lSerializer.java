@@ -25,13 +25,13 @@ import org.apache.juneau.marshall.jsonl.*;
 /**
  * Serializes POJO models to JSON5L (JSON5 Lines).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>application/json5l, application/json5lines, text/json5l</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/json5l</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * JSON5L combines the relaxed JSON5 dialect with JSONL's newline-delimited framing: each top-level
  * value is written as a compact document on its own line, exactly as {@link JsonlSerializer} does.
@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.jsonl.*;
  * json5Sugar()} opt-in switches the per-line output to JSON5 sugar (single-quoted strings, unquoted
  * field names where safe).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Strict-per-line output (default)</jc>
  * 	String <jv>json5l</jv> = Json5lSerializer.<jsf>DEFAULT</jsf>.write(<jv>myList</jv>);
@@ -51,23 +51,23 @@ import org.apache.juneau.marshall.jsonl.*;
  * 	String <jv>json5l</jv> = <jv>serializer</jv>.write(<jv>myList</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output, sugar off (List of beans):</h5>
+ * <h2 class='figure'>Example output, sugar off (List of beans):</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30}
  * {"name":"Bob","age":25}
  * </p>
  *
- * <h5 class='figure'>Example output, sugar on:</h5>
+ * <h2 class='figure'>Example output, sugar on:</h2>
  * <p class='bjson'>
  * {name:'Alice',age:30}
  * {name:'Bob',age:25}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Json5l">JSON5L Basics</a>
  * </ul>
  */

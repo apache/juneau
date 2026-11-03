@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * <c>name</c> field since the header name is specified in the key, and it does not have a <c>required</c> field
  * since headers are always optional in HTTP for Swagger 2.0.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Header Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -52,7 +52,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	HeaderInfo <jv>headerInfo</jv> = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#header-object">Swagger 2.0 Specification &gt; Header Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-responses/">Swagger Describing Responses</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -208,7 +208,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li class='note'>
@@ -479,7 +479,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the header that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li class='note'>

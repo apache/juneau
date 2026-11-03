@@ -43,7 +43,7 @@ import org.apache.juneau.commons.bean.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link MarshalledApply @MarshalledApply}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledAnnotation">@Marshalled Annotation</a>
  * </ul>
  */
@@ -96,7 +96,7 @@ public @interface Marshalled {
 	 * <p>
 	 * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
@@ -221,13 +221,13 @@ public @interface Marshalled {
 	 * <p>
 	 * Examples are used in cases such as POJO examples in Swagger documents.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public class</jk> MyClass {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Setting applies to specified class and all subclasses.
 	 * 	<li class='note'>
@@ -244,7 +244,7 @@ public @interface Marshalled {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Example}
 	 * </ul>
 	 *
@@ -267,11 +267,10 @@ public @interface Marshalled {
 	 * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a
 	 * parse).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Marshalled</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyInterface {...}
-	 * <p>
 	 *
 	 * @return The annotation value.
 	 */
@@ -283,7 +282,7 @@ public @interface Marshalled {
 	 * <p>
 	 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
 	 *
@@ -302,14 +301,14 @@ public @interface Marshalled {
 	 * <p>
 	 * It is also used to specify element names in XML.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
 	 * 	<ja>@Marshalled</ja>(typeName=<js>"mybean"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
@@ -326,14 +325,14 @@ public @interface Marshalled {
 	 * <p>
 	 * The default value if not specified is <js>"_type"</js>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Use 'type' instead of '_type' for bean names.</jc>
 	 * 	<ja>@Marshalled</ja>(typePropertyName=<js>"type"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link MarshalledConfig#typePropertyName()}
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>

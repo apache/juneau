@@ -33,7 +33,7 @@ import java.util.function.*;
  * Templates are obtained via {@link VarResolver#compile(String)} or
  * {@link VarResolverSession#compile(String)} — there is no public constructor.
  *
- * <h5 class='section'>Compile-binding contract:</h5>
+ * <h2 class='section'>Compile-binding contract:</h2>
  * <p>
  * A compiled template is bound to the {@link VarResolver} instance it was compiled against. Cached
  * {@link Var} (and, in the future, {@link VarFunction}) references are resolved at compile time.
@@ -41,7 +41,7 @@ import java.util.function.*;
  * resolver is undefined behavior. Rebuilding the resolver invalidates any compiled templates from
  * the previous instance — caller's responsibility to re-compile.
  *
- * <h5 class='section'>Threadsafety:</h5>
+ * <h2 class='section'>Threadsafety:</h2>
  * <p>
  * {@link VarTemplate} instances are immutable and threadsafe — the same template can be safely
  * shared across threads. Note that {@link VarResolverSession} is <b>not</b> threadsafe; the
@@ -49,7 +49,7 @@ import java.util.function.*;
  * inherits the standard session-threadsafety contract. The {@link #asSupplierWithFreshSessions(VarResolver)}
  * variant opens a fresh session per call and is safe to share across threads.
  *
- * <h5 class='section'>Which Supplier do I want?</h5>
+ * <h2 class='section'>Which Supplier do I want?</h2>
  * <ul>
  * 	<li>{@link #asSupplierWithFreshSessions(VarResolver)} — opens a fresh session per
  * 		{@code .get()} call. Safe to share across threads. Use this for user-facing code,
@@ -61,7 +61,7 @@ import java.util.function.*;
  * 		session lifecycle.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */

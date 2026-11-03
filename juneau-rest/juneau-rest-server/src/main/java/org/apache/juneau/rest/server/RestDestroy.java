@@ -33,7 +33,7 @@ import jakarta.servlet.*;
  * The only valid parameter type for this method is {@link RestContext}, although typically no arguments will
  * be specified.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(...)
  * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalJenaConfig {
@@ -48,7 +48,7 @@ import jakarta.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		The method should return <jk>void</jk> although if it does return any value, the value will be ignored.
  * 	<li class='note'>
@@ -68,7 +68,7 @@ import jakarta.servlet.*;
  * 		overridden by the child class.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LifecycleHooks">Lifecycle Hooks</a>
  * </ul>
  */

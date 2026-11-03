@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.collections.*;
  * Every problem is collected; nothing is thrown.  Callers decide how loud to be: the page render, the
  * template validator and C3's {@code PageSpec.build()} each turn the list into their own failure.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   JsonMap <jv>contract</jv> = JsonMap.<jsm>ofString</jsm>(<jv>pageJson</jv>);
  *   <jk>for</jk> (<jk>var</jk> <jv>p</jv> : BusWiringValidator.<jsm>validate</jsm>(<jv>contract</jv>, CardTypeRegistry.<jsm>standard</jsm>()))
@@ -58,7 +58,7 @@ public final class BusWiringValidator {
 	/**
 	 * One wiring problem.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 *   <jk>var</jk> <jv>p</jv> = <jk>new</jk> BusWiringValidator.Problem(<js>"E-52"</js>,
 	 *     <js>"topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"</js>);

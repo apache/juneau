@@ -66,7 +66,7 @@ public class UonApplyAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(java.lang.annotation.Annotation...) MarshallingContext.Builder#annotations(java.lang.annotation.Annotation...)}
 	 * </ul>
 	 */

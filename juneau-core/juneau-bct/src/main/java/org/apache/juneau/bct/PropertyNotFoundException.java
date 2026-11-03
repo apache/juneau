@@ -24,7 +24,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>This exception is typically thrown by {@link PropertyExtractor} implementations
  * when attempting to access a property that does not exist on the target object.</p>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  *   <jc>// Property extraction that may throw PropertyNotFoundException</jc>
  *   <jk>try</jk> {

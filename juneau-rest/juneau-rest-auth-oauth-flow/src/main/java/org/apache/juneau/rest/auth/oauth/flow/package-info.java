@@ -23,7 +23,7 @@
  * primitives are role-neutral (neither client- nor server-specific) and are consumed by both the REST server
  * OAuth/OIDC modules and the MCP client-side token-acquisition layer.
  *
- * <h5 class='topic'>Flow inventory</h5>
+ * <h2 class='topic'>Flow inventory</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.auth.oauth.flow.OAuthClientCredentialsFlow OAuthClientCredentialsFlow}
  * 	<li class='jc'>{@link org.apache.juneau.rest.auth.oauth.flow.OAuthAuthorizationCodeFlow OAuthAuthorizationCodeFlow} (with PKCE)

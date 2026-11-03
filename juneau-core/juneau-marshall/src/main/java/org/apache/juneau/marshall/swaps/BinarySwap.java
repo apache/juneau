@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 		on the simple {@link String#getBytes(java.nio.charset.Charset)} path for non-binary inputs.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>
  */

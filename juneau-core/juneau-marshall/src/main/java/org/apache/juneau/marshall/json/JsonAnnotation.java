@@ -25,7 +25,7 @@ import org.apache.juneau.commons.*;
 /**
  * Utility classes and methods for the {@link Json @Json} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
  * </ul>
  */
@@ -39,7 +39,7 @@ public class JsonAnnotation {
 	/**
 	 * Builder class.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */

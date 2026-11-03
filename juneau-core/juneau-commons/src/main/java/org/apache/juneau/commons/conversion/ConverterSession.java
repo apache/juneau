@@ -30,7 +30,7 @@ import java.util.*;
  * Implementations look up contextual objects by type (and optionally by name). If no matching object is
  * registered for the requested type the method returns {@link Optional#empty()}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A Conversion lambda that reads TimeZone from the session.</jc>
  * 	Conversion&lt;String, Calendar&gt; <jv>conv</jv> = (<jv>in</jv>, <jv>memberOf</jv>, <jv>session</jv>, <jv>args</jv>) -&gt; {
@@ -42,7 +42,7 @@ import java.util.*;
  * 	};
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Conversion}
  * 	<li class='jc'>{@link Converter}
  * </ul>

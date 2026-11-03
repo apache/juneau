@@ -32,12 +32,12 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Converts Java POJOs to INI format (section/key-value structure).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Produces: <bc>text/ini</bc>
  * <br>Accepts: <bc>text/ini, text/x-ini</bc>
  *
- * <h5 class='topic'>Bean-to-INI mapping</h5>
+ * <h2 class='topic'>Bean-to-INI mapping</h2>
  * <ul class='spaced-list'>
  * 	<li>Simple properties → key-value pairs in the default section
  * 	<li>Nested beans → <c>[sectionName]</c> sections
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Null values → unquoted <c>null</c> token
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to INI</jc>
  * 	String <jv>ini</jv> = IniSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -57,13 +57,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>ini</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bini'>
  * 	<ck>name</ck> = <cv>Alice</cv>
  * 	<ck>age</ck> = <cv>30</cv>
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bini'>
  * 	<ck>name</ck> = <cv>Alice</cv>
  * 	<ck>age</ck> = <cv>30</cv>
@@ -75,21 +75,20 @@ import org.apache.juneau.marshall.stream.*;
  * 	<ck>state</ck> = <cv>MA</cv>
  * </p>
  *
- * <h5 class='topic'>Limitations</h5>
- * <p>
+ * <h2 class='topic'>Limitations</h2>
  * <ul class='spaced-list'>
  * 	<li>Top-level collections, arrays, and scalar values are not supported. The root must be a bean or
  * 		<c>Map&lt;String,?&gt;</c>. Throws {@link SerializeException} for unsupported root types.
  * 	<li>{@link Reader} and {@link InputStream} passthrough is not supported.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * 	<li class='note'>Complex values (collections, maps with complex values) are embedded as JSON5 inline
  * 		strings and remain fully round-trippable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Ini">INI Basics</a>
  * </ul>
  */

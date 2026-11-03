@@ -31,7 +31,7 @@ import org.apache.juneau.console.*;
  * The built-in transforms are <c>bucket</c>, <c>filter</c>, <c>groupBy</c> and <c>topN</c>; app transforms are
  * registered under dotted names.  A string arg that is exactly <c>{token}</c> is filled from params.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>page</jv>.data(Derived.<jsm>from</jsm>(<js>"orgRequests"</js>)
  * 		.transform(<js>"groupBy"</js>, JsonMap.<jsm>of</jsm>(<js>"by"</js>, List.<jsm>of</jsm>(<js>"reason"</js>),

@@ -33,11 +33,11 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Parses INI files (section/key-value format) into Java beans and maps.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Consumes: <bc>text/ini, text/x-ini</bc>
  *
- * <h5 class='topic'>Value parsing</h5>
+ * <h2 class='topic'>Value parsing</h2>
  * <ul class='spaced-list'>
  * 	<li>Unquoted <c>null</c> → Java <jk>null</jk>
  * 	<li>Unquoted <c>true</c>/<c>false</c> → Boolean
@@ -49,12 +49,12 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Other unquoted tokens → String
  * </ul>
  *
- * <h5 class='topic'>Sections</h5>
+ * <h2 class='topic'>Sections</h2>
  * <p>
  * Sections (e.g. <c>[address]</c>) map to nested bean properties or Map properties.
  * Section paths like <c>[employment/company]</c> map to deeply nested bean properties.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse INI into a bean</jc>
  * 	MyConfig <jv>config</jv> = IniParser.<jsf>DEFAULT</jsf>.read(<jv>ini</jv>, MyConfig.<jk>class</jk>);
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	Map&lt;String, Object&gt; <jv>map</jv> = IniParser.<jsf>DEFAULT</jsf>.read(<jv>ini</jv>, Map.<jk>class</jk>, String.<jk>class</jk>, Object.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example input:</h5>
+ * <h2 class='figure'>Example input:</h2>
  * <p class='bini'>
  * 	<ck>name</ck> = <cv>Alice</cv>
  * 	<ck>age</ck> = <cv>30</cv>
@@ -74,17 +74,17 @@ import org.apache.juneau.marshall.stream.*;
  * 	<ck>state</ck> = <cv>MA</cv>
  * </p>
  *
- * <h5 class='topic'>Limitations</h5>
+ * <h2 class='topic'>Limitations</h2>
  * <p>
  * Parsing into top-level collections, arrays, or scalar types is not supported.
  * The target type must be a bean class or <c>Map&lt;String,?&gt;</c>.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * 	<li class='note'>Values starting with <c>[</c> or <c>{</c> are delegated to the JSON parser.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Ini">INI Basics</a>
  * </ul>
  */

@@ -26,7 +26,7 @@ import java.util.*;
  * <p>
  * This class can be used to get and set property values on a bean, or to get metadata on a property.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct a new bean</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person();
@@ -44,7 +44,7 @@ import java.util.*;
  * 	<jv>birthDate</jv>.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * This is a lightweight immutable view over a {@link BeanMap}.
  * Its thread-safety characteristics are the same as the backing {@link BeanMap}.

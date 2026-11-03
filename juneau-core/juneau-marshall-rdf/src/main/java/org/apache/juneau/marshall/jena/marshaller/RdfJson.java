@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * A pairing of a {@link RdfJsonSerializer} and {@link RdfJsonParser} into a single class with convenience to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean or map to RDF/JSON</jc>
  * 	String <jv>rdfJson</jv> = RdfJson.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -40,13 +40,13 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>rdfJson</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age, RDF/JSON format):</h5>
+ * <h2 class='figure'>Example output (bean with name/age, RDF/JSON format):</h2>
  * <p class='bjson'>
  * 	{ <js>"&lt;subject&gt;"</js>: { <js>"&lt;.../name&gt;"</js>: [{ <js>"value"</js>: <js>"Alice"</js> }],
  * 		<js>"&lt;.../age&gt;"</js>: [{ <js>"value"</js>: 30, <js>"type"</js>: <js>"literal"</js> }] } }
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bjson'>
  * 	{ <js>"&lt;...&gt;"</js>: { <js>"&lt;.../name&gt;"</js>: [{ <js>"value"</js>: <js>"Alice"</js> }],
  * 		<js>"&lt;.../address&gt;"</js>: [{ <js>"type"</js>: <js>"uri"</js>, <js>"value"</js>: <js>".../address"</js> }] },
@@ -60,7 +60,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = RdfJson.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

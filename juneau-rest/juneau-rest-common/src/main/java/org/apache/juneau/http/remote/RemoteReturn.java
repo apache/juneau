@@ -20,7 +20,7 @@ package org.apache.juneau.http.remote;
  * Possible values for the {@link RemoteOp#returns() @RemoteOp(returns)} annotation and the {@code returns} attribute on
  * {@link RemoteGet}, {@link RemotePost}, {@link RemotePut}, {@link RemotePatch}, and {@link RemoteDelete}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * </ul>
  */

@@ -52,7 +52,7 @@ import org.apache.juneau.marshall.marshaller.Json;
  * <p>
  * <b>Path safety.</b> The application supplies the {@link Path}; nothing in a request ever becomes a path.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	FileTerminalSource <jv>src</jv> = FileTerminalSource.<jsm>create</jsm>(<jv>dir</jv>.resolve(<js>"run.log"</js>))
  * 		.terminal(() -&gt; <jv>run</jv>.isFinished())

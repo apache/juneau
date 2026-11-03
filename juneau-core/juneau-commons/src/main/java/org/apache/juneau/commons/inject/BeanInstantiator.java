@@ -44,7 +44,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='jm'>{@link BeanInstantiator#of(Class)}
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Bean with builder pattern</jc>
  * 	<jk>public class</jk> MyBean {
@@ -103,7 +103,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		.run();
  * </p>
  *
- * <h5 class='section'>Bean Creation Order:</h5>
+ * <h2 class='section'>Bean Creation Order:</h2>
  * <p>
  * The creator attempts to instantiate beans in the following order:
  * <ol class='spaced-list'>
@@ -126,7 +126,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		</ol>
  * </ol>
  *
- * <h5 class='section'>Builder Detection:</h5>
+ * <h2 class='section'>Builder Detection:</h2>
  * <p>
  * Builders are detected in the following priority order:
  * <ol class='spaced-list'>
@@ -141,7 +141,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		</ul>
  * </ol>
  *
- * <h5 class='section'>Dependency Injection:</h5>
+ * <h2 class='section'>Dependency Injection:</h2>
  * <p>
  * Both builder instances and the final bean have automatic dependency injection performed via
  * {@link ClassInfo#inject(Object, BeanStore)}, which processes {@code @Inject} and {@code @Autowired} annotations
@@ -151,7 +151,7 @@ import org.apache.juneau.commons.reflect.*;
  * This means that after a bean is created, all of its fields and methods annotated with {@code @Inject} or {@code @Autowired}
  * will automatically be populated with beans from the bean store.
  *
- * <h5 class='section'>Caching:</h5>
+ * <h2 class='section'>Caching:</h2>
  * <p>
  * By default, each call to {@link #run()} creates a new bean instance. To enable caching, call {@link Builder#cached()}.
  * When caching is enabled, bean instances are cached using {@link Memoizer}, so multiple calls to {@link #run()}
@@ -159,14 +159,14 @@ import org.apache.juneau.commons.reflect.*;
  * {@link Builder#impl(Object)} and explicit builder instances set via {@link Builder#builder(Object)} are preserved
  * across resets.
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * Configuration is performed on the inner {@link Builder} which is <b>not</b> thread-safe. Configure on a single
  * thread, then call {@link Builder#build()} to produce an immutable {@link BeanInstantiator} that is safe for
  * shared concurrent use. The {@link Builder#run()} shorthand is equivalent to {@code build().run()} and is
  * appropriate for one-shot bean creation from a single thread.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>Builders must have a <c>build()</c>, <c>create()</c>, or <c>get()</c> method that returns the bean type.
  * 		This method is required - constructors accepting builders are no longer supported.
  * 	<li class='note'>The builder's <c>build()</c>/<c>create()</c>/<c>get()</c> method may have <c>@Inject</c> or <c>@Autowired</c>
@@ -179,7 +179,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='note'>Deprecated and <a class="doclink" href="https://juneau.apache.org/site/apidocs/org/apache/juneau/commons/bean/BeanIgnore.html">@BeanIgnore</a>-annotated methods/constructors are ignored.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BasicBeanStore}
  * </ul>
  *
@@ -458,7 +458,7 @@ public class BeanInstantiator<T> {
 	 * an immutable {@link BeanInstantiator} suitable for shared concurrent use. Most call sites use the
 	 * {@link #run()} shorthand which is equivalent to {@code build().run()}.
 	 *
-	 * <h5 class='section'>Thread Safety:</h5>
+	 * <h2 class='section'>Thread Safety:</h2>
 	 * <p>
 	 * Builder instances are <b>not</b> thread-safe. Configure on one thread, then either call {@link #build()}
 	 * to produce a thread-safe immutable {@link BeanInstantiator}, or call {@link #run()} to one-shot create a
@@ -577,7 +577,7 @@ public class BeanInstantiator<T> {
 	 * This method is useful when bean creation failure is expected and should not be treated as exceptional,
 	 * such as when implementing optional features or trying multiple creation strategies.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Unlike {@link #run()}, this method catches {@link ExecutableException} and returns empty.
 	 * 	<li class='note'>If a fallback is registered via {@link #fallback(Supplier)},
 	 * 		it will be used before returning empty, so this method will only return empty if both
@@ -589,7 +589,7 @@ public class BeanInstantiator<T> {
 	 * 		and will propagate to the caller.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Try to create, use default if it fails</jc>
 	 * 	MyBean <jv>bean</jv> = BeanInstantiator
@@ -631,14 +631,14 @@ public class BeanInstantiator<T> {
 	 * This is particularly useful when the bean store contents change and you want to recreate the bean
 	 * with updated dependencies.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>The returned {@link Memoizer} is thread-safe.
 	 * 	<li class='note'>Each call to {@link Memoizer#get()} after a reset() will invoke
 	 * 		{@link #run()}, which may trigger dependency injection and post-creation hooks.
 	 * 	<li class='note'>The memoizer inherits all Optional-like methods from {@link NullableSupplier}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a memoizer for a bean with dependencies</jc>
 	 * 	BeanStore <jv>store</jv> = <jk>new</jk> BasicBeanStore(<jk>null</jk>);
@@ -765,7 +765,7 @@ public class BeanInstantiator<T> {
 	 * If the builder instance's class is invalid (does not have a valid build method), this method throws an
 	 * {@link IllegalArgumentException}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>When specified, the builder type detection is bypassed.
 	 * 	<li class='note'>The builder will be used to create the bean via:
 	 * 		<ul>
@@ -794,7 +794,7 @@ public class BeanInstantiator<T> {
 	 * By default, {@code BeanInstantiator} looks for inner classes named {@code "Builder"}.
 	 * This method allows you to specify alternative class names.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Inner builder classes must be public, static, and pass builder validation
 	 * 		(have a build/create/get method or be accepted by a bean constructor).
 	 * 	<li class='note'>If multiple inner classes match, the first valid one found will be used.
@@ -803,7 +803,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>Calling this method replaces the default builder class names.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Support alternative builder class naming conventions</jc>
 	 * 	MyBean <jv>bean</jv> = BeanInstantiator
@@ -828,7 +828,7 @@ public class BeanInstantiator<T> {
 	 * By default, {@code BeanInstantiator} looks for static methods named {@code "create"} or {@code "builder"}
 	 * that return a builder type. This method allows you to specify alternative method names.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Builder factory methods must be public, static, non-deprecated, and return a builder type
 	 * 		(not the bean type itself).
 	 * 	<li class='note'>If multiple builder factory methods match, the one with the most parameters that can be
@@ -837,7 +837,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>Calling this method replaces the default builder method names.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Support alternative builder factory method naming conventions</jc>
 	 * 	MyBean <jv>bean</jv> = BeanInstantiator
@@ -862,7 +862,7 @@ public class BeanInstantiator<T> {
 	 * By default, {@code BeanInstantiator} looks for instance methods named {@code "build"}, {@code "create"}, or {@code "get"}
 	 * on the builder that return the bean type. This method allows you to specify alternative method names.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Build methods must be public, non-static, non-deprecated, and return the bean type
 	 * 		(or a parent type of the bean type).
 	 * 	<li class='note'>If the method has {@code @Inject} or {@code @Autowired} annotation, its parameters are resolved from the bean store.
@@ -870,7 +870,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>Calling this method replaces the default build method names.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Support alternative build method naming conventions</jc>
 	 * 	MyBean <jv>bean</jv> = BeanInstantiator
@@ -900,7 +900,7 @@ public class BeanInstantiator<T> {
 	 * When caching mode is disabled (the default), each call to {@link #run()} will create a new bean instance
 	 * by calling {@link #findBeanImpl()} directly.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Enable caching mode - same instance returned on each run()</jc>
 	 * 	<jk>var</jk> <jv>creator</jv> = BeanInstantiator
@@ -939,7 +939,7 @@ public class BeanInstantiator<T> {
 	 * {@link #run()} unchanged — constructor lookup is skipped. This matches legacy {@code BeanCreator}
 	 * semantics for static {@code create()} / {@code builder()} / {@code getInstance()} methods.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// AttributeArg.create(ParameterInfo) returns null if @Attr is not present.</jc>
 	 * 	<jc>// Without factoryAbstainOnNull, BeanInstantiator would then invoke the AttributeArg(ParameterInfo)</jc>
@@ -986,7 +986,7 @@ public class BeanInstantiator<T> {
 	 * the same use case (legacy filtered out the multi-arg ctors via {@code hasAllParams} returning false, since the
 	 * legacy bean store didn't auto-resolve raw {@code Map}/{@code Collection} parameter types).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Instantiating an arbitrary Map subclass — prefer the no-arg ctor over copy-ctors.</jc>
 	 * 	Map&lt;?,?&gt; <jv>m</jv> = BeanInstantiator
@@ -1087,7 +1087,7 @@ public class BeanInstantiator<T> {
 	 * which creation path was taken, why creation might have failed, or to troubleshoot
 	 * unexpected behavior.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Debug logs include: builder detection, factory method attempts, constructor attempts,
 	 * 		dependency resolution, injection, hooks execution, validation, and fallback usage.
 	 * 	<li class='note'>The debug log is reset each time {@link #run()} or {@link #asOptional()} is called.
@@ -1097,7 +1097,7 @@ public class BeanInstantiator<T> {
 	 * 		(subsequent calls return the cached instance unless {@link #reset()} is called).
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Enable debug mode</jc>
 	 * 	<jk>var</jk> <jv>creator</jv> = BeanInstantiator
@@ -1126,7 +1126,7 @@ public class BeanInstantiator<T> {
 	 * to create beans without a builder. This method allows you to specify alternative
 	 * factory method names to support non-standard naming conventions.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Factory methods must be public, static, non-deprecated, and return the bean type.
 	 * 	<li class='note'>If multiple factory methods match, the one with the most parameters that can be
 	 * 		resolved from the bean store will be used.
@@ -1135,7 +1135,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>Calling this method replaces the default factory method names.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Support multiple factory method naming conventions</jc>
 	 * 	MyBean <jv>bean</jv> = BeanInstantiator
@@ -1164,7 +1164,7 @@ public class BeanInstantiator<T> {
 	 * This enables graceful degradation when bean creation cannot succeed, such as when optional features
 	 * or dependencies are not available.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>The fallback supplier is only invoked if bean creation fails.
 	 * 		If bean creation succeeds normally, the fallback is never called.
 	 * 	<li class='note'>Fallbacks are checked after all normal creation attempts (builders, factory methods, constructors).
@@ -1177,7 +1177,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>To use a pre-created instance as a fallback, wrap it in a supplier: <c>fallback(() -&gt; myInstance)</c>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Provide a default instance if creation fails</jc>
 	 * 	MyService <jv>service</jv> = BeanInstantiator
@@ -1235,7 +1235,7 @@ public class BeanInstantiator<T> {
 	 * all parent classes up to and including the bean type. If no subtype was specified, the list will contain
 	 * only the bean type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// If beanType is A and beanSubType is C (extends B extends A)</jc>
 	 * 	<jc>// getBeanSubTypes() returns: [C, B, A]</jc>
@@ -1274,7 +1274,7 @@ public class BeanInstantiator<T> {
 	 * This method returns a list that includes the primary builder type and all builder types found by traversing
 	 * the builder's parent hierarchy. This allows parent builders to be resolved as injectable types.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Class A with builder</jc>
 	 * 	<jk>class</jk> A {
@@ -1307,7 +1307,7 @@ public class BeanInstantiator<T> {
 	 * {@link #run()} or {@link #asOptional()}. The log is only populated when {@link #debug()}
 	 * mode is enabled.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Returns an empty list if {@link #debug()} was not called or if no creation has been attempted.
 	 * 	<li class='note'>The log is reset at the beginning of each {@link #run()} call.
 	 * 	<li class='note'>Since {@link #run()} uses a cached {@link Memoizer}, the log reflects only the first creation
@@ -1315,7 +1315,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>The returned list is unmodifiable.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>var</jk> <jv>creator</jv> = BeanInstantiator.<jsm>of</jsm>(MyBean.<jk>class</jk>, <jv>store</jv>)
 	 * 		.debug();
@@ -1341,7 +1341,7 @@ public class BeanInstantiator<T> {
 	 * When specified, the bean creation logic is bypassed and this implementation is returned
 	 * directly from {@link #run()}, after performing dependency injection on it.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>The bean implementation will still have its fields and methods injected via {@link ClassInfo#inject(Object, BeanStore)}.
 	 * 	<li class='note'>This is useful when you want to provide a pre-configured instance but still benefit from dependency injection.
 	 * 	<li class='note'>The explicit implementation is preserved even when {@link #reset()} is called, unlike cached results from suppliers.
@@ -1365,7 +1365,7 @@ public class BeanInstantiator<T> {
 	 * <p>
 	 * Multiple hooks can be registered and they will be executed in the order they were added.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Hooks are executed every time {@link #run()} is called. Since {@link #run()} uses a cached
 	 * 		{@link Memoizer}, hooks are only executed once unless {@link #reset()} is called.
 	 * 	<li class='note'>Hooks are executed after dependency injection, so all {@code @Inject} fields and methods
@@ -1376,7 +1376,7 @@ public class BeanInstantiator<T> {
 	 * 	<li class='note'>The hook receives the fully initialized bean instance as its parameter.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Register multiple post-creation hooks</jc>
 	 * 	MyService <jv>service</jv> = BeanInstantiator
@@ -1435,7 +1435,7 @@ public class BeanInstantiator<T> {
 	 * Multiple wrappers may be registered; they are applied in registration order. Each wrapper receives
 	 * the output of the previous wrapper.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BeanInstantiator.<jsm>of</jsm>(MyService.<jk>class</jk>, store)
 	 * 		.wrap(LoggingProxy::wrap)
@@ -1558,7 +1558,7 @@ public class BeanInstantiator<T> {
 	 * methods or constructors. This is useful when a Builder class is co-located with the bean type
 	 * (e.g. {@code Foo.Builder}) but the caller wants to use a builder-taking constructor instead.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BeanInstantiator.<jsm>of</jsm>(BasicSwaggerProvider.<jk>class</jk>, beanStore)
 	 * 		.add(SwaggerProvider.Builder.<jk>class</jk>, <jv>this</jv>)
@@ -1637,7 +1637,7 @@ public class BeanInstantiator<T> {
 	 * <p>
 	 * This causes them to be re-evaluated on the next call to {@link #run()}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>If an explicit builder instance was set via {@link #builder(Object)},
 	 * 		it is preserved and not cleared by this method.
 	 * 	<li class='note'>If an explicit implementation was set via {@link #impl(Object)},

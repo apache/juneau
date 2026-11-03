@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.beans.*;
  * ({@code /admin/*}). All three classes live in the {@code org.apache.juneau.rest.server.ops}
  * ops/introspection mixin pack.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /options} can be overridden via the SVL variable
@@ -62,7 +62,7 @@ import org.apache.juneau.rest.server.beans.*;
  * {@code /routes} alias must now set {@code -Djuneau.routeindex.path=routes} or compose a
  * second instance with the override.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -72,7 +72,7 @@ import org.apache.juneau.rest.server.beans.*;
  * that the route-index walks the host's {@link RestContext} via {@link #resolveHostContext}
  * &mdash; it only makes sense in a host-attached composition, not standalone.
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=RouteIndexMixin.<jk>class</jk>)
@@ -81,7 +81,7 @@ import org.apache.juneau.rest.server.beans.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Output:</h5>
+ * <h2 class='section'>Output:</h2>
  *
  * <p>
  * Each {@code @RestOp}-annotated method on the host (and on any other mixins on the host) is
@@ -120,7 +120,7 @@ import org.apache.juneau.rest.server.beans.*;
  * The handler itself carries {@link OpSwagger#ignore() @OpSwagger(ignore=true)} so the
  * route-index endpoint is excluded from the OpenAPI spec.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link EchoMixin}
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

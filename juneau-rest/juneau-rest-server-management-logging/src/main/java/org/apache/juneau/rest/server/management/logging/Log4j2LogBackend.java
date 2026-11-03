@@ -40,7 +40,7 @@ import org.apache.logging.log4j.core.config.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Level mapping</h5>
+ * <h2 class='topic'>Level mapping</h2>
  *
  * <p>
  * Levels are Log4j2 standard level names ({@code "TRACE"}, {@code "DEBUG"}, {@code "INFO"}, {@code "WARN"},

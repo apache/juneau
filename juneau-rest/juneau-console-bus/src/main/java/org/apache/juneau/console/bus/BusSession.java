@@ -25,7 +25,7 @@ import java.util.*;
  * The session's capability id is deliberately not on this interface: it never leaves the bus module except in the
  * session POST response, and {@code toString()} redacts it.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jv>bus</jv>.publishTo(<jv>s</jv> -&gt; <js>"east"</js>.equals(<jv>s</jv>.attribute(<js>"region"</js>)), <js>"ops.alert:east"</js>, <jv>alert</jv>);
  * </p>

@@ -35,7 +35,7 @@ import org.apache.juneau.commons.collections.*;
  * HTTP authentication, an API key (either as a header or as a query parameter), OAuth2's common flows (implicit,
  * password, client credentials and authorization code) as defined in RFC6749, and OpenID Connect Discovery.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Security Scheme Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>openIdConnectUrl</c> (string) - OpenId Connect URL to discover OAuth2 configuration values (for <js>"openIdConnect"</js> type)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an API key security scheme</jc>
  * 	SecuritySchemeInfo <jv>scheme</jv> = <jk>new</jk> SecuritySchemeInfo()
@@ -79,7 +79,7 @@ import org.apache.juneau.commons.collections.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#security-scheme-object">OpenAPI Specification &gt; Security Scheme Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/">OpenAPI Authentication</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

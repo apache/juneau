@@ -29,14 +29,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * WHATWG parse state machine (<a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">HTML §9.2</a>).
  * Designed for long-lived SSE streams that outlive any reasonable per-call buffer.
  *
- * <h5 class='section'>Why a separate class:</h5>
+ * <h2 class='section'>Why a separate class:</h2>
  * <p>
  * No other Juneau marshaller ships a separate iterator-style helper. SSE warrants the deviation
  * because SSE responses are open until the client disconnects or the server pushes its last event;
  * forcing callers through the eager {@code List<SseEvent>} path would defeat the entire point of
  * using SSE.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> (SseEventReader <jv>r</jv> = <jk>new</jk> SseEventReader(<jv>responseReader</jv>)) {
  * 		<jk>while</jk> (<jv>r</jv>.hasNext()) {
@@ -46,11 +46,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  * </ul>
  */

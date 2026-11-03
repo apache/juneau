@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.*;
  * used to provide additional documentation that is not part of the main OpenAPI specification, such as detailed
  * guides, tutorials, or API documentation hosted elsewhere.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The External Documentation Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.*;
  * 	<li><c>url</c> (string, REQUIRED) - The URL for the target documentation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create external documentation reference</jc>
  * 	ExternalDocumentation <jv>docs</jv> = <jk>new</jk> ExternalDocumentation()
@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.*;
  * 		.setUrl(<js>"https://example.com"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#external-documentation-object">OpenAPI Specification &gt; External Documentation Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/external-documentation/">OpenAPI External Documentation</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

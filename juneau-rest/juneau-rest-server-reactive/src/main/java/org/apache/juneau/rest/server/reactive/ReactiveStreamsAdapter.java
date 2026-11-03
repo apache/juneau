@@ -23,7 +23,7 @@ import java.util.concurrent.*;
  * {@link ReactiveResponseProcessor} understands: a {@link CompletionStage} (single value) or a
  * {@link java.util.concurrent.Flow.Publisher Flow.Publisher} (a stream of values).
  *
- * <h5 class='topic'>Why this exists</h5>
+ * <h2 class='topic'>Why this exists</h2>
  * <p>
  * The opt-in {@code juneau-rest-server-reactive} module handles {@link java.util.concurrent.Flow.Publisher Flow.Publisher}
  * (and, via the existing {@code AsyncResponseProcessor}, {@link CompletionStage}) using only JDK APIs &mdash;
@@ -34,7 +34,7 @@ import java.util.concurrent.*;
  * convert those types into the JDK-native shapes, so the streaming / buffering / SSE / NDJSON plumbing
  * is implemented exactly once in the core.
  *
- * <h5 class='topic'>Registration</h5>
+ * <h2 class='topic'>Registration</h2>
  * <p>
  * Adapters are discovered via the JDK {@link java.util.ServiceLoader} mechanism. A bridge module (or a
  * consumer who wants a custom adapter) ships a

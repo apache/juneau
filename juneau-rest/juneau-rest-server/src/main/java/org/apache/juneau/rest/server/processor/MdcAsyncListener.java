@@ -27,7 +27,7 @@ import java.util.logging.*;
  * Bridges SLF4J MDC context from the request (dispatch) thread to the {@link java.util.concurrent.CompletableFuture}
  * completion thread.
  *
- * <h5 class='topic'>Problem</h5>
+ * <h2 class='topic'>Problem</h2>
  * <p>
  * When a {@code @RestOp} method returns a {@link java.util.concurrent.CompletableFuture}, the {@link AsyncResponseProcessor}
  * registers a {@link java.util.concurrent.CompletionStage#whenComplete(BiConsumer) whenComplete} callback that runs on
@@ -35,7 +35,7 @@ import java.util.logging.*;
  * SLF4J's {@code MDC} is backed by a {@link ThreadLocal}, so any diagnostic context set by an upstream filter
  * (e.g. {@code requestId}, {@code userId}) is invisible to log statements emitted inside that callback.
  *
- * <h5 class='topic'>Solution</h5>
+ * <h2 class='topic'>Solution</h2>
  * <p>
  * {@code MdcAsyncListener} provides a single factory method, {@link #wrap(BiConsumer, Map)}, that wraps a
  * {@code whenComplete} callback with the standard MDC snapshot-restore-clear pattern:
@@ -49,20 +49,20 @@ import java.util.logging.*;
  *       any MDC state the completion thread itself had before the callback.
  * </ol>
  *
- * <h5 class='topic'>Lazy skip</h5>
+ * <h2 class='topic'>Lazy skip</h2>
  * <p>
  * {@link #snapshot()} returns {@code null} when the request thread's MDC is empty or when SLF4J is absent.
  * {@link #wrap(BiConsumer, Map)} returns the original callback unchanged when the snapshot is {@code null}, so no
  * work is done on the completion thread for the common case of no MDC state.
  *
- * <h5 class='topic'>SLF4J detection</h5>
+ * <h2 class='topic'>SLF4J detection</h2>
  * <p>
  * {@code MdcAsyncListener} uses {@link Class#forName(String)} to probe for {@code org.slf4j.MDC} at class-load
  * time. SLF4J is NOT a compile-time dependency of {@code juneau-rest-server}. If SLF4J is absent from the
  * runtime classpath, the class gracefully degrades: {@link #isAvailable()} returns {@code false},
  * {@link #snapshot()} returns {@code null}, and {@link #wrap(BiConsumer, Map)} returns the original callback.
  *
- * <h5 class='topic'>Limitation</h5>
+ * <h2 class='topic'>Limitation</h2>
  * <p>
  * This class bridges SLF4J MDC only. Users of Log4j2's {@code ThreadContext} directly (without the SLF4J facade)
  * will not benefit from this listener. That is documented as a v1 limitation; the SLF4J MDC is the lingua franca

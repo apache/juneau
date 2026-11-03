@@ -36,7 +36,7 @@ import java.util.*;
  * {@link JobKeyLedger#response(IdempotencyKey)}.  The shape rules live in {@link JobLogChecks}, shared with the page
  * card.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RegionDef <jv>region</jv> = JobLogRegion.<jsm>create</jsm>(<js>"restock-species"</js>)
  * 		.submit(JobLogRegion.Submit.<jsm>create</jsm>(<js>"/jobs/species/{id}/restock"</js>, <js>"restock-species"</js>, <js>"/jobs/species/{id}/key"</js>)

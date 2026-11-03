@@ -28,7 +28,7 @@ import java.util.function.*;
  * <p>
  * Authorization credentials for connecting to a proxy.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -135,7 +135,7 @@ public class ProxyAuthorization extends HttpStringHeader {
 	 * Setting a scheme preset or {@link #token(String)} clears any previously-registered auth-params and vice versa, so
 	 * a built value carries either a token68 or an auth-param list, never both.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = ProxyAuthorization.<jsm>create</jsm>()
 	 * 		.digest()
@@ -149,7 +149,7 @@ public class ProxyAuthorization extends HttpStringHeader {
 	 * 	<jc>// =&gt; "Digest username=\"Mufasa\", realm=\"...\", uri=\"/dir/index.html\", qop=auth, nc=00000001, response=\"...\""</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link ProxyAuthorization}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7235'>RFC 7235 - HTTP/1.1 Authentication</a>
 	 * </ul>

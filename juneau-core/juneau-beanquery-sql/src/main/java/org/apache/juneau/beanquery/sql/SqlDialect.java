@@ -37,7 +37,7 @@ import org.apache.juneau.commons.beanquery.*;
  * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException.Code#BAD_VALUE BAD_VALUE} rather than emitting SQL that differs from the in-memory
  * result.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	SqlDialect <jv>dialect</jv> = PostgresDialect.<jsf>INSTANCE</jsf>;
  * 	SqlFragment <jv>frag</jv> = <jv>dialect</jv>.renderBare(<jv>dialect</jv>.quote(<js>"status"</js>), SearchType.<jsf>ENUM</jsf>, <js>"OPEN"</js>, <jk>false</jk>);
@@ -107,7 +107,7 @@ public interface SqlDialect {
 	 * {@link org.apache.juneau.commons.beanquery.BeanQuerySyntaxException.Code#BAD_VALUE BAD_VALUE} instead of silently comparing text (where {@code 9.10}
 	 * sorts before {@code 9.9}).  Equality, {@code $in}, {@code $ne} and {@code $prefix} are not affected.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A dialect that compares versions as integer tuples opts in.</jc>
 	 * 	<ja>@Override</ja> <jk>public boolean</jk> supportsVersionOrdering() { <jk>return true</jk>; }

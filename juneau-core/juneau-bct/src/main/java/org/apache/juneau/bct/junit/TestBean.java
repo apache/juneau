@@ -42,7 +42,7 @@ import java.lang.annotation.*;
  * overrides via the SUT's builder) and <b>Mode OVERLAY</b> (existing-instance push/pop against a long-lived
  * SUT's bean store).  See {@link JuneauBeanStoreExtension} for the full Mode INJECT / Mode OVERLAY contracts.
  *
- * <h5 class='section'>Applies to:</h5>
+ * <h2 class='section'>Applies to:</h2>
  * <ul>
  * 	<li><b>Fields</b> &mdash; the field's current value (read via reflection) is registered as the override.
  * 	<li><b>Methods</b> &mdash; a parameterless factory method whose return type is type-compatible with the
@@ -50,7 +50,7 @@ import java.lang.annotation.*;
  * 		{@link Scope#CLASS}).
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@ExtendWith</ja>(JuneauBeanStoreExtension.<jk>class</jk>)
  * 	<jk>class</jk> MyResourceTest {
@@ -71,7 +71,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JuneauBeanStoreExtension} - The JUnit 5 extension that discovers and applies these annotations.
  * 	<li class='jc'>{@link TestBeanStore} - The overlay builder the extension populates.
  * 	<li class='je'>{@link Scope} - Per-method vs per-class lifecycle selector.

@@ -40,7 +40,7 @@ import java.util.*;
  * 	<li>{@link #getError() error} &mdash; optional error message (omitted from the response when <jk>null</jk>).
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A normal page of results.</jc>
  * 	DataTablesResults&lt;Person&gt; <jv>results</jv> = DataTablesResults.&lt;Person&gt;<jsm>create</jsm>()
@@ -89,7 +89,7 @@ public class DataTablesResults<T> {
 	 * {@code BeanQuerySyntaxException} (unknown column, too many search clauses, ...): since 2026-10-05 that propagates
 	 * and is mapped centrally to HTTP 400 with an {@code X-BeanQuery-Error} header.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>return</jk> DataTablesResults.<jsm>error</jsm>(<jv>request</jv>.getDraw(), <js>"Unknown column 'x'."</js>);
 	 * </p>

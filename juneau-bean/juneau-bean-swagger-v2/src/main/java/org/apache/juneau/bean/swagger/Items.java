@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * definitions that are not located in "body" to describe the type of items in an array. This is particularly useful
  * for query parameters, path parameters, and header parameters that accept arrays.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Items Object supports the following fields from JSON Schema:
  * <ul class='spaced-list'>
@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li><c>multipleOf</c> (number) - Must be a multiple of this value
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Items <jv>items</jv> = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
@@ -70,7 +70,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#items-object">Swagger 2.0 Specification &gt; Items Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-parameters/">Swagger Describing Parameters</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -204,7 +204,7 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li class='note'>
@@ -454,7 +454,7 @@ public class Items extends SwaggerElement {
 	 * <p>
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li class='note'>

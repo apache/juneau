@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * and unique for each page. It is important for SEO, accessibility, and user experience as
  * it helps users identify the page content and purpose.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -52,7 +52,7 @@ import org.apache.juneau.marshall.*;
  * 	Title <jv>emoji</jv> = <jsm>title</jsm>(<js>"🎉 Welcome to Our Store!"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

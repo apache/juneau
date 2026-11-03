@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Mounted under {@link PetstoreConsoleResource} at {@code /console/dev}.  Each page is its own child resource.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Mounted as a child of the console root.</jc>
  * 	<ja>@Rest</ja>(path=<js>"/console"</js>, children={StoreRest.<jk>class</jk>, DevRest.<jk>class</jk>})

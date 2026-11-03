@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.*;
  * {@code VersionProvider} worker and delegate to it &mdash; so the three deployment forms cannot drift, and no
  * flavor is another flavor's worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='jc'>{@link VersionResource}
  * 	<li class='jc'>{@link VersionServlet}

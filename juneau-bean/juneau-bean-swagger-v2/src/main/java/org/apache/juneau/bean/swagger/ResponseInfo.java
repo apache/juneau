@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * The Response Object describes a single response from a Swagger 2.0 API operation, including a description,
  * schema, headers, and examples. Responses are associated with HTTP status codes (e.g., 200, 404, 500).
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Response Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>examples</c> (map of any) - An example of the response message (keys are media types)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ResponseInfo <jv>info</jv> = <jsm>responseInfo</jsm>(<js>"A complex object array response"</js>)
@@ -74,7 +74,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#response-object">Swagger 2.0 Specification &gt; Response Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-responses/">Swagger Describing Responses</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

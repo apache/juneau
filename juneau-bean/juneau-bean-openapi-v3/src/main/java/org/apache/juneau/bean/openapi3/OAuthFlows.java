@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * for different OAuth 2.0 flows that can be used to secure the API. Each flow type has its own specific configuration
  * requirements and use cases.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The OAuthFlows Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>authorizationCode</c> ({@link OAuthFlow}) - Configuration for the OAuth Authorization Code flow
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	OAuthFlows <jv>x</jv> = <jsm>oauthFlows</jsm>()
@@ -66,7 +66,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#oauth-flows-object">OpenAPI Specification &gt; OAuth Flows Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/oauth2/">OpenAPI OAuth2 Authentication</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

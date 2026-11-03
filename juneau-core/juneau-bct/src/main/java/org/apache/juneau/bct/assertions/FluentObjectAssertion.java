@@ -31,8 +31,7 @@ import org.apache.juneau.commons.utils.*;
 /**
  * Used for fluent assertion calls against POJOs.
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -52,8 +51,7 @@ import org.apache.juneau.commons.utils.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -64,8 +62,7 @@ import org.apache.juneau.commons.utils.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -77,7 +74,7 @@ import org.apache.juneau.commons.utils.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *
@@ -153,7 +150,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Converts this object to a string using {@link Object#toString} and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
 	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
@@ -170,7 +167,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Converts this object to a string using the specified function and returns it as a new assertion.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
 	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
@@ -252,7 +249,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Asserts that the object is an instance of the specified class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
 	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isExactType(MyBean.<jk>class</jk>);
@@ -354,7 +351,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Asserts that the specified object is the same as this object after converting both to strings using the specified function.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isSameSerializedAs(<jv>other</jv>, <jv>x</jv> -&gt; <jv>x</jv>.toString());
 	 * </p>
@@ -389,7 +386,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Asserts that the object is an instance of the specified class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
 	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);

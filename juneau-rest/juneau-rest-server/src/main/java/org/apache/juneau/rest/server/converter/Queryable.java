@@ -65,7 +65,7 @@ import org.apache.juneau.rest.server.*;
  * session's <c>total</c>/<c>matched</c> row counts &mdash; each header is set only when the corresponding count
  * is present.  Without it, neither header is set.  The response body itself stays a bare list either way.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(converters=Queryable.<jk>class</jk>)
  * 	<jk>public class</jk> PeopleResource <jk>extends</jk> BasicRestServlet {
@@ -97,7 +97,7 @@ import org.apache.juneau.rest.server.*;
  * 	X-BeanQuery-Matched: 7
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link QueryableSettings} - Per-resource limits and defaults for this converter.
  * 	<li class='jc'>{@link BeanQueryRequest} - The request parameters this converter binds.
  * 	<li class='jc'>{@link InMemoryBeanQueryContext} - The engine this converter drives.

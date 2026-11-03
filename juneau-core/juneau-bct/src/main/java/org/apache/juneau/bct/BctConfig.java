@@ -28,7 +28,7 @@ import org.junit.jupiter.api.extension.*;
  * This annotation can be applied to test classes or test methods to automatically configure
  * BCT settings before tests run and clear them after tests complete.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@BctConfig</ja>(sortMaps=TriState.<jsf>TRUE</jsf>)
  * 	<jk>class</jk> MyTest {
@@ -71,7 +71,7 @@ public @interface BctConfig {
 	 * If specified (not the default {@link BeanConverter}), the class will be instantiated using
 	 * its no-arg constructor and set as the converter for the current thread.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@BctConfiguration</ja>(beanConverter=MyCustomConverter.<jk>class</jk>)
 	 * 	<jk>class</jk> MyTest {

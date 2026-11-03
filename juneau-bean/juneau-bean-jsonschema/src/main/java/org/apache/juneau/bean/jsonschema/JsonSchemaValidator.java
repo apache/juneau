@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * {@code MarshalledPropertyPostProcessor}) can install schema validation closures on bean properties without taking a
  * compile-time dependency on this module.
  *
- * <h5 class='section'>Supported keywords (v1):</h5>
+ * <h2 class='section'>Supported keywords (v1):</h2>
  * <ul class='spaced-list'>
  * 	<li>Any type: {@code type}, {@code enum}, {@code const}.
  * 	<li>Numeric: {@code minimum}, {@code maximum}, {@code exclusiveMinimum}, {@code exclusiveMaximum},
@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 		{@link Map}-shaped values).
  * </ul>
  *
- * <h5 class='section'>Deferred keywords:</h5>
+ * <h2 class='section'>Deferred keywords:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@code format} — informational only by default; validators may treat it as advisory.
  * 	<li>{@code patternProperties}, {@code additionalProperties}, {@code prefixItems}, {@code contains},
@@ -60,13 +60,13 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li>References: {@code $ref}, {@code $defs} (the bean carries them; the validator does not resolve them yet).
  * </ul>
  *
- * <h5 class='section'>Descriptive keywords (always ignored):</h5>
+ * <h2 class='section'>Descriptive keywords (always ignored):</h2>
  * <ul class='spaced-list'>
  * 	<li>{@code title}, {@code summary}, {@code description}, {@code examples}, {@code $comment}, {@code deprecated},
  * 		{@code readOnly}, {@code writeOnly}.
  * </ul>
  *
- * <h5 class='section'>Java-value mapping:</h5>
+ * <h2 class='section'>Java-value mapping:</h2>
  * <p>
  * Java values are matched against JSON Schema {@code type} keywords as follows:
  * <ul class='spaced-list'>
@@ -82,7 +82,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li>{@code any} — always matches.
  * </ul>
  *
- * <h5 class='section'>Nested validation:</h5>
+ * <h2 class='section'>Nested validation:</h2>
  * <p>
  * For property-level validation, the validator recurses into:
  * <ul class='spaced-list'>
@@ -94,11 +94,11 @@ import org.apache.juneau.marshall.marshaller.*;
  * The validator does <b>not</b> recurse into Java beans via reflection.  Inner {@code @Schema} annotations on a
  * nested bean's own properties are validated independently by the marshalling layer's per-property install hooks.
  *
- * <h5 class='section'>Thread safety:</h5>
+ * <h2 class='section'>Thread safety:</h2>
  * Instances are immutable and safe to share across threads.  The compiled {@link Pattern} for the {@code pattern}
  * keyword is cached on construction.
  *
- * <h5 class='section'>Interruptible {@code pattern} matching:</h5>
+ * <h2 class='section'>Interruptible {@code pattern} matching:</h2>
  * <p>
  * A {@code pattern} keyword can encode a catastrophically-backtracking regular expression that a hostile input can
  * drive into effectively-unbounded work. {@link java.util.regex.Matcher} never checks {@link Thread#isInterrupted()},
@@ -109,7 +109,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * promptly. A caller that bounds validation on a worker thread (for example an MCP {@code tools/call} DoS guard) can
  * therefore reclaim the thread by interrupting it, rather than leaking a core to a match that ignores cancellation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>
  * </ul>
  *

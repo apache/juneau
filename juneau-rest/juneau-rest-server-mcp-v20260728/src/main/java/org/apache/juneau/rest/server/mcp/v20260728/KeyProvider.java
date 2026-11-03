@@ -44,7 +44,7 @@ import javax.crypto.SecretKey;
  * Not annotated {@code @FunctionalInterface}: unlike single-method SPIs such as
  * {@link org.apache.juneau.rest.server.auth.ApiKeyStore}, this SPI declares two abstract methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link KeyedSecret}
  * 	<li class='jc'>{@link EphemeralKeyProvider}
  * 	<li class='jc'>{@link StaticKeyProvider}

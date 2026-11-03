@@ -23,7 +23,7 @@ import java.util.logging.*;
  * Reflective accessor for the currently-active OpenTelemetry trace / span id, used by
  * {@link LogEntryFormatter} to populate the optional {@code {traceId}} / {@code {spanId}} log fields.
  *
- * <h5 class='topic'>Optional / reflective coupling</h5>
+ * <h2 class='topic'>Optional / reflective coupling</h2>
  *
  * <p>
  * OpenTelemetry is <b>not</b> a compile-time dependency of {@code juneau-microservice}. This class
@@ -33,7 +33,7 @@ import java.util.logging.*;
  * {@link #isAvailable()} returns {@code false} and {@link #currentTraceId()} / {@link #currentSpanId()}
  * return the empty string, so the {@code {traceId}} / {@code {spanId}} placeholders render empty.
  *
- * <h5 class='topic'>Where the id comes from</h5>
+ * <h2 class='topic'>Where the id comes from</h2>
  *
  * <p>
  * The id is read from {@code Span.current().getSpanContext()} &mdash; the OTel context active on the

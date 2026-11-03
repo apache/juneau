@@ -65,7 +65,7 @@ import jakarta.websocket.server.*;
  * repeated lines of a forwarded header in the order they arrived on the wire.  Jetty and Tomcat both do.  A container
  * that reorders them would select the wrong hop.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// Do not construct this class; register the endpoint instead:</jc>
  *   BusWebSockets.<jsm>register</jsm>(<jv>servletContext</jv>, JobsRest.<jsf>BUS</jsf>);

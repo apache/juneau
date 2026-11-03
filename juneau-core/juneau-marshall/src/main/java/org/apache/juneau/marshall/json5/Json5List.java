@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.serializer.*;
  * For strict (RFC 8259) JSON behavior, use {@link JsonList}. For a neutral, marshaller-agnostic
  * base with no language coupling, use {@link MarshalledList}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct an empty list</jc>
  * 	Json5List <jv>list</jv> = Json5List.<jsm>of</jsm>();
@@ -55,7 +55,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>s</jv> = <jv>list</jv>.toString();  <jc>// "[{foo:'bar'},{baz:'bing'}]"</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
@@ -545,7 +545,7 @@ public class Json5List extends MarshalledList {
 	 * <p>
 	 * This method performs a round-trip serialization and deserialization to convert the list into the target type.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>The current implementation uses a serialization round-trip which may be inefficient for
 	 * 		frequent conversions of large objects. Consider caching results or using direct object conversion where possible.
 	 * </ul>

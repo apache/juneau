@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * {@link org.apache.juneau.commons.settings.Settings#get() Settings.get()}), then coerced to the
  * target Java type via {@link org.apache.juneau.commons.settings.Settings#toType(String, Class)}.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Field injection with default.</jc>
  * 	<ja>@Value</ja>(<js>"${db.timeout.ms:5000}"</js>)
@@ -44,7 +44,7 @@ import java.lang.annotation.*;
  * 	) { ... }
  * </p>
  *
- * <h5 class='section'>Resolution order:</h5>
+ * <h2 class='section'>Resolution order:</h2>
  * <ol>
  * 	<li>Thread-local override ({@link org.apache.juneau.commons.settings.Settings#setLocal Settings.setLocal})
  * 	<li>Global override ({@link org.apache.juneau.commons.settings.Settings#setGlobal Settings.setGlobal})
@@ -59,7 +59,7 @@ import java.lang.annotation.*;
  * via FQN-based detection in {@link JsrSupport}; no compile-time Spring dependency is introduced in
  * {@code juneau-commons}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>{@code @Value} and {@code @Inject} on the same site is invalid and throws
  * 		a {@code BeanCreationException}. {@code @Value} resolves strings/primitives; {@code @Inject}
  * 		resolves beans.
@@ -67,7 +67,7 @@ import java.lang.annotation.*;
  * 		a {@code BeanCreationException} is thrown.  For reference types, {@code null} is injected.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">@Value Annotation Basics</a>
  * </ul>
  */

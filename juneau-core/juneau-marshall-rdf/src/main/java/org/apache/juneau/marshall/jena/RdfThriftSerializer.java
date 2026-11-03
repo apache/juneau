@@ -23,7 +23,7 @@ package org.apache.juneau.marshall.jena;
  * Serializes POJOs to compact binary RDF using Apache Thrift encoding, ideal for efficient storage
  * and network transfer. Semantically equivalent to RDF/XML and other RDF text formats.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to RDF/THRIFT bytes.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
@@ -45,11 +45,11 @@ package org.apache.juneau.marshall.jena;
  *
  * <p>Output is binary (<jk>byte</jk>[]), Apache Thrift format. Complex structures (nested objects, arrays) serialize to equivalent RDF triples in binary form.</p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

@@ -21,7 +21,7 @@ import org.apache.juneau.commons.http.*;
 /**
  * Represents a parser and media type that matches an HTTP <c>Content-Type</c> header value.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

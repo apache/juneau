@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.processor.*;
  * is the host-side complement to {@link Rest#mixins() @Rest(mixins=...)} (which takes bare classes and offers
  * no override hook).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		mixinDefs=<ja>@Mixin</ja>(type=FooMixin.<jk>class</jk>, guards=AdminGuard.<jk>class</jk>)
@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.processor.*;
  * Here {@code AdminGuard} is applied to {@code FooMixin}'s endpoints as declared by the host, without
  * {@code FooMixin} having to declare it.
  *
- * <h5 class='section'>Override semantics</h5>
+ * <h2 class='section'>Override semantics</h2>
  * <p>
  * The override slots mirror the same {@code @Rest} attributes and resolve through the existing host&rarr;mixin
  * inheritance chain, exactly as if the value had been declared on the mixin class itself, but at the
@@ -73,7 +73,7 @@ import org.apache.juneau.rest.server.processor.*;
  * <p>
  * {@link #path()}/{@link #paths()} re-mount the mixin's endpoints under host-chosen prefix(es).
  *
- * <h5 class='section'>Merging a mixin's list attributes into the host</h5>
+ * <h2 class='section'>Merging a mixin's list attributes into the host</h2>
  * <p>
  * The override slots above apply the <i>host's</i> values to the <i>mixin's</i> endpoints.  The separate opt-in
  * {@link #mergeIntoHost()} directive does the reverse: it appends the <i>mixin's</i> own list-shaped
@@ -81,7 +81,7 @@ import org.apache.juneau.rest.server.processor.*;
  * {@code @RestOp} methods pick them up too.  It defaults to {@code false} (host endpoints see only the host's
  * chain, as before) and is only settable on a rich {@code @Mixin} &mdash; see {@link #mergeIntoHost()}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Rest#mixinDefs()}
  * 	<li class='ja'>{@link Rest#mixins()}
  * </ul>
@@ -128,7 +128,7 @@ public @interface Mixin {
 	 * {@code @Mixin} that leaves it {@code false}, so existing resources are unaffected.  The mixin still mounts
 	 * its own endpoints as usual &mdash; this directive is purely additive to the host chain.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Auto-wire JspMixin's JspViewRenderer into the host so the host's own @RestOp methods can</jc>
 	 * 	<jc>// return JspView (no need to also list JspViewRenderer in the host's @Rest(responseProcessors)).</jc>

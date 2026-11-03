@@ -36,12 +36,12 @@ import org.apache.juneau.marshall.parser.*;
  * Embedded sub-messages and packed repeated fields are decoded by reading the length-delimited block via
  * {@link #readLenDelimited()} and constructing a new {@code ProtobufReader} over those bytes.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not intended for external use.
  * 	<li class='note'>This class is not thread-safe; each parse session uses its own instance.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/programming-guides/encoding/">Protocol Buffers Encoding</a>
  * </ul>

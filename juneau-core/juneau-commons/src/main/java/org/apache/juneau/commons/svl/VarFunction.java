@@ -27,7 +27,7 @@ import java.util.*;
  * compose freely with {@code ${...}} lookups and other {@code #{...}} calls; arguments are
  * pre-resolved by the runtime before {@link #invoke(VarResolverSession, List) invoke} is called.
  *
- * <h5 class='section'>Naming note:</h5>
+ * <h2 class='section'>Naming note:</h2>
  * <p>
  * Named {@code VarFunction} rather than the shorter {@code Function} because Juneau's
  * serializer/parser/test code makes heavy use of {@link java.util.function.Function} and
@@ -52,7 +52,7 @@ import java.util.*;
  * coercion automatically from the subclass's {@code invoke(...)} method signature, eliminating
  * the per-function plumbing.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Direct VarFunction impl (less common — TypedFunction is preferred).</jc>
  * 	<jk>public class</jk> Reverse <jk>implements</jk> VarFunction {
@@ -65,7 +65,7 @@ import java.util.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * 	<li class='jc'>{@link TypedFunction}
  * </ul>

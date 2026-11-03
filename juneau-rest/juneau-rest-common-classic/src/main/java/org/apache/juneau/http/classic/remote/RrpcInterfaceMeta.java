@@ -34,7 +34,7 @@ import org.apache.juneau.http.remote.*;
  * <p>
  * Captures the information in {@link Remote @Remote} annotations for caching and reuse.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  */

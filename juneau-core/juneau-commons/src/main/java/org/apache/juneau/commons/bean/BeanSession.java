@@ -31,17 +31,17 @@ import java.util.*;
  * On the commons-side construction path ({@code BeanMeta.of(Class, BeanConfigContext)}) the session is
  * <jk>null</jk> and these operations are skipped; the bean-modeling code runs in raw-reflection mode.
  *
- * <h5 class='section'>Method parameter typing:</h5>
+ * <h2 class='section'>Method parameter typing:</h2>
  * <p>
  * The {@code targetType} parameters are typed as {@link Object} because the marshalling layer expresses them
  * as {@code ClassMeta<?>} — a marshalling-side type that {@code commons.bean} cannot reference.  Callers in
  * the bean-modeling layer pass through whatever opaque type-metadata handle they received; the
  * {@code MarshallingSession} implementation interprets it as a {@code ClassMeta}.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Thread safety depends on implementation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanConfigContext} — bean-modeling configuration counterpart.
  * </ul>
  */

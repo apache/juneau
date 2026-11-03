@@ -31,7 +31,7 @@ import org.apache.juneau.http.classic.*;
  * Indicates multiple options for the resource from which the client may choose (via agent-driven content negotiation).
  * For example, this code could be used to present multiple video format options, to list files with different filename extensions, or to suggest word-sense disambiguation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

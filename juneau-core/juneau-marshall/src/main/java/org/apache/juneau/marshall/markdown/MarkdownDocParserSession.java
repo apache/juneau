@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.parser.*;
  * Parses Markdown documents (headings + tables) produced by {@link MarkdownDocSerializer}
  * into Java objects by mapping heading sections to nested bean properties.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

@@ -43,7 +43,7 @@ import org.apache.juneau.http.header.*;
  * This is a self-typed (CRTP) root: a leaf declares <c>class Ok <jk>extends</jk> BasicHttpResponse&lt;Ok&gt;</c> and
  * inherits leaf-typed fluent setters with no covariant overrides.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

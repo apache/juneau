@@ -35,7 +35,7 @@ import jakarta.servlet.http.*;
  * Rejections are built only inside this package ({@link BoundaryResult}'s rejecting constructor is package-private),
  * so an implementation outside it can only {@linkplain BoundaryResult#ALLOWED allow}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LoopbackBoundary}
  * 	<li class='jc'>{@link RequestBoundaryFilter}
  * </ul>

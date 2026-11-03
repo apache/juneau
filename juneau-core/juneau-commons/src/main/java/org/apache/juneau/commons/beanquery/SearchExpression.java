@@ -39,14 +39,14 @@ import java.util.stream.*;
  * This tree is the parser's output, not a wire format: a {@link BeanQuery} carries only raw expression strings, and
  * engines call the parser themselves.  See {@link SearchExpressionParser}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	SearchExpression <jv>node</jv> = SearchExpressionParser.<jsm>parse</jsm>(<js>"$contains(err)"</js>, SearchOperatorSet.<jsm>standard</jsm>());
  * 	<jk>if</jk> (<jv>node</jv>.isFunction())
  * 		<jsm>evaluate</jsm>(<jv>node</jv>.name(), <jv>node</jv>.literalArgs());  <jc>// name() == "$contains", literalArgs() == ["err"]</jc>
  * </p>
  *
- * <h5 class='section'>Example (typed values):</h5>
+ * <h2 class='section'>Example (typed values):</h2>
  * <p class='bjava'>
  * 	SearchExpression <jv>e</jv> = SearchExpressionParser.<jsm>parse</jsm>(<js>"$eq(42)"</js>, SearchOperatorSet.<jsm>standard</jsm>());
  * 	<jc>// After QueryResolver types it against a NUMERIC column, the arg's typedValue() is a BigDecimal, not "42".</jc>

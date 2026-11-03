@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * the path-doubling that a mixin-shaped op would produce when the servlet itself is mounted at
  * {@code /static/*}.
  *
- * <h5 class='figure'>Microservice registration:</h5>
+ * <h2 class='figure'>Microservice registration:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Bean</ja> Servlet staticFiles() {
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link StaticFilesMixin}
  * 	<li class='jc'>{@link StaticFilesResource}
  * 	<li class='jc'>{@link StaticFiles}

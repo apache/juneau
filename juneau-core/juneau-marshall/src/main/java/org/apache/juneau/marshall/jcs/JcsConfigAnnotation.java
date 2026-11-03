@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Utility classes and methods for the {@link JcsConfig @JcsConfig} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * </ul>
  */

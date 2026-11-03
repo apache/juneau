@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.marshaller.*;
 /**
  * General exception thrown whenever an error occurs during serialization.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  * </ul>

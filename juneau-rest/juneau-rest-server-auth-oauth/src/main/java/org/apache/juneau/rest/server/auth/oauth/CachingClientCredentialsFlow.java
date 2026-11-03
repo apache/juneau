@@ -37,7 +37,7 @@ import com.nimbusds.oauth2.sdk.http.*;
  * than hitting the IdP on each call.  When no {@link Builder#tokenCache(TokenCache) cache} is configured the decorator
  * simply delegates to the neutral flow.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jk>var</jk> token = CachingClientCredentialsFlow.<jsm>create</jsm>()

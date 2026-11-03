@@ -44,7 +44,7 @@ import org.apache.juneau.console.views.*;
  * {@code targetId} is the key's own value.  The shape rules are {@link JobLogChecks}, shared with
  * {@link JobLogRegion}.  There is no typed builder; build it with {@link CardSpec#of(String, String)}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@card type="job-log" id="rebuild" title="Rebuild index"&gt;
  * 	{ submit: { endpoint: '/ops/jobs/rebuild', fields: [ { name: 'shards', label: 'Shards', type: 'number', default: 4 } ] },

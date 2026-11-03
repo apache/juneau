@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.*;
 /**
  * Operations: parent of the Jobs and Audit pages.  {@code GET /console/ops} redirects to Jobs.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/ops"</js>, children={JobsRest.<jk>class</jk>})
  * 	<jk>public class</jk> OpsRest <jk>extends</jk> PetstoreConsolePage {

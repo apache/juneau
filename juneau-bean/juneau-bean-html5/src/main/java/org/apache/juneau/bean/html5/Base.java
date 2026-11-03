@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * the default target for all links and forms in the document. Only one base element is allowed
  * per document and it must be placed in the head section.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Set base URL for all relative links</jc>
  * 	Base <jv>base1</jv> = <jsm>base</jsm>().href(<js>"https://example.com/docs/"</js>);
@@ -49,9 +49,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#base() base()}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

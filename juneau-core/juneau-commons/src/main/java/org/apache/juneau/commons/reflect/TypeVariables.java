@@ -28,7 +28,7 @@ import java.util.*;
  * This class provides a type-safe wrapper around type variable implementations,
  * using {@link List} instead of arrays for better API consistency.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Given class hierarchy:</jc>
  * 	<jk>public static class</jk> BeanA&lt;T&gt; {
@@ -43,7 +43,7 @@ import java.util.*;
  * 	Class&lt;?&gt; <jv>impl</jv> = <jv>tv</jv>.get(BeanA.<jk>class</jk>, 0);  <jc>// Returns Integer.class</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li>{@link #of(Type)}
  * </ul>
@@ -87,7 +87,7 @@ public class TypeVariables {
 	 * 	{BeanA.class:[Integer.class]}
 	 * </p>
 	 *
-	 * <h5 class='section'>Known Limitations:</h5>
+	 * <h4 class='section'>Known Limitations:</h4>
 	 * <p>
 	 * This code doesn't currently properly handle the following situation with nested generic bounds:
 	 * <p class='bjava'>
@@ -222,7 +222,7 @@ public class TypeVariables {
 	 * This method resolves generic types, parameterized types, generic arrays, and type variables
 	 * to their concrete class representations.
 	 *
-	 * <h5 class='section'>Type Resolution:</h5>
+	 * <h4 class='section'>Type Resolution:</h4>
 	 * <ul>
 	 * 	<li><b>Class</b> - Returns the class as-is
 	 * 	<li><b>ParameterizedType</b> - Returns the raw type class

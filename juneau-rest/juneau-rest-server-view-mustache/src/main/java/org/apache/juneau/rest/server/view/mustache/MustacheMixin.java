@@ -45,7 +45,7 @@ import com.github.mustachejava.*;
  * 		host needed.
  * </ol>
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=MustacheMixin.<jk>class</jk>)
@@ -65,7 +65,7 @@ import com.github.mustachejava.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /mustache/*} can be overridden via the SVL variable
@@ -75,7 +75,7 @@ import com.github.mustachejava.*;
  * ({@code juneau.mustache.path = views}) to change the runtime mount without subclassing.
  * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -84,7 +84,7 @@ import com.github.mustachejava.*;
  * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin
  * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='section'>Choosing a MustacheFactory:</h5>
+ * <h2 class='section'>Choosing a MustacheFactory:</h2>
  *
  * <p>
  * The {@code juneau-rest-server-view-mustache} module ships <b>only</b> the mustache.java
@@ -115,7 +115,7 @@ import com.github.mustachejava.*;
  * When no Mustache engine is on the classpath, the renderer surfaces
  * {@link MustacheViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.
  *
- * <h5 class='section'>Template suffix:</h5>
+ * <h2 class='section'>Template suffix:</h2>
  *
  * <p>
  * Unlike the Thymeleaf bridge (which always appends {@code .html} via the engine resolver's
@@ -126,7 +126,7 @@ import com.github.mustachejava.*;
  * with it (idempotent), so callers can write {@code MustacheView.of("hello")} or request
  * {@code /mustache/hello} and have it resolve to {@code hello.mustache} on the classpath.
  *
- * <h5 class='section'>Multiple base paths:</h5>
+ * <h2 class='section'>Multiple base paths:</h2>
  *
  * <p>
  * A host with {@code /templates/} and {@code /admin/templates/} template trees registers two
@@ -135,13 +135,13 @@ import com.github.mustachejava.*;
  * {@code MustacheMixin_MockRest_Test} test in {@code juneau-integration-tests} for the canonical
  * pattern.
  *
- * <h5 class='section'>OpenAPI surface:</h5>
+ * <h2 class='section'>OpenAPI surface:</h2>
  *
  * <p>
  * The greedy {@code /*} handler is not API-meaningful and is excluded from generated
  * Swagger / OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MustacheView}
  * 	<li class='jc'>{@link MustacheViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MustacheViewSupport">Mustache View Support</a>

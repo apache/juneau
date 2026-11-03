@@ -40,9 +40,9 @@ The commit message is optional on the command line. It is prompted for when omit
 ## What it does
 
 1. Parses and validates the arguments. A bad combination exits 2 (`parse_args`).
-2. Prechecks, before any build work (`prechecks`): git `user.email` is the committer identity the script requires (`REQUIRED_GIT_EMAIL`), the tree has no unstaged or untracked-and-not-ignored changes, the branch is not behind its upstream, and every `.github/workflows/*.yml` / `*.yaml` parses as YAML (PyYAML; the refusal names `file:line:col`). The first three run for juneau-docs when it is present and has staged changes or unpushed commits.
+2. Prechecks, before any build work (`prechecks`): git `user.email` is the committer identity the script requires (`REQUIRED_GIT_EMAIL`), the tree has no unstaged or untracked-and-not-ignored changes, the branch is not behind its upstream, and every `.github/workflows/*.yml` / `*.yaml` parses as YAML (PyYAML; the refusal names `file:line:col`). The first three run for juneau-docs when it is present and has staged changes or unpushed commits. Also an `ai artifacts` check (`ai_artifacts_check`): when the sibling `juneau-docs` exists, it runs that checkout's `scripts/check-ai-artifacts.py --juneau-root <this checkout>` and refuses if the generated `static/llms.txt` / `static/ai/` are stale, printing `python3 scripts/generate-ai-artifacts.py` (run in juneau-docs). It never regenerates. It runs whether or not juneau-docs has anything to push, and also for `--docs-only` (the docs stage would fail on it); with no sibling it passes with a skip note. `--test-only` skips all prechecks, so it skips this too.
 3. Optional gate, when asked: tracker audit (`run_tracker_audit_gate`).
-4. Unless `--skip-tests`: `check-container-tags.py`, `check-bom-completeness.py`, then `test.py --full` (which builds, installs and runs the Java, Python and, when needed, browser tests, then fails on any stack trace they printed that [`trace-allowlist.txt`](trace-allowlist.txt) does not allow), then `push-timings.py`.
+4. Unless `--skip-tests`: `check-container-tags.py`, `check-bom-completeness.py`, `check-javadoc-html.py` (doclint `html` and `accessibility` over every main source tree, with `--java-home` set from `$JAVA_HOME` or `~/jdk/default`; any remaining diagnostic fails the push), then `test.py --full` (which builds, installs and runs the Java, Python and, when needed, browser tests, then fails on any stack trace they printed that [`trace-allowlist.txt`](trace-allowlist.txt) does not allow), then `push-timings.py`.
 5. Commits whatever is already staged and pushes to the tracked upstream (`commit_and_push`). It stages nothing itself.
 6. Repeats the follow-up for juneau-docs when it exists (`run_docs_followup`), after its docs build check.
 
@@ -70,5 +70,5 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 
 ## See also
 
-- `test.py`, `push-timings.py`, `check-container-tags.py`, `check-bom-completeness.py`
+- `test.py`, `push-timings.py`, `check-container-tags.py`, `check-bom-completeness.py`, `check-javadoc-html.py`
 - Docs site: Developer Info, Script: push (`04.02.02.ScriptPush.md` in juneau-docs)

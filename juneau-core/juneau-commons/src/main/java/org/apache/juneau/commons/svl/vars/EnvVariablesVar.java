@@ -25,7 +25,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * The format for this var is <js>"$E{envVar[,defaultValue]}"</js>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a variable resolver that resolves environment variables (e.g. "$E{PATH}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(EnvVariablesVar.<jk>class</jk>).build();
@@ -38,7 +38,7 @@ import org.apache.juneau.commons.svl.*;
  * Since this is a {@link SimpleVar}, any variables contained in the result will be recursively resolved.
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */

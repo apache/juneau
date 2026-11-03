@@ -27,7 +27,7 @@
  * {@link org.apache.juneau.marshall.jsonl.JsonlParser JsonlParser} which extend the JSON serializer/parser to produce
  * and consume newline-delimited JSON.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a list of beans to JSONL</jc>
  * 	String <jv>jsonl</jv> = Jsonl.<jsm>of</jsm>(<jv>myList</jv>);
@@ -36,7 +36,7 @@
  * 	List&lt;MyBean&gt; <jv>list</jv> = Jsonl.<jsm>to</jsm>(<jv>jsonl</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://jsonlines.org/">JSON Lines Specification</a>
  * </ul>
  */

@@ -31,7 +31,7 @@ import org.apache.juneau.http.*;
  * <p>
  * Note that this annotation is optional if you do not need to override any of the values.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * </ul>
  */
@@ -48,7 +48,7 @@ public @interface RemotePatch {
 	 * <p>
 	 * If you do not specify a path, then the path is inferred from the Java method name.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// PATCH /pet</jc>
 	 * 	<ja>@RemotePatch</ja>
@@ -139,7 +139,7 @@ public @interface RemotePatch {
 	 * Precedence (most-specific first): an {@link Url @Url} parameter, then this method-level
 	 * value, then the interface-level default ({@link Remote#baseUrl()}), then the client root URL.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -175,7 +175,7 @@ public @interface RemotePatch {
 	 * declared via {@link #headers()} (since it also drives serializer selection); a genuinely caller-supplied
 	 * {@code @Header("Content-Type")} parameter still takes effect.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -203,7 +203,7 @@ public @interface RemotePatch {
 	 * {@link #headers()}; a genuinely caller-supplied {@code @Header("Accept")} parameter still takes effect.  Exactly
 	 * one {@code Accept} header is sent.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -223,7 +223,7 @@ public @interface RemotePatch {
 	 * (it is not suppressed), and this method-level value takes precedence over an interface-level
 	 * {@link Remote#headers()} constant of the same name.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -246,7 +246,7 @@ public @interface RemotePatch {
 	 * this method-level value takes precedence over an interface-level {@link Remote#queryData()} constant of the same
 	 * name.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -269,7 +269,7 @@ public @interface RemotePatch {
 	 * this method-level value takes precedence over an interface-level {@link Remote#formData()} constant of the same
 	 * name.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -291,7 +291,7 @@ public @interface RemotePatch {
 	 * ({@link Remote#interceptors()}) and builder-configured interceptors; the three sets are unioned in the order
 	 * builder &rarr; interface &rarr; method.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The member type is {@code Class<?>[]} (not {@code Class<? extends RestCallInterceptor>[]}) because
 	 * 		<c>RestCallInterceptor</c> lives in the {@code juneau-rest-client} module, which this annotation's module
@@ -314,7 +314,7 @@ public @interface RemotePatch {
 	 * value overrides the interface-level default ({@link Remote#timeout()}).  Connect timeouts remain a client-level
 	 * setting.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -346,7 +346,7 @@ public @interface RemotePatch {
 	 * <p>
 	 * Scalar precedence: a positive method-level value overrides the interface-level default ({@link Remote#retries()}).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -364,7 +364,7 @@ public @interface RemotePatch {
 	 * with a non-repeatable body is never retried.  The effective value is the logical OR of this method-level value
 	 * and the interface-level default ({@link Remote#retryNonIdempotent()}).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -384,7 +384,7 @@ public @interface RemotePatch {
 	 * The effective value is the logical OR of this method-level value and the interface-level default
 	 * ({@link Remote#throwOnError()}).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).

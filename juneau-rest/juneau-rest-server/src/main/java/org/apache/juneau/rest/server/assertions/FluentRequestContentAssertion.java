@@ -29,8 +29,7 @@ import org.apache.juneau.bct.assertions.*;
 /**
  * Used for fluent assertion calls against {@link RequestContent} objects.
  *
- * <h5 class='topic'>Test Methods</h5>
- * <p>
+ * <h2 class='topic'>Test Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentRequestContentAssertion}
  * 	<ul class='javatreec'>
@@ -57,8 +56,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
- * <p>
+ * <h2 class='topic'>Transform Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentRequestContentAssertion}
  * 	<ul class='javatreec'>
@@ -75,8 +73,7 @@ import org.apache.juneau.bct.assertions.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
- * <p>
+ * <h2 class='topic'>Configuration Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -88,7 +85,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *
@@ -140,7 +137,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	/**
 	 * Converts the content to a type using {@link RequestContent#as(Class)} and then returns the value as an object assertion.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the request content bean is the expected value.</jc>
 	 * 	<jv>request</jv>
@@ -149,7 +146,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * 			.asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -172,7 +169,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	/**
 	 * Converts the content to a type using {@link RequestContent#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the request content bean is the expected value.</jc>
 	 * 	<jv>request</jv>
@@ -181,7 +178,7 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	 * 			.asJson().is(<js>"{foo:123}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -205,14 +202,14 @@ public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<Requ
 	/**
 	 * Provides the ability to perform fluent-style assertions on the bytes of the request content.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the request content equals the text "foo".</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>

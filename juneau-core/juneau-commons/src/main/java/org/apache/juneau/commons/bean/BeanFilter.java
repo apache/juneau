@@ -30,7 +30,7 @@ import org.apache.juneau.commons.reflect.*;
  * sees {@link BeanFilter}.  This interface is restricted to commons-compatible return types
  * (collections, {@link ClassInfo}, {@link PropertyNamer}, plain values).
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Thread safety depends on implementation.
  */
 public interface BeanFilter {

@@ -29,11 +29,11 @@ import org.apache.juneau.marshall.uon.*;
 /**
  * Serializes POJOs to values suitable for transmission as HTTP headers, query/form-data parameters, and path variables.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi</a>
 
  * </ul>
@@ -96,7 +96,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * <p>
 		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link Schema#collectionFormat()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer using CSV for collections.</jc>
 		 * 	OpenApiSerializer <jv>serializer1</jv> = OpenApiSerializer
@@ -157,7 +157,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * <p>
 		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link Schema#format()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a plain-text serializer.</jc>
 		 * 	OpenApiSerializer <jv>serializer1</jv> = OpenApiSerializer

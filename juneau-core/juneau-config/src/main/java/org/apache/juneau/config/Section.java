@@ -71,7 +71,7 @@ public class Section {
 	 * <p>
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
 	 *
-	 * <h5 class='figure'>Example config file</h5>
+	 * <h4 class='figure'>Example config file</h4>
 	 * <p class='bini'>
 	 * 	<cs>[MyAddress]</cs>
 	 * 	<ck>name</ck> = <cv>John Smith</cv>
@@ -81,7 +81,7 @@ public class Section {
 	 * 	<ck>zip</ck> = <cv>12345</cv>
 	 * </p>
 	 *
-	 * <h5 class='figure'>Example bean</h5>
+	 * <h4 class='figure'>Example bean</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> Address {
 	 * 		<jk>public</jk> String <jf>name</jf>, <jf>street</jf>, <jf>city</jf>;
@@ -90,7 +90,7 @@ public class Section {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='figure'>Example usage</h5>
+	 * <h4 class='figure'>Example usage</h4>
 	 * <p class='bjava'>
 	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 * 	Address <jv>address</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).asBean(Address.<jk>class</jk>).orElse(<jk>null</jk>);
@@ -132,7 +132,7 @@ public class Section {
 	 * Wraps this section inside a Java interface so that values in the section can be read and
 	 * write using getters and setters.
 	 *
-	 * <h5 class='figure'>Example config file</h5>
+	 * <h4 class='figure'>Example config file</h4>
 	 * <p class='bini'>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>string</ck> = <cv>foo</cv>
@@ -143,7 +143,7 @@ public class Section {
 	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
 	 * </p>
 	 *
-	 * <h5 class='figure'>Example interface</h5>
+	 * <h4 class='figure'>Example interface</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
 	 *
@@ -167,7 +167,7 @@ public class Section {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='figure'>Example usage</h5>
+	 * <h4 class='figure'>Example usage</h4>
 	 * <p class='bjava'>
 	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
@@ -180,7 +180,7 @@ public class Section {
 	 * 	<jv>ci</jv>.save();
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>
 	 *

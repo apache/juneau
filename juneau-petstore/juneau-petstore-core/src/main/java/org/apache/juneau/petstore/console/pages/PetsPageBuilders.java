@@ -31,7 +31,7 @@ import org.apache.juneau.console.widgets.*;
  * Builder twins of the Pets pages: P2 Pets ({@code pets.ftlh}), its {@code ?mixed} variant, P3 Sold
  * ({@code pets-sold.ftlh}) and P4 one pet ({@code pet.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, PetsPageBuilders.<jsm>pets</jsm>());
  * </p>

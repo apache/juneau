@@ -28,7 +28,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * {@link RuntimeException}, making it compatible with standard {@link Consumer5} usage while still allowing
  * the implementation to throw checked exceptions via {@link #acceptThrows(Object, Object, Object, Object, Object)}.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Exception support - allows checked exceptions to be thrown via {@link #acceptThrows(Object, Object, Object, Object, Object)}
@@ -36,7 +36,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>Dual interface - can be used as both Consumer5 and ThrowingConsumer5
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Five-argument operations that may throw I/O exceptions
  * 	<li>Validation operations that may throw validation exceptions
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>Operations that need to propagate checked exceptions
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda with exception</jc>
  * 	ThrowingConsumer5&lt;String,Integer,Boolean,Double,Long&gt; <jv>fileWriter</jv> = (<jv>path</jv>, <jv>content</jv>, <jv>append</jv>, <jv>timeout</jv>, <jv>timestamp</jv>) -&gt; {
@@ -66,7 +66,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<jv>fileWriter</jv>.apply(<js>"/tmp/output.txt"</js>, <js>"Hello World"</js>, <jk>true</jk>, 5.0, 1234567890L);  <jc>// May throw RuntimeException</jc>
  * </p>
  *
- * <h5 class='section'>Exception Handling:</h5>
+ * <h2 class='section'>Exception Handling:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@link #acceptThrows(Object, Object, Object, Object, Object)} - Throws checked exceptions directly
  * 	<li>{@link #apply(Object, Object, Object, Object, Object)} - Wraps checked exceptions in {@link RuntimeException}
@@ -74,7 +74,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>Use {@code apply} when you want standard Consumer5 behavior
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThrowingConsumer} - Single-argument consumer that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer2} - Two-argument consumer that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer3} - Three-argument consumer that throws exceptions
@@ -145,7 +145,7 @@ public interface ThrowingConsumer5<A,B,C,D,E> extends Consumer5<A,B,C,D,E> {
 	 * This is the functional method that implementations must provide. It allows checked exceptions
 	 * to be thrown directly, unlike the standard {@link Consumer5#apply(Object, Object, Object, Object, Object)} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ThrowingConsumer5&lt;String,Integer,Boolean,Double,Long&gt; <jv>validator</jv> = (<jv>name</jv>, <jv>age</jv>, <jv>active</jv>, <jv>score</jv>, <jv>timestamp</jv>) -&gt; {
 	 * 		<jk>if</jk> (<jv>name</jv> == <jk>null</jk> || <jv>name</jv>.isEmpty()) {

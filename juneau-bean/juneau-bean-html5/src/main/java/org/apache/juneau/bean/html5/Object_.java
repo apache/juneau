@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.*;
  * PDFs, images, videos, or other HTML documents. While historically used for plugins, modern web development often
  * prefers more specific elements like img, video, audio, or iframe when appropriate.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// PDF document</jc>
  * 	Object_ <jv>pdf</jv> = <jsm>object</jsm>()
@@ -90,9 +90,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#object(Object...) object(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

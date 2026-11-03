@@ -31,7 +31,7 @@ import org.apache.juneau.http.*;
  * <p>
  * Contains exception information including name and optionally a message.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found
  * </p>
@@ -53,7 +53,7 @@ import org.apache.juneau.http.*;
  * 	Thrown: RuntimeException;foo
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

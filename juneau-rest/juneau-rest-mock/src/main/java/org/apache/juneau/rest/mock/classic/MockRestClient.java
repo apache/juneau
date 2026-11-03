@@ -65,7 +65,7 @@ import jakarta.servlet.http.*;
  * <p>
  * The following shows a simple example of invoking a PUT method on a simple REST interface and asserting the correct status code and response body:
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MockTest {
  *
@@ -148,7 +148,7 @@ import jakarta.servlet.http.*;
  * 	directly on the underlying {@link HttpServletRequest} object.  The following example shows how
  * 	this can be used to directly set roles on the request object to perform security testing.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
  * 	<jk>public class</jk> A {
@@ -171,7 +171,7 @@ import jakarta.servlet.http.*;
  * <p>
  * 	Debug mode is provided that will cause your HTTP requests and responses to be sent to the console:
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	MockRestClient <jv>client</jv> = MockRestClient
  * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
@@ -183,7 +183,7 @@ import jakarta.servlet.http.*;
  * <p>
  * 	The class can also be used for testing of {@link Remote @Remote}-annotated interfaces against {@link Rest @Rest}-annotated resources.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Our remote resource to test.</jc>
  * 	<ja>@Remote</ja>
@@ -217,11 +217,11 @@ import jakarta.servlet.http.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock</a>
  * </ul>
  */
@@ -308,7 +308,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * <p>
 		 * Allows you to add resolved parent path variables when performing tests on child resource classes.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// A parent class with a path variable.</jc>
 		 * 	<ja>@Rest</ja>(
@@ -341,8 +341,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * 		.assertStatus().asCode().is(200)
 		 * 		.assertContent().is(<js>"bar"</js>);
 		 * </p>
-		 *
-		 * <review>Needs review</review>
 		 *
 		 * @param value The path variables.
 		 * @return This object.

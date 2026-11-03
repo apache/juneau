@@ -27,7 +27,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This class wraps an underlying list and provides a fluent API for adding elements. All methods return
  * <c>this</c> to allow method chaining. The underlying list can be any {@link List} implementation.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Fluent API:</b> All methods return <c>this</c> for method chaining
  * 	<li><b>Arbitrary List Support:</b> Works with any list implementation
@@ -35,7 +35,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li><b>Transparent Interface:</b> Implements the full {@link List} interface, so it can be used anywhere a list is expected
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a FluentList wrapping an ArrayList</jc>
  * 	FluentList&lt;String&gt; <jv>list</jv> = <jk>new</jk> FluentList&lt;&gt;(<jk>new</jk> ArrayList&lt;&gt;());
@@ -51,7 +51,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jv>list</jv>.aa(<jv>other</jv>);
  * </p>
  *
- * <h5 class='section'>Example - Conditional Building:</h5>
+ * <h2 class='section'>Example - Conditional Building:</h2>
  * <p class='bjava'>
  * 	<jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
  * 	<jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;
@@ -63,7 +63,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.ai(<jv>includeTest</jv>, <js>"test"</js>);    <jc>// Not added</jc>
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>All list operations are delegated to the underlying list
  * 	<li>The fluent methods ({@link #a(Object)}, {@link #aa(Collection)}, {@link #ai(boolean, Object)}) return <c>this</c> for chaining
@@ -71,12 +71,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>The underlying list is stored by reference (not copied), so modifications affect the original list
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe unless the underlying list is thread-safe. If thread safety is required,
  * use a thread-safe list type (e.g., {@link java.util.concurrent.CopyOnWriteArrayList}).
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -106,7 +106,7 @@ public class FluentList<E> extends AbstractList<E> {
 	 * This is a convenience method that calls {@link #add(Object)} and returns <c>this</c>
 	 * for method chaining.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentList&lt;String&gt; <jv>list</jv> = <jk>new</jk> FluentList&lt;&gt;(<jk>new</jk> ArrayList&lt;&gt;());
 	 * 	<jv>list</jv>.a(<js>"item1"</js>).a(<js>"item2"</js>);
@@ -127,7 +127,7 @@ public class FluentList<E> extends AbstractList<E> {
 	 * This is a convenience method that calls {@link #addAll(Collection)} and returns <c>this</c>
 	 * for method chaining. If the specified collection is <jk>null</jk>, this is a no-op.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FluentList&lt;String&gt; <jv>list</jv> = <jk>new</jk> FluentList&lt;&gt;(<jk>new</jk> ArrayList&lt;&gt;());
 	 * 	List&lt;String&gt; <jv>other</jv> = List.of(<js>"item1"</js>, <js>"item2"</js>);
@@ -151,7 +151,7 @@ public class FluentList<E> extends AbstractList<E> {
 	 * If the condition is <jk>false</jk>, the element is not added and this method returns <c>this</c>
 	 * without modifying the list.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>includeDebug</jv> = <jk>true</jk>;
 	 * 	<jk>boolean</jk> <jv>includeTest</jv> = <jk>false</jk>;

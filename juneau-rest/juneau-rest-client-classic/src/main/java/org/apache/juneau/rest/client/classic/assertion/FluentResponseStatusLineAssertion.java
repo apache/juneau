@@ -27,7 +27,7 @@ import org.apache.juneau.bct.assertions.*;
 /**
  * Used for fluent assertion calls against a response {@link StatusLine} object.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Validates the response status code is 200 or 404.</jc>
  * 	<jv>client</jv>
@@ -37,8 +37,7 @@ import org.apache.juneau.bct.assertions.*;
  * </p>
  *
  *
- * <h5 class='topic'>Test Methods</h5>
- * <p>
+ * <h2 class='topic'>Test Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -57,8 +56,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
- * <p>
+ * <h2 class='topic'>Transform Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentResponseStatusLineAssertion}
  * 	<ul class='javatreec'>
@@ -77,8 +75,7 @@ import org.apache.juneau.bct.assertions.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
- * <p>
+ * <h2 class='topic'>Configuration Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -90,7 +87,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>

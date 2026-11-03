@@ -80,7 +80,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@code ?method=DOWNLOAD} link as a write and refuses it, so behind one the listing's links stop working; send real
  * {@code VIEW} or {@code DOWNLOAD} requests instead.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  * </ul>
  *

@@ -31,7 +31,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * configured instance as a bean, or return one from a {@code @Bean} factory method on the resource; the resolver picks it
  * up via {@link RestContext#getRequestIdSettings()}.
  *
- * <h5 class='topic'>Resolution behavior</h5>
+ * <h2 class='topic'>Resolution behavior</h2>
  * <ol>
  * 	<li>If the request already carries a non-empty id under {@link #getAttributeKey() attributeKey} (idempotent re-entry
  * 		or a parent filter), that value is honored unchanged.
@@ -42,14 +42,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Otherwise a fresh id is minted via {@link #getIdSupplier() idSupplier}.
  * </ol>
  *
- * <h5 class='topic'>Default validator &mdash; sanitize-and-accept</h5>
+ * <h2 class='topic'>Default validator &mdash; sanitize-and-accept</h2>
  * <p>
  * Unlike a reject-and-remint regex, the default validator {@linkplain Builder#validator(Predicate) accepts} any candidate
  * that survives sanitization within the length cap.  The sanitizer already neutralizes CR/LF/control-character
  * header-injection payloads (escaping them to inert, ASCII-safe {@code \\uXXXX}), so the default honors a cleaned form
  * rather than discarding a slightly-dirty id.  Supply a stricter validator (e.g. UUID-only) to opt into reject-and-remint.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  *

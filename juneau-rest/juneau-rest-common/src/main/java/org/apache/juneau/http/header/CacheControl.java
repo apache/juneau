@@ -28,7 +28,7 @@ import java.util.function.*;
  * <p>
  * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -96,7 +96,7 @@ public class CacheControl extends HttpStringHeader {
 	 * cacheability directives (e.g. {@link #publicCache()} vs {@link #privateCache()}) overwrite one another;
 	 * boolean directives (e.g. {@link #noStore()}) are idempotent.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = CacheControl.<jsm>create</jsm>()
 	 * 		.publicCache()
@@ -106,7 +106,7 @@ public class CacheControl extends HttpStringHeader {
 	 * 	<jc>// =&gt; "public, max-age=3600, must-revalidate"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link CacheControl}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc9111'>RFC 9111 - HTTP Caching</a>
 	 * </ul>

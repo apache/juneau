@@ -22,7 +22,7 @@ import org.apache.juneau.rest.server.*;
 /**
  * REST method guard.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Implements a guard mechanism for REST method calls that allows requests to be rejected before invocation of the REST
  * method.
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * If multiple guards are specified, ALL guards must pass in order for the request to proceed.
  *
- * <h5 class='topic'>How to implement</h5>
+ * <h2 class='topic'>How to implement</h2>
  *
  * Typically, guards will be used for permissions checking on the user making the request, but it can also be used for
  * other purposes like pre-call validation of a request.
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Guards must implement a no-args constructor.
  *
- * <h5 class='topic'>Example usage:</h5>
+ * <h2 class='topic'>Example usage:</h2>
  * <p class='bjava'>
  * 	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet {
  *
@@ -57,7 +57,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Example implementation:</h5>
+ * <h2 class='topic'>Example implementation:</h2>
  * <p class='bjava'>
  * 	<jc>// Define a guard that only lets Billy make a request</jc>
  * 	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
@@ -69,7 +69,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Guards">Guards</a>
  * </ul>
  */

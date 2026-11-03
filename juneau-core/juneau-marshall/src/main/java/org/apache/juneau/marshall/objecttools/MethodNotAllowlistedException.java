@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
  * reflective-invoke-over-the-wire exposure (e.g. a REST endpoint that feeds untrusted method/argument strings
  * straight into an introspector).
  *
- * <h5 class='section'>How to fix:</h5><ul>
+ * <h2 class='section'>How to fix:</h2><ul>
  * 	<li>
  * 		Allow-list the specific method(s) you intend to expose:
  * 		<p class='bjava'>
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.*;
  * 		</p>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ObjectIntrospector}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Object Tools</a>
  * </ul>

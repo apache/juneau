@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * Declares that a REST operation changes state, so that binding it to an HTTP method defined as safe becomes a
  * startup failure instead of a silent mistake.
  *
- * <h5 class='section'>The mistake this exists to catch</h5>
+ * <h2 class='section'>The mistake this exists to catch</h2>
  * <p>
  * RFC 9110 defines {@code GET}, {@code HEAD}, {@code OPTIONS} and {@code TRACE} as <i>safe</i>: a client, a proxy,
  * a crawler or a browser prefetcher may issue them freely, repeat them, and follow them without asking, precisely
@@ -55,7 +55,7 @@ import java.lang.annotation.*;
  * safe method through nobody's decision.  The check resolves the method the same way dispatch does, so it sees the
  * inferred {@code GET} rather than the absent annotation.
  *
- * <h5 class='section'>Why this is declared and not detected</h5>
+ * <h2 class='section'>Why this is declared and not detected</h2>
  * <p>
  * The obvious alternative is for the framework to work out for itself which handlers mutate, and it was rejected
  * because no sound version of it exists.  "Mutates" is a claim about effects on state the <i>application</i> cares
@@ -86,7 +86,7 @@ import java.lang.annotation.*;
  * operation mutates, and the operation is bound to a method defined as safe.  Those cannot both be intended, and
  * no inference is involved in noticing it.
  *
- * <h5 class='section'>What this does not catch</h5>
+ * <h2 class='section'>What this does not catch</h2>
  * <p>
  * <b>An operation that mutates and says nothing is invisible to this check.</b>  The check finds contradictions,
  * not omissions, and a developer who does not reach for the annotation gets no protection from it.  That limit is
@@ -106,7 +106,7 @@ import java.lang.annotation.*;
  * would be convenient and would immediately produce false failures on the page-rendering {@code GET} that nearly
  * every such resource also has &mdash; reintroducing exactly the false-positive problem that ruled out inference.
  *
- * <h5 class='section'>When it runs</h5>
+ * <h2 class='section'>When it runs</h2>
  * <p>
  * When the resource's operation table is assembled: at startup under {@link Rest#eagerInit()}, and otherwise on
  * the first request to that resource.  In both cases it runs <b>before any operation on that resource can be
@@ -117,7 +117,7 @@ import java.lang.annotation.*;
  * a property of a security filter &mdash; it is a property of the resource, which the filter then depends on.  An
  * application with no {@code @Mutating} anywhere is unaffected.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Correct: declared mutating, bound to a method that is not safe.  Boots, and the boundary's write
  * 	// checks apply to it because POST is not in the safe set.</jc>
@@ -126,7 +126,7 @@ import java.lang.annotation.*;
  * 	<jk>public</jk> ArmResult <jsm>arm</jsm>(<ja>@Path</ja>(<js>"version"</js>) String <jv>version</jv>, <ja>@Content</ja> ArmRequest <jv>body</jv>) {...}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.filter.LoopbackBoundary}
  * 	<li class='jm'>{@link MethodSafety#check(java.util.List)}
  * </ul>

@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.guard.*;
 /**
  * Utility classes and methods for the {@link Child @Child} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Child}
  * 	<li class='ja'>{@link Rest#childrenDefs()}
  * </ul>

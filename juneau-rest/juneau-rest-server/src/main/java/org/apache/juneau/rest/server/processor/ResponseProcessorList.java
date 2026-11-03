@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.view.*;
 /**
  * A list of {@link ResponseProcessor} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */

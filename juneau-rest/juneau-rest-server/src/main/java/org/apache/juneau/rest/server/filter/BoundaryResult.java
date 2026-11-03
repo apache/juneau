@@ -20,7 +20,7 @@ package org.apache.juneau.rest.server.filter;
  * The outcome of {@link RequestBoundary#check(jakarta.servlet.http.HttpServletRequest)}: either allowed, or a
  * rejection carrying the reason, the HTTP status to answer with, and a message safe to return to the caller.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BoundaryReason}
  * 	<li class='jc'>{@link RequestBoundaryFilter}
  * </ul>

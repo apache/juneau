@@ -38,7 +38,7 @@ import com.github.mustachejava.*;
  * their own
  * {@link Rest#responseProcessors() responseProcessors} list.
  *
- * <h5 class='section'>Behavior:</h5>
+ * <h2 class='section'>Behavior:</h2>
  *
  * <ol class='spaced-list'>
  * 	<li>Inspect the response content. If the value is not a {@link MustacheView}, return
@@ -59,7 +59,7 @@ import com.github.mustachejava.*;
  * 		missing dependency.
  * </ol>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link MustacheView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>

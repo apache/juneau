@@ -40,7 +40,7 @@ import org.apache.juneau.commons.utils.*;
  * <p>
  * Renamed from {@code Value} in 10.0.0 to resolve an import-name collision with the {@code @Value} injection annotation.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Mutable value container with fluent API
  * 	<li>Optional-like methods: {@link #get()}, {@link #orElse(Object)}, {@link #ifPresent(Consumer)}, {@link #map(Function)}
@@ -49,13 +49,13 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Method chaining for all setter operations
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, consider using atomic classes like
  * 		{@link java.util.concurrent.atomic.AtomicReference}.
  * </ul>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
  * 	Holder&lt;String&gt; <jv>name</jv> = Holder.<jsm>of</jsm>(<js>"John"</js>);
@@ -84,7 +84,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jv>monitored</jv>.set(<js>"updated"</js>);  <jc>// Triggers listener</jc>
  * </p>
  *
- * <h5 class='section'>Specialized Value Classes:</h5>
+ * <h2 class='section'>Specialized Value Classes:</h2>
  * <p>
  * For primitive types and common use cases, specialized subclasses are available with additional convenience methods:
  * <ul class='spaced-list'>
@@ -98,7 +98,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>{@link Flag} - For non-nullable boolean flags (true/false only, no null state)
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * 	<li class='jc'>{@link ValueListener}
  * 	<li class='jc'>{@link IntegerHolder}
@@ -117,7 +117,7 @@ public class Holder<T> {
 	/**
 	 * Creates a new empty value (with <c>null</c> as the initial value).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jsm>assertNull</jsm>(<jv>value</jv>.get());
@@ -144,7 +144,7 @@ public class Holder<T> {
 	/**
 	 * Creates a new value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jsm>assertEquals</jsm>(<js>"hello"</js>, <jv>value</jv>.get());
@@ -218,7 +218,7 @@ public class Holder<T> {
 	 * <p>
 	 * This method is analogous to {@link Optional#filter(Predicate)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	Holder&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
@@ -246,7 +246,7 @@ public class Holder<T> {
 	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Holder} rather
 	 * than a simple value. This is analogous to {@link Optional#flatMap(Function)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	Holder&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Holder.<jsm>of</jsm>(<jv>s</jv>.length()));
@@ -285,7 +285,7 @@ public class Holder<T> {
 	/**
 	 * Returns the current value and then sets it to the specified value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
 	 * 	String <jv>oldValue</jv> = <jv>value</jv>.getAndSet(<js>"new"</js>);  <jc>// Returns "old"</jc>
@@ -307,7 +307,7 @@ public class Holder<T> {
 	 * <p>
 	 * This is useful for "consuming" a value, ensuring it can only be retrieved once.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"data"</js>);
 	 * 	String <jv>result</jv> = <jv>value</jv>.getAndUnset();  <jc>// Returns "data"</jc>
@@ -330,7 +330,7 @@ public class Holder<T> {
 	/**
 	 * If a value is present (not <jk>null</jk>), invokes the specified consumer with the value, otherwise does nothing.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jv>value</jv>.ifPresent(<jsm>System.out</jsm>::<jv>println</jv>);  <jc>// Prints "hello"</jc>
@@ -353,7 +353,7 @@ public class Holder<T> {
 	 * This method uses {@code eq()} for equality comparison, which handles <jk>null</jk> values safely
 	 * and performs deep equality checks for arrays and collections.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(<js>"hello"</js>));
@@ -397,7 +397,7 @@ public class Holder<T> {
 	 * <p>
 	 * Only one listener can be registered at a time. Calling this method again will replace the previous listener.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"initial"</js>);
 	 * 	<jv>value</jv>.listener(<jv>newValue</jv> -&gt; <jsm>log</jsm>(<js>"Changed to: "</js> + <jv>newValue</jv>));
@@ -420,7 +420,7 @@ public class Holder<T> {
 	 * <p>
 	 * If this value is empty (<jk>null</jk>), returns an empty value without applying the mapper.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>name</jv> = Holder.<jsm>of</jsm>(<js>"john"</js>);
 	 * 	Holder&lt;String&gt; <jv>upper</jv> = <jv>name</jv>.map(String::toUpperCase);
@@ -492,7 +492,7 @@ public class Holder<T> {
 	 * <p>
 	 * If a {@link ValueListener} is registered, it will be notified of the change.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jv>value</jv>.set(<js>"hello"</js>).set(<js>"world"</js>);  <jc>// Method chaining</jc>
@@ -512,7 +512,7 @@ public class Holder<T> {
 	/**
 	 * Sets the value only if the specified condition is <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
 	 * 	<jv>value</jv>.setIf(<jk>true</jk>, <js>"new"</js>);   <jc>// Sets to "new"</jc>
@@ -536,7 +536,7 @@ public class Holder<T> {
 	 * <p>
 	 * If the value is already set, this method does nothing.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
 	 * 	<jv>value</jv>.setIfEmpty(<js>"first"</js>);   <jc>// Sets value to "first"</jc>
@@ -564,7 +564,7 @@ public class Holder<T> {
 	 * <p>
 	 * If the current value is <jk>null</jk>, this is a no-op.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
 	 * 	<jv>value</jv>.update(String::toUpperCase);

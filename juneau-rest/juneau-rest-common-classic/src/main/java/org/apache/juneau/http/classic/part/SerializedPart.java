@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.urlencoding.*;
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the
  * {@link UrlEncodingSerializer class}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	NameValuePairs <jv>params</jv> = <jk>new</jk> NameValuePairs()
  * 		.append(<jk>new</jk> SerializedNameValuePair(<js>"myPojo"</js>, <jv>pojo</jv>, UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>))
@@ -40,7 +40,7 @@ import org.apache.juneau.marshall.urlencoding.*;
  * 	<jv>request</jv>.setEntity(<jk>new</jk> UrlEncodedFormEntity(<jv>params</jv>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

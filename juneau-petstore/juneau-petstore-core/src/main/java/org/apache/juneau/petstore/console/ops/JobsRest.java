@@ -65,7 +65,7 @@ import org.apache.juneau.console.widgets.*;
  * {@link TerminalMixin} and shown two ways &mdash; a FreeMarker terminal card over the in-memory output, and a second
  * card over the same run's file-backed transcript.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// POST /console/ops/jobs/restock {DOG:2, slowMs:3000, holdMs:1000, idempotencyKey:'7f3c...'}</jc>
  * 	<jk>var</jk> <jv>body</jv> = Restock.<jsm>of</jsm>(<jv>json</jv>);
@@ -139,7 +139,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 * A per-host override of the jobs hard timeout.  Declare it as a {@code @Bean} on the host that mounts the
 	 * console; it is per instance, so one test host's short timeout does not leak into another.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<ja>@Bean</ja> <jk>public</jk> JobsRest.HardTimeout jobsHardTimeout() {
 	 * 		<jk>return new</jk> JobsRest.HardTimeout(Duration.<jsm>ofSeconds</jsm>(5));
@@ -212,7 +212,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	/**
 	 * The restock request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Wire form: {perSpecies:{DOG:2, CAT:1}, idempotencyKey:'7f3c...'}</jc>
 	 * 	<jk>var</jk> <jv>r</jv> = <jk>new</jk> Restock(Map.<jsm>of</jsm>(Species.<jsf>DOG</jsf>, 2), <js>"7f3c"</js>, 0, 1000);

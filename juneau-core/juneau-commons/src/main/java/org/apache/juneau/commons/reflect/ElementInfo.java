@@ -30,7 +30,7 @@ import java.lang.reflect.*;
  * by providing common functionality for checking Java language modifiers and element flags. Subclasses extend this
  * to provide specific functionality for their element type.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Modifier checking - check for public, private, protected, static, final, etc.
  * 	<li>Flag checking - check for element flags using {@link ElementFlag}
@@ -38,14 +38,14 @@ import java.lang.reflect.*;
  * 	<li>Extensible - subclasses can add element-specific flag checks
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Checking modifiers on reflection elements
  * 	<li>Filtering elements by flags
  * 	<li>Building frameworks that need to analyze element characteristics
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Check modifiers</jc>
  * 	ElementInfo <jv>ei</jv> = ...;
@@ -57,7 +57,7 @@ import java.lang.reflect.*;
  * 	<jk>boolean</jk> <jv>hasAllFlags</jv> = <jv>ei</jv>.hasAllFlags(ElementFlag.PUBLIC, ElementFlag.STATIC);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ElementFlag} - Element flags enumeration
  * 	<li class='jc'>{@link ClassInfo} - Class introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection

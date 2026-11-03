@@ -36,7 +36,7 @@ import org.apache.juneau.commons.utils.*;
  * rendering use {@link StringUtils#mformat(String, Object...)} / {@code Shorts.mf(...)}/{@code Shorts.mfs(...)}
  * (backed by {@link java.text.MessageFormat}).
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul>
  *   <li><b>Printf grammar:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, <js>"%1$s"</js>, etc.</li>
  *   <li><b>Thread-Safe:</b> Immutable class, safe for concurrent use</li>
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.utils.*;
  *       (rather than throwing) and a fast path avoids {@link java.util.Formatter} for simple <js>"%s"</js> tokens</li>
  * </ul>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Simple printf</jc>
  * 	StringFormat <jv>fmt</jv> = StringFormat.<jsm>ofPrintf</jsm>(<js>"Hello %s, you have %d items"</js>);
@@ -58,13 +58,13 @@ import org.apache.juneau.commons.utils.*;
  * 	<jc>// Returns: "Alice loves Bob, and Alice also loves Charlie"</jc>
  * </p>
  *
- * <h5 class='section'>Caching:</h5>
+ * <h2 class='section'>Caching:</h2>
  * <p>
  * Use {@link #ofPrintf(String)} to get cached instances. The cache is thread-safe and limited to 1000 entries.
  * For uncached instances, use the constructor directly.
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is immutable and thread-safe. Multiple threads can safely use the same instance concurrently.
  * </p>
@@ -541,7 +541,7 @@ public final class StringFormat {
 	 *   <li><b>StringFormat tokens (complex):</b> <js>"[S:z0:%.2f]"</js> - Complex printf placeholder (format='z', index=0, content)</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Token Format:</h5>
+	 * <h4 class='section'>Token Format:</h4>
 	 * <ul>
 	 *   <li><b>L</b> = Literal token</li>
 	 *   <li><b>S</b> = StringFormat (printf) token</li>
@@ -550,7 +550,7 @@ public final class StringFormat {
 	 *   <li><b>Content:</b> The format string content (for complex tokens)</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	StringFormat <jv>fmt</jv> = StringFormat.<jsm>ofPrintf</jsm>(<js>"Hello %s, you have %d items"</js>);
 	 * 	<jv>fmt</jv>.<jsm>toPattern</jsm>();

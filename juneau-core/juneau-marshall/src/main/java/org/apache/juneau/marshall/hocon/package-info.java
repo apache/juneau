@@ -33,13 +33,13 @@
  * 	<li>Optional root braces — top-level without <c>{}</c>
  * </ul>
  *
- * <h5 class='section'>Bean mapping</h5>
+ * <h2 class='section'>Bean mapping</h2>
  * <p>
  * Round-trip fidelity matches JSON: beans, maps, lists, primitives, dates (ISO 8601), and Duration all round-trip.
  * Substitutions and value concatenation are resolved during parse; the serializer always writes concrete values.
  * </p>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	String <jv>hocon</jv> = HoconSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  * 	MyBean <jv>bean</jv> = HoconParser.<jsf>DEFAULT</jsf>.read(<jv>hocon</jv>, MyBean.<jk>class</jk>);
@@ -49,7 +49,7 @@
  * 	MyBean <jv>bean</jv> = Hocon.<jsf>to</jsf>(<jv>hocon</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HoconSupport">HOCON</a>
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>

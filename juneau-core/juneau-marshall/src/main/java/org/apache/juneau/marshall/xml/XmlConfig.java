@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
  * </ul>
  */
@@ -60,12 +60,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlSerializer.Builder#addBeanTypesXml()}
 	 * </ul>
 	 *
@@ -84,14 +84,14 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		This setting is ignored if {@link XmlSerializer.Builder#enableNamespaces()} is not enabled.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlSerializer.Builder#addNamespaceUrisToRoot()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -106,12 +106,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * Specifies the default namespace URI for this document.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlSerializer.Builder#defaultNamespace(Namespace)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -142,7 +142,7 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='warn'>
 	 * 		Auto-detection of namespaces can be costly performance-wise.
 	 * 		<br>In high-performance environments, it's recommended that namespace detection be
@@ -151,7 +151,7 @@ public @interface XmlConfig {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlSerializer.Builder#disableAutoDetectNamespaces()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -171,12 +171,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlSerializer.Builder#enableNamespaces()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -191,7 +191,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlParser.Builder#eventAllocator(Class)}
 	 * </ul>
 	 *
@@ -205,12 +205,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlSerializer.Builder#namespaces(Namespace...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 	 * </ul>
@@ -231,12 +231,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlParser.Builder#preserveRootElement()}
 	 * </ul>
 	 *
@@ -260,12 +260,12 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Reporters are not copied to new parsers during a clone.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlParser.Builder#reporter(Class)}
 	 * </ul>
 	 *
@@ -279,7 +279,7 @@ public @interface XmlConfig {
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlParser.Builder#resolver(Class)}
 	 * </ul>
 	 *
@@ -301,12 +301,12 @@ public @interface XmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link XmlParser.Builder#validating()}
 	 * </ul>
 	 *

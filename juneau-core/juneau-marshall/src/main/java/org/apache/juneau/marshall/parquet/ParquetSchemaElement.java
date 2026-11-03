@@ -28,7 +28,7 @@ import java.io.*;
  * <a class="doclink" href="https://github.com/apache/parquet-format/blob/master/src/main/thrift/parquet.thrift">parquet.thrift</a>
  * specification. Used for both primitive (leaf) and group (non-leaf) nodes.
  *
- * <h5 class='section'>Parquet Type Enum (Type):</h5>
+ * <h2 class='section'>Parquet Type Enum (Type):</h2>
  * <ul>
  * 	<li>BOOLEAN = 0</li>
  * 	<li>INT32 = 1</li>
@@ -39,14 +39,14 @@ import java.io.*;
  * 	<li>FIXED_LEN_BYTE_ARRAY = 7</li>
  * </ul>
  *
- * <h5 class='section'>Field Repetition Type:</h5>
+ * <h2 class='section'>Field Repetition Type:</h2>
  * <ul>
  * 	<li>REQUIRED = 0</li>
  * 	<li>OPTIONAL = 1</li>
  * 	<li>REPEATED = 2</li>
  * </ul>
  *
- * <h5 class='section'>Converted Type (common values):</h5>
+ * <h2 class='section'>Converted Type (common values):</h2>
  * <ul>
  * 	<li>UTF8 = 0, ENUM = 4, DECIMAL = 5, TIMESTAMP_MILLIS = 9, INT_8 = 15, INT_16 = 16, INT_32 = 17, INT_64 = 18, MAP = 1, LIST = 3</li>
  * </ul>

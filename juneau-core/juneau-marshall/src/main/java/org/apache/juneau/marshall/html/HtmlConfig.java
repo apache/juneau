@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
  * </ul>
  */
@@ -56,12 +56,12 @@ public @interface HtmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#addBeanTypesHtml()}
 	 * </ul>
 	 *
@@ -79,6 +79,7 @@ public @interface HtmlConfig {
 	 * The following shows the difference between the two generated outputs:
 	 *
 	 * <table class='styled'>
+	 * 	<caption>Serialized output without headers</caption>
 	 * 	<tr>
 	 * 		<th><c>withoutHeaders</c></th>
 	 * 		<th><c>withHeaders</c></th>
@@ -86,12 +87,14 @@ public @interface HtmlConfig {
 	 * 	<tr>
 	 * 		<td>
 	 * 			<table class='unstyled'>
+	 * 				<caption>Nested table without headers (1)</caption>
 	 * 				<tr><td>f1</td><td>foo</td></tr>
 	 * 				<tr><td>f2</td><td>bar</td></tr>
 	 * 			</table>
 	 * 		</td>
 	 * 		<td>
 	 * 			<table class='unstyled'>
+	 * 				<caption>Nested table without headers (2)</caption>
 	 * 				<tr><th>key</th><th>value</th></tr>
 	 * 				<tr><td>f1</td><td>foo</td></tr>
 	 * 				<tr><td>f2</td><td>bar</td></tr>
@@ -105,12 +108,12 @@ public @interface HtmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#addKeyValueTableHeaders()}
 	 * </ul>
 	 *
@@ -132,6 +135,7 @@ public @interface HtmlConfig {
 	 * <br>Note that they're both hyperlinks, but the anchor text differs:
 	 *
 	 * <table class='styled'>
+	 * 	<caption>Serialized output with labels</caption>
 	 * 	<tr>
 	 * 		<th><c>withLabels</c></th>
 	 * 		<th><c>withoutLabels</c></th>
@@ -139,12 +143,14 @@ public @interface HtmlConfig {
 	 * 	<tr>
 	 * 		<td>
 	 * 			<table class='unstyled'>
+	 * 				<caption>Nested table with labels (1)</caption>
 	 * 				<tr><th>key</th><th>value</th></tr>
 	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>Apache Foundation</a></td></tr>
 	 * 			</table>
 	 * 		</td>
 	 * 		<td>
 	 * 			<table class='unstyled'>
+	 * 				<caption>Nested table with labels (2)</caption>
 	 * 				<tr><th>key</th><th>value</th></tr>
 	 * 				<tr><td>f1</td><td><a href='http://www.apache.org?label=Apache%20Foundation'>http://www.apache.org?label=Apache%20Foundation</a></td></tr>
 	 * 			</table>
@@ -157,12 +163,12 @@ public @interface HtmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#disableDetectLabelParameters()}
 	 * </ul>
 	 *
@@ -181,6 +187,7 @@ public @interface HtmlConfig {
 	 * The following shows the difference between the two generated outputs:
 	 *
 	 * <table class='styled'>
+	 * 	<caption>Serialized output with links</caption>
 	 * 	<tr>
 	 * 		<th><c>withLinks</c></th>
 	 * 		<th><c>withoutLinks</c></th>
@@ -188,12 +195,14 @@ public @interface HtmlConfig {
 	 * 	<tr>
 	 * 		<td>
 	 * 			<table class='unstyled'>
+	 * 				<caption>Nested table with links (1)</caption>
 	 * 				<tr><th>key</th><th>value</th></tr>
 	 * 				<tr><td>f1</td><td><a href='http://www.apache.org'>http://www.apache.org</a></td></tr>
 	 * 			</table>
 	 * 		</td>
 	 * 		<td>
 	 * 			<table class='unstyled'>
+	 * 				<caption>Nested table with links (2)</caption>
 	 * 				<tr><th>key</th><th>value</th></tr>
 	 * 				<tr><td>f1</td><td>http://www.apache.org</td></tr>
 	 * 			</table>
@@ -206,12 +215,12 @@ public @interface HtmlConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#disableDetectLinksInStrings()}
 	 * </ul>
 	 *
@@ -225,14 +234,14 @@ public @interface HtmlConfig {
 	 * <p>
 	 * The parameter name to look for when resolving link labels.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Default value: <js>"label"</js>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#labelParameter(String)}
 	 * </ul>
 	 *
@@ -268,12 +277,12 @@ public @interface HtmlConfig {
 	 * 	<li><js>"PATH_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a path-relative path.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#uriAnchorText(AnchorText)}
 	 * </ul>
 	 *

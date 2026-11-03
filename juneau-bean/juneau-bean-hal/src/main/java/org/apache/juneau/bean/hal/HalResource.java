@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.marshaller.*;
  *     {@code SwaggerElement}).
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	HalResource <jv>order</jv> = <jk>new</jk> HalResource()
  * 		.addLink(<js>"self"</js>, <jk>new</jk> HalLink().setHref(<js>"/orders/123"</js>))
@@ -53,7 +53,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>order</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a href="https://stateless.group/hal_specification.html">HAL Specification</a>
  *   <li class='link'><a href="https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08">draft-kelly-json-hal-08</a>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHal">juneau-bean-hal</a>

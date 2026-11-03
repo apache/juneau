@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code org.thymeleaf.TemplateEngine} to {@code process(templateName, context, writer)} directly
  * onto the response writer.
  *
- * <h5 class='figure'>Usage:</h5>
+ * <h2 class='figure'>Usage:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/hello/{name}"</js>)
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.server.view.*;
  * (typically {@code .html}). With the bridge's default engine + {@code basePath("/templates/")},
  * {@code ThymeleafView.of("hello")} resolves to {@code /templates/hello.html} on the classpath.
  *
- * <h5 class='section'>Immutability:</h5>
+ * <h2 class='section'>Immutability:</h2>
  *
  * <p>
  * Each {@code attr(...)} / {@code attrs(...)} / {@code header(...)} call returns a <b>new</b>
@@ -60,7 +60,7 @@ import org.apache.juneau.rest.server.view.*;
  * keeps {@code ThymeleafView} a value type safe to share across requests (e.g. as a static
  * singleton built once and returned from many handlers).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThymeleafMixin}
  * 	<li class='jc'>{@link ThymeleafViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>

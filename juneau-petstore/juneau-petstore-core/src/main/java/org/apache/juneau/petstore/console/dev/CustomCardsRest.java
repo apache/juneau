@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * Both JS handlers live in {@code petstore-cards.js}, served beside this class, which also shows the card API
  * ({@code JuneauConsole.refreshCard}, {@code JuneauConsole.cardApi}) and the {@code juneau:card-mounted} event.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjs'>
  * 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push([<js>'kpi'</js>, {
  * 		render(card, el, ctx) { ... }

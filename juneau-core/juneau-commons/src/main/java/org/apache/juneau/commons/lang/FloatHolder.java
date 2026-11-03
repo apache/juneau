@@ -26,12 +26,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This class extends {@link Holder}&lt;{@link Float}&gt; and provides a convenient way to pass mutable
  * float references to lambdas, inner classes, or methods.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a float value to track a running sum</jc>
  * 	FloatHolder <jv>sum</jv> = FloatHolder.<jsm>create</jsm>();
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jsm>log</jsm>(<js>"Total: "</js> + <jv>sum</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -56,7 +56,7 @@ public class FloatHolder extends Holder<Float> {
 	/**
 	 * Creates a new float value initialized to <c>0.0f</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FloatHolder <jv>value</jv> = FloatHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0.0f, <jv>value</jv>.get());
@@ -71,7 +71,7 @@ public class FloatHolder extends Holder<Float> {
 	/**
 	 * Creates a new float value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FloatHolder <jv>value</jv> = FloatHolder.<jsm>of</jsm>(3.14f);
 	 * 	<jsm>assertEquals</jsm>(3.14f, <jv>value</jv>.get());
@@ -101,7 +101,7 @@ public class FloatHolder extends Holder<Float> {
 	 * using absolute difference. The comparison returns <jk>true</jk> if the absolute difference between
 	 * the two values is less than or equal to the specified precision.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FloatHolder <jv>value</jv> = FloatHolder.<jsm>of</jsm>(3.14f);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(3.14f, 0.01f));    <jc>// Exact match within 0.01</jc>
@@ -139,7 +139,7 @@ public class FloatHolder extends Holder<Float> {
 	 * This method handles <jk>null</jk> values safely and performs precision-based equality comparison
 	 * for each value using absolute difference.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FloatHolder <jv>value</jv> = FloatHolder.<jsm>of</jsm>(3.14f);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(0.01f, 2.5f, 3.15f, 5.0f));   <jc>// Matches 3.15f within 0.01</jc>

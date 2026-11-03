@@ -30,7 +30,7 @@ import java.util.*;
  * The marshalling side calls the factory once per bean property at {@link BeanMeta} construction time and installs
  * the resulting validator into the property's read/write transform slots.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Factory implementations must be safe to invoke from multiple threads concurrently.
  *
  * @see PropertyValidator

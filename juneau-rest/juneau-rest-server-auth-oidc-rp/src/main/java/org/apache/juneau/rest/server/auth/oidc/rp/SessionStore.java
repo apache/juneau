@@ -42,7 +42,7 @@ import java.util.*;
  * <p>
  * Implementations must be thread-safe.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link OidcSession}
  * 	<li class='jc'>{@link InMemorySessionStore}
  * 	<li class='jc'>{@link SignedCookieSessionStore}

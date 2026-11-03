@@ -30,12 +30,12 @@ import org.apache.juneau.http.*;
  * Transfer-Encoding can be used, plus the "trailers" value (related to the "chunked" transfer method) to notify the
  * server it expects to receive additional fields in the trailer after the last, zero-sized, chunk.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	TE: trailers, deflate
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The TE request-header field indicates what extension transfer-codings it is willing to accept in the response and
  * whether or not it is willing to accept trailer fields in a chunked transfer-coding.
@@ -88,7 +88,7 @@ import org.apache.juneau.http.*;
  * If the TE field-value is empty or if no TE field is present, the only transfer-coding is "chunked".
  * A message with no transfer-coding is always acceptable.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

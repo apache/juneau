@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.*;
  * so a generated {@code columns} array lines up positionally with the {@code data} rows in a
  * {@link DataTablesResults} envelope.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Bean whose properties drive both the server response and the browser column list.</jc>
  * 	<jk>public class</jk> Release {
@@ -64,7 +64,7 @@ import org.apache.juneau.marshall.*;
  * The result is an ordinary {@code List<Map<String,Object>>}; serialize it with any Juneau serializer (or embed it in a
  * page) to produce the JSON DataTables' {@code columns} option expects.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.console.datatables.adapter.DataTablesQuery}
  * 	<li class='jc'>{@link DataTablesTable}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/reference/option/columns">DataTables columns option</a>

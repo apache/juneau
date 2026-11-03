@@ -32,7 +32,7 @@ import org.apache.juneau.commons.bean.*;
  * <p>
  * This is a {@link ParseException}, so REST {@code @Content} parameters map it to <c>400 Bad Request</c>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
  *
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.bean.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanProp#required()}
  * </ul>
  *

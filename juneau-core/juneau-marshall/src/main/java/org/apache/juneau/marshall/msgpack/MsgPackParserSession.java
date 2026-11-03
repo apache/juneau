@@ -33,11 +33,11 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackParser}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackSupport">MessagePack</a>
 
  * </ul>
@@ -105,10 +105,10 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	/**
 	 * Opens a low-level pull-parser cursor over a MessagePack document, bound to this live session.
 	 *
-	 * <h5 class='section'>Builder properties honored:</h5>
+	 * <h4 class='section'>Builder properties honored:</h4>
 	 * <c>autoCloseStreams</c>, <c>unbuffered</c>.
 	 *
-	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <h4 class='section'>Builder properties NOT honored:</h4>
 	 * <c>listener</c>, <c>debugOutputLines</c>, <c>consumes</c>, swaps, {@code @Schema}.
 	 *
 	 * @param input The input.

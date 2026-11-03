@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 /**
  * Valid values for the <c>type</c> field.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */

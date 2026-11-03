@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code freemarker.template.Configuration} to {@code getTemplate(templateName)} and then
  * {@code process(dataModel, writer)} directly onto the response writer.
  *
- * <h5 class='figure'>Usage:</h5>
+ * <h2 class='figure'>Usage:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/hello/{name}"</js>)
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code FreemarkerView.of("hello.ftlh")} resolves to {@code /templates/hello.ftlh} on the
  * classpath.
  *
- * <h5 class='section'>{@code .ftl} vs {@code .ftlh} auto-escape:</h5>
+ * <h2 class='section'>{@code .ftl} vs {@code .ftlh} auto-escape:</h2>
  *
  * <p>
  * FreeMarker auto-selects HTML escaping by file extension: {@code .ftlh} templates emit
@@ -60,7 +60,7 @@ import org.apache.juneau.rest.server.view.*;
  * templates emit raw output. For HTML responses, prefer the {@code .ftlh} extension to avoid an
  * XSS regression sneaking in via a future attribute-binding change.
  *
- * <h5 class='section'>Template suffix:</h5>
+ * <h2 class='section'>Template suffix:</h2>
  *
  * <p>
  * The {@link FreemarkerMixin.Builder#templateSuffix(String) templateSuffix(...)} builder
@@ -69,7 +69,7 @@ import org.apache.juneau.rest.server.view.*;
  * bridge resolve it as {@code "hello.ftlh"} on the classpath (idempotent &mdash; explicit suffix
  * is honored).
  *
- * <h5 class='section'>Immutability:</h5>
+ * <h2 class='section'>Immutability:</h2>
  *
  * <p>
  * Each {@code attr(...)} / {@code attrs(...)} / {@code header(...)} call returns a <b>new</b>
@@ -77,7 +77,7 @@ import org.apache.juneau.rest.server.view.*;
  * This keeps {@code FreemarkerView} a value type safe to share across requests (e.g. as a static
  * singleton built once and returned from many handlers).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FreemarkerMixin}
  * 	<li class='jc'>{@link FreemarkerViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>

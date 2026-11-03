@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * Indicators are resolved from the host's bean store, so a host registers its own
  * {@link HealthIndicator} beans (e.g. via Spring {@code @Bean} or a Juneau {@code BeanStore}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link HealthServlet}
  * 	<li class='jc'>{@link HealthAggregator}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

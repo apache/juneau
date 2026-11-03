@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li><b>version attribute</b> (optional) - Version of the generating agent
  * </ul>
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomGenerator = element atom:generator {
  * 		atomCommonAttributes,
@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Generator <jv>gen</jv> = <jk>new</jk> Generator(<js>"My Blog Software"</js>)
  * 		.setUri(<js>"http://www.myblogsoftware.com"</js>)
@@ -59,12 +59,12 @@ import org.apache.juneau.marshall.xml.*;
  * 		.setGenerator(<jv>gen</jv>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomGenerator</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.4">RFC 4287 - Section 4.2.4</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>

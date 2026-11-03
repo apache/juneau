@@ -20,7 +20,7 @@ package org.apache.juneau.marshall.jena;
  * Used in conjunction with the {@link Rdf#collectionFormat() @Rdf(collectionFormat)} annotation to fine-tune how
  * classes, beans, and bean properties are serialized, particularly collections.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
 
  * </ul>

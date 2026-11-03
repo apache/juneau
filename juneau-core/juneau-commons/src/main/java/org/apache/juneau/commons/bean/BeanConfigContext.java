@@ -45,7 +45,7 @@ import org.apache.juneau.commons.reflect.Visibility;
  * {@code BeanConfigContext} snapshot to feed bean-modeling code without exposing marshalling-only
  * APIs.
  *
- * <h5 class='section'>Construction:</h5>
+ * <h2 class='section'>Construction:</h2>
  * <p class='bjava'>
  * 	<jc>// All defaults.</jc>
  * 	BeanConfigContext <jv>defaults</jv> = BeanConfigContext.<jsf>DEFAULT</jsf>;
@@ -63,12 +63,12 @@ import org.apache.juneau.commons.reflect.Visibility;
  * 		.build();
  * </p>
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * {@link BeanConfigContext} instances are immutable and thread-safe.
  * {@link Builder} instances are mutable and not thread-safe.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanConfig @BeanConfig} — the annotation form.
  * </ul>
  */

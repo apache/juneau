@@ -34,11 +34,11 @@ import java.lang.annotation.*;
  * 	<li>Arguments and argument-types of client-side <ja>@RemoteResource</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
+ * <h2 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h2>
  * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
  * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
@@ -85,11 +85,11 @@ import java.lang.annotation.*;
  * <br>Schema-based serialization and parsing is allowed just as if used as individual parameter types.
  *
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ * <h2 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h2>
  * <p>
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remote resource annotations.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
@@ -131,10 +131,9 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
- * <p>
  */
 @Documented
 @Target({ PARAMETER, TYPE, METHOD })

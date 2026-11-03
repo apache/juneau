@@ -26,7 +26,7 @@ import org.apache.juneau.http.*;
 /**
  * Extended annotation for {@link Rest#swagger() @Rest(swagger)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
@@ -51,7 +51,7 @@ public @interface Swagger {
 	 * (e.g. <js>"contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js> or
 	 * <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -60,7 +60,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -75,7 +75,7 @@ public @interface Swagger {
 	/**
 	 * Defines the swagger field <c>/info/description</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -87,7 +87,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -118,7 +118,7 @@ public @interface Swagger {
 	 * (e.g. <js>"externalDocs = {url:'http://juneau.apache.org'}"</js> or
 	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -151,7 +151,7 @@ public @interface Swagger {
 	 * (e.g. <js>"license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js> or
 	 * <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -160,7 +160,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -201,7 +201,7 @@ public @interface Swagger {
 	 * (e.g. <js>"tags = [{name:'Foo',description:'Foobar'}]"</js> or
 	 * <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -210,7 +210,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> array.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -235,7 +235,7 @@ public @interface Swagger {
 	 * The default value pulls the description from the <c>termsOfService</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -250,7 +250,7 @@ public @interface Swagger {
 	/**
 	 * Defines the swagger field <c>/info/title</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -259,7 +259,7 @@ public @interface Swagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -370,7 +370,7 @@ public @interface Swagger {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 	<li class='note'>
@@ -408,7 +408,7 @@ public @interface Swagger {
 	 * The default value pulls the description from the <c>version</c> entry in the servlet resource bundle.
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 	<li class='note'>

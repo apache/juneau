@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * {@code id}, and an optional {@code meta} bag. {@code type} is a plain {@code String} for the same reasons
  * documented on {@link JsonApiResource#getType()}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  * </ul>
  */

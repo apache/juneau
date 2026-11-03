@@ -25,7 +25,7 @@ import org.apache.juneau.commons.*;
 /**
  * Extended annotation for {@link RestOp#swagger() RestOp.swagger()}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  */
@@ -38,7 +38,7 @@ public @interface OpSwagger {
 	 * <p>
 	 * Use this value to override the supported <c>Content-Type</c> media types defined by the parsers defined via {@link RestOp#parsers()}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is either a comma-delimited list of simple strings or a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> array.
 	 * 	<li class='note'>
@@ -54,7 +54,7 @@ public @interface OpSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/deprecated</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
@@ -63,7 +63,7 @@ public @interface OpSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is boolean.
 	 * 	<li class='note'>
@@ -81,7 +81,7 @@ public @interface OpSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/description</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -107,7 +107,7 @@ public @interface OpSwagger {
 	 * (e.g. greedy {@code /*} static-file handlers, {@code /favicon.ico}, internal probes) where
 	 * documenting the operation would just be noise.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		path=<js>"/static/*"</js>,
@@ -117,7 +117,7 @@ public @interface OpSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Default is <jk>false</jk> &mdash; operations are emitted by default.
 	 * 	<li class='note'>
@@ -133,7 +133,7 @@ public @interface OpSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/externalDocs</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
@@ -142,7 +142,7 @@ public @interface OpSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
@@ -156,7 +156,7 @@ public @interface OpSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/operationId</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 	<li class='note'>
@@ -178,7 +178,7 @@ public @interface OpSwagger {
 	 * This annotation is provided for documentation purposes and is used to populate the method <js>"parameters"</js>
 	 * column on the Swagger page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/{a}"</js>,
@@ -194,7 +194,7 @@ public @interface OpSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> array consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'['</js> and <js>']'</js> characters are optional.
@@ -213,7 +213,7 @@ public @interface OpSwagger {
 	 * <p>
 	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestOp#serializers()}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is either a comma-delimited list of simple strings or a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> array.
 	 * 	<li class='note'>
@@ -233,7 +233,7 @@ public @interface OpSwagger {
 	 * This annotation is provided for documentation purposes and is used to populate the method <js>"responses"</js>
 	 * column on the Swagger page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		path=<js>"/"</js>,
@@ -246,7 +246,7 @@ public @interface OpSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
@@ -261,7 +261,7 @@ public @interface OpSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/schemes</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is either a comma-delimited list of simple strings or a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> array.
 	 * 	<li class='note'>
@@ -277,7 +277,7 @@ public @interface OpSwagger {
 	/**
 	 * Defines the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -303,7 +303,7 @@ public @interface OpSwagger {
 	 * A comma-delimited list of tags for API documentation control.
 	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
@@ -312,7 +312,7 @@ public @interface OpSwagger {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
@@ -380,7 +380,7 @@ public @interface OpSwagger {
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 	<li class='note'>

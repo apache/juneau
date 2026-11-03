@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * constraints. The path itself is still exposed to the documentation viewer but they will not know which operations
  * and parameters are available.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The PathItem Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>parameters</c> (array of {@link Parameter}) - A list of parameters that are applicable for all the operations described under this path
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	PathItem <jv>x</jv> = <jsm>pathItem</jsm>()
@@ -73,7 +73,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#path-item-object">OpenAPI Specification &gt; Path Item Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/paths-and-operations/">OpenAPI Paths and Operations</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

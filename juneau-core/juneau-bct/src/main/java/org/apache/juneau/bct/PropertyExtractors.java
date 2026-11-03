@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
  * object types and property access patterns. These extractors are automatically registered when
  * using {@link BasicBeanConverter.Builder#defaultSettings()}.</p>
  *
- * <h5 class='section'>Extractor Hierarchy:</h5>
+ * <h2 class='section'>Extractor Hierarchy:</h2>
  * <p>The extractors form an inheritance hierarchy for code reuse:</p>
  * <ul>
  *    <li><b>{@link ObjectPropertyExtractor}</b> - Base class with JavaBean property access</li>
@@ -40,7 +40,7 @@ import org.apache.juneau.commons.utils.*;
  *    <li><b>{@link MapPropertyExtractor}</b> - Extends ObjectPropertyExtractor with Map key access</li>
  * </ul>
  *
- * <h5 class='section'>Execution Order:</h5>
+ * <h2 class='section'>Execution Order:</h2>
  * <p>In {@link BasicBeanConverter}, the extractors are tried in this order:</p>
  * <ol>
  *    <li><b>Custom extractors</b> - User-registered extractors via {@link BasicBeanConverter.Builder#addPropertyExtractor(PropertyExtractor)}</li>
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.utils.*;
  *    <li><b>{@link MapPropertyExtractor}</b> - Map key access and size property</li>
  * </ol>
  *
- * <h5 class='section'>Property Access Strategy:</h5>
+ * <h2 class='section'>Property Access Strategy:</h2>
  * <p>Each extractor implements a comprehensive fallback strategy for maximum compatibility:</p>
  *
  * @see PropertyExtractor
@@ -65,14 +65,14 @@ public class PropertyExtractors {
 	 * collection-like objects. It provides array-style access using numeric indices and
 	 * universal size/length properties for any listifiable object.</p>
 	 *
-	 * <h5 class='section'>Additional Properties:</h5>
+	 * <h2 class='section'>Additional Properties:</h2>
 	 * <ul>
 	 *    <li><b>Numeric indices:</b> <js>"0"</js>, <js>"1"</js>, <js>"2"</js>, etc. for element access</li>
 	 *    <li><b>Negative indices:</b> <js>"-1"</js>, <js>"-2"</js> for reverse indexing (from end)</li>
 	 *    <li><b>Size properties:</b> <js>"length"</js> and <js>"size"</js> return collection size</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Supported Types:</h5>
+	 * <h2 class='section'>Supported Types:</h2>
 	 * <p>Works with any object that can be listified by the converter:</p>
 	 * <ul>
 	 *    <li><b>Arrays:</b> All array types (primitive and object)</li>
@@ -82,7 +82,7 @@ public class PropertyExtractors {
 	 *    <li><b>Maps:</b> Converted to list of entries for iteration</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h2 class='section'>Examples:</h2>
 	 * <p class='bjava'>
 	 *    <jc>// Array/List access</jc>
 	 *    <jv>list</jv>.get(0)          <jc>// "0" property</jc>
@@ -130,13 +130,13 @@ public class PropertyExtractors {
 	 * Map objects. It provides direct key-based property access and a universal size
 	 * property for Map objects.</p>
 	 *
-	 * <h5 class='section'>Map-Specific Properties:</h5>
+	 * <h2 class='section'>Map-Specific Properties:</h2>
 	 * <ul>
 	 *    <li><b>Direct key access:</b> Any property name that exists as a Map key</li>
 	 *    <li><b>Size property:</b> {@code "size"} returns {@code map.size()}</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Supported Types:</h5>
+	 * <h2 class='section'>Supported Types:</h2>
 	 * <p>Works with any object implementing the {@code Map} interface:</p>
 	 * <ul>
 	 *    <li><b>HashMap, LinkedHashMap:</b> Standard Map implementations</li>
@@ -145,7 +145,7 @@ public class PropertyExtractors {
 	 *    <li><b>Custom Maps:</b> Any Map implementation</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h2 class='section'>Examples:</h2>
 	 * <p class='bjava'>
 	 *    <jc>// Direct key access</jc>
 	 *    <jv>map</jv>.get(<js>"name"</js>)       <jc>// "name" property</jc>
@@ -156,7 +156,7 @@ public class PropertyExtractors {
 	 *    <jv>map</jv>.size()           <jc>// "size" property</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Key Priority:</h5>
+	 * <h2 class='section'>Key Priority:</h2>
 	 * <p>Map key access takes priority over JavaBean properties. If a Map contains
 	 * a key with the same name as a property/method, the Map value is returned first.</p>
 	 *
@@ -190,7 +190,7 @@ public class PropertyExtractors {
 	 * comprehensive JavaBean property access patterns. It tries multiple approaches to
 	 * access object properties, providing maximum compatibility with different coding styles.</p>
 	 *
-	 * <h5 class='section'>Property Access Order:</h5>
+	 * <h2 class='section'>Property Access Order:</h2>
 	 * <ol>
 	 *    <li><b>{@code is{Property}()}</b> - Boolean property getters (e.g., {@code isActive()})</li>
 	 *    <li><b>{@code get{Property}()}</b> - Standard getter methods (e.g., {@code getName()})</li>
@@ -199,7 +199,7 @@ public class PropertyExtractors {
 	 *    <li><b>{@code {property}()}</b> - No-argument methods with exact property name</li>
 	 * </ol>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h2 class='section'>Examples:</h2>
 	 * <p class='bjava'>
 	 *    <jc>// Property "name" can be accessed via:</jc>
 	 *    <jv>obj</jv>.getName()        <jc>// Standard getter</jc>

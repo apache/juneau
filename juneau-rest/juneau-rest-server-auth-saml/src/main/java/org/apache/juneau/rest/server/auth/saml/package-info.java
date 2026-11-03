@@ -23,7 +23,7 @@
  * security defaults.  The OpenSAML dependencies are declared {@code provided}-scope in
  * {@code juneau-rest-server-saml}'s POM, so they never bleed into the dependency tree of an upstream module.
  *
- * <h5 class='topic'>Key types</h5>
+ * <h2 class='topic'>Key types</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.saml.SamlAssertionValidator SamlAssertionValidator}
  * 		&mdash; validates a {@code <samlp:Response>} XML document and returns a
@@ -37,7 +37,7 @@
  * 		{@code DOMMetadataResolver}.
  * </ul>
  *
- * <h5 class='topic'>Security defaults</h5>
+ * <h2 class='topic'>Security defaults</h2>
  * <ul>
  * 	<li><b>Signature required</b> &mdash; unsigned assertions are rejected.
  * 	<li><b>Strict algorithm allowlist</b> &mdash; only {@code rsa-sha256} and {@code ecdsa-sha256}; SHA-1
@@ -49,7 +49,7 @@
  * 		{@link SamlAssertionValidator.Builder#decryptionCredential(org.opensaml.security.credential.Credential) decryptionCredential}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf">SAML 2.0 Core (OASIS)</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SamlAuthSupport">SAML 2.0 AuthN Support (juneau-rest-server-auth-saml)</a>
  * </ul>

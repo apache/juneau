@@ -34,12 +34,12 @@ import org.apache.juneau.marshall.stream.*;
  * TOML (Tom's Obvious Minimal Language) maps unambiguously to hash tables with native typing.
  * See <a href="https://toml.io/en/v1.0.0">TOML v1.0.0</a> specification.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Produces: <bc>application/toml</bc>
  * <br>Accepts: <bc>application/toml</bc>
  *
- * <h5 class='topic'>Bean-to-TOML mapping</h5>
+ * <h2 class='topic'>Bean-to-TOML mapping</h2>
  * <ul class='spaced-list'>
  * 	<li>Simple properties → key-value pairs
  * 	<li>Nested beans → <c>[tableName]</c> sections
@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Null properties are omitted (TOML has no null type)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to TOML</jc>
  * 	String <jv>toml</jv> = TomlSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -66,13 +66,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>toml</jv> = <jv>s</jv>.write(<jv>config</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bcode'>
  * 	name = "Alice"
  * 	age = 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested table + array):</h5>
+ * <h2 class='figure'>Complex (nested table + array):</h2>
  * <p class='bcode'>
  * 	name = "Alice"
  * 	age = 30
@@ -84,7 +84,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	state = "MA"
  * </p>
  *
- * <h5 class='topic'>Limitations compared to JSON</h5>
+ * <h2 class='topic'>Limitations compared to JSON</h2>
  * <p>
  * TOML is a configuration format with a more restricted type system than JSON.
  * The following features supported by {@link JsonSerializer}
@@ -104,7 +104,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		keys may yield invalid TOML.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */

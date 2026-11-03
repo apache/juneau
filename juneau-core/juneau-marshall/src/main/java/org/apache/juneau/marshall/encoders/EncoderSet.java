@@ -31,7 +31,7 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * Represents the set of {@link Encoder encoders} keyed by codings.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Maintains a set of encoders and the codings that they can handle.
  *
@@ -39,7 +39,7 @@ import org.apache.juneau.commons.reflect.*;
  * The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then used to find appropriate
  * encoders for specific <c>Accept-Encoding</c> and <c>Content-Encoding</c> header values.
  *
- * <h5 class='topic'>Match ordering</h5>
+ * <h2 class='topic'>Match ordering</h2>
  *
  * Encoders are matched against <c>Accept-Encoding</c> strings in the order they exist in this group.
  *
@@ -51,7 +51,7 @@ import org.apache.juneau.commons.reflect.*;
  * For example, calling <code>groupBuilder.add(E1.<jk>class</jk>,E2.<jk>class</jk>).add(E3.<jk>class</jk>,
  * E4.<jk>class</jk>)</code> will result in the order <c>E3, E4, E1, E2</c>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
  * 	EncoderSet <jv>encoders</jv> = EncoderSet
@@ -63,11 +63,11 @@ import org.apache.juneau.commons.reflect.*;
  * 	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallEncoders">Encoders</a>
 
  * </ul>

@@ -37,13 +37,13 @@ import org.apache.juneau.marshall.serializer.*;
  * Looks for methods on the class that can be called to swap-in surrogate Number objects before serialization and swap-out
  * surrogate Number objects after parsing.
  *
- * <h5 class='figure'>Valid surrogate objects</h5>
+ * <h2 class='figure'>Valid surrogate objects</h2>
  * <ul>
  * 	<li class='jc'>Any subclass of {@link Number}
  * 	<li class='jc'>Any number primitive
  * </ul>
  *
- * <h5 class='figure'>Valid swap methods (S = Swapped type)</h5>
+ * <h2 class='figure'>Valid swap methods (S = Swapped type)</h2>
  * <ul>
  * 	<li class='jm'><c><jk>public</jk> S toNumber()</c>
  * 	<li class='jm'><c><jk>public</jk> S toNumber(MarshallingSession)</c>
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='jm'><c><jk>public</jk> S toByte(MarshallingSession)</c>
  * </ul>
  *
- * <h5 class='figure'>Valid unswap methods (N = Normal type, S = Swapped type)</h5>
+ * <h2 class='figure'>Valid unswap methods (N = Normal type, S = Swapped type)</h2>
  * <ul>
  * 	<li class='jm'><c><jk>public static</jk> N fromInteger(S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromInteger(MarshallingSession, S)</c>
@@ -99,7 +99,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li>Deprecated members/constructors.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>
  *

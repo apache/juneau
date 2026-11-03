@@ -31,7 +31,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * This session object gets created by {@link RestSession} once the Java method to be invoked has been determined.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

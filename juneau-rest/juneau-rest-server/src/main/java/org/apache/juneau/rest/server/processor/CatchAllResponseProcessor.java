@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.*;
  * Future catch-all processors should also implement this interface to preserve the ordering
  * invariant for any registered {@link ViewRenderer}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ViewRenderer}
  * 	<li class='jc'>{@link ResponseProcessorList}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>

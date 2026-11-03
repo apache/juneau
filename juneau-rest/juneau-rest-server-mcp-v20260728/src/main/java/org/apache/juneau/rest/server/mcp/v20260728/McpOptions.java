@@ -45,7 +45,7 @@ import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
  * them in place &mdash; callers never {@code new} a replacement nested config, so the "must return a stable
  * instance" footgun the pre-consolidation hooks warned about cannot recur.
  *
- * <h5 class='section'>The subscription broker default:</h5>
+ * <h2 class='section'>The subscription broker default:</h2>
  * <p>
  * {@link #getSubscriptionBroker()} defaults to <jk>null</jk>, meaning "framework-derived": the binding lazily
  * derives a {@link BasicMcpSubscriptionBroker} sized from {@link #getSubscriptions()}'s
@@ -54,14 +54,14 @@ import org.apache.juneau.rest.server.mcp.McpSubscriptionBroker;
  * subscribers and publishers across unrelated registries). Call {@link #setSubscriptionBroker(McpSubscriptionBroker)}
  * to supply a custom broker instead (for example one shared across multiple bindings on purpose).
  *
- * <h5 class='section'>The idleTimeoutMs / heartbeatIntervalMs caveat:</h5>
+ * <h2 class='section'>The idleTimeoutMs / heartbeatIntervalMs caveat:</h2>
  * <p>
  * When configuring {@link #subscriptions(Consumer)}, keep
  * {@link McpSubscriptionsConfig#getHeartbeatIntervalMs() heartbeatIntervalMs} below
  * {@link McpSubscriptionsConfig#getIdleTimeoutMs() idleTimeoutMs} (see that method's Javadoc) &mdash; otherwise
  * the idle-timeout watchdog can reap a perfectly healthy connection between two heartbeats.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <pre>
  * McpOptions <jv>options</jv> = <jk>new</jk> McpOptions()
  *     .setInstructions(<js>"Use tool 'echo' to test."</js>)

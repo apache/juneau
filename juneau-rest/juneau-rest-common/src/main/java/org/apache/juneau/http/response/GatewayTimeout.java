@@ -26,7 +26,7 @@ import org.apache.juneau.http.*;
  * <p>
  * The server was acting as a gateway or proxy and did not receive a timely response from the upstream server.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

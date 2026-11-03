@@ -47,7 +47,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * which keeps the conversion rules co-located and makes them straightforward to extend without
  * touching the underlying annotation-walker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">API-Docs Mixin Pack</a>
  * </ul>
  */

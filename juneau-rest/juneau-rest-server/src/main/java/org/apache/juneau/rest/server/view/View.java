@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.processor.*;
  * paired with a {@link ResponseProcessor} that detects its own {@code View} subtype and dispatches
  * to the underlying templating engine.
  *
- * <h5 class='figure'>End-state usage:</h5>
+ * <h2 class='figure'>End-state usage:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
@@ -53,7 +53,7 @@ import org.apache.juneau.rest.server.processor.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Contract:</h5>
+ * <h2 class='section'>Contract:</h2>
  *
  * <ul class='spaced-list'>
  * 	<li>{@link #getTemplateName() getTemplateName()} &mdash; the template path the engine should
@@ -69,14 +69,14 @@ import org.apache.juneau.rest.server.processor.*;
  * 		or {@code Cache-Control} on the rendered response can populate this.
  * </ul>
  *
- * <h5 class='section'>Stability:</h5>
+ * <h2 class='section'>Stability:</h2>
  *
  * <p>
  * This interface is the stable extension point for view modules. New methods will be added as
  * {@code default}-bodied where possible to preserve backward compatibility with downstream view
  * impls.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>

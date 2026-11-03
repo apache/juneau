@@ -24,7 +24,7 @@
  * {@code oidc} sub-packages) rather than reused from {@code juneau-rest-server-auth-oauth}, which compile-depends on
  * the server.  A later auth-module de-layering is expected to rationalize this relocation.
  *
- * <h5 class='topic'>What's here</h5>
+ * <h2 class='topic'>What's here</h2>
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpTokenProvider McpTokenProvider} &mdash; a {@code Supplier<String>} token
  * 		manager for pre-provisioned (static) tokens, the client-credentials grant, and the refresh-token grant

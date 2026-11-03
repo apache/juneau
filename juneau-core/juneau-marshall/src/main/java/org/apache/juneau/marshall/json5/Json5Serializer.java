@@ -24,13 +24,13 @@ import org.apache.juneau.marshall.json.*;
 /**
  * Serializes POJO models to Simplified JSON.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/json5</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * 	This is a JSON serializer that uses simplified notation:
  * <ul class='spaced-list'>
@@ -38,21 +38,21 @@ import org.apache.juneau.marshall.json.*;
  * 	<li>Single quotes.
  * </ul>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bjson'>
  * 	{name:<js>"Alice"</js>,age:30}
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bjson'>
  * 	{name:<js>"Alice"</js>,age:30,address:{street:<js>"123 Main St"</js>,city:<js>"Boston"</js>,state:<js>"MA"</js>},tags:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
  * </ul>
  */

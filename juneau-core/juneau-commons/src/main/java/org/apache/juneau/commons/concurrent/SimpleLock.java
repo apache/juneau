@@ -33,7 +33,7 @@ import java.util.concurrent.locks.*;
  * This class is typically used indirectly through {@link SimpleReadWriteLock#read()} and
  * {@link SimpleReadWriteLock#write()}, but can also be used directly with any {@link Lock} instance.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Using with a ReentrantLock</jc>
  * 	<jk>var</jk> <jv>lock</jv> = <jk>new</jk> ReentrantLock();
@@ -52,12 +52,12 @@ import java.util.concurrent.locks.*;
  * 	<jc>// Read lock is automatically released</jc>
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe itself. Each instance wraps a single {@link Lock} and should be used
  * by a single thread. The underlying lock's thread-safety guarantees apply to the wrapped lock.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>The lock is automatically acquired in the constructor and released in {@link #close()}.
  * 	<li class='note'>If <jk>null</jk> is passed to the constructor, no locking operations are performed
  * 		(useful for creating no-op locks).
@@ -69,7 +69,7 @@ import java.util.concurrent.locks.*;
  * 		reentrant locking, the same thread can acquire it multiple times.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SimpleReadWriteLock} - A read-write lock that returns {@link SimpleLock} instances
  * 	<li class='jc'>{@link Lock} - The underlying lock interface
  * </ul>
@@ -87,7 +87,7 @@ public class SimpleLock implements AutoCloseable {
 	 * {@link SimpleLock} instance but don't want any actual synchronization overhead.
 	 * All lock operations on this instance are no-ops.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Use NO_OP when locking is disabled</jc>
 	 * 	<jk>var</jk> <jv>lock</jv> = isLockingEnabled() ? <jk>new</jk> SimpleLock(<jk>new</jk> ReentrantLock()) : SimpleLock.NO_OP;
@@ -97,7 +97,7 @@ public class SimpleLock implements AutoCloseable {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Calling {@link #close()} on this instance has no effect.
 	 * 	<li class='note'>This instance is thread-safe and can be shared across threads.
 	 * 	<li class='note'>This instance wraps a <jk>null</jk> lock, so no actual locking occurs.
@@ -115,7 +115,7 @@ public class SimpleLock implements AutoCloseable {
 	 * automatically acquired during construction. If <jk>null</jk> is passed, no locking operations
 	 * are performed (useful for creating no-op locks).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Wrap a ReentrantLock</jc>
 	 * 	<jk>var</jk> <jv>underlyingLock</jv> = <jk>new</jk> ReentrantLock();
@@ -126,7 +126,7 @@ public class SimpleLock implements AutoCloseable {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>The lock is acquired immediately in the constructor. This method may block
 	 * 		if the lock is not available.
 	 * 	<li class='note'>If <jk>null</jk> is passed, no lock is acquired and {@link #close()} will have no effect.
@@ -152,14 +152,14 @@ public class SimpleLock implements AutoCloseable {
 	 * called explicitly to release the lock early. If the lock was <jk>null</jk> (no-op lock),
 	 * this method has no effect.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>var</jk> <jv>lock</jv> = <jk>new</jk> SimpleLock(<jk>new</jk> ReentrantLock());
 	 * 	<jc>// Lock is held</jc>
 	 * 	<jv>lock</jv>.close();  <jc>// Explicitly release the lock</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This method is called automatically when exiting a try-with-resources block.
 	 * 	<li class='note'>Multiple calls to this method are safe - subsequent calls have no effect if
 	 * 		the lock has already been released.

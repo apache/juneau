@@ -34,11 +34,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses BSON (Binary JSON) into POJO models.
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  *
  * Handles <c>Content-Type</c> types:  <bc>application/bson</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * BSON-to-Java type mapping:
  * <ul class='spaced-list'>
@@ -58,11 +58,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Deprecated/unsupported types → silently skipped
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li>BSON requires a top-level document. Standalone scalars are wrapped as <c>{value: x}</c>.
  * 	<li>Map keys must be strings. Non-string keys use <c>toString()</c>. Null keys use a configurable placeholder.
  * 	<li>ObjectId (0x07) is read-only; parsed as 24-character hex strings.
@@ -75,7 +75,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>BSON is binary; <c>SpacedHex</c> and <c>Base64</c> subclasses accept text-encoded input.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON</a>
  * </ul>
  */

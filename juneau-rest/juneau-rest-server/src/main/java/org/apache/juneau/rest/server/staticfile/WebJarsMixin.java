@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.util.*;
  * a directory or a missing file.  Responses carry {@code Cache-Control: public, max-age=31536000, immutable}; the
  * URLs are cache-busted by {@link WebJarResolver}.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  * <p>
  * The mount path is pinned at the op level by {@code @RestGet(path="/webjars/*")}; a class-level
  * {@code @Rest(paths=...)} would be ignored under the mixin pattern.

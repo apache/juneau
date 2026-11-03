@@ -35,7 +35,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	with an HTTP 500 ({@link org.apache.juneau.marshall.objecttools.MethodNotAllowlistedException}).
  * </p>
  *
- * <h5 class='section'>Example - allow-listing specific methods:</h5>
+ * <h2 class='section'>Example - allow-listing specific methods:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(converters=Introspectable.<jk>class</jk>)
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Example - trusted resource, pre-10.0 behavior:</h5>
+ * <h2 class='section'>Example - trusted resource, pre-10.0 behavior:</h2>
  * <p class='bjava'>
  * 	<ja>@Bean</ja>
  * 	<jk>public</jk> IntrospectableSettings introspectableSettings() {
@@ -61,7 +61,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	methods you wouldn't want an arbitrary caller to invoke &mdash; allow-list the specific methods instead.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Introspectable}
  * 	<li class='jc'>{@link org.apache.juneau.marshall.objecttools.ObjectIntrospector}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools">Object Tools</a>
@@ -125,7 +125,7 @@ public class IntrospectableSettings {
 		/**
 		 * Allow-lists specific method signatures declared on (or inherited by) the specified class.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	IntrospectableSettings.<jsm>create</jsm>().allow(MyBean.<jk>class</jk>, <js>"getName"</js>, <js>"getAge"</js>);
 		 * </p>

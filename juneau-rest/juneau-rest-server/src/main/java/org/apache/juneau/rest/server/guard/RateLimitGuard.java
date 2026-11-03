@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.*;
  * empty a {@link TooManyRequests} exception is thrown with a {@code Retry-After} header set to the integer
  * number of seconds until the next token will be available.
  *
- * <h5 class='topic'>Example usage</h5>
+ * <h2 class='topic'>Example usage</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>)
@@ -55,7 +55,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Keying</h5>
+ * <h2 class='topic'>Keying</h2>
  *
  * <p>
  * The default key is the request's {@linkplain RestRequest#getRemoteAddr() remote address}.  Set
@@ -67,7 +67,7 @@ import org.apache.juneau.rest.server.*;
  * of the application, attackers can spoof the {@code X-Forwarded-For} header and defeat the IP-based key.  Only
  * opt in when the request edge enforces the header.
  *
- * <h5 class='topic'>Storage</h5>
+ * <h2 class='topic'>Storage</h2>
  *
  * <p>
  * Bucket state is held by a pluggable {@link Storage} SPI.  The default {@link Storage#inMemory()} implementation
@@ -75,14 +75,14 @@ import org.apache.juneau.rest.server.*;
  * for single-pod deployments.  Distributed deployments should provide a substrate-backed implementation
  * (e.g. Redis) so per-pod buckets do not split the shared rate envelope.
  *
- * <h5 class='topic'>Probe paths</h5>
+ * <h2 class='topic'>Probe paths</h2>
  *
  * <p>
  * Built-in probe paths ({@code /healthz}, {@code /readyz}, {@code /livez}) are exempted from throttling by
  * default so a misconfigured limit cannot mask a healthy pod from the orchestrator.  Override via
  * {@link Builder#exemptPaths(String...)}.
  *
- * <h5 class='topic'>Time source</h5>
+ * <h2 class='topic'>Time source</h2>
  *
  * <p>
  * Refill math uses {@link System#nanoTime()}.  This is monotonic and safe across wall-clock jumps but does not
@@ -93,7 +93,7 @@ import org.apache.juneau.rest.server.*;
  * {@link BucketState#lastRequest()} instant reported by {@link Storage#snapshot()} is read from a separate
  * {@link Clock} (default {@link Clock#systemUTC()}), likewise overridable through a package-private constructor.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">Rate-Limiting and Request-Id Propagation</a>
  * </ul>
  *

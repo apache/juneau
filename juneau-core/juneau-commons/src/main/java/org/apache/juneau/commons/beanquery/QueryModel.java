@@ -39,7 +39,7 @@ import org.apache.juneau.commons.bean.*;
  * Dynamic ({@code "*"}) properties are excluded.  A class that isn't a bean (for example, one with no properties)
  * yields an empty model rather than an error.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	QueryModel&lt;Person&gt; <jv>model</jv> = QueryModel.<jsm>of</jsm>(Person.<jk>class</jk>);
  * 	<jk>for</jk> (QueryProperty <jv>p</jv> : <jv>model</jv>.getReadableProperties().values())

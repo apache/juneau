@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.stream.*;
  * Pairs {@link Json5lSerializer} and {@link Json5lParser} into a single class with convenience
  * to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize to JSON5L using instance</jc>
  * 	Json5l <jv>json5l</jv> = <jk>new</jk> Json5l();
@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	List&lt;MyBean&gt; <jv>in</jv> = Json5l.<jsm>to</jsm>(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (List of beans, strict-per-line default):</h5>
+ * <h2 class='figure'>Example output (List of beans, strict-per-line default):</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30}
  * {"name":"Bob","age":25}
@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Json5l.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

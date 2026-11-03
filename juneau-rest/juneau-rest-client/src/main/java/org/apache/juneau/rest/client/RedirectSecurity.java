@@ -50,7 +50,7 @@ import org.apache.juneau.http.*;
  * callers are responsible for resolving a relative {@code Location} header against the original
  * request URI before calling into this class.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>if</jk> (RedirectSecurity.<jsm>shouldStripCredentials</jsm>(<jv>originalUri</jv>, <jv>redirectUri</jv>)) {
  * 		<jc>// remove Authorization / Cookie / etc. before replaying the request</jc>

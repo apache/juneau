@@ -28,7 +28,7 @@ import java.util.concurrent.*;
  * map read instead of whatever the delegate does (for example the relaxed environment source tokenizes the name and
  * probes up to three environment variables).
  *
- * <h5 class='section'>Contract:</h5>
+ * <h2 class='section'>Contract:</h2>
  * <p>
  * <b>Wrap only sources whose answers cannot change after construction, including their misses.</b>
  * A wrapped source that answers {@link PropertyLookupResult#missing()} once, for any reason, answers it forever.
@@ -37,13 +37,13 @@ import java.util.concurrent.*;
  * Do not wrap a {@code SensitivePropertySource} either: the wrapper hides the redaction marker and keeps secret values in
  * memory for its lifetime.
  *
- * <h5 class='section'>Soft cap:</h5>
+ * <h2 class='section'>Soft cap:</h2>
  * <p>
  * The cache holds at most {@link #MAX_ENTRIES} names. Once full, new names pass through to the delegate uncached; there
  * is no eviction, so the first names seen win. The check is not locked: concurrent first lookups can overshoot the cap
  * by at most the number of racing threads.
  *
- * <h5 class='section'>Null names:</h5>
+ * <h2 class='section'>Null names:</h2>
  * <p>
  * A {@code null} name skips the cache (it cannot hold a {@code null} key) and goes to the delegate, so each delegate
  * keeps its own {@code null} behavior.

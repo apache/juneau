@@ -30,20 +30,20 @@ import java.time.*;
  * {@link #wire() wire token} is the stable external spelling.  {@link #bareHelp()} is a fixed, one-sentence
  * explanation of bare-token behavior intended for display in a search-bar popover.
  *
- * <h5 class='section'>Bare-token behavior per type:</h5>
+ * <h2 class='section'>Bare-token behavior per type:</h2>
  * <ul>
  * 	<li>{@link #TEXT} / {@link #ID} &mdash; case-insensitive substring (same idea as {@code $contains}).
  * 	<li>{@link #VERSION} &mdash; dotted-tuple prefix.
  * 	<li>{@link #NUMERIC} / {@link #TIMESTAMP} / {@link #ENUM} / {@link #BOOLEAN} &mdash; exact equality.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	String <jv>help</jv> = SearchType.VERSION.<jsm>bareHelp</jsm>();
  * 	<jc>// help == "Matches any version starting with this prefix, e.g. 250 matches 250.1 and 250.2.3."</jc>
  * </p>
  *
- * <h5 class='section'>Example (typing a literal):</h5>
+ * <h2 class='section'>Example (typing a literal):</h2>
  * <p class='bjava'>
  * 	<jc>// Type a literal the same way for every engine, so a bad value is BAD_VALUE (400) everywhere.</jc>
  * 	Object <jv>v</jv> = SearchType.<jsf>NUMERIC</jsf>.<jsm>parse</jsm>(<js>"42"</js>);  <jc>// BigDecimal("42")</jc>
@@ -139,7 +139,7 @@ public enum SearchType {
 	 * {@link #ENUM} and {@link #VERSION} are returned unchanged (never <jk>null</jk>; a <jk>null</jk> {@code value}
 	 * becomes {@code ""}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BigDecimal <jv>n</jv> = (BigDecimal)SearchType.<jsf>NUMERIC</jsf>.<jsm>parse</jsm>(<js>"-3.5"</js>);
 	 * </p>
@@ -171,7 +171,7 @@ public enum SearchType {
 	 * other literal shape parses exactly as in {@link #parse(String)}; {@link #parse(String)} itself delegates here
 	 * with {@link Instant#now()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Instant <jv>now</jv> = Instant.<jsm>parse</jsm>(<js>"2026-09-30T12:00:00Z"</js>);
 	 * 	Object <jv>yesterday</jv> = SearchType.<jsf>TIMESTAMP</jsf>.<jsm>parse</jsm>(<js>"-24h"</js>, <jv>now</jv>);  <jc>// 2026-09-29T12:00Z</jc>

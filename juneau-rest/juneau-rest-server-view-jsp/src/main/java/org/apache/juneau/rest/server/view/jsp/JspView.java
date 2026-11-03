@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@link jakarta.servlet.RequestDispatcher#forward(jakarta.servlet.ServletRequest,
  * jakarta.servlet.ServletResponse) ServletContext.getRequestDispatcher(...).forward(...)}.
  *
- * <h5 class='figure'>Usage:</h5>
+ * <h2 class='figure'>Usage:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/hello/{name}"</js>)
@@ -45,7 +45,7 @@ import org.apache.juneau.rest.server.view.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Immutability:</h5>
+ * <h2 class='section'>Immutability:</h2>
  *
  * <p>
  * Each {@code attr(...)} / {@code attrs(...)} / {@code header(...)} call returns a <b>new</b>
@@ -53,7 +53,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code JspView} a value type safe to share across requests (e.g. as a static singleton built
  * once and returned from many handlers).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link JspViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>

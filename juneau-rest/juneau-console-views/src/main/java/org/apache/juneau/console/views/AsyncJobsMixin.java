@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.*;
  * 		{@link ActionResult} (a {@code cancelled} / {@code cancelled-after-effect} outcome).
  * </ul>
  *
- * <h5 class='section'>Authorization: the stream URL is the capability</h5>
+ * <h2 class='section'>Authorization: the stream URL is the capability</h2>
  * <p>
  * The stream is a held-open <b>GET</b>, so {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} applies only
  * its <b>Host</b> check (DNS-rebinding stays covered on every request); the Origin/CSRF/JSON checks apply to non-safe
@@ -51,13 +51,13 @@ import org.apache.juneau.rest.server.*;
  * {@code 429}.  A resume value grants nothing: it only picks a position inside a job the caller already holds the
  * capability for, and it is checked only after the {@code 404}, so a bad value cannot reveal whether a job exists.
  *
- * <h5 class='section'>Server-side hard limits</h5>
+ * <h2 class='section'>Server-side hard limits</h2>
  * <p>
  * Every limit is enforced in {@link AsyncJob} / {@link AsyncJobRegistry}, not here and not on the client: the hard
  * timeout, the per-job output cap, the concurrent-job cap and the per-job subscriber cap.  The stream loop simply
  * drains the job until it is terminal, which the timeout guarantees will happen.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> AsyncJobsMixin {
@@ -66,7 +66,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link AsyncJobRegistry}
  * 	<li class='jc'>{@link AsyncJob}

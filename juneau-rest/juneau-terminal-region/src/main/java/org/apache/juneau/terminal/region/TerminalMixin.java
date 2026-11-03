@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Step events are not served here: pair the terminal with {@code TerminalViewMixin} over the same id.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> RunsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> TerminalMixin, TerminalViewMixin {

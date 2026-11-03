@@ -32,20 +32,20 @@ import org.apache.juneau.marshall.stream.*;
  * 	{@link HtmlSerializer#DEFAULT_SQ_READABLE} with {@link HtmlParser#DEFAULT} and exposes the full
  * 	static shortcut surface bound to its own {@link #DEFAULT} instance.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  *	<jc>// Using static shortcuts.</jc>
  * 	String <jv>html</jv> = HtmlSqR.<jsm>of</jsm>(<jv>myPojo</jv>);
  * 	MyPojo <jv>myPojo</jv> = HtmlSqR.<jsm>to</jsm>(<jv>html</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>Because Java <i>hides</i> (does not override) static members, this class redeclares the
  * 		entire static shortcut surface of {@link Html} so that every shortcut is bound to this class's
  * 		single-quote readable {@link #DEFAULT} rather than the {@link Html#DEFAULT}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

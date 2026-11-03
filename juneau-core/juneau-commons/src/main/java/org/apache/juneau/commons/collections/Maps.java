@@ -36,7 +36,7 @@ import java.util.function.*;
  * Instances of this builder can be created using {@link #create(Class, Class)} or the convenience method
  * {@link org.apache.juneau.commons.utils.CollectionUtils#mapBuilder(Class, Class)}.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Fluent API - all methods return <c>this</c> for method chaining
  * 	<li>Multiple add methods - single entries, pairs, other maps
@@ -49,7 +49,7 @@ import java.util.function.*;
  * 	<li>Custom conversion functions - type conversion via {@link #keyFunction(Function)} and {@link #valueFunction(Function)}
  * </ul>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
  *
@@ -105,12 +105,12 @@ import java.util.function.*;
  * 		.buildFiltered();
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is <b>not thread-safe</b>. Each builder instance should be used by a single thread or
  * properly synchronized.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">Collections Package</a>
  * 	<li class='jc'>{@link Lists}
  * 	<li class='jc'>{@link Sets}
@@ -148,7 +148,7 @@ public class Maps<K,V> {
 	 * The types will be inferred from usage context. Internally uses <c>Object.class</c> for both
 	 * key and value types, which allows any types to be added.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Map&lt;String, Integer&gt; <jv>map</jv> = Maps.<jsm>create</jsm>()
 	 * 		.add(<js>"one"</js>, 1)
@@ -344,7 +344,7 @@ public class Maps<K,V> {
 	 * <p>
 	 * This is a convenience method that calls {@link #build()} and wraps the result in a {@link FluentMap}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -372,7 +372,7 @@ public class Maps<K,V> {
 	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link ConcurrentHashMap} if concurrent)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -459,7 +459,7 @@ public class Maps<K,V> {
 	 * 	<li>Empty {@link Collection Collections}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -501,7 +501,7 @@ public class Maps<K,V> {
 	 * <p>
 	 * Note: Filtering is applied at build time, not when adding entries.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -602,7 +602,7 @@ public class Maps<K,V> {
 	 * <p>
 	 * This is useful when the map needs to be accessed from multiple threads.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -642,7 +642,7 @@ public class Maps<K,V> {
 	 * <p>
 	 * This is useful when the map needs to be accessed from multiple threads.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -671,7 +671,7 @@ public class Maps<K,V> {
 	 * Note: If {@link #sorted()} was previously called, calling this method will override it.
 	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final map type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
@@ -700,7 +700,7 @@ public class Maps<K,V> {
 	 * Note: If {@link #sorted()} was previously called, calling this method with <c>true</c> will override it.
 	 * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final map type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *

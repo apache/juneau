@@ -91,7 +91,7 @@ import jakarta.servlet.http.*;
  * resolves the session cookie into a {@link ClaimsPrincipal} for {@code RoleBasedRestGuard} /
  * {@code @Auth Principal}.
  *
- * <h5 class='section'>Security</h5>
+ * <h2 class='section'>Security</h2>
  * <ul>
  * 	<li>{@code state} and {@code nonce} are single-use and TTL-bounded (default 5&nbsp;min); a
  * 		missing / replayed value fails the callback.
@@ -103,7 +103,7 @@ import jakarta.servlet.http.*;
  * 	<li>The session cookie is {@code HttpOnly} + {@code Secure} + {@code SameSite} by default.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SessionStore}
  * 	<li class='jc'>{@link OidcSessionAuthFilter}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)</a>

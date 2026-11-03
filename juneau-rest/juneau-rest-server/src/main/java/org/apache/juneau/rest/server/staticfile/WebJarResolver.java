@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.*;
  * A missing WebJar, or a missing file in a present WebJar, throws {@link IllegalStateException}, so a page never
  * renders a tag that would 404.  Versions and file checks are cached for the life of the class loader.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	String <jv>asset</jv> = WebJarResolver.<jsm>asset</jsm>(<js>"org.webjars"</js>, <js>"jquery"</js>, <js>"jquery/{version}/jquery.min.js"</js>);
  * 	String <jv>url</jv> = WebJarResolver.<jsm>resolve</jsm>(<jv>req</jv>, <jv>asset</jv>);  <jc>// .../webjars/jquery/3.7.1/jquery.min.js?v=3.7.1</jc>

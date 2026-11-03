@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.*;
  * {@link Rest#mixins() @Rest(mixins=EchoMixin.class)}; the {@code /echo/*} URL becomes
  * available alongside the host's own endpoints with no further wiring.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /echo/*} can be overridden via the SVL variable
@@ -65,7 +65,7 @@ import org.apache.juneau.rest.server.*;
  * {@code /debug/echo/*} alias must now either set {@code -Djuneau.echo.path=debug/echo} or
  * compose a second instance with the override.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -73,7 +73,7 @@ import org.apache.juneau.rest.server.*;
  * {@link #echo}; a class-level {@code @Rest(paths=...)} declaration would be silently ignored
  * under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
@@ -93,7 +93,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Enablement:</h5>
+ * <h2 class='section'>Enablement:</h2>
  *
  * <p>
  * The endpoint is <b>disabled by default</b>. Reachability is controlled by an explicit, non-logging switch and is
@@ -125,7 +125,7 @@ import org.apache.juneau.rest.server.*;
  * Host-level {@link Rest#guards() @Rest(guards=...)} inherit onto the mixed-in {@code /echo/*} operation, so declaring
  * guards at the host authorizes the endpoint.
  *
- * <h5 class='section'>Sensitive-header redaction:</h5>
+ * <h2 class='section'>Sensitive-header redaction:</h2>
  *
  * <p>
  * Token-bearing headers must never be reflected back to the caller (would defeat any auth scheme
@@ -141,7 +141,7 @@ import org.apache.juneau.rest.server.*;
  * {@link RedactedHeaders#REDACTED} and {@link RedactedHeaders#DEFAULT} respectively; masking is
  * performed by delegating to {@link RedactedHeaders#redact(String, String, java.util.Collection)}.
  *
- * <h5 class='section'>Body capture and truncation:</h5>
+ * <h2 class='section'>Body capture and truncation:</h2>
  *
  * <p>
  * The handler reads up to {@link Builder#bodyLimit(long) bodyLimit} bytes (default
@@ -150,7 +150,7 @@ import org.apache.juneau.rest.server.*;
  * portion is truncated and the {@code truncated} flag is set to {@code true} so callers can see
  * the response is incomplete.
  *
- * <h5 class='section'>Response shape:</h5>
+ * <h2 class='section'>Response shape:</h2>
  *
  * <p class='bjson'>
  * 	{
@@ -171,7 +171,7 @@ import org.apache.juneau.rest.server.*;
  * The endpoint is excluded from generated Swagger / OpenAPI specs via
  * {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='jc'>{@link RouteIndexMixin}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

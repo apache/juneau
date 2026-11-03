@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.stream.*;
  * {@link ParserPipe} the caller hands in.  Cursor-level behavior is driven by a small
  * {@link Settings} bundle &mdash; currently just <c>trimStrings</c>.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li>Whitespace and JSON comments are tolerated &mdash; comments are silently skipped to mirror
  * 		Juneau's existing JSON parser behavior.

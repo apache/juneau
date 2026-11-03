@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * The Contact Object provides contact information for the exposed API in Swagger 2.0. This information can be used
  * by clients to get in touch with the API maintainers for support, questions, or other inquiries.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Contact Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -41,7 +41,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>email</c> (string) - The email address of the contact person/organization
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Contact <jv>contact</jv> = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
@@ -61,7 +61,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#contact-object">Swagger 2.0 Specification &gt; Contact Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/api-general-info/">Swagger API General Info</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

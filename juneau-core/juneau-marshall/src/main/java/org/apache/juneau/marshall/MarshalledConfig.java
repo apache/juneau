@@ -75,12 +75,12 @@ public @interface MarshalledConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link Context.Builder#debug()}
 	 * </ul>
 	 *
@@ -104,7 +104,7 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
@@ -122,7 +122,7 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * Same as {@link #dictionary()} but replaces any existing value.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
@@ -139,12 +139,12 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingSession.Builder#locale(Locale)}
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#locale(Locale)}
 	 * </ul>
@@ -159,12 +159,12 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * Specifies the default media type value for serializer and parser sessions.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingSession.Builder#mediaType(MediaType)}
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#mediaType(MediaType)}
 	 * </ul>
@@ -198,7 +198,7 @@ public @interface MarshalledConfig {
 	 * <br>When multiple swaps are applicable to the same class, the media type pattern defined by
 	 * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
@@ -218,7 +218,7 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * Same as {@link #swaps()} but replaces any existing value.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#swaps(Class...)}
 	 * </ul>
 	 *
@@ -344,12 +344,12 @@ public @interface MarshalledConfig {
 	 * <p>
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link MarshallingSession.Builder#timeZone(TimeZone)}
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#timeZone(TimeZone)}
 	 * </ul>
@@ -365,14 +365,14 @@ public @interface MarshalledConfig {
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
 	 * parser knows the data type to reconstruct.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Default value: <js>"_type"</js>.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Marshalled#typePropertyName()}
 	 * 	<li class='jm'>{@link MarshallingContext.Builder#typePropertyName(String)}
 	 * </ul>

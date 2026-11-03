@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * <p>
  * Used to identify a namespace/URI pair on a {@link XmlSchema#xmlNs() @XmlSchema(xmlNs)} annotation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
 
  * </ul>

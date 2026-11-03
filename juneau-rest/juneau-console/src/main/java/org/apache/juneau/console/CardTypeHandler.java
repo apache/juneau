@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.collections.*;
  * becomes a template), so most custom cards need only JS. Register a handler when the server must validate
  * or enrich the body.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jk>public final class</jk> KpiCardType <jk>implements</jk> CardTypeHandler {
  *     <ja>@Override</ja> <jk>public</jk> String type() { <jk>return</jk> <js>"kpi"</js>; }
@@ -68,7 +68,7 @@ public interface CardTypeHandler {
 	/**
 	 * Topics this card publishes without declaring them, for R-10. Default: none (the shell adds card:/cmd:).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <ja>@Override</ja>
 	 *   <jk>public</jk> List&lt;String&gt; implicitTopics(JsonMap <jv>card</jv>) {
@@ -85,7 +85,7 @@ public interface CardTypeHandler {
 	 * Roles this type accepts in {@code subscribes[].as}, beyond {@code refresh} and {@code params}.
 	 * {@code null} (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <ja>@Override</ja>
 	 *   <jk>public</jk> Set&lt;String&gt; acceptedRoles() { <jk>return</jk> Set.<jsm>of</jsm>(<js>"highlight"</js>); }
@@ -103,7 +103,7 @@ public interface CardTypeHandler {
 	 * {@code null} (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports
 	 * an unhandled op at runtime (E-JS-48).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <ja>@Override</ja>
 	 *   <jk>public</jk> Set&lt;String&gt; acceptedOps() { <jk>return</jk> Set.<jsm>of</jsm>(<js>"set-target"</js>); }
@@ -120,7 +120,7 @@ public interface CardTypeHandler {
 	 * Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.
 	 * Unioned with the type's packs and the card's {@code requires=}.  Default: none.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <ja>@Override</ja>
 	 *   <jk>public</jk> List&lt;String&gt; requiredPacks(JsonMap <jv>body</jv>) {

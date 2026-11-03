@@ -32,7 +32,7 @@ import org.apache.juneau.commons.function.*;
  * in memory for inspection during tests. It implements {@link Closeable} to automatically
  * remove itself from the logger's listeners when closed.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Capture records using try-with-resources</jc>
  * 	<jk>try</jk> (LogRecordCapture <jv>capture</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>).captureEvents()) {
@@ -49,12 +49,12 @@ import org.apache.juneau.commons.function.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Format String:</h5>
+ * <h2 class='section'>Format String:</h2>
  * <p>
  * The format string supports placeholders as documented in {@link LogRecord#formatted(String)}.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RichLogger#captureEvents()}
  * 	<li class='jc'>{@link LogRecord#formatted(String)}
  * </ul>

@@ -37,11 +37,11 @@ import org.apache.juneau.commons.*;
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
+ * <h2 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h2>
  * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a form-data parameter.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> doPost(
@@ -63,12 +63,12 @@ import org.apache.juneau.commons.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='extlink'><a class='doclink' href='https://swagger.io/specification/v2#parameterObject'>Swagger Parameter Object</a>
  * </ul>
  *
- * <h5 class='topic'>Important note concerning FORM posts</h5>
+ * <h2 class='topic'>Important note concerning FORM posts</h2>
  * <p>
  * This annotation should not be combined with the {@link Content @Content} annotation or <c>RestRequest.getContent()</c> method
  * for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet
@@ -78,19 +78,18 @@ import org.apache.juneau.commons.*;
  * The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the
  * servlet to drain the body content.
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ * <h2 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h2>
  * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FormData">@FormData</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  *
- * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- * <p>
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h2>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  *
@@ -163,7 +162,7 @@ public @interface FormData {
 	 * 		If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
-	 * 		<h5 class='figure'>Examples:</h5>
+	 * 		<h4 class='figure'>Examples:</h4>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
@@ -192,7 +191,7 @@ public @interface FormData {
 	 * 	<li>
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
-	 * 		<h5 class='figure'>Example:</h5>
+	 * 		<h4 class='figure'>Example:</h4>
 	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
@@ -204,7 +203,7 @@ public @interface FormData {
 	 * 	</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
@@ -224,7 +223,7 @@ public @interface FormData {
 	 * Values specified on this field override values specified on the type, and values specified on child types override values
 	 * specified on parent types.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing and parsing validation.

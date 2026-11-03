@@ -30,7 +30,7 @@ import org.apache.juneau.commons.utils.*;
 /**
  * Used for fluent assertion calls against strings.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
  * 	<jv>client</jv>
@@ -40,8 +40,7 @@ import org.apache.juneau.commons.utils.*;
  * </p>
  *
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentStringAssertion}
  * 	<ul class='javatreec'>
@@ -80,8 +79,7 @@ import org.apache.juneau.commons.utils.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentStringAssertion}
  * 	<ul class='javatreec'>
@@ -104,8 +102,7 @@ import org.apache.juneau.commons.utils.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -117,7 +114,7 @@ import org.apache.juneau.commons.utils.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *
@@ -308,7 +305,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * <p>
 	 * Similar to {@link #is(String)} except error message states diff position.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
 	 * 	<jv>client</jv>
@@ -392,7 +389,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Asserts that the lines of text equals the specified value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
 	 * 	<jv>client</jv>
@@ -541,7 +538,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * Asserts that the text equals the specified value after splitting both by newlines and sorting the rows.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
 	 * 	<jv>client</jv>

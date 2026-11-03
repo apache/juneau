@@ -29,7 +29,7 @@ import java.util.regex.*;
  * Applications don't build themes in Java. They author them in their FreeMarker chrome, and the directives build
  * this object:
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bftl'>
  * 	&lt;@console&gt;
  * 		&lt;@theme name="light-red"&gt;
@@ -60,13 +60,14 @@ import java.util.regex.*;
  * are selected by name: {@code <@theme name="gray">} in FTL, or {@code ConsoleChromeMixin.create().theme("gray")}
  * for the served {@code chrome.css}.
  *
- * <h5 class='section'>The two channels:</h5>
+ * <h2 class='section'>The two channels:</h2>
  * <p>
  * The contract in one sentence: <b>a leaf is always a literal; an alias is always a reference; and no token name
  * is declared by both.</b> The two channels are disjoint by <i>value shape</i> rather than by convention, and each
  * carries its own validation:
  *
  * <table class='styled'>
+ * 	<caption>Leaf tokens compared with alias tokens</caption>
  * 	<tr><th>&nbsp;</th><th>leaf ({@link #getTokens()})</th><th>alias ({@link #getAliases()})</th></tr>
  * 	<tr><td>example</td><td><c>--jc-accent: #b45309</c></td><td><c>--jc-tab-bar-bg: var(--jc-card-bg)</c></td></tr>
  * 	<tr><td>value shape</td><td>literal</td><td>reference</td></tr>
@@ -82,7 +83,7 @@ import java.util.regex.*;
  * declare it with {@code token()}. To make it <i>follow</i> {@code --jc-card-bg} through the live cascade,
  * {@link Builder#alias(String, String) alias} it.
  *
- * <h5 class='section'>Why the alias channel exists at all:</h5>
+ * <h2 class='section'>Why the alias channel exists at all:</h2>
  * <p>
  * A leaf cannot carry a derived token. {@link Builder#build()} recognizes a {@code var(--jc-name)} value as a
  * reference and <b>resolves it to a frozen literal</b>, which snapshots the live CSS cascade at composition time
@@ -91,7 +92,7 @@ import java.util.regex.*;
  * unconditional framework defaults rather than per-theme derivations. The alias map is the third channel:
  * <b>consumer-authored derivations that survive to the wire as references.</b>
  *
- * <h5 class='section'>The var() asymmetry &mdash; read this before "unifying" the two paths:</h5>
+ * <h2 class='section'>The var() asymmetry &mdash; read this before "unifying" the two paths:</h2>
  * <p>
  * These two adjacent channels have <b>opposite</b> {@code var()} semantics, deliberately:
  * <ul class='spaced-list'>
@@ -107,7 +108,7 @@ import java.util.regex.*;
  * warning is repeated at the emission site ({@code ConsoleChromeMixin.overrideBlock}), because that is the other
  * place the mistake is reachable from.
  *
- * <h5 class='section'>The dark channel:</h5>
+ * <h2 class='section'>The dark channel:</h2>
  * <p>
  * A theme may also declare <b>dark accents</b> with {@link Builder#dark(String, String)}, read back through
  * {@link #getDarkTokens()}. They apply on top of the shared dark neutral layer, when the page is in the dark scheme.
@@ -115,7 +116,7 @@ import java.util.regex.*;
  * value into the dark scheme. The stock themes use the channel to keep their link, focus and accent colours
  * legible on a dark surface.
  *
- * <h5 class='section'>Security:</h5>
+ * <h2 class='section'>Security:</h2>
  * <p>
  * Identifiers (theme name, token name, alias name) are rejected fail-closed by anchored {@code String.matches(...)}
  * guards. Leaf values are validated by {@code CssValueGrammar}'s accept-known-safe allowlist grammar (not a
@@ -126,7 +127,7 @@ import java.util.regex.*;
  * failure, never a silent fallback. Declared names in the reserved {@code --jc-chrome-*} namespace are rejected
  * (see {@code rejectReservedChromeDeclaration}).
  *
- * <h5 class='section'>Injection safety of the alias channel:</h5>
+ * <h2 class='section'>Injection safety of the alias channel:</h2>
  * <p>
  * Every alias value must match the fully-anchored {@code var(--jc-name)} shape ({@code VAR_REFERENCE}), which
  * admits <b>exactly</b> this alphabet and nothing else: the three letters of {@code var} in either case, an opening
@@ -758,7 +759,7 @@ public final class Theme {
 		 * A name may be declared by only one channel: {@link #build()} rejects a name given to both
 		 * {@code token()} and {@code alias()}, in either order.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Follows --jc-card-bg live, including any later override of it.</jc>
 		 * 	<jv>builder</jv>.alias(<js>"--jc-tab-bar-bg"</js>, <js>"var(--jc-card-bg)"</js>);

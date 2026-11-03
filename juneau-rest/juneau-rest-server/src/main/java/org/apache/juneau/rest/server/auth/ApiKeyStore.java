@@ -39,7 +39,7 @@ import java.util.*;
  * 		"not found" misses (that would couple lookup failures to exception-construction overhead under load).
  * </ul>
  *
- * <h5 class='section'>Example &mdash; in-memory store:</h5>
+ * <h2 class='section'>Example &mdash; in-memory store:</h2>
  *
  * <p class='bjava'>
  * 	<jk>final</jk> Map&lt;String,Principal&gt; <jv>keys</jv> = Map.<jsm>of</jsm>(
@@ -50,7 +50,7 @@ import java.util.*;
  * 	ApiKeyStore <jv>store</jv> = <jv>key</jv> -&gt; Optional.<jsm>ofNullable</jsm>(<jv>keys</jv>.get(<jv>key</jv>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ApiKeyGuard}
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards — Bearer / API-Key / JWT</a>

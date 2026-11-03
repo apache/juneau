@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.tracing.*;
  * has no method-interception / AOP substrate, so observation is explicit (a try-with-resources block)
  * rather than annotation-driven &mdash; consistent with the framework's explicit-over-magic philosophy.
  *
- * <h5 class='topic'>No-backend contract</h5>
+ * <h2 class='topic'>No-backend contract</h2>
  *
  * <p>
  * An {@code Observer} built from the no-op SPIs ({@link #NOOP}) never takes a timestamp and hands back
@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.tracing.*;
  * try-with-resources scaffolding. {@link #start(String, String)} short-circuits to the no-op handle
  * whenever <i>both</i> backends are the no-op singletons.
  *
- * <h5 class='topic'>Wiring</h5>
+ * <h2 class='topic'>Wiring</h2>
  *
  * <p>
  * Typically obtained from a {@code RestContext}'s bean store &mdash; register the same
@@ -55,7 +55,7 @@ import org.apache.juneau.rest.server.tracing.*;
  * 	Observer <jv>o</jv> = <jk>new</jk> Observer(<jk>new</jk> MicrometerMetricsRecorder(<jv>registry</jv>), <jk>new</jk> OtelTracerHook(<jv>otel</jv>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Observations}
  * 	<li class='jc'>{@link Observation}
  * 	<li class='jc'>{@link MetricsRecorder}

@@ -30,7 +30,7 @@ package org.apache.juneau.rest.server.filter;
  * scripts match on them.  A name, once shipped, does not change.  Each constant notes the status a boundary answers
  * it with; the status travels on the {@link BoundaryResult}, not on this enum.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BoundaryResult}
  * 	<li class='jc'>{@link RequestBoundary}
  * </ul>

@@ -24,13 +24,13 @@ import org.apache.juneau.commons.bean.*;
  * The response shape of an {@code aggregate}-mode bulk action ({@link RowAction.BulkMode#AGGREGATE}) &mdash;
  * one outcome per id submitted in the matching {@link BulkRequest}.
  *
- * <h5 class='section'>Own, independently-versioned contract</h5>
+ * <h2 class='section'>Own, independently-versioned contract</h2>
  * <p>
  * {@link #CONTRACT_VERSION} is this type's own wire contract, never aliased to {@code VIEW}, {@code ACTION_RESULT},
  * or {@link BulkMutateDef#CONTRACT_VERSION} &mdash; each of those versions what it defines (a view's shape, a
  * single-row action's outcome, a bulk-mutate action list) and this one versions only this response shape.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(path=<js>"/changes/abort"</js>)
  * 	<jk>public</jk> BulkResult abortChanges(<ja>@Content</ja> BulkRequest <jv>request</jv>) {

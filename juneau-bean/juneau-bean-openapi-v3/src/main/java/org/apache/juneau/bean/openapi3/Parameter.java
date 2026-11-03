@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * locations including the path, query string, headers, or cookies. Each parameter has a name, location, and schema
  * that defines its type and constraints.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Parameter Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -52,7 +52,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 	<li><c>examples</c> (map of {@link Example}) - Examples of the parameter's potential value
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a query parameter</jc>
  * 	Parameter <jv>param</jv> = <jk>new</jk> Parameter()
@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * 		.setExplode(<jk>true</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#parameter-object">OpenAPI Specification &gt; Parameter Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

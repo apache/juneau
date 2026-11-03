@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.httppart.*;
  * Extracted at interface-discovery time (see {@link RrpcInterfaceMeta}) and cached for
  * efficient proxy invocation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

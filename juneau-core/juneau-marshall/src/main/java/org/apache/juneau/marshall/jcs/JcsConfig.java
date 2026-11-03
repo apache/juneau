@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.*;
  * JCS uses fixed canonical output, so no format-specific settings; the annotation provides
  * consistency and future extensibility.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * </ul>
  */

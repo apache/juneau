@@ -38,7 +38,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * so that callers from non-JUnit harnesses (TestNG, raw {@code main(...)}, Spring Test, etc.) can
  * use it without dragging in {@code junit-jupiter-api}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Build the overlay.</jc>
  * 	<jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore()
@@ -53,7 +53,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BasicBeanStore} - The bean store this overlay extends.
  * 	<li class='jc'>{@link StackOverlay} - The stack-aware composition primitive used for class-scope and Mode OVERLAY layering.
  * 	<li class='jc'>{@link JuneauBeanStoreExtension} - Mode INJECT vs Mode OVERLAY contracts and the JUnit 5 lifecycle owner.

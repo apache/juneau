@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.processor.*;
  * Third-party view renderers should implement this interface to inherit the same ordering
  * guarantee.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link CatchAllResponseProcessor}
  * 	<li class='jc'>{@link ResponseProcessorList}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>

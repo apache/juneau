@@ -29,7 +29,7 @@ import java.util.stream.*;
  * reversed without copying or modifying the original list. All read operations (get, iterator, etc.)
  * operate on the underlying list in reverse order.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Zero-copy reverse view - no data duplication
  * 	<li>Efficient random access via index translation
@@ -38,7 +38,7 @@ import java.util.stream.*;
  * 	<li>Iterator and ListIterator support in reversed order
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a list</jc>
  * 	List&lt;String&gt; <jv>original</jv> = List.<jsm>of</jsm>(<js>"A"</js>, <js>"B"</js>, <js>"C"</js>);
@@ -57,7 +57,7 @@ import java.util.stream.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The underlying list must not be null
  * 	<li>Changes to the underlying list are immediately visible in the reversed view

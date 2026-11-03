@@ -38,7 +38,7 @@ import jakarta.servlet.DispatcherType;
  * Provides a {@code @Bean HelloMessageProvider} to demonstrate Spring {@code @Autowired} injection into the
  * companion {@link HelloResource} child — preserving the deployment-glue Spring-injection demo.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */

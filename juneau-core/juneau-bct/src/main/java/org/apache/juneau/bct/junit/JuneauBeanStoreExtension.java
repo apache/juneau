@@ -29,7 +29,7 @@ import org.junit.jupiter.api.extension.*;
  * a {@link TestBeanStore} overlay.
  *
  * <a id="ModeInject"></a>
- * <h5 class='section'>Mode INJECT &mdash; fresh-instance with overrides (default):</h5>
+ * <h2 class='section'>Mode INJECT &mdash; fresh-instance with overrides (default):</h2>
  * <p>
  * The extension supports two wiring patterns.  <b>Mode INJECT</b> is the default and what every
  * {@code @TestBean}-based test ships with out of the box.  The contract:
@@ -55,7 +55,7 @@ import org.junit.jupiter.api.extension.*;
  * {@code ParserSet.Builder}, and {@code EncoderSet.Builder} all implement this Mode INJECT contract.
  *
  * <a id="ModeOverlay"></a>
- * <h5 class='section'>Mode OVERLAY &mdash; existing-instance with push/pop:</h5>
+ * <h2 class='section'>Mode OVERLAY &mdash; existing-instance with push/pop:</h2>
  * <p>
  * <b>Mode OVERLAY</b> is the opt-in pattern for tests that hold a <i>long-lived</i> SUT (typically a
  * {@code Microservice} booted in {@code @BeforeAll}) and want to apply per-test overlays without rebuilding it.
@@ -71,7 +71,7 @@ import org.junit.jupiter.api.extension.*;
  * {@code Mode.INJECT} and {@code Mode.OVERLAY} on the same scope is rejected with a clear
  * {@link IllegalStateException}.
  *
- * <h5 class='section'>Overlay storage:</h5>
+ * <h2 class='section'>Overlay storage:</h2>
  * <p>
  * The extension owns one or two {@link TestBeanStore} overlays per test execution:
  * <ul>
@@ -113,7 +113,7 @@ import org.junit.jupiter.api.extension.*;
  * 		methods.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link TestBean} - The annotation discovered by this extension.
  * 	<li class='jc'>{@link TestBeanStore} - The overlay type the extension produces.
  * 	<li class='je'>{@link Scope} - Per-method vs per-class lifecycle selector.

@@ -29,13 +29,13 @@ import java.lang.annotation.*;
  * <b>content</b> concern ({@link #value()}), enabling {@link Swap @Swap} to be a pure data annotation
  * without marshall-specific application machinery.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@SwapApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@Swap</ja>(impl=MySwap.<jk>class</jk>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  * </ul>
  */
@@ -59,7 +59,7 @@ public @interface SwapApply {
 	 * <p>
 	 * Identifies the targets this annotation applies to using fully-qualified names.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -73,7 +73,7 @@ public @interface SwapApply {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of strings.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

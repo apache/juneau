@@ -45,7 +45,7 @@ import freemarker.template.*;
  * {@link #chromeTemplate(String) chrome template} are in scope, as are {@code <@ns.x>} calls on an
  * {@code <#import … as ns>} namespace.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Test</ja> <jk>void</jk> templatesLint() {
  * 		List&lt;ConsoleTemplateValidator.Finding&gt; <jv>f</jv> = ConsoleTemplateValidator.<jsm>create</jsm>()

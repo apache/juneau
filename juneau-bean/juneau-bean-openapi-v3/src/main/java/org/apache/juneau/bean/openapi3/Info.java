@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * terms of service, contact information, and license. This metadata can be used by client tooling and is typically
  * displayed in API documentation interfaces.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Info Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>license</c> ({@link License}) - License information for the exposed API
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an Info object</jc>
  * 	Info <jv>info</jv> = <jk>new</jk> Info()
@@ -91,7 +91,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#info-object">OpenAPI Specification &gt; Info Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-general-info/">OpenAPI API General Info</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

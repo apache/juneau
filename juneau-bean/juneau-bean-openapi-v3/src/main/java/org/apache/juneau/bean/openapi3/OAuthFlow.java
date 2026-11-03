@@ -32,7 +32,7 @@ import org.apache.juneau.commons.collections.*;
  * scopes needed to configure a specific OAuth 2.0 flow. Different flows require different combinations of URLs and
  * have different security characteristics.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The OAuthFlow Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>scopes</c> (map of strings) - The available scopes for the OAuth2 security scheme. A map between the scope name and a short description for it
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	OAuthFlow <jv>x</jv> = <jsm>oauthFlow</jsm>()
@@ -68,7 +68,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#oauth-flow-object">OpenAPI Specification &gt; OAuth Flow Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/oauth2/">OpenAPI OAuth2 Authentication</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.*;
  * In general, the simple name will be used as the XML prefix mapping unless there are conflicts or prefix re-mappings
  * in the serializer.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
  * </ul>
  */

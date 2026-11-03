@@ -30,7 +30,7 @@ import org.apache.juneau.http.classic.*;
  * <p>
  * The requester has asked the server to switch protocols and the server has agreed to do so.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

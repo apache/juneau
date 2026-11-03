@@ -25,7 +25,7 @@ package org.apache.juneau.http;
  * ({@code juneau-rest-client}'s auto-send interceptor and debug formatter) reference one source of truth without a
  * package cycle.  The header name is intentionally not duplicated as a bare literal in either module.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  *

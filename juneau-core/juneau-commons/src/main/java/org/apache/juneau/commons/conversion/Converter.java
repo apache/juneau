@@ -67,7 +67,7 @@ public interface Converter {
 	 * Returns <jk>null</jk> only when the input object is <jk>null</jk>.
 	 * Throws {@link InvalidConversionException} when no conversion path exists.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Convert to List&lt;String&gt;</jc>
 	 * 	List&lt;String&gt; <jv>list</jv> = <jv>converter</jv>.to(<jv>o</jv>, List.<jk>class</jk>, String.<jk>class</jk>);

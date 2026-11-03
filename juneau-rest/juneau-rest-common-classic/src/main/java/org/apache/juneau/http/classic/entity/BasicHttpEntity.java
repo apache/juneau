@@ -55,11 +55,11 @@ import org.apache.juneau.bct.assertions.*;
  * This is a self-typed (CRTP) root: a leaf declares <c>class StringEntity <jk>extends</jk> BasicHttpEntity&lt;StringEntity&gt;</c>
  * and inherits leaf-typed fluent setters with no covariant overrides.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *
@@ -265,7 +265,7 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	/**
 	 * Sets the 'chunked' flag value to <jk>true</jk>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>
@@ -279,7 +279,7 @@ public abstract class BasicHttpEntity<SELF extends BasicHttpEntity<SELF>> implem
 	/**
 	 * Sets the 'chunked' flag value.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>

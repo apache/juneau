@@ -49,13 +49,13 @@ import java.lang.annotation.*;
  * <p>
  * This annotation can only be applied to constructors and can only be applied to one constructor per class.
  *
- * <h5 class='section'>Java Records:</h5>
+ * <h2 class='section'>Java Records:</h2>
  * <p>
  * For Java records, the canonical constructor and its property mappings are automatically detected, so this
  * annotation is not required.  It can still be used to specify a non-canonical constructor if needed, for example
  * to provide default values for certain components.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanCtorAnnotation">@BeanCtor Annotation</a>
  * </ul>
  */

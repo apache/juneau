@@ -27,7 +27,7 @@ import org.apache.juneau.commons.*;
  * HTTP 500.  Its message is deliberately generic (for example {@code "Query execution failed for table 'person'."});
  * the underlying cause is attached, and engines log any SQL text instead of putting it in the message.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> (SqlBeanQuerySession&lt;Person&gt; <jv>session</jv> = <jv>context</jv>.getSession()) {
  * 		<jk>return</jk> <jv>session</jv>.find(<jv>query</jv>);

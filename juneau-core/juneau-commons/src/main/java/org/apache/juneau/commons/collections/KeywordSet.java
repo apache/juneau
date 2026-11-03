@@ -28,7 +28,7 @@ import java.util.*;
  * Keywords are stored in a sorted array, making lookups O(log n) efficient. This is particularly useful for
  * parsers, compilers, and syntax highlighters that need to frequently check if identifiers are reserved keywords.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Immutable after construction - thread-safe for concurrent reads
  * 	<li>Efficient O(log n) lookups using binary search
@@ -36,14 +36,14 @@ import java.util.*;
  * 	<li>Automatic rejection of null and single-character strings
  * </ul>
  *
- * <h5 class='section'>Implementation Details:</h5>
+ * <h2 class='section'>Implementation Details:</h2>
  * <p>
  * Keywords are sorted lexicographically during construction and stored in an internal array. The {@link #contains(String)}
  * method uses {@link Arrays#binarySearch(Object[], Object)} for efficient lookups. Strings shorter than 2 characters
  * are automatically rejected without performing a search, as most programming languages don't have single-character
  * keywords.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a keyword set for Java reserved words</jc>
  * 	KeywordSet <jv>javaKeywords</jv> = <jk>new</jk> KeywordSet(
@@ -74,7 +74,7 @@ import java.util.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Programming language parsers - checking if tokens are reserved words
  * 	<li>Syntax highlighters - identifying keywords for special formatting
@@ -83,7 +83,7 @@ import java.util.*;
  * 	<li>Query languages - validating reserved words
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>immutable and thread-safe</b> after construction. Multiple threads can safely call
  * 		{@link #contains(String)} concurrently.
@@ -96,7 +96,7 @@ import java.util.*;
  * 		Consider creating {@link KeywordSet} instances as static final constants to avoid repeated construction.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections">Collections Package</a>
  * </ul>
  */
@@ -110,7 +110,7 @@ public class KeywordSet {
 	 * Keywords are automatically sorted during construction. Duplicate keywords are allowed but provide
 	 * no benefit. For best performance, pass unique keywords.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a keyword set for SQL keywords</jc>
 	 * 	KeywordSet <jv>sql</jv> = <jk>new</jk> KeywordSet(
@@ -137,7 +137,7 @@ public class KeywordSet {
 	 * This method performs an O(log n) binary search on the sorted keyword array. Null strings and
 	 * strings with fewer than 2 characters are automatically rejected without performing a search.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	KeywordSet <jv>keywords</jv> = <jk>new</jk> KeywordSet(<js>"class"</js>, <js>"interface"</js>, <js>"enum"</js>);
 	 *
@@ -155,7 +155,7 @@ public class KeywordSet {
 	 * 	<jsm>assertFalse</jsm>(<jv>keywords</jv>.contains(<js>"CLASS"</js>));     <jc>// Different case</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Performance:</h5>
+	 * <h4 class='section'>Performance:</h4>
 	 * <ul>
 	 * 	<li>Time complexity: O(log n) using binary search
 	 * 	<li>Space complexity: O(1) - no additional memory allocated

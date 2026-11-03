@@ -46,7 +46,7 @@ import org.commonmark.renderer.html.HtmlRenderer;
  * commonmark-java's {@link Parser} and {@link HtmlRenderer} are immutable and thread-safe once built, so a single
  * instance of this class is safe to share across threads and reuse for every render.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link MarkdownRenderer}
  * 	<li class='link'><a class="doclink" href="https://github.github.com/gfm/#tables-extension-">GFM tables extension</a>

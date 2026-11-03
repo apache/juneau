@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * nameless {@code <@theme>} block (it inherits the page theme, {@code light-brown} here) with {@code <@token>}
  * overrides: a leaf and an alias.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bftl'>
  * 	&lt;@console brand="My app" theme="light-brown"&gt;
  * 	&lt;@theme&gt;

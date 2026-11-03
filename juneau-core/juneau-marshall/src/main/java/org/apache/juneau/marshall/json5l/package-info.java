@@ -28,7 +28,7 @@
  * with an opt-in for JSON5 sugar.  The parser accepts the full JSON5 dialect per line — and,
  * because JSON5 is a strict superset of JSON, plain JSONL input as well.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a list of beans to JSON5L</jc>
  * 	String <jv>json5l</jv> = Json5l.<jsm>of</jsm>(<jv>myList</jv>);
@@ -37,7 +37,7 @@
  * 	List&lt;MyBean&gt; <jv>list</jv> = Json5l.<jsm>to</jsm>(<jv>json5l</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://jsonlines.org/">JSON Lines Specification</a>
  * 	<li class='link'><a class="doclink" href="https://json5.org/">JSON5 Specification</a>
  * </ul>

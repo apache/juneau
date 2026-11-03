@@ -34,13 +34,13 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to XML.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/xml</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/xml</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * See the {@link JsonSerializer} class for details on how Java models map to JSON.
  *
@@ -116,7 +116,7 @@ import org.apache.juneau.marshall.stream.*;
  * If an attribute name contains any non-valid XML element characters, they will be escaped using standard
  * {@code _x####_} notation.
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  * <p>
  * The following direct subclasses are provided for convenience:
  * <ul>
@@ -124,11 +124,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
 
  * </ul>
@@ -249,7 +249,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * <p>
 		 * This setting is ignored if {@link #enableNamespaces()} is not enabled.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -284,7 +284,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * <p>
 		 * Specifies the default namespace URI for this document.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -316,14 +316,14 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * <p>
 		 * This setting is ignored if {@link Builder#enableNamespaces()} is not enabled.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Auto-detection of namespaces can be costly performance-wise.
 		 * 		<br>In high-performance environments, it's recommended that namespace detection be
 		 * 		disabled, and that namespaces be manually defined through the {@link Builder#namespaces(Namespace...)} property.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -375,7 +375,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * <p>
 		 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlNamespaces">Namespaces</a>
 		 * </ul>
 		 *
@@ -451,7 +451,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 		 * <p>
 		 * The default value is an empty string (no delimiter).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	XmlSerializer.<jsm>create</jsm>()
 		 * 		.textNodeDelimiter(<js>" "</js>)

@@ -22,7 +22,7 @@
  * Lives in {@code juneau-rest-common} to keep the {@code juneau-bean-rfc7807} bean module free of any
  * {@code juneau-rest-common} dependency.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.Problem}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanRfc7807">juneau-bean-rfc7807</a>
  * </ul>

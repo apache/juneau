@@ -31,7 +31,7 @@ import org.apache.juneau.commons.collections.*;
  * XML element names are not inferred (for singular/plural forms) and the name property should be used to add that
  * information. This object is used to control how schema properties are serialized to XML.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Xml Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>wrapped</c> (boolean) - May be used only for an array definition. Signifies whether the array is wrapped
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Xml <jv>x</jv> = <jsm>xml</jsm>().setName(<js>"book"</js>).setNamespace(<js>"http://example.com/schema"</js>);
@@ -61,7 +61,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#xml-object">OpenAPI Specification &gt; XML Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/data-models/representing-xml/">OpenAPI Representing XML</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

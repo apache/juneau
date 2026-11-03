@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.collections.*;
  * as a {@code <template data-card="{id}">}. A bare {@code html} card (no body) emits an empty fragment — the
  * shell paints an empty {@code .jc-card} and nothing more.
  *
- * <h5 class='section'>Trust boundary for {@code src}:</h5>
+ * <h2 class='section'>Trust boundary for {@code src}:</h2>
  * <p>
  * An {@code html} card in a page contract may instead name a {@code src} endpoint. The {@code src} must be a
  * same-origin path (checked at page build, by {@code PageCapture.addCard} for FreeMarker and {@code PageSpec} cards
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.collections.*;
  * card fails closed with E-JS-8 and paints nothing. The flag only affects {@code src} cards, and the default is
  * unchanged (unsanitized).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   CardSource <jv>s</jv> = CardSource.<jsm>create</jsm>(<js>"html"</js>, <js>"welcome"</js>)
  *     .title(<js>"Welcome"</js>)

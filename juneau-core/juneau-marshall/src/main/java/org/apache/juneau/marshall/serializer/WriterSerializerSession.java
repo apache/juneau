@@ -27,7 +27,7 @@ import org.apache.juneau.commons.io.*;
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * This class is typically the parent class of all character-based serializers.
  * <br>It has 1 abstract method to implement...
@@ -36,11 +36,11 @@ import org.apache.juneau.commons.io.*;
  * 		{@link #doWrite(SerializerPipe, Object)}
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */

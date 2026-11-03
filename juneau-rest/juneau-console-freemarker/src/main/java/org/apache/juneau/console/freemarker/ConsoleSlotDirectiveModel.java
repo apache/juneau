@@ -38,7 +38,7 @@ import freemarker.template.*;
  * {@code <body>} tag). A slot authored outside a {@code <@console>} (no {@link PageCapture} in scope) is
  * rejected fail-closed.
  *
- * <h5 class='section'>{@code phase=} (head/scripts only):</h5>
+ * <h2 class='section'>{@code phase=} (head/scripts only):</h2>
  * <p>
  * {@code <@head>} and {@code <@scripts>} accept an optional {@code phase=} that steers the capture to a distinct
  * cascade position: {@code <@head phase="before-page-css">} lands app CSS <b>before</b> the page-local

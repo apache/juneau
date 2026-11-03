@@ -31,13 +31,13 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * Serializes POJO models to the Protocol Buffers <b>binary</b> wire format.
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  *
  * Handles <c>Accept</c> types:  <bc>application/protobuf</bc>
  * <p>
  * Produces <c>Content-Type</c> types: <bc>application/protobuf</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Unlike the text-format {@link org.apache.juneau.marshall.prototext.PrototextSerializer} (<c>text/protobuf</c>), this
  * serializer emits the compact, non-self-describing protobuf binary wire format.  Because the wire carries neither
@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.serializer.*;
  * {@link ProtobufClassMeta}) is consulted during serialization.  The codec is lossless for Juneau&hArr;Juneau
  * round-trips, and upgrades field-by-field to external <c>protoc</c> interop via {@link Protobuf @Protobuf}.
  *
- * <h5 class='section'>Supported types / scalar mapping:</h5>
+ * <h2 class='section'>Supported types / scalar mapping:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@code boolean}/{@code Boolean} &rarr; bool (varint)
  * 	<li>{@code byte}/{@code short}/{@code int}/{@code Integer} &rarr; int32 (varint)
@@ -58,13 +58,13 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li>Repeated scalars &rarr; packed; repeated string/bytes/message &rarr; tagged entries
  * </ul>
  *
- * <h5 class='section'>Field-number assignment:</h5>
+ * <h2 class='section'>Field-number assignment:</h2>
  * <ul class='spaced-list'>
  * 	<li>Explicit {@link Protobuf#fieldNumber()} overrides are reserved first.
  * 	<li>Remaining properties are auto-numbered from 1 by alphabetical property name, skipping the reserved 19000&ndash;19999 band.
  * </ul>
  *
- * <h5 class='section'>Limitations / round-trip guarantees:</h5>
+ * <h2 class='section'>Limitations / round-trip guarantees:</h2>
  * <ul class='spaced-list'>
  * 	<li>Lossless for nullable Juneau&hArr;Juneau round-trips.
  * 	<li>proto3-inherent:  a primitive set to its zero value is wire-indistinguishable from unset.
@@ -72,17 +72,17 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li><c>oneof</c>, full proto2 presence, unknown-field preservation, and well-known types are not supported.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to protobuf binary bytes using the default serializer</jc>
  * 	<jk>byte</jk>[] <jv>bytes</jv> = ProtobufSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/programming-guides/encoding/">Protocol Buffers Encoding</a>
  * </ul>

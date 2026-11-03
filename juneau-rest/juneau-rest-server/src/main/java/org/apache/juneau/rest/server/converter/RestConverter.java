@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='ja'>{@link RestOp#converters()}
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> BasicRestServlet {
  *
@@ -51,7 +51,7 @@ import org.apache.juneau.rest.server.*;
  * Converters can also be associated at the servlet level using the {@link Rest#converters() @Rest(converters)} annotation.
  * <br>Applying converters at the resource level is equivalent to applying converters to each resource method individually.
  *
- * <h5 class='topic'>How to implement</h5>
+ * <h2 class='topic'>How to implement</h2>
  *
  * Implementers should simply implement the {@link #convert(RestRequest, Object)} and return back a 'converted' object.
  * <br>It's up to the implementer to decide what this means.
@@ -66,17 +66,16 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Subclasses can also be defined as inner classes of the resource class.
  *
- * <h5 class='topic'>Predefined converters</h5>
+ * <h2 class='topic'>Predefined converters</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Traversable} - Allows URL additional path info to address individual elements in a POJO tree.
  * 	<li class='jc'>{@link Queryable} - Allows BeanQuery search/view/sort/paging functions to be performed on POJOs.
  * 	<li class='jc'>{@link Introspectable} - Allows Java public methods to be invoked on the returned POJOs.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link RestOp#converters()}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
- * </ul>
  * </ul>
  */
 public interface RestConverter {

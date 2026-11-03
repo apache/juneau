@@ -29,11 +29,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses Hjson (Human JSON) text into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/hjson, application/hjson+json</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This parser handles all standard Hjson syntax as defined by the
  * <a class="doclink" href="https://hjson.github.io/syntax.html">Hjson specification</a>.
@@ -93,7 +93,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		Input consisting of only whitespace or comments returns <jk>null</jk>.
  * </ul>
  *
- * <h5 class='figure'>Example input - readable mode:</h5>
+ * <h2 class='figure'>Example input - readable mode:</h2>
  * <p class='bjson'>
  * 	{
  * 	  name: Alice
@@ -101,19 +101,19 @@ import org.apache.juneau.marshall.stream.*;
  * 	}
  * </p>
  *
- * <h5 class='figure'>Example input - compact mode:</h5>
+ * <h2 class='figure'>Example input - compact mode:</h2>
  * <p class='bjson'>
  * 	{name:Alice,age:30}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>Root-braceless Hjson files (content without a wrapping {@code {}}) are supported on input,
  * 		but {@link HjsonSerializer} always emits root braces by default.
  * 		A parse-then-serialize round-trip of a root-braceless file will produce braced output.
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Hjson">Hjson</a>
  * 	<li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  * </ul>

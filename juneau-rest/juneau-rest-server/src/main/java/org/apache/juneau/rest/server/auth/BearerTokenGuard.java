@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 		header set per RFC 7235 &sect;4.1.
  * </ol>
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>)
@@ -61,7 +61,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Security notes</h5>
+ * <h2 class='topic'>Security notes</h2>
  *
  * <ul>
  * 	<li>Bearer tokens are <b>credentials</b> &mdash; never log the full token, never echo it in a
@@ -73,7 +73,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 		mandatory {@code iss} / {@code aud} / {@code exp} / {@code nbf} checks by default.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link TokenValidator}
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='jc'>{@link Auth}

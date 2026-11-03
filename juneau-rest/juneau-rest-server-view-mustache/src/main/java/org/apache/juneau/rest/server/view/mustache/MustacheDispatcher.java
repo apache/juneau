@@ -42,7 +42,7 @@ import com.github.mustachejava.*;
  * Each flavor independently holds an instance of this worker and delegates to it, so no flavor is
  * another flavor's worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link MustacheServlet}
  * 	<li class='jc'>{@link MustacheResource}

@@ -18,7 +18,7 @@
  * Authentication (AuthN) guards, servlet-layer filters, SPIs, and request-time helpers for
  * {@code juneau-rest-server}.
  *
- * <h5 class='topic'>Guard-level authentication ({@link org.apache.juneau.rest.server.guard.RestGuard})</h5>
+ * <h2 class='topic'>Guard-level authentication ({@link org.apache.juneau.rest.server.guard.RestGuard})</h2>
  *
  * <p>
  * {@link org.apache.juneau.rest.server.auth.BearerTokenGuard BearerTokenGuard} and {@link org.apache.juneau.rest.server.auth.ApiKeyGuard ApiKeyGuard} are
@@ -28,7 +28,7 @@
  * {@link org.apache.juneau.rest.server.auth.AuthArg @Auth Principal} or
  * {@code req.getAttributes().get(PRINCIPAL_ATTR)}.
  *
- * <h5 class='topic'>Servlet-layer authentication ({@link org.apache.juneau.rest.server.auth.AuthFilter AuthFilter})</h5>
+ * <h2 class='topic'>Servlet-layer authentication ({@link org.apache.juneau.rest.server.auth.AuthFilter AuthFilter})</h2>
  *
  * <p>
  * This package also ships a two-layer pluggable servlet-filter authentication framework that runs <b>at the
@@ -45,7 +45,7 @@
  * {@code AuthFilter} instances with first-success principal resolution, role aggregation across all successful
  * filters, and all-failure aggregation into a single {@code 401} response.
  *
- * <h5 class='topic'>Optional&lt;AuthResult&gt; three-state contract</h5>
+ * <h2 class='topic'>Optional&lt;AuthResult&gt; three-state contract</h2>
  *
  * <p>
  * {@link AuthFilter#authenticate authenticate(HttpServletRequest)} returns:
@@ -55,7 +55,7 @@
  * 	<li>{@link java.util.Optional#of(Object) Optional.of(AuthResult)} &mdash; authentication succeeded.
  * </ul>
  *
- * <h5 class='topic'>Principal and role surface</h5>
+ * <h2 class='topic'>Principal and role surface</h2>
  *
  * <p>
  * On success the chain wraps the request in {@link org.apache.juneau.rest.server.auth.AuthenticatedRequestWrapper AuthenticatedRequestWrapper},
@@ -67,7 +67,7 @@
  * This makes {@link org.apache.juneau.rest.server.guard.RoleBasedRestGuard} and {@code @Auth Principal} arg injection work
  * with zero changes.
  *
- * <h5 class='topic'>SPIs</h5>
+ * <h2 class='topic'>SPIs</h2>
  *
  * <p>
  * {@link org.apache.juneau.rest.server.auth.TokenValidator TokenValidator} and {@link org.apache.juneau.rest.server.auth.ApiKeyStore ApiKeyStore} are the
@@ -76,7 +76,7 @@
  * optional {@code juneau-rest-server-auth-jwt} sub-module (which plugs into the
  * {@link org.apache.juneau.rest.server.auth.TokenValidator TokenValidator} SPI from this package).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards — Bearer / API-Key / JWT</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>
  * </ul>

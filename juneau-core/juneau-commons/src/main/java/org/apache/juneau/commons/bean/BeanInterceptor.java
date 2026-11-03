@@ -22,7 +22,7 @@ package org.apache.juneau.commons.bean;
  * <p>
  * Bean interceptors intercept calls to bean getters and setters to allow them to override values in transit.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Interceptor that strips out sensitive information on Address beans.</jc>
  * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
@@ -50,7 +50,7 @@ package org.apache.juneau.commons.bean;
  * 	<li class='jm'>{@code MarshallingContext.Builder<?>#beanInterceptor(Class,Class)}
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Register interceptor on bean class.</jc>
  * 	<ja>@Marshalled</ja>(interceptor=AddressInterceptor.<jk>class</jk>)
@@ -60,7 +60,7 @@ package org.apache.juneau.commons.bean;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>
  *
@@ -82,7 +82,7 @@ public class BeanInterceptor<T> {
 	 * <p>
 	 * Subclasses can override this property to convert property values to some other object just before serialization.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
@@ -111,7 +111,7 @@ public class BeanInterceptor<T> {
 	 * Subclasses can override this property to convert property values to some other object just before calling the
 	 * bean setter.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {

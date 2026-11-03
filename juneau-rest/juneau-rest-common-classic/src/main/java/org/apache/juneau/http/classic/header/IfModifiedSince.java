@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Allows a 304 Not Modified to be returned if content is unchanged.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The If-Modified-Since request-header field is used with a method to make it conditional:
  * if the requested variant has not been modified since the time specified in this field, an entity will not be returned
@@ -91,7 +91,7 @@ import org.apache.juneau.http.*;
  * The result of a request having both an If-Modified-Since header field and either an If-Match or an
  * If-Unmodified-Since header fields is undefined by this specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

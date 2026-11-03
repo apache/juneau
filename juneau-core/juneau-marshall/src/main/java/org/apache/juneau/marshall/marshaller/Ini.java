@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Ini <jv>ini</jv> = <jk>new</jk> Ini();
@@ -42,13 +42,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Ini.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bini'>
  * 	<ck>name</ck> = <cv>Alice</cv>
  * 	<ck>age</ck> = <cv>30</cv>
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bini'>
  * 	<ck>name</ck> = <cv>Alice</cv>
  * 	<ck>age</ck> = <cv>30</cv>
@@ -60,7 +60,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<ck>state</ck> = <cv>MA</cv>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>The top-level object must be a bean or <c>Map&lt;String,?&gt;</c>.
  * 	<li class='note'>Collections and complex map values are embedded as JSON5 inline strings.
  * </ul>
@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Ini.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

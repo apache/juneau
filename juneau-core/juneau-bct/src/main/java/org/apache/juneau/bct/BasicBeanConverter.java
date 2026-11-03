@@ -39,7 +39,7 @@ import java.util.stream.*;
  * assertions, handling complex object introspection and value extraction with high performance through
  * intelligent caching and optimized lookup strategies.</p>
  *
- * <h5 class='section'>Key Features:</h5>
+ * <h2 class='section'>Key Features:</h2>
  * <ul>
  *    <li><b>Extensible Type Handlers:</b> Pluggable stringifiers, listifiers, and swappers for custom types</li>
  *    <li><b>Performance Optimization:</b> ConcurrentHashMap caching for type-to-handler mappings</li>
@@ -48,7 +48,7 @@ import java.util.stream.*;
  *    <li><b>Thread Safety:</b> Fully thread-safe implementation suitable for concurrent testing</li>
  * </ul>
  *
- * <h5 class='section'>Architecture Overview:</h5>
+ * <h2 class='section'>Architecture Overview:</h2>
  * <p>The converter uses four types of pluggable handlers:</p>
  * <dl>
  *    <dt><b>Stringifiers:</b></dt>
@@ -72,7 +72,7 @@ import java.util.stream.*;
  *    <li><b>Map access:</b> Key-based property retrieval and size property</li>
  * </ul>
  *
- * <h5 class='section'>Default Type Support:</h5>
+ * <h2 class='section'>Default Type Support:</h2>
  * <p>Out-of-the-box stringification support includes:</p>
  * <ul>
  *    <li><b>Collections:</b> List, Set, Queue → <js>"[item1,item2,item3]"</js> format</li>
@@ -102,7 +102,7 @@ import java.util.stream.*;
  *    <li><b>Future:</b> Extracts completed result or returns <js>"&lt;pending&gt;"</js> for incomplete futures (via {@link Swappers#futureSwapper()})</li>
  * </ul>
  *
- * <h5 class='section'>Configuration Settings:</h5>
+ * <h2 class='section'>Configuration Settings:</h2>
  * <p>The converter supports extensive customization via settings:</p>
  * <dl>
  *    <dt><code>nullValue</code></dt>
@@ -133,7 +133,7 @@ import java.util.stream.*;
  *    <dd>Format for class names: <js>"simple"</js>, <js>"canonical"</js>, or <js>"full"</js> (default: <js>"simple"</js>)</dd>
  * </dl>
  *
- * <h5 class='section'>Usage Examples:</h5>
+ * <h2 class='section'>Usage Examples:</h2>
  *
  * <p><b>Basic Usage with Defaults:</b></p>
  * <p class='bjava'>
@@ -178,7 +178,7 @@ import java.util.stream.*;
  *    <jk>var</jk> <jv>selfRef</jv> = <jv>customConverter</jv>.getEntry(<jv>user</jv>, <js>"this"</js>); <jc>// Returns user object</jc>
  * </p>
  *
- * <h5 class='section'>Performance Characteristics:</h5>
+ * <h2 class='section'>Performance Characteristics:</h2>
  * <ul>
  *    <li><b>Handler Lookup:</b> O(1) average case via ConcurrentHashMap caching</li>
  *    <li><b>Type Registration:</b> Handlers checked in reverse registration order (last wins)</li>
@@ -187,7 +187,7 @@ import java.util.stream.*;
  *    <li><b>Memory Efficiency:</b> Minimal object allocation during normal operation</li>
  * </ul>
  *
- * <h5 class='section'>Extension Patterns:</h5>
+ * <h2 class='section'>Extension Patterns:</h2>
  *
  * <p><b>Custom Type Stringification:</b></p>
  * <p class='bjava'>
@@ -207,7 +207,7 @@ import java.util.stream.*;
  *       <jp>lazy</jp>.isEvaluated() ? <jp>lazy</jp>.getValue() : "&lt;unevaluated&gt;");
  * </p>
  *
- * <h5 class='section'>Integration with BCT:</h5>
+ * <h2 class='section'>Integration with BCT:</h2>
  * <p>This class is used internally by all BCT assertion methods in {@link BctAssertions}:</p>
  * <ul>
  *    <li>{@link BctAssertions#assertBean(Object, String, String)} - Uses getEntry() for property access</li>
@@ -233,7 +233,7 @@ public class BasicBeanConverter implements BeanConverter {
 	 * and property extraction logic. The builder supports registration of four main types
 	 * of customizations:</p>
 	 *
-	 * <h5 class='section'>Type Handlers:</h5>
+	 * <h2 class='section'>Type Handlers:</h2>
 	 * <ul>
 	 *    <li><b>{@link #addStringifier(Class, Stringifier)}</b> - Custom string conversion logic</li>
 	 *    <li><b>{@link #addListifier(Class, Listifier)}</b> - Custom list conversion for collection-like objects</li>
@@ -241,7 +241,7 @@ public class BasicBeanConverter implements BeanConverter {
 	 *    <li><b>{@link #addPropertyExtractor(PropertyExtractor)}</b> - Custom property access strategies</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>PropertyExtractors:</h5>
+	 * <h2 class='section'>PropertyExtractors:</h2>
 	 * <p>Property extractors define how the converter accesses object properties during nested
 	 * field access (e.g., {@code "user.address.city"}). The converter uses a chain-of-responsibility
 	 * pattern, trying each registered extractor until one succeeds:</p>
@@ -266,7 +266,7 @@ public class BasicBeanConverter implements BeanConverter {
 	 *       .build();
 	 * </p>
 	 *
-	 * <h5 class='section'>Default Configuration:</h5>
+	 * <h2 class='section'>Default Configuration:</h2>
 	 * <p>The {@link #defaultSettings()} method pre-registers comprehensive type handlers
 	 * and property extractors for common Java types, providing out-of-the-box functionality
 	 * for most use cases while still allowing full customization.</p>
@@ -311,7 +311,7 @@ public class BasicBeanConverter implements BeanConverter {
 		 *    <li><b>Legacy objects:</b> Bridging older APIs with modern property access</li>
 		 * </ul>
 		 *
-		 * <h5 class='section'>Implementation Example:</h5>
+		 * <h4 class='section'>Implementation Example:</h4>
 		 * <p class='bjava'>
 		 *    <jc>// Custom extractor for a specialized data class</jc>
 		 *    PropertyExtractor <jv>customExtractor</jv> = (<jp>obj</jp>, <jp>property</jp>) -&gt; {
@@ -548,7 +548,7 @@ public class BasicBeanConverter implements BeanConverter {
 	 * with sensible default settings. It's suitable for most BCT testing scenarios and can be
 	 * used directly without building a custom converter.</p>
 	 *
-	 * <h5 class='section'>Included Support:</h5>
+	 * <h4 class='section'>Included Support:</h4>
 	 * <ul>
 	 *    <li><b>Collections:</b> List, Set, Queue with bracket formatting</li>
 	 *    <li><b>Maps:</b> Map, Properties with brace formatting</li>
@@ -560,14 +560,14 @@ public class BasicBeanConverter implements BeanConverter {
 	 *    <li><b>Wrappers:</b> Optional, Supplier, Future unwrapping</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Default Settings:</h5>
+	 * <h4 class='section'>Default Settings:</h4>
 	 * <ul>
 	 *    <li><code>nullValue</code> = <js>"&lt;null&gt;"</js></li>
 	 *    <li><code>selfValue</code> = <js>"&lt;self&gt;"</js></li>
 	 *    <li><code>classNameFormat</code> = <js>"simple"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Example:</h5>
+	 * <h4 class='section'>Usage Example:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Use default converter for assertions</jc>
 	 *    <jk>var</jk> <jv>result</jv> = BasicBeanConverter.<jsf>DEFAULT</jsf>.stringify(<jv>myObject</jv>);
@@ -914,18 +914,18 @@ public class BasicBeanConverter implements BeanConverter {
 	 * and configuring conversion settings. All registration methods support method chaining
 	 * for convenient configuration.</p>
 	 *
-	 * <h5 class='section'>Handler Registration:</h5>
+	 * <h4 class='section'>Handler Registration:</h4>
 	 * <ul>
 	 *    <li><b>Stringifiers:</b> Custom string conversion logic for specific types</li>
 	 *    <li><b>Listifiers:</b> Custom list conversion logic for collection-like types</li>
 	 *    <li><b>Swappers:</b> Pre-processing transformation logic for wrapper types</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Registration Order:</h5>
+	 * <h4 class='section'>Registration Order:</h4>
 	 * <p>Handlers are checked in reverse registration order (last registered wins).
 	 * This allows overriding default handlers by registering more specific ones later.</p>
 	 *
-	 * <h5 class='section'>Inheritance Support:</h5>
+	 * <h4 class='section'>Inheritance Support:</h4>
 	 * <p>All handlers support class inheritance and interface implementation.
 	 * When looking up a handler, the system checks:</p>
 	 * <ol>
@@ -934,7 +934,7 @@ public class BasicBeanConverter implements BeanConverter {
 	 *    <li>Superclass matches (walking up the inheritance hierarchy)</li>
 	 * </ol>
 	 *
-	 * <h5 class='section'>Usage Example:</h5>
+	 * <h4 class='section'>Usage Example:</h4>
 	 * <p class='bjava'>
 	 *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
 	 *       .defaultSettings()

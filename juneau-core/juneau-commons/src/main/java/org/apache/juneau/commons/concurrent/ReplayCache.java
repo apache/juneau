@@ -56,7 +56,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * process.  Cross-node single-use requires a consumer-supplied {@link ReplayCache} backed by a store shared
  * across every node.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link InMemoryReplayCache}
  * </ul>
  *

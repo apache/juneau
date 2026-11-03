@@ -27,7 +27,7 @@
  * {@code @Bean MetricsRecorder} on their resource and pick the Micrometer registry that matches
  * their downstream (Prometheus, StatsD, JMX, Datadog, NewRelic, etc.).
  *
- * <h5 class='topic'>Containment</h5>
+ * <h2 class='topic'>Containment</h2>
  *
  * <p>
  * The {@code io.micrometer:micrometer-core} dependency is declared in {@code provided} scope on
@@ -41,7 +41,7 @@
  * 		without waiting for a Juneau release.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.micrometer.MicrometerMetricsRecorder MicrometerMetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder}

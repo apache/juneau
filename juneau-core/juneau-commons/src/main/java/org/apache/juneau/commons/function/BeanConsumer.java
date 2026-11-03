@@ -47,7 +47,7 @@ package org.apache.juneau.commons.function;
  * throw an {@link IllegalArgumentException} with a message recommending {@link BeanSupplier} or
  * {@link BeanChannel}.
  *
- * <h5 class='section'>Example (DB-backed consumer with batch commits):</h5>
+ * <h2 class='section'>Example (DB-backed consumer with batch commits):</h2>
  * <p class='bjava'>
  * 	<ja>@Marshalled</ja>(factory=ItemConsumerFactory.<jk>class</jk>)
  * 	<jk>public class</jk> ItemConsumer <jk>implements</jk> BeanConsumer&lt;Item&gt; {
@@ -77,7 +77,7 @@ package org.apache.juneau.commons.function;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanSupplier} - Serialize-only lifecycle interface
  * 	<li class='jc'>{@link BeanChannel} - Round-trip lifecycle interface (extends both)
  * 	<li class='jc'>{@link BeanFactory} - Universal factory for DI framework integration

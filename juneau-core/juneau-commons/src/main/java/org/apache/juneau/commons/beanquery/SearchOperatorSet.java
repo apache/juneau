@@ -35,7 +35,7 @@ import java.util.*;
  * Juneau uses the spellings {@code $prefix} and {@code $blank} as first-class names; there are deliberately <b>no</b>
  * {@code $starts}/{@code $empty} aliases.
  *
- * <h5 class='section'>Case-insensitive names</h5>
+ * <h2 class='section'>Case-insensitive names</h2>
  * <p>
  * Lookup ({@link #get(String)}, {@link #contains(String)}, {@link #without(String)}) is case-insensitive: {@code
  * $EQ}, {@code $Eq} and {@code $eq} all resolve to the same operator. {@link #of(SearchOperator...)} rejects two
@@ -43,7 +43,7 @@ import java.util.*;
  * operator, the same way it replaces an exact-name one. {@link #operators()} and {@link #get(String)} always expose
  * the operator's own canonical (registered) name, never the casing a caller looked it up with.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Hide $regex unless a caller opts in.</jc>
  * 	SearchOperatorSet <jv>restricted</jv> = SearchOperatorSet.<jsm>standard</jsm>().without(<js>"$regex"</js>);

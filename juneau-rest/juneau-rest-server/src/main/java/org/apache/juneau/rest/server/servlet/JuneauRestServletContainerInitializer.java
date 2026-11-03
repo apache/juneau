@@ -40,7 +40,7 @@ import jakarta.servlet.annotation.*;
  * {@link RestContext#resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)
  * RestContext.resolveTopLevelPaths(...)} &mdash; <b>not</b> {@code path()} (child-composition).
  *
- * <h5 class='section'>Activation:</h5>
+ * <h2 class='section'>Activation:</h2>
  *
  * <p>
  * Opt-in via the context init parameter {@code juneau.rest.auto-register=true} (parity with the
@@ -55,7 +55,7 @@ import jakarta.servlet.annotation.*;
  * 	<xt>&lt;/context-param&gt;</xt>
  * </p>
  *
- * <h5 class='section'>Behavior:</h5>
+ * <h2 class='section'>Behavior:</h2>
  *
  * <p>
  * For each handled class that is concrete, carries a {@link Rest @Rest} annotation, is no-arg
@@ -63,7 +63,7 @@ import jakarta.servlet.annotation.*;
  * servlet context at each resolved path. Classes that resolve to no top-level paths (pure mixins /
  * child-composed resources) or that cannot be instantiated with a no-arg constructor are skipped.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link RestContext#resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>

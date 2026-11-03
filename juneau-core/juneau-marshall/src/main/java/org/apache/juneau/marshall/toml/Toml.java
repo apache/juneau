@@ -34,7 +34,7 @@ import java.lang.annotation.*;
  * Currently a marker annotation with no members; it establishes the per-format annotation surface
  * (see {@link TomlApply @TomlApply}) so that members can be added without API changes.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Toml</ja>
  * 	<jk>public class</jk> MyBean {
@@ -42,7 +42,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://toml.io/en/v1.0.0">TOML Specification</a>
  * </ul>
  */

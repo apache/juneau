@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.parser.*;
  * formats (json, xml, bson, yaml, ...) degenerate to a one-record stream; multi-rooted formats
  * (jsonl, csv, sse) expose each line / row / event as a separate record.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> (RecordReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.readRecords(<jv>input</jv>)) {
  * 		<jk>while</jk> (<jv>r</jv>.canRead()) {
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.parser.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Streaming quality:</h5>
+ * <h2 class='section'>Streaming quality:</h2>
  * <ul>
  * 	<li>{@link #isStreaming()} == <jk>true</jk> &mdash; O(1)-memory streaming.  FULL-token formats
  * 		return a cursor that is also a {@link TokenReader} (the structural surface).
@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.parser.*;
  * 		the structural surface is not available.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link RecordWriter} &mdash; the push-side counterpart.
  * 	<li>{@link TokenReader} &mdash; structural extension for FULL-capability formats.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * <p>
  * This implementation follows the JSON Schema Draft 2020-12 specification.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a simple schema for a person object</jc>
  * 	JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
@@ -94,7 +94,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Key Features:</h5>
+ * <h2 class='section'>Key Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Draft 2020-12 Support:</b> Includes all properties from the latest JSON Schema specification
  * 	<li><b>Backward Compatibility:</b> Deprecated Draft 04 properties (like <c>id</c> and <c>definitions</c>) are still supported
@@ -104,7 +104,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	<li><b>Auto Generation:</b> Use {@link JsonSchemaBeanGenerator} to generate schemas from Java types
  * </ul>
  *
- * <h5 class='section'>Common Use Cases:</h5>
+ * <h2 class='section'>Common Use Cases:</h2>
  *
  * <p><b>1. Simple Type Constraints:</b>
  * <p class='bjava'>
@@ -182,7 +182,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>Migration from Draft 04:</h5>
+ * <h2 class='section'>Migration from Draft 04:</h2>
  * <ul class='spaced-list'>
  * 	<li>Use {@link #setIdUri(Object)} instead of {@link #setId(Object)} (deprecated)
  * 	<li>Use {@link #setDefs(Map)} instead of {@link #setDefinitions(Map)} (deprecated but still works)
@@ -190,7 +190,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	<li>Use {@link #setExclusiveMinimum(Number)} with a numeric value instead of a boolean flag
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-core.html">JSON Schema 2020-12 Core</a>
  * 	<li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>

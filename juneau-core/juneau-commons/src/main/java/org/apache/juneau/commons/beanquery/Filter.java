@@ -36,7 +36,7 @@ import java.util.*;
  * module, which this one does not depend on) renders it to a parenthesized SQL boolean expression. Neither engine
  * ever sees a raw request string or an unresolved column name.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// ageExpr/nameExpr/emailExpr are already-resolved SearchExpressions, e.g. from SearchExpressionParser.parse()</jc>
  * 	<jc>// (age &gt; 21) AND (name CONTAINS "bob" OR email CONTAINS "bob")</jc>

@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * It allows you to add subtitles, captions, descriptions, chapters, or metadata to media content,
  * making it more accessible and user-friendly.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Subtitles track</jc>
  * 	Track <jv>subtitles</jv> = <jsm>track</jsm>()
@@ -79,9 +79,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#track() track()}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

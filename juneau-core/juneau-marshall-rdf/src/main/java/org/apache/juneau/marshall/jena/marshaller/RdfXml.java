@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	RdfXml <jv>rdfXml</jv> = <jk>new</jk> RdfXml();
@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = RdfXml.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bxml'>
  * 	<xt>&lt;rdf:RDF&gt;</xt>
  * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
@@ -51,7 +51,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<xt>&lt;/rdf:RDF&gt;</xt>
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array of tags):</h5>
+ * <h2 class='figure'>Complex (nested address + array of tags):</h2>
  * <p class='bxml'>
  * 	<xt>&lt;rdf:RDF&gt;</xt>
  * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
@@ -74,7 +74,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = RdfXml.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

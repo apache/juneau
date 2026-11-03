@@ -24,7 +24,7 @@ import org.apache.juneau.console.views.TableSpec.*;
 /**
  * Builder twin of the Users page (P11, {@code users.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, UsersPageBuilders.<jsm>users</jsm>());
  * </p>

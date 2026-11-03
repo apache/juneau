@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.view.*;
  * Nothing is stored: the submit endpoint accepts the dialog envelope and answers with a success toast.  The page
  * exists so the screenshot sweep and a person can see both dialogs in every palette and scheme.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	GET /console/dev/dialogs
  * 	GET /console/dev/dialogs/wizard-form

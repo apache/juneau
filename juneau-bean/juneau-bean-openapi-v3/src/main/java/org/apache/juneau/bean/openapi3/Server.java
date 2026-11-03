@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.*;
  * to specify different servers for different environments (e.g., development, staging, production) or to provide
  * server-specific configuration such as variables for templating.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Server Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.*;
  * 	<li><c>variables</c> (map of {@link ServerVariable}) - A map between a variable name and its value
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a server with variables</jc>
  * 	Server <jv>server</jv> = <jk>new</jk> Server()
@@ -64,7 +64,7 @@ import org.apache.juneau.marshall.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#server-object">OpenAPI Specification &gt; Server Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/api-host-and-base-path/">OpenAPI API Host and Base Path</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

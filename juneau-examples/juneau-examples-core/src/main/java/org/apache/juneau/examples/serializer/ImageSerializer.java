@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * Example serializer that converts {@link BufferedImage} objects to byte streams.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
  * </ul>
  */

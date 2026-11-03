@@ -63,9 +63,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * read operation will block or not, it is not possible to provide a meaningful
  * implementation of the {@link InputStream#available()} method. A call to this method
  * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
- * <p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

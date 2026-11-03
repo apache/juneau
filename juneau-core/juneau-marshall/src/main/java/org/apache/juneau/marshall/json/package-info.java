@@ -23,13 +23,11 @@
  * 	<li>{@link org.apache.juneau.marshall.json.JsonSerializer JsonSerializer} - Standard JSON serialization
  * 	<li>{@link org.apache.juneau.marshall.json.JsonSchemaSerializer JsonSchemaSerializer} - JSON Schema serialization
  * </ul>
- * </p>
  * <p>
  * See also:
  * <ul>
  * 	<li>{@link org.apache.juneau.marshall.json5.Json5Serializer} - JSON5 (simplified) serialization
  * 	<li>{@link org.apache.juneau.marshall.jcs.JcsSerializer} - JCS (RFC 8785) canonical JSON for hashing and signing
  * </ul>
- * </p>
  */
 package org.apache.juneau.marshall.json;

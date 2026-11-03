@@ -33,7 +33,7 @@ import org.apache.juneau.commons.collections.*;
  * Each Media Type Object provides schema and examples for the media type identified by its key (e.g., <js>"application/json"</js>).
  * Media types are used in request bodies and response content to describe the structure and format of the data being sent or received.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Media Type Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -43,7 +43,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>encoding</c> (map of {@link Encoding}) - A map between a property name and its encoding information
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a MediaType for JSON content</jc>
  * 	MediaType <jv>mediaType</jv> = <jk>new</jk> MediaType()
@@ -62,7 +62,7 @@ import org.apache.juneau.commons.collections.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#media-type-object">OpenAPI Specification &gt; Media Type Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/media-types/">OpenAPI Media Types</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

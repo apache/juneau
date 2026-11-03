@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * under {@link #prefix()} via {@link ConfigPropertiesBinder}, and the bound instance is auto-registered
  * into the current {@link BeanStore}.
  *
- * <h5 class='section'>Binding order and lifecycle</h5>
+ * <h2 class='section'>Binding order and lifecycle</h2>
  * <p>
  * The whole-object config bind runs <b>after</b> {@code @Value}/{@code @Inject} field-and-method injection and
  * <b>before</b> any {@link PostConstruct @PostConstruct} method — so a
@@ -39,14 +39,14 @@ import java.lang.annotation.*;
  * {@code @Value} or {@code @Inject} are left to the injection engine and are never overwritten by config binding,
  * even when a matching {@code prefix.fieldName} key exists.
  *
- * <h5 class='section'>Caller-scoped sources</h5>
+ * <h2 class='section'>Caller-scoped sources</h2>
  * <p>
  * The bind consults any {@link org.apache.juneau.commons.settings.PropertySource PropertySource}-typed beans in the
  * active {@link BeanStore} <b>ahead of</b> the global {@link org.apache.juneau.commons.settings.Settings Settings}
  * chain, so a caller can layer overriding or supplementary sources without mutating the shared
  * {@code Settings.get()} singleton.
  *
- * <h5 class='section'>Not inherited</h5>
+ * <h2 class='section'>Not inherited</h2>
  * <p>
  * This annotation is <b>not</b> {@link java.lang.annotation.Inherited @Inherited}: the {@link BeanInstantiator}
  * trigger fires only when the <i>exact declared type</i> being instantiated carries the annotation — a subclass or
@@ -58,7 +58,7 @@ import java.lang.annotation.*;
  * type still triggers nested binding under the enclosing type's prefix, since the annotation lookup there walks the
  * declared field type's class hierarchy rather than requiring an exact-type match.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@ConfigProperties</ja>(prefix = <js>"MyService"</js>)
  * 	<jk>public class</jk> MyServiceProperties {
@@ -73,7 +73,7 @@ import java.lang.annotation.*;
  * {@code @Value} fields internally and separately be the target of another class's nested
  * {@code @ConfigProperties} bind.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigProperties">@ConfigProperties Annotation Basics</a>
  * </ul>
  *

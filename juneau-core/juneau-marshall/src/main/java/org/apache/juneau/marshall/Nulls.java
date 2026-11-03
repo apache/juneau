@@ -35,7 +35,7 @@ import java.util.*;
  * 	<li>{@link #LEAVE} when neither is set.
  * </ol>
  *
- * <h5 class='section'>Optional contract:</h5>
+ * <h2 class='section'>Optional contract:</h2>
  * <p>
  * For an {@link Optional}-typed property, {@link #EMPTY} and {@link #DEFAULT} both resolve to
  * {@link Optional#empty()} — never a bare {@code null} inside the {@link Optional}.  The same rule

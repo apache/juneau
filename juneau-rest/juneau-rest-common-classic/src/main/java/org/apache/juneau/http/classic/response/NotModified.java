@@ -31,7 +31,7 @@ import org.apache.juneau.http.classic.*;
  * Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match.
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

@@ -51,7 +51,7 @@ import java.util.*;
  * OS-backed implementations (for example an OS-keychain-backed store in a separate module) should let the consumer
  * pick fail-open vs fail-closed via a {@link FailMode} rather than baking a policy into the SPI.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link InMemorySecretStore}
  * 	<li class='jc'>{@link EnvVarSecretStore}
  * 	<li class='jc'>{@link FailMode}

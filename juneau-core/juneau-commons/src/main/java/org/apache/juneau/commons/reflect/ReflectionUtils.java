@@ -31,21 +31,21 @@ import org.apache.juneau.commons.inject.*;
  * ({@link Class}, {@link Method}, {@link Field}, {@link Constructor}) to their corresponding
  * info wrapper objects ({@link ClassInfo}, {@link MethodInfo}, {@link FieldInfo}, {@link ConstructorInfo}).
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Convenient factory methods - convert reflection objects to info wrappers
  * 	<li>Null-safe - methods handle <jk>null</jk> inputs gracefully
  * 	<li>Unified API - consistent method naming across all reflection types
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Converting reflection objects to info wrappers in a consistent way
  * 	<li>Simplifying code that works with both reflection and info objects
  * 	<li>Providing a centralized location for reflection-to-info conversions
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Convert Class to ClassInfo</jc>
  * 	ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(MyClass.<jk>class</jk>);
@@ -63,12 +63,12 @@ import org.apache.juneau.commons.inject.*;
  * 	ConstructorInfo <jv>ci2</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>c</jv>);
  * </p>
  *
- * <h5 class='section'>Null Handling:</h5>
+ * <h2 class='section'>Null Handling:</h2>
  * <p>
  * All methods in this class handle <jk>null</jk> inputs gracefully, returning <jk>null</jk> if the
  * input is <jk>null</jk>. This makes it safe to use in scenarios where reflection objects may be <jk>null</jk>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ClassInfo} - Class introspection wrapper
  * 	<li class='jc'>{@link MethodInfo} - Method introspection wrapper
  * 	<li class='jc'>{@link FieldInfo} - Field introspection wrapper
@@ -142,7 +142,7 @@ public class ReflectionUtils {
 	 * the rawtypes warning that occurs when converting to {@code Class<? extends Enum>} for use
 	 * with methods like {@link EnumSet#allOf(Class)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Instead of:</jc>
 	 * 	<ja>@SuppressWarnings</ja>(<js>"rawtypes"</js>)

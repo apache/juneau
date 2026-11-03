@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.serializer.*;
 /**
  * A pairing of a {@link TriGSerializer} and {@link TriGParser} into a single class with convenience to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean or map to TriG (Turtle with named graphs)</jc>
  * 	String <jv>trig</jv> = TriG.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -40,13 +40,13 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>trig</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age, Turtle with named graph):</h5>
+ * <h2 class='figure'>Example output (bean with name/age, Turtle with named graph):</h2>
  * <p class='bcode'>
  * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; { &lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 . }
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bcode'>
  * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; { &lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
@@ -61,7 +61,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>string</jv> = TriG.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

@@ -24,7 +24,7 @@ import java.util.regex.*;
 /**
  * Builds framework topic names so callers do not hand-format "family:key" strings.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   Topics.<jsm>selection</jsm>(<js>"changes"</js>);   <jc>// "selection:changes"</jc>
  *   Topics.<jsm>cmd</jsm>(<js>"tasks"</js>);           <jc>// "cmd:tasks"</jc>

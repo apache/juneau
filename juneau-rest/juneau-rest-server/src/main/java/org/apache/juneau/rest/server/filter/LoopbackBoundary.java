@@ -28,7 +28,7 @@ import jakarta.servlet.http.*;
  * The request-authenticity half of a loopback application's write protection: decides whether a request came from
  * the page this process served, and refuses it when it did not.
  *
- * <h5 class='section'>What this answers, and what it does not</h5>
+ * <h2 class='section'>What this answers, and what it does not</h2>
  * <p>
  * An application bound to <c>127.0.0.1</c> is reachable only from this host, but "reachable only from this host"
  * is not an authorization boundary &mdash; every browser the user has open is on this host, and any page in any of
@@ -46,8 +46,9 @@ import jakarta.servlet.http.*;
  * arming gate is forgeable by any page in the browser, and an application with only this boundary will faithfully
  * execute whatever its own page was tricked into asking for.
  *
- * <h5 class='section'>The checks</h5>
+ * <h2 class='section'>The checks</h2>
  * <table class='styled'>
+ * 	<caption>Loopback boundary checks</caption>
  * 	<tr><th>Check</th><th>Applies to</th><th>Rule</th><th>Rejection</th></tr>
  * 	<tr>
  * 		<td>{@code Host}</td><td><b>every</b> request</td>
@@ -82,7 +83,7 @@ import jakarta.servlet.http.*;
  * {@code ?method=DELETE} or an {@code X-HTTP-Method-Override: PUT} header takes the write checks, whether or not the
  * resource it reaches would honour the override.
  *
- * <h5 class='section'>HTTP/2</h5>
+ * <h2 class='section'>HTTP/2</h2>
  * <p>
  * An HTTP/2 request has no {@code Host} header; the container surfaces its {@code :authority} only as
  * {@link HttpServletRequest#getServerName()} and {@link HttpServletRequest#getServerPort()}.  A request with no
@@ -97,7 +98,7 @@ import jakarta.servlet.http.*;
  * sends {@code :authority}, so only a non-browser client can provoke this, and such a client must still present the
  * {@code Origin} and token.
  *
- * <h5 class='section'>Why each check is present</h5>
+ * <h2 class='section'>Why each check is present</h2>
  * <p>
  * <b>{@code Host} on every request, not only writes.</b>  This is the check that defeats DNS rebinding, and it is
  * the reason the boundary cannot be scoped to the write path.  An attacker serves a page from
@@ -129,13 +130,13 @@ import jakarta.servlet.http.*;
  * <b>A CSRF token on writes.</b>  A server-held {@link SynchronizerToken}, embedded in the served page.  See that
  * class for why a double-submit cookie is unsound on a loopback port.
  *
- * <h5 class='section'>One canonical origin</h5>
+ * <h2 class='section'>One canonical origin</h2>
  * <p>
  * The authority is a single exact spelling.  If the application is reached at <c>127.0.0.1:8790</c> then
  * <c>localhost:8790</c> is <b>not</b> accepted, and vice versa.  Accepting both doubles the surface for no
  * benefit, and an application that links only to the spelling it accepts never notices the difference.
  *
- * <h5 class='section'>What this does not defend against</h5>
+ * <h2 class='section'>What this does not defend against</h2>
  * <p>
  * These are accepted residual risks, not oversights.  Stating them plainly matters, because a boundary described
  * as stopping more than it does invites the wrong decisions to be built on top of it.
@@ -156,7 +157,7 @@ import jakarta.servlet.http.*;
  * 	<li><b>Intent is not established.</b>  See the first section: that is a separate gate's job.
  * </ul>
  *
- * <h5 class='section'>Non-browser callers</h5>
+ * <h2 class='section'>Non-browser callers</h2>
  * <p>
  * There is deliberately no path-exemption or trusted-caller list.  A non-browser client that must write &mdash;
  * including a process calling back into its own loopback port &mdash; presents the same {@code Host},
@@ -164,7 +165,7 @@ import jakarta.servlet.http.*;
  * more entry added under deadline pressure until it covers the endpoint that mattered, so the boundary does not
  * offer one.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	LoopbackBoundary <jv>boundary</jv> = LoopbackBoundary.<jsm>create</jsm>()
  * 		.authority(<js>"127.0.0.1:8790"</js>)
@@ -176,7 +177,7 @@ import jakarta.servlet.http.*;
  * 		<jv>response</jv>.sendError(<jv>result</jv>.status(), <jv>result</jv>.message());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jic'>{@link RequestBoundary}
  * 	<li class='jc'>{@link LoopbackBoundaryFilter}
  * 	<li class='jc'>{@link SynchronizerToken}

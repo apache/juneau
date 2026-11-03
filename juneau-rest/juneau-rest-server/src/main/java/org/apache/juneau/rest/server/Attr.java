@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.oapi.*;
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a value
  * retrieved from the request attributes.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public</jk> Person getPerson(<ja>@Attr</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.oapi.*;
  * 	}
  * </p>
   *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters">Java Method Parameters</a>
 
  * </ul>
@@ -72,7 +72,7 @@ public @interface Attr {
 	 * 		If the data type is <c>NameValuePairs</c>, <c>Map</c>, or a bean,
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
-	 * 		<h5 class='figure'>Examples:</h5>
+	 * 		<h4 class='figure'>Examples:</h4>
 	 * 		<p class='bjava'>
 	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> JsonMap <jv>allAttributes</jv>) {...}

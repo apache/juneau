@@ -62,7 +62,7 @@ import org.apache.juneau.marshall.parser.*;
  * Leading slashes in URLs are ignored.
  * So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct an unstructured POJO model</jc>
  * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>""</js>
@@ -128,7 +128,7 @@ import org.apache.juneau.marshall.parser.*;
  * of index numbers on GET requests to return a map/bean with a specified attribute value.
  * <br>The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
  * 	Map <jv>map</jv> = <jv>pathTraversal</jv>.getMap(<js>"/items/@name=foo"</js>);
@@ -285,7 +285,7 @@ public class PathTraversal {
 	 * <p>
 	 * Will convert object to the specified type per {@link MarshallingSession#convertToType(Object, Class)}.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	PathTraversal <jv>pathTraversal</jv> = <jk>new</jk> PathTraversal(<jv>object</jv>);
 	 *
@@ -326,7 +326,7 @@ public class PathTraversal {
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	PathTraversal <jv>pathTraversal</jv> = <jk>new</jk> PathTraversal(<jv>object</jv>);
 	 *
@@ -355,7 +355,7 @@ public class PathTraversal {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
@@ -688,7 +688,7 @@ public class PathTraversal {
 	 * <p>
 	 * This method expands the POJO model as necessary to create the new element.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		You can only post to three types of nodes:
 	 * 		<ul>

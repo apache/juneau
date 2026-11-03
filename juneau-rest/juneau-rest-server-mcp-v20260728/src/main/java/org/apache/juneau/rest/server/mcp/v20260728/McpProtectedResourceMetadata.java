@@ -35,7 +35,7 @@ import org.apache.juneau.commons.bean.PropertyNamerULC;
  * via {@code org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata} /
  * {@code McpProtectedResourceMetadataClient}.
  *
- * <h5 class='section'>Client/server split:</h5>
+ * <h2 class='section'>Client/server split:</h2>
  * <p>
  * This intentionally duplicates the shape of the client-side
  * {@code org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata} record; the

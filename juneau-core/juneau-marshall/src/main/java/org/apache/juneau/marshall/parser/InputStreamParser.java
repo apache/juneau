@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Subclass of {@link Parser} for byte-based parsers.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This class is typically the parent class of all byte-based parsers.
  * It has 1 abstract method to implement on the session object...
@@ -31,11 +31,11 @@ import org.apache.juneau.marshall.*;
  * 	<li>{@link ParserSession#doRead(ParserPipe, ClassMeta)}
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
 
  * </ul>

@@ -36,12 +36,11 @@ import org.apache.juneau.marshall.json5.*;
 /**
  * Generates JSON-schema metadata about POJOs.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <p>
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */
@@ -312,12 +311,12 @@ public class JsonSchemaGenerator extends MarshallingTraverseContext implements J
 		/**
 		 * Ignore types from schema definitions.
 		 *
-		 * <h5 class='section'>Description:</h5>
+		 * <h4 class='section'>Description:</h4>
 		 * <p>
 		 * Defines class name patterns that should be ignored when generating schema definitions in the generated
 		 * Swagger documentation.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
 		 * 	<ja>@JsonSchemaConfig</ja>(

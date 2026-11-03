@@ -42,7 +42,7 @@ import com.nimbusds.openid.connect.sdk.*;
  * OpenID Connect authentication request carrying a {@code nonce}.  Supports RFC 8707 resource-indicator binding
  * via {@link Builder#resource(URI)}.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jk>var</jk> flow = OAuthAuthorizationCodeFlow.<jsm>create</jsm>()

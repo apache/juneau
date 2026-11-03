@@ -42,7 +42,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * ({@link Builder#idSupplier idSupplier}, {@link Builder#validator validator}, {@link Builder#attributeKey attributeKey})
  * are <b>documented no-ops</b>: configure {@link RequestIdSettings} instead.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RequestIdSettings}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>

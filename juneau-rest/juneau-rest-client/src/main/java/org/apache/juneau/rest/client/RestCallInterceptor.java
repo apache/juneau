@@ -23,7 +23,7 @@ package org.apache.juneau.rest.client;
  * Registered on the client builder via {@link RestClient.Builder#interceptors(RestCallInterceptor...)}.
  * All callbacks have default no-op implementations so implementations only need to override the hooks they care about.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>builder</jsm>()
  * 		.transport(<jv>transport</jv>)
@@ -36,7 +36,7 @@ package org.apache.juneau.rest.client;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

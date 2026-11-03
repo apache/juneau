@@ -25,7 +25,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * The format for this var is <js>"$P{propertyName[,defaultValue]}"</js>.
  *
- * <h5 class='section'>Caller-scoped property sources:</h5>
+ * <h2 class='section'>Caller-scoped property sources:</h2>
  * <p>
  * Resolution consults the singleton {@link Settings} chain by default. Callers (notably the
  * {@code @Value} injection path) that need to inject additional, caller-scoped

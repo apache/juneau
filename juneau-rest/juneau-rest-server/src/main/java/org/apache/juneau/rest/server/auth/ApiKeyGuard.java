@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 		with a {@code WWW-Authenticate: ApiKey realm="<realm>"} response header.
  * </ol>
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jc>// Default source: X-API-Key header.</jc>
@@ -55,7 +55,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 	ApiKeyGuard.<jsm>create</jsm>().store(<jv>store</jv>).fromCookie(<js>"api_key"</js>).build();
  * </p>
  *
- * <h5 class='topic'>Security notes</h5>
+ * <h2 class='topic'>Security notes</h2>
  *
  * <ul>
  * 	<li>API keys are <b>credentials</b>; never log them, always pair with TLS.
@@ -65,7 +65,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 		({@link MessageDigest#isEqual(byte[], byte[])}).
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ApiKeyStore}
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='jc'>{@link Auth}

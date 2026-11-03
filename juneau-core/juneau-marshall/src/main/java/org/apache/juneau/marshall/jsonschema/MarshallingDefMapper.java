@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Interface used to retrieve identifiers and URIs for bean classes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */

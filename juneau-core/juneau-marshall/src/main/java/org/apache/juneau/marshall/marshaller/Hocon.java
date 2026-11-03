@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * A pairing of a {@link HoconSerializer} and {@link HoconParser} into a single class with convenience to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Instance usage</jc>
  * 	Hocon <jv>hocon</jv> = <jk>new</jk> Hocon();
@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>hoconOut</jv> = Hocon.<jsf>DEFAULT</jsf>.write(<jv>bean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean):</h5>
+ * <h2 class='figure'>Example output (bean):</h2>
  * <p class='bjson'>
  * name = myapp
  * port = 8080
@@ -52,7 +52,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Hocon.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

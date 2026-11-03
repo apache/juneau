@@ -40,7 +40,7 @@ import jakarta.servlet.http.*;
 /**
  * A mutable implementation of {@link HttpServletRequest} for mocking purposes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock</a>
  * </ul>
  */

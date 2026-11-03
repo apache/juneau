@@ -31,7 +31,7 @@ import org.apache.juneau.commons.utils.*;
  * It's commonly used for caching scenarios where you need to uniquely identify objects based on
  * multiple configuration parameters or attributes.
  *
- * <h5 class='section'>Usage Pattern:</h5>
+ * <h2 class='section'>Usage Pattern:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a composite key from multiple values</jc>
  * 	HashKey <jv>key</jv> = HashKey.<jsm>of</jsm>(
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.utils.*;
  * 	MyObject <jv>cached</jv> = <jv>cache</jv>.<jsm>get</jsm>(<jv>lookupKey</jv>);  <jc>// Returns myObject</jc>
  * </p>
  *
- * <h5 class='section'>Important Notes:</h5>
+ * <h2 class='section'>Important Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>
  * 		<b>All relevant values must be included</b> - When using {@code HashKey} for caching, ensure all
@@ -70,7 +70,7 @@ import org.apache.juneau.commons.utils.*;
  * 		handled correctly in equality comparisons.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create keys for caching based on configuration</jc>
  * 	HashKey <jv>key1</jv> = HashKey.<jsm>of</jsm>(<js>"json"</js>, <jk>true</jk>, <jk>false</jk>);
@@ -103,7 +103,7 @@ public class HashKey {
 	 * will produce equal {@code HashKey} instances, while different orders or values will produce
 	 * different keys.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	HashKey <jv>key1</jv> = HashKey.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <jk>true</jk>);
 	 * 	HashKey <jv>key2</jv> = HashKey.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <jk>true</jk>);

@@ -46,7 +46,7 @@ public class Console {
 	 * <p>
 	 * Useful for debug messages.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Console.<jsm>err</jsm>(<js>"myPojo=%s"</js>, <jv>myPojo</jv>);
 	 * </p>
@@ -67,7 +67,7 @@ public class Console {
 	 * <p>
 	 * Useful for debug messages.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Console.<jsm>out</jsm>(<js>"myPojo=%s"</js>, <jv>myPojo</jv>);
 	 * </p>

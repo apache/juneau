@@ -40,7 +40,7 @@ import org.apache.juneau.commons.*;
  * 	<li>Return type interfaces of client-side <ja>@RemoteOp</ja>-annotated methods.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Response">@Response</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#responseObject">Swagger Response Object</a>
@@ -89,13 +89,13 @@ public @interface Response {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object with string keys (media type) and string values (example for that media type) .
 	 * 	<li class='note'>
@@ -116,7 +116,7 @@ public @interface Response {
 	/**
 	 * <mk>headers</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#responseObject">Swagger Response Object</a>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
@@ -129,7 +129,7 @@ public @interface Response {
 	/**
 	 * <mk>schema</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#responseObject">Swagger Response Object</a>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based serializing and serializing validation.

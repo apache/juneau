@@ -43,7 +43,7 @@ import jakarta.servlet.http.*;
  * Roles are extracted from a configurable claim (default: {@code "scope"} &mdash; values are split on
  * whitespace per RFC 6749 &sect;3.3).
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	AuthFilterChain.<jsm>create</jsm>(<jv>bs</jv>)
@@ -54,7 +54,7 @@ import jakarta.servlet.http.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link OAuthIntrospectionValidator}
  * 	<li class='jc'>{@link AuthFilter}

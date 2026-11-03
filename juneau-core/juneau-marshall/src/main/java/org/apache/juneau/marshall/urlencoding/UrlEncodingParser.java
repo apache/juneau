@@ -29,11 +29,11 @@ import org.apache.juneau.marshall.uon.*;
 /**
  * Parses URL-encoded text into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
  *
@@ -43,11 +43,11 @@ import org.apache.juneau.marshall.uon.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding</a>
  * </ul>
  */
@@ -118,7 +118,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * If <jk>false</jk>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
 		 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String[] <jf>f1</jf>;
@@ -136,7 +136,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * <p>
 		 * This option only applies to beans.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value

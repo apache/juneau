@@ -40,7 +40,7 @@ import org.apache.juneau.console.views.*;
  * The views and DataTables toolkit packs link their assets page-relative (e.g. {@code /console/store/juneau-views.js}),
  * so every page also composes {@link ViewsMixin} and {@link DataTablesMixin} to serve them from its own mount.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/ops/audit"</js>)
  * 	<jk>public class</jk> AuditRest <jk>extends</jk> PetstoreConsolePage {

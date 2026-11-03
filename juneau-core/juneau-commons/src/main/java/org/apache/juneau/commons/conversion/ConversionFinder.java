@@ -27,7 +27,7 @@ package org.apache.juneau.commons.conversion;
  * Return <jk>null</jk> from {@link #findConversion(Class, Class)} to indicate that this finder has no conversion for the
  * given type pair; the next registered finder (or the built-in logic) will be tried instead.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ConfigurableConverter <jv>converter</jv> = <jk>new</jk> ConfigurableConverter(
  * 		(<jv>inType</jv>, <jv>outType</jv>) -> {
@@ -38,7 +38,7 @@ package org.apache.juneau.commons.conversion;
  * 	);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ConfigurableConverter}
  * 	<li class='jc'>{@link Conversion}
  * </ul>

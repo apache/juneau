@@ -307,7 +307,7 @@ public final class RestRequest {
 	 * The {@link RecordStreamBody} writes directly to the transport output stream during {@link #run()}, so large
 	 * payloads are streamed to the wire without being buffered in memory.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>client</jv>.post(<js>"/bulk-upload"</js>)
 	 * 		.streamBodyEntity(RecordStreamBody.<jsm>records</jsm>(<jv>w</jv> -&gt; {

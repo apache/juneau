@@ -32,7 +32,7 @@
  * typography.  Wiring the rendered output into a {@code Tab}/{@code Subtab} panel's content property is a deferred
  * follow-on integration point, not part of this module.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.console.views.markdown.MarkdownRenderer MarkdownRenderer}
  * 	<li class='jc'>{@link org.apache.juneau.console.views.markdown.CommonmarkMarkdownRenderer CommonmarkMarkdownRenderer}

@@ -31,7 +31,7 @@ import org.apache.juneau.commons.collections.*;
  * arrays, XML element names are not inferred (for singular/plural forms) and the name property should be used to add
  * that information. This object is used to control how schema properties are serialized to XML.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Xml Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>wrapped</c> (boolean) - May be used only for an array definition. Signifies whether the array is wrapped
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Xml <jv>xml</jv> = <jsm>xml</jsm>()
@@ -63,7 +63,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#xml-object">Swagger 2.0 Specification &gt; XML Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/describing-models/">Swagger Describing Models</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

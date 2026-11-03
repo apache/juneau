@@ -49,7 +49,7 @@ import java.util.zip.*;
  * Thread-safe. Keep one instance per log file and share it across requests; otherwise every request re-scans the
  * file from byte 0.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	FileLineIndex <jv>index</jv> = FileLineIndex.<jsm>of</jsm>(<jv>logFile</jv>);
  * 	FileLineIndex.Snapshot <jv>s</jv> = <jv>index</jv>.refresh();

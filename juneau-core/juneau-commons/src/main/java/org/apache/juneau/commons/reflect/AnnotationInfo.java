@@ -44,7 +44,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li>Sort annotations by precedence using ranks
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Get annotation info from a class</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -58,7 +58,7 @@ import org.apache.juneau.commons.collections.*;
  * 	});
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ClassInfo}
  * 	<li class='jc'>{@link MethodInfo}
  * 	<li class='jc'>{@link FieldInfo}
@@ -80,7 +80,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Creates a new annotation info object.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create annotation info for a class annotation</jc>
 	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -156,7 +156,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * Same as calling {@link Annotation#annotationType()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;Deprecated&gt; <jv>ai</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotation(Deprecated.<jk>class</jk>);
 	 * 	Class&lt;? <jk>extends</jk> Annotation&gt; <jv>type</jv> = <jv>ai</jv>.annotationType();  <jc>// Returns Deprecated.class</jc>
@@ -175,7 +175,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * This is useful when you have an {@code AnnotationInfo<?>} and need to narrow it to a specific type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;?&gt; <jv>ai</jv> = ...;
 	 *
@@ -221,7 +221,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a boolean.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(enabled=true)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -241,7 +241,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * For type-safe access to an array of classes of a specific supertype, use {@link #getClassArray(String, Class)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(types={String.class, Integer.class})</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -258,7 +258,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a class array of a specific type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get an array of serializer classes from an annotation</jc>
 	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;[]&gt; <jv>serializerClasses</jv> =
@@ -293,7 +293,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * For type-safe access to a class of a specific supertype, use {@link #getClassValue(String, Class)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(type=String.class)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -310,7 +310,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a class of a specific type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get a serializer class from an annotation</jc>
 	 * 	Optional&lt;Class&lt;? <jk>extends</jk> Serializer&gt;&gt; <jv>serializerClass</jv> =
@@ -340,7 +340,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a double.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(threshold=0.95)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -357,7 +357,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a float.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(weight=0.5f)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -374,7 +374,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as an integer.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(priority=5)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -391,7 +391,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a long.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(timestamp=1234567890L)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -408,7 +408,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the method with the specified name on this annotation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	Optional&lt;MethodInfo&gt; <jv>method</jv> = <jv>ai</jv>.getMethod(<js>"value"</js>);
@@ -429,7 +429,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the class name of this annotation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	String <jv>name</jv> = <jv>ai</jv>.getName();  <jc>// Returns "mypackage.MyAnnotation"</jc>
@@ -442,7 +442,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the simple class name of this annotation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	String <jv>name</jv> = <jv>ai</jv>.getNameSimple();  <jc>// Returns "MyAnnotation"</jc>
@@ -463,7 +463,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * Higher rank values indicate higher precedence when multiple annotations of the same type are present.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Annotation with rank method</jc>
 	 * 	<ja>@interface</ja> MyAnnotation {
@@ -482,7 +482,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the return type of the specified method on this annotation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Optional&lt;ClassInfo&gt; <jv>returnType</jv> = <jv>annotationInfo</jv>.getReturnType(<js>"value"</js>);
 	 * </p>
@@ -497,7 +497,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(name="John", age=30)</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -514,7 +514,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the value of the specified method on this annotation as a string array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation(tags={"foo", "bar"})</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -534,7 +534,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * This is a convenience method equivalent to calling {@link #getString(String) getString("value")}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @MyAnnotation("foo")</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -552,7 +552,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * This method provides type-safe access to annotation field values without requiring
 	 * explicit reflection calls or casting.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @interface MyAnnotation { String value(); int priority(); }</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -584,7 +584,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * This checks for meta-annotations on the annotation type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if @MyAnnotation is annotated with @Documented</jc>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
@@ -619,7 +619,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation has the specified fully-qualified name.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>isName</jv> = <jv>annotationInfo</jv>.hasName(<js>"org.apache.juneau.commons.bean.Name"</js>);
 	 * </p>
@@ -634,7 +634,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation has the specified simple name.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>isName</jv> = <jv>annotationInfo</jv>.hasSimpleName(<js>"Name"</js>);
 	 * </p>
@@ -649,7 +649,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns the wrapped annotation instance.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	MyAnnotation <jv>annotation</jv> = <jv>ai</jv>.inner();
@@ -672,7 +672,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * This checks if the annotation is annotated with {@link AnnotationGroup} and if
 	 * the group value matches the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define an annotation group</jc>
 	 * 	<ja>@interface</ja> MyGroup {}
@@ -699,7 +699,7 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation is of the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;?&gt; <jv>ai</jv> = ...;
 	 *
@@ -729,7 +729,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * Only annotation values that differ from their default values are included.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	AnnotationInfo&lt;MyAnnotation&gt; <jv>ai</jv> = ...;
 	 * 	LinkedHashMap&lt;String,Object&gt; <jv>map</jv> = <jv>ai</jv>.toMap();
@@ -762,7 +762,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * <p>
 	 * Format: {@code @AnnotationName(on=location)}
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li>{@code @Marshalled(on=MyClass)} - Annotation on a class
 	 * 	<li>{@code @Inject(on=MyClass.myField)} - Annotation on a field
@@ -786,7 +786,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * 	<li>Annotation values (non-default values only, in key=value format)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Simple annotation on a class</jc>
 	 * 	AnnotationInfo <jv>ai</jv> = ...;
@@ -803,7 +803,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * 	<jc>// Returns: "@org.example.Inject(name=myBean, on=org.example.MyClass.myField)"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison with Other Methods:</h5>
+	 * <h4 class='section'>Comparison with Other Methods:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>{@link #toSimpleString()} - Returns simple format: "@AnnotationName(on=location)"
 	 * 	<li>{@link #properties()} - Returns map representation for debugging

@@ -44,9 +44,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Caches results for performance
  * </ul>
  *
- * <h5 class='section'>Annotation Order of Precedence:</h5>
+ * <h2 class='section'>Annotation Order of Precedence:</h2>
  *
- * <h6 class='topic'>For Classes ({@link #find(Class, ClassInfo, AnnotationTraversal...)}):</h6>
+ * <h3 class='topic'>For Classes ({@link #find(Class, ClassInfo, AnnotationTraversal...)}):</h3>
  * <p>
  * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  * <ol>
@@ -71,7 +71,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jc>// 7. @Annotation on package-info.java</jc>
  * </p>
  *
- * <h6 class='topic'>For Methods ({@link #find(Class, MethodInfo, AnnotationTraversal...)}):</h6>
+ * <h3 class='topic'>For Methods ({@link #find(Class, MethodInfo, AnnotationTraversal...)}):</h3>
  * <p>
  * Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  * <ol>
@@ -81,7 +81,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><b>Declared annotations</b> on overridden parent methods (child-to-parent order)
  * </ol>
  *
- * <h6 class='topic'>For Fields ({@link #find(Class, FieldInfo, AnnotationTraversal...)}):</h6>
+ * <h3 class='topic'>For Fields ({@link #find(Class, FieldInfo, AnnotationTraversal...)}):</h3>
  * <p>
  * Annotations are returned with the following precedence:
  * <ol>
@@ -89,7 +89,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><b>Declared annotations</b> on the field
  * </ol>
  *
- * <h6 class='topic'>For Constructors ({@link #find(Class, ConstructorInfo, AnnotationTraversal...)}):</h6>
+ * <h3 class='topic'>For Constructors ({@link #find(Class, ConstructorInfo, AnnotationTraversal...)}):</h3>
  * <p>
  * Annotations are returned with the following precedence:
  * <ol>
@@ -97,7 +97,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><b>Declared annotations</b> on the constructor
  * </ol>
  *
- * <h5 class='section'>Runtime Annotations:</h5>
+ * <h2 class='section'>Runtime Annotations:</h2>
  * <p>
  * Runtime annotations are concrete objects that implement annotation interfaces, added programmatically via the
  * builder's {@link Builder#addRuntimeAnnotations(List)} method. They allow you to dynamically apply annotations
@@ -142,7 +142,7 @@ import org.apache.juneau.commons.utils.*;
  * For example, a runtime {@code @Marshalled} annotation on a class will be found before any {@code @Marshalled} annotation
  * declared directly on that class.
  *
- * <h5 class='section'>Comparison with ElementInfo Methods:</h5>
+ * <h2 class='section'>Comparison with ElementInfo Methods:</h2>
  * <p>
  * The methods in this class differ from {@link ClassInfo#getAnnotations()}, {@link MethodInfo#getAnnotations()}, etc.:
  * <ul>
@@ -151,7 +151,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><b>Precedence</b>: Runtime annotations are inserted at each level with higher priority than declared annotations.
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create with default settings</jc>
  * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider.<jsm>create</jsm>().build();
@@ -169,7 +169,7 @@ import org.apache.juneau.commons.utils.*;
  * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>myAnnotations</jv> = <jv>provider</jv>.find(MyAnnotation.<jk>class</jk>, MyClass.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link AnnotationProvider}
  * 	<li class='jc'>{@link AnnotationInfo}
@@ -193,7 +193,7 @@ public class AnnotationProvider {
 	/**
 	 * Builder for creating configured {@link AnnotationProvider} instances.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	AnnotationProvider <jv>provider</jv> = AnnotationProvider
 	 * 		.<jsm>create</jsm>()
@@ -201,7 +201,7 @@ public class AnnotationProvider {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5>
+	 * <h2 class='section'>See Also:</h2>
 	 * <ul>
 	 * 	<li class='jm'>{@link AnnotationProvider#create()}
 	 * </ul>
@@ -514,7 +514,7 @@ public class AnnotationProvider {
 	 * This method provides a flexible API for traversing annotations.
 	 * It uses {@link AnnotationTraversal} enums to configure what elements to search and in what order.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Search class only</jc>
 	 * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>l1</jv> =
@@ -547,7 +547,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Search constructor annotations</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
@@ -572,7 +572,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Search field annotations</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
@@ -597,7 +597,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * This method provides a flexible API for traversing method annotations.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Search method and matching parent methods</jc>
 	 * 	List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>l1</jv> =
@@ -626,7 +626,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
 	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
@@ -636,7 +636,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Search parameter, matching parameters, and parameter type (child-to-parent)</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
@@ -672,7 +672,7 @@ public class AnnotationProvider {
 	 * This method provides a flexible API for traversing all class annotations.
 	 * Unlike {@link #find(Class, ClassInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get all annotations from class only</jc>
 	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
@@ -699,7 +699,7 @@ public class AnnotationProvider {
 	 * This method provides a flexible, stream-based API for traversing all constructor annotations without creating intermediate lists.
 	 * Unlike {@link #find(Class, ConstructorInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get all annotations from constructor</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
@@ -722,7 +722,7 @@ public class AnnotationProvider {
 	 * This method provides a flexible, stream-based API for traversing all field annotations without creating intermediate lists.
 	 * Unlike {@link #find(Class, FieldInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get all annotations from field</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
@@ -745,7 +745,7 @@ public class AnnotationProvider {
 	 * This method provides a flexible API for traversing all method annotations.
 	 * Unlike {@link #find(Class, MethodInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get all annotations from method and matching parent methods</jc>
 	 * 	List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
@@ -772,7 +772,7 @@ public class AnnotationProvider {
 	 * This method provides a flexible, stream-based API for traversing all parameter annotations without creating intermediate lists.
 	 * Unlike {@link #find(Class, ParameterInfo, AnnotationTraversal...)}, this method does not filter by annotation type.
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
 	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
@@ -782,7 +782,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get all annotations from parameter, matching parameters, and parameter type</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
@@ -813,7 +813,7 @@ public class AnnotationProvider {
 	 * 	find(<jv>type</jv>, <jv>clazz</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this class
 	 * 	<li>{@link AnnotationTraversal#PARENTS PARENTS} - Parent classes and interfaces (child-to-parent order)
@@ -824,7 +824,7 @@ public class AnnotationProvider {
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code PARENTS, PACKAGE}
 	 * <br>Note: {@code PARENTS} includes the class itself plus all parent classes and interfaces.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if class has @MyAnnotation anywhere in hierarchy</jc>
 	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
@@ -854,7 +854,7 @@ public class AnnotationProvider {
 	 * 	find(<jv>type</jv>, <jv>constructor</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this constructor
 	 * </ul>
@@ -862,7 +862,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if constructor has @MyAnnotation</jc>
 	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
@@ -889,7 +889,7 @@ public class AnnotationProvider {
 	 * 	find(<jv>type</jv>, <jv>field</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this field
 	 * </ul>
@@ -897,7 +897,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF}
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if field has @MyAnnotation</jc>
 	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>fi</jv>);
@@ -924,7 +924,7 @@ public class AnnotationProvider {
 	 * 	find(<jv>type</jv>, <jv>method</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this method
 	 * 	<li>{@link AnnotationTraversal#MATCHING_METHODS MATCHING_METHODS} - Matching methods in parent classes (child-to-parent)
@@ -935,7 +935,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE}
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if method has @MyAnnotation anywhere in hierarchy</jc>
 	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>);
@@ -965,7 +965,7 @@ public class AnnotationProvider {
 	 * 	find(<jv>type</jv>, <jv>parameter</jv>, <jv>traversals</jv>).findFirst().isPresent()
 	 * </p>
 	 *
-	 * <h5 class='section'>Supported Traversal Types:</h5>
+	 * <h4 class='section'>Supported Traversal Types:</h4>
 	 * <ul>
 	 * 	<li>{@link AnnotationTraversal#SELF SELF} - Annotations declared directly on this parameter
 	 * 	<li>{@link AnnotationTraversal#MATCHING_PARAMETERS MATCHING_PARAMETERS} - Matching parameters in parent methods/constructors (child-to-parent)
@@ -975,7 +975,7 @@ public class AnnotationProvider {
 	 * <p>
 	 * <b>Default:</b> If no traversals are specified, defaults to: {@code SELF, MATCHING_PARAMETERS, PARAMETER_TYPE}
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if parameter has @MyAnnotation anywhere in hierarchy</jc>
 	 * 	<jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>);

@@ -29,7 +29,7 @@ import java.util.*;
  * (with the backends declared {@code provided}), and any consumer can implement this interface for a backend
  * Juneau does not cover.
  *
- * <h5 class='topic'>Explicit selection (no auto-drive)</h5>
+ * <h2 class='topic'>Explicit selection (no auto-drive)</h2>
  *
  * <p>
  * Consistent with Juneau's explicit-over-magic stance, the backend is <b>explicitly declared</b> by registering a
@@ -37,7 +37,7 @@ import java.util.*;
  * declared, {@link LoggersManager} drives {@link JulLogBackend} &mdash; the endpoint never silently classpath-scans
  * for, and then drives, a backend the operator didn't choose.
  *
- * <h5 class='topic'>Level contract</h5>
+ * <h2 class='topic'>Level contract</h2>
  *
  * <p>
  * Levels are exchanged as backend-native level-name strings (e.g. JUL {@code "FINE"}/{@code "INFO"}, Logback /
@@ -46,7 +46,7 @@ import java.util.*;
  * <b>process-lifetime-only</b> (they do not rewrite the backend's configuration file). The root logger is
  * addressed under the key {@code "ROOT"}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JulLogBackend}
  * 	<li class='jc'>{@link LoggersManager}
  * 	<li class='jc'>{@link LoggersSettings}

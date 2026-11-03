@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.*;
  * Sibling of {@link org.apache.juneau.rest.server.swagger.SwaggerProvider} for OpenAPI 3.1 emission. Both
  * providers coexist; the {@code @Rest(openApiProvider=...)} attribute selects the implementation.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">API-Docs Mixin Pack</a>
  * </ul>
  */

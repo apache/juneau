@@ -28,7 +28,7 @@
  * servlet-subclass path and
  * {@link org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint McpEndpoint} for the mixin path).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerMcp">juneau-rest-server-mcp</a>
  * </ul>
  */

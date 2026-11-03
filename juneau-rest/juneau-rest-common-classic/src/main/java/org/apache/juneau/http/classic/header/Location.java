@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Used in redirection, or when a new resource has been created.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Location response-header field is used to redirect the recipient to a location other than the Request-URI for
  * completion of the request or identification of a new resource.
@@ -56,7 +56,7 @@ import org.apache.juneau.http.*;
  * It is therefore possible for a response to contain header fields for both Location and Content-Location.
  * Also see section 13.10 for cache requirements of some methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

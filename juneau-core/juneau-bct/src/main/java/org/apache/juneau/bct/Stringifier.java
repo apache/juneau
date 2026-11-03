@@ -25,7 +25,7 @@ import java.util.function.*;
  * Bean-Centric Testing framework. They enable precise control over how objects are displayed
  * in test assertions and error messages, going beyond simple {@code toString()} calls.</p>
  *
- * <h5 class='section'>Usage Examples:</h5>
+ * <h2 class='section'>Usage Examples:</h2>
  * <p class='bjava'>
  *    <jc>// Simple custom format</jc>
  *    Stringifier&lt;LocalDate&gt; <jv>dateStringifier</jv> = (<jp>conv</jp>, <jp>date</jp>) -&gt;
@@ -44,7 +44,7 @@ import java.util.function.*;
  *    };
  * </p>
  *
- * <h5 class='section'>Registration:</h5>
+ * <h2 class='section'>Registration:</h2>
  * <p class='bjava'>
  *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
  *       .defaultSettings()
@@ -54,7 +54,7 @@ import java.util.function.*;
  *       .build();
  * </p>
  *
- * <h5 class='section'>Best Practices:</h5>
+ * <h2 class='section'>Best Practices:</h2>
  * <ul>
  *    <li><b>Use the converter parameter</b> for recursive conversion of nested objects</li>
  *    <li><b>Keep output concise</b> but informative for test readability</li>

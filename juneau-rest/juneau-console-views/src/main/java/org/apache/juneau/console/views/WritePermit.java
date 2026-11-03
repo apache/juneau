@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * was consulted before a bulk-mutating affordance is configured (the opt-in separability
  * guarantee).
  *
- * <h5 class='section'>Why this exists, and why it is NOT the console's own {@code WritePermit}</h5>
+ * <h2 class='section'>Why this exists, and why it is NOT the console's own {@code WritePermit}</h2>
  * <p>
  * A consuming application (e.g. the Sandbox Support Console) may already have its own, much richer write-gate
  * token &mdash; one bound to a journal, a box {@code Mode}, an idempotency key, and a target validator (see that
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * is no zero-argument overload, so omitting one is a <b>compile</b> failure, not a missed javadoc sentence
  * (mirroring the discipline of the console's own {@code WriteGuard}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// After the consumer's OWN write-gate has already approved this capability:</jc>
  * 	WritePermit <jv>permit</jv> = WritePermit.<jsm>forCapability</jsm>(<js>"incident:bulk-ack"</js>);
@@ -52,7 +52,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 		.actions(RowAction.<jsm>create</jsm>(<js>"ack"</js>).endpoint(<js>"servlet:/incidents/{id}/ack"</js>).method(RowAction.Method.<jsf>POST</jsf>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link BulkMutateDef}
  * 	<li class='jc'>{@link SelectionDef}

@@ -17,7 +17,7 @@
 /**
  * Petstore console Rendering flavors: one console page per petstore view technology.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	View <jv>page</jv> = Flavor.<jsm>of</jsm>(<js>"freemarker"</js>).page();
  * </p>

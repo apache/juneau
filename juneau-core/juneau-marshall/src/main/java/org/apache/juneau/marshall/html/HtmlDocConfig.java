@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
  * </ul>
  */
@@ -47,7 +47,7 @@ public @interface HtmlDocConfig {
 	 * The aside section floats on the right of the page for providing content supporting the serialized content of
 	 * the page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		aside={
@@ -60,7 +60,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -78,7 +78,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#aside(String...)}
 	 * </ul>
 	 *
@@ -95,7 +95,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * By default, the aside section is floated to the right.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		aside={
@@ -117,7 +117,7 @@ public @interface HtmlDocConfig {
 	 * 	<li><js>"DEFAULT"</js> (defaults to <js>"RIGHT"</js>)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
@@ -126,7 +126,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#asideFloat(AsideFloat)}
 	 * </ul>
 	 *
@@ -140,7 +140,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		footer={
@@ -149,7 +149,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -167,7 +167,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#footer(String...)}
 	 * </ul>
 	 *
@@ -181,7 +181,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Adds the specified HTML content to the head section of the page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		head={
@@ -190,7 +190,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -206,7 +206,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#head(String...)}
 	 * </ul>
 	 *
@@ -221,7 +221,7 @@ public @interface HtmlDocConfig {
 	 * Allows you to override the contents of the header section on the HTML page.
 	 * The header section normally contains the title and description at the top of the page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		header={
@@ -230,7 +230,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -248,7 +248,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class if not overridden.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#header(String...)}
 	 * </ul>
 	 *
@@ -263,7 +263,7 @@ public @interface HtmlDocConfig {
 	 * Allows you to override the contents of the nav section on the HTML page.
 	 * The nav section normally contains the page links at the top of the page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		nav={
@@ -272,7 +272,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -292,7 +292,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#nav(String...)}
 	 * </ul>
 	 *
@@ -325,7 +325,7 @@ public @interface HtmlDocConfig {
 	 * can also be used in addition to various other protocols specified by {@link UriResolver} such as
 	 * <js>"servlet:/..."</js>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={
@@ -337,7 +337,7 @@ public @interface HtmlDocConfig {
 	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet {
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li class='note'>
@@ -355,7 +355,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#navlinks(String...)}
 	 * </ul>
 	 *
@@ -369,14 +369,14 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
@@ -385,7 +385,7 @@ public @interface HtmlDocConfig {
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#noResultsMessage(String)}
 	 * </ul>
 	 *
@@ -404,12 +404,12 @@ public @interface HtmlDocConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#nowrap()}
 	 * </ul>
 	 *
@@ -435,12 +435,12 @@ public @interface HtmlDocConfig {
 	 * 	<li><js>"false"</js> (default)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#resolveBodyVars()}
 	 * </ul>
 	 *
@@ -454,7 +454,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		script={
@@ -463,7 +463,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: Javascript
 	 * 	<li class='note'>
@@ -481,7 +481,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#script(String...)}
 	 * </ul>
 	 *
@@ -495,7 +495,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		style={
@@ -505,7 +505,7 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: CSS
 	 * 	<li class='note'>
@@ -523,7 +523,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#style(String...)}
 	 * </ul>
 	 *
@@ -540,7 +540,7 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Format: URL
 	 * 	<li class='note'>
@@ -552,7 +552,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#stylesheet(String...)}
 	 * </ul>
 	 *
@@ -570,14 +570,14 @@ public @interface HtmlDocConfig {
 	 * By default, the {@link BasicHtmlDocTemplate} class is used to construct the contents of the HTML page, but
 	 * can be overridden with your own custom implementation class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		template=MySpecialDocTemplate.<jk>class</jk>
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
 	 * 	<li class='note'>
@@ -585,7 +585,7 @@ public @interface HtmlDocConfig {
 	 * 		parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#template(Class)}
 	 * </ul>
 	 *
@@ -626,14 +626,14 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
 	 * 	<li class='note'>
 	 * 		Values are appended to the existing list.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlWidgets">Widgets</a>
 	 * </ul>
 	 *

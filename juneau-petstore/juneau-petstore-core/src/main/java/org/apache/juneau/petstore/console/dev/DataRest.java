@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code /orders} streams one CSV row per UTC hour in {@code [start, end)} with {@link SeriesSource}.  The browser
  * requests it once per UTC day chunk and caches closed days in IndexedDB.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	GET /console/dev/data
  * 	GET /console/dev/data/orders?start=2026-10-01T00:00:00Z&amp;end=2026-10-02T00:00:00Z

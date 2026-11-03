@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * URIs are constructed using the pattern <js>"#/definitions/{id}"</js>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
  * </ul>
  */

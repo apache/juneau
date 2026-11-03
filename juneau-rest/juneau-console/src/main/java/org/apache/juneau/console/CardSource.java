@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.parser.*;
  * body as JSON5 or capture it as a {@code <template data-card>}. Built by {@code <@card>} and by C3's
  * {@code PageSpec}; tests build it directly.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   CardSource <jv>s</jv> = CardSource.<jsm>create</jsm>(<js>"datatables"</js>, <js>"releases"</js>)
  *     .title(<js>"Releases"</js>)

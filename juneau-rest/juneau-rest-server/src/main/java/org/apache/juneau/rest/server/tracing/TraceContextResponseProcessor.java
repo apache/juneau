@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.processor.*;
  * {@code tracestate}) so a client calling this server can read the resulting trace identifiers back
  * off the response.
  *
- * <h5 class='topic'>How it works</h5>
+ * <h2 class='topic'>How it works</h2>
  *
  * <p>
  * A {@link TracerHook} bridge (e.g. the OpenTelemetry bridge in {@code juneau-rest-server-tracing-otel})
@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.processor.*;
  * also keeps this processor free of any OpenTelemetry (or other tracer) dependency &mdash; it works
  * with any {@code TracerHook} bridge that populates the two attributes.
  *
- * <h5 class='topic'>Off-by-default behavior</h5>
+ * <h2 class='topic'>Off-by-default behavior</h2>
  *
  * <p>
  * The first action in {@link #process(RestOpSession)} is a single request-attribute read. When no
@@ -59,14 +59,14 @@ import org.apache.juneau.rest.server.processor.*;
  * itself gated on {@code RestContext.responseTraceparent} (default {@code true}); setting it to
  * {@code false} keeps the processor out of the chain entirely.
  *
- * <h5 class='topic'>Already-committed responses</h5>
+ * <h2 class='topic'>Already-committed responses</h2>
  *
  * <p>
  * If the response has already been committed (for example a streaming / SSE handler that flushed its
  * headers before returning), the headers can no longer be set. In that case the processor logs a
  * {@link Level#FINE FINE} message and skips the write &mdash; it never throws.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link TracerHook}
  * 	<li class='link'><a class="doclink" href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>

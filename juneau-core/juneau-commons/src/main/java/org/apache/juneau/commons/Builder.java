@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * Identifies a class as a builder for a POJO class.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// POJO class.</jc>
  * 	<ja>@Builder</ja>(MyBeanBuilder.<jk>class</jk>)
@@ -55,7 +55,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PojoBuilders">POJO Builders</a>
 
  * </ul>

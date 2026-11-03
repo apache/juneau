@@ -26,7 +26,7 @@ import org.apache.juneau.commons.beanquery.*;
  * so a resolver never has to guess about an unknown name.  {@link SqlBeanQueryContext} is the usual implementation.
  * The interface is small so the compiler can be tested without a context or a database.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Logical names map one-to-one to quoted SQL names.</jc>
  * 	ColumnResolver <jv>columns</jv> = <jv>c</jv> -&gt; <jv>dialect</jv>.quote(<jv>c</jv>);

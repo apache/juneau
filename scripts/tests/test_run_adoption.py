@@ -259,7 +259,7 @@ def test_push_test_only_emits_mode_test_and_never_commits(push_mod, gates, monke
     events = markers(capsys.readouterr().out)
     project = Path(push_mod.__file__).resolve().parent.parent.name
     assert events[0] == {"ev": "run", "v": 1, "mode": "test", "project": project}
-    assert [e["id"] for e in events if e["ev"] == "step"] == ["container-tags", "bom", "install"]
+    assert [e["id"] for e in events if e["ev"] == "step"] == ["container-tags", "bom", "javadoc-html", "install"]
     assert events[-2] == {"ev": "note", "level": "info", "text": "Test-only run: nothing was committed or pushed"}
     assert events[-1] == {"ev": "done", "status": "ok"}
     assert not {"identity", "commit", "docs"} & set(gates.calls)
@@ -346,7 +346,7 @@ def test_push_reserves_step_numbers_for_the_steps_test_py_contributes(push_mod, 
     env = _capture_child_env(push_mod, monkeypatch, gates)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
-    assert env["JUNEAU_TERMINAL_N_BASE"] == "2"    # after Tags and BOM
+    assert env["JUNEAU_TERMINAL_N_BASE"] == "3"    # after Tags, BOM and Javadoc HTML
 
 
 def test_push_test_only_fallback_runs_mvn_test_as_a_maven_step(push_mod, gates, monkeypatch, capsys):
@@ -1013,7 +1013,7 @@ def test_push_child_env_carries_push_active_and_n_base_under_markers(push_mod, g
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
-    assert env["JUNEAU_TERMINAL_N_BASE"] == "2"    # after Tags and BOM
+    assert env["JUNEAU_TERMINAL_N_BASE"] == "3"    # after Tags, BOM and Javadoc HTML
 
 
 def test_push_child_env_has_push_active_but_no_n_base_without_markers(push_mod, gates, monkeypatch):
@@ -1047,10 +1047,10 @@ def test_push_reserves_exactly_four_numbers_for_test_py(push_mod, gates, monkeyp
     n_base = int(env["JUNEAU_TERMINAL_N_BASE"])
     steps = [e for e in markers(capsys.readouterr().out) if e["ev"] == "step" and "parent" not in e]
     ids = [e["id"] for e in steps]
-    after = steps[ids.index("bom") + 1]
+    after = steps[ids.index("javadoc-html") + 1]
     assert after["id"] == "install"
     assert after["n"] == n_base + 5
-    assert max(e["n"] for e in steps[:ids.index("bom") + 1]) == n_base
+    assert max(e["n"] for e in steps[:ids.index("javadoc-html") + 1]) == n_base
 
 
 def test_push_plain_ctrl_c_before_the_session_exits_130(push_mod, monkeypatch, capsys):
@@ -1073,7 +1073,7 @@ def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch
 
 
 @pytest.mark.parametrize("argv, expected", [
-    (["--test-only"], ["container-tags", "bom", "build", "tests", "perf", "py-tests", "js-tests", "traces", "timing", "install"]),
+    (["--test-only"], ["container-tags", "bom", "javadoc-html", "build", "tests", "perf", "py-tests", "js-tests", "traces", "timing", "install"]),
     (["Quick fix", "--skip-tests", "--tracker-audit"],
      ["prechecks", "tracker", "tests", "install", "commit", "push"]),
 ])

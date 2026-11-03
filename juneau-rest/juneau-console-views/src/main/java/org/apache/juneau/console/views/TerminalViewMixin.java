@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.*;
  * forbidden id both answer {@code 404}, so ids cannot be enumerated.  Run ids are opaque URL tokens matching
  * {@code ^[A-Za-z0-9_-]{1,128}$}; anything else answers {@code 400} before the resolver runs.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> RunsResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> TerminalViewMixin {

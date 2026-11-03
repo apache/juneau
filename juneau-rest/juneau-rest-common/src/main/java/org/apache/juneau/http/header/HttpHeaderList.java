@@ -30,14 +30,14 @@ import org.apache.juneau.http.*;
  * Mirrors the semantics of {@code HeaderList} from {@code juneau-rest-common-classic} without the
  * Apache HttpCore dependency. Header-name comparisons are case-insensitive by default.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bjava'>
  * 	HttpHeaderList <jv>headers</jv> = HttpHeaderList.<jsm>create</jsm>()
  * 		.append(HttpHeaderBean.<jsm>of</jsm>(<js>"Accept"</js>, <js>"text/xml"</js>))
  * 		.append(<js>"Content-Type"</js>, <js>"text/xml"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

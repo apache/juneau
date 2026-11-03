@@ -30,7 +30,7 @@ import org.apache.juneau.commons.*;
  * for people, {@link #code()} is for callers (an HTTP error body, the JS engine, a test corpus) that need to branch
  * on *which* problem occurred without parsing the message.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> {
  * 		SearchExpressionParser.<jsm>parse</jsm>(<js>"$foo(1)"</js>, SearchOperatorSet.<jsm>standard</jsm>());

@@ -64,7 +64,7 @@ import jakarta.servlet.*;
  * container configured to accept ambiguous paths could route a request to an admin resource without the filter seeing
  * it, so keep the default, and verify any other container the same way.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p>
  * In a Juneau microservice whose root resource mounts the three resources as children, contribute the registration
  * as a <c>@Bean</c>:
@@ -75,7 +75,7 @@ import jakarta.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link CsrfBoundary}
  * 	<li class='jc'>{@link ServletFilterRegistration}
  * </ul>

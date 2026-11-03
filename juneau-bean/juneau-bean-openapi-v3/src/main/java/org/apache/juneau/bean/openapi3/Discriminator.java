@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.*;
  * polymorphism by allowing schemas to be discriminated based on the value of a specific property. This is particularly
  * useful when working with inheritance hierarchies in object-oriented programming.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Discriminator Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.*;
  * 	<li><c>mapping</c> (map of strings) - An object to hold mappings between payload values and schema names or references
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Discriminator <jv>x</jv> = <jsm>discriminator</jsm>()
@@ -65,7 +65,7 @@ import org.apache.juneau.marshall.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#discriminator-object">OpenAPI Specification &gt; Discriminator Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/">OpenAPI Inheritance and Polymorphism</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

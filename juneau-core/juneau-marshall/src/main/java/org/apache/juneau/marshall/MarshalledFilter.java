@@ -50,7 +50,7 @@ import org.apache.juneau.commons.reflect.*;
  * {@link Marshalled @Marshalled} annotation. Filters can be registered with serializers and parsers to customize
  * how specific classes are handled.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Define a custom filter for MyBean</jc>
  * 	<jk>public class</jk> MyMarshalledFilter <jk>extends</jk> MarshalledFilter.Builder&lt;MyBean&gt; {
@@ -69,7 +69,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='ja'>{@link Marshalled @Marshalled}
  * 	<li class='jc'>{@link BeanInterceptor}
@@ -189,7 +189,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * Adds to the list of classes that make up the bean dictionary for this bean.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#dictionary()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 		 * </ul>
@@ -238,7 +238,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * Specifies properties to exclude from the bean class.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#excludeProperties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesExcludes(String, String)}
@@ -263,7 +263,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * When enabled, fluent setters are detected on beans.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#findFluentSetters()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#findFluentSetters()}
 		 * </ul>
@@ -306,7 +306,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * The interceptor to use for intercepting and altering getter and setter calls.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#interceptor()}
 		 * 	<li class='jc'>{@link BeanInterceptor}
 		 * </ul>
@@ -342,7 +342,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * Identifies a class to be used as the interface class for this and all subclasses.
 		 * When specified, only the list of properties defined on the interface class will be used during serialization.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#interfaceClass()}
 		 * </ul>
 		 *
@@ -374,7 +374,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * Specifies the set and order of names of properties associated with the bean class.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#properties()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(Class, String)}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanProperties(String, String)}
@@ -399,7 +399,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * The class to use for calculating bean property names.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#propertyNamer()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#propertyNamer(Class)}
 		 * 	<li class='jc'>{@link PropertyNamer}
@@ -435,7 +435,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * Specifies one or more properties on a bean that are read-only despite having valid getters.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#readOnlyProperties()}
 		 * 	<li class='ja'>{@link BeanProp#ro()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}
@@ -458,7 +458,7 @@ public class MarshalledFilter implements BeanFilter {
 		/**
 		 * Opt out of alphabetical property sorting for this specific bean.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#unsorted()}
 		 * 	<li class='jf'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
@@ -473,7 +473,7 @@ public class MarshalledFilter implements BeanFilter {
 		/**
 		 * Opt out of alphabetical property sorting for this specific bean.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#unsorted()}
 		 * 	<li class='jf'>{@link MarshallingContext.Builder#unsortedProperties()}
 		 * </ul>
@@ -495,7 +495,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * Identifies a stop class for this class and all subclasses.
 		 * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#stopClass()}
 		 * </ul>
 		 *
@@ -527,7 +527,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * Specifies the dictionary type name for this bean.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link Marshalled#typeName()}
 		 * </ul>
 		 *
@@ -545,7 +545,7 @@ public class MarshalledFilter implements BeanFilter {
 		 * <p>
 		 * Specifies one or more properties on a bean that are write-only despite having valid setters.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link BeanType#writeOnlyProperties()}
 		 * 	<li class='ja'>{@link BeanProp#wo()}
 		 * 	<li class='jm'>{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}

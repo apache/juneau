@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.xml.*;
  * This class is extended by all Atom bean classes ({@link Feed}, {@link Entry}, {@link Link},
  * {@link Person}, {@link Category}, {@link Text}, etc.).
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomCommonAttributes =
  * 		attribute xml:base { atomUri }?,
@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.xml.*;
  * 		undefinedAttribute*
  * </p>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Set base URI for relative link resolution</jc>
  * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
@@ -62,12 +62,12 @@ import org.apache.juneau.marshall.xml.*;
  * 		.setLang(<js>"en"</js>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents <c>atomCommonAttributes</c> in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-2">RFC 4287 - Section 2</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
@@ -119,7 +119,7 @@ public abstract class Common {
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
 	 * 		.setBase(<js>"http://example.org/"</js>);
@@ -141,7 +141,7 @@ public abstract class Common {
 	 * <p>
 	 * Sets the natural language of the element's content (xml:lang attribute).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Text <jv>title</jv> = <jk>new</jk> Text(<js>"text"</js>)
 	 * 		.setText(<js>"Mon Blog"</js>)

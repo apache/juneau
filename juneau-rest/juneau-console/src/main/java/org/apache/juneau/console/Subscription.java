@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * One entry of a card's {@code subscribes} list: a concrete topic wired to a role the card type implements.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// Master/detail: the tasks table reloads with the selected change's id.</jc>
  *   CardSpec <jv>tasks</jv> = CardSpec.<jsm>of</jsm>(<js>"datatables"</js>, <js>"tasks"</js>)

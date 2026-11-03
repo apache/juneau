@@ -27,12 +27,12 @@ import org.apache.juneau.commons.utils.*;
  * This class extends {@link Holder}&lt;{@link String}&gt; and adds convenience methods for string
  * equality testing, which are useful in lambdas and conditional logic.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use synchronization or atomic classes.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a mutable string</jc>
  * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
@@ -48,7 +48,7 @@ import org.apache.juneau.commons.utils.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -60,7 +60,7 @@ public class StringHolder extends Holder<String> {
 	/**
 	 * Creates a new empty string value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertNull</jsm>(<jv>name</jv>.get());
@@ -75,7 +75,7 @@ public class StringHolder extends Holder<String> {
 	/**
 	 * Creates a new string value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"Hello"</js>);
 	 * 	<jsm>assertEquals</jsm>(<js>"Hello"</js>, <jv>name</jv>.get());
@@ -110,7 +110,7 @@ public class StringHolder extends Holder<String> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
 	 * 	<jsm>assertTrue</jsm>(<jv>name</jv>.is(<js>"John"</js>));
@@ -135,7 +135,7 @@ public class StringHolder extends Holder<String> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	StringHolder <jv>name</jv> = StringHolder.<jsm>of</jsm>(<js>"John"</js>);
 	 * 	<jsm>assertTrue</jsm>(<jv>name</jv>.isAny(<js>"John"</js>, <js>"Jane"</js>, <js>"Bob"</js>));

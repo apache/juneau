@@ -33,7 +33,7 @@ import jakarta.servlet.*;
  * Opt-in Spring Boot auto-configuration that mounts every {@link RestServlet} bean at its
  * self-declared top-level path without an explicit {@link ServletRegistrationBean} per servlet.
  *
- * <h5 class='section'>Activation:</h5>
+ * <h2 class='section'>Activation:</h2>
  *
  * <p>
  * Gated behind the property {@code juneau.rest.auto-register=true} (no default &mdash;
@@ -45,7 +45,7 @@ import jakarta.servlet.*;
  * 	juneau.rest.auto-register=true
  * </p>
  *
- * <h5 class='section'>Behavior:</h5>
+ * <h2 class='section'>Behavior:</h2>
  *
  * <p>
  * When active, a single {@link ServletContextInitializer} bean walks all {@link RestServlet} beans
@@ -62,7 +62,7 @@ import jakarta.servlet.*;
  * 		is skipped (it is presumably composed as a child or mounted some other way).
  * </ol>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JuneauServletRegistrations}
  * 	<li class='jm'>{@link RestContext#resolveTopLevelPaths(Class, Object, BeanStore)}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>

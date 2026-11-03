@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	MsgPack <jv>msgPack</jv> = <jk>new</jk> MsgPack();
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jk>byte</jk>[] <jv>bytes</jv> = MsgPack.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

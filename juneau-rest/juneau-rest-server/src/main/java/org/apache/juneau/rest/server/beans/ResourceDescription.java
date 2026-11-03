@@ -29,12 +29,12 @@ import org.apache.juneau.marshall.html.*;
  * <p>
  * Typically used in router resources.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>new</jk> ResourceDescription(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
 
  * </ul>

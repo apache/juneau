@@ -36,7 +36,7 @@ import java.util.Locale;
  * The default is {@link #NaN_AS_NULL} which is JSON-spec-compliant per RFC 8259 §6 (non-finite floats
  * are not valid JSON tokens; emitting {@code null} is the closest valid representation).
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#floatFormat() @MarshalledProp(floatFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.
@@ -47,7 +47,7 @@ import java.util.Locale;
  * 	<li>The default constant ({@link #NaN_AS_NULL}).
  * </ol>
  *
- * <h5 class='topic'>Parser leniency</h5>
+ * <h2 class='topic'>Parser leniency</h2>
  *
  * <p>
  * Parsers SHALL accept all of the following wire shapes regardless of the parser-side
@@ -60,7 +60,7 @@ import java.util.Locale;
  * 		preserved as {@code null} when reading into a boxed {@link Double} / {@link Float}.
  * </ul>
  *
- * <h5 class='topic'>JSON-spec compliance</h5>
+ * <h2 class='topic'>JSON-spec compliance</h2>
  *
  * <p>
  * {@link #NaN_AS_NUMBER} is <b>non-standard JSON</b> per RFC 8259 §6 — JSON does not permit {@code NaN} /
@@ -68,7 +68,7 @@ import java.util.Locale;
  * but strict-mode consumers (e.g. some browser {@code JSON.parse} pipelines) will reject them. Use only
  * when you control both ends of the wire.
  *
- * <h5 class='topic'>Binary serializers</h5>
+ * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit native IEEE-754 floats regardless

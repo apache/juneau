@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * Used on methods and fields of {@link BeanStore}-managed objects to denote methods and fields that override and
  * customize beans used by the framework.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	<jc>// Rest resource that uses a customized logger.</jc>
  * 	<ja>@Rest</ja>
@@ -49,7 +49,7 @@ import java.lang.annotation.*;
  * <p>
  * 	The {@link Bean#name()}/{@link Bean#value()} attributes are used to differentiate between named beans.
  * </p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	<jc>// Customized default request headers.</jc>
  * 	<ja>@Bean</ja>(<js>"defaultRequestHeaders"</js>)
@@ -63,7 +63,7 @@ import java.lang.annotation.*;
  * <p>
  * 	The {@link Bean#methodScope()} attribute is used to define beans in the scope of specific {@code @RestOp}-annotated methods.
  * </p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	<jc>// Set a default header on a specific REST method.</jc>
  * 	<jc>// Input parameter is the default header list builder with all annotations applied.</jc>
@@ -81,7 +81,7 @@ import java.lang.annotation.*;
  * 	This annotation can also be used to inject arbitrary beans into the bean store which allows them to be
  * 	passed as resolved parameters on {@code @RestOp}-annotated methods.
  * </p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	<jc>// Custom beans injected into the bean store.</jc>
  * 	<ja>@Bean</ja> MyBean <jv>myBean1</jv> = <jk>new</jk> MyBean();
@@ -96,14 +96,14 @@ import java.lang.annotation.*;
  * 	This annotation can also be used on uninitialized fields.  When fields are uninitialized, they will
  * 	be set during initialization based on beans found in the bean store.
  * </p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	<jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
  * 	<ja>@Bean</ja> RichLogger <jf>logger</jf>;
  * 	<ja>@Bean</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that the BeanStore itself can be accessed this way.</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>Methods and fields can be static or non-static.
  * 	<li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
  * 	<li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.
@@ -114,13 +114,13 @@ import java.lang.annotation.*;
  * 		{@link Bean#methodScope()} annotation can be used to apply to method-level only (when applicable).
  * </ul>
  *
- * <h5 class='section'>Bean names:</h5>
+ * <h2 class='section'>Bean names:</h2>
  * <p>
  * 	Each {@code @Bean} method registers its own result.  Two methods returning the same type are distinguished by name,
  * 	and both beans are kept.  Factory methods on <ja>@Rest</ja> resources and <ja>@Configuration</ja> classes
  * 	are the common use.
  * </p>
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Two beans of the same type, distinguished by name.  Each method's own result is registered.</jc>
  * 	<ja>@Rest</ja>
@@ -138,7 +138,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Precedence (since 10.0.0):</h5>
+ * <h2 class='section'>Precedence (since 10.0.0):</h2>
  * <p>
  * 	{@code @Bean} acts as a <i>programmable default</i>, analogous to Spring's
  * 	<c>&#64;ConditionalOnMissingBean</c>.  When a REST context resolves a framework-managed bean
@@ -166,7 +166,7 @@ import java.lang.annotation.*;
  * 	{@code @Bean} method's type with a Spring-native override such as <c>&#64;Primary</c>).
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanStore}
  * 	<li class='jc'>{@link WritableBeanStore}
  * </ul>

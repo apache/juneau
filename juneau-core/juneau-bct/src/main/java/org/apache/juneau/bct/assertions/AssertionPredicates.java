@@ -37,7 +37,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>{@link FluentListAssertion#isEach(Predicate...)}
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Asserts that a list contains te specified values.</jc>
  * 	List&lt;Object&gt; <jv>myList</jv> = AList.<jsm>of</jsm>(...);
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.utils.*;
  * 		.is(<jsm>eq</jsm>(<js>"foo"</js>), <jsm>any</jsm>(), <jsm>match</jsm>(<js>"bar*"</js>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
@@ -320,6 +320,7 @@ public class AssertionPredicates {
 	 * 		<li>{@link Pattern#LITERAL LITERAL}
 	 * 		<li>{@link Pattern#UNICODE_CHARACTER_CLASS UNICODE_CHARACTER_CLASS}
 	 * 		<li>{@link Pattern#COMMENTS COMMENTS}
+	 * 	</ul>
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> regex(String expression, int flags) {

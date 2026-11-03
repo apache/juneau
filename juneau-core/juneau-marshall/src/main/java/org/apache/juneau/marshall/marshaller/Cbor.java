@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Output is binary (<code><jk>byte</jk>[]</code>) in RFC 8949 CBOR format.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using static convenience methods</jc>
  * 	byte[] <jv>cbor</jv> = Cbor.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jk>byte</jk>[] <jv>bytes</jv> = Cbor.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  * </ul>

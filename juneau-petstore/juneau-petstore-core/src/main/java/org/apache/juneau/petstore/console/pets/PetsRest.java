@@ -46,7 +46,7 @@ import org.apache.juneau.console.widgets.*;
  * appends under {@code pets} as {@code p<petId>} and {@code o<orderId>}.  The Pending changes page is the
  * {@link ChangesRest} child.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// The BQ#6 endpoint behind the table.</jc>
  * 	<ja>@RestPost</ja>(path=<js>"/query"</js>)

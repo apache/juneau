@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Used to resolve parameter values when invoking {@link RestOp}-annotated methods.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A simple parameter resolver that resolves TimeZone parameters from the Time-Zone header.</jc>
  * 	<jc>// (TimeZone parameters are already resolved out-of-the-box; this is purely illustrative.)</jc>
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Rest#restOpArgs()}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
  * </ul>

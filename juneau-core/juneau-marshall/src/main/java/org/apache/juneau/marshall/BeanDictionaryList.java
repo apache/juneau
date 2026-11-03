@@ -29,7 +29,7 @@ import java.util.*;
  * 	<li>Other subclasses of {@link BeanDictionaryMap}.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A bean dictionary list consisting of classes with @Marshalled(typeName) annotations.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryList <jk>extends</jk> BeanDictionaryList {

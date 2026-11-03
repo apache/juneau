@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * Usually used on a subclass of {@link RestServlet}, but can be used to annotate any class that you want to expose as
  * a REST resource.
  *
- * <h5 class='section'>Default response format (content negotiation):</h5>
+ * <h2 class='section'>Default response format (content negotiation):</h2>
  * <p>
  * The response format is <b>not</b> hardwired to JSON.  The serializer used to render a response body is chosen by
  * ordinary HTTP content negotiation &mdash; the request's <c>Accept</c> header is best-matched against the media types
@@ -61,7 +61,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * explicit <c>Accept: application/json</c> header.  See {@link #serializers()} for how serializer ordering determines
  * this default.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
 
  * </ul>
@@ -84,7 +84,7 @@ public @interface Rest {
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -111,7 +111,7 @@ public @interface Rest {
 	 * <c>PATCH</c> is not part of the original HTTP spec), you can add a <c>X-Method: PATCH</c> header on a normal
 	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -152,7 +152,7 @@ public @interface Rest {
 	 * <c>405 Method Not Allowed</c>, so a link can never trigger a write.  On a <c>POST</c>, the parameter may name any
 	 * method in this list.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -175,14 +175,14 @@ public @interface Rest {
 	 * {@link RoleBasedRestGuard} / {@link Auth @Auth}
 	 * / {@code isUserInRole} resolve against the computed identity.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The implementation is instantiated through the resource's bean store (constructor injection).
 	 * 	<li class='note'>
 	 * 		The default {@link org.apache.juneau.rest.server.auth.RestAuthenticator.Null RestAuthenticator.Null} sentinel means &quot;not specified.&quot;
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator — Resource-Level Authentication</a>
 	 * </ul>
 	 *
@@ -198,7 +198,7 @@ public @interface Rest {
 	 * Defines children of this resource.  Each child resource is mounted under its own URL subtree (per the
 	 * child's own {@code @Rest(path=...)} / {@code @Rest(paths=...)}) and constructs its own {@link RestContext}.
 	 *
-	 * <h5 class='section'>Children vs. mixins (resolution semantics)</h5>
+	 * <h4 class='section'>Children vs. mixins (resolution semantics)</h4>
 	 * <p>
 	 * Children are <b>isolated from the parent's resolution chain</b> by design — a child's serializers, parsers,
 	 * guards, hooks, etc. are all resolved against the child's own {@link RestContext} only, NOT walked
@@ -207,13 +207,13 @@ public @interface Rest {
 	 * topic for the rationale (children own their lifecycle and are externally mounted; mixins are inline composers
 	 * sharing the host's URL namespace and resolution chain).
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Children on child are combined with those on parent class.
 	 * 	<li>Children are list parent-to-child in the order they appear in the annotation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources">Child Resources</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server — Mixin Sub-Contexts</a> (for the mixin-vs-child divergence)
 	 * </ul>
@@ -238,7 +238,7 @@ public @interface Rest {
 	 * the remaining scalar seed members are a fallback the child's own explicit {@code @Rest} declaration wins
 	 * over. See {@link Child} for the full semantics.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, maxInput=<js>"10M"</js>)
@@ -252,7 +252,7 @@ public @interface Rest {
 	 * {@code @Child(type=X.class)} with no seed members is the exact equivalent of a bare
 	 * {@code children=X.class} entry.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Child}
 	 * 	<li class='jm'>{@link #children()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ChildResources#host-side-seeding-with-child-1000">Host-side seeding with @Child (10.0.0)</a>
@@ -274,7 +274,7 @@ public @interface Rest {
 	 * Mixin methods are discovered the same way as local operation methods and surface under this resource's URL
 	 * namespace.  On path/method collisions, local methods on this resource win over mixin methods.
 	 *
-	 * <h5 class='section'>Per-mixin RestContext + host-to-mixin inheritance (since 10.0.0)</h5>
+	 * <h4 class='section'>Per-mixin RestContext + host-to-mixin inheritance (since 10.0.0)</h4>
 	 * <p>
 	 * Each mixin class is elevated to its own {@link RestContext} parent-linked to this host's {@link RestContext}.
 	 * The mixin's class-level {@code @Rest(...)} configuration applies to its own endpoints, with inheritance from
@@ -298,7 +298,7 @@ public @interface Rest {
 	 * property — same token set as the host's {@code noInherit} machinery (e.g. {@code "serializers"},
 	 * {@code "guards"}, {@code "messages"}).
 	 *
-	 * <h5 class='section'>Mixins vs. children</h5>
+	 * <h4 class='section'>Mixins vs. children</h4>
 	 * <p>
 	 * Mixins are inline composers that share the host's URL namespace and inherit from the host's resolution chain.
 	 * {@link #children() Children} are independently-mounted resources isolated from the host's resolution chain.
@@ -306,7 +306,7 @@ public @interface Rest {
 	 * <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts#mixin-vs-child-divergence">Mixin-vs-child divergence</a>
 	 * topic for the rationale.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Mixins on child are combined with those on parent class.
 	 * 	<li>Mixins are listed parent-to-child in the order they appear in the annotation.
@@ -319,7 +319,7 @@ public @interface Rest {
 	 * specific mixin's endpoints without editing the mixin class), see the rich {@link #mixinDefs() mixinDefs}
 	 * companion attribute.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jma'>{@link #mixinDefs()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server — Mixin Sub-Contexts</a>
@@ -338,7 +338,7 @@ public @interface Rest {
 	 * guards, serializers, default headers, mount path, etc. &mdash; without subclassing or editing the mixin
 	 * class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		mixinDefs=<ja>@Mixin</ja>(type=FooMixin.<jk>class</jk>, guards=AdminGuard.<jk>class</jk>)
@@ -351,7 +351,7 @@ public @interface Rest {
 	 * here are discovered together (bare classes first, then {@code mixinDefs}).  A {@code @Mixin(type=X.class)}
 	 * with no overrides is the exact equivalent of a bare {@code mixins=X.class} entry.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Mixin}
 	 * 	<li class='jm'>{@link #mixins()}
 	 * </ul>
@@ -398,7 +398,7 @@ public @interface Rest {
 	 * <p>
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -414,12 +414,12 @@ public @interface Rest {
 	 * <p>
 	 * The configuration file .
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Config file is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -447,7 +447,7 @@ public @interface Rest {
 	 * 	<li><js>"false"</js> - Keep initialization lazy until first use (default).
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -477,7 +477,7 @@ public @interface Rest {
 	 * 	<li><js>"false"</js> (default) - Children are constructed eagerly at parent startup.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The first request to a lazy child pays the full construction cost, which can be significant for
 	 * 		heavyweight children.  If predictable first-request latency is required, do not opt in.
@@ -494,7 +494,7 @@ public @interface Rest {
 	 * 		(e.g. <js>"$E{LAZY_CHILDREN,false}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link RestContext.Builder#lazyChildInit(boolean)}
 	 * 	<li class='jm'>{@link #children()}
 	 * </ul>
@@ -509,7 +509,7 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -532,7 +532,7 @@ public @interface Rest {
 	 * Method-level {@link RestGet#allowedSerializerOptions()} values are always merged on top.
 	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
@@ -551,7 +551,7 @@ public @interface Rest {
 	 * <p>
 	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
@@ -572,7 +572,7 @@ public @interface Rest {
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
 	 *
-	 * <h5 class='section'>Mixin sub-contexts (since 10.0.0)</h5>
+	 * <h4 class='section'>Mixin sub-contexts (since 10.0.0)</h4>
 	 * <p>
 	 * On a class declared via {@link #mixins() @Rest(mixins=...)} on a host, {@code noInherit} also blocks the
 	 * host-to-mixin inheritance walk for the named property.  The token set extends to every contribution list
@@ -583,7 +583,7 @@ public @interface Rest {
 	 * chain from the mixin's endpoints (typical pattern for deliberately-unguarded probes like
 	 * {@code HealthMixin}).
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options via HTTP</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server — Mixin Sub-Contexts</a> (for the per-property opt-out semantics)
 	 * </ul>
@@ -598,7 +598,7 @@ public @interface Rest {
 	 * <p>
 	 * Associates one or more {@link RestConverter converters} with a resource class.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Converters on child are combined with those on parent class.
 	 * 	<li>Converters are executed child-to-parent in the order they appear in the annotation.
@@ -618,7 +618,7 @@ public @interface Rest {
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -634,13 +634,13 @@ public @interface Rest {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#defaultCharset}
 	 * 	<li class='ja'>{@link RestGet#defaultCharset}
 	 * 	<li class='ja'>{@link RestPut#defaultCharset}
@@ -661,7 +661,7 @@ public @interface Rest {
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -684,7 +684,7 @@ public @interface Rest {
 	 * 		<li class='jm'>{@link RestRequest#getAttributes()}.
 	 * 	</ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
@@ -696,13 +696,13 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#defaultRequestAttributes()}
 	 * 	<li class='ja'>{@link RestGet#defaultRequestAttributes()}
 	 * 	<li class='ja'>{@link RestPut#defaultRequestAttributes()}
@@ -720,7 +720,7 @@ public @interface Rest {
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -736,7 +736,7 @@ public @interface Rest {
 	 * <p>
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -752,12 +752,12 @@ public @interface Rest {
 	 * <p>
 	 * It is used to populate the Swagger description field.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Description is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -796,7 +796,7 @@ public @interface Rest {
 	 * additional protection here. Set this to <jk>true</jk> to disable the override entirely on any resource
 	 * where it isn't a deliberate feature.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -833,7 +833,7 @@ public @interface Rest {
 	 * 		hierarchy. Default behavior (no opt-in anywhere in the chain) is unchanged from prior releases.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -841,7 +841,7 @@ public @interface Rest {
 	 * 		Use {@link #noInherit()} to prevent inheriting an opt-in from a parent {@code @Rest}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.Problem}
 	 * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.ProblemException}
 	 * 	<li class='jc'>{@link ProblemDetailsProcessor}
@@ -874,7 +874,7 @@ public @interface Rest {
 	 * 		hierarchy. Default behavior (no opt-in anywhere in the chain) is marshalling debug OFF.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -916,7 +916,7 @@ public @interface Rest {
 	 * 		hierarchy.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$E{ENABLE_VIRTUAL_THREADS,false}"</js>).
@@ -926,7 +926,7 @@ public @interface Rest {
 	 * 		under this flag.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#virtualThreads()}
 	 * </ul>
 	 *
@@ -954,7 +954,7 @@ public @interface Rest {
 	 * 		but a missing {@code @Bean} silently falls back to the NoOp singleton — no startup error.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$E{ENABLE_OBSERVABILITY,false}"</js>).
@@ -963,7 +963,7 @@ public @interface Rest {
 	 * 		this resource-level setting.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#observability()}
 	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder}
 	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
@@ -987,13 +987,13 @@ public @interface Rest {
 	 * Per-{@code @RestOp} overrides are available via {@link RestOp#asyncTimeoutMillis()}; the op-level
 	 * setting takes precedence over the resource-level setting.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$E{ASYNC_TIMEOUT_MS,30000}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link AsyncResponseProcessor}
 	 * 	<li class='ja'>{@link RestOp#asyncTimeoutMillis()}
 	 * </ul>
@@ -1018,7 +1018,7 @@ public @interface Rest {
 	 * {@link java.util.concurrent.Executor} registered in the resource's bean store.  Empty string (default)
 	 * means no override — completion callbacks run on the future's natural thread (the existing behavior).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(path=<js>"/api"</js>, asyncCompletionExecutor=<js>"myCompletionPool"</js>)
 	 * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet {
@@ -1039,14 +1039,14 @@ public @interface Rest {
 	 * Per-operation overrides are available via {@link RestOp#asyncCompletionExecutor()} (and the verb annotations).
 	 * A reference to a bean name that does not resolve in the bean store causes a startup failure.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		MDC propagation still works when this executor is set — the
 	 * 		{@link MdcAsyncListener} wraps the callback <em>before</em> it is
 	 * 		routed through the executor, so the MDC snapshot is restored on whichever thread the executor picks.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link AsyncResponseProcessor}
 	 * 	<li class='ja'>{@link RestOp#asyncCompletionExecutor()}
 	 * </ul>
@@ -1067,7 +1067,7 @@ public @interface Rest {
 	 * prepended to the encoder group.
 	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.NoInherit EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
 	 * 	<ja>@Rest</ja>(
@@ -1087,12 +1087,12 @@ public @interface Rest {
 	 * For programmatic equivalents, contribute an {@link EncoderSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")}.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Encoders on child are combined with those on parent class.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders in REST servers</a>
 	 * </ul>
 	 *
@@ -1106,7 +1106,7 @@ public @interface Rest {
 	 * <p>
 	 * Provides default values for {@link FormData @FormData} annotations on method parameters across all methods in this class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		formDataParams={
@@ -1127,7 +1127,7 @@ public @interface Rest {
 	 * <p>
 	 * Associates one or more {@link RestGuard RestGuards} with all REST methods defined in this class.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Guards on child are combined with those on parent class.
 	 * 	<li>Guards are executed child-to-parent in the order they appear in the annotation.
@@ -1144,7 +1144,7 @@ public @interface Rest {
 	 * <p>
 	 * Provides default values for {@link Header @Header} annotations on method parameters across all methods in this class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		headerParams={
@@ -1172,13 +1172,13 @@ public @interface Rest {
 	 * declared {@code Content-Length} or parsed part sizes exceed this ceiling is rejected with a {@code 413}
 	 * response before (or as soon as) the oversized content would otherwise be buffered.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#maxInput}
 	 * 	<li class='ja'>{@link RestPost#maxInput}
 	 * 	<li class='ja'>{@link RestPut#maxInput}
@@ -1213,7 +1213,7 @@ public @interface Rest {
 	 * <p>
 	 * If the bundle name is not specified, the class name of the resource object is used.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1240,7 +1240,7 @@ public @interface Rest {
 	 * prepended to the parser group.
 	 * The {@link org.apache.juneau.marshall.parser.ParserSet.NoInherit ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can consume JSON and XML.</jc>
 	 * 	<ja>@Rest</ja>(
@@ -1261,7 +1261,7 @@ public @interface Rest {
 	 * For programmatic equivalents, contribute a {@link ParserSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")}.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Parsers on child override those on parent class.
 	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.Inherit ParserSet.Inherit} class can be used to inherit and augment values from parent.
@@ -1269,7 +1269,7 @@ public @interface Rest {
 	 * 	<li>Parsers on methods take precedence over those on classes.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -1310,11 +1310,11 @@ public @interface Rest {
 	 * 		On top-level {@link RestServlet} classes deployed as Spring beans when <c>JuneauRestInitializer</c> is being used.
 	 * </ul>
 	 *
-	 * <h5 class='topic'>On child resources</h5>
+	 * <h4 class='topic'>On child resources</h4>
 	 * <p>
 	 * The typical usage is to define a path to a child resource relative to the parent resource.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		children={ChildResource.<jk>class</jk>}
@@ -1345,12 +1345,12 @@ public @interface Rest {
 	 * Note that in this scenario, the <c>path</c> attribute is not defined on the top-level resource.
 	 * Specifying the path on the top-level resource has no effect, but can be used for readability purposes.
 	 *
-	 * <h5 class='topic'>Path variables</h5>
+	 * <h4 class='topic'>Path variables</h4>
 	 * <p>
 	 * The path can contain variables that get resolved to {@link Path @Path} parameters
 	 * or access through the {@link RestRequest#getPathParams()} method.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myResource/{foo}/{bar}"</js>
@@ -1374,7 +1374,7 @@ public @interface Rest {
 	 * When variables are used on a path of a top-level resource deployed as a Spring bean in a Spring Boot application,
 	 * the first part of the URL must be a literal which will be used as the servlet path of the registered servlet.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The leading slash is optional.  <js>"/myResource"</js> and <js>"myResource"</js> is equivalent.
 	 * 	<li class='note'>
@@ -1388,7 +1388,7 @@ public @interface Rest {
 	 * 		ignored &mdash; mixin endpoints land in the host's URL namespace.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Path is searched for in child-to-parent order.
 	 * </ul>
@@ -1408,7 +1408,7 @@ public @interface Rest {
 	 * This is primarily intended for built-in support endpoints such as health probes where multiple exact URLs
 	 * should be served by a single servlet instance.
 	 *
-	 * <h5 class='section'>Runtime substitution (since 10.0.0)</h5>
+	 * <h4 class='section'>Runtime substitution (since 10.0.0)</h4>
 	 * <p>
 	 * Each array element is treated as a template:
 	 * <ol>
@@ -1421,7 +1421,7 @@ public @interface Rest {
 	 * 		A single template element can therefore expand to zero, one, or many mount paths.
 	 * </ol>
 	 *
-	 * <h5 class='figure'>Examples:</h5>
+	 * <h4 class='figure'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// 1. Single key resolving to a multi-value config string.</jc>
 	 * 	<ja>@Rest</ja>(paths={<js>"$C{health.paths}"</js>})
@@ -1433,7 +1433,7 @@ public @interface Rest {
 	 * 	<ja>@Rest</ja>(paths={<js>"$E{HEALTH_PATHS,/healthz,/readyz}"</js>})
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Paths are normalized to servlet path-specs by the hosting runtime.
 	 * 	<li class='note'>
@@ -1462,7 +1462,7 @@ public @interface Rest {
 	 * <p>
 	 * Provides default values for {@link Path @Path} annotations on method parameters across all methods in this class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		pathParams={
@@ -1483,7 +1483,7 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1501,7 +1501,7 @@ public @interface Rest {
 	 * Values specified here are used as defaults when the same property is not explicitly defined on a method parameter's
 	 * {@link Query @Query} annotation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define common query parameters at class level</jc>
 	 * 	<ja>@Rest</ja>(
@@ -1522,7 +1522,7 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		These defaults apply to validation, parsing, and OpenAPI/Swagger documentation generation.
 	 * 	<li class='note'>
@@ -1551,7 +1551,7 @@ public @interface Rest {
 	 * file-system exception, and the like) can't incidentally leak implementation detail to the caller;
 	 * turn it on only for local debugging.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1606,7 +1606,7 @@ public @interface Rest {
 	 * <p>
 	 * This is a shortcut for specifying {@link RestOp#roleGuard()} on all the REST operations on a class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/foo"</js>,
@@ -1617,7 +1617,7 @@ public @interface Rest {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -1659,7 +1659,7 @@ public @interface Rest {
 	 * <p>
 	 * This is a shortcut for specifying {@link RestOp#rolesDeclared()} on all the REST operations on a class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
@@ -1699,7 +1699,7 @@ public @interface Rest {
 	 * prepended to the serializer group.
 	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can produce JSON and XML.</jc>
 	 * 	<ja>@Rest</ja>(
@@ -1720,7 +1720,7 @@ public @interface Rest {
 	 * For programmatic equivalents, contribute a {@link SerializerSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")}.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Serializers on child override those on parent class.
 	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit SerializerSet.Inherit} class can be used to inherit and augment values from parent.
@@ -1728,7 +1728,7 @@ public @interface Rest {
 	 * 	<li>Serializers on methods take precedence over those on classes.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -1754,7 +1754,7 @@ public @interface Rest {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1781,7 +1781,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Static files on child are combined with those on parent class.
 	 * 	<li>Static files are are executed child-to-parent in the order they appear in the annotation.
@@ -1797,7 +1797,7 @@ public @interface Rest {
 	 * <p>
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/addressBook"</js>,
@@ -1814,7 +1814,7 @@ public @interface Rest {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Swagger}
 	 * </ul>
 	 *
@@ -1847,12 +1847,12 @@ public @interface Rest {
 	 * <p>
 	 * It is used to populate the Swagger title field.
 	 *
-	 * <h5 class='section'>Inheritance Rules</h5>
+	 * <h4 class='section'>Inheritance Rules</h4>
 	 * <ul>
 	 * 	<li>Label is searched for in child-to-parent order.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1870,7 +1870,7 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the authority path value for this resource and any child resources.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1886,7 +1886,7 @@ public @interface Rest {
 	 * <p>
 	 * Overrides the context path value for this resource and any child resources.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1905,7 +1905,7 @@ public @interface Rest {
 	 * <p>
 	 * See {@link UriRelativity} for possible values.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
@@ -1924,7 +1924,7 @@ public @interface Rest {
 	 * <p>
 	 * See {@link UriResolution} for possible values.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).

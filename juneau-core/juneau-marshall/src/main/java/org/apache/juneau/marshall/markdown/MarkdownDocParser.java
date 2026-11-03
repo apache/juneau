@@ -23,16 +23,16 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Parses Markdown document-mode output (headings + tables) back to POJOs.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>text/markdown, text/x-markdown</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Extends {@link MarkdownParser} to parse Markdown documents produced by {@link MarkdownDocSerializer}.
  * Heading sections are mapped back to nested bean properties based on heading text matching property names.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse a Markdown document back to a bean</jc>
  * 	String <jv>md</jv> = <js>"# Person\n\n| Property | Value |\n|---|---|\n| name | Alice |\n\n## address\n\n| Property | Value |\n|---|---|\n| city | Boston |"</js>;
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.collections.*;
  * 	MyBean <jv>parsed</jv> = MarkdownDocParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li class='note'>Heading text must match bean property names exactly (case-sensitive).
  * 	<li class='note'>Heading levels must be consistent with serializer output; manually edited heading levels may not parse correctly.
  * 	<li class='note'>A heading followed by a bulleted list is treated as a {@code List&lt;String&gt;} property.
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown</a>
  * </ul>
  */

@@ -43,7 +43,7 @@ import jakarta.servlet.http.*;
  * 		below); otherwise a suppression placeholder + byte count.
  * </ul>
  *
- * <h5 class='section'>Secure-by-default body handling</h5>
+ * <h2 class='section'>Secure-by-default body handling</h2>
  * <p>
  * Bodies are <b>never dumped by default</b>. Dumping is a deliberate operator opt-in behind a single environment-variable
  * master gate, {@code JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES}:
@@ -65,7 +65,7 @@ import jakarta.servlet.http.*;
  * </ul>
  * No bytes appear in any placeholder in any representation.
  *
- * <h5 class='section'>Header redaction and sanitization</h5>
+ * <h2 class='section'>Header redaction and sanitization</h2>
  * <p>
  * Values for a widened, formatter-local credential-bearing header set are masked with {@link RedactedHeaders#REDACTED}.
  * The set starts from {@link RedactedHeaders#DEFAULT} plus {@code X-Auth-Token}, {@code X-Authorization},
@@ -76,14 +76,14 @@ import jakarta.servlet.http.*;
  * text, placeholders) is sanitized against CR/LF/control-char log forging via {@link DebugTextSanitizer}, in
  * <b>mask &rarr; escape &rarr; cap</b> order.
  *
- * <h5 class='section'>Bounds</h5>
+ * <h2 class='section'>Bounds</h2>
  * <p>
  * Bodies are bounded by {@link #bodyCap()} bytes (default <b>8&nbsp;KB</b>) at capture time; headers by
  * {@link #maxHeaders(int)}/{@link #maxHeaderScan(int)}/{@link #maxFieldLength(int)}; the URI by {@link #maxUriLength(int)}.
  * The 8&nbsp;KB body cap is deliberately smaller than {@code EchoMixin}'s 1&nbsp;MB body cap &mdash; debug logging is
  * intended for low-volume operator diagnostics; the two caps are independent by design.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  *

@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Hjson <jv>hjson</jv> = <jk>new</jk> Hjson();
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Hjson.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output - readable mode (Map of name/age):</h5>
+ * <h2 class='figure'>Example output - readable mode (Map of name/age):</h2>
  * <p class='bjson'>
  * 	{
  * 	  name: Alice
@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	}
  * </p>
  *
- * <h5 class='figure'>Example output - compact mode ({@link HjsonC}):</h5>
+ * <h2 class='figure'>Example output - compact mode ({@link HjsonC}):</h2>
  * <p class='bjson'>
  * 	{name:Alice,age:30}
  * </p>
@@ -61,7 +61,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Hjson.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * 	<li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  * </ul>

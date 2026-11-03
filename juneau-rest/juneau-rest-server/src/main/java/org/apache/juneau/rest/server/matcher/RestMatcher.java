@@ -38,7 +38,7 @@ import jakarta.servlet.http.*;
  * This is opposite from the {@link RestOp#guards() @RestOp(guards)} annotation, where all guards are required to match in order to
  * execute the method.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
  *
@@ -69,7 +69,7 @@ import jakarta.servlet.http.*;
  * 		<br>This gives access to the servlet/resource and Java method it's applied to.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
  * </ul>
  */

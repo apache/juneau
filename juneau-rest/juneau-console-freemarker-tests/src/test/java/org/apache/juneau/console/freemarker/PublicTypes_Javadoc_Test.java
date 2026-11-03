@@ -26,11 +26,11 @@ import org.junit.jupiter.api.*;
 
 /**
  * Enforces the standing Juneau convention that every new public type carries a class-level
- * {@code <h5 class='section'>Example:</h5>} Javadoc block and {@code @since 10.0.0}, for exactly the top-level
+ * {@code <h2 class='section'>Example:</h2>} Javadoc block and {@code @since 10.0.0}, for exactly the top-level
  * public types the C3 page-builder work created. Reads source text, not compiled Javadoc (doc comments do not
  * survive into {@code .class} files); a renamed or moved file fails loudly so the audit cannot silently go stale.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jsm>assertHasExampleBlock</jsm>(<jv>juneauRoot</jv>.resolve(<js>"juneau-rest/.../TableSpec.java"</js>));
  * </p>
@@ -76,8 +76,8 @@ class PublicTypes_Javadoc_Test {
 			typeIdx = text.indexOf("public abstract class");
 		assertTrue(typeIdx >= 0, () -> "No public type declaration found in '" + file + "'.");
 		var javadoc = text.substring(0, typeIdx);
-		assertTrue(javadoc.contains("<h5 class='section'>Example:</h5>"),
-			() -> "'" + file + "' is missing the class-level <h5 class='section'>Example:</h5> Javadoc block.");
+		assertTrue(javadoc.contains("<h2 class='section'>Example:</h2>"),
+			() -> "'" + file + "' is missing the class-level <h2 class='section'>Example:</h2> Javadoc block.");
 		assertTrue(javadoc.contains("@since 10.0.0"),
 			() -> "'" + file + "' is missing @since 10.0.0 on its class-level Javadoc.");
 	}

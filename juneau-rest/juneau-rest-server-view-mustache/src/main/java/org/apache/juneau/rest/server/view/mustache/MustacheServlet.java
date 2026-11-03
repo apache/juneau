@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.*;
  * ({@link Rest#paths() @Rest(paths="/mustache/*")}) and inherits the {@code /*} op from
  * {@link ViewServlet}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MustacheViewSupport">Mustache View Support</a>

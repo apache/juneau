@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * Identifies a proxy against a REST interface.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * </ul>
  */
@@ -42,7 +42,7 @@ public @interface Remote {
 	 * the classic Apache-HttpClient transport accepts subclasses of
 	 * <c>org.apache.juneau.http.classic.header.HeaderList</c>; other transports may ignore the value.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supplier class must provide a public no-arg constructor.
 	 * 	<li class='note'>
@@ -59,7 +59,7 @@ public @interface Remote {
 	 * <p>
 	 * Specifies headers to set on all requests.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -83,7 +83,7 @@ public @interface Remote {
 	 * suppressed).  A method-level constant of the same name (see {@code @RemoteOp(queryData=...)} and the verb
 	 * annotations) takes precedence over the interface-level value declared here.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -110,7 +110,7 @@ public @interface Remote {
 	 * suppressed).  A method-level constant of the same name (see {@code @RemoteOp(formData=...)} and the verb
 	 * annotations) takes precedence over the interface-level value declared here.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -132,7 +132,7 @@ public @interface Remote {
 	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -169,7 +169,7 @@ public @interface Remote {
 	 * {@code baseUrl} (see {@code @RemoteOp(baseUrl=...)} and the verb annotations), then this interface-level value,
 	 * then the client root URL.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -199,7 +199,7 @@ public @interface Remote {
 	 * <p>
 	 * A method-level {@link RemoteOp#contentType()} (or verb-annotation equivalent) overrides this default.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -220,7 +220,7 @@ public @interface Remote {
 	 * <p>
 	 * A method-level {@link RemoteOp#accept()} (or verb-annotation equivalent) overrides this default.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -257,7 +257,7 @@ public @interface Remote {
 	 * 	<jk>public</jk> Object method3()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -273,7 +273,7 @@ public @interface Remote {
 	 * <p>
 	 * The default value is <js>"Client-Version"</js>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
@@ -292,7 +292,7 @@ public @interface Remote {
 	 * any method-level ({@code @RemoteOp/@RemoteGet/...(interceptors=...)}) interceptors; the three sets are unioned in
 	 * the order builder &rarr; interface &rarr; method (method-level runs closest to the call).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The member type is {@code Class<?>[]} (not {@code Class<? extends RestCallInterceptor>[]}) because
 	 * 		<c>RestCallInterceptor</c> lives in the {@code juneau-rest-client} module, which this annotation's module
@@ -314,7 +314,7 @@ public @interface Remote {
 	 * duration parser.  A method-level {@code timeout} ({@code @RemoteOp/@RemoteGet/...}) overrides this default.
 	 * Connect timeouts remain a client-level setting (not configurable per call).
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -331,7 +331,7 @@ public @interface Remote {
 	 * A value of {@code 0} (the default) disables retries.  A positive method-level {@code retries} overrides this
 	 * default.  See {@code @RemoteOp(retries=...)} for the retry trigger statuses and the (hard) safety gating rules.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -349,7 +349,7 @@ public @interface Remote {
 	 * request with a non-repeatable body is never retried.  The effective value is the logical OR of this default and
 	 * the method-level value.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -367,7 +367,7 @@ public @interface Remote {
 	 * {@code throws} clause matched, a generic exception is thrown.  The effective value is the logical OR of this
 	 * default and the method-level value.  See {@code @RemoteOp(throwOnError=...)}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -393,7 +393,7 @@ public @interface Remote {
 	 * {@code allowPrivateUrls(...)} setting, and the <js>"RestClient.allowPrivateUrls"</js> system property: any one
 	 * of the three opting in is sufficient.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).

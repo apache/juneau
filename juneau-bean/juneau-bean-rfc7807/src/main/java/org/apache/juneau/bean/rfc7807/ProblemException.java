@@ -34,7 +34,7 @@ package org.apache.juneau.bean.rfc7807;
  * (no {@code juneau-rest-server} dep); the server-side processor recognises {@code ProblemException} and unwraps it
  * for serialization.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Problem}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanRfc7807">juneau-bean-rfc7807</a>
  * </ul>

@@ -29,17 +29,17 @@ import org.apache.juneau.marshall.xml.*;
 /**
  * Serializes POJOs to HTTP responses as XML+SOAP.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Accept</c> types:  <bc>text/xml+soap</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/xml+soap</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

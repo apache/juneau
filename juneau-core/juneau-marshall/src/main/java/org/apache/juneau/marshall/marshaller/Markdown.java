@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Markdown <jv>md</jv> = <jk>new</jk> Markdown();
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Markdown.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bcode'>
  * 	| Property | Value |
  * 	|---|---|
@@ -56,7 +56,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Markdown.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

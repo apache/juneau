@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * the {@code /robots.txt} and {@code /sitemap.xml} URLs become available alongside the host's own
  * endpoints with no further wiring.
  *
- * <h5 class='section'>Hardcoded mount paths:</h5>
+ * <h2 class='section'>Hardcoded mount paths:</h2>
  *
  * <p>
  * Unlike the sibling api-docs and ops mixins (see {@link org.apache.juneau.rest.server.docs.SwaggerMixin},
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * (and consumed by search engines configured to look for the file at that exact path). A
  * runtime mount-path override here would have no practical effect.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The two mount paths
@@ -61,7 +61,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern (see
  * {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=SeoMixin.<jk>class</jk>)
@@ -76,7 +76,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Defaults &amp; behavior:</h5>
+ * <h2 class='section'>Defaults &amp; behavior:</h2>
  *
  * <ul class='spaced-list'>
  * 	<li><b>Robots policy &mdash; deny-all by default.</b> {@code GET /robots.txt} returns
@@ -95,7 +95,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 		{@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='jc'>{@link WellKnownMixin}

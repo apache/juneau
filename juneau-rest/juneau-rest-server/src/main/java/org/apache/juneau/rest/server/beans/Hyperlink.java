@@ -21,7 +21,7 @@ import org.apache.juneau.bean.html5.*;
 /**
  * Defines a simple hyperlink class.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
@@ -46,7 +46,7 @@ import org.apache.juneau.bean.html5.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
  * </ul>
  */

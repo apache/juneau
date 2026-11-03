@@ -34,7 +34,7 @@ package org.apache.juneau.commons.function;
  * 	<li>If both fail, throw {@link IllegalArgumentException}
  * </ol>
  *
- * <h5 class='section'>Example (Spring integration):</h5>
+ * <h2 class='section'>Example (Spring integration):</h2>
  * <p class='bjava'>
  * 	<jc>// Spring singleton factory that creates per-request ItemChannel instances</jc>
  * 	<ja>@Component</ja>
@@ -52,7 +52,7 @@ package org.apache.juneau.commons.function;
  * 	<jk>public class</jk> ItemChannel <jk>implements</jk> BeanChannel&lt;Item&gt; { ... }
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanConsumer} - Parse-only lifecycle interface
  * 	<li class='jc'>{@link BeanSupplier} - Serialize-only lifecycle interface
  * 	<li class='jc'>{@link BeanChannel} - Round-trip lifecycle interface

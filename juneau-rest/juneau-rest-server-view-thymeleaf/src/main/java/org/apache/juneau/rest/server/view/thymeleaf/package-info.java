@@ -37,7 +37,7 @@
  * 		{@code engine.process(templateName, context, writer)}.
  * </ul>
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=ThymeleafMixin.<jk>class</jk>)
@@ -56,7 +56,7 @@
  * 	}
  * </p>
  *
- * <h5 class='section'>Engine-agnostic packaging:</h5>
+ * <h2 class='section'>Engine-agnostic packaging:</h2>
  *
  * <p>
  * The bridge module's main POM declares <b>only</b> {@code org.thymeleaf:thymeleaf} in
@@ -80,7 +80,7 @@
  * the missing dependency and linking to the "Choosing a TemplateEngine" matrix in
  * {@code ThymeleafViewSupport.md}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.View}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

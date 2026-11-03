@@ -39,7 +39,7 @@
  * 		{@code cfg.getTemplate(templateName).process(dataModel, writer)}.
  * </ul>
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=FreemarkerMixin.<jk>class</jk>)
@@ -59,7 +59,7 @@
  * 	}
  * </p>
  *
- * <h5 class='section'>Engine-agnostic packaging:</h5>
+ * <h2 class='section'>Engine-agnostic packaging:</h2>
  *
  * <p>
  * The bridge module's main POM declares <b>only</b> {@code org.freemarker:freemarker} in
@@ -84,14 +84,14 @@
  * naming the missing dependency and linking to the "Choosing a Configuration" matrix in
  * {@code FreemarkerViewSupport.md}.
  *
- * <h5 class='section'>{@code .ftl} vs {@code .ftlh}:</h5>
+ * <h2 class='section'>{@code .ftl} vs {@code .ftlh}:</h2>
  *
  * <p>
  * FreeMarker auto-selects HTML escaping by file extension: {@code .ftlh} templates emit
  * HTML-escaped output, while {@code .ftl} templates emit raw output. For HTML responses, prefer
  * {@code .ftlh} so a future attribute-binding change can't introduce an XSS regression.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.View}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

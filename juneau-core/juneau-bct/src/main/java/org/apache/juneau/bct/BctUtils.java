@@ -30,7 +30,7 @@ import org.opentest4j.*;
  * This class contains static utility methods specific to the Bean-Centric Testing framework.
  * For general-purpose utility methods, use the classes in {@code org.apache.juneau.commons.utils} package.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  *   <li class='jc'>{@link org.apache.juneau.commons.utils.Shorts} - Terse aliases for the domain utility methods, including argument validation
  *   <li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils} - String manipulation methods
@@ -46,7 +46,7 @@ public class BctUtils {
 	 * <p>This method constructs a properly formatted assertion failure with expected and actual values
 	 * for use in test frameworks. The message follows JUnit's standard format for assertion failures.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <jk>if</jk> (!<jsm>eq</jsm>(<jv>expected</jv>, <jv>actual</jv>)) {
 	 *       <jk>throw</jk> <jsm>assertEqualsFailed</jsm>(<jv>expected</jv>, <jv>actual</jv>, () -&gt; <js>"Custom context message with arg %s"</js>, <jv>arg</jv>);
@@ -69,7 +69,7 @@ public class BctUtils {
 	 * structured field strings into tokens. It's commonly used for parsing field lists
 	 * and nested property expressions.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <jk>var</jk> <jv>tokens</jv> = <jsm>tokenize</jsm>(<js>"name,address{street,city},age"</js>);
 	 *   <jc>// Parses nested field expressions</jc>

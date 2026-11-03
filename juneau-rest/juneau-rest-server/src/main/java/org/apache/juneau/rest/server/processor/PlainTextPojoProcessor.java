@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.util.*;
 /**
  * Response handler for plain-old Java objects when a serializer match is not found and they're asking for plain/text or anything.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */

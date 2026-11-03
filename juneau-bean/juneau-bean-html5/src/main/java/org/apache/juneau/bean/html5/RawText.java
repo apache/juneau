@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * Typical use is embedding pre-built script/style bodies into a {@link Script}/{@link Style} element:
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Browser-safe raw JSON sidecar ('&lt;' pre-escaped to \\u003c by the caller).</jc>
  * 	Script <jv>s</jv> = <jsm>script</jsm>(<js>"application/json"</js>).text(<jsm>rawText</jsm>(<jv>escapedJson</jv>));
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.xml.*;
  * back through Juneau's parser.  Callers embedding markup-bearing content are responsible for escaping <js>'&lt;'</js>
  * to the JS/CSS unicode escape <js>"\\u003c"</js> before wrapping.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link HtmlBuilder#rawText(String)}
  * 	<li class='jic'>{@link RawContent}
  * </ul>

@@ -17,7 +17,7 @@
 /**
  * Collections classes.
  *
- * <h5 class='section'>Type hierarchy:</h5>
+ * <h2 class='section'>Type hierarchy:</h2>
  * <ul>
  * 	<li>{@link org.apache.juneau.marshall.collections.MarshalledMap MarshalledMap} / {@link org.apache.juneau.marshall.collections.MarshalledList MarshalledList}
  * 		&mdash; neutral, marshaller-agnostic base classes carrying typed accessors, fluent setters,

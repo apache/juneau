@@ -27,20 +27,20 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses <c>text/event-stream</c> input (WHATWG Server-Sent Events) into Java objects.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types: <bc>text/event-stream</bc>.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Eager parse path — drains the stream into a {@link java.util.List List&lt;SseEvent&gt;}.
  * For true line-driven streaming over long-lived connections, use {@link SseEventReader} directly.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  * </ul>
  */

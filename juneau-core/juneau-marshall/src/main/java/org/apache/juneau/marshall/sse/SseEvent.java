@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.*;
  * and assign the resulting string to {@link #setData(String) setData(...)}. The serializer will
  * split that string on {@code \n} into multiple <c>data:</c> lines per spec.
  *
- * <h5 class='figure'>Example: build and serialize an event:</h5>
+ * <h2 class='figure'>Example: build and serialize an event:</h2>
  * <p class='bjava'>
  * 	SseEvent <jv>event</jv> = <jk>new</jk> SseEvent()
  * 		.setEvent(<js>"progress"</js>)
@@ -53,11 +53,11 @@ import org.apache.juneau.commons.bean.*;
  * 	String <jv>wire</jv> = Sse.<jsm>of</jsm>(<jv>event</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  * 	<li class='link'><a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG HTML §9.2 — Server-sent events</a>
  * </ul>

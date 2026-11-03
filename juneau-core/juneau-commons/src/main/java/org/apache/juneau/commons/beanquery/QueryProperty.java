@@ -33,7 +33,7 @@ import org.apache.juneau.commons.bean.*;
  * and the configured {@link PropertyNamer}, so it is the name serializers emit.  Reads use the getter (or record
  * accessor), else the field.  Writes use the setter, else a non-final field.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	QueryProperty <jv>age</jv> = QueryModel.<jsm>of</jsm>(Person.<jk>class</jk>).getReadableProperty(<js>"age"</js>);
  * 	SearchType <jv>type</jv> = <jv>age</jv>.getSearchType();  <jc>// NUMERIC</jc>
@@ -79,7 +79,7 @@ public final class QueryProperty {
 	 * are {@link SearchType#NUMERIC}; enums are {@link SearchType#ENUM}; dates, calendars and temporals are
 	 * {@link SearchType#TIMESTAMP}; everything else is {@link SearchType#TEXT}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	QueryProperty.<jsm>searchTypeOf</jsm>(<jk>int</jk>.<jk>class</jk>);        <jc>// NUMERIC</jc>
 	 * 	QueryProperty.<jsm>searchTypeOf</jsm>(Instant.<jk>class</jk>);     <jc>// TIMESTAMP</jc>

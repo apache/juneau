@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * Identifies a method parameter on a REST proxy interface whose value supplies the entire request URL (or a
  * root-relative URL) for that single call &mdash; the Retrofit <c>@Url</c> pattern.
  *
- * <h5 class='topic'>Arguments of client-side @Remote-annotated interfaces</h5>
+ * <h2 class='topic'>Arguments of client-side @Remote-annotated interfaces</h2>
  * <p>
  * When the bound argument is non-<jk>null</jk> and non-blank, its string value becomes the effective URL for that
  * invocation, overriding the interface/method-declared path resolution:
@@ -48,7 +48,7 @@ import java.lang.annotation.*;
  * {@link org.apache.juneau.http.remote.Remote#path()} + {@code @RemoteOp(path=...)} and over any declarative
  * {@code baseUrl} override.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Remote</ja>(path=<js>"/api"</js>)
  * 	<jk>public interface</jk> MyProxy {
@@ -58,7 +58,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		At most one <ja>@Url</ja> parameter is allowed per method (validated at proxy-build time).
  * 	<li class='note'>
@@ -71,7 +71,7 @@ import java.lang.annotation.*;
  * 		(<c>RestClient.getRemote(...)</c>), with the same http/https-only scheme guard on both.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * </ul>
  *

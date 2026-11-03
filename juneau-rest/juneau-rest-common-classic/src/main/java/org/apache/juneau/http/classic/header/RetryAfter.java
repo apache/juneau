@@ -33,13 +33,13 @@ import org.apache.juneau.http.*;
  * If an entity is temporarily unavailable, this instructs the client to try again later.
  * Value could be a specified period of time (in seconds) or a HTTP-date.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Retry-After: 120
  * 	Retry-After: Fri, 07 Nov 2014 23:59:59 GMT
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Retry-After response-header field can be used with a 503 (Service Unavailable) response to indicate how long the
  * service is expected to be unavailable to the requesting client.
@@ -62,7 +62,7 @@ import org.apache.juneau.http.*;
  * <p>
  * In the latter example, the delay is 2 minutes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

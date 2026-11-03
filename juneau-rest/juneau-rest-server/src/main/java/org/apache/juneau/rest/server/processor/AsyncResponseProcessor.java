@@ -54,7 +54,7 @@ import jakarta.servlet.http.*;
  * 		{@link ProblemDetailsProcessor}) handles it, then completes the {@code AsyncContext}.
  * </ul>
  *
- * <h5 class='section'>Synchronous fallback</h5>
+ * <h2 class='section'>Synchronous fallback</h2>
  * <p>
  * In environments where {@link HttpServletRequest#startAsync()} is unsupported (most notably
  * Juneau's {@code MockServletRequest}, which returns {@code null}), this processor falls back to a
@@ -63,14 +63,14 @@ import jakarta.servlet.http.*;
  * This keeps the unit-test surface working without requiring a real servlet container while
  * preserving full {@code AsyncContext} semantics in production.
  *
- * <h5 class='section'>Timeout</h5>
+ * <h2 class='section'>Timeout</h2>
  * <p>
  * The async timeout is configurable via {@code @Rest(asyncTimeoutMillis)} /
  * {@code @RestOp(asyncTimeoutMillis)} (default 30s). On timeout the processor cancels the future
  * with {@code mayInterruptIfRunning=true} and writes a {@link HttpServletResponse#SC_GATEWAY_TIMEOUT}
  * response.
  *
- * <h5 class='section'>Bare {@link Future} rejection</h5>
+ * <h2 class='section'>Bare {@link Future} rejection</h2>
  * <p>
  * Bare {@link Future} return types (anything that is a {@code Future} but not a
  * {@link CompletionStage}) are rejected with an {@link InternalServerError} —
@@ -78,7 +78,7 @@ import jakarta.servlet.http.*;
  * cooperation guarantees that {@link CompletableFuture} provides. Handlers that need async dispatch
  * must return {@link CompletableFuture} or {@link CompletionStage}.
  *
- * <h5 class='section'>Completion executor</h5>
+ * <h2 class='section'>Completion executor</h2>
  * <p>
  * When {@code @Rest(asyncCompletionExecutor="poolName")} or the per-op equivalent is set, this processor
  * switches from {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)},
@@ -86,14 +86,14 @@ import jakarta.servlet.http.*;
  * snapshot (see below) is taken on the request thread <em>before</em> the executor routing so the MDC context
  * is always available regardless of which thread the executor picks.
  *
- * <h5 class='section'>Thread-local caveats</h5>
+ * <h2 class='section'>Thread-local caveats</h2>
  * <p>
  * Anything carried via {@link ThreadLocal} (SLF4J MDC, security contexts) does NOT survive the
  * async boundary — the {@code whenComplete} callback typically runs on a different thread than the
  * one that produced the future. {@code RequestAttributes}, {@link org.apache.juneau.commons.svl.VarResolverSession},
  * and {@link java.util.Locale} are request-scoped and survive correctly.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAsyncDispatch">Async Returns + Virtual-Thread Dispatch</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>

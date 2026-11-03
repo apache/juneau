@@ -33,7 +33,7 @@ import org.apache.juneau.petstore.service.*;
  * The classic rows a {@code new PetStore()} loads (pets 1-9, orders 101-103, three users) stay first with their ids;
  * generated rows follow.  Both runners seed this way on startup.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Default seed and clock (what the runners use).</jc>
  * 	PetStore <jv>store</jv> = PetstoreSeed.<jsm>create</jsm>().populate(<jk>new</jk> PetStore());

@@ -653,7 +653,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * <p>
 	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
 	 * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>, <ja>@Path</ja> UUID <jv>personId</jv>) {
@@ -662,14 +662,14 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
 	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#responseProcessors()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
 	 * </ul>
@@ -793,7 +793,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * ContentDisposition.attachment(filename)}).
 	 * </p>
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	<jv>res</jv>.downloadAs(<js>"example.pdf"</js>).setContent(<jv>pdfBytes</jv>);
 	 * </p>
@@ -816,7 +816,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * <c>*</c> is accepted. The header is serialized in canonical form (re-quoted for strong tags,
 	 * <c>W/</c>-prefixed for weak tags).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>res</jv>.eTag(<js>"\"v42\""</js>);  <jc>// ETag: "v42"</jc>
 	 * 	<jv>res</jv>.eTag(<js>"W/\"v42\""</js>);  <jc>// ETag: W/"v42"</jc>
@@ -852,7 +852,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * The instant is rendered in GMT regardless of the JVM's default timezone. The fractional-second
 	 * portion is truncated, matching the per-spec one-second resolution of HTTP-date timestamps.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>res</jv>.lastModified(Instant.<jsm>parse</jsm>(<js>"2026-05-22T00:00:00Z"</js>));
 	 * 	<jc>// Last-Modified: Fri, 22 May 2026 00:00:00 GMT</jc>
@@ -906,7 +906,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	/**
 	 * Sets the <c>Cache-Control</c> response header from a {@link org.apache.juneau.http.header.CacheControl.Builder CacheControl.Builder}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>res</jv>.cacheControl(CacheControl.<jsm>create</jsm>().publicCache().maxAge(3600));
 	 * 	<jc>// Cache-Control: public, max-age=3600</jc>

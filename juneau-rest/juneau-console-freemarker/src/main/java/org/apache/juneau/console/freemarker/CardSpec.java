@@ -27,7 +27,7 @@ import org.apache.juneau.console.views.*;
  * Type-agnostic card entry in the page contract: {@code id}, {@code type}, optional {@code src},
  * {@code title}, {@code template}, plus a type-specific body map. C2 extends the card grammar.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	CardSpec <jv>c</jv> = CardSpec.<jsm>html</jsm>(<js>"intro"</js>).title(<js>"Welcome"</js>).template(<js>"intro"</js>);
  * 	CardSpec <jv>t</jv> = CardSpec.<jsm>of</jsm>(<js>"datatables"</js>, <js>"releases"</js>)

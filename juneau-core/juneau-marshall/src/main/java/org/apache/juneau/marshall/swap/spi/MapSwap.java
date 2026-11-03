@@ -21,7 +21,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * Abstract subclass for object swaps that swap objects for object maps.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A swap that converts beans into generic maps.</jc>
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.collections.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.write(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>
  *

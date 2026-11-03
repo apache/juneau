@@ -37,7 +37,7 @@ import org.apache.juneau.commons.inject.*;
  * 	<li>On constructor and method arguments when the parameter names are not in the compiled bytecode.
  * </ul>
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Without -parameters flag, parameter names would be arg0, arg1, etc.</jc>
  * 	<jk>public class</jk> Person {
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.inject.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Comparison with @Named:</h5>
+ * <h2 class='section'>Comparison with @Named:</h2>
  * <p>
  * Do not confuse this annotation with {@code @Named}, which serves a different purpose:
  * <ul>
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.inject.*;
  * 	<li><b>{@code @Named}</b> - Specifies which named bean to inject (bean qualifier)
  * </ul>
  *
- * <h5 class='section'>Example showing the difference:</h5>
+ * <h2 class='section'>Example showing the difference:</h2>
  * <p class='bjava'>
  * 	<jc>// @Name - for parameter naming</jc>
  * 	<jk>public</jk> Person(<ja>@Name</ja>(<js>"firstName"</js>) String <jv>arg0</jv>) {
@@ -68,7 +68,7 @@ import org.apache.juneau.commons.inject.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@code @Named}
  * 	<li class='jc'>{@link BeanStore}
  * </ul>

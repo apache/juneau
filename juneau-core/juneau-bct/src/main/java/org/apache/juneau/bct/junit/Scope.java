@@ -23,7 +23,7 @@ package org.apache.juneau.bct.junit;
  * Selects whether the override is rebuilt on every test method ({@link #METHOD}) or shared across all test
  * methods in a single test class ({@link #CLASS}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link TestBean} - The annotation that carries this scope.
  * 	<li class='jc'>{@link JuneauBeanStoreExtension} - The JUnit 5 extension that honors this scope.
  * </ul>

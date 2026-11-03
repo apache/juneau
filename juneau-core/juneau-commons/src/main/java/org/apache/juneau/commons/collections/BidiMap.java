@@ -30,7 +30,7 @@ import java.util.*;
  * This implementation provides efficient bidirectional lookups by maintaining two internal maps:
  * a forward map for key-to-value lookups and a reverse map for value-to-key lookups.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul>
  * 	<li>Implements the standard {@link Map} interface for forward key→value lookups
  * 	<li>Provides {@link #getKey(Object)} method for reverse value→key lookups
@@ -40,7 +40,7 @@ import java.util.*;
  * 	<li>Thread-safety: Not thread-safe by default; external synchronization required if accessed by multiple threads
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a bidirectional map</jc>
  * 	BidiMap&lt;String,Integer&gt; <jv>map</jv> = BidiMap.<jsm>create</jsm>()
@@ -56,14 +56,14 @@ import java.util.*;
  * 	String <jv>key</jv> = <jv>map</jv>.getKey(2);  <jc>// Returns "two"</jc>
  * </p>
  *
- * <h5 class='section'>Null Handling:</h5>
+ * <h2 class='section'>Null Handling:</h2>
  * <p>
  * The {@link Builder#add(Object, Object)}/{@link Builder#build()} construction path filters out entries with
  * null keys or values.
  * {@link #put(Object, Object)} and {@link #putAll(Map)} perform <b>no</b> null filtering after construction —
  * null keys and values are stored in both the forward and reverse maps unconditionally.
  *
- * <h5 class='section'>Unmodifiable Instances:</h5>
+ * <h2 class='section'>Unmodifiable Instances:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an unmodifiable bidirectional map</jc>
  * 	BidiMap&lt;String,Integer&gt; <jv>map</jv> = BidiMap.<jsm>create</jsm>()
@@ -73,7 +73,7 @@ import java.util.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -92,7 +92,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * Provides a fluent API for constructing bidirectional maps.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	BidiMap&lt;String,Integer&gt; <jv>map</jv> = BidiMap.<jsm>create</jsm>()
 	 * 		.add(<js>"one"</js>, 1)
@@ -258,7 +258,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	 * <p>
 	 * This is the reverse lookup operation that makes this a bidirectional map.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BidiMap&lt;String,Integer&gt; <jv>map</jv> = BidiMap.<jsm>create</jsm>().add(<js>"two"</js>, 2).build();
 	 * 	String <jv>key</jv> = <jv>map</jv>.getKey(2);  <jc>// Returns "two"</jc>

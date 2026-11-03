@@ -34,12 +34,12 @@ import java.lang.annotation.*;
  * 	<li>Methods and return types of server-side and client-side <ja>@Response</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments of server-side <ja>@RestOp</ja>-annotated methods</h5>
+ * <h2 class='topic'>Arguments of server-side <ja>@RestOp</ja>-annotated methods</h2>
  *
  * <p>
  * On server-side REST, this annotation can be applied to method parameters to identify them as an HTTP response value.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> addPet(<ja>@Content</ja> Pet <jv>pet</jv>, <ja>@StatusCode</ja> Holder&lt;Integer&gt; <jv>status</jv>) {
@@ -51,12 +51,12 @@ import java.lang.annotation.*;
  * <p>
  * The parameter type must be {@link org.apache.juneau.commons.inject.Value} with a parameterized type of {@link Integer}.
  *
- * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated types</h5>
+ * <h2 class='topic'>Public methods of <ja>@Response</ja>-annotated types</h2>
  *
  * <p>
  * On {@link Response @Response}-annotated classes, this method can be used to denote an HTTP status code on a response.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public</jk> Success addPet(Pet <jv>pet</jv>) {
@@ -85,17 +85,16 @@ import java.lang.annotation.*;
  * The method being annotated must be public and return a numeric value.
  *
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * </ul>
  *
- * <h5 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h5>
+ * <h2 class='topic'>Methods and return types of server-side and client-side @Response-annotated interfaces</h2>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Response">@Response</a>
  * </ul>
  *
- * <p>
  */
 @Documented
 @Target({ PARAMETER, METHOD, TYPE })

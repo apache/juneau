@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * {@code @Rest} chain, so builder-supplied values <b>take precedence</b> over the class's own
  * {@link Rest @Rest} annotation values.
  *
- * <h5 class='section'>Self type (CRTP):</h5>
+ * <h2 class='section'>Self type (CRTP):</h2>
  *
  * <p>
  * {@code SELF} is the concrete builder type, left open through the flavor builders and their user subclasses so

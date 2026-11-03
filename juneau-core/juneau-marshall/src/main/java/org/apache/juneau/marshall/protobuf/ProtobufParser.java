@@ -31,17 +31,17 @@ import org.apache.juneau.marshall.parser.*;
 /**
  * Parses the Protocol Buffers <b>binary</b> wire format into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Content-Type</c> types:  <bc>application/protobuf</bc>, <bc>application/x-protobuf</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Parsing requires the target type (<c>parse(bytes, MyBean.<jk>class</jk>)</c>) since the protobuf binary wire is
  * not self-describing.  The target type's field-number/scalar-type table (cached on {@link ProtobufClassMeta}) drives
  * decoding.  Unknown field numbers are skipped correctly by wire type (parsing never breaks) but are not preserved.
  *
- * <h5 class='section'>Limitations / round-trip guarantees:</h5>
+ * <h2 class='section'>Limitations / round-trip guarantees:</h2>
  * <ul class='spaced-list'>
  * 	<li>Lossless for nullable Juneau&hArr;Juneau round-trips.
  * 	<li>proto3-inherent:  a primitive set to its zero value is wire-indistinguishable from unset.
@@ -51,17 +51,17 @@ import org.apache.juneau.marshall.parser.*;
  * 		field carries the full unsigned magnitude.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse protobuf binary bytes into a bean</jc>
  * 	MyBean <jv>bean</jv> = ProtobufParser.<jsf>DEFAULT</jsf>.read(<jv>bytes</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/programming-guides/encoding/">Protocol Buffers Encoding</a>
  * </ul>

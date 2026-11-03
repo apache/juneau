@@ -40,7 +40,7 @@ import java.util.*;
  * copied and exposed as an unmodifiable view. {@code ClaimsPrincipal} can be safely cached and
  * shared across requests.
  *
- * <h5 class='section'>Type coercion contract for {@link #getClaim(String, Class)}:</h5>
+ * <h2 class='section'>Type coercion contract for {@link #getClaim(String, Class)}:</h2>
  *
  * <ul>
  * 	<li>If the underlying value is already an instance of the requested type, it is returned directly.
@@ -57,7 +57,7 @@ import java.util.*;
  * {@code List<String>}, callers can read it back as {@code List.class} or pull individual
  * elements via {@link #getClaims()} and operate on the {@link List} directly.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Auth}
  * 	<li class='jc'>{@link TokenValidator}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7519#section-4">RFC 7519 &sect;4 &mdash; JWT Claims</a>

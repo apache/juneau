@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.*;
  * {@code CsrfBoundary}'s allowed hosts).  The method judged is the one the request claims, so a GET carrying a
  * {@code method} parameter or an override header that claims a write gets the write check.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <ja>@Rest</ja>(path=<js>"/ops/jobs"</js>)
  *   <jk>public class</jk> JobsRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> AsyncJobsMixin, BusEventsMixin {
@@ -51,7 +51,7 @@ import org.apache.juneau.rest.server.*;
  *   }
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// An application with its own CSRF guard puts it in front of the session POST.
  *   // Re-declaring @RestPost here is optional and registers the route once.</jc>

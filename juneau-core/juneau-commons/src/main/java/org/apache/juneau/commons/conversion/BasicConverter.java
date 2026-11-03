@@ -36,6 +36,7 @@ import org.apache.juneau.commons.reflect.*;
  * The following conversions are supported:
  *
  * <table class='styled'>
+ * 	<caption>Supported conversions</caption>
  * 	<tr><th>Input type</th><th>Output type</th><th>Notes</th></tr>
  * 	<tr>
  * 		<td>Any type</td>
@@ -145,7 +146,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	</tr>
  * </table>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe. The singleton instance can be safely shared across multiple threads.
  */

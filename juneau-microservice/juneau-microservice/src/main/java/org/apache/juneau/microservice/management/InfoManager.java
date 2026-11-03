@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.*;
  * build-side stamped {@code Build-*}/{@code Git-*} fields) are reachable here.  When no manifest bean is
  * present the endpoint degrades cleanly to an empty map rather than failing.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>
  *

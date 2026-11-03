@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.staticfile.*;
  * The greedy {@code /htdocs/*} blob handler is not API-meaningful and is excluded from the published
  * Swagger/OpenAPI specification via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link StaticFilesMixin}
  * </ul>
  *

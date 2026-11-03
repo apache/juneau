@@ -37,7 +37,7 @@ import com.nimbusds.oauth2.sdk.id.*;
  * the caller (e.g. the server-side {@code CachingClientCredentialsFlow} decorator or the MCP client's token
  * provider).  Supports RFC 8707 resource-indicator binding via {@link Builder#resource(URI)}.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jk>var</jk> token = OAuthClientCredentialsFlow.<jsm>create</jsm>()
@@ -49,7 +49,7 @@ import com.nimbusds.oauth2.sdk.id.*;
  * 		.acquire();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">RFC 6749 &sect;4.4</a>
  * </ul>

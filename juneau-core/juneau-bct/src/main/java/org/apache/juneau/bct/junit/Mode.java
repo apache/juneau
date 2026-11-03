@@ -23,7 +23,7 @@ package org.apache.juneau.bct.junit;
  * Selects how the {@link JuneauBeanStoreExtension} threads the overlay into the system under test.  See
  * {@link JuneauBeanStoreExtension} for the full {@link #INJECT} vs {@link #OVERLAY} contracts.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link TestBean} - The annotation that carries this mode selector.
  * 	<li class='jc'>{@link JuneauBeanStoreExtension} - The JUnit 5 extension that honors this mode.
  * </ul>

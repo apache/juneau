@@ -46,7 +46,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Non-bean modelled classes.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledAnnotation">@Marshalled Annotation</a>
  * </ul>
  */
@@ -70,14 +70,14 @@ public @interface BeanType {
 	 * <p>
 	 * Specifies a list of properties that should be excluded from the bean's property set.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
 	 * 	<ja>@BeanType</ja>(excludeProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		{@link #xp()} is a shortened synonym for this value.
 	 * 	<li class='note'>
@@ -98,7 +98,7 @@ public @interface BeanType {
 	 * Specifies a {@link BeanFactory} class to use for instantiating
 	 * this class instead of relying on a no-arg constructor or static {@code getInstance()} method.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link BeanFactory}
 	 * </ul>
 	 *
@@ -115,7 +115,7 @@ public @interface BeanType {
 	 * <p>
 	 * When <jk>true</jk>, fluent setters will be detected on beans.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@BeanType</ja>(findFluentSetters=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {
@@ -184,14 +184,14 @@ public @interface BeanType {
 	 * <p>
 	 * The order specified is the same order that the entries will be returned by the bean's property set.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<ja>@BeanType</ja>(properties=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		{@link #p()} is a shortened synonym for this value.
 	 * </ul>
@@ -206,7 +206,7 @@ public @interface BeanType {
 	 * <p>
 	 * Property namers are used to transform bean property names from standard form to some other form.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	 * 	<ja>@BeanType</ja>(propertyNamer=PropertyNamerDLC.<jk>class</jk>)
@@ -224,14 +224,14 @@ public @interface BeanType {
 	 * Specifies one or more properties on a bean that are read-only despite having valid getters.
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from being parsed, but not serialized.</jc>
 	 * 	<ja>@BeanType</ja>(readOnlyProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		{@link #ro()} is a shortened synonym for this value.
 	 * </ul>
@@ -284,7 +284,7 @@ public @interface BeanType {
 	 * When <jk>true</jk>, properties of this bean use declaration order instead: record component order for records,
 	 * field declaration order (superclass first) for other classes, then method-only properties alphabetically.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Disable sorted properties for this specific bean.</jc>
 	 * 	<ja>@BeanType</ja>(unsorted=<jk>true</jk>)
@@ -309,14 +309,14 @@ public @interface BeanType {
 	 * Specifies one or more properties on a bean that are write-only despite having valid setters.
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from being serialized, but not parsed.</jc>
 	 * 	<ja>@BeanType</ja>(writeOnlyProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		{@link #wo()} is a shortened synonym for this value.
 	 * </ul>

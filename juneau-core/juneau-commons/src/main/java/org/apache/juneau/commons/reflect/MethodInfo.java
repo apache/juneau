@@ -41,7 +41,7 @@ import org.apache.juneau.commons.utils.*;
  * API with additional functionality for method introspection, annotation handling, and hierarchy traversal.
  * It's designed to be lightweight, thread-safe, and cached for efficient reuse.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Method introspection - access method metadata, parameters, return type, exceptions
  * 	<li>Annotation support - get annotations from method and overridden methods in hierarchy
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Thread-safe - instances are immutable and safe for concurrent access
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Introspecting method metadata for code generation or analysis
  * 	<li>Finding annotations on methods including those from parent classes
@@ -59,7 +59,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Building frameworks that need to analyze method signatures
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Get MethodInfo from a class</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -76,7 +76,7 @@ import org.apache.juneau.commons.utils.*;
  * 	List&lt;MethodInfo&gt; <jv>matching</jv> = <jv>method</jv>.getMatchingMethods();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ClassInfo} - Class introspection
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
  * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
@@ -93,7 +93,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Creates a MethodInfo wrapper for the specified method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
 	 * 	MethodInfo <jv>mi</jv> = MethodInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>, <jv>m</jv>);
@@ -110,7 +110,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Creates a MethodInfo wrapper for the specified method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
 	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
@@ -132,7 +132,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * This convenience method automatically determines the declaring class from the method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
 	 * 	MethodInfo <jv>mi</jv> = MethodInfo.<jsm>of</jsm>(<jv>m</jv>);
@@ -215,7 +215,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * Same as calling {@link Method#getAnnotatedReturnType()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For method: public @NotNull String getName()</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"getName"</js>);
@@ -271,7 +271,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * this method automatically expands container annotations into individual instances. This allows you to filter for
 	 * a repeatable annotation and get back all individual occurrences without manually handling the container.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get all @Marshalled annotations on this method and overridden methods</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;Bean&gt;&gt; <jv>beans</jv> = <jv>methodInfo</jv>.getAnnotations(Bean.<jk>class</jk>);
@@ -298,7 +298,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * Returns <jk>null</jk> if this method is not an annotation member, or if the annotation member has no default value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For annotation: @interface MyAnnotation { String value() default "default"; }</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyAnnotation.<jk>class</jk>).getMethod(<js>"value"</js>);
@@ -320,7 +320,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * If the return type is a parameterized type, the {@link Type} object returned reflects the actual type parameters used in the source code.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For method: public List&lt;String&gt; getValues()</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getMethod(<js>"getValues"</js>);
@@ -353,7 +353,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>Continue up the hierarchy
 	 * </ol>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Interface and class hierarchy:</jc>
 	 * 	<jk>interface</jk> I1 {
@@ -509,7 +509,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * It checks if each parameter type is present in the specified list, but does not verify
 	 * that the count of each type matches exactly.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 *
 	 * 	<jc>// Example method:</jc>
@@ -730,7 +730,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p>
 	 * A default method is a public non-abstract instance method (i.e., non-static method with a body) declared in an interface.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// For interface: interface MyInterface { default String getName() { return "default"; } }</jc>
 	 * 	MethodInfo <jv>mi</jv> = ClassInfo.<jsm>of</jsm>(MyInterface.<jk>class</jk>).getMethod(<js>"getName"</js>);
@@ -864,7 +864,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>If not found in the bean store, checks the <c>otherBeans</c> parameter.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Parameter Resolution:</h5>
+	 * <h4 class='section'>Parameter Resolution:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
 	 * 		If not found, checks <c>otherBeans</c> for a compatible instance.

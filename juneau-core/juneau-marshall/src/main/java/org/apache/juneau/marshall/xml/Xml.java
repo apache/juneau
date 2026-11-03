@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * 	<li>Override the XML format on a POJO.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
  * </ul>
  */
@@ -55,7 +55,7 @@ public @interface Xml {
 	 * <p>
 	 * Applies only to collection and array bean properties.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@Xml</ja>(childName=<js>"child"</js>}
@@ -100,7 +100,7 @@ public @interface Xml {
 	/**
 	 * The {@link XmlFormat} to use for serializing this object type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *

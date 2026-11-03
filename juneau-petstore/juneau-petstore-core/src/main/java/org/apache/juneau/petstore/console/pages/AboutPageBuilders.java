@@ -21,7 +21,7 @@ import org.apache.juneau.console.freemarker.*;
 /**
  * Builder twin of the About page ({@code about.ftlh}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, AboutPageBuilders.<jsm>about</jsm>());
  * </p>

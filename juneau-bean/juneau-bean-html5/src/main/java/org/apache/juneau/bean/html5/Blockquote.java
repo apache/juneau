@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * rendered as an indented block of text to distinguish it from the surrounding content. The cite
  * attribute can be used to provide a link to the source of the quotation.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple blockquote</jc>
  * 	Blockquote <jv>quote1</jv> = <jsm>blockquote</jsm>().text(<js>"The only way to do great work is to love what you do."</js>);
@@ -55,9 +55,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#blockquote(Object...) blockquote(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

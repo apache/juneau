@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.util.*;
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=WidgetsMixin.class)}; the asset URLs then become
  * available alongside the host's own endpoints.
  *
- * <h5 class='section'>These assets still need the view runtime beside them</h5>
+ * <h2 class='section'>These assets still need the view runtime beside them</h2>
  * <p>
  * The bytes live here, but they are <b>not</b> a standalone widget runtime: the calendar script
  * resolves its glyphs through the rich-view module's icon registry ({@code juneau-icons.js}) and pushes its
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.server.util.*;
  * these assets from before they moved, reading the bytes from <b>this</b> module's classpath.  An existing
  * application therefore keeps working unchanged; a new one composes this mixin.
  *
- * <h5 class='section'>Contract-version handshake:</h5>
+ * <h2 class='section'>Contract-version handshake:</h2>
  * <p>
  * Each {@code *_CONTRACT_VERSION} constant is the handshake stamp the matching runtime bakes in.
  * {@link #CALENDAR_CONTRACT_VERSION} aliases {@link CalendarDef#CONTRACT_VERSION};
@@ -55,7 +55,7 @@ import org.apache.juneau.rest.server.util.*;
  * {@link #HEADER_CONTRACT_VERSION} is a literal (the header bean is gone). The three are deliberately distinct from one another: a calendar-envelope
  * revision must never force a header or bar-sidecar bump, or vice-versa.
  *
- * <h5 class='section'>Cache-busting + versioned URLs:</h5>
+ * <h2 class='section'>Cache-busting + versioned URLs:</h2>
  * <p>
  * {@link #widgetAssetUrl(String)} carries the same {@code ?v=<buildVersion>-<hash8>} content-sensitive cache-buster
  * shape the views mixin uses: an 8-hex-char content hash of the asset's own served bytes, computed once and cached.
@@ -66,7 +66,7 @@ import org.apache.juneau.rest.server.util.*;
  * {@code buildVersion} resolves this module's implementation version rather than a neighbouring module's.  The two
  * modules share the hash function, not a cache.
  *
- * <h5 class='section'>The serving-path {@code Widget.validate()} gate</h5>
+ * <h2 class='section'>The serving-path {@code Widget.validate()} gate</h2>
  * <p>
  * This class also nests {@link WidgetValidationProcessor}, a {@link ResponseProcessor} that calls
  * {@link Widget#validate()} on any REST response content that is a {@link Widget}, fail-closed, ahead of every
@@ -85,7 +85,7 @@ import org.apache.juneau.rest.server.util.*;
  * processor is itself a serving-framework type, so nesting it here keeps that rule literally true rather than
  * requiring an amendment.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link CalendarDef}
  * 	<li class='jc'>{@link WidgetValidationProcessor}
@@ -100,7 +100,7 @@ public class WidgetsMixin {
 	/**
 	 * The URL path at which the reusable-calendar runtime is served (relative to the host mount).
 	 *
-	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <h4 class='section'>Load order is a contract, not a preference:</h4>
 	 * <p>
 	 * This {@code <script>} MUST come after the view module's {@code juneau-views.js}.  The calendar's
 	 * {@code "+N more"} popover is pushed onto the ONE shared layer stack that script publishes, so Escape, focus
@@ -251,14 +251,14 @@ public class WidgetsMixin {
 	 * REST response content that is a {@link Widget}, giving the JSON serving path the same gate the
 	 * {@code juneau-console-views} HTML emitters already give every {@code Widget} they consume.
 	 *
-	 * <h5 class='section'>Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook</h5>
+	 * <h2 class='section'>Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook</h2>
 	 * <p>
 	 * {@code juneau-rest-server} does not (and must not) depend on this module, so a hard-coded validation step
 	 * inside it cannot see {@link Widget} without inverting that dependency. A {@link ResponseProcessor} declared
 	 * here, discovered by every classpath that carries this module via {@code ServiceLoader}, needs no such
 	 * reflection or hoisted marker interface &mdash; see the class Javadoc.
 	 *
-	 * <h5 class='section'>Why {@code NEXT}, never {@code FINISHED}</h5>
+	 * <h2 class='section'>Why {@code NEXT}, never {@code FINISHED}</h2>
 	 * <p>
 	 * This processor validates and declines to handle: it never claims the response, so it cannot perturb chain
 	 * ordering, content-type negotiation, or the {@code NotImplemented} fallthrough. Non-{@link Widget} content
@@ -266,14 +266,14 @@ public class WidgetsMixin {
 	 * {@code org.apache.juneau.rest.server.widget.Widget} SVL resolver &mdash; see the module Javadoc's naming
 	 * collision note) costs one {@code instanceof} test and is otherwise untouched.
 	 *
-	 * <h5 class='section'>Why {@code InternalServerError} (500), not the caller's problem</h5>
+	 * <h2 class='section'>Why {@code InternalServerError} (500), not the caller's problem</h2>
 	 * <p>
 	 * A malformed {@link Widget} reaching the serving path is a <b>server</b> defect &mdash; the client asked for
 	 * a dialog correctly and the server built a broken one &mdash; not an inbound-validation failure of the kind
 	 * {@code ValidationException} (400) is scoped to. The underlying {@link IllegalArgumentException} rides as the
 	 * cause so the message names the failing rule.
 	 *
-	 * <h5 class='section'>Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}</h5>
+	 * <h2 class='section'>Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}</h2>
 	 * <p>
 	 * A widget that already called {@code checked()} is validated twice per response: once at build time, once
 	 * here. No {@code validated} flag is added to skip the second pass &mdash; a mutable "already validated" flag
@@ -281,7 +281,7 @@ public class WidgetsMixin {
 	 * that this module's contract deliberately avoids elsewhere. {@code validate()} is cheap and idempotent, so the
 	 * repeat costs nothing worth building around.
 	 *
-	 * <h5 class='section'>Traversal is top-level only</h5>
+	 * <h2 class='section'>Traversal is top-level only</h2>
 	 * <p>
 	 * Only {@code res.getContent()} itself is tested. Nested widgets are covered by the beans' own recursive
 	 * {@code validate()} (e.g. {@link ModalDef#validate()} &rarr; {@link FormDef#validate()}); a {@link Widget}
@@ -289,7 +289,7 @@ public class WidgetsMixin {
 	 * that shape, and walking one would collide with the unrelated {@code examples.views.Widget} row-bean lists
 	 * some example endpoints do return.
 	 *
-	 * <h5 class='section'>Escape hatch</h5>
+	 * <h2 class='section'>Escape hatch</h2>
 	 * <p>
 	 * A resource that must serve a deliberately-invalid {@link Widget} can override the response-processor chain
 	 * entirely with a {@code @Bean ResponseProcessorList} factory method, which replaces the whole list. There is

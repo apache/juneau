@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 /**
  * Thrown when a petstore operation conflicts with the entity's current state (HTTP 409 at the console layer).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>if</jk> (<jv>pet</jv>.getStatus() == PetStatus.<jsf>SOLD</jsf>)
  * 		<jk>throw new</jk> PetstoreConflictException(<js>"Pet '%s' is already '%s'"</js>, <jv>pet</jv>.getId(), <jv>pet</jv>.getStatus());

@@ -43,14 +43,14 @@ import org.apache.juneau.commons.settings.*;
  * Lazy resolution makes the cycle a non-issue: by the time {@code @Value("${...}")} fires its first
  * lookup, all participating classes are fully initialized.
  *
- * <h5 class='section'>Silence on missing config:</h5>
+ * <h2 class='section'>Silence on missing config:</h2>
  * <p>
  * If no system-default {@link Config} is discoverable (no {@code juneau.cfg} / {@code default.cfg}
  * / {@code application.cfg} / etc. on the classpath or working directory), {@code get(name)}
  * returns {@link PropertyLookupResult#missing()} for every key.  No logging, no exception — many
  * deployments have no classpath config and shouldn't see noise.
  *
- * <h5 class='section'>Ordering:</h5>
+ * <h2 class='section'>Ordering:</h2>
  * <p>
  * {@link #order()} returns {@code 100}, which is "low" in the {@link PropertySourceProvider}
  * scheme — provider-discovered classpath defaults register near the bottom of the source list so

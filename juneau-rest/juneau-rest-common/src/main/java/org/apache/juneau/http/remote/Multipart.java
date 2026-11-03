@@ -32,7 +32,7 @@ import java.lang.annotation.*;
  * {@link org.apache.juneau.http.entity.MultipartBody} and the {@code multipart/form-data} {@code Content-Type}
  * (with its generated boundary) is applied automatically.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Remote</ja>(path=<js>"/api"</js>)
  * 	<jk>public interface</jk> UploadService {
@@ -44,7 +44,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Body-mode exclusivity:</h5>
+ * <h2 class='section'>Body-mode exclusivity:</h2>
  * <p>
  * A method is either <i>multipart</i> ({@code @Multipart} + one or more {@link org.apache.juneau.http.Part @Part}
  * parameters) or <i>single-body</i> ({@link org.apache.juneau.http.Content @Content}), never both.  Declaring both
@@ -52,7 +52,7 @@ import java.lang.annotation.*;
  * parameter without {@code @Multipart} &mdash; is rejected at proxy-build time with an
  * {@link IllegalArgumentException}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		<b>Escape hatch (Option B):</b> for advanced cases you can still hand-assemble a
  * 		{@link org.apache.juneau.http.entity.MultipartBody} and pass it as a single
@@ -62,7 +62,7 @@ import java.lang.annotation.*;
  * 		ignores this annotation.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578">RFC 7578 — multipart/form-data</a>
  * </ul>

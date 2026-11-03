@@ -34,7 +34,7 @@ import java.lang.annotation.*;
  * Currently a marker annotation with no members; it establishes the per-format annotation surface
  * (see {@link YamlApply @YamlApply}) so that members can be added without API changes.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Yaml</ja>
  * 	<jk>public class</jk> MyBean {
@@ -42,7 +42,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://yaml.org/spec/1.2.2/">YAML Specification</a>
  * </ul>
  */

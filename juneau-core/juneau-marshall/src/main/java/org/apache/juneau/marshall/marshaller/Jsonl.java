@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.stream.*;
  * Pairs {@link JsonlSerializer} and {@link JsonlParser} into a single class with convenience
  * to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize to JSONL using instance</jc>
  * 	Jsonl <jv>jsonl</jv> = <jk>new</jk> Jsonl();
@@ -39,14 +39,14 @@ import org.apache.juneau.marshall.stream.*;
  * 	List&lt;MyBean&gt; <jv>in</jv> = Jsonl.<jsm>to</jsm>(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (List of beans):</h5>
+ * <h2 class='figure'>Example output (List of beans):</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30}
  * {"name":"Bob","age":25}
  * {"name":"Carol","age":35}
  * </p>
  *
- * <h5 class='figure'>Complex (bean with nested object and array):</h5>
+ * <h2 class='figure'>Complex (bean with nested object and array):</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30,"address":{"street":"123 Main St","city":"Boston"},"tags":["a","b","c"]}
  * {"name":"Bob","age":25,"address":{"street":"456 Oak Ave","city":"Portland"},"tags":["d","e"]}
@@ -58,7 +58,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Jsonl.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

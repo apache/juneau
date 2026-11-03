@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.serializer.*;
  * {@link Collection} interface. But this class provides useful additional functionality when working with
  * data models constructed from Java Collections Framework objects.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

@@ -21,18 +21,18 @@ import java.io.*;
 /**
  * Used for enabling decompression on requests and compression on responses, such as support for GZIP compression.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Used to wrap input and output streams within compression/decompression streams.
  *
  * <p>
  * Encoders are registered with <c>RestServlets</c> through the <ja>@Rest(encoders)</ja> annotation.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallEncoders">Encoders</a>
 
  * </ul>

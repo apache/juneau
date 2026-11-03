@@ -26,7 +26,7 @@ package org.apache.juneau.rest.server.management;
  * in the resource's bean store.  When no such bean is present, {@link DumpsManager} resolves the default
  * (both disabled) and the endpoints respond {@code 403 Forbidden}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link DumpsManager}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>

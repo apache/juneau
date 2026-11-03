@@ -24,31 +24,31 @@ import org.apache.juneau.marshall.json.*;
 /**
  * Parses any valid JSON text into a POJO model.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Content-Type</c> types:  <bc>application/json5, text/json5</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Identical to {@link JsonParser} but accepts JSON5 syntax (single quotes, comments, trailing commas,
  * unquoted keys) and uses media type <bc>application/json5</bc>. Use this parser when the input may
  * contain JSON5-style syntax.
  *
- * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <h2 class='figure'>Example input (Map of name/age):</h2>
  * <p class='bjson'>
  * 	{name:<js>"Alice"</js>,age:30}
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bjson'>
  * 	{name:<js>"Alice"</js>,age:30,address:{street:<js>"123 Main St"</js>,city:<js>"Boston"</js>,state:<js>"MA"</js>},tags:[<js>"a"</js>,<js>"b"</js>,<js>"c"</js>]}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
  * 	<li class='link'>{@link JsonParser} - For strict RFC 8259 JSON only
  * </ul>

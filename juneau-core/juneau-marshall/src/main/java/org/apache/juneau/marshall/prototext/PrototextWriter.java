@@ -30,11 +30,11 @@ import org.apache.juneau.marshall.serializer.*;
  * Extends {@link SerializerWriter} with protobuf-specific methods for field names,
  * scalar values, message blocks, and list syntax.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not intended for external use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format Specification</a>
  * </ul>
  */

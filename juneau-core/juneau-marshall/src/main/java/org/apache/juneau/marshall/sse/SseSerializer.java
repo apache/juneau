@@ -28,11 +28,11 @@ import org.apache.juneau.marshall.stream.*;
  * Serializes {@link SseEvent} objects to the <c>text/event-stream</c> wire format defined by the
  * <a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG Server-Sent Events spec</a>.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Produces <c>Content-Type</c> types: <bc>text/event-stream</bc>.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Accepts any of the following as input and emits one wire event per element followed by a blank
  * line (the spec's "dispatch" boundary):
@@ -48,11 +48,11 @@ import org.apache.juneau.marshall.stream.*;
  * REST infrastructure flushes the underlying TCP socket and the event is delivered immediately to the
  * client.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  * </ul>
  */

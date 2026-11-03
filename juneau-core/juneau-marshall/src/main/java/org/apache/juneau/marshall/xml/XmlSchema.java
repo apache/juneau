@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * Identifies the default XML namespaces at the package level.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
  * </ul>
  */
@@ -66,7 +66,7 @@ public @interface XmlSchema {
 	 * <p>
 	 * Inherited by child packages.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p>
 	 * Contents of <c>package-info.java</c>...
 	 * <p class='bjava'>

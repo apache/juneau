@@ -35,7 +35,7 @@ import org.opentest4j.*;
  * block at the first closing script tag it sees, even one inside a comment or string, which silently truncates the
  * rest of the resource.  Nothing fails loudly, so this check names each offending file and line instead.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Fail if any *.js or *.css file beside juneau-views.js contains a closing script tag.</jc>
  * 	InlineScriptSafety.<jsm>assertNoScriptCloseTag</jsm>(ViewsMixin.<jk>class</jk>, <js>"/org/apache/juneau/views/juneau-views.js"</js>, <js>".js"</js>, <js>".css"</js>);

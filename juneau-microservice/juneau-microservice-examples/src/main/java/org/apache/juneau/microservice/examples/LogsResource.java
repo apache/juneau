@@ -45,8 +45,9 @@ import org.apache.juneau.rest.server.servlet.*;
 /**
  * REST resource for viewing and accessing log files.
  *
- * <h5 class='section'>Routes</h5>
+ * <h2 class='section'>Routes</h2>
  * <table class='styled'>
+ * 	<caption>Log routes</caption>
  * 	<tr><th>Request</th><th>Does</th></tr>
  * 	<tr><td>{@code GET /logs/{path}}</td><td>Information on a file, or a directory listing</td></tr>
  * 	<tr><td>{@code GET /logs/view/{path}}</td><td>The file's contents as text, or as HTML with {@code ?highlight=true}</td></tr>
@@ -76,7 +77,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * <p>
  * This resource has no authentication of its own.  Do not expose it on an untrusted network.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AdminBoundary}
  * </ul>
  */

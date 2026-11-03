@@ -28,12 +28,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Character sets that are acceptable.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Accept-Charset: utf-8
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Accept-Charset request-header field can be used to indicate what character sets are acceptable for the response.
  *
@@ -70,7 +70,7 @@ import org.apache.juneau.http.*;
  * the Accept-Charset header, then the server SHOULD send an error response with the 406 (not acceptable) status code,
  * though the sending of an unacceptable response is also allowed.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

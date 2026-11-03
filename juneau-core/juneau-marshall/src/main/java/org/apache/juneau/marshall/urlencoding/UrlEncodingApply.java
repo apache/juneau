@@ -31,13 +31,13 @@ import org.apache.juneau.marshall.*;
  * <b>content</b> concern ({@link #value()}), enabling {@link UrlEncoding @UrlEncoding} to be a pure data annotation
  * without marshall-specific application machinery.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@UrlEncodingApply</ja>(on=<js>"com.example.Foo"</js>, value=<ja>@UrlEncoding</ja>(expandedParams=<jk>true</jk>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  * </ul>
  */
@@ -58,7 +58,7 @@ public @interface UrlEncodingApply {
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -72,7 +72,7 @@ public @interface UrlEncodingApply {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of strings.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

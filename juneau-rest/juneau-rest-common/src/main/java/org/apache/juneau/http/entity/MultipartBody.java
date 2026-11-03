@@ -32,7 +32,7 @@ import org.apache.juneau.http.*;
  * per-part {@code Content-Type}, and a body writer.  When {@link #writeTo(OutputStream)} is called the
  * parts are streamed directly — no full-body buffering occurs.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>body</jv> = MultipartBody.<jsm>builder</jsm>()
  * 		.field(<js>"title"</js>, <js>"My Report"</js>)
@@ -44,7 +44,7 @@ import org.apache.juneau.http.*;
  * {@link #isRepeatable()} returns {@code false} when any part wraps a one-shot stream, and {@code true}
  * when all parts are repeatable (e.g. strings, files, byte arrays).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578">RFC 7578 — Returning Values from Forms: multipart/form-data</a>
  * </ul>

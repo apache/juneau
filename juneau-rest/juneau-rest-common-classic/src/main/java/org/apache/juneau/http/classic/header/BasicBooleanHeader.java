@@ -28,13 +28,12 @@ import org.apache.juneau.bct.assertions.*;
 /**
  * Category of headers that consist of a single boolean value.
  *
- * <p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Foo: true
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
@@ -159,7 +158,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response header Foo is true.</jc>
 	 * 	<jv>client</jv>

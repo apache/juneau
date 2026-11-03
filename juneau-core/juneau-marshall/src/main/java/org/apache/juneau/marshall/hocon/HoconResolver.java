@@ -32,7 +32,7 @@ import java.util.stream.*;
  * the path does not exist. Required substitutions (${var}) throw if the path is missing.
  * Circular references are detected and cause an error.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */

@@ -26,7 +26,7 @@ import java.util.*;
  * A server-held CSRF token: a secret minted in this process's memory, embedded into the pages this process
  * serves, and required back on every state-changing request.
  *
- * <h5 class='section'>Why this is a synchronizer token and not a double-submit cookie</h5>
+ * <h2 class='section'>Why this is a synchronizer token and not a double-submit cookie</h2>
  * <p>
  * The cheap, common CSRF design is <i>double submit</i>: the server sets a random value in a cookie, the page
  * reads it back out and echoes it in a header, and the server accepts the request when the cookie and the header
@@ -48,7 +48,7 @@ import java.util.*;
  * from one.  Doing so does not weaken the mechanism slightly &mdash; it reintroduces exactly the bypass described
  * above, because a cookie-borne token is attacker-choosable from any port on the same host.
  *
- * <h5 class='section'>Lifetime</h5>
+ * <h2 class='section'>Lifetime</h2>
  * <p>
  * A token instance is a secret with no expiry and no rotation: it lives as long as the object does.  An
  * application that constructs one at startup therefore gets per-boot tokens, and a restart invalidates every
@@ -56,14 +56,14 @@ import java.util.*;
  * whose server no longer shares any state with it, and requiring a reload is the honest outcome.  Two instances
  * never share a value, so a token minted by one is rejected by the other.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// One token per process, embedded into every page this process serves.</jc>
  * 	SynchronizerToken <jv>token</jv> = SynchronizerToken.<jsm>generate</jsm>();
  * 	String <jv>html</jv> = <js>"&lt;meta name='csrf-token' content='"</js> + <jv>token</jv>.value() + <js>"'&gt;"</js>;
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LoopbackBoundary}
  * </ul>
  *

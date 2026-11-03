@@ -46,7 +46,7 @@ import java.io.*;
  * 	<li class='jac'>{@link StreamedVar}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */
@@ -186,7 +186,7 @@ public abstract class Var {
 	 * 		once at startup.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Folding contract:</h5>
+	 * <h4 class='section'>Folding contract:</h4>
 	 * <p>
 	 * When a {@link Var} returns {@code true} here, the compiler invokes
 	 * {@link #doResolve(VarResolverSession, String)} on a no-bean session at compile time.

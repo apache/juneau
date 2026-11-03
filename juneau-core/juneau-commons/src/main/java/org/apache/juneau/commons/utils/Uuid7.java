@@ -33,7 +33,7 @@ import java.util.*;
  * The {@link SecureRandom} used to fill the random bits is cached per thread ({@link ThreadLocal}) so minting is not a
  * fresh {@link SecureRandom} construction (and potential entropy syscall) on the request path.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc9562.html">RFC 9562 — Universally Unique IDentifiers (UUIDs)</a>
  * </ul>
  */

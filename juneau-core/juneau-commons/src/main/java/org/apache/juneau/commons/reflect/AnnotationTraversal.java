@@ -29,7 +29,7 @@ package org.apache.juneau.commons.reflect;
  * When multiple traversal types are specified, they are automatically sorted by their precedence
  * to ensure consistent behavior regardless of the order they are specified.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// These produce the same result (automatically sorted by precedence):</jc>
  * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> = 
@@ -38,7 +38,7 @@ package org.apache.juneau.commons.reflect;
  * 		annotationProvider.streamClassAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, SELF, PARENTS, PACKAGE);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AnnotationProvider}
  * 	<li class='jm'>{@link AnnotationProvider#find(Class, ClassInfo, AnnotationTraversal...)}
  * 	<li class='jm'>{@link AnnotationProvider#find(Class, MethodInfo, AnnotationTraversal...)}
@@ -53,10 +53,10 @@ public enum AnnotationTraversal {
 	 * <p>
 	 * This searches for annotations directly declared on the target element.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * All element types (classes, methods, fields, constructors, parameters).
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 10 (highest - searched first)
 	 */
 	SELF(10),
@@ -69,16 +69,16 @@ public enum AnnotationTraversal {
 	 * interleaved in child-to-parent order (using {@link ClassInfo#getParentsAndInterfaces()}).
 	 * Default order is child-to-parent unless {@link #REVERSE} is specified.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Classes.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given: class Child extends Parent implements Interface</jc>
 	 * 	<jc>// Traverses parents and interfaces interleaved: Parent → Interface → GrandParent → ...</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 20
 	 */
 	PARENTS(20),
@@ -90,10 +90,10 @@ public enum AnnotationTraversal {
 	 * For methods: Searches annotations on methods with the same signature in parent classes and interfaces.
 	 * This finds annotations on overridden methods.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Methods.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given:</jc>
 	 * 	<jk>class</jk> Parent {
@@ -106,7 +106,7 @@ public enum AnnotationTraversal {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 20
 	 */
 	MATCHING_METHODS(20),
@@ -118,10 +118,10 @@ public enum AnnotationTraversal {
 	 * For parameters: Searches annotations on parameters in matching parent methods or constructors.
 	 * This finds annotations on parameters in overridden methods or parent constructors.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Parameters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given:</jc>
 	 * 	<jk>class</jk> Parent {
@@ -133,7 +133,7 @@ public enum AnnotationTraversal {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 20
 	 */
 	MATCHING_PARAMETERS(20),
@@ -145,16 +145,16 @@ public enum AnnotationTraversal {
 	 * For methods: Searches annotations on the method's return type and its hierarchy.
 	 * Automatically includes {@link #PARENTS} of the return type.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Methods.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given: public MyClass myMethod() {...}</jc>
 	 * 	<jc>// Searches: MyClass hierarchy and its interfaces</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 30
 	 */
 	RETURN_TYPE(30),
@@ -166,16 +166,16 @@ public enum AnnotationTraversal {
 	 * For methods, fields, and constructors: Searches annotations on the declaring class and its parent hierarchy.
 	 * Automatically includes the declaring class and all its parents and interfaces.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Methods, fields, and constructors.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given: class Child extends Parent { void method() {...} }</jc>
 	 * 	<jc>// Searches: Child hierarchy (Child, Parent, interfaces, etc.)</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 35
 	 */
 	DECLARING_CLASS(35),
@@ -187,16 +187,16 @@ public enum AnnotationTraversal {
 	 * For parameters: Searches annotations on the parameter's type and its hierarchy.
 	 * Automatically includes {@link #PARENTS} and {@link #PACKAGE} of the parameter type.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Parameters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Given: void method(MyClass param) {...}</jc>
 	 * 	<jc>// Searches: MyClass hierarchy, its interfaces, and package</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 30
 	 */
 	PARAMETER_TYPE(30),
@@ -207,15 +207,15 @@ public enum AnnotationTraversal {
 	 * <p>
 	 * Searches for annotations on the package-info class.
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * Classes and parameters (via {@link #PARAMETER_TYPE}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Searches annotations in package-info.java</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 40 (lowest - searched last)
 	 */
 	PACKAGE(40),
@@ -231,10 +231,10 @@ public enum AnnotationTraversal {
 	 * By default, traversals return results in child-to-parent order (child annotations first).
 	 * Using {@code REVERSE} changes this to parent-to-child order (parent annotations first).
 	 *
-	 * <h5 class='section'>Applicable to:</h5>
+	 * <h4 class='section'>Applicable to:</h4>
 	 * All stream-based traversal methods.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Default (child-first): Child → Parent → GrandParent</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> = 
@@ -245,7 +245,7 @@ public enum AnnotationTraversal {
 	 * 		streamClassAnnotations(MyAnnotation.<jk>class</jk>, <jv>ci</jv>, PARENTS, REVERSE);
 	 * </p>
 	 *
-	 * <h5 class='section'>Order:</h5>
+	 * <h4 class='section'>Order:</h4>
 	 * Precedence: 999 (modifier - does not affect traversal order)
 	 */
 	REVERSE(999);

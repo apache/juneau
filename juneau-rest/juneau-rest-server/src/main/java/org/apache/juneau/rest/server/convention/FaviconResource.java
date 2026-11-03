@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * under a parent at the subtree {@code /favicon.ico} and serves the configured favicon bytes by
  * delegating to a shared flavor-neutral {@link FaviconProvider} worker bean &mdash; so the forms cannot drift.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link FaviconServlet}
  * 	<li class='jc'>{@link FaviconProvider}

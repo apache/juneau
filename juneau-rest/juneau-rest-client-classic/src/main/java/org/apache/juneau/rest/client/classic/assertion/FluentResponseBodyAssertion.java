@@ -29,8 +29,7 @@ import org.apache.juneau.bct.assertions.*;
 /**
  * Used for fluent assertion calls against {@link ResponseContent} objects.
  *
- * <h5 class='topic'>Test Methods</h5>
- * <p>
+ * <h2 class='topic'>Test Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentResponseBodyAssertion}
  * 	<ul class='javatreec'>
@@ -57,8 +56,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
- * <p>
+ * <h2 class='topic'>Transform Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentResponseBodyAssertion}
  * 	<ul class='javatreec'>
@@ -75,8 +73,7 @@ import org.apache.juneau.bct.assertions.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
- * <p>
+ * <h2 class='topic'>Configuration Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -88,7 +85,7 @@ import org.apache.juneau.bct.assertions.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
@@ -141,7 +138,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	/**
 	 * Converts the body to a type using {@link ResponseContent#as(Class)} and then returns the value as an object assertion.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
 	 * 	<jv>client</jv>
@@ -161,7 +158,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	/**
 	 * Converts the body to a type using {@link ResponseContent#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
 	 * 	<jv>client</jv>
@@ -184,7 +181,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	/**
 	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "foo".</jc>
 	 * 	<jv>client</jv>
@@ -193,7 +190,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -211,7 +208,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	<jv>client</jv>
@@ -263,7 +260,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>

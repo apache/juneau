@@ -29,13 +29,13 @@ import org.apache.juneau.commons.function.*;
 /**
  * Simple in-memory cache for storing and retrieving objects by three-part keys.
  *
- * <h5 class='section'>Overview:</h5>
+ * <h2 class='section'>Overview:</h2>
  * <p>
  * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for three-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by three keys.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Thread-safe concurrent access without external synchronization
  * 	<li>Three-part composite key support
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Can be disabled entirely via builder or system property
  * </ul>
  *
- * <h5 class='section'>WEAK Mode Semantics:</h5>
+ * <h2 class='section'>WEAK Mode Semantics:</h2>
  * <p>
  * {@link CacheMode#WEAK} on this class is <b>best-effort</b>, not retention-guaranteed. Each lookup synthesizes
  * an internal {@code Tuple3} composite key that is never exposed to the caller, so that key is reachable only
@@ -58,7 +58,7 @@ import org.apache.juneau.commons.function.*;
  * remains strongly reachable elsewhere. If guaranteed retention is required, use {@link CacheMode#FULL} (the
  * default mode) instead of WEAK. See {@link CacheMode#WEAK} for details.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a cache with default supplier</jc>
  * 	Cache3&lt;String,String,String,Translation&gt; <jv>translationCache</jv> = Cache3
@@ -74,7 +74,7 @@ import org.apache.juneau.commons.function.*;
  * 	Translation <jv>t2</jv> = <jv>translationCache</jv>.get(<js>"fr"</js>, <js>"FR"</js>, <js>"greeting"</js>, () -&gt; customTranslation);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link Cache}
  * 	<li class='jc'>{@link Cache2}

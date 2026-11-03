@@ -27,7 +27,7 @@
  * {@code http.response.status_code}, {@code http.route}), and continues an inbound W3C trace context
  * carried on the {@code traceparent} / {@code tracestate} request headers.
  *
- * <h5 class='topic'>Containment</h5>
+ * <h2 class='topic'>Containment</h2>
  *
  * <p>
  * The {@code io.opentelemetry:opentelemetry-api} dependency is declared in {@code provided} scope on
@@ -41,7 +41,7 @@
  * 		security patches) without waiting for a Juneau release.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.otel.OtelTracerHook OtelTracerHook}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}

@@ -30,7 +30,7 @@ import java.util.function.*;
  * and a {@link #reset()} method to clear the cache, forcing recomputation on the next call to {@link #get()}.
  * It also inherits all Optional-like convenience methods from {@link NullableSupplier}.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a memoizer</jc>
  * 	Memoizer&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> Memoizer&lt;&gt;(() -&gt; expensiveComputation());
@@ -51,13 +51,13 @@ import java.util.function.*;
  * 	String <jv>result3</jv> = <jv>supplier</jv>.get();  <jc>// Recomputes</jc>
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe for both {@link #get()} and {@link #reset()} operations.
  * If multiple threads call get() simultaneously after a reset, the supplier may be invoked
  * multiple times, but only one result will be cached.
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul>
  * 	<li>The supplier may be called multiple times if threads race, but only one result is cached.
  * 	<li>The cached value can be <jk>null</jk> if the supplier returns <jk>null</jk>.
@@ -66,7 +66,7 @@ import java.util.function.*;
  * 	<li>Inherits all Optional-like methods from {@link NullableSupplier} (isPresent(), isEmpty(), map(), orElse(), etc.).
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jm'>{@link Suppliers#memoizer(Supplier)}
  * 	<li class='jc'>{@link NullableSupplier} - Base interface providing Optional-like methods
@@ -133,7 +133,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 * This method is thread-safe and is particularly useful for testing when you need to
 	 * inject a specific value without invoking the supplier.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a memoizer</jc>
 	 * 	Memoizer&lt;String&gt; <jv>supplier</jv> = <jk>new</jk> Memoizer&lt;&gt;(() -&gt; <js>"computed"</js>);

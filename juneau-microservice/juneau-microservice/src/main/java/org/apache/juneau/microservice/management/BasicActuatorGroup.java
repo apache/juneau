@@ -63,7 +63,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * ({@code /threaddump}, {@code /heapdump}) are deny-by-default via {@link DumpsSettings}.  No auth provider is
  * auto-wired (explicit-over-magic).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>
  *

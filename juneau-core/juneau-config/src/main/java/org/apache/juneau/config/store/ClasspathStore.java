@@ -33,7 +33,7 @@ import org.apache.juneau.commons.utils.*;
  * <p>
  * Configuration files retrieved from the classpath can be modified but not persisted.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */

@@ -45,13 +45,13 @@ import org.apache.juneau.marshall.html.*;
  * helper is intentionally scoped to the {@code juneau-console-datatables} module so the marshall core and
  * {@code HtmlDocSerializer} stay decoupled from any DataTables-specific rendering.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Server-render the rows; the browser calls $('#releases').DataTable() to upgrade it.</jc>
  * 	Table <jv>t</jv> = DataTablesTable.<jsm>of</jsm>(<js>"releases"</js>, <jv>releases</jv>, Release.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link DataTablesColumns}
  * 	<li class='jc'>{@link DataTablesMixin}
  * 	<li class='link'><a class="doclink" href="https://datatables.net/examples/data_sources/dom">DataTables from a pre-rendered DOM table</a>

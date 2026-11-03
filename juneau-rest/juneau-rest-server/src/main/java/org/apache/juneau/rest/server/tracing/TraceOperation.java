@@ -34,7 +34,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * {@code juneau-rest-server-tracing-otel}) a low-cardinality span name plus a small set of attributes
  * derived from resolved request arguments, without either side depending on the other's types.
  *
- * <h5 class='topic'>Default operation</h5>
+ * <h2 class='topic'>Default operation</h2>
  *
  * <p>
  * {@link #DEFAULT} carries no span name and no attributes. It is the value
@@ -43,7 +43,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * whatever span name / attributes it would otherwise derive from the {@link org.apache.juneau.rest.server.RestRequest}
  * itself (HTTP method, route, etc.); it is not required to name every span after a non-HTTP operation.
  *
- * <h5 class='topic'>Attribute-name constants</h5>
+ * <h2 class='topic'>Attribute-name constants</h2>
  *
  * <p>
  * The attribute-name constants declared here are the exact, pinned MCP/GenAI span-attribute keys that
@@ -61,7 +61,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * levels may change in a future semantic-conventions release; this pin must be re-checked before any
  * OpenTelemetry or semantic-conventions dependency upgrade touches MCP tracing.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link TraceContextCarrier}
  * 	<li class='jc'>{@link TraceContextExtractor}
  * 	<li class='jc'>{@link TracerHook}

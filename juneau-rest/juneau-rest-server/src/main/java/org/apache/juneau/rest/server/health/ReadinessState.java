@@ -32,7 +32,7 @@ import org.apache.juneau.commons.inject.*;
  * {@link HealthProbe#LIVE LIVE} probe ({@code /livez}) is intentionally <b>not</b> gated, so Kubernetes does
  * not kill the pod mid-drain.
  *
- * <h5 class='section'>Resolution:</h5>
+ * <h2 class='section'>Resolution:</h2>
  * <p>
  * {@link HealthAggregator} and the embedded-server shutdown hooks resolve the state via
  * {@link #resolve(BeanStore)}: a {@code ReadinessState} bean registered in the relevant {@link BeanStore} wins;
@@ -49,7 +49,7 @@ import org.apache.juneau.commons.inject.*;
  * <p>
  * This class is thread-safe; the flag is {@code volatile}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link HealthAggregator}
  * </ul>
  *
@@ -156,7 +156,7 @@ public final class ReadinessState {
 	 * re-published on every server (re)start does not accumulate duplicate callbacks.  Callbacks run on the
 	 * thread that calls {@link #markOutOfService()}; exceptions they throw are swallowed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jv>state</jv>.onOutOfService(<js>"my-streams"</js>, () -&gt; <jv>streamRegistry</jv>.closeAll());
 	 * </p>

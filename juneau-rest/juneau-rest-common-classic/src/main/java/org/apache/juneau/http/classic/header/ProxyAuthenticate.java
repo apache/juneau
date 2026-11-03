@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Request authentication to access the proxy.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Proxy-Authenticate: Basic
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Proxy-Authenticate response-header field MUST be included as part of a 407 (Proxy Authentication Required)
  * response.
@@ -49,7 +49,7 @@ import org.apache.juneau.http.*;
  * However, an intermediate proxy might need to obtain its own credentials by requesting them from the downstream
  * client, which in some circumstances will appear as if the proxy is forwarding the Proxy-Authenticate header field.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

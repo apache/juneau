@@ -45,7 +45,7 @@ import org.apache.juneau.petstore.dto.*;
  * <p>
  * Every successful create, update or delete is recorded in the audit trail; see {@link #getAudit()}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */
@@ -218,7 +218,7 @@ public class PetStore {
 	/**
 	 * Adds a batch of available pets, one per requested count, and records one summary {@code RESTOCK} audit entry.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>var</jk> <jv>added</jv> = <jv>store</jv>.restock(Map.<jsm>of</jsm>(Species.<jsf>DOG</jsf>, 2, Species.<jsf>CAT</jsf>, 1), <js>"job:restock"</js>);
 	 * 	<jc>// 3 new pets named "DOG #101", "DOG #102", "CAT #103" (species + store-unique id), plus one RESTOCK audit entry.</jc>
@@ -616,7 +616,7 @@ public class PetStore {
 	/**
 	 * Opens a query session over a snapshot of the pets.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> (<jk>var</jk> <jv>s</jv> = <jv>store</jv>.queryPets()) {
 	 * 		<jk>return</jk> DataTablesQuery.<jsm>run</jsm>(<jv>req</jv>, <jv>s</jv>);

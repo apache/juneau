@@ -29,7 +29,7 @@ import org.apache.juneau.commons.function.*;
  * This class provides a flexible, builder-based approach to defining properties on objects,
  * supporting both method-based and field-based access patterns.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Type-safe - generic types for object and value types
  * 	<li>Builder-based - fluent API for construction
@@ -38,7 +38,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li>Exception handling - uses {@link ThrowingFunction} and {@link ThrowingConsumer2} for exception support
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create property with method getter and setter</jc>
  * 	Property&lt;MyClass, String&gt; <jv>nameProperty</jv> = Property
@@ -69,7 +69,7 @@ import org.apache.juneau.commons.function.*;
  * 	String <jv>value</jv> = <jv>nameProperty</jv>.get(<jv>obj</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
@@ -87,7 +87,7 @@ public class Property<T,V> {
 	/**
 	 * Creates a new builder for constructing a property.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Property&lt;MyClass, String&gt; <jv>prop</jv> = Property
 	 * 		.&lt;MyClass, String&gt;<jsm>create</jsm>()

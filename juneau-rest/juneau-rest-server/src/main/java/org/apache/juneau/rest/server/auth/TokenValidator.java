@@ -40,7 +40,7 @@ import java.security.*;
  * 		IdP; the validator caches successful responses for a short TTL.
  * </ul>
  *
- * <h5 class='topic'>Contract</h5>
+ * <h2 class='topic'>Contract</h2>
  *
  * <p>
  * On success, return a non-null {@link Principal}. On failure, throw {@link AuthenticationException}
@@ -54,7 +54,7 @@ import java.security.*;
  * header &mdash; the guard does not pre-trim or unquote. Validators should treat it as untrusted input
  * (no logging of full tokens, no exception messages echoing the token, etc.).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6750">RFC 6750 &mdash; Bearer Token Usage</a>

@@ -25,7 +25,7 @@
  * {@code toString()}'d, logged, or dumped.  Backends that reach an OS keychain, a remote vault, or a cloud
  * secret manager live in separate opt-in modules, never here.
  *
- * <h5 class='section'>Key types:</h5>
+ * <h2 class='section'>Key types:</h2>
  * <ul>
  * 	<li>{@link org.apache.juneau.commons.secret.SecretStore SecretStore} &mdash; the SPI (store / find / exists / delete).
  * 	<li>{@link org.apache.juneau.commons.secret.InMemorySecretStore InMemorySecretStore} &mdash; the zero-config, process-local default.

@@ -28,7 +28,7 @@ import java.util.regex.*;
  * {@code Nd} and {@code Nh} end at now floored to the minute; {@code ytd} starts at January 1, 00:00 UTC.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RangeSection.<jsm>quick</jsm>(<js>"7d"</js>, <js>"30d"</js>, <js>"90d"</js>, <js>"ytd"</js>).custom(<jk>true</jk>).defaultPreset(<js>"30d"</js>)
  * 		.publishes(Topics.<jsm>filter</jsm>(<js>"range"</js>));

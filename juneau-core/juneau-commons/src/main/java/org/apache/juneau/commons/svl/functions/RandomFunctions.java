@@ -32,7 +32,7 @@ import org.apache.juneau.commons.svl.*;
  * {@code Supplier<String>} field to get fresh-per-{@code .get()} semantics, or a bare
  * {@code String} field to capture once at bean construction.
  *
- * <h5 class='section'>Cryptographic strength:</h5>
+ * <h2 class='section'>Cryptographic strength:</h2>
  * <ul>
  * 	<li>{@link Rand}, {@link RandInt}, {@link RandLong}, {@link RandString}, {@link RandChoice}
  * 		are backed by {@link ThreadLocalRandom}. Threadsafe; <b>NOT</b> cryptographically secure.

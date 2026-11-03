@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Used to specify directives that must be obeyed by all caching mechanisms along the request-response chain.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Cache-Control: no-cache
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Cache-Control general-header field is used to specify directives that MUST be obeyed by all caching mechanisms
  * along the request/response chain.
@@ -95,7 +95,7 @@ import org.apache.juneau.http.*;
  * 	<li>Extensions to the caching system.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

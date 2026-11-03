@@ -29,7 +29,7 @@ import java.util.*;
  * This tree allows handling of path expressions ({@code a.b.c = value}), object merging (duplicate keys merge),
  * value concatenation, and substitution resolution.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */

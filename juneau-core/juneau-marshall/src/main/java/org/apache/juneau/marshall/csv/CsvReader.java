@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.parser.*;
  *   <li>Optional whitespace trimming
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not intended for external use.
  * </ul>
  */

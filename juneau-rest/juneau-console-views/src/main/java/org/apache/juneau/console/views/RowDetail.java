@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.collections.*;
  * <p>
  * {@link #CONTRACT_VERSION} and {@link #response(Object)} describe the JSON that endpoint returns.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>table</jv>.detail(RowDetail.<jsm>create</jsm>(<js>"/rest/work/data/{id}"</js>)
  * 		.title(<js>"{workId}"</js>).icon(<js>"search"</js>)

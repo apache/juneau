@@ -48,7 +48,7 @@ import jakarta.servlet.*;
  * string is hard-coded here; a servlet that resolves to no top-level paths is rejected with an
  * {@link IllegalArgumentException} (declare {@code @Rest(paths=...)} or override {@code getPaths()}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JuneauRestAutoConfiguration}
  * 	<li class='jm'>{@link RestContext#resolveTopLevelPaths(Class, Object, BeanStore)}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>

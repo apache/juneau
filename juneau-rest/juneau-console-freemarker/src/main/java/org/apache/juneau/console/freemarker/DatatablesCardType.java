@@ -35,7 +35,7 @@ import org.apache.juneau.console.widgets.*;
  * ({@code key}/{@code label}, not VIEW_META's {@code data}/{@code title}); {@code NS.card.liftCatalog}
  * (juneau-views.js) does the lift at mount time.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   CardSource <jv>s</jv> = CardSource.<jsm>create</jsm>(<js>"datatables"</js>, <js>"releases"</js>)
  *     .body(<js>"{dataUrl:'/rest/releases/data', columns:[{key:'version', label:'Version', searchType:'text'}]}"</js>)

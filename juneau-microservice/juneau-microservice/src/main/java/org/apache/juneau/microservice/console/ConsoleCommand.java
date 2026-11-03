@@ -96,7 +96,7 @@ import org.apache.juneau.commons.runtime.*;
  * 	<jv>args</jv>.get(<js>"optArg2"</js>, String[].<jk>class</jk>);  <jc>// ["baz qux"]</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  * </ul>
  */

@@ -32,13 +32,13 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to YAML.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>application/yaml, text/yaml</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/yaml</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * The conversion is as follows...
  * <ul class='spaced-list'>
@@ -73,7 +73,7 @@ import org.apache.juneau.marshall.stream.*;
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String <jv>yaml</jv> = YamlSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -88,13 +88,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>yaml</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (LinkedHashMap of name/age):</h5>
+ * <h2 class='figure'>Example output (LinkedHashMap of name/age):</h2>
  * <p class='bcode'>
  * 	name: Alice
  * 	age: 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested bean + array; bean properties are sorted alphabetically by default):</h5>
+ * <h2 class='figure'>Complex (nested bean + array; bean properties are sorted alphabetically by default):</h2>
  * <p class='bcode'>
  * 	address:
  * 	  city: Boston
@@ -108,7 +108,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	  - c
  * </p>
  *
- * <h5 class='section'>Limitations compared to JSON</h5>
+ * <h2 class='section'>Limitations compared to JSON</h2>
  * <p>
  * The YAML serializer has fewer configuration options than {@link JsonSerializer}:
  * <ul class='spaced-list'>
@@ -120,11 +120,11 @@ import org.apache.juneau.marshall.stream.*;
  * 		No strict vs lax output modes; YAML output follows a consistent, human-readable style.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlSupport">YAML</a>
  * </ul>
  */

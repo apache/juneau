@@ -25,7 +25,7 @@ import java.io.*;
  * Parses compact binary RDF (Protocol Buffers encoding) into POJOs. Accepts byte arrays and input streams.
  * Semantically equivalent to RDF/XML parsing—produces the same Java objects.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse RDF/PROTO bytes into a bean.</jc>
  * 	<jk>byte</jk>[] <jv>protoBytes</jv> = RdfProto.<jsm>of</jsm>(<jv>person</jv>);
@@ -51,11 +51,11 @@ import java.io.*;
  *
  * <p>Input is binary (<jk>byte</jk>[] or {@link InputStream}). Complex structures (nested objects, arrays) are supported—they are encoded as equivalent RDF triples in Protocol Buffers format.</p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

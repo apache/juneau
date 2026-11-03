@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.tracing.*;
 /**
  * A specialized invoker for methods that are called during a servlet request.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestContext">RestContext</a>
  * </ul>
  */
@@ -93,7 +93,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * {@link RestContext#postCall(RestOpSession)}) continue to use {@link #invoke(RestOpSession)} so the
 	 * observability boundary stays anchored on the user-facing handler.
 	 *
-	 * <h5 class='section'>Virtual-thread dispatch</h5>
+	 * <h4 class='section'>Virtual-thread dispatch</h4>
 	 * <p>
 	 * When the operation opts into virtual threads via {@code @Rest(virtualThreads=true)} or
 	 * {@code @RestOp(virtualThreads=true)} and the runtime is Java 21+, the entire body of this method
@@ -102,7 +102,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * That keeps observability scoping correct (open and close run on the same thread) while letting
 	 * blocking I/O inside the handler park a virtual thread instead of the carrier.
 	 *
-	 * <h5 class='section'>{@link CompletableFuture} returns</h5>
+	 * <h4 class='section'>{@link CompletableFuture} returns</h4>
 	 * <p>
 	 * When the handler returns a {@link CompletionStage}, the observability close is deferred to the
 	 * future's {@code whenComplete} callback so metrics and traces capture the actual completion time

@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * The natural language or languages of the intended audience for the enclosed content.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Content-Language: da
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Content-Language entity-header field describes the natural language(s) of the intended audience for the
  * enclosed entity.
@@ -72,7 +72,7 @@ import org.apache.juneau.http.*;
  * <p>
  * Content-Language MAY be applied to any media type -- it is not limited to textual documents.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

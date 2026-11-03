@@ -31,7 +31,7 @@ import org.apache.juneau.http.classic.*;
  * The server successfully processed the request, but is not returning any content.
  * Unlike a 204 response, this response requires that the requester reset the document view.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

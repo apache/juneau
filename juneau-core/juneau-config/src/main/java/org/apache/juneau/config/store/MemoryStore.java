@@ -28,7 +28,7 @@ import java.util.concurrent.*;
  * <p>
  * Points to a file system directory containing configuration files.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  */

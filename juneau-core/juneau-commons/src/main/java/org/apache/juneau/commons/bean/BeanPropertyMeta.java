@@ -51,7 +51,7 @@ import org.apache.juneau.commons.reflect.*;
  * Developers will typically not need access to this class.  The information provided by it is already exposed through
  * several methods on the {@link BeanMap} API.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * Instances are immutable after construction and are safe for concurrent read access.
  *

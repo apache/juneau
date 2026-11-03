@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.view.*;
  * 		{@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration.
  * </ol>
  *
- * <h5 class='section'>Auto-wiring the renderer into the host's own endpoints:</h5>
+ * <h2 class='section'>Auto-wiring the renderer into the host's own endpoints:</h2>
  *
  * <p>
  * A bare {@code @Rest(mixins=JspMixin.class)} is enough &mdash; a host whose own {@code @RestOp} method returns
@@ -73,7 +73,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code SerializedPojoProcessor} in every case, so the {@link JspView} bean is dispatched to the JSP engine
  * rather than bean-serialized.
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=JspMixin.<jk>class</jk>)
@@ -92,7 +92,7 @@ import org.apache.juneau.rest.server.view.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /jsp/*} can be overridden via the SVL variable
@@ -106,7 +106,7 @@ import org.apache.juneau.rest.server.view.*;
  * Override accepts bare token ({@code jsp}), leading slash ({@code /jsp}), trailing slash
  * ({@code jsp/}), or wildcard suffix ({@code /jsp/*}) &mdash; all resolve to the same mount.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -114,7 +114,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@link #render}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='section'>Engine-agnostic packaging:</h5>
+ * <h2 class='section'>Engine-agnostic packaging:</h2>
  *
  * <p>
  * The {@code juneau-rest-server-view-jsp} module ships <b>only</b> the JSP API + JSTL impl in
@@ -133,7 +133,7 @@ import org.apache.juneau.rest.server.view.*;
  * When no engine is on the classpath, the renderer surfaces
  * {@link JspViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.
  *
- * <h5 class='section'>Spring Boot fat-jar caveat:</h5>
+ * <h2 class='section'>Spring Boot fat-jar caveat:</h2>
  *
  * <p>
  * Spring Boot's repackaged fat jar does not place {@code .jsp} files where the embedded JSP
@@ -142,7 +142,7 @@ import org.apache.juneau.rest.server.view.*;
  * prefix is the Servlet 3.0 convention Spring Boot honors for embedded servlets). Both
  * {@code mvn spring-boot:run} and the deployed jar pick the files up this way.
  *
- * <h5 class='section'>Multiple base paths:</h5>
+ * <h2 class='section'>Multiple base paths:</h2>
  *
  * <p>
  * A host with {@code /views/} JSPs and {@code /admin/views/} JSPs registers two
@@ -151,13 +151,13 @@ import org.apache.juneau.rest.server.view.*;
  * {@code JspMixin_MultiBasePath_Test} test in {@code juneau-integration-tests} for the canonical
  * pattern.
  *
- * <h5 class='section'>OpenAPI surface:</h5>
+ * <h2 class='section'>OpenAPI surface:</h2>
  *
  * <p>
  * The greedy {@code /*} handler is not API-meaningful and is excluded from generated
  * Swagger / OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JspView}
  * 	<li class='jc'>{@link JspViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>

@@ -23,7 +23,7 @@ package org.apache.juneau.marshall.jena;
  * Produces RDF quads (subject, predicate, object, graph) in N-Quads notation. Like N-Triples but
  * with an optional fourth element for the named graph. Useful for RDF datasets.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to N-Quads string.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
@@ -39,13 +39,13 @@ package org.apache.juneau.marshall.jena;
  * 	String <jv>nQuads</jv> = <jv>s</jv>.write(<jv>bean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bcode'>
  * 	&lt;...&gt; &lt;.../name&gt; "Alice" &lt;...&gt; .
  * 	&lt;...&gt; &lt;.../age&gt; "30"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt; &lt;...&gt; .
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bcode'>
  * 	&lt;...&gt; &lt;.../name&gt; "Alice" &lt;graph&gt; .
  * 	&lt;...&gt; &lt;.../address&gt; &lt;.../address&gt; &lt;graph&gt; .
@@ -54,11 +54,11 @@ package org.apache.juneau.marshall.jena;
  * 	&lt;.../address&gt; &lt;.../state&gt; "MA" &lt;graph&gt; .
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

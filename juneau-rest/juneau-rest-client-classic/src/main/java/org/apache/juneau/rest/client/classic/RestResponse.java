@@ -41,7 +41,7 @@ import org.apache.juneau.bct.assertions.*;
  * <p>
  * Instances of this class are created by calling the {@link RestRequest#run()} method.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a request and response, automatically closing both.</jc>
  * 	<jk>try</jk> (
@@ -62,13 +62,13 @@ import org.apache.juneau.bct.assertions.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.
  * 		The {@link #close()} method allows unchecked exceptions to propagate for debuggability,
  * 		while catching and logging checked exceptions to follow AutoCloseable best practices.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>
  */
@@ -135,7 +135,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	/**
 	 * Provides the ability to perform fluent-style assertions on the response character encoding.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
 	 * 	<jv>client</jv>
@@ -154,7 +154,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	<jv>client</jv>
@@ -206,7 +206,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
@@ -227,7 +227,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * <p>
 	 * A shortcut for calling <c>assertContent().is(<jv>value</jv>)</c>.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	<jv>client</jv>
@@ -262,7 +262,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	/**
 	 * Provides the ability to perform fluent-style assertions on a response header.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	<jv>client</jv>
@@ -323,7 +323,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	/**
 	 * Provides the ability to perform fluent-style assertions on the response {@link StatusLine} object.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -341,7 +341,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	/**
 	 * Provides the ability to perform fluent-style assertions on the response status code.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -379,7 +379,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * <p>
 	 * This method is idempotent and can be called multiple times without side effects.
 	 *
-	 * <h5 class='section'>Implementation Notes:</h5>
+	 * <h4 class='section'>Implementation Notes:</h4>
 	 * <p>
 	 * This implementation represents a compromise between strict AutoCloseable compliance and debuggability:
 	 * <ul>
@@ -560,7 +560,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	 * <p>
 	 * The entity is provided by calling setEntity.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
 	 * 		Instead, <c>getContent().isPresent()</c> can be used to determine whether the response has a body.
 	 * </ul>
@@ -778,7 +778,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 	/**
 	 * Associates a response entity with this response.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>If an entity has already been set for this response and it depends on an input stream
 	 * 		({@link HttpEntity#isStreaming()} returns <jk>true</jk>), it must be fully consumed in order to ensure
 	 * 		release of resources.

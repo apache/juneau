@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.xml.*;
  * Metadata on bean properties specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation
  * on the bean property.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
 
  * </ul>

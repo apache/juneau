@@ -30,7 +30,7 @@ import java.lang.annotation.*;
  * request body &mdash; the Retrofit <c>@Part</c> pattern.  The engine adapts each {@code @Part} parameter into the
  * streaming {@link org.apache.juneau.http.entity.MultipartBody}.
  *
- * <h5 class='topic'>Accepted part-source types</h5>
+ * <h2 class='topic'>Accepted part-source types</h2>
  * <p>
  * The bound argument type determines how the part body is produced:
  * <ul class='spaced-list'>
@@ -46,7 +46,7 @@ import java.lang.annotation.*;
  * <p>
  * A <jk>null</jk> argument contributes no part.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RemotePost</ja>(<js>"/upload"</js>)
  * 	<ja>@Multipart</ja>
@@ -55,7 +55,7 @@ import java.lang.annotation.*;
  * 		<ja>@Part</ja>(name=<js>"attachment"</js>, fileName=<js>"report.pdf"</js>, contentType=<js>"application/pdf"</js>) <jk>byte</jk>[] <jv>data</jv>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		Valid only on a method also annotated {@link org.apache.juneau.http.remote.Multipart @Multipart}; a
  * 		{@code @Part} parameter on a non-multipart method is rejected at proxy-build time.
@@ -64,7 +64,7 @@ import java.lang.annotation.*;
  * 		ignores this annotation.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

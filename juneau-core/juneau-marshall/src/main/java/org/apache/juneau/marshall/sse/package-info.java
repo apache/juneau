@@ -31,7 +31,7 @@
  * SSE streams are typically long-lived. For true line-driven streaming over a {@link java.io.Reader}
  * that the caller owns, use the {@link org.apache.juneau.marshall.sse.SseEventReader SseEventReader} iterator.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG HTML §9.2 — Server-sent events</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  * </ul>

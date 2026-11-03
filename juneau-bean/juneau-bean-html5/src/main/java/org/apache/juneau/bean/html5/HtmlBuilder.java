@@ -23,7 +23,7 @@ package org.apache.juneau.bean.html5;
  * The HtmlBuilder class contains lots of static creator methods to minimize the amount of code needed to produce HTML DOMs.
  * Instead of using constructors directly, you can use these static methods for more concise code.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
  *
@@ -122,7 +122,7 @@ package org.apache.juneau.bean.html5;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

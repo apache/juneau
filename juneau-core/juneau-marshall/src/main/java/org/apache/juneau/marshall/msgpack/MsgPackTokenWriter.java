@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.stream.*;
  * is called, then writes the length-prefix header followed by the buffered bytes.  Memory cost
  * is O(largest open container).
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li>{@code byte[]} values dispatch to native MsgPack {@code bin}, not to a base64 string fallback.
  * </ul>

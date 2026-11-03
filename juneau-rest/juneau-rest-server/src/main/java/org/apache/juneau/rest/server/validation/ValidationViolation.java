@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
  * {@link #invalidValue} field is omitted by default to avoid echoing potentially sensitive request data back to
  * the client; callers can opt back in via {@link #setInvalidValue(String)}.
  *
- * <h5 class='section'>JSON shape:</h5>
+ * <h2 class='section'>JSON shape:</h2>
  * <p class='bjson'>
  * 	{
  * 		<jok>"path"</jok>: <jov>"name"</jov>,
@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ValidationException}
  * 	<li class='jc'>{@link BeanValidator}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>

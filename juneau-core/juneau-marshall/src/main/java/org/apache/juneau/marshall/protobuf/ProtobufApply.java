@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.*;
  * <b>content</b> concern ({@link #value()}), enabling {@link Protobuf @Protobuf} to be a pure data annotation
  * without marshall-specific application machinery.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  * </ul>
  */
@@ -52,7 +52,7 @@ public @interface ProtobufApply {
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -63,7 +63,7 @@ public @interface ProtobufApply {
 	/**
 	 * Dynamically apply this annotation to the specified classes.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

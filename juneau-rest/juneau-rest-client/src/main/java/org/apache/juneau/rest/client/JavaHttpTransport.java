@@ -72,7 +72,7 @@ import org.apache.juneau.http.remote.*;
  * {@link Redirect#ALWAYS}), since this transport cannot re-validate hops that client follows on its own; build it
  * with the default {@link Redirect#NEVER} (the JDK default) to let this transport's own redirect loop apply.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

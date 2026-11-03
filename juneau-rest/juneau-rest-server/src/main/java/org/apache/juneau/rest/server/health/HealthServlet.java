@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * delegating to a shared {@link HealthAggregator} worker bean. The {@link HealthMixin} mixin flavor
  * delegates to the same bean, so the two forms cannot drift.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link HealthMixin}
  * 	<li class='jc'>{@link HealthAggregator}
  * </ul>

@@ -32,7 +32,7 @@ import org.apache.juneau.commons.reflect.*;
  * This class extends {@link AnnotationObject} to provide support for annotations that have an <c>on</c> property which
  * allows them to be targeted to specific program elements based on their fully-qualified names.
  *
- * <h5 class='section'>Overview:</h5>
+ * <h2 class='section'>Overview:</h2>
  * <p>
  * Applied annotations allow you to define annotation properties in external configuration or programmatically at runtime,
  * rather than requiring them to be declared directly on classes, methods, fields, or constructors at compile-time.
@@ -46,7 +46,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li>Centralized configuration - Define annotation properties for multiple classes in one place
  * </ul>
  *
- * <h5 class='section'>Targeting with <c>on</c>:</h5>
+ * <h2 class='section'>Targeting with <c>on</c>:</h2>
  * <p>
  * The base {@link Builder#on(String...)} method accepts fully-qualified names in the following formats:
  * <ul class='spaced-list'>
@@ -56,7 +56,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li><js>"com.example.MyClass(java.lang.String,int)"</js> - Target a specific constructor
  * </ul>
  *
- * <h5 class='section'>Builder Variants:</h5>
+ * <h2 class='section'>Builder Variants:</h2>
  * <p>
  * This class provides specialized builder variants for different targeting scenarios:
  * <ul class='javatree'>
@@ -90,7 +90,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li class='jc'>{@link BuilderTMFC} - For targeting classes, methods, fields, and constructors
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a Bean annotation that applies to MyClass</jc>
  * 	MarshalledAnnotation <jv>annotation</jv> = MarshalledAnnotation
@@ -106,7 +106,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The {@link #on()} method returns the string-based targets
  * 	<li>Subclasses may provide additional {@code onClass()}, {@code onMethod()}, etc. methods for type-safe access
@@ -114,7 +114,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li>Hashcode is calculated lazily on first access and then cached for performance
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../overview-summary.html#juneau-commons.Annotations">Overview &gt; juneau-commons &gt; Annotations</a>
  * </ul>
  */
@@ -134,7 +134,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * <p>
 	 * Provides string-based targeting via the {@link #on(String...)} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target specific classes and methods by name</jc>
 	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
@@ -144,7 +144,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link BuilderT} - For type-safe class targeting
 	 * 	<li class='jc'>{@link BuilderM} - For method targeting
 	 * 	<li class='jc'>{@link BuilderC} - For constructor targeting
@@ -188,7 +188,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * 	<li class='jm'>{@link #on(ConstructorInfo...) on(ConstructorInfo...)} - Target by ConstructorInfo wrapper
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target specific constructors</jc>
 	 * 	Constructor&lt;?&gt; <jv>ctor</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>, <jk>int</jk>.<jk>class</jk>);
@@ -247,7 +247,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * 	<li class='jm'>{@link #on(MethodInfo...) on(MethodInfo...)} - Target by MethodInfo wrapper
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target specific methods</jc>
 	 * 	Method <jv>method1</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
@@ -309,7 +309,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * 	<li class='jm'>{@link #on(FieldInfo...) on(FieldInfo...)} - Target by FieldInfo wrapper
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target specific methods and fields</jc>
 	 * 	Method <jv>method</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
@@ -398,7 +398,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * 	<li class='jm'>{@link #onClass(ClassInfo...) onClass(ClassInfo...)} - Target by ClassInfo, stored as Class objects
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target classes using type-safe references</jc>
 	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
@@ -408,7 +408,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * 		.build();
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5>
+	 * <h2 class='section'>Notes:</h2>
 	 * <ul class='spaced-list'>
 	 * 	<li>Use {@link #on(Class...)} when you want string-based matching (e.g., for configuration)
 	 * 	<li>Use {@link #onClass(Class...)} when you need direct Class object references
@@ -487,7 +487,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * <p>
 	 * Combines the capabilities of {@link BuilderT} and {@link BuilderM}, providing targeting for both classes and methods.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target both classes and methods</jc>
 	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
@@ -554,7 +554,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * Combines the capabilities of {@link BuilderT}, {@link BuilderM}, and field targeting,
 	 * providing comprehensive targeting for classes, methods, and fields.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target classes, methods, and fields</jc>
 	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation
@@ -636,7 +636,7 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * The most comprehensive builder variant, combining all targeting capabilities from {@link BuilderT}, {@link BuilderM},
 	 * field targeting, and {@link BuilderC}, providing complete targeting for all program elements.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	<jc>// Target any program element</jc>
 	 * 	MyAnnotation <jv>annotation</jv> = MyAnnotation

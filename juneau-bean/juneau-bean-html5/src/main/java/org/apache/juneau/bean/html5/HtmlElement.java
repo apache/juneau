@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>
  * These are beans that when serialized using {@link HtmlSerializer} generate valid HTML5 elements.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
 
  * </ul>
@@ -290,7 +290,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when the element loses focus.
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
@@ -357,7 +357,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when the value of a form element changes and loses focus.
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
@@ -381,7 +381,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when the element is clicked.
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
@@ -491,7 +491,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when the element receives focus.
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
@@ -585,7 +585,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when the element and its resources have finished loading.
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
@@ -728,7 +728,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when the mouse pointer moves over the element (bubbles).
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.
@@ -964,7 +964,7 @@ public abstract class HtmlElement<SELF extends HtmlElement<SELF>> {
 	 * <p>
 	 * Event handler for when a form is submitted.
 	 *
-	 * <h5 class='section'>Note:</h5>
+	 * <h4 class='section'>Note:</h4>
 	 * <p>
 	 * If your HTML serializer is configured to use single quotes for attribute values, you should use double quotes
 	 * in your JavaScript code, and vice versa. Otherwise, the quotes will be converted to HTML entities.

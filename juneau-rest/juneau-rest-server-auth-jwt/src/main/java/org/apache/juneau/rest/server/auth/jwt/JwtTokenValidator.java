@@ -66,7 +66,7 @@ import com.nimbusds.jwt.proc.*;
  * 		caller-supplied {@link Builder#jwkSource(JWKSource) jwkSource(...)} is unaffected.
  * </ul>
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<jk>var</jk> validator = JwtTokenValidator.<jsm>create</jsm>()
@@ -81,7 +81,7 @@ import com.nimbusds.jwt.proc.*;
  * 		.build();
  * </p>
  *
- * <h5 class='topic'>Security notes</h5>
+ * <h2 class='topic'>Security notes</h2>
  *
  * <ul>
  * 	<li>Never disable {@code iss} / {@code aud} validation. The builder enforces them.
@@ -90,7 +90,7 @@ import com.nimbusds.jwt.proc.*;
  * 	<li>Rotate JWKS keys on a schedule. {@link JwksCache} picks up new keys after the configured TTL.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link TokenValidator}
  * 	<li class='jc'>{@link BearerTokenGuard}

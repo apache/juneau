@@ -33,7 +33,7 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Utility methods for working with collections and maps.
  *
- * <h5 class='section'>Complex Data Structure Construction:</h5>
+ * <h2 class='section'>Complex Data Structure Construction:</h2>
  * <p>
  * This class provides convenient shorthand methods for creating complex nested data structures.
  * The primary methods for building structures are:
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.collections.*;
  *    <li>{@link #immutableMap(Object, Object, Object, Object, Object, Object)} - Creates unmodifiable maps
  * </ul>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Array of lists of maps</jc>
  * 	<jk>var</jk> <jv>data</jv> = <jsm>a</jsm>(
@@ -111,7 +111,7 @@ import org.apache.juneau.commons.collections.*;
  * 	);
  * </p>
  *
- * <h5 class='section'>Best Practices:</h5>
+ * <h2 class='section'>Best Practices:</h2>
  * <ul>
  *    <li>Use {@link #array(Object...)} for arrays when type can be inferred, {@link #objectArray(Object...)} for Object arrays
  *    <li>Use {@link #map(Object, Object, Object, Object, Object, Object)} when you need modifiable maps
@@ -120,7 +120,7 @@ import org.apache.juneau.commons.collections.*;
  *    <li>Static import these methods for maximum readability: <code>import static org.apache.juneau.commons.utils.CollectionUtils.*;</code>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">juneau-commons</a>
  * </ul>
  */
@@ -149,7 +149,7 @@ public class CollectionUtils {
 	 * 		to the result — not even a {@code null} element.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;Object&gt; <jv>nested</jv> = List.of(<jk>new</jk> <jk>int</jk>[]{1, 2}, List.of(<js>"a"</js>, <js>"b"</js>));
 	 *
@@ -184,7 +184,7 @@ public class CollectionUtils {
 	 * Named {@code deepStream} rather than {@code stream} to avoid an erasure conflict with the existing
 	 * shallow-array overload {@link #stream(Object[])}, which has the same erased parameter type ({@code Object[]}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;Object&gt; <jv>nested</jv> = List.of(<jk>new</jk> <jk>int</jk>[]{1, 2}, List.of(<js>"a"</js>, <js>"b"</js>));
 	 *
@@ -288,7 +288,7 @@ public class CollectionUtils {
 	 * <jk>null</jk> elements are skipped.
 	 * A <jk>null</jk> entries array is a no-op.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list</jv> = <jk>new</jk> ArrayList&lt;&gt;();
 	 * 	addAllNn(<jv>list</jv>, <js>"a"</js>, <jk>null</jk>, <js>"b"</js>);  <jc>// list is [a, b]</jc>
@@ -316,7 +316,7 @@ public class CollectionUtils {
 	 * <jk>null</jk> elements are skipped.
 	 * A <jk>null</jk> entries collection is a no-op.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Set&lt;String&gt; <jv>set</jv> = <jk>new</jk> LinkedHashSet&lt;&gt;();
 	 * 	addAllNn(<jv>set</jv>, Arrays.<jsm>asList</jsm>(<js>"a"</js>, <jk>null</jk>, <js>"b"</js>));  <jc>// set is [a, b]</jc>
@@ -519,7 +519,7 @@ public class CollectionUtils {
 	 * This is a null-safe operation. Returns an empty Optional if the iterator is <jk>null</jk> or
 	 * has no more elements.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Iterator&lt;String&gt; <jv>it</jv> = list.iterator();
 	 * 	Optional&lt;String&gt; <jv>first</jv> = <jsm>next</jsm>(<jv>it</jv>);  <jc>// Optional.of("first")</jc>
@@ -544,7 +544,7 @@ public class CollectionUtils {
 	 * <p>
 	 * This is a null-safe operation. Returns an empty Optional if the iterable is <jk>null</jk> or empty.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>l</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 * 	Optional&lt;String&gt; <jv>first</jv> = <jsm>first</jsm>(<jv>list</jv>);  <jc>// Optional.of("a")</jc>
@@ -704,7 +704,7 @@ public class CollectionUtils {
 	 * This is a null-safe convenience method that wraps {@link Array#getLength(Object)}.
 	 * Works with both object arrays and primitive arrays.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array1</jv> = {<js>"foo"</js>, <js>"bar"</js>};
 	 * 	<jk>int</jk>[] <jv>array2</jv> = {1, 2, 3};
@@ -1345,7 +1345,7 @@ public class CollectionUtils {
 	 * <p>
 	 * This is a shortcut for <c>Maps.create().ordered()</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapBuilder()
 	 * 		.add(<js>"foo"</js>, 1)
@@ -1368,7 +1368,7 @@ public class CollectionUtils {
 	 * <p>
 	 * This is a shortcut for <c>Maps.create(String.<jk>class</jk>, Object.<jk>class</jk>)</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapBuilder()
 	 * 		.add(<js>"foo"</js>, 1)
@@ -1406,7 +1406,7 @@ public class CollectionUtils {
 	 * <p>
 	 * This is typically used for creating property maps in <c>toString()</c> methods that need to be sorted and filtered.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// In a properties() method</jc>
 	 * 	<jk>return</jk> filteredBeanPropertyMap()
@@ -1516,7 +1516,7 @@ public class CollectionUtils {
 	/**
 	 * Returns a reverse stream of the specified list.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>list</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
 	 * 	Stream&lt;String&gt; <jv>reversed</jv> = <jsm>rstream</jsm>(<jv>list</jv>);
@@ -1540,7 +1540,7 @@ public class CollectionUtils {
 	 * A negation token is a string starting with <js>'-'</js> followed by at least one character.
 	 * When encountered, it removes the first prior occurrence of the corresponding positive token.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>result</jv> = <jsm>removeNegations</jsm>(list(<js>"a"</js>, <js>"b"</js>, <js>"-a"</js>, <js>"c"</js>));
 	 * 	<jc>// Produces: ["b", "c"]</jc>
@@ -1706,7 +1706,7 @@ public class CollectionUtils {
 	 * <p>
 	 * Gracefully handles <jk>null</jk> arrays by returning an empty stream.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"a"</js>, <js>"b"</js>, <js>"c"</js>};
 	 *
@@ -1814,7 +1814,7 @@ public class CollectionUtils {
 	 * <p>This utility method enables testing of any collection-like object by converting it to a List that can be
 	 * passed to methods such as TestUtils.assertList().</p>
 	 *
-	 * <h5 class='section'>Supported Input Types:</h5>
+	 * <h4 class='section'>Supported Input Types:</h4>
 	 * <ul>
 	 * 	<li><b>List:</b> Returns the input unchanged</li>
 	 * 	<li><b>Iterable:</b> Any collection, set, queue, etc. (converted to List preserving order)</li>
@@ -1825,7 +1825,7 @@ public class CollectionUtils {
 	 * 	<li><b>Array:</b> Converts any array type (including primitive arrays) to List</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Test a Set</jc>
 	 * 	Set&lt;String&gt; <jv>mySet</jv> = Set.of(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
@@ -1852,7 +1852,7 @@ public class CollectionUtils {
 	 * 	assertList(toList(<jv>myQueue</jv>), <js>"first"</js>, <js>"second"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Integration with Testing:</h5>
+	 * <h4 class='section'>Integration with Testing:</h4>
 	 * <p>This method is specifically designed to work with testing frameworks to provide
 	 * a unified testing approach for all collection-like types. Instead of having separate assertion methods
 	 * for arrays, sets, and other collections, you can convert them all to Lists and use standard

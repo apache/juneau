@@ -38,7 +38,7 @@ import java.util.logging.*;
  * 	<li>Convenience methods for formatted logging using {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
  * </ul>
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul>
  * 	<li>All standard {@link java.util.logging.Logger} functionality via delegation
  * 	<li>Convenience methods for formatted logging at all log levels
@@ -46,7 +46,7 @@ import java.util.logging.*;
  * 	<li>Printf-style formatting (rendered via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)})
  * </ul>
  *
- * <h5 class='section'>Format Support:</h5>
+ * <h2 class='section'>Format Support:</h2>
  * <p>
  * The formatting methods use printf-style ({@link java.util.Formatter}) placeholders. MessageFormat-style
  * (<js>"{0}"</js>) patterns are <b>not</b> expanded here — use {@link org.apache.juneau.commons.utils.Shorts#mf(String, Object...)} /
@@ -63,7 +63,7 @@ import java.util.logging.*;
  * {@link java.util.logging.LogRecord} by a non-Juneau handler.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RichLogger <jv>logger</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>.getName());
  *
@@ -74,7 +74,7 @@ import java.util.logging.*;
  * 	<jv>logger</jv>.fine(<js>"Debug value: %s"</js>, debugValue);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
  * 	<li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}
  * 	<li class='jc'>{@link java.util.logging.Logger}

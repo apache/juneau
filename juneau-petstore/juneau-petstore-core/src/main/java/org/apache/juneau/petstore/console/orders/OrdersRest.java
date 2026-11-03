@@ -43,7 +43,7 @@ import org.apache.juneau.console.widgets.*;
  * The Orders page and its endpoints: the server-mode datatable query over BeanQuery, the {@code approve} and
  * {@code deliver} status transitions, and the cancel dialog form with its {@code DELETE}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// PLACED to APPROVED; any other status is a 409.</jc>
  * 	<ja>@RestPost</ja>(path=<js>"/{id}/approve"</js>)

@@ -80,7 +80,7 @@ import org.apache.juneau.console.views.*;
  * <p>
  * POSIX only: there is no Windows pseudo-terminal support.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	TerminalProcess <jv>p</jv> = TerminalProcess.<jsm>start</jsm>(<js>"maven"</js>, List.<jsm>of</jsm>(<js>"mvn"</js>, <js>"test"</js>), 120, 40, <jv>runDir</jv>);
  * 	<jv>terminals</jv>.put(<jv>id</jv>, <jv>p</jv>.terminal());

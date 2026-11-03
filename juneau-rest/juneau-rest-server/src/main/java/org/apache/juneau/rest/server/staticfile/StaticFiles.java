@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.cp.*;
 /**
  * API for retrieving localized static files from either the classpath or file system.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
  * </ul>
  */

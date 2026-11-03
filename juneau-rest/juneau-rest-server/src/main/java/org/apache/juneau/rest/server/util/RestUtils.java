@@ -133,7 +133,7 @@ public class RestUtils {
 	 * This is useful when processing input that could be either a JSON value or a plain string,
 	 * such as configuration values or user input that may or may not be JSON-encoded.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// JSON object is parsed</jc>
 	 * 	Object <jv>result1</jv> = parseIfJson(<js>"{\"name\":\"John\"}"</js>);
@@ -175,7 +175,7 @@ public class RestUtils {
 	 * 	<li>Multiple occurrences of the same key append values to the list</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Map&lt;String,List&lt;String&gt;&gt; <jv>params</jv> = parseQuery(<js>"f1=v1&amp;f2=v2&amp;f1=v3"</js>);
 	 * 	<jv>params</jv>.get(<js>"f1"</js>);  <jc>// Returns [v1, v3]</jc>
@@ -206,7 +206,7 @@ public class RestUtils {
 	 * 	<li>Multiple occurrences of the same key append values to the list</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse from a reader</jc>
 	 * 	Reader <jv>reader</jv> = <jk>new</jk> StringReader(<js>"f1=v1&amp;f2=v2"</js>);

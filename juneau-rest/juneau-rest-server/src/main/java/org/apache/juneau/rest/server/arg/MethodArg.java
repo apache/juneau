@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * The parameter type must be {@link String}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JavaMethodParameters">Java Method Parameters</a>
  * </ul>
  */

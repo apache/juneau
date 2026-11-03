@@ -18,7 +18,7 @@
  * Explicit programmatic observation API for {@code juneau-rest-server} &mdash; custom (non-request)
  * metrics + tracing around an arbitrary block of work.
  *
- * <h5 class='topic'>Why explicit (no {@code @Observed} annotation)</h5>
+ * <h2 class='topic'>Why explicit (no {@code @Observed} annotation)</h2>
  *
  * <p>
  * Juneau has no method-interception / AOP substrate (no dynamic proxying of arbitrary beans, no
@@ -28,7 +28,7 @@
  * This is consistent with the framework's explicit-over-magic philosophy &mdash; the same reason the
  * curated dependency bundles register nothing automatically.
  *
- * <h5 class='topic'>Reuses the request-path SPIs</h5>
+ * <h2 class='topic'>Reuses the request-path SPIs</h2>
  *
  * <p>
  * Observations are recorded through the very same two SPIs the request path uses &mdash;
@@ -39,7 +39,7 @@
  * The shipped bridges ({@code MicrometerMetricsRecorder}, {@code OtelTracerHook}) override those default
  * methods; bridges that do not simply skip custom observations.
  *
- * <h5 class='topic'>No-backend contract</h5>
+ * <h2 class='topic'>No-backend contract</h2>
  *
  * <p>
  * When no backend is installed, {@link org.apache.juneau.rest.server.observation.Observations#observe(String, String) Observations#observe(String, String)}

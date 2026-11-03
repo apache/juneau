@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@code /.well-known/security.txt} URL becomes available alongside the host's own endpoints with
  * no further wiring.
  *
- * <h5 class='section'>Hardcoded mount path:</h5>
+ * <h2 class='section'>Hardcoded mount path:</h2>
  *
  * <p>
  * Unlike the sibling api-docs and ops mixins (see {@link org.apache.juneau.rest.server.docs.SwaggerMixin},
@@ -56,7 +56,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * filename suffix is the protocol-defined registry key &mdash; a runtime override here would
  * make the endpoint undiscoverable by spec-compliant clients.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -64,7 +64,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link #getSecurityTxt}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=WellKnownMixin.<jk>class</jk>)
@@ -78,7 +78,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Defaults &amp; behavior:</h5>
+ * <h2 class='section'>Defaults &amp; behavior:</h2>
  *
  * <ul class='spaced-list'>
  * 	<li><b>No default body.</b> Per RFC 9116, {@code security.txt}'s mere presence is meaningful;
@@ -90,7 +90,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 		{@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link SeoMixin}
  * 	<li class='jc'>{@link VersionMixin}

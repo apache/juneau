@@ -38,7 +38,7 @@ import org.opentest4j.*;
  * on the Bean-Centric Testing (BCT) framework. BCT enables sophisticated assertion patterns for
  * testing object properties, collections, maps, and complex nested structures with minimal code.</p>
  *
- * <h5 class='section'>Bean-Centric Testing (BCT) Framework:</h5>
+ * <h2 class='section'>Bean-Centric Testing (BCT) Framework:</h2>
  * <p>The BCT framework consists of several key components:</p>
  * <ul>
  *    <li><b>{@link BeanConverter}:</b> Core interface for object conversion and property access</li>
@@ -46,7 +46,7 @@ import org.opentest4j.*;
  *    <li><b>Assertion Methods:</b> High-level testing methods that leverage the converter framework</li>
  * </ul>
  *
- * <h5 class='section'>Primary BCT Assertion Methods:</h5>
+ * <h2 class='section'>Primary BCT Assertion Methods:</h2>
  * <dl>
  *    <dt><b>{@link #assertBean(Object, String, String)}</b></dt>
  *    <dd>Tests object properties with nested syntax support and collection iteration</dd>
@@ -61,7 +61,7 @@ import org.opentest4j.*;
  *    <dd>Tests list/collection elements with varargs for expected values</dd>
  * </dl>
  *
- * <h5 class='section'>BCT Advanced Features:</h5>
+ * <h2 class='section'>BCT Advanced Features:</h2>
  * <ul>
  *    <li><b>Nested Property Syntax:</b> "address{street,city}" for testing nested objects</li>
  *    <li><b>Collection Iteration:</b> "#{address{street,city}}" syntax for testing all elements</li>
@@ -72,7 +72,7 @@ import org.opentest4j.*;
  *    <li><b>Map Key Access:</b> Including special <js>"&lt;null&gt;"</js> syntax for null keys</li>
  * </ul>
  *
- * <h5 class='section'>Converter Extensibility:</h5>
+ * <h2 class='section'>Converter Extensibility:</h2>
  * <p>The BCT framework is built on the extensible {@link BasicBeanConverter} which allows:</p>
  * <ul>
  *    <li><b>Custom Stringifiers:</b> Type-specific string conversion logic</li>
@@ -82,7 +82,7 @@ import org.opentest4j.*;
  *    <li><b>Configurable Settings:</b> Formatting, delimiters, and display options</li>
  * </ul>
  *
- * <h5 class='section'>Usage Examples:</h5>
+ * <h2 class='section'>Usage Examples:</h2>
  *
  * <p><b>Basic Property Testing:</b></p>
  * <p class='bjava'>
@@ -118,7 +118,7 @@ import org.opentest4j.*;
  *       <js>"prop1,prop2"</js>, <js>"value1,value2"</js>);
  * </p>
  *
- * <h5 class='section'>Customizing the Default Converter:</h5>
+ * <h2 class='section'>Customizing the Default Converter:</h2>
  * <p>The default bean converter can be customized on a per-thread basis using:</p>
  * <ul>
  *    <li><b>{@link BctConfiguration#set(BeanConverter)}:</b> Set a custom converter for the current thread</li>
@@ -159,15 +159,15 @@ import org.opentest4j.*;
  *          .addStringifier(LocalDateTime.<jk>class</jk>, <jp>dt</jp> -> <jp>dt</jp>.format(DateTimeFormatter.<jsf>ISO_DATE_TIME</jsf>))
  *          .build();
  *       BctAssertions.<jsm>setConverter</jsm>(<jv>dateConverter</jv>);
- *       <jkt>try</jkt> {
+ *       <jk>try</jk> {
  *          <jsm>assertBean</jsm>(<jv>event</jv>, <js>"timestamp"</js>, <js>"2023-12-01T10:30:00"</js>);
- *       } <jkt>finally</jkt> {
+ *       } <jk>finally</jk> {
  *          BctAssertions.<jsm>resetConverter</jsm>();
  *       }
  *    }
  * </p>
  *
- * <h5 class='section'>Performance and Thread Safety:</h5>
+ * <h2 class='section'>Performance and Thread Safety:</h2>
  * <p>The BCT framework is designed for high performance with:</p>
  * <ul>
  *    <li><b>Caching:</b> Type-to-handler mappings cached for fast lookup</li>
@@ -195,7 +195,7 @@ public class BctAssertions {
 	 * BCT caller already statically imports {@link BctAssertions}.<jsm>*</jsm> and would otherwise need to
 	 * separately reference {@link BctConfiguration} just to override the converter.</p>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@BeforeEach</ja>
 	 * 	<jk>void</jk> <jsm>setUp</jsm>() {
@@ -219,7 +219,7 @@ public class BctAssertions {
 	 * already statically imports {@link BctAssertions}.<jsm>*</jsm> and would otherwise need to
 	 * separately reference {@link BctConfiguration} just to reset the converter.</p>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@AfterEach</ja>
 	 * 	<jk>void</jk> <jsm>tearDown</jsm>() {
@@ -260,7 +260,7 @@ public class BctAssertions {
 	 * and value extraction. The converter provides sophisticated property access through the {@link BeanConverter}
 	 * interface, supporting multiple fallback mechanisms for accessing object properties and values.</p>
 	 *
-	 * <h5 class='section'>Basic Usage:</h5>
+	 * <h4 class='section'>Basic Usage:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test multiple properties</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"prop1,prop2,prop3"</js>, <js>"val1,val2,val3"</js>);
@@ -275,7 +275,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>, <jsm>fs</jsm>(<js>"User %s validation failed"</js>, <js>"John"</js>));
 	 * </p>
 	 *
-	 * <h5 class='section'>Nested Property Testing:</h5>
+	 * <h4 class='section'>Nested Property Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test nested bean properties</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,address{street,city,state}"</js>, <js>"John,{123 Main St,Springfield,IL}"</js>);
@@ -284,7 +284,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,person{address{geo{lat,lon}}}"</js>, <js>"John,{{{40.7,-74.0}}}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Array, List, and Stream Testing:</h5>
+	 * <h4 class='section'>Array, List, and Stream Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test array/list elements by index - items is a String[] or List&lt;String&gt;</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"items{0,1,2}"</js>, <js>"{item1,item2,item3}"</js>);
@@ -299,7 +299,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"userStream{#{name}}"</js>, <js>"[{Alice},{Bob}]"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Collection Iteration Syntax:</h5>
+	 * <h4 class='section'>Collection Iteration Syntax:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test properties across ALL elements in a collection using #{...} syntax - userList is a List&lt;User&gt; where User has getName()</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"userList{#{name}}"</js>, <js>"[{John},{Jane},{Bob}]"</js>);
@@ -316,7 +316,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>processor</jv>, <js>"dataStream{#{value}}"</js>, <js>"[{A},{B},{C}]"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Universal Collection Size Properties:</h5>
+	 * <h4 class='section'>Universal Collection Size Properties:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Both 'length' and 'size' work universally across all collection types</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myArray{length}"</js>, <js>"{5}"</js>);        <jc>// Arrays</jc>
@@ -329,7 +329,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"myMap{length}"</js>, <js>"{7}"</js>);          <jc>// Also works for maps</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Class Name Testing:</h5>
+	 * <h4 class='section'>Class Name Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test class properties (prefer simple names for maintainability)</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"obj{class{simpleName}}"</js>, <js>"{{MyClass}}"</js>);
@@ -338,7 +338,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"obj{class{name}}"</js>, <js>"{{com.example.MyClass}}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Method Chaining Support:</h5>
+	 * <h4 class='section'>Method Chaining Support:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test fluent setter chains (returns same object)</jc>
 	 *    <jsm>assertBean</jsm>(
@@ -348,7 +348,7 @@ public class BctAssertions {
 	 *    );
 	 * </p>
 	 *
-	 * <h5 class='section'>Advanced Collection Analysis:</h5>
+	 * <h4 class='section'>Advanced Collection Analysis:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Combine size/length, metadata, and content iteration in single assertions - users is a List&lt;User&gt;</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"users{length,class{simpleName},#{name}}"</js>,
@@ -366,7 +366,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>response</jv>, <js>"results{size},metadata{length}"</js>, <js>"{25},{4}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Direct Field Access:</h5>
+	 * <h4 class='section'>Direct Field Access:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test public fields directly (no getters required)</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"f1,f2,f3"</js>, <js>"val1,val2,val3"</js>);
@@ -375,7 +375,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"f1{length},f2{class{simpleName}}"</js>, <js>"{5},{{String}}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Map Testing:</h5>
+	 * <h4 class='section'>Map Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test map values by key</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"configMap{timeout,retries}"</js>, <js>"{30000,3}"</js>);
@@ -387,7 +387,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"mapWithNullKey{&lt;null&gt;}"</js>, <js>"{nullKeyValue}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Collection and Boolean Values:</h5>
+	 * <h4 class='section'>Collection and Boolean Values:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test boolean values</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"enabled,visible"</js>, <js>"true,false"</js>);
@@ -396,7 +396,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"statuses"</js>, <js>"[ACTIVE,PENDING]"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Value Syntax Rules:</h5>
+	 * <h4 class='section'>Value Syntax Rules:</h4>
 	 * <ul>
 	 *    <li><b>Simple values:</b> <js>"value"</js> for direct property values</li>
 	 *    <li><b>Nested values:</b> <js>"{value}"</js> for single-level nested properties</li>
@@ -408,7 +408,7 @@ public class BctAssertions {
 	 *    <li><b>Null values:</b> <js>"null"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Property Access Priority:</h5>
+	 * <h4 class='section'>Property Access Priority:</h4>
 	 * <ol>
 	 *    <li><b>Collection/Array access:</b> Numeric indices for arrays/lists (e.g., <js>"0"</js>, <js>"1"</js>)</li>
 	 *    <li><b>Universal size properties:</b> <js>"length"</js> and <js>"size"</js> for arrays, collections, and maps</li>
@@ -445,14 +445,14 @@ public class BctAssertions {
 	 * using the same property access logic as {@link #assertBean(Object, String, String)}.
 	 * It's perfect for testing collections of similar objects or validation results.</p>
 	 *
-	 * <h5 class='section'>Basic Usage:</h5>
+	 * <h4 class='section'>Basic Usage:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test list of user beans</jc>
 	 *    <jsm>assertBeans</jsm>(<jv>userList</jv>, <js>"name,age"</js>,
 	 *       <js>"John,25"</js>, <js>"Jane,30"</js>, <js>"Bob,35"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Complex Property Testing:</h5>
+	 * <h4 class='section'>Complex Property Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test nested properties across multiple beans - orderList is a List&lt;Order&gt; where Order has getId() and getCustomer() returning Customer with getName() and getEmail()</jc>
 	 *    <jsm>assertBeans</jsm>(<jv>orderList</jv>, <js>"id,customer{name,email}"</js>,
@@ -465,7 +465,7 @@ public class BctAssertions {
 	 *       <js>"{{Phone}},599.99"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Validation Testing:</h5>
+	 * <h4 class='section'>Validation Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test validation results</jc>
 	 *    <jsm>assertBeans</jsm>(<jv>validationErrors</jv>, <js>"field,message,code"</js>,
@@ -473,7 +473,7 @@ public class BctAssertions {
 	 *       <js>"age,Must be 18 or older,E002"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Collection Iteration Testing:</h5>
+	 * <h4 class='section'>Collection Iteration Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test collection iteration within beans (#{...} syntax)</jc>
 	 *    <jsm>assertBeans</jsm>(<jv>departmentList</jv>, <js>"name,employees{#{name}}"</js>,
@@ -481,7 +481,7 @@ public class BctAssertions {
 	 *       <js>"Marketing,[{David},{Eve}]"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Parser Result Testing:</h5>
+	 * <h4 class='section'>Parser Result Testing:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test parsed object collections</jc>
 	 *    <jk>var</jk> <jv>parsed</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>jsonArray</jv>, MyBean[].class);
@@ -565,7 +565,7 @@ public class BctAssertions {
 	 * {@link BeanConverter} and then checks if it contains the expected substring. This is useful
 	 * for testing partial content matches without requiring exact string equality.</p>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test that error message contains key information</jc>
 	 *    <jsm>assertContains</jsm>(<js>"FileNotFoundException"</js>, <jv>exception</jv>);
@@ -614,7 +614,7 @@ public class BctAssertions {
 	 * converted to its string representation using the current {@link BeanConverter} and must not contain
 	 * the substring.</p>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test that a rendered page does not leak a value</jc>
 	 *    <jsm>assertNotContains</jsm>(<js>"password"</js>, <jv>html</jv>);
@@ -656,7 +656,7 @@ public class BctAssertions {
 	 * required substrings. All provided substrings must be present in the actual object's string
 	 * representation for the assertion to pass.</p>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test that error contains multiple pieces of information</jc>
 	 *    <jsm>assertContainsAll</jsm>(<jv>exception</jv>, <js>"FileNotFoundException"</js>, <js>"config.xml"</js>, <js>"/etc"</js>);
@@ -723,7 +723,7 @@ public class BctAssertions {
 	 *    <li><b>Other objects:</b> Must be convertible to an empty List via {@link BeanConverter#listify(Object)}</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Supported Types:</h5>
+	 * <h4 class='section'>Supported Types:</h4>
 	 * <p>Any object that can be converted to a List, including:</p>
 	 * <ul>
 	 *    <li>Collections (List, Set, Queue, etc.)</li>
@@ -733,7 +733,7 @@ public class BctAssertions {
 	 *    <li>Optional objects</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test empty collections</jc>
 	 *    <jsm>assertEmpty</jsm>(Collections.<jsm>emptyList</jsm>());
@@ -781,7 +781,7 @@ public class BctAssertions {
 	/**
 	 * Asserts that a List or List-like object contains the expected values using flexible comparison logic.
 	 *
-	 * <h5 class='section'>Testing Non-List Collections:</h5>
+	 * <h4 class='section'>Testing Non-List Collections:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test a Set using l() conversion</jc>
 	 *    Set&lt;String&gt; <jv>mySet</jv> = <jk>new</jk> TreeSet&lt;&gt;(Arrays.<jsm>asList</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>));
@@ -796,17 +796,17 @@ public class BctAssertions {
 	 *    <jsm>assertList</jsm>(<jsm>l</jsm>(<jv>myStream</jv>), <js>"foo"</js>, <js>"bar"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <h4 class='section'>Comparison Modes:</h4>
 	 * <p>The method supports three different ways to compare expected vs actual values:</p>
 	 *
-	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <h5 class='section'>1. String Comparison (Readable Format):</h5>
 	 * <p class='bjava'>
 	 *    <jc>// Elements are converted to strings using the bean converter and compared as strings</jc>
 	 *    <jsm>assertList</jsm>(List.<jsm>of</jsm>(1, 2, 3), <js>"1"</js>, <js>"2"</js>, <js>"3"</js>);
 	 *    <jsm>assertList</jsm>(List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>), <js>"a"</js>, <js>"b"</js>);
 	 * </p>
 	 *
-	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <h5 class='section'>2. Predicate Testing (Functional Validation):</h5>
 	 * <p class='bjava'>
 	 *    <jc>// Use Predicate&lt;T&gt; for functional testing</jc>
 	 *    Predicate&lt;Integer&gt; <jv>greaterThanOne</jv> = <jv>x</jv> -&gt; <jv>x</jv> &gt; 1;
@@ -817,7 +817,7 @@ public class BctAssertions {
 	 *    <jsm>assertList</jsm>(List.<jsm>of</jsm>(<js>"apple"</js>, <js>"banana"</js>), <jv>startsWithA</jv>, <js>"banana"</js>);
 	 * </p>
 	 *
-	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <h5 class='section'>3. Object Equality (Direct Comparison):</h5>
 	 * <p class='bjava'>
 	 *    <jc>// Non-String, non-Predicate objects use <jsm>Objects.equals</jsm>() comparison</jc>
 	 *    <jsm>assertList</jsm>(List.<jsm>of</jsm>(1, 2, 3), 1, 2, 3); <jc>// Integer objects</jc>
@@ -896,11 +896,11 @@ public class BctAssertions {
 	/**
 	 * Asserts that a Map contains the expected key/value pairs using flexible comparison logic.
 	 *
-	 * <h5 class='section'>Map Entry Serialization:</h5>
+	 * <h4 class='section'>Map Entry Serialization:</h4>
 	 * <p>Map entries are serialized to strings as key/value pairs in the format <js>"key=value"</js>.
 	 * Nested maps and collections are supported with appropriate formatting.</p>
 	 *
-	 * <h5 class='section'>Testing Nested Maps and Collections:</h5>
+	 * <h4 class='section'>Testing Nested Maps and Collections:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test simple map entries</jc>
 	 *    Map&lt;String,String&gt; <jv>simpleMap</jv> = Map.<jsm>of</jsm>(<js>"a"</js>, <js>"1"</js>, <js>"b"</js>, <js>"2"</js>);
@@ -915,30 +915,30 @@ public class BctAssertions {
 	 *    <jsm>assertMap</jsm>(<jv>mapWithArrays</jv>, <js>"a={b=[1,2]}"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison Modes:</h5>
+	 * <h4 class='section'>Comparison Modes:</h4>
 	 * <p>The method supports the same comparison modes as {@link #assertList(Object, Object...)}:</p>
 	 *
-	 * <h6 class='section'>1. String Comparison (Readable Format):</h6>
+	 * <h5 class='section'>1. String Comparison (Readable Format):</h5>
 	 * <p class='bjava'>
 	 *    <jc>// Map entries are converted to strings and compared as strings</jc>
 	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"key1"</js>, <js>"value1"</js>), <js>"key1=value1"</js>);
 	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"count"</js>, 42), <js>"count=42"</js>);
 	 * </p>
 	 *
-	 * <h6 class='section'>2. Predicate Testing (Functional Validation):</h6>
+	 * <h5 class='section'>2. Predicate Testing (Functional Validation):</h5>
 	 * <p class='bjava'>
 	 *    <jc>// Use Predicate&lt;Map.Entry&lt;K,V&gt;&gt; for functional testing</jc>
 	 *    Predicate&lt;Map.Entry&lt;String,Integer&gt;&gt; <jv>valueGreaterThanTen</jv> = <jv>entry</jv> -&gt; <jv>entry</jv>.getValue() &gt; 10;
 	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"count"</js>, 42), <jv>valueGreaterThanTen</jv>);
 	 * </p>
 	 *
-	 * <h6 class='section'>3. Object Equality (Direct Comparison):</h6>
+	 * <h5 class='section'>3. Object Equality (Direct Comparison):</h5>
 	 * <p class='bjava'>
 	 *    <jc>// Non-String, non-Predicate objects use <jsm>Objects.equals</jsm>() comparison</jc>
 	 *    <jsm>assertMap</jsm>(Map.<jsm>of</jsm>(<js>"key"</js>, <jv>myObject</jv>), <jv>expectedEntry</jv>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Map Ordering Behavior:</h5>
+	 * <h4 class='section'>Map Ordering Behavior:</h4>
 	 * <p>The {@link Listifiers#mapListifier()} method ensures deterministic ordering for map entries:</p>
 	 * <ul>
 	 *    <li><b>{@link SortedMap} (TreeMap, etc.):</b> Preserves existing sort order</li>
@@ -1034,7 +1034,7 @@ public class BctAssertions {
 	 * {@link BeanConverter} and then tests it against the provided glob-style pattern.
 	 * This is useful for testing string formats with simple wildcard patterns.</p>
 	 *
-	 * <h5 class='section'>Pattern Syntax:</h5>
+	 * <h4 class='section'>Pattern Syntax:</h4>
 	 * <p>The pattern uses glob-style wildcards:</p>
 	 * <ul>
 	 *    <li><b>{@code *}</b> matches any sequence of characters (including none)</li>
@@ -1042,7 +1042,7 @@ public class BctAssertions {
 	 *    <li><b>All other characters</b> are treated literally</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test filename patterns</jc>
 	 *    <jsm>assertMatchesGlob</jsm>(<js>"user_*_temp"</js>, <jv>filename</jv>);
@@ -1097,7 +1097,7 @@ public class BctAssertions {
 	 *    <li><b>Other objects:</b> Must convert to a non-empty List via {@link BeanConverter#listify(Object)}</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Supported Types:</h5>
+	 * <h4 class='section'>Supported Types:</h4>
 	 * <p>Any object that can be converted to a List, including:</p>
 	 * <ul>
 	 *    <li>Collections (List, Set, Queue, etc.)</li>
@@ -1107,7 +1107,7 @@ public class BctAssertions {
 	 *    <li>Optional objects</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test non-empty collections</jc>
 	 *    <jsm>assertNotEmpty</jsm>(List.<jsm>of</jsm>(<js>"item1"</js>, <js>"item2"</js>));
@@ -1158,7 +1158,7 @@ public class BctAssertions {
 	 *    <li><b>Collection-like objects:</b> Any object that can be converted to a List via the underlying converter</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test string length</jc>
 	 *    <jsm>assertSize</jsm>(5, <js>"hello"</js>);
@@ -1202,7 +1202,7 @@ public class BctAssertions {
 	 * {@link BeanConverter} and performs an exact equality comparison with the expected string.
 	 * This is useful for testing complete string output, formatted objects, or converted values.</p>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test exact string conversion</jc>
 	 *    <jsm>assertString</jsm>(<js>"John,30,true"</js>, <jv>user</jv>); <jc>// Assuming user converts to this format</jc>

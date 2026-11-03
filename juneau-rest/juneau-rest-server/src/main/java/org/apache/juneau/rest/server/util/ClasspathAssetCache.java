@@ -35,7 +35,7 @@ import org.apache.juneau.http.resource.*;
  * {@code ConsoleChromeMixin} (juneau-console) and {@code ViewsMixin} (juneau-console-views)
  * previously each hand-rolled as their own private statics and static cache maps.
  *
- * <h5 class='section'>Version-anchor:</h5>
+ * <h2 class='section'>Version-anchor:</h2>
  * <p>
  * {@link #buildVersion()} resolves {@link Package#getImplementationVersion()} from the constructor-supplied
  * <b>anchor</b> class, not from this class's own class/package. A mixin composes one {@link ClasspathAssetCache}
@@ -45,7 +45,7 @@ import org.apache.juneau.http.resource.*;
  * on this class instead would resolve {@code juneau-rest-server}'s own implementation version for every
  * consuming mixin, silently changing every consumer's cache-buster URLs.
  *
- * <h5 class='section'>Thread-safety:</h5>
+ * <h2 class='section'>Thread-safety:</h2>
  * <p>
  * Backed by {@link ConcurrentHashMap}s; safe to share across concurrent requests. Classpath-shipped resources
  * are assumed immutable for the lifetime of the JVM, so bytes and hashes are computed at most once per resource.

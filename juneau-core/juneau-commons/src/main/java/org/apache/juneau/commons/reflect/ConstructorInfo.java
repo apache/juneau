@@ -35,7 +35,7 @@ import org.apache.juneau.commons.utils.*;
  * API with additional functionality for constructor introspection, annotation handling, and instance creation.
  * It extends {@link ExecutableInfo} to provide common functionality shared with methods.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Constructor introspection - access constructor metadata, parameters, exceptions
  * 	<li>Annotation support - get annotations declared on the constructor
@@ -44,7 +44,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Thread-safe - instances are immutable and safe for concurrent access
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Introspecting constructor metadata for code generation or analysis
  * 	<li>Creating instances of classes dynamically
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Building frameworks that need to instantiate objects
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Get ConstructorInfo from a class</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -68,7 +68,7 @@ import org.apache.juneau.commons.utils.*;
  * 	MyClass <jv>obj</jv> = <jv>ctor</jv>.invoke(<js>"arg"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ClassInfo} - Class introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='jc'>{@link FieldInfo} - Field introspection
@@ -84,7 +84,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Creates a ConstructorInfo wrapper for the specified constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
 	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>);
@@ -106,7 +106,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * <p>
 	 * This convenience method automatically determines the declaring class from the constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor(String.<jk>class</jk>);
 	 * 	ConstructorInfo <jv>ci</jv> = ConstructorInfo.<jsm>of</jsm>(<jv>c</jv>);
@@ -169,7 +169,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Returns the wrapped constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ConstructorInfo <jv>ci</jv> = ...;
 	 * 	Constructor&lt;MyClass&gt; <jv>ctor</jv> = <jv>ci</jv>.inner();
@@ -354,7 +354,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * 	<li>If not found in the bean store, checks the <c>otherBeans</c> parameter.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Parameter Resolution:</h5>
+	 * <h4 class='section'>Parameter Resolution:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
 	 * 		If not found, checks <c>otherBeans</c> for a compatible instance.

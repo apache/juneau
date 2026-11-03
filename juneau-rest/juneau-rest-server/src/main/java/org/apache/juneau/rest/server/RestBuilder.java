@@ -43,14 +43,14 @@ import org.apache.juneau.rest.server.swagger.*;
  * 	MyRest <jv>r</jv> = MyRest.<jsm>builder</jsm>().path(<js>"/foo"</js>).allowedHeaderParams(<js>"foo"</js>).build();
  * </p>
  *
- * <h5 class='section'>Self type (CRTP):</h5>
+ * <h2 class='section'>Self type (CRTP):</h2>
  *
  * <p>
  * The {@code SELF} type parameter is the concrete builder type, so every fluent setter returns the most-derived
  * builder type and bespoke setters added by a builder subclass chain with true covariant returns.  This mirrors
  * the project-wide {@code SELF}/{@code self()} self-type convention.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AbstractRestBuilder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.servlet.RestServlet.Builder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.servlet.RestResource.Builder}

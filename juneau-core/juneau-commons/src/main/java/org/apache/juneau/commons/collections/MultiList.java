@@ -29,7 +29,7 @@ import java.util.stream.*;
  * a single list, without actually copying the elements. Modifications made through the iterator
  * or list iterator affect the underlying lists.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Zero-Copy Composition:</b> No data is copied when creating a MultiList; it simply wraps the provided lists
  * 	<li><b>Transparent Access:</b> Accessing elements by index or iterating over a MultiList seamlessly traverses all underlying lists in order
@@ -38,7 +38,7 @@ import java.util.stream.*;
  * 	<li><b>Enumeration Support:</b> Provides an {@link Enumeration} view via {@link #enumerator()}
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a MultiList from three separate lists</jc>
  * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);
@@ -69,7 +69,7 @@ import java.util.stream.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The order of access follows the order of lists as provided in the constructor
  * 	<li>Within each list, access order follows the list's natural order
@@ -80,12 +80,12 @@ import java.util.stream.*;
  * 	<li>The {@link #get(int)} method locates the element by traversing lists until the correct index is found
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not inherently thread-safe. If the underlying lists are modified concurrently
  * during iteration or access, the behavior is undefined. Synchronization must be handled externally if needed.
  *
- * <h5 class='section'>Example - Processing Multiple Data Sources:</h5>
+ * <h2 class='section'>Example - Processing Multiple Data Sources:</h2>
  * <p class='bjava'>
  * 	<jc>// Combine results from database, cache, and defaults</jc>
  * 	List&lt;User&gt; <jv>dbUsers</jv> = fetchFromDatabase();
@@ -101,7 +101,7 @@ import java.util.stream.*;
  * 	User <jv>user</jv> = <jv>allUsers</jv>.get(<jv>10</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -128,7 +128,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * The lists are stored by reference (not copied), so modifications made through the
 	 * MultiList's iterator will affect the original lists.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"a"</js>, <js>"b"</js>));
 	 * 	List&lt;String&gt; <jv>list2</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"c"</js>, <js>"d"</js>));
@@ -156,7 +156,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * This is useful for compatibility with legacy APIs that require an {@link Enumeration}
 	 * rather than an {@link Iterator}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	MultiList&lt;String&gt; <jv>multiList</jv> = <jk>new</jk> MultiList&lt;&gt;(list1, list2);
 	 * 	Enumeration&lt;String&gt; <jv>enumeration</jv> = <jv>multiList</jv>.enumerator();
@@ -181,7 +181,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * The index is resolved by traversing the underlying lists in order until the
 	 * correct list and position within that list is found.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);        <jc>// indices 0-1</jc>
 	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>, <js>"e"</js>); <jc>// indices 2-4</jc>
@@ -221,7 +221,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * The returned iterator supports the {@link Iterator#remove()} operation, which removes
 	 * the current element from its underlying list.
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Elements from the first list are iterated first, then the second, and so on
 	 * 	<li>If a list is empty, it is skipped during iteration
@@ -232,7 +232,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * 		in a row may throw {@link IllegalStateException} (behavior depends on underlying list)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"a"</js>, <js>"b"</js>));
 	 * 	List&lt;String&gt; <jv>list2</jv> = <jk>new</jk> ArrayList&lt;&gt;(List.of(<js>"c"</js>, <js>"d"</js>));
@@ -299,7 +299,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * The returned list iterator supports the {@link ListIterator#remove()} operation, which removes
 	 * the current element from its underlying list.
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Elements from the first list are iterated first, then the second, and so on
 	 * 	<li>If a list is empty, it is skipped during iteration
@@ -449,7 +449,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * underlying list. The size is recalculated each time this method is called
 	 * (it is not cached).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);        <jc>// size = 2</jc>
 	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>, <js>"e"</js>); <jc>// size = 3</jc>
@@ -475,7 +475,7 @@ public class MultiList<E> extends AbstractList<E> {
 	 * The format is <c>"[[...],[...],...]"</c> where each <c>[...]</c> is the standard
 	 * standard string representation of each underlying list (as returned by {@link Object#toString()}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	List&lt;String&gt; <jv>list1</jv> = List.of(<js>"a"</js>, <js>"b"</js>);
 	 * 	List&lt;String&gt; <jv>list2</jv> = List.of(<js>"c"</js>, <js>"d"</js>);

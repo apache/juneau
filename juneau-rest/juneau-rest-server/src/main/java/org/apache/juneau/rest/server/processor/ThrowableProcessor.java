@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Adds a <c>Thrown</c> header to the response and returns <c>0</c> so that the processor chain can continue.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */

@@ -32,13 +32,13 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Serializes POJOs to plain text using just the <c>toString()</c> method on the serialized object.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  *
  * Handles <c>Accept</c> types:  <bc>text/plain</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/plain</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  *
  * Essentially converts POJOs to plain text using the <c>toString()</c> method.
  *
@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * Also serializes objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;}
  * transform defined on it.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

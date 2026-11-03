@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	Parsing uses the standard {@link JsonParser} since JCS output is valid JSON.
  * </p>
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using static convenience methods.</jc>
  * 	String <jv>s</jv> = Jcs.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -46,12 +46,12 @@ import org.apache.juneau.marshall.stream.*;
  * 	MyBean <jv>b</jv> = <jv>jcs</jv>.read(<jv>s</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bjson'>
  * 	{<jok>"age"</jok>:<jov>30</jov>,<jok>"name"</jok>:<jov>"Alice"</jov>}
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		{@link java.math.BigDecimal} and {@link java.math.BigInteger} values beyond IEEE 754 double
  * 		precision range will lose precision or throw during serialization.
@@ -66,7 +66,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Jcs.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Jcs">JCS</a>
  * 	<li class='jc'>{@link JcsSerializer}

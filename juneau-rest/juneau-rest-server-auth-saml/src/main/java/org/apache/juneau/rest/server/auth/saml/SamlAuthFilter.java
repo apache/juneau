@@ -51,13 +51,13 @@ import jakarta.servlet.http.*;
  * 		an {@link AuthenticationException} with a {@code WWW-Authenticate: SAML ...} challenge.
  * </ol>
  *
- * <h5 class='topic'>Roles</h5>
+ * <h2 class='topic'>Roles</h2>
  * <p>
  * If the resolved {@link ClaimsPrincipal} contains a claim whose name equals the configured
  * {@code rolesClaim} (default {@code "roles"}) and whose value is a {@link List} of {@link String}, those role
  * names are populated on the {@link AuthResult}.  Otherwise the role set is empty.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p>
  * Note that {@code validator} below is <i>not</i> built with
@@ -81,7 +81,7 @@ import jakarta.servlet.http.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link SamlAssertionValidator}
  * 	<li class='jc'>{@link SamlBinding}

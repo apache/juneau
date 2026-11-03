@@ -32,7 +32,7 @@ import org.apache.juneau.commons.httppart.*;
  * implementation that ships with Juneau is backed by the typed {@code JsonSchema} bean and lives in
  * {@code juneau-bean-jsonschema}; it is discovered at runtime via {@link java.util.ServiceLoader ServiceLoader}.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Implementations must be safe to invoke from multiple threads concurrently, since a single validator is shared by all
  * marshalling sessions for a given {@link BeanMeta}.
  *

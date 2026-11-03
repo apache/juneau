@@ -40,12 +40,12 @@ import org.apache.juneau.commons.*;
  * 	<li>Methods and return types of server-side and client-side <ja>@Request</ja>-annotated interfaces.
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
+ * <h2 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h2>
  * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as the
  * path remainder after the path pattern match.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/*"</js>)
  * 	<jk>public void</jk> doGet(
@@ -58,24 +58,20 @@ import org.apache.juneau.commons.*;
  * <p>
  * This is functionally equivalent to using <c><ja>@Path</ja>(<js>"/*"</js>)</c>, but provides a more intuitive name.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Path">@Path</a>
  * </ul>
  *
- * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
+ * <h2 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h2>
  * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they represent the path remainder on the request.
  *
- * <h5 class='section'>See Also:</h5><ul>
- * </ul>
- *
- * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- * <p>
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h2>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Request">@Request</a>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Path}
  * </ul>
  *
@@ -112,7 +108,7 @@ public @interface PathRemainder {
 	 * Values specified on this field override values specified on the type, and values specified on child types override values
 	 * specified on parent types.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing and parsing validation.

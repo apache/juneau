@@ -41,7 +41,7 @@ import freemarker.template.*;
  * {@code #juneau-page} contract and the same toolkit asset tags as an FTL page.  Chrome (brand, nav tree, footer, theme tokens) stays in the app's
  * chrome template.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>var</jk> <jv>spec</jv> = PageSpec.<jsm>create</jsm>()
  * 		.title(<js>"SLO"</js>)
@@ -53,7 +53,7 @@ import freemarker.template.*;
  * 		.table(<jv>sloTable</jv>);
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> PageSpec.<jsm>create</jsm>()
  * 		.tab(<js>"changes"</js>)
@@ -449,7 +449,7 @@ public final class PageSpec {
 	 * Adds an {@code html} card whose body is fetched from {@code src}, with a title, optionally rebuilt through the
 	 * views attribute-allowlist sanitizer.  The equivalent of {@code <@card type="html" src="..." sanitize=true>}.
 	 *
-	 * <h5 class='section'>Trust boundary:</h5>
+	 * <h4 class='section'>Trust boundary:</h4>
 	 * <p>
 	 * With {@code sanitize} <jk>false</jk> the shell fetches {@code src} and inserts the returned HTML as-is through a
 	 * raw HTML-sink assignment, <b>unsanitized</b>, the same trust level as {@code footer.text} (see

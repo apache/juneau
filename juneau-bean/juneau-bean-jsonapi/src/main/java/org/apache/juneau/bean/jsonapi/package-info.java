@@ -19,7 +19,7 @@
  * Juneau {@link org.apache.juneau.marshall.Marshalled @Marshalled} types for the
  * <a href="https://jsonapi.org/format/">JSON:API v1.1</a> wire format.
  *
- * <h5 class='topic'>Overview</h5>
+ * <h2 class='topic'>Overview</h2>
  *
  * <p>
  * JSON:API is a media-type ({@code application/vnd.api+json}) for building APIs with shared conventions for
@@ -28,7 +28,7 @@
  * {@link org.apache.juneau.marshall.json.JsonParser} already produce and consume the wire format. The matching
  * {@code ContentType} constant is {@code org.apache.juneau.http.header.ContentType#APPLICATION_VND_API_JSON}.
  *
- * <h5 class='topic'>Bean Classes</h5>
+ * <h2 class='topic'>Bean Classes</h2>
  * <ul class='spaced-list'>
  *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiDocument JsonApiDocument} - Top-level container with
  *     {@code data}/{@code errors}/{@code meta}/{@code jsonapi}/{@code links}/{@code included}.
@@ -50,7 +50,7 @@
  *     string URL or a {@link org.apache.juneau.bean.jsonapi.JsonApiLink JsonApiLink} object per the spec.
  * </ul>
  *
- * <h5 class='topic'>Important: {@code JsonApiResource.type} is a plain String</h5>
+ * <h2 class='topic'>Important: {@code JsonApiResource.type} is a plain String</h2>
  *
  * <p>
  * JSON:API uses {@code type} as an open-ended string field on resource objects (the entity-type name, e.g.
@@ -60,14 +60,14 @@
  * bean dispatch would break round-tripping of unknown {@code type} values and force every API to enumerate its
  * resource types in a Java dictionary up front.
  *
- * <h5 class='topic'>Document-level mutual exclusion</h5>
+ * <h2 class='topic'>Document-level mutual exclusion</h2>
  *
  * <p>
  * Per the JSON:API spec, a document MUST contain at least one of {@code data}, {@code errors}, or {@code meta};
  * {@code data} and {@code errors} MUST NOT coexist. {@link org.apache.juneau.bean.jsonapi.JsonApiDocument JsonApiDocument}
  * documents this constraint and offers an optional {@code validate()} helper.
  *
- * <h5 class='topic'>Example</h5>
+ * <h2 class='topic'>Example</h2>
  *
  * <p class='bjava'>
  * 	<jc>// Build a compound document with included resources.</jc>
@@ -78,7 +78,7 @@
  * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.write(<jv>doc</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a href="https://jsonapi.org/format/">JSON:API v1.1</a>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  * </ul>

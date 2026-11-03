@@ -89,7 +89,7 @@ import net.shibboleth.shared.resolver.*;
  * 		{@code <EncryptedAssertion>}, a {@code decryptionCredential} must be configured.
  * </ul>
  *
- * <h5 class='topic'>Marker claim</h5>
+ * <h2 class='topic'>Marker claim</h2>
  * <p>
  * The returned {@link ClaimsPrincipal} is annotated with {@code issuerType=SAML} so downstream code
  * can distinguish SAML-derived principals from JWT-derived principals without resorting to a subclass:
@@ -100,7 +100,7 @@ import net.shibboleth.shared.resolver.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Builder usage</h5>
+ * <h2 class='topic'>Builder usage</h2>
  *
  * <p>
  * This recipe builds a <b>standalone</b> validator with no {@link Builder#recipient(String)} configured, so
@@ -118,7 +118,7 @@ import net.shibboleth.shared.resolver.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link SamlAuthFilter}
  * 	<li class='jc'>{@link SamlMetadataResolvers}

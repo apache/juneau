@@ -26,7 +26,7 @@ import org.apache.juneau.http.*;
  * <p>
  * The server has received the request headers and the client should proceed to send the request body.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

@@ -29,7 +29,7 @@ import org.springframework.beans.factory.annotation.*;
  * Resolution of the {@code HelloMessageProvider} bean works because the parent router extends
  * {@code BasicSpringRestServletGroup} (i.e. {@code SpringRestServlet}), which lets child resources be Spring beans.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */

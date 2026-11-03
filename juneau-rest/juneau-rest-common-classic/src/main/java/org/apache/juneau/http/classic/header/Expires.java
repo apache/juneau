@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Gives the date/time after which the response is considered stale (in "HTTP-date" format as defined by RFC 7231).
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Expires: Thu, 01 Dec 1994 16:00:00 GMT
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Expires entity-header field gives the date/time after which the response is considered stale.
  * A stale cache entry may not normally be returned by a cache (either a proxy cache or a user agent cache) unless it is
@@ -80,7 +80,7 @@ import org.apache.juneau.http.*;
  * would by default be non-cacheable indicates that the response is cacheable, unless indicated otherwise by a
  * Cache-Control header field (section 14.9).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

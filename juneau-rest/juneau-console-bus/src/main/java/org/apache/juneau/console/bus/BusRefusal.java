@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.collections.*;
  * A named refusal from the bus: the session POST's {@code 400/403/429/501} answers and the codec's
  * {@code bus:bad-frame}.  The message is fixed server text; {@link #denied()} lists the topic names the caller requested, which is the only caller input in a refusal.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jk>try</jk> {
  *     BusSession <jv>s</jv> = <jv>bus</jv>.openSession(<jv>req</jv>, <jv>body</jv>);

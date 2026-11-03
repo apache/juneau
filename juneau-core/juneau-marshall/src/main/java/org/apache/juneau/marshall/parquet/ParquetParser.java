@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Always returns a {@link List}&lt;T&gt;; each row in the file becomes one list element.
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  * <p>
  * Handles <c>Content-Type</c>: <bc>application/vnd.apache.parquet</bc>
  */

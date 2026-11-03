@@ -42,8 +42,7 @@ import org.apache.juneau.marshall.httppart.*;
  * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, Object <jv>headerValue</jv>)</c>
  * </ul>
  *
- * <p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bjava'>
  * 	<jc>// Our header bean.</jc>
  * 	<ja>@Header</ja>(<js>"Foo"</js>)
@@ -59,7 +58,7 @@ import org.apache.juneau.marshall.httppart.*;
  *  FooHeader <jv>foo</jv> = <jv>headers</jv>.get(FooHeader.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

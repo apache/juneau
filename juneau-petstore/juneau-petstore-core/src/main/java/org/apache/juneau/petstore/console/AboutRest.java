@@ -31,7 +31,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * {@link BeanDescription}, {@link Hyperlink} and {@link SeeOtherRoot} are small beans meant for REST responses:
  * {@code OPTIONS}-style introspection, navigational links and root-relative redirects.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// GET /console/about/beans/BeanDescription</jc>
  * 	<ja>@RestGet</ja>(path=<js>"/beans/BeanDescription"</js>)
@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * 	&lt;@card id="overview" title="About the petstore"&gt;&lt;div class="jc-prose"&gt;...&lt;/div&gt;&lt;/@card&gt;
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>

@@ -220,12 +220,19 @@ class MdcAsyncListener_Test extends TestBase {
 	// correlation survives the async-completion hop (resolved Q5).
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void traceEnrichment_01_activeSpanFoldsTraceAndSpanIdIntoSnapshot() {
-		var tracer = io.opentelemetry.sdk.OpenTelemetrySdk.builder()
-			.setTracerProvider(io.opentelemetry.sdk.trace.SdkTracerProvider.builder().build())
+	// OTel SDK 1.67.0+ hands out a no-op tracer (invalid span contexts) when the provider has no span processor.
+	private static io.opentelemetry.api.trace.Tracer sdkTracer() {
+		return io.opentelemetry.sdk.OpenTelemetrySdk.builder()
+			.setTracerProvider(io.opentelemetry.sdk.trace.SdkTracerProvider.builder()
+				.addSpanProcessor(io.opentelemetry.sdk.trace.export.SimpleSpanProcessor.create(io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter.create()))
+				.build())
 			.build()
 			.getTracer("test");
+	}
+
+	@Test
+	void traceEnrichment_01_activeSpanFoldsTraceAndSpanIdIntoSnapshot() {
+		var tracer = sdkTracer();
 		var span = tracer.spanBuilder("op").startSpan();
 		try (var scope = span.makeCurrent()) {
 			var snap = MdcAsyncListener.snapshot();
@@ -245,10 +252,7 @@ class MdcAsyncListener_Test extends TestBase {
 
 	@Test
 	void traceEnrichment_03_existingMdcPreservedAlongsideTraceIds() {
-		var tracer = io.opentelemetry.sdk.OpenTelemetrySdk.builder()
-			.setTracerProvider(io.opentelemetry.sdk.trace.SdkTracerProvider.builder().build())
-			.build()
-			.getTracer("test");
+		var tracer = sdkTracer();
 		var span = tracer.spanBuilder("op").startSpan();
 		MDC.put("requestId", "abc-123");
 		try (var scope = span.makeCurrent()) {

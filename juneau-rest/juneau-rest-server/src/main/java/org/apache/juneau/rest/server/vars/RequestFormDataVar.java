@@ -30,20 +30,20 @@ import org.apache.juneau.rest.server.*;
  * Used to resolve values returned by {@link RestRequest#getFormParam(String)}.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RF{foo}"</js>);
  * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RF{foo,bar}"</js>);
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
  * 	<li class='note'>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
  * </ul>
  */

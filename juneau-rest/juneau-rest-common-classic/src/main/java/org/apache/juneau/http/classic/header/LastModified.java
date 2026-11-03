@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * <p>
  * The last modified date for the requested object (in "HTTP-date" format as defined by RFC 7231).
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Last-Modified entity-header field indicates the date and time at which the origin server believes the variant was
  * last modified.
@@ -70,7 +70,7 @@ import org.apache.juneau.http.*;
  * <p>
  * HTTP/1.1 servers SHOULD send Last-Modified whenever feasible.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

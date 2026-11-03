@@ -19,7 +19,7 @@ package org.apache.juneau.http;
 /**
  * Static strings used for Swagger parameter types.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2/#data-types">Swagger 2.0 Data Types</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/#data-types">OpenAPI 3.0 Data Types</a>
  * </ul>

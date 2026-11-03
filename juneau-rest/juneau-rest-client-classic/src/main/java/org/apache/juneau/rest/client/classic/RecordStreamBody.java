@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.stream.*;
  * opens a writer of the appropriate kind, and hands it to the caller's consumer.  When the
  * consumer returns, the writer is closed and the request body is dispatched.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<ja>@Remote</ja>
  * 	<jk>public interface</jk> MyApi {

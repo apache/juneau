@@ -34,13 +34,13 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to CBOR (RFC 8949).
  *
- * <h5 class='section'>Media types:</h5>
+ * <h2 class='section'>Media types:</h2>
  *
  * Handles <c>Accept</c> types:  <bc>application/cbor</bc>
  * <p>
  * Produces <c>Content-Type</c> types: <bc>application/cbor</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Java-to-CBOR type mapping:
  * <ul class='spaced-list'>
@@ -56,13 +56,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>All other types → fallback to {@code toString()} as string
  * </ul>
  *
- * <h5 class='section'>Behavior-specific subclasses:</h5>
+ * <h2 class='section'>Behavior-specific subclasses:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@link SpacedHex} — Spaced-hex text output for debugging
  * 	<li>{@link Base64} — Base64 text output
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to CBOR bytes using the default serializer</jc>
  * 	byte[] <jv>cbor</jv> = CborSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -72,7 +72,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	byte[] <jv>cbor</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  * </p>
  *
- * <h5 class='section'>Round-trip notes:</h5>
+ * <h2 class='section'>Round-trip notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@link BigInteger} — emitted losslessly as a native CBOR integer when it fits CBOR's integer
  * 		range ({@code -2^64 .. 2^64-1}), otherwise as a lossless decimal string.
@@ -84,11 +84,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Semantic tags (major type 6) not emitted unless {@link Builder#useTags(boolean) useTags(true)}.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>

@@ -31,11 +31,11 @@ import org.apache.juneau.marshall.json5.*;
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
@@ -128,11 +128,11 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * <p>
 		 * Specifies the maximum indentation level in the serialized document.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -158,11 +158,11 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * <p>
 		 * Specifies the character to use for quoting attributes and values.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that uses single quotes.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -215,11 +215,11 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * <p>
 		 * Specifies to use single quotes for quoting attributes and values.
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that uses single quotes.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -251,7 +251,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * <p>
 		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#write(Object, Object)}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -281,7 +281,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * <p>
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with whitespace enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -321,7 +321,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * <p>
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with whitespace enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -461,7 +461,7 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	 * instance can be passed directly wherever a {@link java.util.function.Function Function} or {@link ThrowingFunction} is
 	 * expected (e.g. assertion transform methods).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).asString(Json5Serializer.<jsf>DEFAULT</jsf>).is(<js>"{...}"</js>);
 	 * </p>

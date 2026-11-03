@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.serializer.*;
  * For strict (RFC 8259) JSON behavior, use {@link JsonMap}. For a neutral, marshaller-agnostic
  * base with no language coupling, use {@link MarshalledMap}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct an empty Map</jc>
  * 	Json5Map <jv>map</jv> = Json5Map.<jsm>of</jsm>();
@@ -54,7 +54,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	String <jv>s</jv> = <jv>map</jv>.toString();  <jc>// "{a:'A',b:{c:'C',d:123}}"</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  */
@@ -247,7 +247,7 @@ public class Json5Map extends MarshalledMap {
 	/**
 	 * Construct a map initialized with the specified key/value pairs.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	Json5Map <jv>map</jv> = <jk>new</jk> Json5Map(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
 	 * </p>

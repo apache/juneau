@@ -26,7 +26,7 @@ import java.util.*;
  * serializers (browsable HTML table, JSON, or XML based on the {@code Accept} header), mirroring the way
  * {@link ChildResourceDescriptions} backs the child-resource navigation page.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RouteDescription}
  * 	<li class='jc'>{@link ResourceDescriptions}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UtilityBeans">Utility Beans</a>

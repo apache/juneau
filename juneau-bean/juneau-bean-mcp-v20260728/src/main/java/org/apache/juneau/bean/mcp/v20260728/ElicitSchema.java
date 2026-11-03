@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.collections.*;
  * (re)declared, and a redeclaration of that field does not discard the marking), and may be called any time,
  * with an unknown name validated only at {@link #build()} time.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	JsonMap <jv>schema</jv> = ElicitSchema.<jsm>create</jsm>()
  * 		.booleanField(<js>"confirm"</js>).title(<js>"Confirm"</js>)

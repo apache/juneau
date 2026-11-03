@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * Carries the standard six members: {@code type}, {@code id}, {@code attributes}, {@code relationships},
  * {@code links}, {@code meta}.
  *
- * <h5 class='topic'>Why {@code type} is a plain String</h5>
+ * <h2 class='topic'>Why {@code type} is a plain String</h2>
  *
  * <p>
  * JSON:API uses {@code type} as an open-ended string field on resource objects (the entity-type name, e.g.
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * with Juneau bean dispatch, break round-tripping of unknown {@code type} values, and force every API to
  * enumerate its resource types in a Java dictionary up front.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  * </ul>
  */

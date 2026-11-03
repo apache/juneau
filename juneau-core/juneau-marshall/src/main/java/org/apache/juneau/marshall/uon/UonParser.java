@@ -35,29 +35,29 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>text/uon</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  *
- * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <h2 class='figure'>Example input (Map of name/age):</h2>
  * <p class='bcode'>
  * 	(name=Alice,age=30)
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bcode'>
  * 	(name=Alice,age=30,address=(street=123+Main+St,city=Boston,state=MA),tags=@(a,b,c))
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UonSupport">UON</a>
 
  * </ul>
@@ -131,7 +131,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * When enabled, URI encoded characters will be decoded.  Otherwise it's assumed that they've already been decoded
 		 * before being passed to this parser.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a decoding UON parser.</jc>
 		 * 	ReaderParser <jv>parser</jv> = UonParser.
@@ -179,7 +179,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * When enabled, after parsing a POJO from the input, verifies that the remaining input in
 		 * the stream consists of only comments or whitespace.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = UonParser.

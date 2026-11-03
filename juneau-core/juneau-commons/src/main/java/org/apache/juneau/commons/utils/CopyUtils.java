@@ -32,7 +32,7 @@ import java.util.function.*;
  * overload resolution.  A single static-import-on-demand of such a subclass brings in <b>both</b> the inherited
  * collection overloads and the module's bean overloads.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link CollectionUtils}
  * </ul>
  */

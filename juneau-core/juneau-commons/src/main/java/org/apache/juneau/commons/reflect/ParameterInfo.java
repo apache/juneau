@@ -42,7 +42,7 @@ import org.apache.juneau.commons.utils.*;
  * It supports resolving parameter names from bytecode (when compiled with <c>-parameters</c>) or from
  * <ja>@Name</ja> annotations.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Parameter introspection - access parameter metadata, type, annotations
  * 	<li>Name resolution - resolve parameter names from bytecode or annotations
@@ -51,7 +51,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Annotation support - get annotations declared on the parameter
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Introspecting parameter metadata for code generation or analysis
  * 	<li>Resolving parameter names for dependency injection frameworks
@@ -60,7 +60,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Building frameworks that need to analyze method/constructor signatures
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Get ParameterInfo from a method</jc>
  * 	MethodInfo <jv>mi</jv> = ...;
@@ -77,7 +77,7 @@ import org.apache.juneau.commons.utils.*;
  * 		<jv>param</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
  * </p>
  *
- * <h5 class='section'>Parameter Name Resolution:</h5>
+ * <h2 class='section'>Parameter Name Resolution:</h2>
  * <p>
  * Parameter names are resolved in the following order:
  * <ol class='spaced-list'>
@@ -86,7 +86,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><c>arg0</c>, <c>arg1</c>, etc. (fallback if names unavailable)
  * </ol>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
  * 	<li class='jc'>{@link ExecutableInfo} - Common executable functionality
@@ -121,7 +121,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * This convenience method automatically determines the declaring executable from the parameter
 	 * and finds the matching ParameterInfo.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Parameter <jv>p</jv> = ...;
 	 * 	ParameterInfo <jv>pi</jv> = ParameterInfo.<jsm>of</jsm>(<jv>p</jv>);
@@ -206,7 +206,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Parameter#getAnnotatedType()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get annotated type: void method(@NotNull String value)</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -261,7 +261,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Parameter#getDeclaringExecutable()} but returns {@link ExecutableInfo} instead.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get the method or constructor that declares this parameter</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -302,7 +302,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * For methods, searches matching methods (same signature) in parent classes/interfaces
 	 * for parameters at the same index with matching name and type.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Constructor with different parameter counts:</jc>
 	 * 	<jk>class</jk> A {
@@ -336,7 +336,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Parameter#getModifiers()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if parameter is final</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -380,7 +380,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Parameter#getParameterizedType()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get generic type information for parameter: List&lt;String&gt; values</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -524,7 +524,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Parameter#isImplicit()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Filter out implicit parameters</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -548,7 +548,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <b>Note:</b> This method is different from {@link #hasName()} which also checks for the presence
 	 * of a <c>@Name</c> annotation. This method only checks if the name is present in the bytecode.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if parameter name is in bytecode</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -569,7 +569,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Same as calling {@link Parameter#isSynthetic()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Filter out compiler-generated parameters</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -605,7 +605,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * <p>
 	 * Only returns <jk>true</jk> for the last parameter of a variable arity method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if this is a varargs parameter</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -631,7 +631,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * 	<li>Varargs indicator (if applicable)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Simple parameter</jc>
 	 * 	ParameterInfo <jv>pi</jv> = ...;
@@ -853,7 +853,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 	 * 	<li>If not found in the bean store, checks the <c>otherBeans</c> parameter.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Parameter Resolution:</h5>
+	 * <h4 class='section'>Parameter Resolution:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
 	 * 		If not found, checks <c>otherBeans</c> for a compatible instance.

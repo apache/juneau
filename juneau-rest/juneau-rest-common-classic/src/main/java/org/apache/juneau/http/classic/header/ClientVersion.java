@@ -32,7 +32,7 @@ import org.apache.juneau.bct.assertions.*;
  * <p>
  * Specifies a client-side version number.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Client-Version: 2.0.1
  * </p>
@@ -41,7 +41,7 @@ import org.apache.juneau.bct.assertions.*;
  * Not part of the RFC2616 specification, but provided to allow for HTTP responses to be tailored to specified
  * known client versions.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *
@@ -146,7 +146,7 @@ public class ClientVersion extends BasicStringHeader {
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the response content is older than 1.</jc>
 	 * 	<jv>client</jv>

@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * The annotated method must be <jk>static</jk>, return an instance of the class (or a subtype), and take exactly one
  * {@link String} argument.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@StringCtor</ja>(<js>"of"</js>)
  * 	<jk>public class</jk> MyClass {
@@ -52,7 +52,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link ClassMeta#newInstanceFromString(Object,String)}
  * </ul>
  *

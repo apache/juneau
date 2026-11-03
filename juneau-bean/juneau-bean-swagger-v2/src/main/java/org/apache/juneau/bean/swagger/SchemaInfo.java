@@ -34,7 +34,7 @@ import org.apache.juneau.commons.collections.*;
  * primitives, and arrays. This object is an extended subset of the JSON Schema Specification Draft 4, with
  * additional extensions provided by the Swagger Specification to allow for more complete documentation.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Schema Object supports all properties from JSON Schema Draft 4, including but not limited to:
  * <ul class='spaced-list'>
@@ -68,7 +68,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>example</c> (any) - Example value (Swagger extension)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	SchemaInfo <jv>info</jv> = <jsm>schemaInfo</jsm>()
@@ -89,7 +89,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#schema-object">Swagger 2.0 Specification &gt; Schema Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/data-models/">Swagger Data Models</a>
  * 	<li class='link'><a class="doclink" href="https://json-schema.org/">JSON Schema Specification</a>

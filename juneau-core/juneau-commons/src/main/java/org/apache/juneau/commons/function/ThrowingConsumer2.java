@@ -28,7 +28,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * {@link RuntimeException}, making it compatible with standard {@link Consumer2} usage while still allowing
  * the implementation to throw checked exceptions via {@link #acceptThrows(Object, Object)}.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Exception support - allows checked exceptions to be thrown via {@link #acceptThrows(Object, Object)}
@@ -36,7 +36,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>Dual interface - can be used as both Consumer2 and ThrowingConsumer2
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Two-argument operations that may throw I/O exceptions
  * 	<li>Validation operations that may throw validation exceptions
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>Operations that need to propagate checked exceptions
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda with exception</jc>
  * 	ThrowingConsumer2&lt;String,Integer&gt; <jv>fileWriter</jv> = (<jv>path</jv>, <jv>content</jv>) -&gt; {
@@ -62,7 +62,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<jv>fileWriter</jv>.apply(<js>"/tmp/output.txt"</js>, <js>"Hello World"</js>);  <jc>// May throw RuntimeException</jc>
  * </p>
  *
- * <h5 class='section'>Exception Handling:</h5>
+ * <h2 class='section'>Exception Handling:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@link #acceptThrows(Object, Object)} - Throws checked exceptions directly
  * 	<li>{@link #apply(Object, Object)} - Wraps checked exceptions in {@link RuntimeException}
@@ -70,7 +70,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * 	<li>Use {@code apply} when you want standard Consumer2 behavior
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThrowingConsumer} - Single-argument consumer that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer3} - Three-argument consumer that throws exceptions
  * 	<li class='jc'>{@link ThrowingConsumer4} - Four-argument consumer that throws exceptions
@@ -135,7 +135,7 @@ public interface ThrowingConsumer2<A,B> extends Consumer2<A,B> {
 	 * This is the functional method that implementations must provide. It allows checked exceptions
 	 * to be thrown directly, unlike the standard {@link Consumer2#apply(Object, Object)} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ThrowingConsumer2&lt;String,Integer&gt; <jv>validator</jv> = (<jv>name</jv>, <jv>age</jv>) -&gt; {
 	 * 		<jk>if</jk> (<jv>name</jv> == <jk>null</jk> || <jv>name</jv>.isEmpty()) {

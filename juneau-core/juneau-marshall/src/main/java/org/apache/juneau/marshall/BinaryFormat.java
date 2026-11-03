@@ -51,7 +51,7 @@ public enum BinaryFormat {
 	/**
 	 * Spaced-hex.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	12 34 56 78 90 AB CD EF
 	 * </p>
@@ -61,7 +61,7 @@ public enum BinaryFormat {
 	/**
 	 * Hex.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	1234567890ABCDEF
 	 * </p>

@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * and pins the ops at {@code /*} &mdash; the op must <b>not</b> re-pin {@code /static/*} or it would
  * double-path to {@code /static/static/*} under the routed-subtree wiring.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link StaticFilesMixin}
  * 	<li class='jc'>{@link StaticFilesServlet}
  * 	<li class='jc'>{@link StaticFiles}

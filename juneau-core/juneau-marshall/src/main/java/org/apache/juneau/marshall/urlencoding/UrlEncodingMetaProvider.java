@@ -22,7 +22,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Interface for providing access to {@link UrlEncodingClassMeta} and {@link UrlEncodingBeanPropertyMeta} objects.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding</a>
  * </ul>
  */

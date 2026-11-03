@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link Rest#mixins() @Rest(mixins=VersionMixin.class)}; the {@code /version} URL becomes available
  * alongside the host's own endpoints with no further wiring.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /version} can be overridden via the SVL variable
@@ -60,7 +60,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@code -Djuneau.version.path=info} (or {@code about}), compose a second instance with the
  * desired override, or subclass and supply their own {@code @RestGet(path=...)} method.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -68,7 +68,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link #getInfo}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins=VersionMixin.<jk>class</jk>)
@@ -84,7 +84,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Default lookup chain:</h5>
+ * <h2 class='section'>Default lookup chain:</h2>
  *
  * <p>
  * The default {@link Builder#fromManifest() fromManifest()} reader walks the
@@ -105,7 +105,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * explicit {@link Builder#fromManifest(ClassLoader) fromManifest(importerClassLoader)} call so the
  * lookup starts from the importer's classloader rather than the framework's.
  *
- * <h5 class='section'>Output:</h5>
+ * <h2 class='section'>Output:</h2>
  *
  * <p>
  * The endpoint returns a JSON map &mdash; e.g.:
@@ -124,7 +124,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * Endpoints are excluded from generated Swagger / OpenAPI specs via
  * {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link SeoMixin}
  * 	<li class='jc'>{@link WellKnownMixin}
@@ -194,7 +194,7 @@ public class VersionMixin extends RestMixin {
 	 * programmatic {@link RestBuilder}(carrying any {@code @Rest}-level overrides such as {@code path}) so those
 	 * values take precedence over the mixin class's own {@link Rest @Rest} annotation.
 	 *
-	 * <h5 class='section'>Why worker + builder, not the flavor Builder:</h5>
+	 * <h4 class='section'>Why worker + builder, not the flavor Builder:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>Takes the already-built <b>worker bean</b> (not the flavor {@link Builder}) so the flavor can be
 	 * 		constructed from ANY independently-supplied worker &mdash; e.g. a user's own {@code @Bean VersionProvider}

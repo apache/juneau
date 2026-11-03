@@ -21,7 +21,7 @@
  * hypermedia format, also covered by
  * <a href="https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08">draft-kelly-json-hal-08</a>.
  *
- * <h5 class='topic'>Overview</h5>
+ * <h2 class='topic'>Overview</h2>
  *
  * <p>
  * HAL is a JSON-based hypermedia format used by RESTful APIs to express links and embedded resources alongside the
@@ -30,7 +30,7 @@
  * and consume {@code application/hal+json}. The matching {@code ContentType} constant is
  * {@code org.apache.juneau.http.header.ContentType#APPLICATION_HAL_JSON} (in {@code juneau-rest-common}).
  *
- * <h5 class='topic'>Bean Classes</h5>
+ * <h2 class='topic'>Bean Classes</h2>
  * <ul class='spaced-list'>
  *   <li>{@link org.apache.juneau.bean.hal.HalResource HalResource} - Top-level HAL resource. Carries
  *     {@code _links}, {@code _embedded}, and arbitrary payload fields.
@@ -45,7 +45,7 @@
  *   <li>{@link org.apache.juneau.bean.hal.HalResourceOrArraySwap HalResourceOrArraySwap} - The {@code _embedded} analogue.
  * </ul>
  *
- * <h5 class='topic'>Example</h5>
+ * <h2 class='topic'>Example</h2>
  *
  * <p class='bjava'>
  * 	<jc>// Build a HAL resource with a self link, a curies array, and embedded items.</jc>
@@ -59,7 +59,7 @@
  * 	HalResource <jv>back</jv> = JsonParser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, HalResource.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a href="https://stateless.group/hal_specification.html">HAL Specification</a>
  *   <li class='link'><a href="https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08">draft-kelly-json-hal-08</a>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHal">juneau-bean-hal</a>

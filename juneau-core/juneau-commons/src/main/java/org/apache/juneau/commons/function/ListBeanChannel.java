@@ -31,7 +31,7 @@ import java.util.*;
  * in memory is acceptable. For large datasets or database-backed scenarios, implement
  * {@link BeanChannel} (or {@link BeanConsumer} / {@link BeanSupplier}) directly.
  *
- * <h5 class='section'>Example (getter-only round-trip property):</h5>
+ * <h2 class='section'>Example (getter-only round-trip property):</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> ItemCollection {
  * 		<jk>private final</jk> ListBeanChannel&lt;Item&gt; <jv>items</jv> = <jk>new</jk> ListBeanChannel&lt;&gt;();
@@ -42,7 +42,7 @@ import java.util.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BeanChannel} - Round-trip lifecycle interface
  * 	<li class='jc'>{@link BeanConsumer} - Parse-only lifecycle interface
  * 	<li class='jc'>{@link BeanSupplier} - Serialize-only lifecycle interface

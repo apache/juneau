@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
  * This is particularly useful for HashMap composite keys when you need to combine multiple
  * values into a single key.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Immutable - values cannot be changed after construction
  * 	<li>Content-based equality - uses {@link Shorts#eq(Object, Object)} for comparison
@@ -40,14 +40,14 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Array support - properly handles arrays with content-based equality and hashing
  * </ul>
  *
- * <h5 class='section'>Array Support:</h5>
+ * <h2 class='section'>Array Support:</h2>
  * <p>
  * Unlike using arrays directly as HashMap keys (which use identity-based equality), this class properly
  * handles arrays by using content-based equality and hashing via {@link HashCode#of(Object...)} which
  * internally uses {@link Arrays#hashCode(Object[])} for arrays. This means two Tuple2 instances
  * containing arrays with the same content will be considered equal.
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Composite keys for HashMap lookups (e.g., combining two identifiers)
  * 	<li>Using arrays in composite keys with proper content-based equality
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Grouping related values together for processing
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Using arrays in composite keys</jc>
  * 	Map&lt;Tuple2&lt;String,int[]&gt;,Result&gt; <jv>map</jv> = <jk>new</jk> HashMap&lt;&gt;();
@@ -68,12 +68,12 @@ import org.apache.juneau.commons.utils.*;
  * 	String <jv>name</jv> = <jv>cache</jv>.get(Tuple2.<jsm>of</jsm>(<js>"user"</js>, 12345));  <jc>// Returns "John Doe"</jc>
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is immutable and therefore thread-safe. Multiple threads can safely access a Tuple2 instance
  * concurrently without synchronization.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Tuple1} - Single-value tuple
  * 	<li class='jc'>{@link Tuple3} - Three-value tuple
  * 	<li class='jc'>{@link Tuple4} - Four-value tuple
@@ -89,7 +89,7 @@ public class Tuple2<A,B> {
 	/**
 	 * Creates a new tuple containing the specified two values.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"name"</js>, 42);
 	 * 	Tuple2&lt;String[],int[]&gt; <jv>arrayTuple</jv> = Tuple2.<jsm>of</jsm>(
@@ -132,7 +132,7 @@ public class Tuple2<A,B> {
 	/**
 	 * Returns the first value in this tuple.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, 42);
 	 * 	String <jv>first</jv> = <jv>tuple</jv>.getA();  <jc>// Returns "hello"</jc>
@@ -145,7 +145,7 @@ public class Tuple2<A,B> {
 	/**
 	 * Returns the second value in this tuple.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, 42);
 	 * 	Integer <jv>second</jv> = <jv>tuple</jv>.getB();  <jc>// Returns 42</jc>
@@ -158,7 +158,7 @@ public class Tuple2<A,B> {
 	/**
 	 * Returns the first value in this tuple wrapped in an {@link Optional}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, 42);
 	 * 	Optional&lt;String&gt; <jv>first</jv> = <jv>tuple</jv>.optA();  <jc>// Returns Optional.of("hello")</jc>
@@ -176,7 +176,7 @@ public class Tuple2<A,B> {
 	/**
 	 * Returns the second value in this tuple wrapped in an {@link Optional}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Tuple2&lt;String,Integer&gt; <jv>tuple</jv> = Tuple2.<jsm>of</jsm>(<js>"hello"</js>, 42);
 	 * 	Optional&lt;Integer&gt; <jv>second</jv> = <jv>tuple</jv>.optB();  <jc>// Returns Optional.of(42)</jc>

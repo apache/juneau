@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * Browsers fetch {@code /favicon.ico} from the site root, so a standalone servlet at that fixed path is
  * the natural deployment for sites that do not compose the mixin into an existing host resource.
  *
- * <h5 class='figure'>Microservice registration:</h5>
+ * <h2 class='figure'>Microservice registration:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Bean</ja> Servlet favicon() {
@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FaviconMixin}
  * 	<li class='jc'>{@link FaviconProvider}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

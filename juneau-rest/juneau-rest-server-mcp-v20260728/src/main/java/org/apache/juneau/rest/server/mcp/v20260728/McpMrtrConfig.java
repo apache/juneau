@@ -42,7 +42,7 @@ import org.apache.juneau.commons.concurrent.*;
  * expiry (see {@link #setClock(Clock)}). Operators inject a shared/rotating-key {@link RequestStateCodec} here
  * for multi-instance or restart-durable resumption.
  *
- * <h5 class='section'>Trust model:</h5>
+ * <h2 class='section'>Trust model:</h2>
  * <ul>
  * 	<li><b>{@code requestState} is a bearer token.</b> Anyone holding a sealed {@code requestState} can resume
  * 		the paused operation until it expires; the token is not bound to a caller identity. It must be

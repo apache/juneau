@@ -31,7 +31,7 @@ import org.apache.juneau.commons.collections.*;
  * object. Furthermore, if referencing a schema which contains an example, the example value shall override the example
  * provided by the schema.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Example Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.collections.*;
  * 		examples that cannot easily be included in JSON or YAML documents. The value field and externalValue field are mutually exclusive
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Example <jv>x</jv> = <jsm>example</jsm>()
@@ -63,7 +63,7 @@ import org.apache.juneau.commons.collections.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#example-object">OpenAPI Specification &gt; Example Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/adding-examples/">OpenAPI Adding Examples</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

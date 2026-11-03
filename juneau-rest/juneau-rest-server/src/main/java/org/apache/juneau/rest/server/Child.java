@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.guard.*;
  * {@link Rest#mixinDefs() @Rest(mixinDefs=...)}. This is the host-side complement to
  * {@link Rest#children() @Rest(children=...)} (which takes bare classes and offers no seed hook).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, maxInput=<js>"10M"</js>)
@@ -41,7 +41,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 	<jk>public class</jk> MyResource { ... }
  * </p>
  *
- * <h5 class='section'>Seed semantics</h5>
+ * <h2 class='section'>Seed semantics</h2>
  * <p>
  * Unlike {@link Mixin @Mixin} overrides (which win over an <i>inherited</i> chain), children are
  * <b>isolated</b> from the host's resolution chain by design, so a {@code @Child} seed doesn't override
@@ -63,7 +63,7 @@ import org.apache.juneau.rest.server.guard.*;
  * There is no {@code noInherit()} member on {@code @Child} itself (nothing to cut in an isolated context), and
  * no {@code path()}/{@code paths()} re-mount member (the child's own {@code @Rest(path)} stays authoritative).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Rest#childrenDefs()}
  * 	<li class='ja'>{@link Rest#children()}
  * </ul>

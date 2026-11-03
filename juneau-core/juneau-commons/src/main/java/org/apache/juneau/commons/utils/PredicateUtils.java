@@ -86,7 +86,7 @@ public final class PredicateUtils {
 	 * <p>
 	 * This is useful for filtering streams to keep only the first occurrence of each unique key.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Filter a stream to keep only methods with unique signatures</jc>
 	 * 	Stream&lt;Method&gt; <jv>methods</jv> = ...;

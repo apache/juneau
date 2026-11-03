@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.parser.*;
  * The purpose is to encapsulate the reader with the {@link ParserPipe} object so that it can be retrieved for
  * debugging purposes.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML</a>
  * </ul>
  */

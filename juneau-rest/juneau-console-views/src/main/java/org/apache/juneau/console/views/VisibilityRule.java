@@ -35,7 +35,7 @@ import org.apache.juneau.console.widgets.Op;
  * page's {@code facts} under a {@code facts.} prefix; a card, badge or ribbon item sees the page's top-level
  * {@code facts} alone.  A field absent from the map fails closed for every operator except {@code absent}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RowAction.<jsm>create</jsm>(<js>"escalate"</js>)
  * 		.visibleWhen(

@@ -41,7 +41,7 @@
  * {@link org.apache.juneau.console.widgets.CalendarDef} bean itself lives in {@code juneau-console-widgets}
  * (bean-only, no dependency on views); views <b>composes</b> it here.
  *
- * <h5 class='section'>Complex dialogs and nested popups (v1):</h5>
+ * <h2 class='section'>Complex dialogs and nested popups (v1):</h2>
  * <p>
  * A {@link org.apache.juneau.console.views.RowAction RowAction} whose presentation is {@code DIALOG} opens a declarative
  * popup dialog described by {@link org.apache.juneau.console.widgets.ModalDef}.  The dialog may carry a
@@ -72,7 +72,7 @@
  * version must match the runtime's baked-in version or the dialog refuses to open; a confirm-only dialog (no form)
  * is never version-gated, even though it now carries the same version.
  *
- * <h5 class='section'>Relocated: the dialog beans now live in the widgets module</h5>
+ * <h2 class='section'>Relocated: the dialog beans now live in the widgets module</h2>
  * <p>
  * {@code ModalDef} and {@code FormDef} were general enough to belong to the shared widget vocabulary, so they have
  * moved from this package to {@code org.apache.juneau.console.widgets}.  This is a <b>breaking package
@@ -85,13 +85,13 @@
  * here, inside {@code juneau-views.js}: after the move a widgets-module bean is driven by a views-module script,
  * which is deliberate rather than accidental (splitting that monolith is a separate concern).
  *
- * <h5 class='section'>Follow-ons (not in this cut):</h5>
+ * <h2 class='section'>Follow-ons (not in this cut):</h2>
  * <ul>
  * 	<li>A second in-tree dialog-form consumer is a 10.0-destination follow-on.
  * 	<li>Richer controls (cron editor, rich text) are deferred.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'><c>juneau-calendar.js</c>
  * 	<li class='jc'>{@link org.apache.juneau.console.datatables.adapter.DataTablesQuery}

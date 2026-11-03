@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * Because the mixin and standalone forms both route through the same {@code RawTemplateDispatcher}
  * implementation, their raw file-serving behavior cannot drift.
  *
- * <h5 class='section'>Standalone vs mixin:</h5>
+ * <h2 class='section'>Standalone vs mixin:</h2>
  *
  * <p>
  * The mixin {@code Basic*Resource} keeps its op pinned at {@code /<token>/*} for composition into a
@@ -53,7 +53,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * that a mixin-shaped op would otherwise produce when the servlet itself is mounted at
  * {@code /<token>/*}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jic'>{@link RawTemplateDispatcher}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>

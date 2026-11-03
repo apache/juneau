@@ -36,7 +36,7 @@ import org.apache.juneau.console.*;
  * shows a "Select all" button while a filter is in force.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ChoiceSection.<jsm>fromDim</jsm>(<js>"orders"</js>, <js>"reason"</js>).label(<js>"Reason"</js>).max(50)
  * 		.publishes(Topics.<jsm>filter</jsm>(<js>"reasons"</js>));

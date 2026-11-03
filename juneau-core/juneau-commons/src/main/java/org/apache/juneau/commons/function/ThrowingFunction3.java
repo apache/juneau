@@ -30,7 +30,7 @@ import java.util.function.*;
  * {@link RuntimeException}, making it compatible with standard {@link Function3} usage while still allowing
  * the implementation to throw checked exceptions via {@link #applyThrows(Object, Object, Object)}.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Exception support - allows checked exceptions to be thrown via {@link #applyThrows(Object, Object, Object)}
@@ -38,7 +38,7 @@ import java.util.function.*;
  * 	<li>Dual interface - can be used as both Function3 and ThrowingFunction3
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Three-argument transformations that may throw I/O exceptions
  * 	<li>Parsing operations that may throw validation exceptions
@@ -46,7 +46,7 @@ import java.util.function.*;
  * 	<li>Operations that need to propagate checked exceptions
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda with exception</jc>
  * 	ThrowingFunction3&lt;String,String,String,File&gt; <jv>fileParser</jv> = (<jv>dir</jv>, <jv>subdir</jv>, <jv>name</jv>) -&gt; {
@@ -68,7 +68,7 @@ import java.util.function.*;
  * 	File <jv>file</jv> = <jv>fileParser</jv>.apply(<js>"/tmp"</js>, <js>"data"</js>, <js>"file.txt"</js>);  <jc>// May throw RuntimeException</jc>
  * </p>
  *
- * <h5 class='section'>Exception Handling:</h5>
+ * <h2 class='section'>Exception Handling:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@link #applyThrows(Object, Object, Object)} - Throws checked exceptions directly
  * 	<li>{@link #apply(Object, Object, Object)} - Wraps checked exceptions in {@link RuntimeException}
@@ -76,7 +76,7 @@ import java.util.function.*;
  * 	<li>Use {@code apply} when you want standard Function3 behavior
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThrowingFunction} - Single-argument function that throws exceptions
  * 	<li class='jc'>{@link ThrowingFunction2} - Two-argument function that throws exceptions
  * 	<li class='jc'>{@link ThrowingFunction4} - Four-argument function that throws exceptions
@@ -145,7 +145,7 @@ public interface ThrowingFunction3<A,B,C,R> extends Function3<A,B,C,R> {
 	 * This is the functional method that implementations must provide. It allows checked exceptions
 	 * to be thrown directly, unlike the standard {@link Function3#apply(Object, Object, Object)} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ThrowingFunction3&lt;String,Integer,Boolean,Integer&gt; <jv>parser</jv> = (<jv>s</jv>, <jv>base</jv>, <jv>signed</jv>) -&gt; {
 	 * 		<jk>try</jk> {

@@ -34,7 +34,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * literal becomes {@code instant &plusmn; duration}, a numeric-duration column's becomes a plain signed-milliseconds
  * number. This type is the shared, stable wire format the builder, parser, and engines meet at.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// matches rows whose lastSeen is within the last 24 hours</jc>
  * 	BeanQuery <jv>q</jv> = BeanQuery.<jsm>create</jsm>()

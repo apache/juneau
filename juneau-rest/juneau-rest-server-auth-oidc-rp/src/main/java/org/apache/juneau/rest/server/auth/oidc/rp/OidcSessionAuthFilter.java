@@ -41,7 +41,7 @@ import jakarta.servlet.http.*;
  * Note that Juneau's {@code MockRest} does not execute servlet filters, so integration tests drive
  * {@link #authenticate(HttpServletRequest)} / {@code doFilter} directly.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link OidcRelyingParty}
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)</a>

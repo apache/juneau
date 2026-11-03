@@ -54,7 +54,7 @@ import org.apache.juneau.microservice.*;
  * {@link org.apache.juneau.rest.server.Rest#path()} during start-up.  See {@link JettyServerComponent} for
  * full details.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty</a>
  * </ul>
  *

@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.ops.*;
  * The residual cross-cutting endpoints are supplied by single-responsibility op-mixins ({@link ErrorMixin},
  * {@link HtdocMixin}, {@link StatsMixin}, and {@link FaviconMixin}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  * </ul>

@@ -32,7 +32,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * ({@code < 0x20} and {@code 0x7F}, including CR/LF that would otherwise enable header injection) are stripped, and
  * {@code "}/{@code \} are backslash-escaped ({@code \"} / {@code \\}) rather than mangled.
  *
- * <h5 class='section'>Extensibility:</h5>
+ * <h2 class='section'>Extensibility:</h2>
  * <p>
  * The baseline emits {@link #realm(String) realm}, {@link #error(String) error},
  * {@link #errorDescription(String) error_description}, {@link #scope(Collection) scope}, and

@@ -27,7 +27,7 @@ import java.util.function.*;
  * <p>
  * A general warning about possible problems with the entity body.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -99,7 +99,7 @@ public class Warning extends HttpStringHeader {
 	 * 3-digit warn-code is zero-padded, the warn-text and optional warn-date are rendered as quoted-strings, and
 	 * {@link #add(String)} is a generic escape hatch for a fully pre-rendered warning-value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = Warning.<jsm>create</jsm>()
 	 * 		.warning(110, <js>"anderson/1.3.37"</js>, <js>"Response is stale"</js>)
@@ -107,7 +107,7 @@ public class Warning extends HttpStringHeader {
 	 * 	<jc>// =&gt; "110 anderson/1.3.37 \"Response is stale\""</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link Warning}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7234'>RFC 7234 - HTTP/1.1 Caching</a>
 	 * </ul>

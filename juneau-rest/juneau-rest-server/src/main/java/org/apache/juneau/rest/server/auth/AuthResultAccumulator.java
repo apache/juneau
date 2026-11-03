@@ -35,7 +35,7 @@ import java.util.logging.Logger;
  * first.  {@link AuthResult.MergeMode#REPLACE REPLACE} resets the accumulated principal + roles.  Used by both
  * {@link AuthFilterChain} and the resource-level fold in {@link org.apache.juneau.rest.server.RestContext}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AuthResult}
  * 	<li class='jc'>{@link AuthFilterChain}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator — Resource-Level Authentication</a>

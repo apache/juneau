@@ -26,7 +26,7 @@ import java.util.*;
  * testing framework, enabling consistent object introspection and value extraction across
  * different object types and structures.</p>
  *
- * <h5 class='section'>Core Conversion Operations:</h5>
+ * <h2 class='section'>Core Conversion Operations:</h2>
  * <dl>
  *    <dt><b>{@link #stringify(Object)}</b></dt>
  *    <dd>Converts any object to its string representation, handling nested structures</dd>
@@ -41,10 +41,10 @@ import java.util.*;
  *    <dd>Accesses object properties using multiple fallback mechanisms</dd>
  * </dl>
  *
- * <h5 class='section'>Property Access Strategy:</h5>
+ * <h2 class='section'>Property Access Strategy:</h2>
  * <p>The {@link #getProperty(Object, String)} method uses a comprehensive fallback approach:</p>
  *
- * <h5 class='section'>Usage in BCT Framework:</h5>
+ * <h2 class='section'>Usage in BCT Framework:</h2>
  * <p>This interface is used internally by BCT assertion methods like:</p>
  * <ul>
  *    <li>{@link BctAssertions#assertBean(Object, String, String)}</li>

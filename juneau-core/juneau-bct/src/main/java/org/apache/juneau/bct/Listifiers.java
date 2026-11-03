@@ -33,12 +33,12 @@ import java.util.stream.*;
  * and iterable types. These listifiers are automatically registered when using
  * {@link BasicBeanConverter.Builder#defaultSettings()}.</p>
  *
- * <h5 class='section'>Purpose:</h5>
+ * <h2 class='section'>Purpose:</h2>
  * <p>Listifiers convert various collection-like objects to {@link List} instances for uniform
  * processing in BCT assertions. This enables consistent iteration and element access across
  * different data structures like arrays, iterators, streams, and custom collections.</p>
  *
- * <h5 class='section'>Built-in Listifiers:</h5>
+ * <h2 class='section'>Built-in Listifiers:</h2>
  * <ul>
  *    <li><b>{@link #collectionListifier()}</b> - Converts {@link Collection} objects to {@link ArrayList}</li>
  *    <li><b>{@link #iterableListifier()}</b> - Converts {@link Iterable} objects using streams</li>
@@ -48,7 +48,7 @@ import java.util.stream.*;
  *    <li><b>{@link #mapListifier()}</b> - Converts {@link Map} to list of {@link java.util.Map.Entry} objects</li>
  * </ul>
  *
- * <h5 class='section'>Usage Example:</h5>
+ * <h2 class='section'>Usage Example:</h2>
  * <p class='bjava'>
  *    <jc>// Register listifiers using builder</jc>
  *    <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
@@ -58,7 +58,7 @@ import java.util.stream.*;
  *       .build();
  * </p>
  *
- * <h5 class='section'>Iterator Consumption:</h5>
+ * <h2 class='section'>Iterator Consumption:</h2>
  * <p><b>Warning:</b> Some listifiers consume their input objects during conversion:</p>
  * <ul>
  *    <li><b>{@link Iterator}:</b> Elements are consumed and iterator becomes exhausted</li>
@@ -66,7 +66,7 @@ import java.util.stream.*;
  *    <li><b>{@link Stream}:</b> Stream is terminated and cannot be reused</li>
  * </ul>
  *
- * <h5 class='section'>Custom Listifier Development:</h5>
+ * <h2 class='section'>Custom Listifier Development:</h2>
  * <p>When creating custom listifiers, follow these patterns:</p>
  * <ul>
  *    <li><b>Null Safety:</b> Handle <jk>null</jk> inputs gracefully</li>
@@ -91,7 +91,7 @@ public class Listifiers {
 	 * <p>This listifier creates a new ArrayList containing all elements from the source collection.
 	 * It works with any Collection subtype including List, Set, Queue, and Deque.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Non-empty collections:</b> Returns new ArrayList with all elements in iteration order</li>
 	 *    <li><b>Empty collections:</b> Returns new empty ArrayList</li>
@@ -99,7 +99,7 @@ public class Listifiers {
 	 *    <li><b>Set ordering:</b> Converts unordered Sets (HashSet, etc.) to TreeSet for deterministic ordering</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Set Ordering Behavior:</h5>
+	 * <h4 class='section'>Set Ordering Behavior:</h4>
 	 * <p>To ensure predictable test results, this listifier handles Sets with unreliable ordering:</p>
 	 * <ul>
 	 *    <li><b>{@link SortedSet} (TreeSet, etc.):</b> Preserves existing sort order</li>
@@ -107,7 +107,7 @@ public class Listifiers {
 	 *    <li><b>{@link HashSet} and other unordered Sets:</b> Converts to {@link TreeSet} for natural ordering</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with different collection types</jc>
 	 *    <jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
@@ -125,7 +125,7 @@ public class Listifiers {
 	 *    <jsm>assertList</jsm>(<jv>queue</jv>, <js>"first"</js>, <js>"second"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Performance:</h5>
+	 * <h4 class='section'>Performance:</h4>
 	 * <p>This listifier creates a new ArrayList and copies all elements, so it has O(n) time
 	 * and space complexity. For unordered Sets, an additional TreeSet conversion adds O(n log n)
 	 * sorting overhead. For large collections, consider the memory implications.</p>
@@ -153,14 +153,14 @@ public class Listifiers {
 	 * <p><b>Warning:</b> This listifier consumes the enumeration during conversion. After listification,
 	 * the enumeration will be exhausted and cannot be used again.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Element extraction:</b> Consumes all remaining elements from the enumeration</li>
 	 *    <li><b>Order preservation:</b> Maintains the enumeration's order in the resulting list</li>
 	 *    <li><b>Enumeration exhaustion:</b> The enumeration becomes unusable after conversion</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with Vector enumeration</jc>
 	 *    <jk>var</jk> <jv>vector</jv> = <jk>new</jk> Vector&lt;&gt;(List.<jsm>of</jsm>(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));
@@ -187,14 +187,14 @@ public class Listifiers {
 	 * spliterator and collecting elements to a list. It works with custom iterables and
 	 * collection types not covered by more specific listifiers.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Standard iterables:</b> Converts elements to list maintaining iteration order</li>
 	 *    <li><b>Custom iterables:</b> Works with any object implementing Iterable interface</li>
 	 *    <li><b>Large iterables:</b> Processes all elements regardless of size</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with custom iterable</jc>
 	 *    <jk>var</jk> <jv>range</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>4</jv>).<jsm>boxed</jsm>().<jsm>collect</jsm>(toList());
@@ -218,14 +218,14 @@ public class Listifiers {
 	 * <p><b>Warning:</b> This listifier consumes the iterator during conversion. After listification,
 	 * the iterator will be exhausted and cannot be used again.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Element extraction:</b> Consumes all remaining elements from the iterator</li>
 	 *    <li><b>Order preservation:</b> Maintains the iterator's order in the resulting list</li>
 	 *    <li><b>Iterator exhaustion:</b> The iterator becomes unusable after conversion</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with list iterator</jc>
 	 *    <jk>var</jk> <jv>list</jv> = List.<jsm>of</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
@@ -238,7 +238,7 @@ public class Listifiers {
 	 *    <jsm>assertList</jsm>(<jv>numbers</jv>, <jv>1</jv>, <jv>2</jv>, <jv>3</jv>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Important Notes:</h5>
+	 * <h4 class='section'>Important Notes:</h4>
 	 * <ul>
 	 *    <li><b>One-time use:</b> The iterator becomes exhausted and unusable after conversion</li>
 	 *    <li><b>Side effects:</b> Any side effects in the iterator's next() method will occur</li>
@@ -258,7 +258,7 @@ public class Listifiers {
 	 * <p>This listifier enables maps to be processed as lists in BCT assertions, making it easy
 	 * to test map contents using list-based assertion methods.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Entry conversion:</b> Each key-value pair becomes a Map.Entry in the list</li>
 	 *    <li><b>Order preservation:</b> Maintains the map's iteration order</li>
@@ -266,7 +266,7 @@ public class Listifiers {
 	 *    <li><b>Map ordering:</b> Converts unordered Maps (HashMap, etc.) to TreeMap for deterministic ordering</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Map Ordering Behavior:</h5>
+	 * <h4 class='section'>Map Ordering Behavior:</h4>
 	 * <p>To ensure predictable test results, this listifier handles Maps with unreliable ordering:</p>
 	 * <ul>
 	 *    <li><b>{@link SortedMap} (TreeMap, etc.):</b> Preserves existing sort order</li>
@@ -274,7 +274,7 @@ public class Listifiers {
 	 *    <li><b>{@link HashMap} and other unordered Maps:</b> Converts to {@link TreeMap} for natural key ordering</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test map contents with deterministic ordering</jc>
 	 *    <jk>var</jk> <jv>map</jv> = Map.<jsm>of</jsm>(<js>"z"</js>, <js>"value1"</js>, <js>"a"</js>, <js>"value2"</js>);
@@ -296,11 +296,11 @@ public class Listifiers {
 	 *    <jsm>assertSize</jsm>(<jv>config</jv>, <js>"properties"</js>, <jv>2</jv>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Entry Processing:</h5>
+	 * <h4 class='section'>Entry Processing:</h4>
 	 * <p>The resulting Map.Entry objects can be further processed by other parts of the
 	 * conversion system, typically being stringified to <js>"key=value"</js> format.</p>
 	 *
-	 * <h5 class='section'>Performance:</h5>
+	 * <h4 class='section'>Performance:</h4>
 	 * <p>This listifier creates a new ArrayList from the map's entrySet. For unordered Maps,
 	 * an additional TreeMap conversion adds O(n log n) sorting overhead based on key ordering.
 	 * For large maps, consider the memory implications.</p>
@@ -328,14 +328,14 @@ public class Listifiers {
 	 * <p><b>Warning:</b> This listifier terminates the stream during conversion. After listification,
 	 * the stream is closed and cannot be used again.</p>
 	 *
-	 * <h5 class='section'>Behavior:</h5>
+	 * <h4 class='section'>Behavior:</h4>
 	 * <ul>
 	 *    <li><b>Stream termination:</b> Calls toList() to collect all stream elements</li>
 	 *    <li><b>Order preservation:</b> Maintains stream order in the resulting list</li>
 	 *    <li><b>Stream closure:</b> The stream becomes unusable after conversion</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Usage Examples:</h5>
+	 * <h4 class='section'>Usage Examples:</h4>
 	 * <p class='bjava'>
 	 *    <jc>// Test with filtered stream</jc>
 	 *    <jk>var</jk> <jv>numbers</jv> = IntStream.<jsm>range</jsm>(<jv>1</jv>, <jv>10</jv>)
@@ -349,7 +349,7 @@ public class Listifiers {
 	 *    <jsm>assertList</jsm>(<jv>words</jv>, <js>"HELLO"</js>, <js>"WORLD"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Important Notes:</h5>
+	 * <h4 class='section'>Important Notes:</h4>
 	 * <ul>
 	 *    <li><b>One-time use:</b> The stream is terminated and cannot be reused</li>
 	 *    <li><b>Lazy evaluation:</b> Stream operations are executed during listification</li>

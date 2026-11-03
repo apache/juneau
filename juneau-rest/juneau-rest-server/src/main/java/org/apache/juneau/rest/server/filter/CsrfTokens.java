@@ -41,7 +41,7 @@ import jakarta.servlet.http.*;
  * 		the <c>Origin</c> check.
  * </ul>
  *
- * <h5 class='section'>Masking</h5>
+ * <h2 class='section'>Masking</h2>
  * <p>
  * The value written into a page is never the token itself.  Each embed gets a fresh 32-byte pad, and the
  * published value is <c>hex(pad || (pad XOR token))</c>: 128 lower-case hex characters.  The secret therefore
@@ -49,20 +49,20 @@ import jakarta.servlet.http.*;
  * compression oracle (BREACH).  That is <b>all</b> masking buys: anyone who sees the wire value can unmask it, so
  * the token header must never be logged, and masking gives no protection to logs, proxies or the browser.
  *
- * <h5 class='section'>Verification</h5>
+ * <h2 class='section'>Verification</h2>
  * <p>
  * A presented value must be exactly 128 lower-case hex characters; anything else is refused before the secret is
  * touched.  It is then unmasked and compared with {@link MessageDigest#isEqual(byte[], byte[])} against the
  * expected 32 bytes.  A request with no session is compared against the HMAC of a fixed placeholder id that no
  * container can issue, so "no session" and "wrong token" do the same work and give the same answer.
  *
- * <h5 class='section'>Session ids</h5>
+ * <h2 class='section'>Session ids</h2>
  * <p>
  * A per-session token changes whenever the session id changes, and this class never changes it.  An application
  * must call {@link HttpServletRequest#changeSessionId()} on login; otherwise a token seen before login stays
  * valid after it.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Default: one token per session, keyed by 32 fresh random bytes for this process.</jc>
  * 	CsrfTokens <jv>tokens</jv> = CsrfTokens.<jsm>perSession</jsm>();
@@ -71,7 +71,7 @@ import jakarta.servlet.http.*;
  * 	CsrfTokens <jv>clustered</jv> = CsrfTokens.<jsm>perSession</jsm>().key(<jv>keyBytesFromSecretStore</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SynchronizerToken}
  * </ul>
  *

@@ -42,13 +42,13 @@ import java.lang.annotation.*;
  * which uses a full {@code Serializer}/{@code Parser} rather than a part serializer/parser), and the classic
  * {@code RestClient} remote-proxy path (which does not discover this annotation).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RemoteGet</ja>(<js>"/mymethod"</js>)
  * 	String myMethod(<ja>@Query</ja>(<js>"foo"</js>) <ja>@HttpPartMarshalling</ja>(serializer=MySerializer.<jk>class</jk>) String <jv>foo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
  * </ul>
  */

@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * boundary it uses, and so {@link #boundary()} returns the {@link LoopbackBoundary} without a cast.  The constants
  * here are the same values as {@link RequestBoundaryFilter}'s.
  *
- * <h5 class='section'>Example (Spring Boot):</h5>
+ * <h2 class='section'>Example (Spring Boot):</h2>
  * <p class='bjava'>
  * 	<ja>@Bean</ja>
  * 	<jk>public</jk> FilterRegistrationBean&lt;LoopbackBoundaryFilter&gt; boundary(LoopbackBoundary <jv>b</jv>) {
@@ -37,7 +37,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LoopbackBoundary}
  * 	<li class='jc'>{@link RequestBoundaryFilter}
  * 	<li class='jc'>{@link SynchronizerToken}

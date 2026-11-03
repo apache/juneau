@@ -27,7 +27,7 @@ import java.lang.reflect.*;
  * This exception is used to wrap checked exceptions that commonly occur when using Java reflection APIs,
  * converting them into unchecked exceptions for easier handling in bean-processing code.
  *
- * <h5 class='section'>Wrapped Exceptions:</h5>
+ * <h2 class='section'>Wrapped Exceptions:</h2>
  * <ul>
  * 	<li>{@link InstantiationException}
  * 	<li>{@link IllegalAccessException}
@@ -41,7 +41,7 @@ import java.lang.reflect.*;
  * The exception message can optionally include the class name of the bean that caused the exception,
  * making it easier to identify the source of reflection errors in complex bean hierarchies.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> {
  * 		Constructor&lt;?&gt; <jv>c</jv> = MyBean.<jk>class</jk>.getConstructor();

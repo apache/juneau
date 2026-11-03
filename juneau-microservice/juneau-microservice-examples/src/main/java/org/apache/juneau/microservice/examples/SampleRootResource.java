@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * its writes are {@code PUT}s, which a browser cannot send cross-site without a CORS preflight.  An application that
  * mounts the admin resources where a browser can reach them should still register {@link AdminBoundary}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  * </ul>
  *

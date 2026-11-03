@@ -27,14 +27,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * five-argument consumers. It's useful when you need to pass operations with five parameters to methods
  * that expect functional interfaces, such as in iteration, builders, or callback patterns.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Functional interface - can be used with lambda expressions and method references
  * 	<li>Composition support - provides {@link #andThen(Consumer5)} for operation chaining
  * 	<li>Side-effect operations - designed for operations that perform side effects rather than return values
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Five-argument operations in iteration patterns
  * 	<li>Builder methods that accept five-parameter operations
@@ -42,7 +42,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Event handlers that process five values
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Lambda expression</jc>
  * 	Consumer5&lt;String,Integer,Boolean,Double,Long&gt; <jv>printer</jv> = (<jv>name</jv>, <jv>age</jv>, <jv>active</jv>, <jv>score</jv>, <jv>timestamp</jv>) -&gt;
@@ -58,7 +58,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jv>validateAndProcess</jv>.apply(<js>"data"</js>, 42, <jk>true</jk>, 10.5, 9876543210L);  <jc>// Validates then processes</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Consumer2} - Two-argument consumer
  * 	<li class='jc'>{@link Consumer3} - Three-argument consumer
  * 	<li class='jc'>{@link Consumer4} - Four-argument consumer
@@ -85,7 +85,7 @@ public interface Consumer5<A,B,C,D,E> {
 	 * If performing either operation throws an exception, it is relayed to the caller of the composed operation.
 	 * If performing this operation throws an exception, the {@code after} operation will not be performed.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Consumer5&lt;String,Integer,Boolean,Double,Long&gt; <jv>log</jv> = (<jv>s</jv>, <jv>i</jv>, <jv>b</jv>, <jv>d</jv>, <jv>l</jv>) -&gt; <jsm>logger</jsm>.info(<jv>s</jv> + <js>": "</js> + <jv>i</jv> + <js>", "</js> + <jv>b</jv> + <js>", "</js> + <jv>d</jv> + <js>", "</js> + <jv>l</jv>);
 	 * 	Consumer5&lt;String,Integer,Boolean,Double,Long&gt; <jv>store</jv> = (<jv>s</jv>, <jv>i</jv>, <jv>b</jv>, <jv>d</jv>, <jv>l</jv>) -&gt; <jv>cache</jv>.put(<jv>s</jv>, <jv>i</jv>, <jv>b</jv>, <jv>d</jv>, <jv>l</jv>);
@@ -108,7 +108,7 @@ public interface Consumer5<A,B,C,D,E> {
 	/**
 	 * Performs this operation on the given arguments.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Consumer5&lt;String,Integer,Boolean,Double,Long&gt; <jv>handler</jv> = (<jv>key</jv>, <jv>value</jv>, <jv>flag</jv>, <jv>weight</jv>, <jv>time</jv>) -&gt; {
 	 * 		<jv>map</jv>.put(<jv>key</jv>, <jv>value</jv>);

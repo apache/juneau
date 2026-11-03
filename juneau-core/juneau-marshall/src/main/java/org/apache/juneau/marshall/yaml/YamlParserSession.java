@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Session object that lives for the duration of a single use of {@link YamlParser}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  */
@@ -134,7 +134,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	 * Buffered array-element {@link RecordReader} for YAML, bound to this live session.  Calls
 	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
 	 *
-	 * <h5 class='section'>Streaming status:</h5>
+	 * <h4 class='section'>Streaming status:</h4>
 	 * <p>
 	 * A top-level YAML block sequence ({@code - elem} per line) <i>is</i> forward-readable in
 	 * principle, so true element-at-a-time streaming is <b>feasible</b> here (unlike Parquet/BSON).

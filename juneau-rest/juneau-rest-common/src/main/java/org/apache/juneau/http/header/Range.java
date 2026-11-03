@@ -27,7 +27,7 @@ import java.util.function.*;
  * <p>
  * Request only part of an entity. Bytes are numbered from 0.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -99,7 +99,7 @@ public class Range extends HttpStringHeader {
 	 * (<c>0-499</c>) via {@link #range(long, long)}, an open-ended range (<c>500-</c>) via {@link #from(long)}, and a
 	 * suffix range (<c>-500</c>) via {@link #suffix(long)} — and {@link #spec(String)} is a generic escape hatch.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = Range.<jsm>create</jsm>()
 	 * 		.range(0, 499)
@@ -108,7 +108,7 @@ public class Range extends HttpStringHeader {
 	 * 	<jc>// =&gt; "bytes=0-499,9500-"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link Range}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7233'>RFC 7233 - HTTP/1.1 Range Requests</a>
 	 * </ul>

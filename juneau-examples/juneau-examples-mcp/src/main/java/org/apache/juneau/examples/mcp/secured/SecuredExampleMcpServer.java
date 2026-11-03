@@ -67,7 +67,7 @@ import org.apache.juneau.rest.server.mcp.v20260728.*;
  * instead of ever reaching {@link ExampleMcpServer}'s tool/prompt/resource handlers; a request bearing a valid
  * bearer token dispatches exactly as it always did.
  *
- * <h5 class='section'>The one wrinkle this class works around:</h5>
+ * <h2 class='section'>The one wrinkle this class works around:</h2>
  * <p>
  * {@link #getResource() The resource URL} is this server's OWN address, which is a problem when
  * {@link SecuredExampleServer} boots on an OS-assigned ephemeral port (as the end-to-end test does): naively,

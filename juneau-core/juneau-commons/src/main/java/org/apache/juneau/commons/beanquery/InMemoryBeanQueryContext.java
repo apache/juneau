@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.*;
  * The context holds no rows.  Open a session over a specific collection with {@link #getSession(Collection)} or
  * {@link #createSession()}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	InMemoryBeanQueryContext&lt;Person&gt; <jv>context</jv> = InMemoryBeanQueryContext
  * 		.<jsm>create</jsm>(Person.<jk>class</jk>)

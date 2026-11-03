@@ -29,11 +29,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * Extends {@link OutputStreamSerializer} and delegates RDF metadata to an internal {@link RdfSerializer}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

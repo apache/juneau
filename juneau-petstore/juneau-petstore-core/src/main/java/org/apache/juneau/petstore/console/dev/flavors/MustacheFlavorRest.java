@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.view.mustache.*;
  * The page itself is a console page (FreeMarker); only the fragment is Mustache, so this resource adds the Mustache
  * renderer beside the inherited FreeMarker one.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> MustacheView.<jsm>of</jsm>(<js>"pets"</js>).attr(<js>"pets"</js>, FlavorPets.<jsm>rows</jsm>(store()));
  * </p>

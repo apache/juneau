@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.view.*;
  * raw-JSP path) can add this class to their own
  * {@link Rest#responseProcessors() responseProcessors} list.
  *
- * <h5 class='section'>Behavior:</h5>
+ * <h2 class='section'>Behavior:</h2>
  *
  * <ol class='spaced-list'>
  * 	<li>Inspect the response content. If the value is not a {@link JspView}, return
@@ -62,7 +62,7 @@ import org.apache.juneau.rest.server.view.*;
  * 		missing dependency and linking to the "Choosing a JSP engine" matrix.
  * </ol>
  *
- * <h5 class='section'>Note on {@code forward()}:</h5>
+ * <h2 class='section'>Note on {@code forward()}:</h2>
  *
  * <p>
  * {@link jakarta.servlet.RequestDispatcher#forward forward()} resets the response output stream.
@@ -71,7 +71,7 @@ import org.apache.juneau.rest.server.view.*;
  * malformed output. The renderer runs at response-resolution time so this is rarely hit by
  * accident; document the constraint for any user relying on {@code RestPreCall}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link JspView}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>

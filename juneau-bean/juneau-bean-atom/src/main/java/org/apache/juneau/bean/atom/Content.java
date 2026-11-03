@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li>Other MIME types - For multimedia content or base64-encoded data
  * </ul>
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomContent = atomInlineTextContent
  * 		| atomInlineXHTMLContent
@@ -83,7 +83,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Plain text content</jc>
  * 	Content <jv>c1</jv> = <jk>new</jk> Content(<js>"text"</js>)
@@ -103,12 +103,12 @@ import org.apache.juneau.marshall.xml.*;
  * 		.setSrc(<js>"http://example.org/movie.mp4"</js>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomContent</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.1.3">RFC 4287 - Section 4.1.3</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
@@ -168,7 +168,7 @@ public class Content extends Text {
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Link to external video</jc>
 	 * 	Content <jv>content</jv> = <jk>new</jk> Content()

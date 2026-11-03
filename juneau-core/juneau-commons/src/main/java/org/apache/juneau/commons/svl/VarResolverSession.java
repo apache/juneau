@@ -45,11 +45,11 @@ import org.apache.juneau.commons.utils.*;
  * Instances of this class are created through the {@link VarResolver#createSession()} and
  * {@link VarResolver#createSession(WritableBeanStore)} methods.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not guaranteed to be thread safe.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */

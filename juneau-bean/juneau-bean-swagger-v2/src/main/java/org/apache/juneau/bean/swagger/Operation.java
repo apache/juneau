@@ -34,7 +34,7 @@ import org.apache.juneau.commons.http.*;
  * in Swagger 2.0. Operations define what actions can be taken, what parameters they accept, what they consume/produce,
  * and what responses they return.
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Operation Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -52,7 +52,7 @@ import org.apache.juneau.commons.http.*;
  * 	<li><c>security</c> (array of map) - A declaration of which security schemes are applied for this operation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Operation <jv>operation</jv> = <jsm>operation</jsm>()
@@ -150,7 +150,7 @@ import org.apache.juneau.commons.http.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/#operation-object">Swagger 2.0 Specification &gt; Operation Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/paths-and-operations/">Swagger Paths and Operations</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
@@ -524,7 +524,7 @@ public class Operation extends SwaggerElement {
 	 * <p>
 	 * A list of parameters that are applicable for this operation.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If a parameter is already defined at the <a class="doclink" href="https://swagger.io/specification#pathItemObject">Path Item</a>,
 	 * 		the new definition will override it, but can never remove it.

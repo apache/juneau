@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.parser.*;
  * 	This class is used to invoke methods on {@code Objects} using arguments in serialized form.
  * </p>
  *
- * <h5 class='section'>Security - secure by default:</h5>
+ * <h2 class='section'>Security - secure by default:</h2>
  * <p>
  * 	As of Juneau 10.0, reflective method dispatch is <b>denied by default</b>.  Before calling
  * 	{@link #invokeMethod(String, String) invokeMethod(...)} (in any of its overloaded forms), the caller must
@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.parser.*;
  * 	source (e.g. a REST request parameter) &mdash; allow-list the specific methods instead.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	String <jv>string1</jv> = <js>"foobar"</js>;
  * 	String <jv>string2</jv> = ObjectIntrospector
@@ -144,7 +144,7 @@ public class ObjectIntrospector {
 	/**
 	 * Allow-lists specific method signatures declared on (or inherited by) the specified class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ObjectIntrospector.<jsm>create</jsm>(<jv>myBean</jv>).allow(MyBean.<jk>class</jk>, <js>"getName"</js>, <js>"getAge"</js>);
 	 * </p>

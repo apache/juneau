@@ -37,7 +37,7 @@ import jakarta.validation.*;
  * construction time, then conditionally invoke {@link #validate(Object, BeanStore)} per request only when an
  * explicit {@code @jakarta.validation.Valid} (or equivalent) marker is present.
  *
- * <h5 class='topic'>Validator resolution order</h5>
+ * <h2 class='topic'>Validator resolution order</h2>
  * <ol>
  * 	<li>A user-supplied {@code Validator} bean visible from the supplied {@link BeanStore} &mdash; typically
  * 		contributed via a {@code @Bean public Validator validator()} factory on a {@code @Rest}-annotated
@@ -52,7 +52,7 @@ import jakarta.validation.*;
  * 		flooding the log.
  * </ol>
  *
- * <h5 class='topic'>Why static dispatch?</h5>
+ * <h2 class='topic'>Why static dispatch?</h2>
  * <p>
  * Each REST argument resolver is built once per {@code @RestOp} method at servlet startup, then invoked on
  * every request. By keeping the validator lookup off the arg-resolver constructor and inside this class's
@@ -60,7 +60,7 @@ import jakarta.validation.*;
  * per request &mdash; and resolvers for {@code @RestOp} methods that never opt in pay nothing at all (the
  * static initializer doesn't run until the first call to {@link #validate(Object, BeanStore)}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ValidationException}
  * 	<li class='jc'>{@link ValidationViolation}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">Jakarta Bean Validation</a>

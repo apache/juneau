@@ -34,7 +34,7 @@ import java.util.*;
  * The default is {@link #STANDARD} which preserves the historical wire output produced by
  * {@link UUID#toString()} (8-4-4-4-12 hyphenated form).
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#uuidFormat() @MarshalledProp(uuidFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#uuidFormat() @Marshalled(uuidFormat=…)} on the bean class.
@@ -45,7 +45,7 @@ import java.util.*;
  * 	<li>The default constant ({@link #STANDARD}).
  * </ol>
  *
- * <h5 class='topic'>Parser leniency</h5>
+ * <h2 class='topic'>Parser leniency</h2>
  *
  * <p>
  * Parsers SHALL accept any wire shape that the corresponding serializer can produce, regardless of the
@@ -53,7 +53,7 @@ import java.util.*;
  * ({@link #STANDARD} / {@link #NO_DASHES} / {@link #URN}) — the configured constant is informational and
  * is consulted only as a hint.
  *
- * <h5 class='topic'>Binary serializers</h5>
+ * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native 16-byte binary regardless of the
@@ -68,7 +68,7 @@ public enum UuidFormat {
 	/**
 	 * 8-4-4-4-12 hyphenated form (the default).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	550e8400-e29b-41d4-a716-446655440000
 	 * </p>
@@ -81,7 +81,7 @@ public enum UuidFormat {
 	/**
 	 * Compact 32-hex-character form (no hyphens).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	550e8400e29b41d4a716446655440000
 	 * </p>
@@ -95,7 +95,7 @@ public enum UuidFormat {
 	/**
 	 * RFC 4122 URN namespace form.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	urn:uuid:550e8400-e29b-41d4-a716-446655440000
 	 * </p>

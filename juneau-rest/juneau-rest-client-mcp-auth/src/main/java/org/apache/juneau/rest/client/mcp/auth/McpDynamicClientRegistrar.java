@@ -59,7 +59,7 @@ import com.nimbusds.openid.connect.sdk.rp.*;
  * registration failure (e.g. {@code invalid_redirect_uri}) surfaces as an {@link McpAuthException} carrying the AS error
  * code (SEP-837 "clients MUST be prepared to handle registration failures").
  *
- * <h5 class='topic'>Security</h5>
+ * <h2 class='topic'>Security</h2>
  * <p>
  * The registration endpoint MUST originate from validated AS metadata ({@link org.apache.juneau.rest.auth.oauth.oidc.OidcDiscoveryClient}
  * enforces the RFC 8414 / OIDC issuer-identity check) and MUST be {@code https} (loopback exempt for local testing,

@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	OpenApi <jv>oapi</jv> = <jk>new</jk> OpenApi();
@@ -50,7 +50,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = OpenApi.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

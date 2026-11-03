@@ -35,7 +35,7 @@ import java.net.*;
  * 	<li><c>atom:contributor</c> - Indicates those who contributed to a feed or entry
  * </ul>
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomPersonConstruct =
  * 		atomCommonAttributes,
@@ -45,7 +45,7 @@ import java.net.*;
  * 		&amp; extensionElement*)
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an author</jc>
  * 	Person <jv>author</jv> = <jk>new</jk> Person(<js>"Jane Doe"</js>)
@@ -57,12 +57,12 @@ import java.net.*;
  * 		.setAuthors(<jv>author</jv>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomPersonConstruct</c> in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-3.2">RFC 4287 - Section 3.2</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>
@@ -130,7 +130,7 @@ public class Person extends Common {
 	 * <p>
 	 * Sets the email address associated with the person.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Jane Doe"</js>)
 	 * 		.setEmail(<js>"jane@example.org"</js>);
@@ -158,7 +158,7 @@ public class Person extends Common {
 	 * <p>
 	 * Sets the human-readable name for the person (required).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Jane Doe"</js>);
 	 * </p>
@@ -183,7 +183,7 @@ public class Person extends Common {
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
 	 * Strings must be valid URIs.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Jane Doe"</js>)
 	 * 		.setUri(<js>"http://example.org/~jane"</js>);

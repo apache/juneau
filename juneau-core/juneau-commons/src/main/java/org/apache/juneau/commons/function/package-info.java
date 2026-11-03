@@ -47,6 +47,7 @@
  * 	</p>
  *
  * 	<table class='styled'>
+ * 		<caption>Lifecycle phases of BeanSupplier and BeanConsumer</caption>
  * 		<tr><th>Phase</th><th>BeanSupplier (serialization)</th><th>BeanConsumer (parsing)</th></tr>
  * 		<tr><td><b>Setup</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#begin() BeanSupplier#begin()} — open cursor, execute query</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#begin() BeanConsumer#begin()} — open connection, prepare statement</td></tr>
  * 		<tr><td><b>Transfer</b></td><td>{@link org.apache.juneau.commons.function.BeanSupplier#iterator() BeanSupplier#iterator()} — yield one bean per call</td><td>{@link org.apache.juneau.commons.function.BeanConsumer#acceptThrows(Object) BeanConsumer#acceptThrows(Object)} — receive one bean per call</td></tr>
@@ -72,7 +73,7 @@
  * 	{@code DataSource} is supplied via a factory registered with {@link org.apache.juneau.commons.function.BeanFactory BeanFactory}.
  * 	</p>
  *
- * 	<h5 class='figure'>Bean class with factory annotation</h5>
+ * 	<h4 class='figure'>Bean class with factory annotation</h4>
  * 	<p class='bjava'>
  * 	<jk>package</jk> com.example;
  *
@@ -129,7 +130,7 @@
  * 	}
  * 	</p>
  *
- * 	<h5 class='figure'>Spring REST endpoint</h5>
+ * 	<h4 class='figure'>Spring REST endpoint</h4>
  * 	<p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> EmployeeResource <jk>extends</jk> BasicRestServlet {
@@ -163,7 +164,7 @@
  * 	it rolls back and rethrows; on completion it performs a final commit and closes resources.
  * 	</p>
  *
- * 	<h5 class='figure'>BeanConsumer with batch commits</h5>
+ * 	<h4 class='figure'>BeanConsumer with batch commits</h4>
  * 	<p class='bjava'>
  * 	<ja>@Marshalled</ja>(factory=EmployeeConsumer.Factory.<jk>class</jk>)
  * 	<jk>public class</jk> EmployeeConsumer <jk>implements</jk> BeanConsumer&lt;Employee&gt; {
@@ -223,14 +224,14 @@
  * 	}
  * 	</p>
  *
- * 	<h5 class='figure'>Parsing via parseToBeanConsumer</h5>
+ * 	<h4 class='figure'>Parsing via parseToBeanConsumer</h4>
  * 	<p class='bjava'>
  * 	<jc>// Direct API usage — framework calls begin(), acceptThrows() per element, complete().</jc>
  * 	<jk>var</jk> <jv>consumer</jv> = <jv>consumerFactory</jv>.create();
  * 	JsonParser.<jsf>DEFAULT</jsf>.getSession().parseToBeanConsumer(<jv>inputStream</jv>, <jv>consumer</jv>, Employee.<jk>class</jk>);
  * 	</p>
  *
- * 	<h5 class='figure'>Spring REST endpoint</h5>
+ * 	<h4 class='figure'>Spring REST endpoint</h4>
  * 	<p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> EmployeeResource <jk>extends</jk> BasicRestServlet {
@@ -251,7 +252,7 @@
  * 	the exception (log-and-skip) for fault-tolerant ingestion of partially-invalid input:
  * 	</p>
  *
- * 	<h5 class='figure'>Fault-tolerant ingestion (skip bad records)</h5>
+ * 	<h4 class='figure'>Fault-tolerant ingestion (skip bad records)</h4>
  * 	<p class='bjava'>
  * 	BeanConsumer&lt;Employee&gt; <jv>consumer</jv> = <jk>new</jk> BeanConsumer&lt;&gt;() {
  * 		<ja>@Override</ja>
@@ -280,7 +281,7 @@
  * 	both serialization and parsing. The implementation itself determines direction at runtime.
  * 	</p>
  *
- * 	<h5 class='figure'>In-memory channel — ListBeanChannel</h5>
+ * 	<h4 class='figure'>In-memory channel — ListBeanChannel</h4>
  * 	<p class='bjava'>
  * 	<jk>public class</jk> EmployeeCollection {
  *
@@ -298,7 +299,7 @@
  * 	Json5Parser.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, EmployeeCollection.<jk>class</jk>);
  * 	</p>
  *
- * 	<h5 class='figure'>Database-backed channel</h5>
+ * 	<h4 class='figure'>Database-backed channel</h4>
  * 	<p class='bjava'>
  * 	<ja>@Marshalled</ja>(factory=EmployeeChannel.Factory.<jk>class</jk>)
  * 	<jk>public class</jk> EmployeeChannel <jk>implements</jk> BeanChannel&lt;Employee&gt; {
@@ -385,7 +386,7 @@
  * 	runtime.
  * 	</p>
  *
- * 	<h5 class='figure'>Spring configuration</h5>
+ * 	<h4 class='figure'>Spring configuration</h4>
  * 	<p class='bjava'>
  * 	<ja>@Configuration</ja>
  * 	<jk>public class</jk> JuneauStreamingConfig {
@@ -407,7 +408,7 @@
  * 	}
  * 	</p>
  *
- * 	<h5 class='figure'>Wiring the SpringBeanStore into a REST resource</h5>
+ * 	<h4 class='figure'>Wiring the SpringBeanStore into a REST resource</h4>
  * 	<p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> EmployeeResource <jk>extends</jk> BasicSpringRestServlet {
@@ -437,6 +438,7 @@
  * 	<div class='topic'>
  *
  * 	<table class='styled'>
+ * 		<caption>Annotations used with streaming beans</caption>
  * 		<tr>
  * 			<th>Annotation</th>
  * 			<th>Target</th>

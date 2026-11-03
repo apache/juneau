@@ -23,7 +23,7 @@
  * map to bean property sets, independent of any marshalling concerns. The marshalling layer (in
  * {@code juneau-marshall}) layers serializer / parser / swap behavior on top of these primitives.
  *
- * <h5 class='topic'>Annotations</h5>
+ * <h2 class='topic'>Annotations</h2>
  * <ul>
  *   <li>{@link org.apache.juneau.commons.bean.BeanType @BeanType} — marks a class as a bean and configures
  *       bean-level options (interface class, stop class, property order, etc.).
@@ -38,7 +38,7 @@
  *   <li>{@link org.apache.juneau.commons.bean.Name @Name} — alternative property name on a parameter.
  * </ul>
  *
- * <h5 class='topic'>Runtime types</h5>
+ * <h2 class='topic'>Runtime types</h2>
  * <ul>
  *   <li>{@link org.apache.juneau.commons.bean.BeanMeta BeanMeta} — metadata describing a bean class
  *       (properties, constructor, type info).
@@ -58,7 +58,7 @@
  *       property reads / writes.
  * </ul>
  *
- * <h5 class='topic'>SPI seams</h5>
+ * <h2 class='topic'>SPI seams</h2>
  * <ul>
  *   <li>{@link org.apache.juneau.commons.bean.BeanConfigContext BeanConfigContext} — immutable POJO carrying all
  *       bean-modeling configuration knobs plus SPI hooks. {@code MarshallingContext} (in
@@ -84,7 +84,7 @@
  *       transformer.
  * </ul>
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * <p>
  * Practical thread-safety semantics for primary runtime types and SPI seams in this package:
  * </p>

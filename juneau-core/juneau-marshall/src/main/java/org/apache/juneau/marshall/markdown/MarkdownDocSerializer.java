@@ -23,19 +23,19 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Serializes POJO models to Markdown document mode (headings + tables).
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/markdown, text/x-markdown</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/markdown</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Extends {@link MarkdownSerializer} to produce full Markdown documents with heading-based structure.
  * Simple bean properties are rendered in a key/value table under the top-level heading.
  * Nested bean and map properties are rendered as sub-sections with their own headings.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to a Markdown document</jc>
  * 	String <jv>md</jv> = MarkdownDocSerializer.<jsf>DEFAULT</jsf>.write(<jv>someBean</jv>);
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.collections.*;
  * 	String <jv>md</jv> = <jv>s</jv>.write(<jv>someBean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (nested bean):</h5>
+ * <h2 class='figure'>Example output (nested bean):</h2>
  * <p class='bcode'>
  * 	# Person
  *
@@ -62,14 +62,14 @@ import org.apache.juneau.commons.collections.*;
  * 	| state | MA |
  * </p>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li class='note'>Multi-line string values cannot round-trip; newlines are replaced with {@code <br>}.
  * 	<li class='note'>The configured null value string (default: {@code *null*}) cannot be stored as a literal string value.
  * 	<li class='note'>Document mode output requires {@link MarkdownDocParser} for parsing; heading text must match property names exactly.
  * 	<li class='note'>This serializer is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown</a>
  * </ul>
  */

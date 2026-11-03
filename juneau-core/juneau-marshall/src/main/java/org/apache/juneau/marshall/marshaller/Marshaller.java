@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
 	 * 	Marshaller <jv>json</jv> = <jk>new</jk> Json();
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */
@@ -90,7 +90,7 @@ public abstract class Marshaller {
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	Marshaller <jv>marshaller</jv>  = Json.<jsf>DEFAULT</jsf>;
 	 *
@@ -147,7 +147,7 @@ public abstract class Marshaller {
 	 * <p>
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	Marshaller <jv>marshaller</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *
@@ -176,7 +176,7 @@ public abstract class Marshaller {
 	 * <p>
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
@@ -254,7 +254,7 @@ public abstract class Marshaller {
 	 * Shortcut for <c>((TokenReadable)getParser()).readTokens(<jv>input</jv>)</c>.  See
 	 * {@link TokenReader} for the cursor contract.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
 	 * 		does not implement {@link TokenReadable} (the structural-token role) yield a
 	 * 		{@link ClassCastException}.
@@ -276,7 +276,7 @@ public abstract class Marshaller {
 	 * Shortcut for <c>((TokenWritable)getSerializer()).writeTokens(<jv>output</jv>)</c>.  See
 	 * {@link TokenWriter} for the generator contract.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
 	 * 		serializer does not implement {@link TokenWritable} (the structural-token role) yield a
 	 * 		{@link ClassCastException}.
@@ -298,7 +298,7 @@ public abstract class Marshaller {
 	 * Shortcut for <c>((RecordReadable)getParser()).readRecords(<jv>input</jv>)</c>.  See
 	 * {@link RecordReader} for the cursor contract.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
 	 * 		does not implement {@link RecordReadable} yield a {@link ClassCastException}.
 	 * </ul>
@@ -319,7 +319,7 @@ public abstract class Marshaller {
 	 * Shortcut for <c>((RecordWritable)getSerializer()).writeRecords(<jv>output</jv>)</c>.  See
 	 * {@link RecordWriter} for the cursor contract.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
 	 * 		serializer does not implement {@link RecordWritable} yield a {@link ClassCastException}.
 	 * </ul>
@@ -340,7 +340,7 @@ public abstract class Marshaller {
 	 * <p>
 	 * Shortcut for <c>((ArrayRecordReadable)getParser()).readArrayRecords(<jv>input</jv>)</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
 	 * 		does not implement {@link ArrayRecordReadable} yield a {@link ClassCastException}.
 	 * </ul>
@@ -361,7 +361,7 @@ public abstract class Marshaller {
 	 * <p>
 	 * Shortcut for <c>((ArrayRecordWritable)getSerializer()).writeArrayRecords(<jv>output</jv>)</c>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
 	 * 		serializer does not implement {@link ArrayRecordWritable} yield a
 	 * 		{@link ClassCastException}.

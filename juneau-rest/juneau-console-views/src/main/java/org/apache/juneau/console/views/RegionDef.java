@@ -35,7 +35,7 @@ import org.apache.juneau.terminal.report.TerminalViewChecks;
  * Juneau-shipped declarative default ({@code JuneauViews.regions.defaultPopulate}), which reads exactly
  * this descriptor (via {@code ctx.declared}) and nothing else.
  *
- * <h5 class='section'>Mutability</h5>
+ * <h2 class='section'>Mutability</h2>
  * <p>
  * Deliberately mutable, like {@link Column} and {@link ViewDef} (the same rule, stated here since this class
  * predates it): a {@link RegionDef} is a server-side authoring bean built up once via its public fields and
@@ -43,7 +43,7 @@ import org.apache.juneau.terminal.report.TerminalViewChecks;
  * mutate one concurrently from more than one thread, and must not reuse one across requests unless every request
  * treats it as read-only after construction.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A lazily-activated row-detail region backed by a data URL, refreshing every 30 seconds.</jc>
  * 	RegionDef <jv>region</jv> = RegionDef.<jsm>create</jsm>(<js>"release-notes"</js>)

@@ -25,7 +25,7 @@ import java.util.*;
 /**
  * The options of a {@code terminal} card: where its bytes and (optionally) its step events come from.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	TerminalDef <jv>def</jv> = TerminalDef.<jsm>forMixin</jsm>(<js>"build"</js>, <js>"/runs"</js>, <js>"r42"</js>)
  * 		.eventsUrl(<js>"/runs/juneau-terminal-view/r42/events"</js>)

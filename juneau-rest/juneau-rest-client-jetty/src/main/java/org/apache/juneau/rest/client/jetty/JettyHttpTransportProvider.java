@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
  * Registered via {@code META-INF/services/HttpTransportProvider} so that
  * {@code RestClient} can auto-discover Jetty 12 when this module is on the classpath.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

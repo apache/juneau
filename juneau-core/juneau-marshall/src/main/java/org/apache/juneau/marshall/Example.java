@@ -33,7 +33,7 @@ import java.lang.annotation.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link ExampleApply @ExampleApply}.
  * </ul>
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// On a static method.</jc>
  * 	<jk>public class</jk> A {

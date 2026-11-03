@@ -29,7 +29,7 @@ import java.lang.annotation.*;
  * nested objects. When a child object is created within a parent object (e.g., in a list or as a property),
  * the parser automatically sets the parent reference on the child.
  *
- * <h5 class='section'>Requirements:</h5>
+ * <h2 class='section'>Requirements:</h2>
  * <ul class='spaced-list'>
  * 	<li>Must be an <strong>instance</strong> method or field (not static)
  * 	<li>For methods: Must accept exactly one parameter (the parent object type)
@@ -44,7 +44,7 @@ import java.lang.annotation.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link ParentPropertyApply @ParentPropertyApply}
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> AddressBook {
  * 		<jk>public</jk> List&lt;Person&gt; people;
@@ -72,14 +72,14 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>When It's Called:</h5>
+ * <h2 class='section'>When It's Called:</h2>
  * <ul class='spaced-list'>
  * 	<li>During parsing when a child object is created within a parent object
  * 	<li>The parser automatically calls the setter or sets the field with a reference to the parent object
  * 	<li>This allows child objects to navigate back to their parent if needed
  * </ul>
  *
- * <h5 class='section'>Parent resolution through collections and maps:</h5>
+ * <h2 class='section'>Parent resolution through collections and maps:</h2>
  * <ul class='spaced-list'>
  * 	<li>A collection/map element's <ja>@ParentProperty</ja> is set to the nearest enclosing bean, skipping any
  * 		intervening collections, maps, or arrays.  In the example above, each <c>Person</c> lives inside a
@@ -90,7 +90,7 @@ import java.lang.annotation.*;
  * 		<ja>@ParentProperty</ja> is left <jk>null</jk>.
  * </ul>
  *
- * <h5 class='section'>Cyclic graphs and serialization:</h5>
+ * <h2 class='section'>Cyclic graphs and serialization:</h2>
  * <ul class='spaced-list'>
  * 	<li>When a <ja>@ParentProperty</ja> back-reference is also a normally-visible bean property (e.g. a <jk>public</jk>
  * 		field or getter, as in the example above), it forms a parent-to-child/child-to-parent <b>cycle</b>.  Unlike
@@ -120,7 +120,7 @@ import java.lang.annotation.*;
  * 	<jsm>assertTrue</jsm>(<jv>person</jv>.addressBook == <jv>parsed</jv>);  <jc>// Parent re-injected through the List.</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ParentPropertyAnnotation">@ParentProperty Annotation</a>
 
  * </ul>

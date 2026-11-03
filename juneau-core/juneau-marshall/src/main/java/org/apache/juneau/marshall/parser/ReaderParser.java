@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
 /**
  * Subclass of {@link Parser} for character-based parsers.
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * This class is typically the parent class of all character-based parsers.
  * It has 1 abstract method to implement on the session object...
@@ -36,11 +36,11 @@ import org.apache.juneau.marshall.*;
  * 	<li>{@link ParserSession#doRead(ParserPipe, ClassMeta)}
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
@@ -116,7 +116,7 @@ public class ReaderParser extends Parser {
 		 * <p>
 		 * Used when passing in input streams and byte arrays to {@link Parser#read(Object, Class)}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser

@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.collections.*;
  * {@link #fields()}, which is user-tamperable request data.  An endpoint that also carries the row id in its path
  * should check {@code targetId().equals(pathId)} first.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>var</jk> <jv>submit</jv> = RowJobSubmit.<jsm>parse</jsm>(<jv>json</jv>);
  * 	<jk>if</jk> (! <jv>submit</jv>.targetId().equals(<jv>id</jv>))
@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.collections.*;
  * 		<jk>return</jk> refuse(<jv>res</jv>, RowJobSubmit.<jsm>bindingRefusal</jsm>());  <jc>// answered 409</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link JobKeyLedger}
  * </ul>

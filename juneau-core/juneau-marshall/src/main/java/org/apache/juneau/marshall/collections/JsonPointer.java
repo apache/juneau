@@ -31,7 +31,7 @@ import java.util.*;
  * base-10 non-negative integer index or the single character <c>-</c> (which references the nonexistent element after
  * the last element, used to append on writes); for objects the decoded token is the member name.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	JsonMap <jv>doc</jv> = JsonMap.<jsm>of</jsm>(<js>"foo"</js>, JsonList.<jsm>of</jsm>(<js>"bar"</js>, <js>"baz"</js>));
  *
@@ -42,7 +42,7 @@ import java.util.*;
  * 	JsonPointer.<jsm>of</jsm>(<js>"/foo/-"</js>).set(<jv>doc</jv>, <js>"qux"</js>);     <jc>// appends "qux"</jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li>Read-miss (missing key, out-of-range index, or type mismatch) resolves to <jk>null</jk> via {@link #eval(Object)}.
  * </ul>

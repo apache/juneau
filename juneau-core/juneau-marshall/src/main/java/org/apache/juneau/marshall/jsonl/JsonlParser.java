@@ -24,11 +24,11 @@ import org.apache.juneau.marshall.json.*;
 /**
  * Parses JSONL (JSON Lines) input into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Parses JSONL input where each non-empty line is a complete JSON value.  Blank lines are ignored.
  * The conversion is as follows...
@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.json.*;
  * When the target type is a {@link Collection} or array, each line is parsed
  * as one element.  When the target type is a single value, only the first non-empty line is parsed.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use the default parser to parse JSONL into a list of POJOs</jc>
  * 	List&lt;MyBean&gt; <jv>list</jv> = JsonlParser.<jsf>DEFAULT</jsf>.read(<jv>jsonlInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -58,15 +58,14 @@ import org.apache.juneau.marshall.json.*;
  * 	<jv>parser</jv> = JsonlParser.<jsf>DEFAULT</jsf>.copy().build();
  * </p>
  *
- * <h5 class='figure'>Example input:</h5>
+ * <h2 class='figure'>Example input:</h2>
  * <p class='bjson'>
  * {"name":"Alice","age":30}
  * {"name":"Bob","age":25}
  * {"name":"Carol","age":35}
  * </p>
  *
- * <h5 class='section'>Limitations compared to JSON</h5>
- * <p>
+ * <h2 class='section'>Limitations compared to JSON</h2>
  * <ul class='spaced-list'>
  * 	<li><b>No multi-line JSON input</b>: Each JSON value must be on a single line.
  * 		Multi-line (pretty-printed) JSON piped as JSONL input will cause parse errors.
@@ -75,11 +74,11 @@ import org.apache.juneau.marshall.json.*;
  * 		silently ignored.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonlSupport">JSONL</a>
  * </ul>
  */

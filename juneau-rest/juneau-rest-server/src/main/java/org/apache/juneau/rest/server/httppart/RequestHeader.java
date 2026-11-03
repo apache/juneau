@@ -87,10 +87,11 @@ import org.apache.juneau.rest.server.*;
  * 		<ul class='javatreec'>
  * 			<li class='jm'>{@link RequestHeader#getName() getName()}
  * 			<li class='jm'>{@link RequestHeader#getValue() getValue()}
-* 		</ul>
+ * 		</ul>
+ * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */

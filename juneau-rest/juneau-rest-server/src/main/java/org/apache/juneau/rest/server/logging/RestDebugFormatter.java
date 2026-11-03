@@ -42,7 +42,7 @@ import jakarta.servlet.http.*;
  * {@link #formatBasic(RestRequest,RestResponse) formatBasic} is additive-safe. Most implementations instead extend
  * {@link BasicRestDebugFormatter} and override only the tier(s) they wish to change.
  *
- * <h5 class='section'>Secure by default</h5>
+ * <h2 class='section'>Secure by default</h2>
  * <p>
  * {@link BasicRestDebugFormatter} is secure by default: request/response <b>bodies are never dumped</b> unless the
  * operator has deliberately set the {@code JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES} environment variable (and even then only
@@ -56,7 +56,7 @@ import jakarta.servlet.http.*;
  * {@link RestRequest#getCachedContentLength()}, {@link RestRequest#getException()}, {@link RestRequest#getExecTime()},
  * {@link RestResponse#getCachedContent()}, {@link RestResponse#getCachedContentLength()}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  *

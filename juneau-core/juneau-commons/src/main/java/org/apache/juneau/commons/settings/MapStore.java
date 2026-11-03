@@ -30,19 +30,19 @@ import java.util.concurrent.atomic.*;
  * for creating custom property stores (e.g., Spring properties, configuration files) that can be added to
  * {@link Settings} as sources.
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe. The internal map is lazily initialized using {@link AtomicReference} and
  * {@link ConcurrentHashMap} for thread-safe operations.
  *
- * <h5 class='section'>Null Value Handling:</h5>
+ * <h2 class='section'>Null Value Handling:</h2>
  * <p>
  * Setting a value to <c>null</c> stores <c>Optional.empty()</c> in the map, which means {@link #get(String)}
  * will return a {@link PropertyLookupResult#present(Optional)} result with an empty optional.
  * This allows you to explicitly override system properties with null values.
  * Use {@link #unset(String)} if you want to remove a key entirely (so {@link #get(String)} returns {@link PropertyLookupResult#missing()}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a store and add properties</jc>
  * 	MapStore <jv>store</jv> = <jk>new</jk> MapStore();

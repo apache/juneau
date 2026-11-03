@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * Beans serialized as strings cannot be reconstituted using a parser unless it is a
  * <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">POJO Categories</a>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
 
  * </ul>

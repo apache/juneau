@@ -39,7 +39,7 @@ import freemarker.template.*;
  * {@code visible=false} omits the node and its whole subtree &mdash; the body is not even rendered. A node not
  * nested inside {@code <@navigation>} and without {@code under=} is rejected fail-closed.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@navigation&gt;
  * 	  &lt;@node id="work" label="Work" href="/work"&gt;
@@ -49,7 +49,7 @@ import freemarker.template.*;
  * 	&lt;/@navigation&gt;
  * </p>
  *
- * <h5 class='section'>{@code under=}: page-scoped nav additions:</h5>
+ * <h2 class='section'>{@code under=}: page-scoped nav additions:</h2>
  * <p>
  * {@code under=} is allowed only on a {@code <@node>} that is a direct child of {@code <@page>}, or of
  * {@code <@console>} outside {@code <@navigation>}; anywhere else it is E-B14.  The node (and any ordinary nested

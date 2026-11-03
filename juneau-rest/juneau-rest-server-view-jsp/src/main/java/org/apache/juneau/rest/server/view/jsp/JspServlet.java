@@ -36,7 +36,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@link ViewServlet} &mdash; eliminating the path-doubling that a mixin-shaped op would
  * produce when the servlet itself is mounted at {@code /jsp/*}.
  *
- * <h5 class='figure'>Microservice registration:</h5>
+ * <h2 class='figure'>Microservice registration:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Bean</ja> Servlet jsp() {
@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.view.*;
  * programmatic {@code RestContext.Builder.paths(...)} rung; the underlying base path for resolving
  * {@code .jsp} files is configured on the {@link JspDispatcher} worker.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>

@@ -35,7 +35,7 @@ import java.util.regex.*;
  * framework or on a particular client.  Failures throw {@link AssertionError}.  Only same-origin URLs are checked:
  * absolute {@code http(s):}, protocol-relative, {@code data:} and fragment-only URLs are skipped.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	MockRestClient <jv>client</jv> = MockRestClient.<jsm>buildLax</jsm>(MyHost.<jk>class</jk>);
  * 	String <jv>html</jv> = <jv>client</jv>.get(<js>"/page"</js>).run().getContent().asString();

@@ -40,7 +40,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * &mdash; reads it from this class, so a security filter and a startup check cannot come to disagree about which
  * methods are writes.  A divergence between those two would be silent and would defeat both.
  *
- * <h5 class='section'>The check</h5>
+ * <h2 class='section'>The check</h2>
  * <p>
  * {@link #check(List)} runs when a resource's operation table is assembled, from
  * {@link RestOperations#RestOperations(RestOperations.Builder)} &mdash; the one constructor every operation table
@@ -60,14 +60,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * unsafe, to {@code "*"} or to {@code "RRPC"}, or that is also {@link Mutating @Mutating}.  A read can be reached by
  * overriding a safe request, so a misdeclared read would be a write behind a plain link.
  *
- * <h5 class='section'>Why the rule is a declared contradiction rather than a detected one</h5>
+ * <h2 class='section'>Why the rule is a declared contradiction rather than a detected one</h2>
  * <p>
  * See {@link Mutating}, which records why inferring "this handler mutates" is not soundly possible and why a check
  * that can wrongly refuse to start an application is worse than no check at all.  The short form: this class only
  * ever reports a contradiction the developer wrote down, so it cannot produce a false positive, and it cannot catch
  * a handler that mutates and says nothing.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link Mutating}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.filter.LoopbackBoundary}
  * </ul>

@@ -50,7 +50,7 @@ import freemarker.template.utility.*;
  * card (see {@code TerminalDef}). A card without {@code id=} gets {@code jc-card-N}. {@code <@card>} is only valid inside
  * {@code <@page>}; markup around it becomes {@code jc-seg-N} segments, so the authored order is kept.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@page tab="releases"&gt;
  * 	  &lt;@card id="intro" title="Releases"&gt;&lt;p&gt;All releases.&lt;/p&gt;&lt;/@card&gt;

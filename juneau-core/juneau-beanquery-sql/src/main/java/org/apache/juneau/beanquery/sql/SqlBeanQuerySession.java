@@ -48,7 +48,7 @@ import org.apache.juneau.commons.collections.*;
  * {@code ?} placeholders) is logged at {@link Level#WARNING} with the driver's exception, whose message may include
  * values.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Caller-owned connection and transaction; a per-request tenant guard.</jc>
  * 	<jk>try</jk> (SqlBeanQuerySession&lt;Person&gt; <jv>session</jv> = <jv>context</jv>.createSession()

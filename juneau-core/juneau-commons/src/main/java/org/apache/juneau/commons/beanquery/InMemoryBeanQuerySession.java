@@ -31,7 +31,7 @@ import java.util.stream.*;
  * deadline ({@link BeanQueryContext.Builder#regexTimeout(java.time.Duration) regexTimeout}).  {@link #close()} is a
  * no-op, but use try-with-resources anyway so the code does not change if the engine does.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> (InMemoryBeanQuerySession&lt;Person&gt; <jv>session</jv> = <jv>context</jv>.createSession()
  * 			.rows(<jv>people</jv>)

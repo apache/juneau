@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Indicates the authentication scheme that should be used to access the requested entity.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	WWW-Authenticate: Basic
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The WWW-Authenticate response-header field MUST be included in 401 (Unauthorized) response messages.
  * The field value consists of at least one challenge that indicates the authentication scheme(s) and parameters
@@ -47,7 +47,7 @@ import org.apache.juneau.http.*;
  * than one challenge, or if more than one WWW-Authenticate header field is provided, the contents of a challenge
  * itself can contain a comma-separated list of authentication parameters.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

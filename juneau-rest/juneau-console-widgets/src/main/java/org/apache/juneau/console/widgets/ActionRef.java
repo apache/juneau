@@ -89,13 +89,13 @@ public class ActionRef implements ActionBarItem {
 	 * carrying {@code reason} as its explanation.  Call this more than once to declare more than one rule; all of
 	 * them must match.
 	 *
-	 * <h5 class='section'>This is presentation only &mdash; never the authorization gate:</h5>
+	 * <h4 class='section'>This is presentation only &mdash; never the authorization gate:</h4>
 	 * <p>
 	 * The rule exists so an operator is not offered a button that cannot possibly work.  The server still re-reads
 	 * the row's state and refuses on its own authority; a client-side rule that quietly became the only check would
 	 * be a regression, not an optimization.  Nothing here is a substitute for the server's own refusal.
 	 *
-	 * <h5 class='section'>Disabled, never hidden:</h5>
+	 * <h4 class='section'>Disabled, never hidden:</h4>
 	 * <p>
 	 * Prefer disabled; hide only when the action is irrelevant.  A detail-panel action has no
 	 * {@code visibleWhen(...)}: removing a momentarily-impossible action makes the bar's contents jump between rows
@@ -103,14 +103,14 @@ public class ActionRef implements ActionBarItem {
 	 * action is invalid for an <b>entire</b> view rather than per row, omit it from that view's action list
 	 * &mdash; that is the right tool, and it is why per-row hiding is not offered.
 	 *
-	 * <h5 class='section'>Which reason an operator sees:</h5>
+	 * <h4 class='section'>Which reason an operator sees:</h4>
 	 * <p>
 	 * When several rules on one action fail, the <b>first-declared</b> one wins and evaluation stops there.  The
 	 * author's ordering is therefore the priority mechanism: no severity field, no concatenation, no
 	 * most-specific-rule heuristic.  The runtime surfaces that one reason through both a native tooltip and
 	 * {@code aria-describedby}, and clears both again when the rules pass.
 	 *
-	 * <h5 class='section'>A field the row does not carry fails closed:</h5>
+	 * <h4 class='section'>A field the row does not carry fails closed:</h4>
 	 * <p>
 	 * A rule keyed on a field the enclosing panel never declares is rejected at startup.  If the field is
 	 * nonetheless missing from a row's payload at runtime, the rule <b>fails</b> and the action disables &mdash;

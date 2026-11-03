@@ -34,7 +34,7 @@ import java.util.stream.*;
  * <p>
  * The default is {@link #INDICES} which emits the ascending set-bit indices as a comma-delimited token.
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#bitSetFormat() @MarshalledProp(bitSetFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#bitSetFormat() @Marshalled(bitSetFormat=…)} on the bean class.
@@ -45,7 +45,7 @@ import java.util.stream.*;
  * 	<li>The default constant ({@link #INDICES}).
  * </ol>
  *
- * <h5 class='topic'>Parsing</h5>
+ * <h2 class='topic'>Parsing</h2>
  *
  * <p>
  * Parsing is directed by the configured constant — a serializer and parser sharing the same
@@ -61,7 +61,7 @@ public enum BitSetFormat {
 	/**
 	 * Ascending set-bit indices as a comma-delimited token (the default).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	0,2,5
 	 * </p>
@@ -74,7 +74,7 @@ public enum BitSetFormat {
 	/**
 	 * Little-endian bit string — character at position <c>i</c> is <c>'1'</c> when bit <c>i</c> is set.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	101001
 	 * </p>
@@ -87,7 +87,7 @@ public enum BitSetFormat {
 	/**
 	 * Hex-encoded little-endian byte array ({@link BitSet#toByteArray()}).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	25
 	 * </p>

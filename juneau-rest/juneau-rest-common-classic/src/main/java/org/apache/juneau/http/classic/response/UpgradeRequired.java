@@ -34,7 +34,7 @@ import org.apache.juneau.http.classic.header.*;
  * <p>
  * The client should switch to a different protocol such as TLS/1.0, given in the Upgrade header field.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

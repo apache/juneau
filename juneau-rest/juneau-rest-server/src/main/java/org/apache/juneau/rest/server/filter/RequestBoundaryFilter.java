@@ -31,7 +31,7 @@ import jakarta.servlet.http.*;
  * Applies a {@link RequestBoundary} to every request reaching the servlet container, rejecting those that did not
  * come from a page this application served.
  *
- * <h5 class='section'>Why a servlet filter, and not a mixin or a guard</h5>
+ * <h2 class='section'>Why a servlet filter, and not a mixin or a guard</h2>
  * <p>
  * The boundary's value depends entirely on there being no way around it, and the two lighter-weight Juneau
  * mechanisms both leave one:
@@ -49,7 +49,7 @@ import jakarta.servlet.http.*;
  * resolve to nothing and would 404.  Nothing can opt out by omission, which is the property that makes it worth
  * having.
  *
- * <h5 class='section'>Rejection behavior</h5>
+ * <h2 class='section'>Rejection behavior</h2>
  * <p>
  * A rejected request is answered directly and the chain is not invoked, so the request never reaches application
  * code.  The response carries the boundary's chosen status, a {@value #REJECTION_HEADER} header naming the
@@ -61,7 +61,7 @@ import jakarta.servlet.http.*;
  * the application being reached at {@code localhost} when it accepts {@code 127.0.0.1}, say &mdash; is immediately
  * diagnosable instead of presenting as an inexplicably broken page.
  *
- * <h5 class='section'>Token availability to the page renderer</h5>
+ * <h2 class='section'>Token availability to the page renderer</h2>
  * <p>
  * On an allowed request the boundary's {@link RequestBoundary#tokenFor(HttpServletRequest) token for that request}
  * is placed under the {@link #TOKEN_ATTRIBUTE} request attribute, and the header name it must be sent back under is
@@ -79,7 +79,7 @@ import jakarta.servlet.http.*;
  * that writes the token calls {@link #markTokenBearing(HttpServletResponse)} before it writes any of the body; this
  * filter cannot know which responses embed it.
  *
- * <h5 class='section'>Sessions</h5>
+ * <h2 class='section'>Sessions</h2>
  * <p>
  * A {@link CsrfBoundary} with a {@linkplain CsrfTokens#perSession() per-session} token needs the session to exist
  * before the page is written, or the page carries a token that verifies against nothing.  The boundary itself never
@@ -97,7 +97,7 @@ import jakarta.servlet.http.*;
  * for HTML, Juneau's own HTML REST pages included, does.  The filter never changes a session id and never sets cookie
  * attributes; those stay the application's (see {@link CsrfBoundary}).
  *
- * <h5 class='section'>Registration: order and dispatcher types</h5>
+ * <h2 class='section'>Registration: order and dispatcher types</h2>
  * <p>
  * Map the filter at {@code /*} so nothing can be reached around it.  Register it ahead of any filter that acts on the
  * request on the application's behalf.  A {@link CsrfBoundary} using
@@ -118,7 +118,7 @@ import jakarta.servlet.http.*;
  * {@code null} dispatcher set in {@code addMappingForUrlPatterns}, or Spring Boot's {@code FilterRegistrationBean}
  * default) is {@code REQUEST} only.
  *
- * <h5 class='section'>Example (Spring Boot):</h5>
+ * <h2 class='section'>Example (Spring Boot):</h2>
  * <p class='bjava'>
  * 	<ja>@Bean</ja>
  * 	<jk>public</jk> FilterRegistrationBean&lt;RequestBoundaryFilter&gt; boundary(RequestBoundary <jv>b</jv>) {
@@ -129,7 +129,7 @@ import jakarta.servlet.http.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jic'>{@link RequestBoundary}
  * 	<li class='jc'>{@link LoopbackBoundaryFilter}
  * </ul>

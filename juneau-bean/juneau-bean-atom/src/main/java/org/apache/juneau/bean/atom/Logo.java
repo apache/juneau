@@ -40,7 +40,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li>Suitable for prominent display in feed readers
  * </ul>
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomLogo = element atom:logo {
  * 		atomCommonAttributes,
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Logo <jv>logo</jv> = <jk>new</jk> Logo(<js>"http://example.org/logo.png"</js>);
  *
@@ -56,12 +56,12 @@ import org.apache.juneau.marshall.xml.*;
  * 		.setLogo(<jv>logo</jv>);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomLogo</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.8">RFC 4287 - Section 4.2.8</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * </ul>

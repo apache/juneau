@@ -31,7 +31,7 @@ import java.util.*;
  * construction via reflection; per-call dispatch picks the matching overload by argument count
  * and runs one reflective invoke + N {@link ArgCoercer} coercions.
  *
- * <h5 class='section'>Method-resolution rules:</h5>
+ * <h2 class='section'>Method-resolution rules:</h2>
  * <ul>
  * 	<li>The subclass declares one or more public methods named {@code invoke}. Each must have a
  * 		distinct fixed-arity (or be the single variadic overload — see below).
@@ -46,7 +46,7 @@ import java.util.*;
  * 		fixed-arity overloads as long as the arity counts don't overlap.
  * </ul>
  *
- * <h5 class='section'>Example — multi-arity:</h5>
+ * <h2 class='section'>Example — multi-arity:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> Substring <jk>extends</jk> TypedFunction {
  * 		<ja>@Override</ja> <jk>public</jk> String name() { <jk>return</jk> <js>"substring"</js>; }

@@ -45,7 +45,7 @@ import org.thymeleaf.templatemode.*;
  * 		host needed.
  * </ol>
  *
- * <h5 class='figure'>Composition example (microservice):</h5>
+ * <h2 class='figure'>Composition example (microservice):</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/app"</js>, mixins=ThymeleafMixin.<jk>class</jk>)
@@ -64,7 +64,7 @@ import org.thymeleaf.templatemode.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /thymeleaf/*} can be overridden via the SVL variable
@@ -74,7 +74,7 @@ import org.thymeleaf.templatemode.*;
  * ({@code juneau.thymeleaf.path = views}) to change the runtime mount without subclassing.
  * Resolution happens once at {@link RestContext} construction time (SVL resolution in {@code @RestOp(path)}).
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -83,7 +83,7 @@ import org.thymeleaf.templatemode.*;
  * a class-level {@code @Rest(paths=...)} declaration would be silently ignored under the mixin
  * pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='section'>Choosing a TemplateEngine:</h5>
+ * <h2 class='section'>Choosing a TemplateEngine:</h2>
  *
  * <p>
  * The {@code juneau-rest-server-view-thymeleaf} module ships <b>only</b> the Thymeleaf core API in
@@ -110,7 +110,7 @@ import org.thymeleaf.templatemode.*;
  * When no Thymeleaf engine is on the classpath, the renderer surfaces
  * {@link ThymeleafViewRenderer#NO_ENGINE_DIAGNOSTIC} naming the missing dependency.
  *
- * <h5 class='section'>Multiple base paths:</h5>
+ * <h2 class='section'>Multiple base paths:</h2>
  *
  * <p>
  * A host with {@code /templates/} and {@code /admin/templates/} template trees registers two
@@ -119,13 +119,13 @@ import org.thymeleaf.templatemode.*;
  * {@code ThymeleafMixin_MockRest_Test} test in {@code juneau-integration-tests} for the canonical
  * pattern.
  *
- * <h5 class='section'>OpenAPI surface:</h5>
+ * <h2 class='section'>OpenAPI surface:</h2>
  *
  * <p>
  * The greedy {@code /*} handler is not API-meaningful and is excluded from generated
  * Swagger / OpenAPI specs via {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ThymeleafView}
  * 	<li class='jc'>{@link ThymeleafViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>

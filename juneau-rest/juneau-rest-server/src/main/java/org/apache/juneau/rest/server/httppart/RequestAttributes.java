@@ -41,7 +41,7 @@ import jakarta.servlet.http.*;
  * 	<jk>public</jk> Object myMethod(RequestAttributes <jv>attributes</jv>) {...}
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestAttributes <jv>attributes</jv>) {
@@ -90,7 +90,7 @@ import jakarta.servlet.http.*;
  * 	the underlying servlet request attributes making it possible to mix the usage of both APIs.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */

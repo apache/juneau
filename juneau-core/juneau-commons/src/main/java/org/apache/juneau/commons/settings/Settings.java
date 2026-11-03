@@ -40,7 +40,7 @@ import org.apache.juneau.commons.reflect.*;
  * Settings instances are created using the {@link Builder} pattern. Use {@link #create()} to create a new builder,
  * or {@link #get()} to get the singleton instance (which is created using default builder settings).
  *
- * <h5 class='section'>Lookup Order:</h5>
+ * <h2 class='section'>Lookup Order:</h2>
  * <p>
  * When retrieving a property value, the lookup order is:
  * <ol>
@@ -60,14 +60,14 @@ import org.apache.juneau.commons.reflect.*;
  * If SPI registered no system-property source (a shaded jar that does not merge <c>META-INF/services</c>, for example),
  * a fallback system-property source sits just above the relaxed environment source.
  *
- * <h5 class='section'>Sources vs Stores:</h5>
+ * <h2 class='section'>Sources vs Stores:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Sources</b> ({@link PropertySource}) - Provide read-only access to property values. Examples: {@link FunctionalPropertySource}
  * 	<li><b>Stores</b> ({@link PropertyStore}) - Provide read/write access to property values. Examples: {@link MapStore}, {@link FunctionalPropertyStore}
  * 	<li>Stores can be used as sources (they extend {@link PropertySource}), so you can add stores via {@link Builder#addSource(PropertySource)}
  * </ul>
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>System property access - read Java system properties with type conversion via {@link StringSetting}
  * 	<li>Global overrides - override system properties globally for all threads (stored in a {@link PropertyStore})
@@ -78,7 +78,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<li>Resettable suppliers - settings are returned as {@link StringSetting} instances that can be reset to force recomputation
  * </ul>
  *
- * <h5 class='section'>Usage Examples:</h5>
+ * <h2 class='section'>Usage Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Get a system property as a StringSetting (using singleton instance)</jc>
  * 	StringSetting <jv>setting</jv> = Settings.<jsf>get</jsf>().get(<js>"my.property"</js>);
@@ -124,7 +124,7 @@ import org.apache.juneau.commons.reflect.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>System Properties:</h5>
+ * <h2 class='section'>System Properties:</h2>
  * <ul class='spaced-list'>
  * 	<li><c>juneau.settings.disableGlobal</c> (system property) or <c>JUNEAU_SETTINGS_DISABLEGLOBAL</c> (system env) - If set to <c>true</c>, prevents new global overrides
  * 		from being set via {@link #setGlobal(String, String)}. Existing global overrides will still be
@@ -199,7 +199,7 @@ public class Settings {
 	 * configuration. The builder allows you to configure stores, sources, and other settings
 	 * before building the final Settings instance.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a custom Settings instance</jc>
 	 * 	Settings <jv>custom</jv> = Settings.<jsf>create</jsf>()
@@ -326,7 +326,7 @@ public class Settings {
 		 * {@link Settings#get(String, Object)}. The function will be used to convert string values
 		 * to the specified type.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Register a custom converter for a custom type</jc>
 		 * 	Settings <jv>custom</jv> = Settings.<jsf>create</jsf>()
@@ -617,7 +617,7 @@ public class Settings {
 	 * Supported types include any type that has a static method with signature <c>public static &lt;T&gt; T anyName(String arg)</c>
 	 * or a public constructor with signature <c>public T(String arg)</c>, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// System property: -Dmy.property=true</jc>
 	 * 	Boolean <jv>flag</jv> = get(<js>"my.property"</js>, <jk>false</jk>);  <jc>// true</jc>
@@ -803,7 +803,7 @@ public class Settings {
 	 * When a conversion method or constructor is found via reflection, it is cached in the
 	 * <c>toTypeFunctions</c> map for future use.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><c>Boolean</c> - Uses <c>Boolean.valueOf(String)</c> static method
 	 * 	<li><c>Integer</c> - Uses <c>Integer.valueOf(String)</c> static method

@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * be used only once per page and contains the central topic or functionality of the page. It
  * is important for accessibility and helps screen readers identify the main content area.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple main content</jc>
  * 	Main <jv>simple</jv> = <jsm>main</jsm>(
@@ -98,7 +98,7 @@ import org.apache.juneau.marshall.*;
  * 	);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

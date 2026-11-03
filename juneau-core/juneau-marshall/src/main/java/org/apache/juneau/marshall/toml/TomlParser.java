@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.stream.*;
  * <p>
  * Handles <c>Content-Type</c>: <bc>application/toml</bc>
  *
- * <h5 class='topic'>Limitations compared to JSON</h5>
+ * <h2 class='topic'>Limitations compared to JSON</h2>
  * <p>
  * TOML is a configuration format with a more restricted type system than JSON.
  * The following features supported by {@link JsonParser}
@@ -56,7 +56,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		for full compatibility.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse TOML into a JsonMap</jc>
  * 	String <jv>toml</jv> = <js>"name = \"myapp\"\nport = 8080"</js>;
@@ -72,13 +72,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>parsed</jv> = Toml.<jsm>to</jsm>(<jv>toml</jv>, JsonMap.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example input (Map of name/age):</h5>
+ * <h2 class='figure'>Example input (Map of name/age):</h2>
  * <p class='bcode'>
  * 	name = "Alice"
  * 	age = 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested table + array):</h5>
+ * <h2 class='figure'>Complex (nested table + array):</h2>
  * <p class='bcode'>
  * 	name = "Alice"
  * 	age = 30
@@ -90,7 +90,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	state = "MA"
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a href="https://toml.io/en/v1.0.0">TOML v1.0.0 Specification</a>
  * </ul>
  */

@@ -27,7 +27,7 @@ import java.time.*;
  * registry expects (Micrometer {@code io.micrometer.core.instrument.Timer}, OpenTelemetry
  * metric instruments, Dropwizard {@code MetricRegistry}, etc.).
  *
- * <h5 class='topic'>Off-by-default contract</h5>
+ * <h2 class='topic'>Off-by-default contract</h2>
  *
  * <p>
  * {@code juneau-rest-server} resolves the {@code MetricsRecorder} via
@@ -37,7 +37,7 @@ import java.time.*;
  * cost beyond a single static-field read. To opt in, the consumer registers a {@code MetricsRecorder}
  * bean &mdash; typically via {@code @Bean MetricsRecorder} on the resource or its parent.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
@@ -50,7 +50,7 @@ import java.time.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Threading</h5>
+ * <h2 class='topic'>Threading</h2>
  *
  * <p>
  * Implementations <b>must</b> be thread-safe &mdash; the same {@code MetricsRecorder} bean is invoked
@@ -59,7 +59,7 @@ import java.time.*;
  * status is known, so implementations should keep the call cheap (constant-time tag computation,
  * non-blocking registry writes).
  *
- * <h5 class='topic'>Event ordering</h5>
+ * <h2 class='topic'>Event ordering</h2>
  *
  * <p>
  * For a given {@code @RestOp} invocation, {@code record(...)} fires exactly once after the operation
@@ -69,7 +69,7 @@ import java.time.*;
  * after the handler returns or throws). It does <b>not</b> include response serialization performed
  * later in the request pipeline.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link NoOpMetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>

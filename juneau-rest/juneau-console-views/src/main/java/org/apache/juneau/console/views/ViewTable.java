@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.filter.*;
  * stamp or select: CSRF on a shell ancestor, layout hint, selection/bulk markers, row-detail template
  * attributes, and the named overflow class. It is not a Java page-authoring factory.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link ViewsMixin}
  * 	<li class='jc'>{@link SelectionDef}

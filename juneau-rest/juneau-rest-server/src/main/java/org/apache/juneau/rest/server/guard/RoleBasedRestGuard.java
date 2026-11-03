@@ -38,13 +38,13 @@ import org.apache.juneau.rest.server.*;
  * 	<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>AND operations take precedence over OR operations (as expected).
  * 	<li class='note'>Whitespace is ignored.
  * 	<li class='note'><jk>null</jk> or empty expressions always match as <jk>false</jk>.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Guards">Guards</a>
  * </ul>
  */

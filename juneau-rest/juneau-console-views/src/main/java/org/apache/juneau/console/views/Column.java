@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.collections.*;
  * One datatable column's search configuration &mdash; its value {@link SearchType} and the optional
  * per-column {@link SearchOperatorSet}.
  *
- * <h5 class='section'>Operator gating</h5>
+ * <h2 class='section'>Operator gating</h2>
  * <p>
  * A column's offerable operators are modeled by a single {@link SearchOperatorSet}, never a string allow-list or a
  * separate custom-operator map.  A custom operator is simply a {@link SearchOperator} placed inside a set via
@@ -44,14 +44,14 @@ import org.apache.juneau.marshall.collections.*;
  * An operator not on the effective set is a <b>reject</b> (the popup marks it invalid), never a silent rewrite
  * &mdash; see {@link #offers(String)}.
  *
- * <h5 class='section'>Mutability</h5>
+ * <h2 class='section'>Mutability</h2>
  * <p>
  * Deliberately mutable, like {@link ViewDef} and {@link RegionDef}: a {@link Column} is a server-side authoring
  * bean built up once via fluent setters while constructing a view definition, not an
  * immutable value object.  Callers must not mutate one concurrently from more than one thread, and must not reuse
  * one across requests unless every request treats it as read-only after construction.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A searchable "status" column offering only $eq and $in, plus a custom "$mine" operator.</jc>
  * 	Column <jv>status</jv> = Column.<jsm>create</jsm>(<js>"status"</js>)
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.collections.*;
  * 			SearchOperator.<jsm>create</jsm>(<js>"$mine"</js>, <js>"Assigned to me"</js>).types(SearchType.<jsf>ID</jsf>).build()));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link SearchOperator}
  * 	<li class='jc'>{@link SearchOperatorSet}

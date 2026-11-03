@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.stream.*;
  * Parses RFC 4180-compliant CSV into collections of beans, maps, or simple values. Each row becomes an
  * element; the header row defines column names.
  *
- * <h5 class='section'>JSON Parity Features (opt-in):</h5>
+ * <h2 class='section'>JSON Parity Features (opt-in):</h2>
  * <ul>
  *   <li><b>Type discriminator</b> — Parse {@code _type} column when present; use {@link CsvParser.Builder#beanDictionary(Class[])
  *       beanDictionary()} for polymorphic types.
@@ -47,30 +47,30 @@ import org.apache.juneau.marshall.stream.*;
  *       matching this are parsed as null.
  * </ul>
  *
- * <h5 class='section'>Data Structures Not Supported:</h5>
+ * <h2 class='section'>Data Structures Not Supported:</h2>
  * <ul>
  *   <li><b>Parent/inherited properties</b> — Bean hierarchy cannot be reconstructed from flat columns.
  *   <li><b>Optional wrappers</b> — Round-trip may differ from tree formats.
  * </ul>
  *
- * <h5 class='section'>Best Supported:</h5>
+ * <h2 class='section'>Best Supported:</h2>
  * <p>
  * Parsing into {@link Collection} of flat beans or maps, or single beans/maps with simple
  * property types (primitives, strings, numbers, enums, dates, byte arrays, or nested structures when enabled).
  *
- * <h5 class='figure'>Example input (list of maps with a,b):</h5>
+ * <h2 class='figure'>Example input (list of maps with a,b):</h2>
  * <p class='bcode'>
  * 	a,b
  * 	foo,bar
  * </p>
  *
- * <h5 class='figure'>Complex (list of beans with nested address, flattened):</h5>
+ * <h2 class='figure'>Complex (list of beans with nested address, flattened):</h2>
  * <p class='bcode'>
  * 	name,age,address_street,address_city,address_state,tags
  * 	Alice,30,123 Main St,Boston,MA,"a,b,c"
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

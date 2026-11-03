@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
 /**
  * The four petstore rendering flavors shown under Developer &gt; Rendering flavors.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// The console page for one flavor.</jc>
  * 	View <jv>page</jv> = Flavor.<jsm>of</jsm>(<js>"mustache"</js>).page();

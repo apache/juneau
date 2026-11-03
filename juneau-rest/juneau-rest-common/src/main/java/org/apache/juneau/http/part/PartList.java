@@ -46,7 +46,7 @@ import org.apache.juneau.http.*;
  * 	PartList <jv>parts2</jv> = PartList.<jsm>ofPairs</jsm>(<js>"username"</js>, <js>"alice"</js>, <js>"password"</js>, <js>"secret"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

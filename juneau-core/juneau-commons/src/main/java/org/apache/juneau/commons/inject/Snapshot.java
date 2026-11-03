@@ -30,7 +30,7 @@ package org.apache.juneau.commons.inject;
  * identity-based; two distinct push operations always produce distinct snapshots, even when the overlay and the
  * owning store are the same.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	WritableBeanStore <jv>store</jv> = ...;
  * 	BeanStore <jv>overlay</jv> = <jk>new</jk> BasicBeanStore().addBean(MyService.<jk>class</jk>, <jv>mock</jv>);
@@ -43,7 +43,7 @@ package org.apache.juneau.commons.inject;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link WritableBeanStore} - The interface that produces and consumes {@code Snapshot} instances.
  * 	<li class='jc'>{@link StackOverlay} - The underlying stack-overlay primitive {@code BasicBeanStore} composes with.
  * </ul>

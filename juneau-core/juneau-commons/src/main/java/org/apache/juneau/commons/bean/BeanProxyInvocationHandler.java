@@ -44,7 +44,7 @@ import java.util.*;
  * When comparing two proxy instances using {@code equals()}, if both are created with {@code BeanProxyInvocationHandler},
  * the comparison is optimized by directly comparing their internal property maps rather than converting to {@link BeanMap}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Define an interface</jc>
  * 	<jk>public interface</jk> Person {
@@ -64,7 +64,7 @@ import java.util.*;
  * 	<jk>var</jk> name = person.<jsm>getName</jsm>(); <jc>// Returns "John"</jc>
  * </p>
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * Instances are not thread-safe.
  * Property values are stored in a mutable {@link HashMap} with no synchronization.

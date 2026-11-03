@@ -29,13 +29,13 @@ import org.apache.juneau.commons.lang.*;
  * This class is useful when you need a four-value composite key for HashMap lookups that properly implements
  * {@link #equals(Object)} and {@link #hashCode()} based on content rather than identity.
  *
- * <h5 class='section'>Array Support:</h5>
+ * <h2 class='section'>Array Support:</h2>
  * <p>
  * Unlike using arrays directly as HashMap keys, this class properly handles arrays by using
  * content-based equality and hashing via {@link HashCode#of(Object...)} which internally uses
  * {@link Arrays#hashCode(Object[])} for arrays.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Tuple1}
  * 	<li class='jc'>{@link Tuple2}
  * 	<li class='jc'>{@link Tuple3}

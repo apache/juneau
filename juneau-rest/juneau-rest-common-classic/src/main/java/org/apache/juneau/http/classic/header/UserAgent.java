@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * The user agent string of the user agent.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The User-Agent request-header field contains information about the user agent originating the request.
  * This is for statistical purposes, the tracing of protocol violations, and automated recognition of user agents for
@@ -51,7 +51,7 @@ import org.apache.juneau.http.*;
  * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

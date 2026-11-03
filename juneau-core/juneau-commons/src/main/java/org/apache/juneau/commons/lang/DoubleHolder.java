@@ -26,12 +26,12 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * This class extends {@link Holder}&lt;{@link Double}&gt; and provides a convenient way to pass mutable
  * double references to lambdas, inner classes, or methods.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a double value to track a running sum</jc>
  * 	DoubleHolder <jv>sum</jv> = DoubleHolder.<jsm>create</jsm>();
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jsm>log</jsm>(<js>"Total: "</js> + <jv>sum</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -56,7 +56,7 @@ public class DoubleHolder extends Holder<Double> {
 	/**
 	 * Creates a new double value initialized to <c>0.0</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0.0, <jv>value</jv>.get());
@@ -71,7 +71,7 @@ public class DoubleHolder extends Holder<Double> {
 	/**
 	 * Creates a new double value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>of</jsm>(3.14159);
 	 * 	<jsm>assertEquals</jsm>(3.14159, <jv>value</jv>.get());
@@ -101,7 +101,7 @@ public class DoubleHolder extends Holder<Double> {
 	 * using absolute difference. The comparison returns <jk>true</jk> if the absolute difference between
 	 * the two values is less than or equal to the specified precision.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>of</jsm>(3.14159);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(3.14, 0.01));      <jc>// Within 0.01</jc>
@@ -138,7 +138,7 @@ public class DoubleHolder extends Holder<Double> {
 	 * This method handles <jk>null</jk> values safely and performs precision-based equality comparison
 	 * for each value using absolute difference.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	DoubleHolder <jv>value</jv> = DoubleHolder.<jsm>of</jsm>(3.14159);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(0.01, 2.5, 3.15, 5.0));   <jc>// Matches 3.15 within 0.01</jc>

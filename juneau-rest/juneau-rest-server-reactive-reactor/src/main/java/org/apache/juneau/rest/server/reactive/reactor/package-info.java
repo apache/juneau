@@ -28,14 +28,14 @@
  * classpath enables {@code Mono} / {@code Flux} / {@code Single} / {@code Maybe} / {@code Flowable} /
  * {@code Observable} / {@code Publisher} return types from {@code @RestOp} handlers.
  *
- * <h5 class='topic'>Containment</h5>
+ * <h2 class='topic'>Containment</h2>
  * <p>
  * The {@code reactor-core}, {@code rxjava}, and {@code reactive-streams} dependencies are declared in
  * {@code provided} scope on this module's POM. Consumers add only the reactive library and version they
  * actually use; adapters whose backing library is absent are skipped at {@link java.util.ServiceLoader}
  * load time. The core {@code juneau-rest-server} jar stays dependency-free.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.reactive.ReactiveResponseProcessor}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerReactive">Reactive-Streams Returns</a>

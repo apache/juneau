@@ -54,7 +54,7 @@ import jakarta.servlet.*;
  * 	<jk>public</jk> Object myMethod(RequestContent <jv>content</jv>) {...}
  * </p>
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public void</jk> doPost(RequestContent <jv>content</jv>) {
@@ -93,7 +93,7 @@ import jakarta.servlet.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  * </ul>
  */
@@ -136,6 +136,7 @@ public class RequestContent {
 	 * If type is <jk>null</jk> or <code>Object.<jk>class</jk></code>, then the actual type will be determined
 	 * automatically based on the following input:
 	 * <table class='styled'>
+	 * 	<caption>Input types and return types</caption>
 	 * 	<tr><th>Type</th><th>JSON input</th><th>XML input</th><th>Return type</th></tr>
 	 * 	<tr>
 	 * 		<td>object</td>
@@ -178,7 +179,7 @@ public class RequestContent {
 	 * <p>
 	 * Refer to <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">POJO Categories</a> for a complete definition of supported POJOs.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse into an integer.</jc>
 	 * 	<jk>int</jk> <jv>content1</jv> = <jv>req</jv>.getContent().as(<jk>int</jk>.<jk>class</jk>);
@@ -196,7 +197,7 @@ public class RequestContent {
 	 * 	Map <jv>content5</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
@@ -220,7 +221,7 @@ public class RequestContent {
 	 * <p>
 	 * This is similar to {@link #as(Class)} but allows for complex collections of POJOs to be created.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; <jv>content1</jv> = <jv>req</jv>.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
@@ -235,7 +236,7 @@ public class RequestContent {
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>content4</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
 	 * 	<li class='note'>
@@ -264,7 +265,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content as a byte array.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
@@ -280,7 +281,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a simple hexadecimal character string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	0123456789ABCDEF
 	 * </p>
@@ -296,7 +297,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a simple space-delimited hexadecimal character string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	01 23 45 67 89 AB CD EF
 	 * </p>
@@ -312,7 +313,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a plain string.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
@@ -405,7 +406,7 @@ public class RequestContent {
 	/**
 	 * Returns the HTTP content content as a {@link Reader}.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * 	<li class='note'>

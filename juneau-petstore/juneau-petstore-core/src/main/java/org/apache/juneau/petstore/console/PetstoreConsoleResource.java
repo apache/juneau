@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Every page renders through {@code base.ftlh} (the {@code <@console>} chrome and nav tree).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Mount it in a runner beside the API; both see the same @Bean PetStore.</jc>
  * 	<ja>@Rest</ja>(children={PetStoreResource.<jk>class</jk>, PetstoreConsoleResource.<jk>class</jk>})

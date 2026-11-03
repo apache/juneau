@@ -41,7 +41,7 @@ import org.apache.juneau.commons.svl.vars.*;
  * <p>
  * The {@link Var} interface defines how variables are converted to values.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> SystemPropertiesVar <jk>extends</jk> SimpleVar {
  *
@@ -63,7 +63,7 @@ import org.apache.juneau.commons.svl.vars.*;
  * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to $S{java.home}"</js>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */
@@ -311,7 +311,7 @@ public class VarResolver {
 	 * Default string variable resolver with support for system properties, environment
 	 * variables, and the built-in {@link VarFunction} catalog.
 	 *
-	 * <h5 class='section'>Built-in {@link Var} bindings:</h5>
+	 * <h4 class='section'>Built-in {@link Var} bindings:</h4>
 	 * <ul>
 	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
 	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
@@ -321,7 +321,7 @@ public class VarResolver {
 	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Built-in {@link VarFunction} catalog:</h5>
+	 * <h4 class='section'>Built-in {@link VarFunction} catalog:</h4>
 	 * <p>
 	 * Ships ~68 built-in functions across 10 categories — string, type-conversion, arithmetic,
 	 * boolean, conditional, regex, encoding, date/time, random/UUID, and JSON-navigation.
@@ -472,7 +472,7 @@ public class VarResolver {
 	 * {@link VarTemplate#asSupplierWithFreshSessions(VarResolver)} for a threadsafe re-evaluating
 	 * Supplier.
 	 *
-	 * <h5 class='section'>Compile-binding contract:</h5>
+	 * <h4 class='section'>Compile-binding contract:</h4>
 	 * <p>
 	 * The compiled template is bound to <i>this</i> resolver. Cached {@link Var} (and, in the
 	 * future, function) references are resolved at compile time. Passing the compiled template

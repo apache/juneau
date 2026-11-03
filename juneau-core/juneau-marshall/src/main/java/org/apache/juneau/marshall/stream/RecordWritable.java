@@ -37,7 +37,7 @@ import java.io.*;
  * <p>
  * <b>Capability is detected via {@code instanceof}.</b>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link TokenWritable} &mdash; the structural-token extension (FULL formats).
  * 	<li>{@link RecordReadable} &mdash; the symmetric reader role.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

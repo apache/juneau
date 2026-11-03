@@ -36,7 +36,7 @@ import org.apache.juneau.commons.reflect.*;
  * All extra abstract methods declared here mirror methods that {@code ClassMeta} already implements,
  * so {@code ClassMeta} satisfies this contract by virtue of its existing implementation.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Thread safety depends on implementation.
  *
  * @param <T> The raw class type this instance represents.

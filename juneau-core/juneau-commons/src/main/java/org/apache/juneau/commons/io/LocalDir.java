@@ -34,7 +34,7 @@ import org.apache.juneau.commons.utils.*;
  * or the file system. This is particularly useful in applications that need to work with directory-based
  * resources in both development (file system) and production (packaged JAR) environments.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Unified directory access - works with both classpath resources and file system directories
  * 	<li>File resolution - can resolve files within the directory using relative paths
@@ -42,7 +42,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Immutable - directory location cannot be changed after construction
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Accessing template directories that may be on classpath or file system
  * 	<li>Loading configuration files from directories in both development and production
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Applications that need to support both embedded and external directory access
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Classpath directory</jc>
  * 	LocalDir <jv>classpathDir</jv> = <jk>new</jk> LocalDir(MyClass.<jk>class</jk>, <js>"templates"</js>);
@@ -65,7 +65,7 @@ import org.apache.juneau.commons.utils.*;
  * 	LocalFile <jv>file3</jv> = <jv>packageDir</jv>.resolve(<js>"resource.txt"</js>);
  * </p>
  *
- * <h5 class='section'>Path Resolution:</h5>
+ * <h2 class='section'>Path Resolution:</h2>
  * <p>
  * The {@link #resolve(String)} method resolves files within the directory using relative paths.
  * For classpath directories, the path resolution follows Java resource path conventions:
@@ -75,12 +75,12 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Relative path - resolves relative to the specified classpath path
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is immutable and therefore thread-safe. Multiple threads can safely access a LocalDir
  * instance concurrently without synchronization.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LocalFile} - File counterpart for individual file access
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
@@ -119,7 +119,7 @@ public class LocalDir {
 	 * Creates a LocalDir that references a directory on the classpath, relative to the specified class.
 	 * The path resolution follows Java resource path conventions.
 	 *
-	 * <h5 class='section'>Path Examples:</h5>
+	 * <h4 class='section'>Path Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Package directory (null or empty)</jc>
 	 * 	LocalDir <jv>dir1</jv> = <jk>new</jk> LocalDir(MyClass.<jk>class</jk>, <jk>null</jk>);
@@ -155,7 +155,7 @@ public class LocalDir {
 	 * <p>
 	 * Creates a LocalDir that references a directory on the file system using a {@link Path}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Absolute path</jc>
 	 * 	LocalDir <jv>dir1</jv> = <jk>new</jk> LocalDir(Paths.get(<js>"/var/config"</js>));
@@ -204,7 +204,7 @@ public class LocalDir {
 	 * 	<li>Relative clazzPath - resolved path remains relative
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	LocalDir <jv>dir</jv> = <jk>new</jk> LocalDir(MyClass.<jk>class</jk>, <js>"templates"</js>);
 	 *
@@ -218,7 +218,7 @@ public class LocalDir {
 	 * 	LocalFile <jv>file2</jv> = <jv>dir</jv>.resolve(<js>"pages/about.html"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Security (path-traversal):</h5>
+	 * <h4 class='section'>Security (path-traversal):</h4>
 	 * <p>
 	 * For filesystem-root {@code LocalDir} instances, path resolution is delegated to
 	 * {@link FileUtils#resolveSafely(java.io.File, String)} which enforces a strict boundary check:

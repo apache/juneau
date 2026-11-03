@@ -34,7 +34,7 @@ import org.apache.juneau.httppart.bean.*;
  * now fails registration with an {@link IllegalArgumentException} naming the bean, the getter and the expected setter
  * &mdash; not only the requests that happen to supply that parameter.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A concrete request bean: public no-arg constructor plus a setter for every annotated getter.</jc>
  * 	<ja>@Request</ja>

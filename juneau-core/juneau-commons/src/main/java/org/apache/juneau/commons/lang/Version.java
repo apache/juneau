@@ -27,7 +27,7 @@ import java.util.*;
  * <p>
  * Used to compare version numbers.
  *
- * <h5 class='section'>Equality vs. matching:</h5>
+ * <h2 class='section'>Equality vs. matching:</h2>
  * <p>
  * {@link #equals(Object)}, {@link #hashCode()} and {@link #compareTo(Version)} are <b>strict</b> and
  * mutually consistent &mdash; two versions are only equal when their full part sequences are identical
@@ -144,7 +144,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1"</js>)));
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"2"</js>)));
@@ -162,7 +162,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns <jk>true</jk> if the specified version is at least this version.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>false</jk>)));
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtLeast(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
@@ -194,7 +194,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns <jk>true</jk> if the specified version is at most this version.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1"</js>)));
 	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"2"</js>)));
@@ -212,7 +212,7 @@ public class Version implements Comparable<Version> {
 	/**
 	 * Returns <jk>true</jk> if the specified version is at most this version.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>false</jk>)));
 	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isAtMost(Version.<jsm>of</jsm>(<js>"1.2.3"</js>, <jk>true</jk>)));
@@ -247,7 +247,7 @@ public class Version implements Comparable<Version> {
 	 * consistent with {@link #hashCode()} and must never be used as the basis for hash- or tree-based collection
 	 * membership.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
 	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2"</js>)));

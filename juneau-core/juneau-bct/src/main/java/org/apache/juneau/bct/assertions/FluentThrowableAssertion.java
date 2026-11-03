@@ -32,8 +32,7 @@ import org.apache.juneau.commons.function.*;
 /**
  * Used for fluent assertion calls against throwables.
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -52,8 +51,7 @@ import org.apache.juneau.commons.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentThrowableAssertion}
  * 	<ul class='javatreec'>
@@ -75,8 +73,7 @@ import org.apache.juneau.commons.function.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -88,7 +85,7 @@ import org.apache.juneau.commons.function.*;
 * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *
@@ -145,7 +142,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the caused-by throwable.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception whose
 	 * 	// caused-by message contains 'foobar'. </jc>
@@ -164,7 +161,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the caused-by throwable.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception whose
 	 * 	// caused-by message contains 'foobar'. </jc>
@@ -188,7 +185,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the throwable localized message.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception with a
 	 * 	// caused-by RuntimeException containing 'foobar'</jc>
@@ -216,7 +213,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the throwable localized message.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception with
 	 * 	// 'foobar' somewhere in the localized messages. </jc>
@@ -234,7 +231,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the throwable message and all caused-by messages.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception with
 	 * 	// 'foobar' somewhere in the messages. </jc>
@@ -265,7 +262,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the throwable message.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception
 	 *	// with 'foobar' somewhere in the messages. </jc>
@@ -283,7 +280,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the throwable message and all caused-by messages.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception with
 	 * 	// 'foobar' somewhere in the messages. </jc>
@@ -314,7 +311,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Returns an assertion against the throwable localized message.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws an exception with
 	 * 	// 'foobar' somewhere in the stack trace. </jc>
@@ -337,7 +334,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Asserts that this throwable is exactly the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
 	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
@@ -358,7 +355,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Asserts that this throwable exists.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws any exception.</jc>
 	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).isExists();
@@ -376,7 +373,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	/**
 	 * Asserts that this throwable is of the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException. </jc>
 	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())

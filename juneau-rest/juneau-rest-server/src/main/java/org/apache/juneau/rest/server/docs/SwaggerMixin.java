@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.*;
  * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=SwaggerMixin.class)};
  * the {@code /api} URL becomes available alongside the host's own endpoints with no further wiring.
  *
- * <h5 class='section'>Configurable mount path:</h5>
+ * <h2 class='section'>Configurable mount path:</h2>
  *
  * <p>
  * The default mount {@code /api/*} can be overridden via the SVL variable
@@ -51,7 +51,7 @@ import org.apache.juneau.rest.server.*;
  * Override accepts bare token ({@code api}), leading slash ({@code /api}), trailing slash
  * ({@code api/}), or wildcard suffix ({@code /api/*}) &mdash; all resolve to the same mount.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  *
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is
@@ -59,7 +59,7 @@ import org.apache.juneau.rest.server.*;
  * {@link #getSwagger}; a class-level {@code @Rest(paths=...)} declaration would be silently
  * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/myresource"</js>, mixins=SwaggerMixin.<jk>class</jk>)
@@ -69,7 +69,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Content negotiation:</h5>
+ * <h2 class='section'>Content negotiation:</h2>
  *
  * <p>
  * Standard Juneau content negotiation. {@code Accept: text/html} renders the Swagger-UI HTML view
@@ -77,7 +77,7 @@ import org.apache.juneau.rest.server.*;
  * {@link Swagger} bean using the host's serializer set.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link SwaggerUiMixin}
  * 	<li class='jc'>{@link OpenApiMixin}
  * 	<li class='jc'>{@link RedocMixin}

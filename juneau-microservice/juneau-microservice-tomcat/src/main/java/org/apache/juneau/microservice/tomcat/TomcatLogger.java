@@ -36,7 +36,7 @@ import org.apache.juli.logging.*;
  * <c>debug</c>&rarr;{@link Level#FINE FINE}, <c>info</c>&rarr;{@link Level#INFO INFO},
  * <c>warn</c>&rarr;{@link Level#WARNING WARNING}, and <c>error</c>/<c>fatal</c>&rarr;{@link Level#SEVERE SEVERE}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat">juneau-microservice-tomcat</a>
  * </ul>
  *

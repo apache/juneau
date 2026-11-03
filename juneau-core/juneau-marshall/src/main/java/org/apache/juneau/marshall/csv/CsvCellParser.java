@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.parser.*;
  *   <li>Values: object | array | quoted string | number | identifier | null
  * </ul>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>Reserved characters: {@code ; : \{ \} [ ] " \}
  * </ul>
  */

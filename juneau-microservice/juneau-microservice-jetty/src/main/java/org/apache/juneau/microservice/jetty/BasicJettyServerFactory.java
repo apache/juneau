@@ -29,7 +29,7 @@ import org.eclipse.jetty.xml.*;
 /**
  * Basic implementation of a Jetty server factory.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty</a>
  * </ul>
  */

@@ -44,7 +44,7 @@ import org.apache.juneau.commons.reflect.*;
  * (no marshalling-side help available).  {@code @BeanType} reads remain functional via the configured
  * {@link BeanConfigContext#getAnnotationProvider()}.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Thread safety depends on implementation.
  *
  * @see BeanConfigContext.Builder#beanMetaInitializer(BeanMetaInitializer)

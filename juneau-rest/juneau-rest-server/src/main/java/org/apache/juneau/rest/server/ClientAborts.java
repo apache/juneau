@@ -29,7 +29,7 @@ import java.util.*;
  * writer, but the concrete type is container-specific.  This class detects it without a compile-time dependency on any
  * container.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> {
  * 		<jv>res</jv>.flushBuffer();

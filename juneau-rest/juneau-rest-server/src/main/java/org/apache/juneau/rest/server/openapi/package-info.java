@@ -25,7 +25,7 @@
  * providers coexist and a resource may select either or both. The default OpenAPI version emitted
  * is {@code "3.1.0"}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">API-Docs Mixin Pack</a>
  * </ul>
  */

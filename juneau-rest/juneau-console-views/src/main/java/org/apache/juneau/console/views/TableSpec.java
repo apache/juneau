@@ -37,7 +37,7 @@ import org.apache.juneau.console.widgets.Op;
  * {@link Column#defaultVisible(boolean) Column.defaultVisible(false)} only hides a column when the client's
  * {@code columnConfig} (juneau-config.js) is on.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	TableSpec <jv>t</jv> = TableSpec.<jsm>create</jsm>(<js>"slo"</js>)
  * 		.rowType(SloPod.<jk>class</jk>)

@@ -43,7 +43,7 @@ import org.apache.juneau.terminal.region.*;
  * <p>
  * Run ids are random 128-bit hex strings, so a terminal can be read only by someone who was given its id.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> (<jk>var</jk> <jv>runs</jv> = <jk>new</jk> GroomRuns(650)) {
  * 		<jk>var</jk> <jv>run</jv> = <jv>runs</jv>.start(<js>"Rex"</js>, <jk>false</jk>, <jk>null</jk>);

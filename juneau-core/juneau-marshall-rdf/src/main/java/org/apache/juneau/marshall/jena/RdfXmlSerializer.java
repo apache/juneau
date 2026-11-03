@@ -22,7 +22,7 @@ package org.apache.juneau.marshall.jena;
  * <p>
  * Produces human-readable RDF/XML output suitable for interchange and debugging.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a bean to RDF/XML string.</jc>
  * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
@@ -38,7 +38,7 @@ package org.apache.juneau.marshall.jena;
  * 	String <jv>rdfXml</jv> = <jv>s</jv>.write(<jv>bean</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
+ * <h2 class='figure'>Example output (bean with name/age):</h2>
  * <p class='bxml'>
  * 	<xt>&lt;rdf:RDF&gt;</xt>
  * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
@@ -48,7 +48,7 @@ package org.apache.juneau.marshall.jena;
  * 	<xt>&lt;/rdf:RDF&gt;</xt>
  * </p>
  *
- * <h5 class='figure'>Complex (nested address + array):</h5>
+ * <h2 class='figure'>Complex (nested address + array):</h2>
  * <p class='bxml'>
  * 	<xt>&lt;rdf:RDF&gt;</xt>
  * 		<xt>&lt;rdf:Description rdf:about=</xt><xs>"..."</xs><xt>&gt;</xt>
@@ -65,11 +65,11 @@ package org.apache.juneau.marshall.jena;
  * 	<xt>&lt;/rdf:RDF&gt;</xt>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */

@@ -30,11 +30,11 @@ import org.apache.juneau.marshall.serializer.*;
  * Extends {@link SerializerWriter} with INI-specific methods for sections, key-value pairs,
  * comments, and quoted strings.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not intended for external use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Ini">INI Basics</a>
  * </ul>
  */

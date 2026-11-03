@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * navigation page renders one entry per {@link Rest#children() @Rest(children)} resource declared on the
  * host.
  *
- * <h5 class='section'>Reaching the host's children:</h5>
+ * <h2 class='section'>Reaching the host's children:</h2>
  *
  * <p>
  * A mixin's {@code @RestOp} methods are bound to a per-mixin {@link RestContext} sub-context that has no
@@ -39,21 +39,21 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@code getHostContext()} is backed by the sub-context's already-populated parent linkage, this works
  * whether the mixin is composed onto a servlet host or a child-resource host.
  *
- * <h5 class='section'>Page decoration:</h5>
+ * <h2 class='section'>Page decoration:</h2>
  *
  * <p>
  * Per the mixin sub-context inheritance model, the navigation page inherits the host's class-level
  * {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig} page decoration (navigation links,
  * etc.), so the rendered HTML matches the host's other endpoints.
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(mixins=NavigationMixin.<jk>class</jk>, children={Foo.<jk>class</jk>, Bar.<jk>class</jk>})
  * 	<jk>public class</jk> RootResource <jk>extends</jk> RestServlet { ... }
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ChildResourceDescriptions}
  * 	<li class='jm'>{@link RestMixin#getHostContext()}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

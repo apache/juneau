@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * A pairing of {@link ParquetSerializer} and {@link ParquetParser} for Apache Parquet binary format.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a list of beans to Parquet bytes</jc>
  * 	List&lt;MyBean&gt; <jv>beans</jv> = List.<jsm>of</jsm>(new MyBean(...), new MyBean(...));
@@ -57,7 +57,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jk>byte</jk>[] <jv>bytes</jv> = Parquet.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Parquet">Parquet Basics</a>
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>

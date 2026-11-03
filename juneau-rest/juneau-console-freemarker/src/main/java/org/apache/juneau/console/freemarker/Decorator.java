@@ -22,7 +22,7 @@ import org.apache.juneau.marshall.collections.*;
  * A chart decorator entry: one element of a chart card's {@code decorators[]}, run in the browser by the decorator
  * registered under its {@code use} name ({@code JuneauCharts.decorator}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ChartDef.<jsm>line</jsm>(<js>"t"</js>).src(<js>"/s"</js>).x(<js>"d"</js>).series(<js>"v"</js>, <js>"V"</js>)
  * 		.decorate(Markers.<jsm>now</jsm>(<js>"Today"</js>)).decorate(Thresholds.<jsm>at</jsm>(500).label(<js>"SLO"</js>));

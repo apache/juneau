@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.view.*;
 /**
  * Charts: the chart-core demo page, built with {@link DevPageBuilders#charts()} only (it has no template twin).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	GET /console/dev/charts
  * 	GET /console/dev/charts/daily

@@ -32,7 +32,7 @@ import org.apache.juneau.http.response.*;
  * structured, serialized {@link #getViolations() violations list} so the response body can include the list of
  * field-level errors that produced the failure.
  *
- * <h5 class='section'>Wire shape:</h5>
+ * <h2 class='section'>Wire shape:</h2>
  * <p>
  * The response body depends on whether RFC 7807 problem-details mode is enabled on the resource:
  * <ul class='spaced-list'>
@@ -43,7 +43,7 @@ import org.apache.juneau.http.response.*;
  * 		{@code { "status":400, "errors":[ ... ] }} envelope.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ValidationViolation}
  * 	<li class='jc'>{@link BeanValidator}
  * 	<li class='jc'>{@link BadRequest}

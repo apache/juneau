@@ -33,7 +33,7 @@ import org.apache.juneau.console.*;
  * ({@code {schemaVersion:1, viewId, search?, columns?, options?}}) whenever the user changes it.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	Rail.<jsm>left</jsm>().sections(
  * 		SearchSection.<jsm>create</jsm>().publishes(Topics.<jsm>filter</jsm>(<js>"search"</js>)),
@@ -173,7 +173,7 @@ public abstract class Section {
 	/**
 	 * A section implemented in JS.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	Section.<jsm>custom</jsm>(<js>"app.goto"</js>, JsonMap.<jsm>of</jsm>()).publishes(Topics.<jsm>filter</jsm>(<js>"goto"</js>));
 	 * </p>

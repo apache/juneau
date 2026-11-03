@@ -33,13 +33,14 @@ import org.apache.juneau.console.widgets.Op;
  * {@code juneau-views.js} runtime renders each as a row-menu item and, on activation, submits the declared
  * {@link #endpoint} with the declared {@link #method} as a JSON request carrying the process's CSRF token.
  *
- * <h5 class='section'>The frozen wire schema</h5>
+ * <h2 class='section'>The frozen wire schema</h2>
  * <p>
  * This is the <b>complete</b> set of wire fields; it is pinned in full now so that later waves (a future declarative
  * modal/form + typed result) can rely on it verbatim without forcing another fail-loud
  * contract bump.  Only {@link #id} is required; every other field is optional and is omitted from the serialized
  * form when unset (null-valued properties are dropped).
  * <table class='styled'>
+ * 	<caption>Row action fields</caption>
  * 	<tr><th>Field</th><th>Type / tokens</th><th>Meaning</th></tr>
  * 	<tr><td>{@code id}</td><td>string</td><td>Stable action id (menu-item key; also the submit's logical name).</td></tr>
  * 	<tr><td>{@code label}</td><td>string</td><td>The menu-item text.</td></tr>
@@ -76,7 +77,7 @@ import org.apache.juneau.console.widgets.Op;
  * {@code VIEW_META} &mdash; a {@link RowAction} that leaves it unset serializes
  * unchanged, and old {@code juneau-views.js} ignores the unknown key.
  *
- * <h5 class='section'>Why {@link #method} cannot be a safe method</h5>
+ * <h2 class='section'>Why {@link #method} cannot be a safe method</h2>
  * <p>
  * {@link Method} enumerates only {@code POST}/{@code PUT}/{@code PATCH}/{@code DELETE}, so a safe (CSRF-exempt)
  * method cannot be declared at all &mdash; a build-time refusal by construction.  This mirrors the server boundary:
@@ -85,7 +86,7 @@ import org.apache.juneau.console.widgets.Op;
  * only to non-safe methods.  A mutating action bound to {@code GET} would be a CSRF-able write; the type system
  * forbids expressing one.
  *
- * <h5 class='section'>Per-row {@code {property}} substitution in {@link #endpoint} and {@link #form}</h5>
+ * <h2 class='section'>Per-row {@code {property}} substitution in {@link #endpoint} and {@link #form}</h2>
  * <p>
  * {@link #endpoint(String) endpoint} and {@link #form(String) form} may each carry a {@code {property}} token
  * (e.g. {@code {id}}, as in the example below) that the client-side runtime substitutes from the row &mdash; the
@@ -96,7 +97,7 @@ import org.apache.juneau.console.widgets.Op;
  * is used as declared.  A blank/absent {@code form} is the confirm-only local path (no
  * GET), not a refusal.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	RowAction <jv>delete</jv> = RowAction.<jsm>create</jsm>(<js>"delete"</js>)
  * 		.label(<js>"Delete"</js>)
@@ -108,7 +109,7 @@ import org.apache.juneau.console.widgets.Op;
  * 		.visibleWhen(VisibilityRule.<jsm>when</jsm>(<js>"locked"</js>).ne(<jk>true</jk>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link Render}
  * </ul>

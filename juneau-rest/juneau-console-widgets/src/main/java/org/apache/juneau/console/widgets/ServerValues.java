@@ -43,7 +43,7 @@ import org.apache.juneau.commons.svl.*;
  * scope here).  Values are session-aware: each provider is a {@link Function} of the per-render
  * {@link VarResolverSession}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	ServerValues <jv>sv</jv> = ServerValues.<jsm>create</jsm>()
  * 		.value(<js>"failedCount"</js>, <jv>session</jv> -&gt; <jv>metrics</jv>.failed())

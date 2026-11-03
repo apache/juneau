@@ -39,7 +39,7 @@ import org.apache.juneau.console.views.*;
  * ({@code kind:"line", x:..., series:[...]}) byte-for-byte; the other kinds emit {@code helper:{kind, ...}}, and
  * {@code raw} emits neither (its {@link #option(JsonMap)} is the whole chart).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jv>page</jv>.card(ChartDef.<jsm>line</jsm>(<js>"orders-trend"</js>).title(<js>"Orders"</js>).src(<js>"/console/store/stats/daily"</js>)
  * 		.x(<js>"day"</js>).series(<js>"placed"</js>, <js>"Placed"</js>).series(<js>"delivered"</js>, <js>"Delivered"</js>).toCardSpec());
@@ -139,7 +139,7 @@ public final class ChartDef {
 	 * A click on a tile publishes the row's {@link #tileFields(String...)} as {@code meta} (the tile's {@code row} is
 	 * always <jk>null</jk>); a click on a group does nothing.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ChartDef.<jsm>treemap</jsm>(<js>"fleet"</js>).src(<js>"/api/hosts"</js>).groupBy(<js>"region"</js>, <js>"cluster"</js>).label(<js>"host"</js>)
 	 * 		.colorBy(<js>"health"</js>, ChartDef.<jsm>legendItem</jsm>(<js>"ok"</js>, <js>"Healthy"</js>, <js>"ok"</js>),

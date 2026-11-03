@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * {@link DumpsSettings} bean enabling them is registered in the bean store.  {@code /heapdump} additionally
  * degrades to {@code 501 Not Implemented} on a JVM without HotSpot heap-dump support.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link DumpsResource}
  * 	<li class='jc'>{@link DumpsManager}
  * 	<li class='jc'>{@link DumpsSettings}

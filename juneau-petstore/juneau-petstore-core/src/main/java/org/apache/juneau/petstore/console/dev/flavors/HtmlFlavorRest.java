@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.view.*;
 /**
  * The Html rendering flavor: the pet list built with the HTML5 bean builder.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// GET /console/dev/flavors/html/fragment returns a bare table, no page chrome:</jc>
  * 	<jc>// &lt;table class="petstore-flavor" data-flavor="html"&gt;&lt;tr&gt;&lt;th&gt;Name&lt;/th&gt;...</jc>

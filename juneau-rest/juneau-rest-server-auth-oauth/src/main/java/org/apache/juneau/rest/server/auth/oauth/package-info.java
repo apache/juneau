@@ -27,7 +27,7 @@
  * it never bleeds into the dependency tree of an upstream module.  Consumers who want OAuth functionality
  * declare {@code com.nimbusds:oauth2-oidc-sdk} themselves at runtime.
  *
- * <h5 class='topic'>Key types</h5>
+ * <h2 class='topic'>Key types</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.OAuthIntrospectionValidator OAuthIntrospectionValidator}
  * 		&mdash; opaque-token validator wrapping Nimbus's RFC 7662 introspection client.
@@ -41,7 +41,7 @@
  * 		over the role-neutral {@code OAuthClientCredentialsFlow}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6749">RFC 6749 &mdash; OAuth 2.0</a>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7662">RFC 7662 &mdash; Token Introspection</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OAuthAuthSupport">OAuth 2.0 / OIDC AuthN Support (juneau-rest-server-auth-oauth)</a>

@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * The page is {@code store.ftlh}, with a builder twin at {@code ?builder}.  The feeds are read-only JSON over the
  * live store, and the revenue tile counts days by the store's clock in UTC.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/"</js>)
  * 	<jk>public</jk> View page() { <jk>return</jk> FreemarkerView.<jsm>of</jsm>(<js>"store.ftlh"</js>); }

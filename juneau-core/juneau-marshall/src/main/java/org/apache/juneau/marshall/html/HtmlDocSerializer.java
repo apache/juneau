@@ -32,13 +32,13 @@ import org.apache.juneau.marshall.*;
 /**
  * Serializes POJOs to HTTP responses as HTML documents.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/html</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</xt></code>,
  * <code><xt>&lt;head&gt;</xt></code>, and <code><xt>&lt;body&gt;</xt></code> tags so that it can be rendered in a browser.
@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * Configurable properties are typically specified via <ja>@HtmlDocConfig</ja>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
@@ -68,11 +68,11 @@ import org.apache.juneau.marshall.*;
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
 
  * </ul>
@@ -208,7 +208,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <p>
 		 * By default, the aside section is empty.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -222,7 +222,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Format: HTML
 		 * 	<li class='note'>
@@ -259,7 +259,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <p>
 		 * By default, the aside section is floated to the right.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -315,7 +315,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <p>
 		 * By default, the footer section is empty.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -379,7 +379,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <p>
 		 * Adds the specified HTML content to the head section of the page.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -420,7 +420,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * Allows you to override the contents of the header section on the HTML page.
 		 * The header section normally contains the title and description at the top of the page.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -461,7 +461,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * Allows you to override the contents of the nav section on the HTML page.
 		 * The nav section normally contains the page links at the top of the page.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -523,7 +523,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * can also be used in addition to various other protocols specified by {@link UriResolver} such as
 		 * <js>"servlet:/..."</js>.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -550,7 +550,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <p>
 		 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -730,7 +730,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * By default, the {@link BasicHtmlDocTemplate} class is used to construct the contents of the HTML page, but
 		 * can be overridden with your own custom implementation class.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
@@ -800,12 +800,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 		.build();
 		 * </p>
 		 *
-		 * <h5 class='section'>Notes:</h5><ul>
+		 * <h4 class='section'>Notes:</h4><ul>
 		 * 	<li class='note'>
 		 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 		 * </ul>
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlWidgets">Widgets</a>
 		 * </ul>
 		 *

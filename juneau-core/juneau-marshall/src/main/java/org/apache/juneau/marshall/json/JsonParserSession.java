@@ -38,11 +38,11 @@ import org.apache.juneau.marshall.swap.spi.*;
 /**
  * Session object that lives for the duration of a single use of {@link JsonParser}.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
 
  * </ul>
@@ -785,12 +785,12 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	 * The cursor is purely structural &mdash; object swaps and {@code @Schema} annotations are not
 	 * applied at this layer.  See {@link TokenReader} for the contract.
 	 *
-	 * <h5 class='section'>Builder properties honored:</h5>
+	 * <h4 class='section'>Builder properties honored:</h4>
 	 * The structurally-applicable subset flows through to the cursor: <c>autoCloseStreams</c>,
 	 * <c>unbuffered</c>, <c>trimStrings</c> (applied to {@link TokenType#VALUE_STRING} and
 	 * {@link TokenType#FIELD_NAME} values), and the {@code ReaderParser} stream/file charsets.
 	 *
-	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <h4 class='section'>Builder properties NOT honored:</h4>
 	 * <c>validateEnd()</c> (the cursor leaves end-of-input checking to the caller),
 	 * <c>listener(...)</c>/<c>debugOutputLines(...)</c>, <c>consumes(...)</c>, object swaps, and
 	 * {@code @Schema} annotations (only applied on the POJO databind path).

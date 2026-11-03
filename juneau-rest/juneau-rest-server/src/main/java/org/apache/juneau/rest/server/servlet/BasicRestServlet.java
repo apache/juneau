@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.ops.*;
  * {@code /api}, {@code /swagger}, {@code /openapi}, {@code /openapi.json}, {@code /openapi.yaml},
  * {@code /redoc}, {@code /htdocs/*}, {@code /favicon.ico}, {@code /stats}, {@code /error}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  * </ul>
  *

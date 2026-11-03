@@ -29,7 +29,7 @@ import io.micrometer.core.instrument.*;
  * {@link MetricsRecorder} bridge that records every {@code @RestOp} call as a Micrometer
  * {@link Timer} sample on the configured {@link MeterRegistry}.
  *
- * <h5 class='topic'>Metric shape</h5>
+ * <h2 class='topic'>Metric shape</h2>
  *
  * <p>
  * Each call records to one Timer named (by default) {@value #DEFAULT_TIMER_NAME} with four tags:
@@ -51,7 +51,7 @@ import io.micrometer.core.instrument.*;
  * convention so existing dashboards / alerts that scrape {@code http.server.requests} from Spring
  * Boot services keep working when those services are reimplemented on Juneau.
  *
- * <h5 class='topic'>Wiring</h5>
+ * <h2 class='topic'>Wiring</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Configuration</ja>
@@ -73,7 +73,7 @@ import io.micrometer.core.instrument.*;
  * The {@code MetricsRecorder} bean is picked up by {@code juneau-rest-server} through the
  * {@code RestContext}'s bean store and invoked once per {@code @RestOp} call.
  *
- * <h5 class='topic'>Customizing the metric name</h5>
+ * <h2 class='topic'>Customizing the metric name</h2>
  *
  * <p>
  * Pass a non-default name to the two-arg constructor when the default
@@ -89,7 +89,7 @@ import io.micrometer.core.instrument.*;
  * recorder-level timer name. Per-op tags added via {@link org.apache.juneau.rest.server.RestOp#metricTags()}
  * are merged into the standard tag set as additional {@code key=value} pairs.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MetricsRecorder}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * 	<li class='link'><a class="doclink" href="https://micrometer.io/docs/concepts">Micrometer Concepts</a>

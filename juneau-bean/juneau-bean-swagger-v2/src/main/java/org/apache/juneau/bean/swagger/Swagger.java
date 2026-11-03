@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.objecttools.*;
  * available paths and operations, parameters, responses, security definitions, and other information. This is
  * the Swagger 2.0 specification (predecessor to OpenAPI 3.0).
  *
- * <h5 class='section'>Swagger Specification:</h5>
+ * <h2 class='section'>Swagger Specification:</h2>
  * <p>
  * The Swagger Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -58,7 +58,7 @@ import org.apache.juneau.marshall.objecttools.*;
  * 	<li><c>externalDocs</c> ({@link ExternalDocumentation}) - Additional external documentation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a Swagger document</jc>
  * 	Swagger <jv>doc</jv> = <jk>new</jk> Swagger()
@@ -78,7 +78,7 @@ import org.apache.juneau.marshall.objecttools.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/specification/v2/">Swagger 2.0 Specification</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/2-0/basic-structure/">Swagger Basic Structure</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>

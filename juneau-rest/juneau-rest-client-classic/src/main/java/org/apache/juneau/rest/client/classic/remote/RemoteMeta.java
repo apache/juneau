@@ -37,7 +37,7 @@ import org.apache.juneau.http.remote.*;
  * Captures the information in {@link Remote @Remote} and {@link RemoteOp @RemoteOp} annotations for
  * caching and reuse.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client-classic</a>
  * </ul>

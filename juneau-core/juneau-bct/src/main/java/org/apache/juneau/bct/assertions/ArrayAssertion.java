@@ -24,7 +24,7 @@ import java.util.function.*;
 /**
  * Used for assertion calls against arrays.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
  *
@@ -32,7 +32,7 @@ import java.util.function.*;
  * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);
  * </p>
  *
- * <h5 class='topic'>Test Methods</h5>
+ * <h2 class='topic'>Test Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentArrayAssertion}
  * 	<ul class='javatreec'>
@@ -63,8 +63,7 @@ import java.util.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='topic'>Transform Methods</h5>
- * <p>
+ * <h2 class='topic'>Transform Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link FluentArrayAssertion}
  * 	<ul class='javatreec'>
@@ -86,8 +85,7 @@ import java.util.function.*;
  *	</ul>
  * </ul>
  *
- * <h5 class='topic'>Configuration Methods</h5>
- * <p>
+ * <h2 class='topic'>Configuration Methods</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -99,7 +97,7 @@ import java.util.function.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>

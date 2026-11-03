@@ -51,11 +51,11 @@ import org.apache.juneau.marshall.*;
  * root — JLS &sect;8.1.2 forbids a generic {@code Throwable}.  The funnel therefore returns the base type and each leaf
  * keeps its covariant setter overrides.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  *

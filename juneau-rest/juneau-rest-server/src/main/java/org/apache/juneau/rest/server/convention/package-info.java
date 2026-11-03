@@ -39,7 +39,7 @@
  * 		{@code /.well-known/security.txt} per RFC 9116; 404 unless explicitly configured.
  * </ul>
  *
- * <h5 class='section'>Composition example:</h5>
+ * <h2 class='section'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
@@ -69,7 +69,7 @@
  * convention endpoints are not API-meaningful.
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  * </ul>
  *

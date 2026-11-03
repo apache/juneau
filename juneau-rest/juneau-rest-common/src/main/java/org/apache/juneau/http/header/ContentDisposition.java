@@ -119,7 +119,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 	 * {@link #param(String, String)} is a generic escape hatch.  Setters overwrite a previously-set parameter of the
 	 * same name while preserving its original position.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = ContentDisposition.<jsm>create</jsm>()
 	 * 		.attachment()
@@ -129,7 +129,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 	 * 	<jc>// =&gt; "attachment; filename=\"genome.jpeg\"; size=12345"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link ContentDisposition}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc6266'>RFC 6266 - Use of the Content-Disposition Header Field</a>
 	 * </ul>

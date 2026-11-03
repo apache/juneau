@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * of input such as voice commands or menu selections. It is commonly styled with a monospace font
  * to distinguish it from regular text and often appears in documentation, tutorials, and help pages.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	<jc>// Simple keyboard shortcut</jc>
  * 	Kbd <jv>simple</jv> = <jsm>kbd</jsm>(<js>"Ctrl+S"</js>);
@@ -81,9 +81,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#kbd(Object...) kbd(Object...)}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

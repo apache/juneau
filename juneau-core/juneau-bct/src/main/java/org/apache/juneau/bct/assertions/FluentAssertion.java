@@ -27,7 +27,7 @@ import java.io.*;
  * Defines a {@link #returns()} method that returns an original object.
  * Assertion test methods that pass use this method to return to the origin of the call.
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
  * 	MyPojo <jv>myPojo</jv> = ...;
@@ -39,7 +39,7 @@ import java.io.*;
  * <p>
  * For subclasses such as {@link IntegerAssertion}, the return object is simply itself so that multiple tests
  * can be performed using the same assertion.
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> IntegerAssertion <jk>extends</jk> FluentIntegerAssertion&lt;IntegerAssertion&gt; {
  *  	...
@@ -53,20 +53,17 @@ import java.io.*;
  * </p>
  *
  *
- * <h5 class='section'>Test Methods:</h5>
- * <p>
+ * <h2 class='section'>Test Methods:</h2>
  * <ul class='javatree'>
  * 	<li>None
  * </ul>
   *
- * <h5 class='section'>Transform Methods:</h5>
- * <p>
+ * <h2 class='section'>Transform Methods:</h2>
  * <ul class='javatree'>
  * 	<li>None
  * </ul>
  *
- * <h5 class='section'>Configuration Methods:</h5>
- * <p>
+ * <h2 class='section'>Configuration Methods:</h2>
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Assertion}
  * 	<ul class='javatreec'>
@@ -78,7 +75,7 @@ import java.io.*;
  * 	</ul>
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  * </ul>
  *

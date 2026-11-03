@@ -31,13 +31,13 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Serializes POJO models to Protobuf Text Format.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Accept</c> types:  <bc>text/protobuf, text/x-protobuf</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/protobuf</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Implements the <a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format</a>
  * serializer.  This is the human-readable text format used for protobuf configuration files and debugging,
@@ -79,7 +79,7 @@ import org.apache.juneau.marshall.stream.*;
  * ISO 8601 strings.  Swaps can be used to convert non-serializable POJOs into serializable forms or to override
  * the default format for types that already have built-in support.
  *
- * <h5 class='topic'>Behavior-specific subclasses</h5>
+ * <h2 class='topic'>Behavior-specific subclasses</h2>
  * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
@@ -87,7 +87,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		{@link PrototextSerializer.Readable} - Default serializer with additional indentation spacing.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
  * 	String <jv>proto</jv> = PrototextSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -102,13 +102,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>proto</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  * </p>
  *
- * <h5 class='figure'>Example output (Map of name/age):</h5>
+ * <h2 class='figure'>Example output (Map of name/age):</h2>
  * <p class='bcode'>
  * 	name: "Alice"
  * 	age: 30
  * </p>
  *
- * <h5 class='figure'>Complex (nested object + array):</h5>
+ * <h2 class='figure'>Complex (nested object + array):</h2>
  * <p class='bcode'>
  * 	name: "Alice"
  * 	age: 30
@@ -120,11 +120,11 @@ import org.apache.juneau.marshall.stream.*;
  * 	tags: ["a", "b", "c"]
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Prototext">Protobuf Text Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format Specification</a>
  * </ul>

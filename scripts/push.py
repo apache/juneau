@@ -402,12 +402,41 @@ def workflow_yaml_check(repo_dir, outcome):
     return checks.Check("workflows", fn)
 
 
+AI_ARTIFACTS_CHECK = "ai artifacts"
+AI_ARTIFACTS_REGEN = "python3 scripts/generate-ai-artifacts.py"
+
+
+def ai_artifacts_check(juneau_root, docs_root):
+    """
+    The Prechecks row's `ai artifacts` check: runs juneau-docs' scripts/check-ai-artifacts.py against this checkout
+    and fails when the generated static/llms.txt and static/ai/ are stale, naming the regenerate command.  It never
+    regenerates.  Without a juneau-docs sibling (or without that script in it) the check passes with a note.
+    """
+    checks = toolkit("checks")
+    script = docs_root / "scripts" / "check-ai-artifacts.py"
+
+    def fn():
+        if not docs_root.exists():
+            return checks.Verdict("pass", "skipped: no juneau-docs sibling")
+        if not script.exists():
+            return checks.Verdict("pass", "skipped: juneau-docs has no scripts/check-ai-artifacts.py")
+        result = subprocess.run([sys.executable, "-B", str(script), "--juneau-root", str(juneau_root)],
+                                cwd=docs_root, capture_output=True, text=True, check=False)
+        if result.returncode == 0:
+            return checks.PASS
+        lines = [line for line in (result.stdout + result.stderr).splitlines() if line.strip()]
+        return checks.Verdict("fail", "juneau-docs AI artifacts are stale", (
+            *lines, f"Regenerate them in juneau-docs ({AI_ARTIFACTS_REGEN}), stage the result, then push again."))
+    return checks.Check(AI_ARTIFACTS_CHECK, fn)
+
+
 def prechecks(juneau_root, *, dry_run=False, docs=True):
     """
     The Prechecks row's checks, which refuse before any build or test gate a push that commit_and_push() would
     only refuse at the end: git's user.email isn't the ASF committer identity, the tree has unreviewed changes, the
-    branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed), or a
-    .github/workflows file is not valid YAML (or PyYAML is missing).
+    branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed), a
+    .github/workflows file is not valid YAML (or PyYAML is missing), or the juneau-docs AI artifacts are stale
+    (ai_artifacts_check; skipped with a note without a juneau-docs sibling).
     With docs and the juneau-docs sibling present and active -- something staged, or commits ahead of its upstream
     (docs_active) -- the same three for juneau-docs follow (docs_prechecks); an idle juneau-docs is not checked, so
     its dirt doesn't block a juneau push.  The late checks stay (upstream can move during the long build); these
@@ -420,8 +449,10 @@ def prechecks(juneau_root, *, dry_run=False, docs=True):
               checks.upstream(juneau_root),
               workflow_yaml_check(juneau_root, outcome)]
     docs_root = juneau_root.parent / "juneau-docs"
-    if docs and docs_root.exists() and docs_active(docs_root):
-        listed += docs_prechecks(docs_root, dry_run=dry_run)
+    if docs:
+        listed.append(ai_artifacts_check(juneau_root, docs_root))
+        if docs_root.exists() and docs_active(docs_root):
+            listed += docs_prechecks(docs_root, dry_run=dry_run)
     return listed
 
 
@@ -446,6 +477,11 @@ def docs_prechecks(docs_root, *, dry_run=False):
     return [checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label=DOCS_IDENTITY_CHECK),
             checks.unreviewed(docs_root, git_cmd=DOCS_GIT, label="docs unreviewed", outcome=outcome),
             checks.upstream(docs_root, git_cmd=DOCS_GIT, label="docs upstream")]
+
+
+def docs_only_prechecks(juneau_root, docs_root, *, dry_run=False):
+    """--docs-only's Prechecks: docs_prechecks() plus the AI-artifacts freshness check."""
+    return [*docs_prechecks(docs_root, dry_run=dry_run), ai_artifacts_check(juneau_root, docs_root)]
 
 
 def current_branch(repo_dir):
@@ -585,6 +621,24 @@ def bom_summary(text):
     """The BOM row, `<n> modules in juneau-bom`, from check-bom-completeness.py's output; None if not recognised."""
     found = BOM_LINE.search(text or "")
     return f"{found.group(1)} modules in juneau-bom" if found else None
+
+
+JAVADOC_HTML_LINE = re.compile(r"javadoc html check: (clean|\d+ diagnostics)")
+
+
+def javadoc_html_summary(text):
+    """The Javadoc HTML row, `clean` or `<n> diagnostics`, from check-javadoc-html.py's output; None if not recognised."""
+    found = JAVADOC_HTML_LINE.search(text or "")
+    return found.group(1) if found else None
+
+
+def javadoc_html_command(script):
+    """check-javadoc-html.py's command line, pointing it at $JAVA_HOME or else ~/jdk/default when that exists."""
+    cmd = [sys.executable, str(script)]
+    java_home = os.environ.get("JAVA_HOME") or str(Path.home() / "jdk" / "default")
+    if (Path(java_home) / "bin" / "javadoc").exists():
+        cmd += ["--java-home", java_home]
+    return cmd
 
 
 COMMIT_LINE = re.compile(r"^\[.+? ([0-9a-f]{7,40})\] (.*)$", re.MULTILINE)
@@ -943,23 +997,24 @@ def run_docs_only(args, juneau_root):
         print(f"  4. Commit whatever is already staged: git commit -m \"{args.message}\"  (in juneau-docs; "
               "refuses if anything is unstaged/untracked-and-not-gitignored)")
         print("  5. Push to the tracked upstream  (in juneau-docs)")
-        toolkit("run").checks("prechecks", "Prechecks", docs_prechecks(docs_root, dry_run=True), dry_run=True)
+        toolkit("run").checks("prechecks", "Prechecks", docs_only_prechecks(juneau_root, docs_root, dry_run=True),
+                              dry_run=True)
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
     repo = docs_root if docs_root.exists() else juneau_root
-    return _in_session("Push", lambda s: _docs_only_steps(s, args, console, docs_root, missing),
+    return _in_session("Push", lambda s: _docs_only_steps(s, args, console, juneau_root, docs_root, missing),
                        header=session_header("Juneau Docs", current_branch(repo)), lines=session_lines(args.message),
                        mode="push", repo=repo,
                        plan=[("prechecks", "Prechecks"), ("docs-smoke", DOCS_BUILD_LABEL), ("commit", "Commit"),
                              ("push", "Push")])
 
 
-def _docs_only_steps(s, args, console, docs_root, missing):
+def _docs_only_steps(s, args, console, juneau_root, docs_root, missing):
     """--docs-only's steps inside its session s.  Returns the exit code."""
     if not docs_root.exists():
         s.fail(missing[0], hint=missing[1:])
-    s.checks("prechecks", "Prechecks", docs_prechecks(docs_root))
+    s.checks("prechecks", "Prechecks", docs_only_prechecks(juneau_root, docs_root))
     # After Prechecks: upstream check, no-op detection, unreviewed-changes guard, docs smoke check,
     # commit, and push -- all delegated to commit_and_push() (shared with main()'s Step 6
     # follow-up) so the nothing-staged-vs-nothing-to-push fix and the unreviewed-changes guard
@@ -1030,7 +1085,7 @@ def main():
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
     "prechecks": "Prechecks", "tracker": "Tracker", "container-tags": "Tags",
-    "bom": "BOM", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
+    "bom": "BOM", "javadoc-html": "Javadoc HTML", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
     "js-tests": "Browser Tests", "traces": "Traces", "timing": "Timing",
     "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": DOCS_BUILD_LABEL,
     "docs-commit": "Docs", "docs-push": "Docs push",
@@ -1050,7 +1105,8 @@ def push_plan(args, script_dir, juneau_root, console):
         ids.append("tests")
     else:
         ids += [step_id for step_id, name in (("container-tags", "check-container-tags.py"),
-                                             ("bom", "check-bom-completeness.py")) if (script_dir / name).exists()]
+                                             ("bom", "check-bom-completeness.py"),
+                                             ("javadoc-html", "check-javadoc-html.py")) if (script_dir / name).exists()]
         if (script_dir / "test.py").exists():
             ids += ["build", "tests", "perf", "py-tests", "js-tests", "traces"]
         else:
@@ -1270,6 +1326,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             step_num += 1
             print(f"  {step_num}. Verify BOM completeness: python3 scripts/check-bom-completeness.py")
             step_num += 1
+            print(f"  {step_num}. Verify Javadoc HTML: python3 scripts/check-javadoc-html.py")
+            step_num += 1
             print(f"  {step_num}. Run tests: python3 scripts/test.py --full (timings go to ~/.cache/juneau-terminal/history/<repo>-<sha8>/test.jsonl)")
             step_num += 1
             print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --repo . (reads that store)")
@@ -1353,6 +1411,19 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
                 summarize=bom_summary
             ):
                 return aborted("\n❌ Build process aborted: juneau-bom is out of sync with the reactor.")
+            step_num += 1
+
+        check_javadoc_html = script_dir / "check-javadoc-html.py"
+        if check_javadoc_html.exists():
+            if not run_marked(
+                "javadoc-html", "Javadoc HTML",
+                javadoc_html_command(check_javadoc_html),
+                f"🔎 Step {step_num}: Checking Javadoc HTML and accessibility...",
+                juneau_root,
+                label="Javadoc HTML",
+                summarize=javadoc_html_summary
+            ):
+                return aborted("\n❌ Build process aborted: Javadoc HTML/accessibility check found problems.")
             step_num += 1
 
         test_script = script_dir / 'test.py'

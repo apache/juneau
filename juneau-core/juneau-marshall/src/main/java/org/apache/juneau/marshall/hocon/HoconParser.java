@@ -29,11 +29,11 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * Parses HOCON (Human-Optimized Config Object Notation) text into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/hocon</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * Multi-pass parsing strategy: tokenize → build intermediate tree → resolve substitutions → convert to bean.
  *
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.stream.*;
  * Supports unquoted string keys and values, path expressions (<c>a.b.c = value</c>), object merging, substitution resolution,
  * triple-quoted strings, both <c>//</c> and <c>#</c> comments, and optional root braces.
  *
- * <h5 class='figure'>Example input (bean):</h5>
+ * <h2 class='figure'>Example input (bean):</h2>
  * <p class='bjson'>
  * name = myapp
  * port = 8080
@@ -56,13 +56,13 @@ import org.apache.juneau.marshall.stream.*;
  * tags = [web, api, rest]
  * </p>
  *
- * <h5 class='section'>Limitations:</h5><ul>
+ * <h2 class='section'>Limitations:</h2><ul>
  * 	<li class='note'><c>include</c> directives are not supported — they are ignored with a warning during parsing.
  * 	<li class='note'>Duration/size unit suffixes (<c>10s</c>, <c>5m</c>, <c>512K</c>, <c>2G</c>) are treated as unquoted strings.
  * 	<li class='note'>Substitutions are resolved before bean conversion; the resolved (concrete) values are what Juneau sees.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HoconSupport">HOCON</a>
  * </ul>
  */

@@ -41,12 +41,12 @@ import org.apache.juneau.rest.server.servlet.*;
  * of one, that's already covered by whatever authentication/authorization the app applies to its management
  * endpoints generally; this mixin does not add any of its own for the read side.
  *
- * <h5 class='section'>Backend:</h5><ul>
+ * <h2 class='section'>Backend:</h2><ul>
  * 	<li>Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend
  * 		explicitly via {@link LoggersSettings.Builder#backend(LogBackend)} &mdash; see {@link LogBackend}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link LoggersResource}
  * 	<li class='jc'>{@link LoggersManager}
  * 	<li class='jc'>{@link LogBackend}

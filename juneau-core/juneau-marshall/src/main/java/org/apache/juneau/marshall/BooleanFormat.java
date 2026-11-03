@@ -34,7 +34,7 @@ import java.util.Locale;
  * The default is {@link #TRUE_FALSE} which preserves the historical wire output (the bare
  * <c>true</c> / <c>false</c> tokens).
  *
- * <h5 class='topic'>Precedence (highest to lowest)</h5>
+ * <h2 class='topic'>Precedence (highest to lowest)</h2>
  * <ol>
  * 	<li>{@link MarshalledProp#booleanFormat() @MarshalledProp(booleanFormat=…)} on the bean property.
  * 	<li>{@link Marshalled#booleanFormat() @Marshalled(booleanFormat=…)} on the bean class.
@@ -45,14 +45,14 @@ import java.util.Locale;
  * 	<li>The default constant ({@link #TRUE_FALSE}).
  * </ol>
  *
- * <h5 class='topic'>Parser leniency</h5>
+ * <h2 class='topic'>Parser leniency</h2>
  *
  * <p>
  * Parsers SHALL accept any of the textual shapes ({@code true}/{@code false}, {@code 1}/{@code 0},
  * {@code yes}/{@code no}, {@code y}/{@code n}, {@code on}/{@code off}) regardless of the parser-side
  * {@code BooleanFormat} setting. Matching is case-insensitive. The configured constant is informational only.
  *
- * <h5 class='topic'>Binary serializers</h5>
+ * <h2 class='topic'>Binary serializers</h2>
  *
  * <p>
  * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a native boolean wire type regardless
@@ -68,7 +68,7 @@ public enum BooleanFormat {
 	/**
 	 * Standard boolean tokens (the default).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	true
 	 * 	false
@@ -82,7 +82,7 @@ public enum BooleanFormat {
 	/**
 	 * Numeric tokens — <c>0</c> for {@code false} and <c>1</c> for {@code true}.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	1
 	 * 	0
@@ -98,7 +98,7 @@ public enum BooleanFormat {
 	/**
 	 * English long-form yes / no.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	yes
 	 * 	no
@@ -112,7 +112,7 @@ public enum BooleanFormat {
 	/**
 	 * Compact single-character yes / no.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	Y
 	 * 	N
@@ -126,7 +126,7 @@ public enum BooleanFormat {
 	/**
 	 * On / off.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bcode'>
 	 * 	on
 	 * 	off

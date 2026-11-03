@@ -37,7 +37,7 @@ import jakarta.servlet.http.*;
  * 	<li>throw {@link AuthenticationException} &mdash; credentials present but invalid.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Authenticator}
  * 	<li class='jc'>{@link AuthResult}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator — Resource-Level Authentication</a>

@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * that is not displayed to users but is used by browsers, search engines, and other web services.
  * Common uses include character encoding, viewport settings, SEO information, and social media tags.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bcode w800'>
  * 	// Character encoding
  * 	Meta meta1 = meta().charset("utf-8");
@@ -61,9 +61,8 @@ import org.apache.juneau.marshall.*;
  * 		<li class='jm'>{@link HtmlBuilder#meta() meta()}
  * 	</ul>
  * </ul>
- * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5">juneau-bean-html5</a>
  * </ul>
  */

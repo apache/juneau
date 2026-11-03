@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.*;
  * OpenTelemetry {@code io.opentelemetry.api.trace.Span}, a Brave {@code Span}, an application
  * tracing object, etc.) and surface the close / status / error transitions through the {@code Scope}.
  *
- * <h5 class='topic'>Off-by-default contract</h5>
+ * <h2 class='topic'>Off-by-default contract</h2>
  *
  * <p>
  * {@code juneau-rest-server} resolves the {@code TracerHook} via
@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.*;
  * registers a {@code TracerHook} bean &mdash; typically via {@code @Bean TracerHook} on the resource
  * or its parent.
  *
- * <h5 class='topic'>Usage</h5>
+ * <h2 class='topic'>Usage</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
@@ -53,7 +53,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='topic'>Lifecycle</h5>
+ * <h2 class='topic'>Lifecycle</h2>
  *
  * <p>
  * For each {@code @RestOp} invocation, the framework:
@@ -71,7 +71,7 @@ import org.apache.juneau.rest.server.*;
  * Implementations <b>must</b> be thread-safe &mdash; the same {@code TracerHook} bean is invoked
  * concurrently from every request thread for the lifetime of the {@code RestContext}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link NoOpTracerHook}
  * 	<li class='jc'>{@link Scope}
  * 	<li class='jc'>{@link TraceContextCarrier}

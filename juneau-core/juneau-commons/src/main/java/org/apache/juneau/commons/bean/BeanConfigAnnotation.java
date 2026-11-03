@@ -26,7 +26,7 @@ package org.apache.juneau.commons.bean;
  * {@code org.apache.juneau.BeanConfigAnnotation.Applier} class), since
  * {@code juneau-commons} cannot depend on {@code juneau-marshall}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='ja'>{@link BeanConfig}
  * </ul>
  */

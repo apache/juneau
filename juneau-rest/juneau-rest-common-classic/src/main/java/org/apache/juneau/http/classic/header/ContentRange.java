@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Where in a full body message this partial message belongs.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Content-Range: bytes 21010-47021/47022
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Content-Range entity-header is sent with a partial entity-body to specify where in the full entity-body the
  * partial body should be applied.
@@ -128,7 +128,7 @@ import org.apache.juneau.http.*;
  * response for
  * an unsatisfiable Range request-header, since not all servers implement this request-header.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

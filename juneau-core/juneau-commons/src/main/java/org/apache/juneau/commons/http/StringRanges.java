@@ -33,7 +33,7 @@ import org.apache.juneau.commons.collections.*;
  * The returned ranges are sorted such that the most acceptable value is available at ordinal position
  * <js>'0'</js>, and the least acceptable at position n-1.
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Accept-Encoding request-header field is similar to Accept, but restricts the content-codings (section 3.5) that
  * are acceptable in the response.
@@ -54,7 +54,7 @@ import org.apache.juneau.commons.collections.*;
  * 	Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

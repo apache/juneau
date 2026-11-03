@@ -35,14 +35,14 @@ import org.apache.juneau.commons.settings.*;
  * interfere with each other's settings. Settings are typically configured via the {@link BctConfig @BctConfig}
  * annotation, but can also be set programmatically.
  *
- * <h5 class='section'>Configuration Properties:</h5>
+ * <h2 class='section'>Configuration Properties:</h2>
  * <ul>
  * 	<li><b>{@link #BCT_SORT_MAPS}:</b> Enable sorting of maps in assertions</li>
  * 	<li><b>{@link #BCT_SORT_COLLECTIONS}:</b> Enable sorting of collections in assertions</li>
  * 	<li><b>Bean Converter:</b> Custom bean converter instance for property access and conversion</li>
  * </ul>
  *
- * <h5 class='section'>Usage via Annotation:</h5>
+ * <h2 class='section'>Usage via Annotation:</h2>
  * <p class='bjava'>
  * 	<ja>@BctConfig</ja>(sortMaps=TriState.<jsf>TRUE</jsf>, beanConverter=MyConverter.<jk>class</jk>)
  * 	<jk>class</jk> MyTest {
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.settings.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Usage via Programmatic API:</h5>
+ * <h2 class='section'>Usage via Programmatic API:</h2>
  * <p class='bjava'>
  * 	<ja>@BeforeEach</ja>
  * 	<jk>void</jk> setUp() {
@@ -69,7 +69,7 @@ import org.apache.juneau.commons.settings.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * All methods in this class are thread-safe. Configuration is stored in thread-local storage,
  * ensuring that each test thread has its own isolated configuration that doesn't interfere
@@ -101,7 +101,7 @@ public class BctConfiguration {
 	 * When set to <jk>true</jk>, maps will be sorted by key before comparison in assertions.
 	 * This ensures consistent ordering regardless of the map's internal ordering.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BctConfiguration.<jsm>set</jsm>(BctConfiguration.<jsf>BCT_SORT_MAPS</jsf>, <jk>true</jk>);
 	 * </p>
@@ -115,7 +115,7 @@ public class BctConfiguration {
 	 * When set to <jk>true</jk>, collections will be sorted before comparison in assertions.
 	 * This ensures consistent ordering regardless of the collection's internal ordering.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BctConfiguration.<jsm>set</jsm>(BctConfiguration.<jsf>BCT_SORT_COLLECTIONS</jsf>, <jk>true</jk>);
 	 * </p>
@@ -134,7 +134,7 @@ public class BctConfiguration {
 	 * The value is stored in thread-local storage and will only affect the current thread.
 	 * This is the recommended way to set configuration for individual tests.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BctConfiguration.<jsm>set</jsm>(BctConfiguration.<jsf>BCT_SORT_MAPS</jsf>, <jk>true</jk>);
 	 * </p>
@@ -155,7 +155,7 @@ public class BctConfiguration {
 	 * Global values apply to all threads and persist until explicitly cleared.
 	 * Use with caution in multi-threaded test environments.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	BctConfiguration.<jsm>setGlobal</jsm>(BctConfiguration.<jsf>BCT_SORT_MAPS</jsf>, <jk>true</jk>);
 	 * </p>
@@ -192,7 +192,7 @@ public class BctConfiguration {
 	 * Returns the configured value if set, otherwise returns the provided default value.
 	 * Thread-local values take precedence over global values.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>sortMaps</jv> = BctConfiguration.<jsm>get</jsm>(BctConfiguration.<jsf>BCT_SORT_MAPS</jsf>, <jk>false</jk>);
 	 * </p>
@@ -215,7 +215,7 @@ public class BctConfiguration {
 	 * Returns the configured boolean value if set, otherwise returns the provided default value.
 	 * Thread-local values take precedence over global values.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>boolean</jk> <jv>sortMaps</jv> = BctConfiguration.<jsm>get</jsm>(BctConfiguration.<jsf>BCT_SORT_MAPS</jsf>, <jk>false</jk>);
 	 * </p>
@@ -245,7 +245,7 @@ public class BctConfiguration {
 	 * a clean state for subsequent tests. The {@link BctConfigExtension BctConfigExtension}
 	 * automatically calls this method after each test.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@AfterEach</ja>
 	 * 	<jk>void</jk> tearDown() {
@@ -287,7 +287,7 @@ public class BctConfiguration {
 	 * for specific tests. The converter can be configured via the {@link BctConfig @BctConfig}
 	 * annotation or set programmatically.
 	 *
-	 * <h5 class='section'>Usage Example:</h5>
+	 * <h4 class='section'>Usage Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@BeforeEach</ja>
 	 * 	<jk>void</jk> setUp() {
@@ -310,7 +310,7 @@ public class BctConfiguration {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Thread Safety:</h5>
+	 * <h4 class='section'>Thread Safety:</h4>
 	 * <p>
 	 * This method is thread-safe and uses thread-local storage. Each test method running in parallel
 	 * will have its own converter instance, preventing cross-thread interference.

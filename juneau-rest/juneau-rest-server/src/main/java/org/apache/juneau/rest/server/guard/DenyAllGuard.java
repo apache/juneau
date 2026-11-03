@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.*;
  * annotation-derived guard list (including this deny-all) with the user-supplied chain &mdash;
  * see the {@code RestOpContext.guards} memoizer for the full lookup contract.
  *
- * <h5 class='figure'>Composition example:</h5>
+ * <h2 class='figure'>Composition example:</h2>
  *
  * <p class='bjava'>
  * 	<jc>// Default-deny on a resource until the importer wires up auth.</jc>
@@ -47,7 +47,7 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link RestGuard}
  * 	<li class='jc'>{@link RestGuardList}
  * 	<li class='ja'>{@link Rest#guards()}

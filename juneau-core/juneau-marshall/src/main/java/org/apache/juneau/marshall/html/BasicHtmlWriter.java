@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
  * can also be extended (e.g. by {@link SimpleHtmlWriter} or by the body-var-resolving anonymous writer in
  * {@link BasicHtmlDocTemplate}).
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>

@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * The swap is identical to just calling {@link StackTraceElement#toString()}, but provides the ability to
  * parse the resulting string back into a bean.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
 
  * </ul>

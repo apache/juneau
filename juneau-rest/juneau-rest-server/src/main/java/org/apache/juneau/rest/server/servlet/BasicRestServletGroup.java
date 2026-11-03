@@ -44,7 +44,7 @@ import jakarta.servlet.*;
  * <p>
  * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
  *
- * <h5 class='section'>Dynamic children:</h5>
+ * <h2 class='section'>Dynamic children:</h2>
  *
  * <p>
  * Additional child resources can be registered or unregistered at runtime via {@link #addChild(Class)} /
@@ -52,7 +52,7 @@ import jakarta.servlet.*;
  * group servlet is mounted once and individual tests plug in their own {@code @Rest} resources without restarting
  * the servlet container.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  * </ul>
  *

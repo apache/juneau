@@ -40,7 +40,7 @@ import org.apache.juneau.marshall.xml.*;
  * 	<li><c>via</c> - The source of the information
  * </ul>
  *
- * <h5 class='figure'>Schema</h5>
+ * <h2 class='figure'>Schema</h2>
  * <p class='bschema'>
  * 	atomLink =
  * 		element atom:link {
@@ -55,7 +55,7 @@ import org.apache.juneau.marshall.xml.*;
  * 		}
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create links for an entry</jc>
  * 	Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
@@ -69,12 +69,12 @@ import org.apache.juneau.marshall.xml.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>Specification:</h5>
+ * <h2 class='section'>Specification:</h2>
  * <p>
  * Represents an <c>atomLink</c> construct in the
  * <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.7">RFC 4287 - Section 4.2.7</a> specification.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
  * 	<li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.iana.org/assignments/link-relations/link-relations.xhtml">IANA Link Relations</a>
@@ -199,7 +199,7 @@ public class Link extends Common {
 	 * <p>
 	 * Sets the URI of the referenced resource (required).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Link <jv>link</jv> = <jk>new</jk> Link()
 	 * 		.setHref(<js>"http://example.org/posts/1"</js>);
@@ -221,7 +221,7 @@ public class Link extends Common {
 	 * <p>
 	 * Sets the language of the resource pointed to by the link.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://example.org/post1.html"</js>)
 	 * 		.setHreflang(<js>"en-US"</js>);
@@ -249,7 +249,7 @@ public class Link extends Common {
 	 * <p>
 	 * Sets an advisory size in bytes of the linked resource.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Podcast episode with file size</jc>
 	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://example.org/episode1.mp3"</js>)
@@ -277,7 +277,7 @@ public class Link extends Common {
 	 * <js>"enclosure"</js>, <js>"via"</js>, <js>"first"</js>, <js>"last"</js>,
 	 * <js>"previous"</js>, <js>"next"</js>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Link <jv>link</jv> = <jk>new</jk> Link()
 	 * 		.setRel(<js>"alternate"</js>)
@@ -300,7 +300,7 @@ public class Link extends Common {
 	 * <p>
 	 * Sets human-readable information about the link.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Link <jv>link</jv> = <jk>new</jk> Link(<js>"related"</js>, <js>"text/html"</js>, <js>"http://example.org/related"</js>)
 	 * 		.setTitle(<js>"Related Article"</js>);
@@ -325,7 +325,7 @@ public class Link extends Common {
 	 * <p>
 	 * This should be a valid MIME media type as defined by RFC 4287.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"text/html"</js>
 	 * 	<li><js>"application/pdf"</js>

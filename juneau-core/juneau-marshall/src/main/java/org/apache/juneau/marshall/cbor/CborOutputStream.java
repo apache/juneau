@@ -32,12 +32,12 @@ import org.apache.juneau.marshall.serializer.*;
  * containing a 3-bit major type and 5-bit additional information. Integers use compact encoding;
  * strings, arrays, and maps use definite-length encoding.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is not intended for external use.
  * 	<li class='note'>This class is not thread-safe; each serialization session uses its own instance.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>

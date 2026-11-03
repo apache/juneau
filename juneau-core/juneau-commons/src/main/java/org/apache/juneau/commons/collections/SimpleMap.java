@@ -34,7 +34,7 @@ import org.apache.juneau.commons.utils.*;
  * for small maps (typically less than 10 entries) where the overhead of a {@link HashMap} is not
  * justified.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Unmodifiable:</b> All mutation operations throw {@link UnsupportedOperationException}
  * 	<li><b>Fixed Keys and Values:</b> Keys and values are set at construction time
@@ -45,7 +45,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><b>Predictable Performance:</b> O(n) lookup time, but faster than {@link HashMap} for small n
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Immutable configuration maps with a fixed set of known keys
  * 	<li>Small lookup tables that should not be modified
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Situations where map size is small and keys are known at compile time
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an unmodifiable map with fixed keys and values</jc>
  * 	String[] <jv>keys</jv> = {<js>"host"</js>, <js>"port"</js>, <js>"timeout"</js>};
@@ -69,7 +69,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jv>config</jv>.put(<js>"port"</js>, 9090);  <jc>// Throws UnsupportedOperationException</jc>
  * </p>
  *
- * <h5 class='section'>Restrictions:</h5>
+ * <h2 class='section'>Restrictions:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Immutable:</b> Cannot add, remove, or modify entries after construction
  * 	<li><b>Fixed Size:</b> Size is determined at construction time
@@ -77,19 +77,19 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><b>Array Length:</b> Keys and values arrays must have the same length
  * </ul>
  *
- * <h5 class='section'>Performance Characteristics:</h5>
+ * <h2 class='section'>Performance Characteristics:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>get(key):</b> O(n) - Linear search through keys array
  * 	<li><b>size():</b> O(1) - Direct array length access
  * 	<li><b>Memory:</b> Lower overhead than {@link HashMap} for small maps
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe since it's immutable after construction. Multiple threads can safely
  * read from a SimpleMap concurrently without synchronization.
  *
- * <h5 class='section'>Example - Configuration Map:</h5>
+ * <h2 class='section'>Example - Configuration Map:</h2>
  * <p class='bjava'>
  * 	<jc>// Create immutable configuration</jc>
  * 	SimpleMap&lt;String,Object&gt; <jv>defaults</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
@@ -101,14 +101,14 @@ import org.apache.juneau.commons.utils.*;
  * 	<jk>return</jk> <jv>defaults</jv>;
  * </p>
  *
- * <h5 class='section'>Comparison with Map.of():</h5>
+ * <h2 class='section'>Comparison with Map.of():</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Null Support:</b> SimpleMap supports null keys/values, Map.of() does not
  * 	<li><b>Insertion Order:</b> SimpleMap preserves insertion order, Map.of() does not
  * 	<li><b>Size Limit:</b> Map.of() limited to 10 entries, SimpleMap has no limit
  * </ul>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link SimpleMap} - The modifiable version of this class
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
@@ -190,7 +190,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 * For true immutability, ensure the arrays are not modified after passing them
 	 * to this constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>keys</jv> = {<js>"name"</js>, <js>"age"</js>, <js>"city"</js>};
 	 * 	Object[] <jv>values</jv> = {<js>"John"</js>, 30, <js>"NYC"</js>};
@@ -239,7 +239,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 * <p>
 	 * The returned set is unmodifiable and backed by the underlying entries array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
 	 * 		<jk>new</jk> String[]{<js>"a"</js>, <js>"b"</js>},
@@ -266,7 +266,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 * for comparison. For small maps (typically less than 10 entries), this is often faster than
 	 * the hash lookup in {@link HashMap}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
 	 * 		<jk>new</jk> String[]{<js>"age"</js>, <js>"score"</js>},
@@ -295,7 +295,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 * <p>
 	 * The returned set is unmodifiable and backed by the underlying keys array.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
 	 * 		<jk>new</jk> String[]{<js>"x"</js>, <js>"y"</js>, <js>"z"</js>},

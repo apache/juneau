@@ -50,7 +50,7 @@ import org.apache.juneau.commons.inject.*;
  * 	<li>Constructor parameters.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanPropAnnotation">@BeanProp Annotation</a>
  * </ul>
  */
@@ -98,7 +98,7 @@ public @interface BeanProp {
 	 * 	<li><b>Concrete implementation</b> - Specify a concrete class for an abstract/interface element type
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> OrderCollection {
 	 * 		<jc>// Stream property - element type cannot be inferred at runtime due to erasure</jc>
@@ -111,7 +111,7 @@ public @interface BeanProp {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link BeanSupplier}
 	 * 	<li class='jc'>{@link BeanConsumer}
 	 * 	<li class='jc'>{@link BeanChannel}
@@ -136,7 +136,7 @@ public @interface BeanProp {
 	 * 	<li>Throw {@link IllegalArgumentException} if both fail
 	 * </ol>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@BeanProp</ja>(factory=ItemChannelFactory.<jk>class</jk>, elementType=Item.<jk>class</jk>)
@@ -144,7 +144,7 @@ public @interface BeanProp {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jc'>{@link BeanFactory}
 	 * 	<li class='ja'>{@link BeanType#factory()}
 	 * </ul>
@@ -163,7 +163,7 @@ public @interface BeanProp {
 	 * Normally, this is automatically inferred from the field name or getter method name of the property.
 	 * However, this property can be used to assign a different property name from the automatically inferred value.
 	 *
-	 * <h5 class='topic'>Dynamic beans</h5>
+	 * <h4 class='topic'>Dynamic beans</h4>
 	 * <p>
 	 * On a <strong>field</strong> whose type is not a {@link Map}, <js>"*"</js> does not create a dynamic property:
 	 * the property name is the field name (same as omitting {@code name}/{@code value}), while other attributes on
@@ -214,7 +214,7 @@ public @interface BeanProp {
 	 * For bean properties of maps and collections, this annotation can be used to identify the class types of the
 	 * contents of the bean property object when the generic parameter types are interfaces or abstract classes.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -249,7 +249,7 @@ public @interface BeanProp {
 	 * This attribute is independent of {@code @Schema(required)}, which only affects generated schema documentation and
 	 * HTTP part validation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public record</jk> Person(<ja>@BeanProp</ja>(required=<jk>true</jk>) String <jv>name</jv>, Integer <jv>age</jv>) {}
 	 *
@@ -261,7 +261,7 @@ public @interface BeanProp {
 	 * 	JsonParser.<jsf>DEFAULT</jsf>.read(<js>"{\"name\":null}"</js>, Person.<jk>class</jk>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		A required property must be writable (a field, setter or constructor argument).  Marking a read-only
 	 * 		property required fails when the bean metadata is built.
@@ -283,7 +283,7 @@ public @interface BeanProp {
 	 * <p>
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@BeanProp</ja>(ro=<js>"true"</js>)
@@ -291,7 +291,7 @@ public @interface BeanProp {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		<b>Java Records:</b> Marking record components as read-only is not supported during parsing.
 	 * 		Because records are immutable, all components must be provided to the canonical constructor.
@@ -315,7 +315,7 @@ public @interface BeanProp {
 	 * <p>
 	 * This property must denote a concrete bean class with a no-arg constructor.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
@@ -351,7 +351,7 @@ public @interface BeanProp {
 	 * <p>
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@BeanProp</ja>(wo=<js>"true"</js>)

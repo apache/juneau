@@ -26,15 +26,14 @@ import org.apache.juneau.http.header.*;
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.
  *
- * <p>
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	If-Match: "xyzzy"
  * 	If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
  * 	If-Match: *
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

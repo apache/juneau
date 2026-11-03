@@ -40,7 +40,7 @@ import org.apache.juneau.commons.bean.*;
  * 	<li>{@link StatusTone#NEUTRAL} &mdash; neutral
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// A red unread-count badge that caps at "99+".</jc>
  * 	Badge <jv>badge</jv> = Badge.<jsm>count</jsm>(120).tone(StatusTone.<jsf>ERROR</jsf>).max(99).label(<js>"unread notifications"</js>);

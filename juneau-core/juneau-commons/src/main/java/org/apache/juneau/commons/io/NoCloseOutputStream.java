@@ -29,14 +29,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * stream. This is useful when you need to pass a stream to code that will close it, but you
  * want to keep the underlying stream open for further use.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Prevents closing - {@link #close()} flushes but doesn't close the underlying stream
  * 	<li>Transparent delegation - all other operations pass through to the wrapped stream
  * 	<li>Useful for resource management - allows multiple consumers without premature closing
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Passing streams to APIs that close them, but you need to keep the stream open
  * 	<li>Multiple operations on the same stream where intermediate operations might close it
@@ -44,7 +44,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<li>Wrapping system streams (System.out, System.err) that should not be closed
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Wrap a stream that should not be closed</jc>
  * 	FileOutputStream <jv>fos</jv> = <jk>new</jk> FileOutputStream(<js>"output.txt"</js>);
@@ -58,14 +58,14 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * 	<jv>fos</jv>.close();  <jc>// Close when actually done</jc>
  * </p>
  *
- * <h5 class='section'>Important Notes:</h5>
+ * <h2 class='section'>Important Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>The {@link #close()} method flushes the stream but does not close the underlying stream
  * 	<li>You are responsible for closing the underlying stream when you're done with it
  * 	<li>This wrapper does not prevent resource leaks - ensure the underlying stream is eventually closed
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link NoCloseWriter} - Writer counterpart
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
@@ -85,7 +85,7 @@ public class NoCloseOutputStream extends OutputStream {
 	 * Creates a new NoCloseOutputStream that wraps the specified OutputStream. The wrapper
 	 * will prevent the underlying stream from being closed via the {@link #close()} method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FileOutputStream <jv>fos</jv> = <jk>new</jk> FileOutputStream(<js>"file.txt"</js>);
 	 * 	NoCloseOutputStream <jv>wrapper</jv> = <jk>new</jk> NoCloseOutputStream(<jv>fos</jv>);
@@ -104,7 +104,7 @@ public class NoCloseOutputStream extends OutputStream {
 	 * This method flushes any buffered data to the underlying stream but does not close it.
 	 * The underlying stream remains open and can continue to be used after this method is called.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FileOutputStream <jv>fos</jv> = <jk>new</jk> FileOutputStream(<js>"file.txt"</js>);
 	 * 	NoCloseOutputStream <jv>wrapper</jv> = <jk>new</jk> NoCloseOutputStream(<jv>fos</jv>);

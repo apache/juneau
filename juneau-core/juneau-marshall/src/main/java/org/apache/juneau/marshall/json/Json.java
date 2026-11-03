@@ -38,7 +38,7 @@ import java.lang.annotation.*;
  * 		Wrap bean instances inside wrapper object (e.g. <c>{'wrapperAttr':bean}</c>).
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON</a>
 
  * </ul>
@@ -66,7 +66,7 @@ public @interface Json {
 	 * <p>
 	 * This annotation can be applied to beans as well as other objects serialized to other types (e.g. strings).
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Json</ja>(wrapperAttr=<js>"myWrapper"</js>)
 	 * 	<jk>public class</jk> MyBean {

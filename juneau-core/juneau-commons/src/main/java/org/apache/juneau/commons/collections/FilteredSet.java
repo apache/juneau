@@ -29,7 +29,7 @@ import java.util.function.*;
  * Only elements that pass the filter (i.e., the predicate returns <jk>true</jk>) are actually stored in
  * the underlying set.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Flexible Filtering:</b> Use any {@link Predicate} to filter elements based on any criteria
  * 	<li><b>Optional Filter:</b> Filter is optional when using the builder - defaults to accepting all elements
@@ -42,7 +42,7 @@ import java.util.function.*;
  * 	<li><b>Automatic Deduplication:</b> Duplicate elements are automatically handled by the underlying set
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a filtered set that only accepts non-null values</jc>
  * 	FilteredSet&lt;String&gt; <jv>set</jv> = FilteredSet
@@ -57,7 +57,7 @@ import java.util.function.*;
  * 	<jc>// set now contains: ["value1", "value3"]</jc>
  * </p>
  *
- * <h5 class='section'>Example - Custom Set Type:</h5>
+ * <h2 class='section'>Example - Custom Set Type:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a filtered TreeSet that only accepts positive numbers</jc>
  * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
@@ -71,7 +71,7 @@ import java.util.function.*;
  * 	<jv>set</jv>.add(10);  <jc>// Added</jc>
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>Filtering is applied to all element addition methods: {@link #add(Object)}, {@link #addAll(Collection)}, etc.
  * 	<li>If the filter returns <jk>false</jk>, the element is silently ignored (not added)
@@ -82,12 +82,12 @@ import java.util.function.*;
  * 	<li>Duplicate elements are automatically handled by the underlying set (only one occurrence is stored)
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe unless the underlying set is thread-safe. If thread safety is required,
  * use a thread-safe set type (e.g., {@link java.util.concurrent.CopyOnWriteArraySet}) via the <c>inner</c> method.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -102,7 +102,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	/**
 	 * Builder for creating {@link FilteredSet} instances.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -133,7 +133,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		 * This method can be called multiple times. When called multiple times, all filters are combined
 		 * using AND logic - an element must pass all filters to be added to the set.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Filter out null values</jc>
 		 * 	Builder&lt;String&gt; <jv>b</jv> = FilteredSet.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -164,7 +164,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		 * <p>
 		 * If not specified, a new {@link LinkedHashSet} will be created during {@link #build()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Use a TreeSet for sorted order</jc>
 		 * 	Builder&lt;String&gt; <jv>b</jv> = FilteredSet.<jsm>create</jsm>(String.<jk>class</jk>)
@@ -196,7 +196,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		 * this function before being added to the set. If not specified, elements must already be of the
 		 * correct type (or <c>Object.class</c> is used if types were not specified, which accepts any type).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 		 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -256,7 +256,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * allowing any element types to be added. However, the generic type parameter should still be
 	 * specified for type safety.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Explicitly specify generic types using diamond operator</jc>
 	 * 	<jk>var</jk> <jv>set</jv> = FilteredSet
@@ -334,7 +334,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * adding it to the set. This is useful for validation, debugging, or pre-checking elements before
 	 * attempting to add them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -361,7 +361,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * The returned predicate is the combined filter used internally by this set. If multiple filters
 	 * were set via the builder, they are combined using AND logic.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -441,25 +441,25 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * the type (if element type was specified when creating the set). After conversion and validation,
 	 * the element is added using the standard {@link #add(Object)} method, which applies the filter.
 	 *
-	 * <h5 class='section'>Type Conversion:</h5>
+	 * <h4 class='section'>Type Conversion:</h4>
 	 * <ul>
 	 * 	<li>If an element function is configured, the element is converted by applying the function
 	 * 	<li>If no function is configured, the object is used as-is (but may be validated if types were specified)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Type Validation:</h5>
+	 * <h4 class='section'>Type Validation:</h4>
 	 * <ul>
 	 * 	<li>If element type was specified (via {@link #create(Class)}), the converted element must be an instance of that type
 	 * 	<li>If {@link #create()} was used (no types specified), <c>Object.class</c> is used, which accepts any type
 	 * </ul>
 	 *
-	 * <h5 class='section'>Return Value:</h5>
+	 * <h4 class='section'>Return Value:</h4>
 	 * <ul>
 	 * 	<li>If the element is added successfully, returns <jk>true</jk>
 	 * 	<li>If the element is filtered out or already present, returns <jk>false</jk>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -486,7 +486,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * This method iterates over all elements in the source collection and adds each one using {@link #addConverted(Object)},
 	 * which applies conversion and validation before adding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -524,7 +524,7 @@ public class FilteredSet<E> extends AbstractSet<E> {
 	 * Each element from the collections/arrays will be added using {@link #add(Object)}, which applies
 	 * conversion and filtering.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredSet&lt;Integer&gt; <jv>set</jv> = FilteredSet
 	 * 		.<jsm>create</jsm>(Integer.<jk>class</jk>)

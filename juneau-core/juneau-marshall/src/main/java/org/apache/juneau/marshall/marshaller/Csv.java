@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.stream.*;
 /**
  * A pairing of a {@link CsvSerializer} and {@link CsvParser} into a single class with convenience to/of methods.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// Serialize a list of beans to CSV</jc>
  * 	List&lt;Person&gt; <jv>people</jv> = List.of(<jk>new</jk> Person(<js>"Alice"</js>, 30), <jk>new</jk> Person(<js>"Bob"</js>, 25));
@@ -45,13 +45,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>csv</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example output (list of maps with a,b):</h5>
+ * <h2 class='figure'>Example output (list of maps with a,b):</h2>
  * <p class='bcode'>
  * 	a,b
  * 	foo,bar
  * </p>
  *
- * <h5 class='figure'>Complex (list of beans with nested address, flattened):</h5>
+ * <h2 class='figure'>Complex (list of beans with nested address, flattened):</h2>
  * <p class='bcode'>
  * 	name,age,address_street,address_city,address_state,tags
  * 	Alice,30,123 Main St,Boston,MA,"a,b,c"
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	String <jv>string</jv> = Csv.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

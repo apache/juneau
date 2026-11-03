@@ -30,7 +30,7 @@ import java.nio.file.*;
  * character encodings and optional handling for missing files. It's similar to {@link FileReaderBuilder}
  * but works with the modern NIO Path API instead of the legacy File API.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Fluent API - all methods return <c>this</c> for method chaining
  * 	<li>NIO Path support - works with modern {@link Path} API
@@ -39,7 +39,7 @@ import java.nio.file.*;
  * 	<li>Multiple path specification methods - accept Path or String path
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Reading files with specific character encodings using NIO Path API
  * 	<li>Handling optional configuration files that may not exist
@@ -47,7 +47,7 @@ import java.nio.file.*;
  * 	<li>Working with NIO-based file operations
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Basic usage</jc>
  * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
@@ -68,13 +68,13 @@ import java.nio.file.*;
  * 		.build();
  * </p>
  *
- * <h5 class='section'>Character Encoding:</h5>
+ * <h2 class='section'>Character Encoding:</h2>
  * <p>
  * By default, the builder uses the system's default charset ({@link Charset#defaultCharset()}).
  * You can specify a custom charset using {@link #charset(Charset)} or {@link #charset(String)}.
  * This is important when reading files that were written with a specific encoding.
  *
- * <h5 class='section'>Comparison with FileReaderBuilder:</h5>
+ * <h2 class='section'>Comparison with FileReaderBuilder:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>FileReaderBuilder:</b> Works with legacy {@link File} API
  * 	<li><b>PathReaderBuilder:</b> Works with modern NIO {@link Path} API
@@ -82,7 +82,7 @@ import java.nio.file.*;
  * 	<li><b>PathReaderBuilder:</b> Uses {@link Files#newBufferedReader(Path, Charset)}
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link FileReaderBuilder} - Builder for File-based readers
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  * </ul>
@@ -97,7 +97,7 @@ public class PathReaderBuilder {
 	/**
 	 * Creates a new builder.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
 	 * 		.path(Paths.get(<js>"data.txt"</js>))
@@ -113,7 +113,7 @@ public class PathReaderBuilder {
 	/**
 	 * Creates a new builder initialized with the specified path.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Path <jv>path</jv> = Paths.get(<js>"config.properties"</js>);
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>(<jv>path</jv>)
@@ -142,7 +142,7 @@ public class PathReaderBuilder {
 	 * method will return a {@link StringReader} with empty content instead of throwing an
 	 * {@link IOException}. This is useful for optional configuration files.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Without allowNoFile - throws exception if file doesn't exist</jc>
 	 * 	Reader <jv>reader1</jv> = PathReaderBuilder.<jsm>create</jsm>()
@@ -168,7 +168,7 @@ public class PathReaderBuilder {
 	 * <p>
 	 * Boolean-arg form of {@link #allowNoFile()}, useful when the setting is conditional.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
 	 * 		.path(Paths.get(<js>"optional.txt"</js>))
@@ -192,7 +192,7 @@ public class PathReaderBuilder {
 	 * this method returns an empty {@link StringReader}. Otherwise, it creates a buffered reader
 	 * using {@link Files#newBufferedReader(Path, Charset)} with the specified character encoding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>try</jk> (Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
 	 * 		.path(Paths.get(<js>"data.txt"</js>))
@@ -228,7 +228,7 @@ public class PathReaderBuilder {
 	 * Specifying the encoding is important when reading files that were written with a specific
 	 * character encoding. Passing <jk>null</jk> resets to the default charset.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
 	 * 		.path(Paths.get(<js>"data.txt"</js>))
@@ -253,7 +253,7 @@ public class PathReaderBuilder {
 	 * {@link Charset} using {@link Charset#forName(String)}. Passing <jk>null</jk> resets to
 	 * the default charset.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
 	 * 		.path(Paths.get(<js>"data.txt"</js>))
@@ -274,7 +274,7 @@ public class PathReaderBuilder {
 	/**
 	 * Sets the path to read from.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Path <jv>p</jv> = Paths.get(<js>"config.properties"</js>);
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
@@ -297,7 +297,7 @@ public class PathReaderBuilder {
 	 * This is a convenience method that converts a string path to a {@link Path} using
 	 * {@link Paths#get(String, String...)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Reader <jv>reader</jv> = PathReaderBuilder.<jsm>create</jsm>()
 	 * 		.path(<js>"/path/to/file.txt"</js>)

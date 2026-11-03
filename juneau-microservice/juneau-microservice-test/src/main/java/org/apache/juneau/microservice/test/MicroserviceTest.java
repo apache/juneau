@@ -36,7 +36,7 @@ import org.junit.jupiter.api.extension.*;
  * {@link org.apache.juneau.microservice.Microservice#stop() stop()}s it afterward (releasing the port and
  * firing {@code @PreDestroy} hooks).
  *
- * <h5 class='topic'>Specifying the system under test</h5>
+ * <h2 class='topic'>Specifying the system under test</h2>
  *
  * <p>
  * The SUT is declared <i>explicitly</i> (no classpath scanning), two complementary ways:
@@ -54,7 +54,7 @@ import org.junit.jupiter.api.extension.*;
  * In both cases the extension additionally installs an {@link EphemeralJettyServerConfig} (binding a Jetty
  * {@code Server} to port 0) and {@code JettyConfiguration}, so tests only contribute their resources.
  *
- * <h5 class='topic'>Mock-bean injection</h5>
+ * <h2 class='topic'>Mock-bean injection</h2>
  *
  * <p>
  * Declare collaborators to substitute with the existing {@link org.apache.juneau.bct.junit.TestBean @TestBean}
@@ -63,7 +63,7 @@ import org.junit.jupiter.api.extension.*;
  * service sees them from startup. {@code @TestBean(mode = Mode.OVERLAY)} pushes/pops against the already-booted
  * instance instead.
  *
- * <h5 class='topic'>What gets injected into tests</h5>
+ * <h2 class='topic'>What gets injected into tests</h2>
  *
  * <p>
  * Test methods (and lifecycle methods) may declare parameters resolved by the extension:
@@ -73,14 +73,14 @@ import org.junit.jupiter.api.extension.*;
  * / {@code Integer}). The same {@code TestBeanStore} parameter the underlying
  * {@link org.apache.juneau.bct.junit.JuneauBeanStoreExtension} resolves is available too.
  *
- * <h5 class='topic'>When to use this vs. {@code MockRestClient}</h5>
+ * <h2 class='topic'>When to use this vs. {@code MockRestClient}</h2>
  *
  * <p>
  * Use {@code @MicroserviceTest} for a genuine full-microservice integration test &mdash; real server, real
  * connectors, real lifecycle, over HTTP. For an in-JVM test of a single {@code @Rest} resource (no server, no
  * sockets), use {@code MockRestClient} directly; the two paths are intentionally distinct.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@MicroserviceTest</ja>(configurations=MyServerConfig.<jk>class</jk>)
  * 	<jk>class</jk> MyServiceTest {
@@ -100,7 +100,7 @@ import org.junit.jupiter.api.extension.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MicroserviceExtension}
  * 	<li class='jc'>{@link org.apache.juneau.bct.junit.TestBean}
  * </ul>

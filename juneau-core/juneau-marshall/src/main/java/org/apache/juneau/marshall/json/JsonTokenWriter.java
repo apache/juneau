@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.stream.*;
  * {@link #JsonTokenWriter(Writer)} uses {@link Settings#DEFAULT} (compact, double-quoted, RFC-8259
  * strict).
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * 	<li>The writer tracks just enough state to insert structural separators (<c>,</c> between
  * 		array/object members and <c>:</c> between field names and values).  It does not validate

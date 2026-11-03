@@ -36,7 +36,7 @@ import org.apache.juneau.http.UnmodifiableBean;
 /**
  * A simple list of HTTP headers with various convenience methods.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bjava'>
  * 	HeaderList <jv>headers</jv> = HeaderList
  * 		.<jsm>create</jsm>()
@@ -58,7 +58,7 @@ import org.apache.juneau.http.UnmodifiableBean;
  * 	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"</js>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */
@@ -115,7 +115,7 @@ public class HeaderList extends ArrayList<Header> {
 	/**
 	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	HeaderList <jv>headers</jv> = HeaderList.<jsm>ofPairs</jsm>(<js>"Accept"</js>, <js>"text/xml"</js>, <js>"Content-Type"</js>, <js>"text/xml"</js>);
 	 * </p>
@@ -321,7 +321,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.Header#name()} or
 	 * 	{@link org.apache.juneau.http.Header#value()} annotations.
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
 	 * </p>
@@ -397,7 +397,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * 	<li><c>X(String <jv>name</jv>, Object <jv>value</jv>)</c>
 	 * </ul>
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	BasicIntegerHeader <jv>age</jv> = headerList.get(<js>"Age"</js>, BasicIntegerHeader.<jk>class</jk>);
 	 * </p>

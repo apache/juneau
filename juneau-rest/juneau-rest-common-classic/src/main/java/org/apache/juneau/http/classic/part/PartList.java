@@ -34,7 +34,7 @@ import org.apache.juneau.http.*;
 /**
  * An simple list of HTTP parts (form-data, query-parameters, path-parameters).
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bjava'>
  * 	PartList <jv>parts</jv> = PartList
  * 		.<jsm>create</jsm>()
@@ -42,7 +42,7 @@ import org.apache.juneau.http.*;
  * 		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */
@@ -98,7 +98,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	/**
 	 * Creates a new {@link PartList} initialized with the specified name/value pairs.
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	PartList <jv>parts</jv> = PartList.<jsm>ofPairs</jsm>(<js>"foo"</js>, 1, <js>"bar"</js>, <jk>true</jk>);
 	 * </p>
@@ -302,7 +302,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * <p>
 	 * Same as {@link #get(String, Class)} but the part name is pulled from the name or value attribute of the {@link FormData}/{@link Query}/{@link Path} annotation.
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	Age <jv>age</jv> = <jv>partList</jv>.get(Age.<jk>class</jk>);
 	 * </p>
@@ -378,7 +378,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * 	<li><c>X(String <jv>name</jv>, Object <jv>value</jv>)</c>
 	 * </ul>
 	 *
-	 * <h5 class='figure'>Example</h5>
+	 * <h4 class='figure'>Example</h4>
 	 * <p class='bjava'>
 	 * 	BasicIntegerPart <jv>age</jv> = <jv>partList</jv>.get(<js>"age"</js>, BasicIntegerPart.<jk>class</jk>);
 	 * </p>

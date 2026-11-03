@@ -72,7 +72,7 @@ import jakarta.servlet.*;
  * External callers reach this component via
  * {@code Microservice.getInstance().getBeanStore().getBean(JettyServerComponent.class).orElseThrow()}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty</a>
  * </ul>
  *

@@ -34,7 +34,7 @@ import java.util.stream.*;
  * Subclasses implement {@link #findConversion(Class, Class)} to provide the actual conversion logic.
  * The result is cached so that reflection or other expensive discovery happens only once per type pair.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyConverter <jk>extends</jk> CachingConverter {
  *
@@ -47,7 +47,7 @@ import java.util.stream.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe. The cache uses {@link ConcurrentHashMap} for safe concurrent access.
  * </p>

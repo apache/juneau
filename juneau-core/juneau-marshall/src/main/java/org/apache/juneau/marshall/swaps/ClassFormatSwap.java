@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * setting propagate without rebuilding {@link DefaultSwaps}. When the context is at
  * {@link ClassFormat#NOT_SET} the swap falls through to {@link ClassFormat#FQCN}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
  * </ul>
  */

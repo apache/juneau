@@ -39,7 +39,7 @@ import org.apache.juneau.console.widgets.*;
  * it itself.  This mirrors the sibling {@code DataTablesMixin}/{@code ConsoleChromeMixin} serving pattern (those
  * modules are not dependencies of this one, so they are not linked here).
  *
- * <h5 class='section'>What this ships (and what it deliberately does not):</h5>
+ * <h2 class='section'>What this ships (and what it deliberately does not):</h2>
  * <p>
  * Juneau's jars don't copy the <a class="doclink" href="https://datatables.net">DataTables</a> library or jQuery.  Only
  * the thin, first-party runtime is served here; the DataTables, jQuery and Buttons files come from the WebJars that
@@ -48,7 +48,7 @@ import org.apache.juneau.console.widgets.*;
  * {@code chrome.css} themes the same {@code .tag.<domain>.<value>} classes when present, but this module takes
  * <b>no</b> dependency on it.
  *
- * <h5 class='section'>Relocated: two assets now ship in the widget module</h5>
+ * <h2 class='section'>Relocated: two assets now ship in the widget module</h2>
  * <p>
  * {@code juneau-calendar.js} and {@code juneau-calendar.css} are widget runtimes, not
  * table runtimes, and their bytes now live in {@code juneau-console-widgets} beside the bean contracts that
@@ -67,7 +67,7 @@ import org.apache.juneau.console.widgets.*;
  * A page loading the widget calendar runtime must still load this module's {@code juneau-icons.js} and
  * {@code juneau-views.js} first.
  *
- * <h5 class='section'>Cache-busting + versioned URLs:</h5>
+ * <h2 class='section'>Cache-busting + versioned URLs:</h2>
  * <p>
  * Each asset is served with a one-day {@code Cache-Control} and referenced from a page's {@code head=} block with a
  * {@code ?v=<buildVersion>-<hash8>} cache-buster (see {@link #viewAssetUrl(String)}, or
@@ -82,18 +82,18 @@ import org.apache.juneau.console.widgets.*;
  * unpackaged (IDE/test) classpath.  The served endpoint ignores the query string, so any (or no) {@code ?v=} still
  * resolves to the same asset.
  *
- * <h5 class='section'>Contract-version handshake:</h5>
+ * <h2 class='section'>Contract-version handshake:</h2>
  * <p>
  * {@link #CONTRACT_VERSION} is the single wire-contract discriminator for a {@code VIEW_META} sidecar.
  * {@code juneau-views.js} bakes in the same value so the client can fail loud when a served sidecar's
  * {@code contractVersion} differs from the runtime's.
  *
- * <h5 class='section'>Mixin-only deployment:</h5>
+ * <h2 class='section'>Mixin-only deployment:</h2>
  * <p>
  * The mount paths are pinned at the op level by {@code @RestGet(path=...)} on the serving methods; a class-level
  * {@code @Rest(paths=...)} would be silently ignored under the mixin pattern.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link ViewTable}
  * </ul>
@@ -137,7 +137,7 @@ public class ViewsMixin {
 	 * after jQuery and DataTables and before {@code juneau-views.js}.  A host with datatables cards composes
 	 * {@link DataTablesMixin} and {@code WebJarsMixin}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(mixins={ViewsMixin.<jk>class</jk>, DataTablesMixin.<jk>class</jk>, WebJarsMixin.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
@@ -160,7 +160,7 @@ public class ViewsMixin {
 	/**
 	 * The URL path at which the icon registry is served (relative to the host mount).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Page-level sprite layers, read once before the chrome draws:</jc>
 	 * 	<jc>// &lt;script src="/views/juneau-icons.js"</jc>
@@ -204,7 +204,7 @@ public class ViewsMixin {
 	 * {@code juneau-regions.js} and {@code juneau-console.js}, all of which read it.  The {@code "views"} toolkit pack
 	 * lists it first.  A page that wires topics without it fails loud with {@code E-JS-46}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A hand-written page head that does not use the "views" toolkit pack: the bus goes first.</jc>
 	 * 	<jk>var</jk> <jv>bus</jv> = ViewsMixin.<jsm>viewAssetUrl</jsm>(<jv>req</jv>, ViewsMixin.<jsf>BUS_JS_PATH</jsf>);
@@ -220,7 +220,7 @@ public class ViewsMixin {
 	 * file is not served to browsers.  An app replaces part or all of this shipped set per page with a replacement
 	 * and/or override sprite that uses the same {@code juneau-sym-{stem}} symbol ids.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Page-level sprite layers, read once before the chrome draws:</jc>
 	 * 	<jc>// &lt;script src="/views/juneau-icons.js"</jc>
@@ -238,7 +238,7 @@ public class ViewsMixin {
 	 * Default remains {@link #SYMBOLS_SVG_PATH} (Juneau's own shipped set).  The Material pack loads as the replacement
 	 * layer on top of that shipped sprite, so stems the Material file does not carry fall back to the shipped glyph.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Opt in to the Material Symbols sprite as the replacement layer over the shipped set, before the chrome draws:</jc>
 	 * 	<jc>// &lt;script src="/views/juneau-icons.js" data-juneau-icon-pack="material"&gt;&lt;/script&gt;</jc>
@@ -252,7 +252,7 @@ public class ViewsMixin {
 	 * The URL path at which the opt-in region-populate runtime is served (relative to the host mount).  A page with
 	 * no {@code data-juneau-region} element never needs to load it.
 	 *
-	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <h4 class='section'>Load order is a contract, not a preference:</h4>
 	 * <p>
 	 * This {@code <script>} MUST come after {@code juneau-views.js}.  The region runtime publishes onto the same
 	 * {@code window.JuneauViews} namespace that {@code juneau-views.js} creates, and reuses that runtime's
@@ -264,7 +264,7 @@ public class ViewsMixin {
 	 * The URL path at which the opt-in region-populate paint library is served (relative to the host mount).  A
 	 * page of purely custom regions (every populate hand-writes its own DOM) never needs to load it.
 	 *
-	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <h4 class='section'>Load order is a contract, not a preference:</h4>
 	 * <p>
 	 * This {@code <script>} MUST come after {@code juneau-regions.js} (itself after {@code juneau-views.js}).
 	 * {@code fieldGrid}'s renderer dispatch reads the renderer registry {@code juneau-views.js} publishes and its
@@ -282,7 +282,7 @@ public class ViewsMixin {
 	/**
 	 * The URL path at which the opt-in terminal-view module is served (relative to the host mount).
 	 *
-	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <h4 class='section'>Load order is a contract, not a preference:</h4>
 	 * <p>
 	 * This {@code <script>} MUST come after {@code juneau-regions.js} (itself after {@code juneau-views.js}) and
 	 * before {@code juneau-helpers.js}.  It registers its populator with {@code juneau-regions.js} at load time;
@@ -308,7 +308,7 @@ public class ViewsMixin {
 	 * The URL path at which the opt-in reusable-calendar runtime is served (relative to the host mount).  A page
 	 * with no calendar never loads it.
 	 *
-	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <h4 class='section'>Load order is a contract, not a preference:</h4>
 	 * <p>
 	 * This {@code <script>} MUST come after {@code juneau-views.js}.  The calendar's {@code "+N more"} popover is
 	 * pushed onto the ONE shared layer stack that {@code juneau-views.js} publishes, so that Escape, focus return
@@ -345,7 +345,7 @@ public class ViewsMixin {
 	 * shell loads it once via {@code PageCapture.writeBody}, and a second copy from the toolkit pack would
 	 * double-load the runtime.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A views-only application serves the console shell at the same stable (unprefixed) path ConsoleChromeMixin serves it at.</jc>
 	 * 	<ja>&#64;Rest</ja>(mixins=ViewsMixin.<jk>class</jk>)

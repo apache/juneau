@@ -24,7 +24,7 @@ package org.apache.juneau.commons.reflect;
  * and other attributes (synthetic, deprecated, etc.) that can be present on program elements. Each modifier has both
  * a positive flag (e.g., <c>PUBLIC</c>) and a negated flag (e.g., <c>NOT_PUBLIC</c>) for convenient filtering.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Java modifiers - all standard Java modifiers (public, private, protected, static, final, etc.)
  * 	<li>Negated flags - each modifier has a corresponding NOT_* flag for filtering
@@ -32,7 +32,7 @@ package org.apache.juneau.commons.reflect;
  * 	<li>Type attributes - flags for identifying classes, interfaces, enums, records, annotations
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Filtering classes, methods, fields by modifiers
  * 	<li>Identifying special attributes (synthetic, deprecated, bridge methods)
@@ -40,7 +40,7 @@ package org.apache.juneau.commons.reflect;
  * 	<li>Building frameworks that need to analyze program element characteristics
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Check if a class is public</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -56,20 +56,20 @@ package org.apache.juneau.commons.reflect;
  * 	<jk>boolean</jk> <jv>isDeprecated</jv> = <jv>method</jv>.hasFlag(ElementFlag.DEPRECATED);
  * </p>
  *
- * <h5 class='section'>Modifier Flags:</h5>
+ * <h2 class='section'>Modifier Flags:</h2>
  * <p>
  * Standard Java modifiers: <c>PUBLIC</c>, <c>PRIVATE</c>, <c>PROTECTED</c>, <c>STATIC</c>, <c>FINAL</c>,
  * <c>SYNCHRONIZED</c>, <c>VOLATILE</c>, <c>TRANSIENT</c>, <c>NATIVE</c>, <c>ABSTRACT</c>.
  * Each has a corresponding <c>NOT_*</c> flag.
  *
- * <h5 class='section'>Attribute Flags:</h5>
+ * <h2 class='section'>Attribute Flags:</h2>
  * <p>
  * Non-modifier attributes: <c>ANNOTATION</c>, <c>ANONYMOUS</c>, <c>ARRAY</c>, <c>BRIDGE</c>, <c>CLASS</c>,
  * <c>CONSTRUCTOR</c>, <c>DEFAULT</c>, <c>DEPRECATED</c>, <c>ENUM</c>, <c>ENUM_CONSTANT</c>, <c>HAS_PARAMS</c>,
  * <c>LOCAL</c>, <c>MEMBER</c>, <c>NON_STATIC_MEMBER</c>, <c>PRIMITIVE</c>, <c>RECORD</c>, <c>SEALED</c>,
  * <c>SYNTHETIC</c>, <c>VARARGS</c>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ElementInfo} - Base class that uses these flags
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>

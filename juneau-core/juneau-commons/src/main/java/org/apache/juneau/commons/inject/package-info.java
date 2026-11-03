@@ -16,14 +16,14 @@
  * This package provides a compact, store-centric model intended for framework-owned wiring.
  * It is not a general-purpose CDI/Spring replacement.
  *
- * <h5 class='section'>Supported annotation interop:</h5>
+ * <h2 class='section'>Supported annotation interop:</h2>
  * <ul>
  * 	<li>JSR-330-style injection markers (matched by FQN, no hard dependency): {@code jakarta.inject.*}, {@code javax.inject.*}
  * 	<li>JSR-250 lifecycle markers (matched by FQN, no hard dependency): {@code jakarta.annotation.*}, {@code javax.annotation.*}
  * 	<li>Spring {@code @Autowired} support (matched by FQN)
  * </ul>
  *
- * <h5 class='section'>Non-goals:</h5>
+ * <h2 class='section'>Non-goals:</h2>
  * <ul>
  * 	<li>Classpath component scanning
  * 	<li>AOP, transactions, scheduling, caching abstractions

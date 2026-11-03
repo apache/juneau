@@ -28,7 +28,7 @@ import org.apache.juneau.http.response.*;
  * bean module stays free of any {@code juneau-rest-common} dependency. The package is co-located with the bean's
  * package namespace so the cross-reference is discoverable from {@link Problem}'s javadoc.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>try</jk> {
  * 		...
@@ -38,7 +38,7 @@ import org.apache.juneau.http.response.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Notes:</h5>
+ * <h2 class='section'>Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>{@code type} is intentionally left {@code null}. RFC 7807 &sect;3.1 defines {@code about:blank} as the default
  * 		when the field is absent; the bean serializes a {@code null} {@code type} as an omitted field rather than as
@@ -47,7 +47,7 @@ import org.apache.juneau.http.response.*;
  * 		<c><jk>new</jk> NotFound()</c> case where the message would just echo {@code "Not Found"}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Problem}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanRfc7807">juneau-bean-rfc7807</a>
  * </ul>

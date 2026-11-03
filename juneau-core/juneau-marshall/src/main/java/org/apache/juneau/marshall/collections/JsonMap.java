@@ -52,7 +52,7 @@ import org.apache.juneau.marshall.serializer.*;
  * converting a JSON object string directly into a {@link Map}.  It also contains accessor methods for to avoid common
  * typecasting when accessing elements in a list.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Construct an empty Map</jc>
  * 	JsonMap <jv>map</jv> = JsonMap.<jsm>of</jsm>();
@@ -88,7 +88,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<jk>int</jk> <jv>_int</jv> = <jv>map2</jv>.getInt(<js>"a"</js>);  <jc>// a == 1 </jc>
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  */
@@ -281,7 +281,7 @@ public class JsonMap extends MarshalledMap {
 	/**
 	 * Construct a map initialized with the specified key/value pairs.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
 	 * </p>
@@ -406,7 +406,7 @@ public class JsonMap extends MarshalledMap {
 	/**
 	 * Construct a map initialized with the specified key/value pairs.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	JsonMap <jv>map</jv> = <jk>new</jk> JsonMap(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
 	 * </p>

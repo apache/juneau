@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.xml.*;
  * Can be used to serialize text containing markup without escaping the markup.
  * For example:
  *
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	HtmlText <jv>htmlText</jv> = <jk>new</jk> HtmlText(<js>"&lt;span&gt;&amp;#2753;&lt;/span&gt;"</js>);
  * </p>

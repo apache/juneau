@@ -19,7 +19,7 @@ package org.apache.juneau.petstore.service;
 /**
  * One staged inline edit of a pet field, waiting on the Pending changes page to be applied or discarded.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	PendingChange <jv>c</jv> = <jv>store</jv>.pendingChanges().stage(1, <js>"name"</js>, <js>"Sir Frisky"</js>, <js>"alice"</js>);
  * 	<jc>// c.getState() == State.PENDING; the pet is unchanged until apply()</jc>

@@ -32,7 +32,7 @@ import org.apache.juneau.http.classic.*;
  * In contrast to how 302 was historically implemented, the request method is not allowed to be changed when reissuing the original request.
  * For example, a POST request should be repeated using another POST request.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

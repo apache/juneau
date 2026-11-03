@@ -31,7 +31,7 @@ package org.apache.juneau.commons.bean;
  * The bean-modeling layer never instantiates a registry directly — instances are always supplied
  * by the marshalling layer via marshalling-side hooks.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  * Thread safety depends on implementation.
  */
 public interface BeanRegistryLookup {

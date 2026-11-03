@@ -23,7 +23,7 @@
  * each individual function is a static nested class extending
  * {@link org.apache.juneau.commons.svl.TypedFunction}.
  *
- * <h5 class='section'>Categories:</h5>
+ * <h2 class='section'>Categories:</h2>
  * <ul>
  * 	<li>{@link org.apache.juneau.commons.svl.functions.StringFunctions StringFunctions} — substring, upper,
  * 		lower, trim, replace, contains, format, split, join, pathToken, etc.
@@ -47,7 +47,7 @@
  * 		values, size.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  * </ul>
  */

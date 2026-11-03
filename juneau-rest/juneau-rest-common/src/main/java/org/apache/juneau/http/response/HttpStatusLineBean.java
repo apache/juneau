@@ -36,7 +36,7 @@ import org.apache.juneau.http.*;
  * 	HttpStatusLine <jv>sl3</jv> = HttpStatusLineBean.<jsm>of</jsm>(HttpProtocolVersion.<jsf>HTTP_2_0</jsf>, 200, <js>"OK"</js>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

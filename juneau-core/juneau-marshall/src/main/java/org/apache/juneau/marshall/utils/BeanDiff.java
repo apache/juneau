@@ -28,7 +28,6 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * Utility class for comparing two versions of a POJO.
  *
- * <p>
  *
  * <p class='bjava'>
  * 	<jc>// Two beans to compare.</jc>

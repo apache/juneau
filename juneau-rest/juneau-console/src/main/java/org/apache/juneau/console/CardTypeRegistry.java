@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.collections.*;
  * generic passthrough for unknown types. {@link #standard()} is immutable; a host that adds its own types
  * works on a {@link #copy()}, so one host's types never leak into another's.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   CardTypeRegistry <jv>r</jv> = CardTypeRegistry.<jsm>standard</jsm>().copy()
  *     .add(<jk>new</jk> KpiCardType())          <jc>// E-21 bad name, E-22 reserved, E-20 duplicate</jc>

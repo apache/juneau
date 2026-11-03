@@ -32,7 +32,7 @@ import jakarta.servlet.http.*;
  * 	<li>throw {@link AuthenticationException} &mdash; credentials were present but invalid.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='jc'>{@link AuthFilterChain}
  * 	<li class='jc'>{@link RestAuthenticator}

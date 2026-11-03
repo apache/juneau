@@ -26,18 +26,18 @@ import org.apache.juneau.commons.bean.*;
 /**
  * The declarative source of a row-action modal's input form (the form half of a {@code present=dialog} action).
  *
- * <h5 class='section'>A widget contract driven by a view-module runtime</h5>
+ * <h2 class='section'>A widget contract driven by a view-module runtime</h2>
  * <p>
  * Like {@link ModalDef}, this is a general widget contract that lives in this module while the browser runtime that
  * paints it ships with the rich-view module.  Nothing here depends on that module.
  *
- * <h5 class='section'>Flat or sectioned</h5>
+ * <h2 class='section'>Flat or sectioned</h2>
  * <p>
  * A form declares either a flat {@link #fields} list or an ordered list of {@link Section}s, never both: the flat list
  * <i>is</i> the single-section case.  Sections render as a ribbon-format strip above one visible pane; they are a
  * layout of one dialog, not a stack of dialogs, so they cost nothing against the runtime's modal-depth cap.
  *
- * <h5 class='section'>Typed inputs, not markup</h5>
+ * <h2 class='section'>Typed inputs, not markup</h2>
  * <p>
  * The client paints {@link #fields} as native {@code <input>} / {@code <textarea>} / {@code <select>} /
  * {@code <button>} elements via {@code createElement}.  Labels and option text use {@code textContent}; prefills use
@@ -50,7 +50,7 @@ import org.apache.juneau.commons.bean.*;
  * shipped {@code juneau-views.js} ignores it.
  * </p>
  *
- * <h5 class='section'>Per-widget contract version (fail-loud when a form is present)</h5>
+ * <h2 class='section'>Per-widget contract version (fail-loud when a form is present)</h2>
  * <p>
  * This bean {@link Widget#validate() validates} fail-closed and carries an instance {@link #contractVersion}.  The
  * version defaults to {@link #CONTRACT_VERSION} from the instant the form is constructed &mdash; a raw
@@ -63,7 +63,7 @@ import org.apache.juneau.commons.bean.*;
  * three makes every form-bearing dialog refuse to open.
  * </p>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	FormDef <jv>form</jv> = FormDef.<jsm>create</jsm>()
  * 		.field(FormDef.Input.<jsm>of</jsm>(<js>"resolution"</js>, <js>"Resolution comment"</js>, <js>"textarea"</js>)
@@ -71,7 +71,7 @@ import org.apache.juneau.commons.bean.*;
  * 			.value(<js>""</js>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link ModalDef}
  * 	<li class='jc'>{@link ActionRef}

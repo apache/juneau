@@ -33,7 +33,7 @@
  * populates a {@code DataTablesResults} envelope (mapping {@code total}&rarr;{@code recordsTotal} and
  * {@code matched}&rarr;{@code recordsFiltered}).
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.console.datatables.adapter.DataTablesQuery}
  * 	<li class='jc'>{@link org.apache.juneau.commons.beanquery.BeanQuerySession}

@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * the child's subtree mount and delegates straight to the shared {@link RawTemplateDispatcher}, so the
  * mixin, servlet, and child forms cannot drift.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jic'>{@link RawTemplateDispatcher}
  * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

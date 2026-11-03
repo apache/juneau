@@ -24,7 +24,7 @@ import org.apache.juneau.commons.collections.*;
 /**
  * Represents a simple bean property value and the meta-data associated with it.
  *
- * <h5 class='topic'>Thread safety</h5>
+ * <h2 class='topic'>Thread safety</h2>
  *
  * Instances are immutable and thread-safe.
  */

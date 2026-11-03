@@ -60,7 +60,7 @@ import org.apache.juneau.rest.client.remote.*;
  * {@code -jetty}) registers a higher-priority provider via {@link ServiceLoader} that takes
  * over automatically.  An explicit {@link Builder#transport(HttpTransport)} call always wins.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

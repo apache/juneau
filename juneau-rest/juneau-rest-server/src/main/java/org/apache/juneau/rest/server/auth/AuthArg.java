@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.arg.*;
  * matching the Spring / Servlet convention; the {@link Auth} annotation is for clarity and for
  * disambiguating against another arg resolver that might otherwise claim the parameter.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link Auth}
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link ApiKeyGuard}

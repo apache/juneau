@@ -33,7 +33,7 @@ import org.apache.juneau.commons.collections.*;
  * Operations are the core of the API specification, defining what actions can be taken, what parameters they accept,
  * and what responses they return.
  *
- * <h5 class='section'>OpenAPI Specification:</h5>
+ * <h2 class='section'>OpenAPI Specification:</h2>
  * <p>
  * The Operation Object is composed of the following fields:
  * <ul class='spaced-list'>
@@ -51,7 +51,7 @@ import org.apache.juneau.commons.collections.*;
  * 	<li><c>servers</c> (array of {@link Server}) - An alternative server array to service this operation
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an Operation object for a GET endpoint</jc>
  * 	Operation <jv>operation</jv> = <jk>new</jk> Operation()
@@ -83,7 +83,7 @@ import org.apache.juneau.commons.collections.*;
  * 		);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#operation-object">OpenAPI Specification &gt; Operation Object</a>
  * 	<li class='link'><a class="doclink" href="https://swagger.io/docs/specification/paths-and-operations/">OpenAPI Paths and Operations</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

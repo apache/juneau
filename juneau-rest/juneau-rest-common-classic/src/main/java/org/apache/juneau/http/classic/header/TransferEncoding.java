@@ -27,12 +27,12 @@ import org.apache.juneau.http.*;
  * The form of encoding used to safely transfer the entity to the user.
  * Currently defined methods are: chunked, compress, deflate, gzip, identity.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Transfer-Encoding general-header field indicates what (if any) type of transformation has been applied to the
  * message body in order to safely transfer it between the sender and the recipient.
@@ -58,7 +58,7 @@ import org.apache.juneau.http.*;
  * <p>
  * Many older HTTP/1.0 applications do not understand the Transfer-Encoding header.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

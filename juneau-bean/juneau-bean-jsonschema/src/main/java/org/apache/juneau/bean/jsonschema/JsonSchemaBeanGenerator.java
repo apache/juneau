@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.parser.*;
  * {@link JsonSchemaGenerator} in <c>juneau-marshall</c> produces <c>JsonMap</c> output.  This class wraps that
  * generator and converts the generated map into typed <c>JsonSchema</c> beans in <c>juneau-bean-jsonschema</c>.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Default generation.</jc>
  * 	JsonSchema <jv>s1</jv> = JsonSchemaBeanGenerator.<jsf>DEFAULT</jsf>.generate(MyBean.<jk>class</jk>);

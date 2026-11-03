@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Designed for use with static imports to allow concise serialization code without explicitly
  * referencing marshaller classes.
  *
- * <h5 class='figure'>Examples:</h5>
+ * <h2 class='figure'>Examples:</h2>
  * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.marshall.marshaller.MarshallUtils.*;
  *
@@ -59,7 +59,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	List&lt;MyBean&gt; <jv>list</jv> = json(<jv>jsonString</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */

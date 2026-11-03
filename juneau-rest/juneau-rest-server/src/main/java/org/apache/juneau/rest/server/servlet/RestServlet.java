@@ -52,13 +52,13 @@ import jakarta.servlet.http.*;
  * 	information about your resource in a read-only object.
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		Users will typically extend from {@link BasicRestServlet} or {@link BasicRestServletGroup}
  * 		instead of this class directly.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class</a>
  * </ul>
  *
@@ -214,7 +214,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * 		lowest precedence.
 	 * </ol>
 	 *
-	 * <h5 class='section'>Accepted return shapes:</h5><ul>
+	 * <h4 class='section'>Accepted return shapes:</h4><ul>
 	 * 	<li>{@code null} &mdash; no override; resolution falls through to the {@code @Rest(paths=...)}
 	 * 		annotation default.
 	 * 	<li>{@link String} &mdash; a single path or a comma-delimited list, e.g.
@@ -234,7 +234,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * and {@code $S{prop,default}} resolve through the bootstrap variable catalog), and the post-SVL value is
 	 * comma-split with each piece trimmed and empty pieces dropped.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Returning {@code null} (the default) means &quot;inherit annotation&quot; &mdash; the next rung resolves.
 	 * 	<li class='note'>

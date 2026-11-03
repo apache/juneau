@@ -20,7 +20,7 @@
  * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807 &mdash; Problem Details for HTTP APIs</a>
  * (media type {@code application/problem+json}).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanRfc7807">juneau-bean-rfc7807</a>
  * </ul>
  */

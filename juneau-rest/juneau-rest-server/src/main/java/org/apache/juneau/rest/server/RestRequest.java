@@ -329,7 +329,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Provides the ability to perform fluent-style assertions on the response character encoding.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
 	 * 	<jv>request</jv>
@@ -346,7 +346,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns a fluent assertion for the request content.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the request content contains "foo".</jc>
 	 * 	<jv>request</jv>
@@ -362,7 +362,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns a fluent assertion for the specified form parameter.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
@@ -379,7 +379,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns a fluent assertion for the specified header.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
@@ -396,7 +396,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns a fluent assertion for the specified query parameter.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
@@ -413,7 +413,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns an assertion on the request line returned by {@link #getRequestLine()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates the request content contains "foo".</jc>
 	 * 	<jv>request</jv>
@@ -445,7 +445,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 		the supplied date.
 	 * </ol>
 	 *
-	 * <h5 class='section'>Usage:</h5>
+	 * <h4 class='section'>Usage:</h4>
 	 *
 	 * <p>
 	 * Set the response's <c>ETag</c> and/or <c>Last-Modified</c> <b>first</b>, then call this method.
@@ -462,7 +462,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Returns an {@link Optional} so the caller controls how to handle the failure
 	 * 		(throw inline, hand off to a logger, etc.). Both the returned <c>304</c> and <c>412</c>
 	 * 		failures are {@link BasicHttpException} instances, which are {@link RuntimeException}s,
@@ -475,7 +475,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 		flag is ignored when comparing tag values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link RestResponse#eTag(String) RestResponse.eTag(String)}
 	 * 	<li class='jm'>{@link RestResponse#lastModified(Instant) RestResponse.lastModified(Instant)}
 	 * </ul>
@@ -624,7 +624,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Returns a {@link RequestAttributes} object that encapsulates access to attributes on the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
@@ -637,7 +637,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * 	<li class='note'>
@@ -648,7 +648,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Attr @Attr} annotation can be used to access individual attribute values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
 	 * </ul>
 	 *
@@ -716,7 +716,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * The config file is identified via {@link Rest#config()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
@@ -732,12 +732,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The {@link Config} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigurationFiles">Configuration Files</a>
 	 * </ul>
 	 *
@@ -757,7 +757,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Returns a {@link RequestContent} object that encapsulates access to the HTTP request content.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
@@ -768,14 +768,14 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The {@link RequestContent} object can also be passed as a parameter on the method.
 	 * 	<li class='note'>
 	 * 		The {@link Content @Content} annotation can be used to access the content as well.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
 	 * </ul>
 	 *
@@ -861,7 +861,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP content.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
@@ -876,7 +876,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * 	<li class='note'>
@@ -887,7 +887,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
 	 * </ul>
 	 *
@@ -971,7 +971,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * If there is more than one matching header in the message the last element of <c>getHeaders(String)</c> is returned.
 	 * <br>If there is no matching header in the message, an empty request header object is returned.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
 	 * 	<jv>request</jv>
@@ -993,7 +993,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Returns a {@link RequestHeaderList} object that encapsulates access to HTTP headers on the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
@@ -1012,7 +1012,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * 	<li class='note'>
@@ -1023,7 +1023,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
 	 * </ul>
 	 *
@@ -1094,7 +1094,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the resource bundle for the request locale.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>
 	 * 	<jk>public</jk> String hello(RestRequest <jv>req</jv>, <ja>@Query</ja>(<js>"user"</js>) String <jv>user</jv>) {
@@ -1104,12 +1104,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The {@link Messages} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link RestRequest#getMessage(String,Object...)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/LocalizedMessages">Localized Messages</a>
 	 * </ul>
@@ -1198,7 +1198,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Returns a {@link RequestPathParamList} object that encapsulates access to URL path parameters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/{foo}/{bar}/{baz}/*"</js>)
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
@@ -1215,7 +1215,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * </ul>
@@ -1274,7 +1274,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Similar to {@link HttpServletRequest#getParameterMap()} but only looks for query parameters in the URL and not form posts.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
@@ -1289,12 +1289,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
 	 * </ul>
 	 *
@@ -1326,7 +1326,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	/**
 	 * Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
 	 * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
@@ -1608,7 +1608,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * A shortcut for calling <c>getInfoProvider().getSwagger(request);</c>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>
 	 * 	<jk>public</jk> List&lt;Tag&gt; swaggerTags(RestRequest <jv>req</jv>) {
@@ -1616,12 +1616,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The {@link Swagger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#swaggerProvider()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
 	 * </ul>
@@ -1638,7 +1638,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Sibling of {@link #getSwagger()} for the OpenAPI 3.1 emission path.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#openApiProvider()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">API-Docs Mixin Pack</a>
 	 * </ul>
@@ -1735,7 +1735,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * <p>
 	 * Used to resolve SVL variables in text.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>
 	 * 	<jk>public</jk> String hello(RestRequest <jv>req</jv>) {
@@ -1748,12 +1748,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The {@link VarResolverSession} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * </ul>

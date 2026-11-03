@@ -31,7 +31,7 @@ import java.util.function.*;
  * concurrent environments where you need to atomically update a reference while also having Optional-like
  * operations.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Extends AtomicReference - inherits all atomic operations (get, set, compareAndSet, etc.)
  * 	<li>Optional-like API - provides isPresent(), isEmpty(), map(), orElse(), etc.
@@ -39,7 +39,7 @@ import java.util.function.*;
  * 	<li>Null-safe - handles null values gracefully (null represents "empty")
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an empty reference</jc>
  * 	NullableReference&lt;String&gt; <jv>ref</jv> = NullableReference.<jsm>empty</jsm>();
@@ -59,13 +59,13 @@ import java.util.function.*;
  * 	<jv>ref</jv>.compareAndSet(<js>"value"</js>, <js>"newValue"</js>);
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is thread-safe. All operations inherit thread-safety from {@link AtomicReference}.
  * Multiple threads can safely call methods like {@link #get()}, {@link #set(Object)}, {@link #compareAndSet(Object, Object)},
  * and the Optional-like methods concurrently.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AtomicReference} - Base class providing atomic operations
  * 	<li class='jc'>{@link Optional} - Java's Optional class
  * 	<li class='jc'>{@link org.apache.juneau.commons.function.NullableSupplier} - Similar functionality for suppliers

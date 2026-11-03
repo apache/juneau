@@ -17,7 +17,7 @@
 /**
  * Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/dev"</js>, children={FlavorsRest.<jk>class</jk>})
  * 	<jk>public class</jk> DevRest <jk>extends</jk> PetstoreConsolePage {}

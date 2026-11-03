@@ -31,7 +31,7 @@ import org.apache.juneau.commons.inject.*;
  *
  * Keeps track of number of starts/finishes on tasks and keeps an average run time.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ExecutionStatistics">REST method execution statistics</a>
  * </ul>
  */

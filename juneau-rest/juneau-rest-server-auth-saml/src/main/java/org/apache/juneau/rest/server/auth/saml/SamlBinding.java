@@ -22,20 +22,20 @@ package org.apache.juneau.rest.server.auth.saml;
  * <p>
  * v1 ships the two HTTP-flavored bindings.  Artifact and SOAP back-channel bindings are deferred.
  *
- * <h5 class='topic'>HTTP POST binding</h5>
+ * <h2 class='topic'>HTTP POST binding</h2>
  * <p>
  * The IdP returns an auto-submitting HTML form whose {@code SAMLResponse} field carries the base64-encoded
  * {@code <Response>} document.  The browser POSTs the form to the SP's assertion-consumer URL.  This is the
  * dominant binding for SAML 2.0 web SSO.
  *
- * <h5 class='topic'>HTTP Redirect binding</h5>
+ * <h2 class='topic'>HTTP Redirect binding</h2>
  * <p>
  * The IdP redirects the browser to the SP with the {@code SAMLResponse} carried in a query-string parameter.
  * The value is deflated (RFC 1951) and then base64-encoded so that even mid-size assertions fit inside URL
  * length limits.  This binding is more commonly used for {@code <AuthnRequest>} than for {@code <Response>},
  * but some IdPs offer it for assertions too.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link SamlAuthFilter}
  * 	<li class='link'><a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf">SAML 2.0 Bindings (OASIS)</a>

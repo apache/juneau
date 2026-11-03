@@ -42,7 +42,7 @@ import org.apache.juneau.commons.utils.*;
  * It extends {@link AccessibleInfo} to provide {@link AccessibleObject} functionality for accessing
  * private fields.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li>Field introspection - access field metadata, type, modifiers
  * 	<li>Annotation support - get annotations declared on the field
@@ -51,7 +51,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Thread-safe - instances are immutable and safe for concurrent access
  * </ul>
  *
- * <h5 class='section'>Use Cases:</h5>
+ * <h2 class='section'>Use Cases:</h2>
  * <ul class='spaced-list'>
  * 	<li>Introspecting field metadata for code generation or analysis
  * 	<li>Accessing field values in beans or data objects
@@ -60,7 +60,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li>Building frameworks that need to analyze or manipulate field values
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Get FieldInfo from a class</jc>
  * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -79,7 +79,7 @@ import org.apache.juneau.commons.utils.*;
  * 	Object <jv>value</jv> = <jv>field</jv>.get(<jv>obj</jv>);
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link ClassInfo} - Class introspection
  * 	<li class='jc'>{@link MethodInfo} - Method introspection
  * 	<li class='jc'>{@link ConstructorInfo} - Constructor introspection
@@ -96,7 +96,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	/**
 	 * Creates a FieldInfo wrapper for the specified field.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ClassInfo <jv>ci</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
 	 * 	Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
@@ -118,7 +118,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * <p>
 	 * This convenience method automatically determines the declaring class from the field.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
 	 * 	FieldInfo <jv>fi</jv> = FieldInfo.<jsm>of</jsm>(<jv>f</jv>);
@@ -203,7 +203,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * <p>
 	 * Same as calling {@link Field#getAnnotatedType()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get annotated type: @NotNull String name</jc>
 	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"name"</js>);
@@ -259,7 +259,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	/**
 	 * Returns the full name of this field.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul>
 	 * 	<li><js>"com.foo.MyClass.myField"</js> - Method.
 	 * </ul>
@@ -376,7 +376,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * <p>
 	 * Same as calling {@link Field#isEnumConstant()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Check if field is an enum constant</jc>
 	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyEnum.<jk>class</jk>).getField(<js>"VALUE1"</js>);
@@ -403,7 +403,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * <p>
 	 * Same as calling {@link Field#isSynthetic()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Filter out compiler-generated fields</jc>
 	 * 	FieldInfo <jv>fi</jv> = ...;
@@ -467,7 +467,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * <p>
 	 * Same as calling {@link Field#toGenericString()}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Get generic string for: public static final List&lt;String&gt; VALUES</jc>
 	 * 	FieldInfo <jv>fi</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getField(<js>"VALUES"</js>);
@@ -497,7 +497,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * 	<li>Fully qualified field name (declaring-class.field-name)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Simple field</jc>
 	 * 	FieldInfo <jv>fi</jv> = ...;
@@ -561,7 +561,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 	 * supporting single beans, {@code Optional}, arrays, {@code List}, {@code Set}, and {@code Map}.
 	 * The field is made accessible before setting its value.
 	 *
-	 * <h5 class='section'>Field Resolution:</h5>
+	 * <h4 class='section'>Field Resolution:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>Single beans</b> - Resolved using {@link BeanStore#getBean(Class)} or {@link BeanStore#getBean(Class, String)}.
 	 * 		Throws {@link ExecutableException} if not found.

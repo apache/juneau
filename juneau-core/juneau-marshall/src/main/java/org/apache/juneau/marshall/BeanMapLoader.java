@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.parser.*;
 /**
  * Marshalling-side helper for loading {@link BeanMap} contents from JSON text or a reader/parser pair.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Populate a bean map from a JSON string.</jc>
  * 	BeanMap&lt;Person&gt; <jv>m</jv> = <jv>bc</jv>.newBeanMap(Person.<jk>class</jk>);

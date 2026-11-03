@@ -27,7 +27,7 @@ import java.util.function.*;
  * <p>
  * Disclose original information of a client connecting to a web server through an HTTP proxy.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *
@@ -101,7 +101,7 @@ public class Forwarded extends HttpStringHeader {
 	 * hatch.  Values are emitted as bare tokens when possible and quoted automatically when they are not valid tokens
 	 * (e.g. IPv6 node identifiers such as <c>"[2001:db8::1]:8080"</c>).  Call {@link #next()} to start a new hop.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	String <jv>value</jv> = Forwarded.<jsm>create</jsm>()
 	 * 		.forValue(<js>"192.0.2.60"</js>)
@@ -113,7 +113,7 @@ public class Forwarded extends HttpStringHeader {
 	 * 	<jc>// =&gt; "for=192.0.2.60;proto=http;by=203.0.113.43, for=198.51.100.17"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h2 class='section'>See Also:</h2><ul>
 	 * 	<li class='jc'>{@link Forwarded}
 	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7239'>RFC 7239 - Forwarded HTTP Extension</a>
 	 * </ul>

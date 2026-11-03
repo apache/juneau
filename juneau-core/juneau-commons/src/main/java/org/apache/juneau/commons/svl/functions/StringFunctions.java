@@ -124,7 +124,7 @@ public final class StringFunctions {
 	 * Strips leading and trailing {@code /}, plus a trailing {@code /*} (or {@code *} that
 	 * sits immediately after a {@code /}). Multi-segment paths are preserved.
 	 *
-	 * <h5 class='section'>Edge cases:</h5>
+	 * <h2 class='section'>Edge cases:</h2>
 	 * <ul>
 	 * 	<li>{@code ""} → {@code ""}
 	 * 	<li>{@code "/"} → {@code ""}
@@ -253,7 +253,7 @@ public final class StringFunctions {
 	 * {@code %d}, {@code %.2f}). Variadic args; coerced per Java {@code Formatter} rules at
 	 * invocation.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p>
 	 * {@code #{format("%s-%03d", ${prefix}, ${counter})}}
 	 *
@@ -323,7 +323,7 @@ public final class StringFunctions {
 	 * {@code #{join(separator, parts...)}} — concatenates {@code parts} with {@code separator}
 	 * between each pair.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p>
 	 * {@code #{join("/", ${tenant}, ${id})}} → {@code acme/42}
 	 */

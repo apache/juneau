@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.logging.*;
  * {@link BasicRestDebugFormatter} directly, so mock-specific rendering can be layered in independently of the
  * server's shipped default without affecting non-mock resources.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
  * </ul>
  *

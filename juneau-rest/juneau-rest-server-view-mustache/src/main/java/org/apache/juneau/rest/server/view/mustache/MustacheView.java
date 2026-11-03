@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code com.github.mustachejava.MustacheFactory} to {@code compile(templateName)} and then
  * {@code execute(writer, scope)} directly onto the response writer.
  *
- * <h5 class='figure'>Usage:</h5>
+ * <h2 class='figure'>Usage:</h2>
  *
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/hello/{name}"</js>)
@@ -52,7 +52,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@code MustacheView.of("hello.mustache")} resolves to {@code templates/hello.mustache} on the
  * classpath.
  *
- * <h5 class='section'>Template suffix:</h5>
+ * <h2 class='section'>Template suffix:</h2>
  *
  * <p>
  * Unlike the Thymeleaf bridge (which always appends {@code .html} via the engine resolver's
@@ -63,7 +63,7 @@ import org.apache.juneau.rest.server.view.*;
  * end with it (idempotent), so the caller can write {@code MustacheView.of("hello")} and the
  * bridge resolves it as {@code "hello.mustache"} on the classpath.
  *
- * <h5 class='section'>Immutability:</h5>
+ * <h2 class='section'>Immutability:</h2>
  *
  * <p>
  * Each {@code attr(...)} / {@code attrs(...)} / {@code header(...)} call returns a <b>new</b>
@@ -71,7 +71,7 @@ import org.apache.juneau.rest.server.view.*;
  * keeps {@code MustacheView} a value type safe to share across requests (e.g. as a static
  * singleton built once and returned from many handlers).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MustacheMixin}
  * 	<li class='jc'>{@link MustacheViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MustacheViewSupport">Mustache View Support</a>

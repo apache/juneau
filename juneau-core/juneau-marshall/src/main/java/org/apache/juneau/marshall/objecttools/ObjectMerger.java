@@ -68,7 +68,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, <jv>merge</jv>.getX());
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		Null POJOs are ignored.
  * 	<li class='note'>

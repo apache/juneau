@@ -27,7 +27,7 @@ import org.apache.juneau.commons.utils.*;
  * collection/map/array <c>copyOf(...)</c> overloads <b>and</b> the Swagger bean <c>copyOf(&lt;BeanType&gt;)</c>
  * overloads declared here, resolved via ordinary Java overload resolution.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link CopyUtils}
  * </ul>
  */

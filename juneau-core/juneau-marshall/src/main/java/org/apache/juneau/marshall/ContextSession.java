@@ -33,7 +33,7 @@ import org.apache.juneau.commons.reflect.*;
 /**
  * A one-time-use non-thread-safe object that's meant to be used once and then thrown away.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='warn'>This class is not typically thread safe.
  * </ul>
  *
@@ -127,9 +127,10 @@ public abstract class ContextSession {
 		 * <p>
 		 * If not specified, defaults to {@link Context.Builder#debug()}.
 		 *
-		 * <h5 class='section'>See Also:</h5><ul>
+		 * <h4 class='section'>See Also:</h4><ul>
 		 * 	<li class='ja'>{@link MarshalledConfig#debug()}
 		 * 	<li class='jm'>{@link Context.Builder#debug()}
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.

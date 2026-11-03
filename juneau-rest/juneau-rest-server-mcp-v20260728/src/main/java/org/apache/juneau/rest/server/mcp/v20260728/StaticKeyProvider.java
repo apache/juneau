@@ -34,7 +34,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * randomly, so it can be shared across process instances &mdash; the fix for horizontally-scaled MRTR RESUME
  * (see {@code AeadRequestStateCodec}).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	KeyProvider <jv>kp</jv> = StaticKeyProvider.<jsm>create</jsm>()
  * 		.addKey(<js>"2026-08-a"</js>, <jv>k1</jv>)

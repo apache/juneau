@@ -22,7 +22,7 @@ package org.apache.juneau.commons.reflect;
  * <p>
  * Controls which parts of the fully qualified class name are included in the output.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Given class: java.util.Map.Entry</jc>
  *
@@ -31,7 +31,7 @@ package org.apache.juneau.commons.reflect;
  * 	ClassNameFormat.<jsf>SIMPLE</jsf>    <jc>// "Entry"</jc>
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Common</a>
  * </ul>
  */
@@ -40,7 +40,7 @@ public enum ClassNameFormat {
 	/**
 	 * Full name including package and outer classes.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"java.lang.String"</js>
 	 * 	<li><js>"java.util.Map$Entry"</js> or <js>"java.util.Map.Entry"</js> (depending on separator)
@@ -56,7 +56,7 @@ public enum ClassNameFormat {
 	/**
 	 * Short name including outer classes but not the package.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"String"</js>
 	 * 	<li><js>"Map$Entry"</js> or <js>"Map.Entry"</js> (depending on separator)
@@ -73,7 +73,7 @@ public enum ClassNameFormat {
 	/**
 	 * Simple name without package or outer classes.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><js>"String"</js>
 	 * 	<li><js>"Entry"</js>

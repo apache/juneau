@@ -42,7 +42,7 @@ import org.apache.juneau.rest.server.*;
  * Exposure is governed by {@link DumpsSettings} resolved from the bean store; both dumps are
  * <b>deny-by-default</b> &mdash; see {@link DumpsSettings}.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link DumpsSettings}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface (Actuator-style endpoints)</a>
  * </ul>

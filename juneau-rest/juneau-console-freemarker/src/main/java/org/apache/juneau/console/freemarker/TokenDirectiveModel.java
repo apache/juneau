@@ -55,7 +55,7 @@ import freemarker.template.*;
  * {@code alias=} stays a live reference. {@code dark} is the only accepted value: a light token omits
  * {@code scheme=}.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bftl'>
  * 	&lt;@theme name="light-red"&gt;
  * 		&lt;#-- A leaf: a literal. --&gt;

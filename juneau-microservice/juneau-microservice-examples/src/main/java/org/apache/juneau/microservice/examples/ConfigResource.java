@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * A {@code GET} returns the whole configuration, including any secrets in it, and this resource has no
  * authentication of its own.  Do not expose it on an untrusted network.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AdminBoundary}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  * </ul>

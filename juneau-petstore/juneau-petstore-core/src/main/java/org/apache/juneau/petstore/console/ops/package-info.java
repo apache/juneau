@@ -17,7 +17,7 @@
 /**
  * Petstore console operations pages: background jobs and the audit log.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/ops"</js>, children={JobsRest.<jk>class</jk>})
  * 	<jk>public class</jk> OpsRest <jk>extends</jk> PetstoreConsolePage {}

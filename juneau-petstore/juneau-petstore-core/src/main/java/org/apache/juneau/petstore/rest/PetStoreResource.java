@@ -58,7 +58,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<li>{@code DELETE /users/{username}}    — delete user
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */

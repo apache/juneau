@@ -189,7 +189,7 @@ public class StringUtils {
 	 * If the string is <jk>null</jk>, shorter than or equal to <c>length</c>, or has length 3 or less,
 	 * the original string is returned unchanged.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	abbreviate(<js>"Hello World"</js>, 8);        <jc>// "Hello..."</jc>
 	 * 	abbreviate(<js>"Hello World"</js>, 20);       <jc>// "Hello World" (no change)</jc>
@@ -230,7 +230,7 @@ public class StringUtils {
 	 * If the string is <jk>null</jk>, empty, or contains only whitespace, nothing is appended.
 	 * If <c>sb</c> is <jk>null</jk> and an append is going to occur, a new StringBuilder is automatically created.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
 	 * 	appendIfNotBlank(<jv>sb</jv>, <js>"hello"</js>);  <jc>// Appends "hello"</jc>
@@ -265,7 +265,7 @@ public class StringUtils {
 	 * If the string is <jk>null</jk> or empty, nothing is appended.
 	 * If <c>sb</c> is <jk>null</jk> and an append is going to occur, a new StringBuilder is automatically created.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
 	 * 	appendIfNotEmpty(<jv>sb</jv>, <js>"hello"</js>);  <jc>// Appends "hello"</jc>
@@ -301,7 +301,7 @@ public class StringUtils {
 	 * If the StringBuilder is not empty, the separator is appended first, then the string.
 	 * If <c>sb</c> is <jk>null</jk> and an append is going to occur, a new StringBuilder is automatically created.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
 	 * 	appendWithSeparator(<jv>sb</jv>, <js>"first"</js>, <js>", "</js>);   <jc>// Appends "first"</jc>
@@ -447,7 +447,7 @@ public class StringUtils {
 	 * Creates a new StringBuilder, applies the consumer to it, and returns the resulting string.
 	 * This provides a functional way to build strings without manually managing the StringBuilder.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String <jv>result</jv> = buildString(<jv>sb</jv> -&gt; {
 	 * 		<jv>sb</jv>.append(<js>"Hello"</js>);
@@ -489,7 +489,7 @@ public class StringUtils {
 	 *   <li>Mixed case: "Hello_World-Test" → "helloWorldTest"</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	camelCase(<jk>null</jk>);                    <jc>// null</jc>
 	 * 	camelCase(<js>""</js>);                      <jc>// ""</jc>
@@ -528,7 +528,7 @@ public class StringUtils {
 	/**
 	 * Capitalizes the first character of a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	capitalize(<jk>null</jk>);          <jc>// null</jc>
 	 * 	capitalize(<js>""</js>);            <jc>// ""</jc>
@@ -578,7 +578,7 @@ public class StringUtils {
 	 *   <li>The index is greater than or equal to the string length</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	charAt(<js>"Hello"</js>, 0);     <jc>// 'H'</jc>
 	 * 	charAt(<js>"Hello"</js>, 4);     <jc>// 'o'</jc>
@@ -601,7 +601,7 @@ public class StringUtils {
 	/**
 	 * Cleans a string by removing control characters and normalizing whitespace.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	clean(<js>"hello\u0000\u0001world"</js>);     <jc>// "hello world"</jc>
 	 * 	clean(<js>"hello  \t\n  world"</js>);         <jc>// "hello world"</jc>
@@ -629,7 +629,7 @@ public class StringUtils {
 	 *   <li>Neither <jk>null</jk> → returns the same as {@link String#compareTo(String)}</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	compare(<js>"apple"</js>, <js>"banana"</js>);   <jc>// negative (apple &lt; banana)</jc>
 	 * 	compare(<js>"banana"</js>, <js>"apple"</js>);   <jc>// positive (banana &gt; apple)</jc>
@@ -660,7 +660,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns a negative integer, zero, or a positive integer as the first string is less than, equal to, or greater than the second string, ignoring case.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	compareIgnoreCase(<js>"apple"</js>, <js>"BANANA"</js>);   <jc>// negative (apple &lt; banana)</jc>
 	 * 	compareIgnoreCase(<js>"Hello"</js>, <js>"hello"</js>);    <jc>// 0 (equal)</jc>
@@ -688,7 +688,7 @@ public class StringUtils {
 	 * This method compresses the input string using GZIP compression. The string is first converted to
 	 * UTF-8 bytes, then compressed. Use {@link #decompress(byte[])} to decompress the result.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Compress a string</jc>
 	 * 	byte[] <jv>compressed</jv> = compress(<js>"Hello World"</js>);
@@ -719,7 +719,7 @@ public class StringUtils {
 	 * <p>
 	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	contains(<js>"Hello World"</js>, <js>'o'</js>);   <jc>// true</jc>
 	 * 	contains(<js>"Hello World"</js>, <js>'x'</js>);   <jc>// false</jc>
@@ -744,7 +744,7 @@ public class StringUtils {
 	 * Returns <jk>false</jk> if the string is <jk>null</jk>, otherwise behaves the same as
 	 * {@link String#contains(CharSequence)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	contains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// true</jc>
 	 * 	contains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// false</jc>
@@ -769,7 +769,7 @@ public class StringUtils {
 	 * Returns <jk>false</jk> if the string is <jk>null</jk>, otherwise behaves the same as
 	 * {@link String#contains(CharSequence)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	contains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// true</jc>
 	 * 	contains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// false</jc>
@@ -797,7 +797,7 @@ public class StringUtils {
 	 *   <li>Any of the specified characters are not found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'e'</js>, <js>'l'</js>);   <jc>// true (contains all)</jc>
 	 * 	containsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'x'</js>);                <jc>// false (missing 'x')</jc>
@@ -830,7 +830,7 @@ public class StringUtils {
 	 *   <li>Any of the specified substrings are not found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// true (contains all)</jc>
 	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// false (missing "Foo")</jc>
@@ -863,7 +863,7 @@ public class StringUtils {
 	 *   <li>Any of the specified substrings are not found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// true (contains all)</jc>
 	 * 	containsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// false (missing "Foo")</jc>
@@ -896,7 +896,7 @@ public class StringUtils {
 	 *   <li>None of the specified characters are found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsAny(<js>"Hello World"</js>, <js>'o'</js>, <js>'x'</js>);   <jc>// true (contains 'o')</jc>
 	 * 	containsAny(<js>"Hello World"</js>, <js>'x'</js>, <js>'y'</js>);   <jc>// false</jc>
@@ -930,7 +930,7 @@ public class StringUtils {
 	 *   <li>None of the specified substrings are found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
 	 * 	containsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
@@ -964,7 +964,7 @@ public class StringUtils {
 	 *   <li>None of the specified substrings are found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// true (contains "Hello")</jc>
 	 * 	containsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// false</jc>
@@ -991,7 +991,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string contains a substring, ignoring case.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	containsIgnoreCase(<js>"Hello World"</js>, <js>"world"</js>);     <jc>// true</jc>
 	 * 	containsIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);     <jc>// true</jc>
@@ -1014,7 +1014,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns <c>0</c> if the string is <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	countChars(<js>"Hello World"</js>, <js>'o'</js>);   <jc>// 2</jc>
 	 * 	countChars(<js>"Hello World"</js>, <js>'x'</js>);   <jc>// 0</jc>
@@ -1038,7 +1038,7 @@ public class StringUtils {
 	/**
 	 * Counts the number of occurrences of a substring within a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	countMatches(<js>"hello world world"</js>, <js>"world"</js>);     <jc>// 2</jc>
 	 * 	countMatches(<js>"ababab"</js>, <js>"ab"</js>);                    <jc>// 3</jc>
@@ -1068,7 +1068,7 @@ public class StringUtils {
 	 * Converts non-printable and non-ASCII characters (outside the range <c>0x20-0x7E</c>) to hexadecimal
 	 * sequences in the format <js>"[hex]"</js>. Printable ASCII characters are left unchanged.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	decodeHex(<js>"Hello"</js>);              <jc>// "Hello"</jc>
 	 * 	decodeHex(<js>"Hello\u0000World"</js>);   <jc>// "Hello[0]World"</jc>
@@ -1099,7 +1099,7 @@ public class StringUtils {
 	 * This method is the inverse of {@link #compress(String)}. It takes a byte array that was compressed
 	 * using GZIP compression and decompresses it into a UTF-8 encoded string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Compress a string</jc>
 	 * 	byte[] <jv>compressed</jv> = compress(<js>"Hello World"</js>);
@@ -1148,7 +1148,7 @@ public class StringUtils {
 	 * where they differ. If the strings are equal, returns <c>-1</c>. If one string is a prefix of the other,
 	 * returns the length of the shorter string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	diffPosition(<js>"apple"</js>, <js>"apple"</js>);      <jc>// -1 (equal)</jc>
 	 * 	diffPosition(<js>"apple"</js>, <js>"apricot"</js>);    <jc>// 2 (differs at 'p' vs 'r')</jc>
@@ -1185,7 +1185,7 @@ public class StringUtils {
 	 * where they differ. If the strings are equal (ignoring case), returns <c>-1</c>. If one string is a prefix of the other,
 	 * returns the length of the shorter string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	diffPositionIc(<js>"Apple"</js>, <js>"apple"</js>);      <jc>// -1 (equal ignoring case)</jc>
 	 * 	diffPositionIc(<js>"Apple"</js>, <js>"Apricot"</js>);    <jc>// 2 (differs at 'p' vs 'r')</jc>
@@ -1220,7 +1220,7 @@ public class StringUtils {
 	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
 	 * Uses a {@link LinkedHashSet} to preserve insertion order while removing duplicates.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"foo"</js>, <js>"bar"</js>, <js>"foo"</js>, <js>"baz"</js>, <js>"bar"</js>};
 	 * 	String[] <jv>unique</jv> = distinct(<jv>array</jv>);
@@ -1243,7 +1243,7 @@ public class StringUtils {
 	 * Double Metaphone is an improved version of Metaphone that returns two codes:
 	 * a primary code and an alternate code. This handles more edge cases and variations.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	doubleMetaphone(<js>"Smith"</js>);   <jc>// "SM0"</jc>
 	 * 	doubleMetaphone(<js>"Schmidt"</js>); <jc>// "XMT"</jc>
@@ -1287,7 +1287,7 @@ public class StringUtils {
 	 * <p>
 	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk> or empty.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	endsWith(<js>"Hello"</js>, <js>'o'</js>);     <jc>// true</jc>
 	 * 	endsWith(<js>"Hello"</js>, <js>'H'</js>);     <jc>// false</jc>
@@ -1318,7 +1318,7 @@ public class StringUtils {
 	 * This is a null-safe operation. Returns <jk>false</jk> if the string is <jk>null</jk>.
 	 * Otherwise behaves the same as {@link String#endsWith(String)}.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	endsWith(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// true</jc>
 	 * 	endsWith(<js>"Hello World"</js>, <js>"Hello"</js>);   <jc>// false</jc>
@@ -1347,7 +1347,7 @@ public class StringUtils {
 	 *   <li>The string does not end with any of the specified characters</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	endsWithAny(<js>"Hello"</js>, <js>'o'</js>, <js>'x'</js>);     <jc>// true (ends with 'o')</jc>
 	 * 	endsWithAny(<js>"Hello"</js>, <js>'x'</js>, <js>'y'</js>);     <jc>// false</jc>
@@ -1384,7 +1384,7 @@ public class StringUtils {
 	 *   <li>The string does not end with any of the specified suffixes</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	endsWithAny(<js>"Hello World"</js>, <js>"World"</js>, <js>"Foo"</js>);   <jc>// true (ends with "World")</jc>
 	 * 	endsWithAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);   <jc>// false</jc>
@@ -1411,7 +1411,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string ends with a suffix, ignoring case.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	endsWithIgnoreCase(<js>"Hello World"</js>, <js>"world"</js>);     <jc>// true</jc>
 	 * 	endsWithIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);     <jc>// true</jc>
@@ -1437,7 +1437,7 @@ public class StringUtils {
 	 * <c>H(X) = -Σ P(x) * log2(P(x))</c>
 	 * where P(x) is the probability of character x.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	entropy(<js>"aaaa"</js>);        <jc>// 0.0 (no randomness)</jc>
 	 * 	entropy(<js>"abcd"</js>);        <jc>// 2.0 (high randomness)</jc>
@@ -1483,7 +1483,7 @@ public class StringUtils {
 	 *   <li>Neither <jk>null</jk> → compares string representations ignoring case</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"HELLO"</js>);     <jc>// true</jc>
 	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"World"</js>);     <jc>// false</jc>
@@ -1517,7 +1517,7 @@ public class StringUtils {
 	 *   <li>Neither <jk>null</jk> → compares strings ignoring case</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"hello"</js>);     <jc>// true</jc>
 	 * 	equalsIgnoreCase(<js>"Hello"</js>, <js>"WORLD"</js>);     <jc>// false</jc>
@@ -1573,7 +1573,7 @@ public class StringUtils {
 	 * <p>This method converts special characters to their Java escape sequences and
 	 * converts non-printable ASCII characters to Unicode escape sequences.
 	 *
-	 * <h5 class='section'>Escape mappings:</h5>
+	 * <h4 class='section'>Escape mappings:</h4>
 	 * <ul>
 	 *   <li>{@code "} → {@code \"}</li>
 	 *   <li>{@code \} → {@code \\}</li>
@@ -1585,7 +1585,7 @@ public class StringUtils {
 	 *   <li>Non-printable characters → {@code \\uXXXX}</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <jk>var</jk> <jv>escaped</jv> = <jsm>escapeForJava</jsm>(<js>"Hello\nWorld\"Test\""</js>);
 	 *   <jc>// Returns: "Hello\\nWorld\\\"Test\\\""</jc>
@@ -1633,7 +1633,7 @@ public class StringUtils {
 	 * 	<li>{@code U+2029} (PARAGRAPH SEPARATOR) &rarr; {@code \u005Cu2029}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Injection vectors this defends against (do not "simplify" these away):</h5>
+	 * <h4 class='section'>Injection vectors this defends against (do not "simplify" these away):</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li><b>{@code </script>} break-out.</b>  A {@code <script>} element's content is <i>raw text</i>: the HTML
 	 * 		parser scans it only for an end tag, which it matches ASCII-case-insensitively as {@code </script}
@@ -1652,21 +1652,21 @@ public class StringUtils {
 	 * 		one helper is correct for both the {@code type="application/json"} and the inline-expression form.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Why <c>&amp;</c> and {@code >} are deliberately NOT escaped:</h5>
+	 * <h4 class='section'>Why <c>&amp;</c> and {@code >} are deliberately NOT escaped:</h4>
 	 * <p>
 	 * Raw-text content is not entity-decoded by the browser, so HTML character references buy no safety here and
 	 * {@link #escapeHtml(String)} is the <b>wrong</b> tool for this context &mdash; it would rewrite <c>&amp;</c>
 	 * to <c>&amp;amp;</c> and corrupt the payload the moment {@code JSON.parse} reads it back verbatim.  For the
 	 * same reason {@code >} cannot terminate anything on its own once {@code <} is gone.
 	 *
-	 * <h5 class='section'>Why the substitutions are safe:</h5>
+	 * <h4 class='section'>Why the substitutions are safe:</h4>
 	 * <p>
 	 * In valid JSON, {@code <}, {@code U+2028}, and {@code U+2029} can only occur inside a string literal (JSON's
 	 * inter-token whitespace is limited to space, tab, CR, and LF), and inside a string literal a backslash is
 	 * always itself escaped as {@code \u005C\u005C}.  The inserted backslash therefore always begins a fresh
 	 * escape sequence rather than extending a preceding one.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Serialize, escape, then insert as VERBATIM raw script content (never entity-encoded).</jc>
 	 * 	String <jv>json</jv> = <jsm>escapeForScript</jsm>(Json.<jsm>of</jsm>(<jv>meta</jv>));
@@ -1708,7 +1708,7 @@ public class StringUtils {
 	 *   <li><js>'\''</js> → <js>"&amp;#39;"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	escapeHtml(<js>"&lt;script&gt;alert('xss')&lt;/script&gt;"</js>);
 	 * 	<jc>// Returns: "&amp;lt;script&amp;gt;alert(&amp;#39;xss&amp;#39;)&amp;lt;/script&amp;gt;"</jc>
@@ -1741,7 +1741,7 @@ public class StringUtils {
 	 * <p>
 	 * Escapes the following regex special characters: <js>\.*+?^${}()[]|\\</js>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	escapeRegex(<js>"file.txt"</js>);        <jc>// Returns: "file\\.txt"</jc>
 	 * 	escapeRegex(<js>"price: $10.99"</js>);   <jc>// Returns: "price: \\$10\\.99"</jc>
@@ -1765,7 +1765,7 @@ public class StringUtils {
 	 * Basic SQL escaping for string literals. Escapes single quotes by doubling them.
 	 * This is a basic implementation - for production use, consider using prepared statements.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	escapeSql(<js>"O'Brien"</js>);     <jc>// Returns: "O''Brien"</jc>
 	 * 	escapeSql(<js>"It's a test"</js>); <jc>// Returns: "It''s a test"</jc>
@@ -1793,7 +1793,7 @@ public class StringUtils {
 	 *   <li><js>'\''</js> → <js>"&amp;apos;"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	escapeXml(<js>"&lt;tag attr='value'&gt;text&lt;/tag&gt;"</js>);
 	 * 	<jc>// Returns: "&amp;lt;tag attr=&amp;apos;value&amp;apos;&amp;gt;text&amp;lt;/tag&amp;gt;"</jc>
@@ -1826,7 +1826,7 @@ public class StringUtils {
 	 * <p>
 	 * Finds all occurrences of text between the start and end markers (non-overlapping).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	extractBetween(<js>"&lt;tag&gt;content&lt;/tag&gt;"</js>, <js>"&lt;"</js>, <js>"&gt;"</js>);
 	 * 	<jc>// ["tag", "/tag"]</jc>
@@ -1864,7 +1864,7 @@ public class StringUtils {
 	 * <p>
 	 * Uses a basic email regex pattern to find email addresses.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	extractEmails(<js>"Contact: user@example.com or admin@test.org"</js>);
 	 * 	<jc>// ["user@example.com", "admin@test.org"]</jc>
@@ -1893,7 +1893,7 @@ public class StringUtils {
 	 * <p>
 	 * Finds all sequences of digits (including decimal numbers with dots).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	extractNumbers(<js>"Price: $19.99, Quantity: 5"</js>);
 	 * 	<jc>// ["19.99", "5"]</jc>
@@ -1923,7 +1923,7 @@ public class StringUtils {
 	 * <p>
 	 * Uses a basic URL regex pattern to find URLs (http, https, ftp).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	extractUrls(<js>"Visit https://example.com or http://test.org"</js>);
 	 * 	<jc>// ["https://example.com", "http://test.org"]</jc>
@@ -1952,7 +1952,7 @@ public class StringUtils {
 	 * <p>
 	 * A word is defined as a sequence of letters, digits, and underscores.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	extractWords(<js>"Hello world! This is a test."</js>);
 	 * 	<jc>// ["Hello", "world", "This", "is", "a", "test"]</jc>
@@ -1982,7 +1982,7 @@ public class StringUtils {
 	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
 	 * Returns an empty array if the predicate is <jk>null</jk> or no elements match.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"foo"</js>, <js>""</js>, <js>"bar"</js>, <jk>null</jk>, <js>"baz"</js>};
 	 * 	String[] <jv>filtered</jv> = filter(<jv>array</jv>, StringUtils.<jsf>NOT_EMPTY</jsf>);
@@ -2014,7 +2014,7 @@ public class StringUtils {
 	 *   <li>The string is empty</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	firstChar(<js>"Hello"</js>);     <jc>// 'H'</jc>
 	 * 	firstChar(<js>"World"</js>);     <jc>// 'W'</jc>
@@ -2054,7 +2054,7 @@ public class StringUtils {
 	 * This method iterates through the provided strings and returns the first one that is not <jk>null</jk>
 	 * and not empty (as determined by {@link #isNotEmpty(CharSequence)}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	firstNonEmpty(<jk>null</jk>, <js>""</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// "Hello"</jc>
 	 * 	firstNonEmpty(<js>"Hello"</js>, <js>"World"</js>);                              <jc>// "Hello"</jc>
@@ -2081,7 +2081,7 @@ public class StringUtils {
 	 * This method scans the string from the beginning and returns the first character that is not
 	 * a whitespace character (as determined by {@link Character#isWhitespace(char)}).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	firstNonWhitespaceChar(<js>"Hello"</js>);          <jc>// 'H'</jc>
 	 * 	firstNonWhitespaceChar(<js>"  Hello"</js>);        <jc>// 'H'</jc>
@@ -2115,7 +2115,7 @@ public class StringUtils {
 	 * Only ASCII characters (0-127) that are not in the valid URI character set are encoded.
 	 * If the string contains no invalid characters, the original string is returned.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	fixUrl(<js>"hello world"</js>);              <jc>// "hello+world"</jc>
 	 * 	fixUrl(<js>"file://path/to file.txt"</js>);  <jc>// "file://path/to+file.txt"</jc>
@@ -2168,12 +2168,12 @@ public class StringUtils {
 	 * escaping). For MessageFormat-style (<js>"{0}"</js>) patterns — including externally-authored i18n
 	 * <c>.properties</c> strings — use {@link #mformat(String, Object...)} instead.
 	 *
-	 * <h5 class='section'>Format Support:</h5>
+	 * <h4 class='section'>Format Support:</h4>
 	 * <ul>
 	 *   <li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, <js>"%1$s"</js>, etc.</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Printf Format Specifiers:</h5>
+	 * <h4 class='section'>Printf Format Specifiers:</h4>
 	 * <ul>
 	 *   <li><b>%s</b> - String</li>
 	 *   <li><b>%d</b> - Decimal integer</li>
@@ -2191,12 +2191,12 @@ public class StringUtils {
 	 *   <li><b>%%</b> - Literal percent sign</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Format Specifier Syntax:</h5>
+	 * <h4 class='section'>Format Specifier Syntax:</h4>
 	 * <p>
 	 * Printf format specifiers follow this pattern: <c>%[argument_index$][flags][width][.precision]conversion</c>
 	 * </p>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Printf-style formatting</jc>
 	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
@@ -2219,7 +2219,7 @@ public class StringUtils {
 	 * 	<jc>// Returns: "Alice loves Bob, and Alice also loves Charlie"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Comparison with mformat():</h5>
+	 * <h4 class='section'>Comparison with mformat():</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Printf style (this method)</jc>
 	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
@@ -2228,7 +2228,7 @@ public class StringUtils {
 	 * 	mformat(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
 	 * </p>
 	 *
-	 * <h5 class='section'>Null Handling:</h5>
+	 * <h4 class='section'>Null Handling:</h4>
 	 * <p>
 	 * Null arguments are formatted as the string <js>"null"</js> for string conversions,
 	 * or cause a {@link NullPointerException} for numeric conversions (consistent with {@link String#format(String, Object...)}).
@@ -2261,7 +2261,7 @@ public class StringUtils {
 	 * supplied the pattern is returned verbatim (so <js>"''"</js>-quoting is left untouched for placeholder-free
 	 * strings).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	mformat(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
 	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
@@ -2467,7 +2467,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns a UUID in the format: <c>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</c>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	generateUUID();  <jc>// "550e8400-e29b-41d4-a716-446655440000"</jc>
 	 * </p>
@@ -2540,7 +2540,7 @@ public class StringUtils {
 	 * <p>
 	 * Supports simple duration formats:
 	 *
-	 * <h5 class='section'>Format Examples:</h5>
+	 * <h4 class='section'>Format Examples:</h4>
 	 * <ul>
 	 * 	<li><js>"1000"</js> - 1000 milliseconds (no suffix)
 	 * 	<li><js>"10s"</js> - 10 seconds
@@ -2551,7 +2551,7 @@ public class StringUtils {
 	 * 	<li><js>"1h 30m"</js> - 1 hour 30 minutes (with spaces)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Supported Units:</h5>
+	 * <h4 class='section'>Supported Units:</h4>
 	 * <ul>
 	 * 	<li><b>Milliseconds:</b> <js>"ms"</js>, <js>"millis"</js>, <js>"milliseconds"</js> (or no suffix)
 	 * 	<li><b>Seconds:</b> <js>"s"</js>, <js>"sec"</js>, <js>"second"</js>, <js>"seconds"</js>
@@ -2641,7 +2641,7 @@ public class StringUtils {
 	 *   <li>All other characters are treated literally</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"user_*_temp"</js>);
 	 *   <jk>boolean</jk> <jv>matches</jv> = <jv>pattern</jv>.matcher(<js>"user_alice_temp"</js>).matches();  <jc>// true</jc>
@@ -2666,7 +2666,7 @@ public class StringUtils {
 	 *   <li>All other characters are treated literally</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 *   <jc>// Case-insensitive matching</jc>
 	 *   <jk>var</jk> <jv>pattern</jv> = <jsm>getGlobMatchPattern</jsm>(<js>"USER_*"</js>, Pattern.<jsf>CASE_INSENSITIVE</jsf>);
@@ -2771,7 +2771,7 @@ public class StringUtils {
 	 * <b>Note:</b> Actual memory usage may vary based on JVM implementation, object alignment,
 	 * and whether compressed OOPs are enabled. This is an approximation for informational purposes.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	getStringSize(<jk>null</jk>);        <jc>// Returns: 0</jc>
 	 * 	getStringSize(<js>""</js>);          <jc>// Returns: ~40 bytes</jc>
@@ -2794,7 +2794,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string has text (not null, not empty, and contains at least one non-whitespace character).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	hasText(<jk>null</jk>);       <jc>// false</jc>
 	 * 	hasText(<js>""</js>);         <jc>// false</jc>
@@ -2831,7 +2831,7 @@ public class StringUtils {
 	/**
 	 * Finds the index of the first occurrence of a substring within a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	indexOf(<js>"hello world"</js>, <js>"world"</js>);     <jc>// 6</jc>
 	 * 	indexOf(<js>"hello world"</js>, <js>"xyz"</js>);       <jc>// -1</jc>
@@ -2851,7 +2851,7 @@ public class StringUtils {
 	/**
 	 * Finds the index of the first occurrence of a substring within a string, ignoring case.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	indexOfIgnoreCase(<js>"Hello World"</js>, <js>"world"</js>);     <jc>// 6</jc>
 	 * 	indexOfIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);     <jc>// 6</jc>
@@ -2875,7 +2875,7 @@ public class StringUtils {
 	 * Returns <jk>null</jk> if the input string is <jk>null</jk>.
 	 * This method provides a null-safe wrapper around {@link String#intern()}.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String <jv>s1</jv> = <jk>new</jk> String(<js>"test"</js>);
 	 * 	String <jv>s2</jv> = <jk>new</jk> String(<js>"test"</js>);
@@ -2886,7 +2886,7 @@ public class StringUtils {
 	 * 	assertTrue(<jv>i1</jv> == <jv>i2</jv>);  <jc>// Same interned object</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Performance Note:</h5>
+	 * <h4 class='section'>Performance Note:</h4>
 	 * <p>String interning stores strings in a special pool, which can save memory when the same string
 	 * values are used repeatedly. However, the intern pool has limited size and interning can be slow,
 	 * so use judiciously for strings that are known to be repeated frequently.</p>
@@ -2905,7 +2905,7 @@ public class StringUtils {
 	 * Replaces variables of the form <js>"${name}"</js> with values from the map.
 	 * This is similar to shell variable interpolation syntax.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	var vars = Map.of(<js>"name"</js>, <js>"John"</js>, <js>"city"</js>, <js>"New York"</js>);
 	 * 	interpolate(<js>"Hello ${name}, welcome to ${city}"</js>, vars);
@@ -3020,7 +3020,7 @@ public class StringUtils {
 	 * Returns <jk>true</jk> only if all strings are not null, not empty, and contain non-whitespace characters.
 	 * Returns <jk>false</jk> if the array is null or empty, or if any string is null, empty, or whitespace only.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isAllNotBlank();                                     <jc>// false</jc>
 	 * 	isAllNotBlank(<jk>null</jk>);                        <jc>// false</jc>
@@ -3053,7 +3053,7 @@ public class StringUtils {
 	 * Returns <jk>true</jk> only if all strings are not null and have a length greater than zero.
 	 * Returns <jk>false</jk> if the array is null or empty, or if any string is null or empty.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isAllNotEmpty();                                     <jc>// false</jc>
 	 * 	isAllNotEmpty(<jk>null</jk>);                        <jc>// false</jc>
@@ -3081,7 +3081,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string contains only alphabetic characters (a-z, A-Z).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isAlpha(<jk>null</jk>);         <jc>// false</jc>
 	 * 	isAlpha(<js>""</js>);           <jc>// false</jc>
@@ -3106,7 +3106,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string contains only alphanumeric characters (a-z, A-Z, 0-9).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isAlphaNumeric(<jk>null</jk>);         <jc>// false</jc>
 	 * 	isAlphaNumeric(<js>""</js>);           <jc>// false</jc>
@@ -3135,7 +3135,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns <jk>true</jk> if at least one string is not null, not empty, and contains non-whitespace characters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isAnyNotBlank(<jk>null</jk>, <jk>null</jk>);             <jc>// false</jc>
 	 * 	isAnyNotBlank(<js>""</js>, <js>""</js>);                 <jc>// false</jc>
@@ -3163,7 +3163,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns <jk>true</jk> if at least one string is not null and has a length greater than zero.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isAnyNotEmpty(<jk>null</jk>, <jk>null</jk>);             <jc>// false</jc>
 	 * 	isAnyNotEmpty(<js>""</js>, <js>""</js>);                 <jc>// false</jc>
@@ -3187,7 +3187,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string is blank (null, empty, or whitespace only).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isBlank(<jk>null</jk>);       <jc>// true</jc>
 	 * 	isBlank(<js>""</js>);         <jc>// true</jc>
@@ -3214,7 +3214,7 @@ public class StringUtils {
 	 *   <li>Ensuring the number is between 13-19 digits (standard credit card length)</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isCreditCard(<jk>null</jk>);                    <jc>// false</jc>
 	 * 	isCreditCard(<js>""</js>);                      <jc>// false</jc>
@@ -3368,7 +3368,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string contains only digit characters (0-9).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isDigit(<jk>null</jk>);         <jc>// false</jc>
 	 * 	isDigit(<js>""</js>);           <jc>// false</jc>
@@ -3397,7 +3397,7 @@ public class StringUtils {
 	 * Performs basic email validation using a simple regex pattern.
 	 * This is not a complete RFC 5321/5322 validation, but covers most common email formats.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isEmail(<jk>null</jk>);                    <jc>// false</jc>
 	 * 	isEmail(<js>""</js>);                      <jc>// false</jc>
@@ -3420,7 +3420,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string is null or empty.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isEmpty(<jk>null</jk>);    <jc>// true</jc>
 	 * 	isEmpty(<js>""</js>);      <jc>// true</jc>
@@ -3447,7 +3447,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string is non-null and not empty.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isNotEmpty(<jk>null</jk>);    <jc>// false</jc>
 	 * 	isNotEmpty(<js>""</js>);      <jc>// false</jc>
@@ -3513,7 +3513,7 @@ public class StringUtils {
 	 * Returns <jk>false</jk> if the input string is <jk>null</jk>.
 	 * A string is considered interned if it is the same object reference as its interned version.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String <jv>s1</jv> = <js>"test"</js>;  <jc>// String literal is automatically interned</jc>
 	 * 	assertTrue(isInterned(<jv>s1</jv>));
@@ -3611,7 +3611,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string is not blank (not null, not empty, and not whitespace only).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isNotBlank(<jk>null</jk>);       <jc>// false</jc>
 	 * 	isNotBlank(<js>""</js>);         <jc>// false</jc>
@@ -3679,7 +3679,7 @@ public class StringUtils {
 	 *   <li>With country code: <js>"+1 123-456-7890"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isPhoneNumber(<jk>null</jk>);              <jc>// false</jc>
 	 * 	isPhoneNumber(<js>""</js>);                <jc>// false</jc>
@@ -3709,7 +3709,7 @@ public class StringUtils {
 	 * <p>
 	 * Uses the {@link #similarity(String, String)} method to calculate similarity and compares it to the threshold.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isSimilar(<js>"hello"</js>, <js>"hello"</js>, <js>0.8</js>);        <jc>// true</jc>
 	 * 	isSimilar(<js>"kitten"</js>, <js>"sitting"</js>, <js>0.8</js>);     <jc>// false</jc>
@@ -3787,7 +3787,7 @@ public class StringUtils {
 	 * <p>
 	 * Uses {@link SimpleDateFormat} to parse the date string according to the format pattern.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isValidDateFormat(<js>"2023-12-25"</js>, <js>"yyyy-MM-dd"</js>);  <jc>// true</jc>
 	 * 	isValidDateFormat(<js>"25/12/2023"</js>, <js>"dd/MM/yyyy"</js>);  <jc>// true</jc>
@@ -3825,7 +3825,7 @@ public class StringUtils {
 	 *   <li>Labels cannot be empty</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isValidHostname(<js>"example.com"</js>);        <jc>// true</jc>
 	 * 	isValidHostname(<js>"sub.example.com"</js>);    <jc>// true</jc>
@@ -3879,7 +3879,7 @@ public class StringUtils {
 	 * <p>
 	 * Supports both IPv4 (e.g., "192.168.1.1") and IPv6 (e.g., "2001:0db8:85a3:0000:0000:8a2e:0370:7334") formats.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isValidIpAddress(<js>"192.168.1.1"</js>);                    <jc>// true</jc>
 	 * 	isValidIpAddress(<js>"2001:0db8:85a3::8a2e:0370:7334"</js>); <jc>// true</jc>
@@ -3927,7 +3927,7 @@ public class StringUtils {
 	 *   <li>No separators: <js>"001B44113AB7"</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isValidMacAddress(<js>"00:1B:44:11:3A:B7"</js>);  <jc>// true</jc>
 	 * 	isValidMacAddress(<js>"00-1B-44-11-3A-B7"</js>);  <jc>// true</jc>
@@ -3957,7 +3957,7 @@ public class StringUtils {
 	 * <p>
 	 * Attempts to compile the regex pattern to verify it's syntactically correct.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isValidRegex(<js>"[a-z]+"</js>);        <jc>// true</jc>
 	 * 	isValidRegex(<js>"[a-z"</js>);          <jc>// false (unclosed bracket)</jc>
@@ -3984,7 +3984,7 @@ public class StringUtils {
 	 * <p>
 	 * Uses {@link SimpleDateFormat} to parse the time string according to the format pattern.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isValidTimeFormat(<js>"14:30:00"</js>, <js>"HH:mm:ss"</js>);  <jc>// true</jc>
 	 * 	isValidTimeFormat(<js>"2:30 PM"</js>, <js>"h:mm a"</js>);     <jc>// true</jc>
@@ -4022,7 +4022,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string contains only whitespace characters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	isWhitespace(<jk>null</jk>);         <jc>// false</jc>
 	 * 	isWhitespace(<js>""</js>);           <jc>// true</jc>
@@ -4131,7 +4131,7 @@ public class StringUtils {
 	/**
 	 * Joins an array of integers with a delimiter.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	join(<jk>new int</jk>[]{1, 2, 3}, <js>","</js>);   <jc>// "1,2,3"</jc>
 	 * 	join(<jk>new int</jk>[]{}, <js>","</js>);          <jc>// ""</jc>
@@ -4255,7 +4255,7 @@ public class StringUtils {
 	 *   <li>Snake_case: "hello_world" → "hello-world"</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	kebabCase(<jk>null</jk>);                    <jc>// null</jc>
 	 * 	kebabCase(<js>""</js>);                      <jc>// ""</jc>
@@ -4289,7 +4289,7 @@ public class StringUtils {
 	/**
 	 * Finds the index of the last occurrence of a substring within a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	lastIndexOf(<js>"hello world world"</js>, <js>"world"</js>);     <jc>// 12</jc>
 	 * 	lastIndexOf(<js>"hello world"</js>, <js>"xyz"</js>);             <jc>// -1</jc>
@@ -4309,7 +4309,7 @@ public class StringUtils {
 	/**
 	 * Finds the index of the last occurrence of a substring within a string, ignoring case.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	lastIndexOfIgnoreCase(<js>"Hello World World"</js>, <js>"world"</js>);     <jc>// 12</jc>
 	 * 	lastIndexOfIgnoreCase(<js>"Hello World"</js>, <js>"WORLD"</js>);           <jc>// 6</jc>
@@ -4345,7 +4345,7 @@ public class StringUtils {
 	/**
 	 * Returns the leftmost characters of a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	left(<jk>null</jk>, 3);          <jc>// null</jc>
 	 * 	left(<js>""</js>, 3);            <jc>// ""</jc>
@@ -4373,7 +4373,7 @@ public class StringUtils {
 	 * <p>
 	 * The Levenshtein distance is the minimum number of single-character edits (insertions, deletions, or substitutions) required to change one string into another.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	levenshteinDistance(<js>"kitten"</js>, <js>"sitting"</js>);     <jc>// 3</jc>
 	 * 	levenshteinDistance(<js>"hello"</js>, <js>"hello"</js>);        <jc>// 0</jc>
@@ -4425,7 +4425,7 @@ public class StringUtils {
 	 * <p>
 	 * Counts newline characters. A string ending without a newline is counted as one line.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	lineCount(<js>"line1\nline2\nline3"</js>);      <jc>// 3</jc>
 	 * 	lineCount(<js>"single line"</js>);              <jc>// 1</jc>
@@ -4493,7 +4493,7 @@ public class StringUtils {
 	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
 	 * Returns an array with <jk>null</jk> elements if the function is <jk>null</jk> or returns <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"foo"</js>, <js>"bar"</js>, <js>"baz"</js>};
 	 * 	String[] <jv>uppercased</jv> = map(<jv>array</jv>, String::toUpperCase);
@@ -4518,7 +4518,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string matches a regular expression pattern.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	matches(<js>"12345"</js>, <js>"\\d+"</js>);              <jc>// true</jc>
 	 * 	matches(<js>"abc123"</js>, <js>"^[a-z]+\\d+$"</js>);     <jc>// true</jc>
@@ -4543,7 +4543,7 @@ public class StringUtils {
 	 * Metaphone is a phonetic algorithm that produces codes representing how words sound.
 	 * It's more accurate than Soundex for English words.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	metaphone(<js>"Smith"</js>);   <jc>// "SM0"</jc>
 	 * 	metaphone(<js>"Smythe"</js>);  <jc>// "SM0"</jc>
@@ -4699,7 +4699,7 @@ public class StringUtils {
 	/**
 	 * Returns the middle characters of a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	mid(<jk>null</jk>, 1, 3);          <jc>// null</jc>
 	 * 	mid(<js>""</js>, 1, 3);            <jc>// ""</jc>
@@ -4730,7 +4730,7 @@ public class StringUtils {
 	 * Returns the character that appears most often. If multiple characters have the same
 	 * frequency, returns the first one encountered.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	mostFrequentChar(<js>"hello"</js>);     <jc>// 'l'</jc>
 	 * 	mostFrequentChar(<js>"aabbcc"</js>);    <jc>// 'a' (first encountered)</jc>
@@ -4767,7 +4767,7 @@ public class StringUtils {
 	 * Compares strings in a way that numbers are compared numerically rather than lexicographically.
 	 * For example, "file2.txt" comes before "file10.txt" in natural order.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	naturalCompare(<js>"file2.txt"</js>, <js>"file10.txt"</js>);   <jc>// negative (2 &lt; 10)</jc>
 	 * 	naturalCompare(<js>"file10.txt"</js>, <js>"file2.txt"</js>);   <jc>// positive (10 &gt; 2)</jc>
@@ -4846,7 +4846,7 @@ public class StringUtils {
 	 * <p>
 	 * Uses Unicode normalization form NFD (Canonical Decomposition).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	normalizeUnicode(<js>"café"</js>);
 	 * 	<jc>// Normalized form</jc>
@@ -4864,7 +4864,7 @@ public class StringUtils {
 	/**
 	 * Normalizes all whitespace in a string to single spaces.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	normalizeWhitespace(<js>"hello  \t\n  world"</js>);   <jc>// "hello world"</jc>
 	 * 	normalizeWhitespace(<js>"  hello  world  "</js>);     <jc>// "hello world"</jc>
@@ -4886,7 +4886,7 @@ public class StringUtils {
 	 * This is the inverse of {@link #contains(String, char)}.
 	 * Returns <jk>true</jk> if the string is <jk>null</jk> or does not contain the character.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContains(<js>"Hello World"</js>, <js>'x'</js>);   <jc>// true</jc>
 	 * 	notContains(<js>"Hello World"</js>, <js>'o'</js>);   <jc>// false</jc>
@@ -4910,7 +4910,7 @@ public class StringUtils {
 	 * This is the inverse of {@link #contains(String, CharSequence)}.
 	 * Returns <jk>true</jk> if the string is <jk>null</jk> or does not contain the substring.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// true</jc>
 	 * 	notContains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// false</jc>
@@ -4934,7 +4934,7 @@ public class StringUtils {
 	 * This is the inverse of {@link #contains(String, String)}.
 	 * Returns <jk>true</jk> if the string is <jk>null</jk> or does not contain the substring.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContains(<js>"Hello World"</js>, <js>"Foo"</js>);     <jc>// true</jc>
 	 * 	notContains(<js>"Hello World"</js>, <js>"World"</js>);   <jc>// false</jc>
@@ -4963,7 +4963,7 @@ public class StringUtils {
 	 *   <li>Any of the specified characters are not found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContainsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'x'</js>);                <jc>// true (missing 'x')</jc>
 	 * 	notContainsAll(<js>"Hello World"</js>, <js>'H'</js>, <js>'e'</js>, <js>'l'</js>);   <jc>// false (contains all)</jc>
@@ -4991,7 +4991,7 @@ public class StringUtils {
 	 *   <li>Any of the specified substrings are not found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// true (missing "Foo")</jc>
 	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// false (contains all)</jc>
@@ -5019,7 +5019,7 @@ public class StringUtils {
 	 *   <li>Any of the specified substrings are not found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);    <jc>// true (missing "Foo")</jc>
 	 * 	notContainsAll(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"World"</js>);   <jc>// false (contains all)</jc>
@@ -5047,7 +5047,7 @@ public class StringUtils {
 	 *   <li>None of the specified characters are found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContainsAny(<js>"Hello World"</js>, <js>'x'</js>, <js>'y'</js>);   <jc>// true</jc>
 	 * 	notContainsAny(<js>"Hello World"</js>, <js>'o'</js>, <js>'x'</js>);   <jc>// false (contains 'o')</jc>
@@ -5076,7 +5076,7 @@ public class StringUtils {
 	 *   <li>None of the specified substrings are found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// true</jc>
 	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);  <jc>// false (contains "Hello")</jc>
@@ -5105,7 +5105,7 @@ public class StringUtils {
 	 *   <li>None of the specified substrings are found in the string</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Foo"</js>, <js>"Bar"</js>);    <jc>// true</jc>
 	 * 	notContainsAny(<js>"Hello World"</js>, <js>"Hello"</js>, <js>"Foo"</js>);  <jc>// false (contains "Hello")</jc>
@@ -5137,7 +5137,7 @@ public class StringUtils {
 	/**
 	 * Converts a number to its ordinal form (1st, 2nd, 3rd, 4th, etc.).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	ordinal(<js>1</js>);     <jc>// "1st"</jc>
 	 * 	ordinal(<js>2</js>);     <jc>// "2nd"</jc>
@@ -5171,7 +5171,7 @@ public class StringUtils {
 	/**
 	 * Center pads a string with a specified character.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	padCenter(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
 	 * 	padCenter(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
@@ -5199,7 +5199,7 @@ public class StringUtils {
 	/**
 	 * Left pads a string with a specified character.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	padLeft(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
 	 * 	padLeft(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
@@ -5225,7 +5225,7 @@ public class StringUtils {
 	/**
 	 * Right pads a string with a specified character.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	padRight(<jk>null</jk>, 5, <js>' '</js>);          <jc>// "     "</jc>
 	 * 	padRight(<js>""</js>, 5, <js>' '</js>);            <jc>// "     "</jc>
@@ -5301,7 +5301,7 @@ public class StringUtils {
 	 * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})
 	 * without having to write a {@code try}/{@code catch} block at the call site.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>int</jk> <jv>port</jv> = StringUtils.<jsm>parseInt</jsm>(<jv>value</jv>,
 	 * 		()-&gt; <jsm>illegalArg</jsm>(<js>"Invalid port: {0}"</js>, <jv>value</jv>));
@@ -5391,7 +5391,7 @@ public class StringUtils {
 	 * Lets callers wrap the parse failure with a domain-specific error (typically an {@link IllegalArgumentException})
 	 * without having to write a {@code try}/{@code catch} block at the call site.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>long</jk> <jv>size</jv> = StringUtils.<jsm>parseLong</jsm>(<jv>value</jv>,
 	 * 		()-&gt; <jsm>illegalArg</jsm>(<js>"Invalid size: {0}"</js>, <jv>value</jv>));
@@ -5457,7 +5457,7 @@ public class StringUtils {
 	 * <p>
 	 * Splits the string by the entry delimiter, then splits each entry by the key-value delimiter.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	parseMap(<js>"key1=value1,key2=value2"</js>, <js>'='</js>, <js>','</js>, <jk>false</jk>);
 	 * 	<jc>// {"key1":"value1","key2":"value2"}</jc>
@@ -5608,7 +5608,7 @@ public class StringUtils {
 	 *   <li>Kebab-case: "hello-world" → "HelloWorld"</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	pascalCase(<jk>null</jk>);                    <jc>// null</jc>
 	 * 	pascalCase(<js>""</js>);                      <jc>// ""</jc>
@@ -5644,7 +5644,7 @@ public class StringUtils {
 	 * Simple pluralization that adds "s" to most words, with basic rules for words ending in "s", "x", "z", "ch", "sh" (add "es"),
 	 * and words ending in "y" preceded by a consonant (replace "y" with "ies").
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	pluralize(<js>"cat"</js>, <js>1</js>);        <jc>// "cat"</jc>
 	 * 	pluralize(<js>"cat"</js>, <js>2</js>);        <jc>// "cats"</jc>
@@ -5729,7 +5729,7 @@ public class StringUtils {
 	 * <p>
 	 * Characters are composed of upper-case and lower-case ASCII letters (a-z, A-Z).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	randomAlphabetic(<jk>5</jk>);  <jc>// "aBcDe"</jc>
 	 * </p>
@@ -5757,7 +5757,7 @@ public class StringUtils {
 	 * <p>
 	 * Characters are composed of upper-case and lower-case ASCII letters and digits (a-z, A-Z, 0-9).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	randomAlphanumeric(<jk>8</jk>);  <jc>// "aB3dE5fG"</jc>
 	 * </p>
@@ -5787,7 +5787,7 @@ public class StringUtils {
 	 * <p>
 	 * Characters are composed of printable ASCII characters (32-126).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	randomAscii(<jk>10</jk>);  <jc>// "!@#$%^&amp;*()"</jc>
 	 * </p>
@@ -5811,7 +5811,7 @@ public class StringUtils {
 	 * <p>
 	 * Characters are composed of digits (0-9).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	randomNumeric(<jk>6</jk>);  <jc>// "123456"</jc>
 	 * </p>
@@ -5835,7 +5835,7 @@ public class StringUtils {
 	 * <p>
 	 * Each character in the generated string is randomly selected from the provided character set.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	randomString(<jk>5</jk>, <js>"ABC"</js>);  <jc>// "BACAB"</jc>
 	 * </p>
@@ -5869,7 +5869,7 @@ public class StringUtils {
 	 * </ul>
 	 * Returns a score from 0-100, where higher scores indicate easier reading.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	readabilityScore(<js>"The cat sat."</js>);      <jc>// Higher score (simple)</jc>
 	 * 	readabilityScore(<js>"The sophisticated..."</js>); <jc>// Lower score (complex)</jc>
@@ -5923,7 +5923,7 @@ public class StringUtils {
 	 * nested structures to create human-readable representations. It's extensively used throughout
 	 * the Juneau framework for test assertions and debugging output.</p>
 	 *
-	 * <h5 class='section'>Type-Specific Formatting:</h5>
+	 * <h4 class='section'>Type-Specific Formatting:</h4>
 	 * <ul>
 	 * 	<li><b>null:</b> Returns <js>null</js></li>
 	 * 	<li><b>Optional:</b> Recursively formats the contained value (or <js>null</js> if empty)</li>
@@ -5942,7 +5942,7 @@ public class StringUtils {
 	 * 	<li><b>All other types:</b> Uses {@link Object#toString()}</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Collections</jc>
 	 * 	readable(List.of("a", "b", "c")) <jc>// Returns: "[a,b,c]"</jc>
@@ -5965,12 +5965,12 @@ public class StringUtils {
 	 * 	readable(MyEnum.FOO) <jc>// Returns: "FOO"</jc>
 	 * </p>
 	 *
-	 * <h5 class='section'>Recursive Processing:</h5>
+	 * <h4 class='section'>Recursive Processing:</h4>
 	 * <p>The method recursively processes nested structures, so complex objects containing
 	 * collections, maps, and arrays are fully flattened into readable format. This makes it
 	 * ideal for test assertions where you need to compare complex object structures.</p>
 	 *
-	 * <h5 class='section'>Error Handling:</h5>
+	 * <h4 class='section'>Error Handling:</h4>
 	 * <p>IO operations (reading files, streams) are wrapped in safe() calls, converting
 	 * any exceptions to RuntimeExceptions. Binary data (InputStreams, byte arrays) is
 	 * converted to hexadecimal representation for readability.</p>
@@ -6023,7 +6023,7 @@ public class StringUtils {
 	/**
 	 * Removes all occurrences of a substring from a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	remove(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
 	 * 	remove(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
@@ -6047,7 +6047,7 @@ public class StringUtils {
 	 * <p>
 	 * Normalizes the string to NFD form and removes combining diacritical marks.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeAccents(<js>"café"</js>);     <jc>// "cafe"</jc>
 	 * 	removeAccents(<js>"naïve"</js>);    <jc>// "naive"</jc>
@@ -6081,7 +6081,7 @@ public class StringUtils {
 	/**
 	 * Removes multiple substrings from a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeAll(<js>"hello world test"</js>, <js>"hello"</js>, <js>"test"</js>);  <jc>// " world "</jc>
 	 * 	removeAll(<jk>null</jk>, <js>"x"</js>);                                     <jc>// null</jc>
@@ -6107,7 +6107,7 @@ public class StringUtils {
 	/**
 	 * Removes control characters from a string, replacing them with spaces.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeControlChars(<js>"hello\u0000\u0001world"</js>);   <jc>// "hello  world"</jc>
 	 * 	removeControlChars(<js>"hello\nworld"</js>);             <jc>// "hello\nworld"</jc>
@@ -6133,7 +6133,7 @@ public class StringUtils {
 	/**
 	 * Removes a suffix from a string if present.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeEnd(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
 	 * 	removeEnd(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
@@ -6156,7 +6156,7 @@ public class StringUtils {
 	/**
 	 * Removes non-printable characters from a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeNonPrintable(<js>"hello\u0000world"</js>);   <jc>// "helloworld"</jc>
 	 * </p>
@@ -6173,7 +6173,7 @@ public class StringUtils {
 	/**
 	 * Removes a prefix from a string if present.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeStart(<jk>null</jk>, <js>"x"</js>);              <jc>// null</jc>
 	 * 	removeStart(<js>"hello"</js>, <jk>null</jk>);          <jc>// "hello"</jc>
@@ -6204,7 +6204,7 @@ public class StringUtils {
 	 * <p>
 	 * If the string does not contain any underscores, the original string is returned (no new object created).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	removeUnderscores(<js>"1_000_000"</js>);        <jc>// "1000000"</jc>
 	 * 	removeUnderscores(<js>"1_000.5"</js>);          <jc>// "1000.5"</jc>
@@ -6267,7 +6267,7 @@ public class StringUtils {
 	/**
 	 * Reverses a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	reverse(<jk>null</jk>);          <jc>// null</jc>
 	 * 	reverse(<js>""</js>);            <jc>// ""</jc>
@@ -6286,7 +6286,7 @@ public class StringUtils {
 	/**
 	 * Returns the rightmost characters of a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	right(<jk>null</jk>, 3);          <jc>// null</jc>
 	 * 	right(<js>""</js>, 3);            <jc>// ""</jc>
@@ -6315,7 +6315,7 @@ public class StringUtils {
 	 * Removes HTML/XML tags and escapes special characters to prevent XSS attacks.
 	 * This is a basic sanitization - for production use, consider a more robust library.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	sanitize(<js>"&lt;script&gt;alert('xss')&lt;/script&gt;"</js>);     <jc>// "&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;"</jc>
 	 * 	sanitize(<js>"Hello &lt;b&gt;World&lt;/b&gt;"</js>);                <jc>// "Hello &amp;lt;b&amp;gt;World&amp;lt;/b&amp;gt;"</jc>
@@ -6337,7 +6337,7 @@ public class StringUtils {
 	 * <p>
 	 * Returns a value between 0.0 (completely different) and 1.0 (identical).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	similarity(<js>"hello"</js>, <js>"hello"</js>);           <jc>// 1.0 (100%)</jc>
 	 * 	similarity(<js>"kitten"</js>, <js>"sitting"</js>);        <jc>// ~0.57 (57%)</jc>
@@ -6375,7 +6375,7 @@ public class StringUtils {
 	 *   <li>Kebab-case: "hello-world" → "hello_world"</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	snakeCase(<jk>null</jk>);                    <jc>// null</jc>
 	 * 	snakeCase(<js>""</js>);                      <jc>// ""</jc>
@@ -6415,7 +6415,7 @@ public class StringUtils {
 	 * Returns <jk>null</jk> if the array is <jk>null</jk>.
 	 * This method creates a copy of the array and sorts it, leaving the original array unchanged.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"zebra"</js>, <js>"apple"</js>, <js>"banana"</js>};
 	 * 	String[] <jv>sorted</jv> = sort(<jv>array</jv>);
@@ -6441,7 +6441,7 @@ public class StringUtils {
 	 * This method creates a copy of the array and sorts it using case-insensitive comparison,
 	 * leaving the original array unchanged.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	String[] <jv>array</jv> = {<js>"Zebra"</js>, <js>"apple"</js>, <js>"Banana"</js>};
 	 * 	String[] <jv>sorted</jv> = sortIgnoreCase(<jv>array</jv>);
@@ -6466,7 +6466,7 @@ public class StringUtils {
 	 * Soundex is a phonetic algorithm for indexing names by sound. The code consists of
 	 * a letter followed by three digits. Similar-sounding names produce the same code.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	soundex(<js>"Smith"</js>);   <jc>// "S530"</jc>
 	 * 	soundex(<js>"Smythe"</js>);  <jc>// "S530"</jc>
@@ -7067,7 +7067,7 @@ public class StringUtils {
 	/**
 	 * Checks if a string starts with a prefix, ignoring case.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	startsWithIgnoreCase(<js>"Hello World"</js>, <js>"hello"</js>);     <jc>// true</jc>
 	 * 	startsWithIgnoreCase(<js>"Hello World"</js>, <js>"HELLO"</js>);     <jc>// true</jc>
@@ -7140,7 +7140,7 @@ public class StringUtils {
 	/**
 	 * Returns the substring after the first occurrence of a separator.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	substringAfter(<jk>null</jk>, <js>"."</js>);              <jc>// null</jc>
 	 * 	substringAfter(<js>"hello.world"</js>, <jk>null</jk>);    <jc>// ""</jc>
@@ -7166,7 +7166,7 @@ public class StringUtils {
 	/**
 	 * Returns the substring before the first occurrence of a separator.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	substringBefore(<jk>null</jk>, <js>"."</js>);              <jc>// null</jc>
 	 * 	substringBefore(<js>"hello.world"</js>, <jk>null</jk>);    <jc>// "hello.world"</jc>
@@ -7190,7 +7190,7 @@ public class StringUtils {
 	/**
 	 * Returns the substring between two delimiters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	substringBetween(<jk>null</jk>, <js>"&lt;"</js>, <js>"&gt;"</js>);              <jc>// null</jc>
 	 * 	substringBetween(<js>"&lt;hello&gt;"</js>, <js>"&lt;"</js>, <js>"&gt;"</js>);   <jc>// "hello"</jc>
@@ -7217,7 +7217,7 @@ public class StringUtils {
 	/**
 	 * Swaps the case of all characters in a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	swapCase(<js>"Hello World"</js>);   <jc>// "hELLO wORLD"</jc>
 	 * 	swapCase(<js>"ABC123xyz"</js>);     <jc>// "abc123XYZ"</jc>
@@ -7254,7 +7254,7 @@ public class StringUtils {
 	 *   <li>Kebab-case: "hello-world" → "Hello World"</li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	titleCase(<jk>null</jk>);                    <jc>// null</jc>
 	 * 	titleCase(<js>""</js>);                      <jc>// ""</jc>
@@ -7553,7 +7553,7 @@ public class StringUtils {
 	 * it is replaced with the corresponding character at the same position in <c>toChars</c>.
 	 * Characters not found in <c>fromChars</c> are left unchanged.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	transliterate(<js>"hello"</js>, <js>"aeiou"</js>, <js>"12345"</js>);
 	 * 	<jc>// "h2ll4"</jc>
@@ -7690,7 +7690,7 @@ public class StringUtils {
 	/**
 	 * Uncapitalizes the first character of a string.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	uncapitalize(<jk>null</jk>);          <jc>// null</jc>
 	 * 	uncapitalize(<js>""</js>);            <jc>// ""</jc>
@@ -7752,7 +7752,7 @@ public class StringUtils {
 	 *   <li><js>"&amp;#39;"</js> or <js>"&amp;apos;"</js> → <js>'\''</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	unescapeHtml(<js>"&amp;lt;script&amp;gt;"</js>);     <jc>// Returns: "&lt;script&gt;"</jc>
 	 * </p>
@@ -7780,7 +7780,7 @@ public class StringUtils {
 	 *   <li><js>"&amp;apos;"</js> → <js>'\''</js></li>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	unescapeXml(<js>"&amp;lt;tag&amp;gt;"</js>);     <jc>// Returns: "&lt;tag&gt;"</jc>
 	 * </p>
@@ -7995,7 +7995,7 @@ public class StringUtils {
 	 * A word is defined as a sequence of one or more word characters (letters, digits, underscores)
 	 * separated by non-word characters.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	wordCount(<js>"Hello world"</js>);              <jc>// 2</jc>
 	 * 	wordCount(<js>"The quick brown fox"</js>);      <jc>// 4</jc>
@@ -8034,7 +8034,7 @@ public class StringUtils {
 	 * Wraps text by breaking at word boundaries (spaces). Words longer than the wrap length
 	 * will be broken at the wrap length. Existing newlines are preserved.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	wrap(<js>"hello world test"</js>, 10);  <jc>// "hello world\ntest"</jc>
 	 * 	wrap(<jk>null</jk>, 10);                <jc>// null</jc>
@@ -8056,7 +8056,7 @@ public class StringUtils {
 	 * Wraps text by breaking at word boundaries (spaces). Words longer than the wrap length
 	 * will be broken at the wrap length. Existing newlines are preserved.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	wrap(<js>"hello world test"</js>, 10, <js>"<br>"</js>);  <jc>// "hello world<br>test"</jc>
 	 * 	wrap(<jk>null</jk>, 10, <js>"\n"</js>);                  <jc>// null</jc>

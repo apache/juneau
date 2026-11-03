@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * Applied to Config annotations to identify the class used to push the values into a property store.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AnnotationApplier}
  * </ul>
  */

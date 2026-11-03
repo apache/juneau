@@ -24,11 +24,11 @@ import org.apache.juneau.marshall.json5.*;
 /**
  * Parses JSON5L (JSON5 Lines) input into POJO models.
  *
- * <h5 class='topic'>Media types</h5>
+ * <h2 class='topic'>Media types</h2>
  * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/json5l, application/json5lines, text/json5l</bc>
  *
- * <h5 class='topic'>Description</h5>
+ * <h2 class='topic'>Description</h2>
  * <p>
  * JSON5L combines the relaxed JSON5 dialect with JSONL's newline-delimited framing.  Each non-empty,
  * non-comment line is parsed as a complete JSON5 value (single-quoted strings, unquoted field names,
@@ -41,24 +41,24 @@ import org.apache.juneau.marshall.json5.*;
  * <c>/* &#42;/</c> block comment must open and close on the same physical line — block comments
  * cannot span record boundaries.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse JSON5L into a list of POJOs</jc>
  * 	List&lt;MyBean&gt; <jv>list</jv> = Json5lParser.<jsf>DEFAULT</jsf>.read(<jv>json5lInput</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <h5 class='figure'>Example input:</h5>
+ * <h2 class='figure'>Example input:</h2>
  * <p class='bjson'>
  * // header comment line
  * {name:'Alice',age:30}
  * {name:'Bob',age:25}  // trailing comment
  * </p>
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Json5l">JSON5L Basics</a>
  * </ul>
  */

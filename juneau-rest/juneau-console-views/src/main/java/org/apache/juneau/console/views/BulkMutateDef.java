@@ -26,7 +26,7 @@ import org.apache.juneau.commons.bean.*;
  * The bulk-mutate opt-in for a {@link ViewTable} &mdash; the second, INDEPENDENT half of the row-selection /
  * bulk-mutate separability guarantee.
  *
- * <h5 class='section'>Two required parameters make it structurally, not conventionally, safe</h5>
+ * <h2 class='section'>Two required parameters make it structurally, not conventionally, safe</h2>
  * <p>
  * There is no zero-argument (or permit-less) way to obtain a {@link BulkMutateDef}: {@link #create(WritePermit,
  * SelectionDef)} takes both a {@link WritePermit} <b>and</b> the {@link SelectionDef} it operates against as
@@ -43,7 +43,7 @@ import org.apache.juneau.commons.bean.*;
  * 		references) bulk-mutate &mdash; so enabling selection alone can never surface a bulk-mutate control.
  * </ul>
  *
- * <h5 class='section'>Reuses {@link RowAction} and {@link ActionResult} verbatim &mdash; N per-row writes, per-target results</h5>
+ * <h2 class='section'>Reuses {@link RowAction} and {@link ActionResult} verbatim &mdash; N per-row writes, per-target results</h2>
  * <p>
  * A bulk action is declared as an ordinary {@link RowAction} (the {@link RowAction} wire schema is completely
  * untouched by this type); {@code juneau-views.js} executes a bulk action as N independent, per-row invocations
@@ -55,7 +55,7 @@ import org.apache.juneau.commons.bean.*;
  * {@code data-juneau-inflight} marker clears on ITS OWN terminal outcome (success/failure/refusal/unknown) so a
  * stuck marker on one target can never halt the whole table's polling.
  *
- * <h5 class='section'>Its own, independent contract version</h5>
+ * <h2 class='section'>Its own, independent contract version</h2>
  * <p>
  * Unlike {@link SelectionDef} (which is pure DOM attributes, never wire data), a bulk action LIST is itself wire
  * data the client must parse &mdash; so it travels as its own JSON sidecar (distinct from the {@code VIEW_META}
@@ -66,7 +66,7 @@ import org.apache.juneau.commons.bean.*;
  * {@link WritePermit} carried by this builder is a server-side-only construction guard and is <b>never</b>
  * serialized &mdash; only {@link #contractVersion} and {@link #actions} reach the wire.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>);
  * 	<jc>// Requires a permit the CALLER's own write-gate has already minted, and the selection it targets.</jc>
@@ -75,7 +75,7 @@ import org.apache.juneau.commons.bean.*;
  * 			.endpoint(<js>"servlet:/incidents/ack"</js>).method(RowAction.Method.<jsf>POST</jsf>));
  * </p>
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='jc'>{@link SelectionDef}
  * 	<li class='jc'>{@link WritePermit}

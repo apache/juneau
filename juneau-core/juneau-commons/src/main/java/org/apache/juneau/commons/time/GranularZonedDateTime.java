@@ -39,7 +39,7 @@ import org.apache.juneau.commons.utils.*;
  * rolling by 1 will advance the year, while a precision of {@link ChronoField#HOUR_OF_DAY} means
  * rolling by 1 will advance the hour.
  *
- * <h5 class='section'>ISO8601 Parsing:</h5>
+ * <h2 class='section'>ISO8601 Parsing:</h2>
  * <p>
  * The {@link #of(String)} method can parse various ISO8601 timestamp formats:
  * <ul>
@@ -63,7 +63,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<li><js>"2011-01-15T12:30:45.123456789"</js> → {@link ChronoField#NANO_OF_SECOND} (4-9 digits)
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Parse an ISO8601 timestamp with year precision</jc>
  * 	GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(<js>"2011"</js>);
@@ -82,11 +82,11 @@ import org.apache.juneau.commons.utils.*;
  * 	<jc>// Result: 2011-01-15T14:00:00Z</jc>
  * </p>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is immutable and thread-safe.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jm'>{@link ZonedDateTime}
  * 	<li class='jm'>{@link ChronoField}
  * 	<li class='jm'>{@link DateUtils}
@@ -138,7 +138,7 @@ public class GranularZonedDateTime {
 	 * based on the format. If no timezone is specified in the string, the system default
 	 * timezone is used.
 	 *
-	 * <h5 class='section'>Supported Formats:</h5>
+	 * <h4 class='section'>Supported Formats:</h4>
 	 * <ul>
 	 * 	<li>Date: <js>"2011"</js>, <js>"2011-01"</js>, <js>"2011-01-15"</js>
 	 * 	<li>DateTime: <js>"2011-01-15T12"</js>, <js>"2011-01-15T12:30"</js>, <js>"2011-01-15T12:30:45"</js>
@@ -147,14 +147,14 @@ public class GranularZonedDateTime {
 	 * 	<li>With timezone: <js>"2011-01-15T12:30:45Z"</js>, <js>"2011-01-15T12:30:45+05:30"</js>, <js>"2011-01-15T12:30:45-05:30"</js>
 	 * </ul>
 	 *
-	 * <h5 class='section'>Timezone Handling:</h5>
+	 * <h4 class='section'>Timezone Handling:</h4>
 	 * <ul>
 	 * 	<li>If the string contains a timezone (Z, +HH:mm, -HH:mm, etc.), that timezone is used.
 	 * 	<li>If no timezone is specified, the system default timezone is used.
 	 * 	<li>For time-only formats (starting with "T"), the current date is used with the specified or default timezone.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Precision Detection:</h5>
+	 * <h4 class='section'>Precision Detection:</h4>
 	 * <p>
 	 * The precision is automatically determined from the format:
 	 * <ul>
@@ -192,7 +192,7 @@ public class GranularZonedDateTime {
 	 * 	<li>Time-only formats (starting with "T") - uses the clock's instant to get the current date
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse with a fixed clock for deterministic testing</jc>
 	 * 	<jk>var</jk> <jv>clock</jv> = Clock.<jsm>fixed</jsm>(Instant.<jsm>parse</jsm>(<js>"2000-01-01T12:00:00Z"</js>), ZoneOffset.<jsf>UTC</jsf>);
@@ -234,7 +234,7 @@ public class GranularZonedDateTime {
 	 * 	<li>Time-only formats (starting with "T") - uses the clock's instant to get the current date
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse with default timezone and a fixed clock</jc>
 	 * 	<jk>var</jk> <jv>clock</jv> = Clock.<jsm>fixed</jsm>(Instant.<jsm>parse</jsm>(<js>"2000-01-01T12:00:00Z"</js>), ZoneOffset.<jsf>UTC</jsf>);
@@ -856,7 +856,7 @@ public class GranularZonedDateTime {
 	 * This method creates a new GranularZonedDateTime by adding the specified amount to the
 	 * specified field. The precision of the returned object remains the same as this object.
 	 *
-	 * <h5 class='section'>Supported Fields:</h5>
+	 * <h4 class='section'>Supported Fields:</h4>
 	 * <ul>
 	 * 	<li>{@link ChronoField#YEAR}
 	 * 	<li>{@link ChronoField#MONTH_OF_YEAR}
@@ -868,7 +868,7 @@ public class GranularZonedDateTime {
 	 * 	<li>{@link ChronoField#NANO_OF_SECOND}
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a datetime with hour precision</jc>
 	 * 	GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(<js>"2011-01-15T12Z"</js>);
@@ -896,7 +896,7 @@ public class GranularZonedDateTime {
 	 * This is a convenience method that calls {@link #roll(ChronoField, int)} using this
 	 * object's precision field.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Create a datetime with year precision</jc>
 	 * 	GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(<js>"2011"</js>);

@@ -42,7 +42,7 @@ import java.lang.annotation.*;
  * 	Therefore, this annotation can be used in conjunction with the {@link Content @Cpmtemt} annotation or
  * 	{@code RestRequest.getContent()} method for <c>application/x-www-form-urlencoded POST</c> calls.
  *  </p>
- * <h5 class='figure'>Example:</h5>
+ * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
@@ -64,6 +64,7 @@ import java.lang.annotation.*;
  * 	The following table shows the behavioral differences between <ja>@HasQuery</ja> and <ja>@Query</ja>:
  * </p>
  * <table class='styled w400'>
+ * 	<caption>Query content to return value</caption>
  * 	<tr>
  * 		<th><c>Query content</c></th>
  * 		<th><c><ja>@HasQuery</ja>(<js>"a"</js>)</c></th>
@@ -90,7 +91,6 @@ import java.lang.annotation.*;
  * 		<td><jk>null</jk></td>
  * 	</tr>
  * </table>
- * <p>
  */
 @Documented
 @Target({ PARAMETER })
@@ -111,7 +111,7 @@ public @interface HasQuery {
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>

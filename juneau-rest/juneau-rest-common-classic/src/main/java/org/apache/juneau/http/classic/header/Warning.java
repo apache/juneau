@@ -26,12 +26,12 @@ import org.apache.juneau.http.*;
  * <p>
  * A general warning about possible problems with the entity body.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Warning: 199 Miscellaneous warning
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Warning general-header field is used to carry additional information about the status or transformation of a
  * message which might not be reflected in the message.
@@ -125,7 +125,7 @@ import org.apache.juneau.http.*;
  * (This prevents bad consequences of naive caching of Warning header fields.)
  * If all of the warning-values are deleted for this reason, the Warning header MUST be deleted as well.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

@@ -33,12 +33,12 @@ import org.apache.juneau.marshall.serializer.*;
  * each document is buffered in a {@link ByteArrayOutputStream} child. When complete, the size is calculated
  * and <c>[int32 size][content][0x00]</c> is written to the parent stream.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON</a>
  * </ul>
  */

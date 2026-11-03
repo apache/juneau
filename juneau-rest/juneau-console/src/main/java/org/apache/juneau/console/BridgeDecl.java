@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * Declares one server bridge in the page contract's {@code bridges} list.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   PageSpec.<jsm>create</jsm>()
  *     .topic(TopicDecl.<jsm>of</jsm>(<js>"ops.jobs"</js>).retain(<jk>true</jk>).publisher(TopicDecl.Publisher.<jsf>SERVER</jsf>))

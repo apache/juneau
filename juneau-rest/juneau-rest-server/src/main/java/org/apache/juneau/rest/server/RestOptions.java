@@ -37,7 +37,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * <p>
  * This is a specialized subtype of <c><ja>{@link RestOp @RestOp}(method=<jsf>OPTIONS</jsf>)</c>.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method</a>
 
  * </ul>
@@ -141,13 +141,13 @@ public @interface RestOptions {
 	 * <p>
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
 	 * </ul>
 	 *
@@ -168,7 +168,7 @@ public @interface RestOptions {
 	 * 		<li class='jm'>{@link RestRequest#getAttributes()}.
 	 * 	</ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
@@ -180,14 +180,14 @@ public @interface RestOptions {
 	 * 	}
 	 * </p>
 	 *
-	 * </ul>
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
+	 * <h4 class='section'>See Also:</h4><ul>
+	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -200,14 +200,14 @@ public @interface RestOptions {
 	 * <p>
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestOptions</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -227,13 +227,13 @@ public @interface RestOptions {
 	 * <p>
 	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestOptions</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
 	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
 	 * 	<li class='note'>
@@ -253,14 +253,14 @@ public @interface RestOptions {
 	 * <p>
 	 * Specifies default values for response headers if they're not overwritten during the request.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestOptions</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
@@ -285,7 +285,7 @@ public @interface RestOptions {
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li class='note'>
@@ -307,7 +307,7 @@ public @interface RestOptions {
 	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
 	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
 	 * 	<ja>@Rest</ja>(
@@ -334,7 +334,7 @@ public @interface RestOptions {
 	 * For programmatic equivalents, contribute a {@link EncoderSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders in REST servers</a>
 	 * </ul>
 	 *
@@ -363,7 +363,7 @@ public @interface RestOptions {
 	 * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but
 	 * differing based on some request attribute, such as a specific header value.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jac'>{@link RestMatcher}
 	 * </ul>
 	 *
@@ -382,7 +382,7 @@ public @interface RestOptions {
 	 * <p>
 	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.Path @Path} parameters.
 	 *
-	 * <h5 class='figure'>Examples:</h5>
+	 * <h4 class='figure'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestOptions</ja>(path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	 * </p>
@@ -393,7 +393,7 @@ public @interface RestOptions {
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the path.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.Path}
 	 * </ul>
 	 *
@@ -415,13 +415,13 @@ public @interface RestOptions {
 	 * 	<li><js>""</js> (default) &mdash; inherit from {@link Rest#problemDetails()}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#problemDetails()}
 	 * </ul>
 	 *
@@ -442,7 +442,7 @@ public @interface RestOptions {
 	 * 	<li><js>""</js> (default) &mdash; inherit from {@link Rest#debugMarshalling()}.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link Rest#debugMarshalling()}
 	 * </ul>
 	 *
@@ -462,7 +462,7 @@ public @interface RestOptions {
 	 * 	<li><js>""</js> (default) &mdash; inherits the resource-level setting.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#observability()}
 	 * </ul>
 	 *
@@ -479,7 +479,7 @@ public @interface RestOptions {
 	 * specific operation through a dedicated thread pool. Empty string (default) inherits from
 	 * {@link Rest#asyncCompletionExecutor()}.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#asyncCompletionExecutor()}
 	 * 	<li class='ja'>{@link Rest#asyncCompletionExecutor()}
 	 * </ul>
@@ -492,7 +492,7 @@ public @interface RestOptions {
 	/**
 	 * Per-operation metric name override. Empty string (default) uses the recorder's own name derivation.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#metricName()}
 	 * </ul>
 	 *
@@ -505,7 +505,7 @@ public @interface RestOptions {
 	 * Per-operation metric tags. Format: comma-separated {@code key=value} pairs.
 	 * Empty string (default) means no additional tags.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link RestOp#metricTags()}
 	 * </ul>
 	 *
@@ -520,13 +520,13 @@ public @interface RestOptions {
 	 * <p>
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link RestOpContext#getSupportedAcceptTypes()}
 	 * </ul>
 	 *
@@ -543,7 +543,7 @@ public @interface RestOptions {
 	 * Merged on top of resource-level {@link Rest#allowedSerializerOptions()} values.
 	 * Use {@link #noInherit()} to replace rather than extend the resource-level list.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
@@ -560,7 +560,7 @@ public @interface RestOptions {
 	 * Merged on top of resource-level {@link Rest#allowedParserOptions()} values.
 	 * Use {@link #noInherit()} to replace rather than extend the resource-level list.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties">Safe Properties</a>
 	 * </ul>
 	 *
@@ -577,7 +577,7 @@ public @interface RestOptions {
 	 * Prevents the named property from inheriting values from the enclosing {@code @Rest} annotation.
 	 * The {@code noInherit} attribute itself is never inherited.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions">Session Options via HTTP</a>
 	 * </ul>
 	 *
@@ -591,7 +591,7 @@ public @interface RestOptions {
 	 * <p>
 	 * An expression defining if a user with the specified roles are allowed to access this method.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -604,7 +604,7 @@ public @interface RestOptions {
 	 * 	}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
@@ -646,7 +646,7 @@ public @interface RestOptions {
 	 * <p>
 	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -681,7 +681,7 @@ public @interface RestOptions {
 	 * This value overrides serializers specified at the class level using {@link Rest#serializers()}.
 	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit SerializerSet.Inherit} class can be used to include values from the parent class.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can produce JSON and HTML.</jc>
 	 * 	<ja>@Rest</ja>(
@@ -708,7 +708,7 @@ public @interface RestOptions {
 	 * For programmatic equivalents, contribute a {@link SerializerSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling">Marshalling</a>
 	 * </ul>
 	 *
@@ -730,7 +730,7 @@ public @interface RestOptions {
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li class='note'>
@@ -752,7 +752,7 @@ public @interface RestOptions {
 	 * The format of this annotation is JSON when all individual parts are concatenated.
 	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestOptions</ja>(
 	 * 		path=<js>"/{propertyName}"</js>,
@@ -771,7 +771,7 @@ public @interface RestOptions {
 	 * 	)
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -784,7 +784,7 @@ public @interface RestOptions {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='ja'>{@link OpSwagger}
 	 * 	<li class='jc'>{@link SwaggerProvider}
 	 * </ul>

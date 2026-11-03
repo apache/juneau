@@ -28,12 +28,12 @@ import org.apache.juneau.http.*;
  * <p>
  * Content-Types that are acceptable for the response.
  *
- * <h5 class='figure'>Example</h5>
+ * <h2 class='figure'>Example</h2>
  * <p class='bcode'>
  * 	Accept: text/plain
  * </p>
  *
- * <h5 class='topic'>RFC2616 Specification</h5>
+ * <h2 class='topic'>RFC2616 Specification</h2>
  *
  * The Accept request-header field can be used to specify certain media types which are acceptable for the response.
  * Accept headers can be used to indicate that the request is specifically limited to a small set of desired types, as
@@ -140,7 +140,7 @@ import org.apache.juneau.http.*;
  * However, unless the user agent is a closed system which cannot interact with other rendering agents, this default
  * set ought to be configurable by the user.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>

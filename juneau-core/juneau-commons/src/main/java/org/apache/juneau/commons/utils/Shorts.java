@@ -55,7 +55,7 @@ import org.apache.juneau.commons.reflect.*;
  * factories, {@code req*}, {@code chk*}) but never a delegating alias, because that alias would
  * call back into a domain class.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
  *
@@ -450,7 +450,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -473,7 +473,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -501,7 +501,7 @@ public class Shorts {
 	 * <p>
 	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -528,7 +528,7 @@ public class Shorts {
 	 * <p>
 	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -555,7 +555,7 @@ public class Shorts {
 	 * <p>
 	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -585,7 +585,7 @@ public class Shorts {
 	 * <p>
 	 * Arguments are checked in order, so the exception names the first <jk>null</jk> argument.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -616,7 +616,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified string argument is <jk>null</jk> or blank.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -640,7 +640,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified array argument or any of its elements is <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -666,7 +666,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified collection argument or any of its elements is <jk>null</jk>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -694,7 +694,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified object is not an instance of the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -721,7 +721,7 @@ public class Shorts {
 	/**
 	 * Throws the exception provided by the supplier if the specified object is not an instance of the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -752,7 +752,7 @@ public class Shorts {
 	/**
 	 * Throws an {@link IllegalArgumentException} if any element of the specified class array is not a subtype of the specified type.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -783,7 +783,7 @@ public class Shorts {
 	 * The state-check counterpart of {@link #req(boolean, String, Object...)}: use it for object or
 	 * lifecycle state rather than method arguments.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *
@@ -810,7 +810,7 @@ public class Shorts {
 	 * The state-check counterpart of {@link #reqnn(String, Object)}: use it for object or
 	 * lifecycle state rather than method arguments.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.Shorts.*;
 	 *

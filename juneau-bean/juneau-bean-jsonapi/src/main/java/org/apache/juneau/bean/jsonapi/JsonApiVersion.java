@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.marshaller.*;
  * this object carries the optional protocol {@code version} string (e.g. {@code "1.1"}) and an optional
  * {@code meta} bag.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  *   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonApi">juneau-bean-jsonapi</a>
  * </ul>
  */

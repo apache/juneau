@@ -36,7 +36,7 @@ import org.apache.juneau.console.views.TableSpec.*;
  * {@code flavors-react.ftlh}), Secure ({@code secure.ftlh}), Themes ({@code themes.ftlh}), Charts (builder only),
  * Data sources (builder only), Dialogs (builder only) and Dashboard (builder only).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, DevPageBuilders.<jsm>secure</jsm>());
  * </p>

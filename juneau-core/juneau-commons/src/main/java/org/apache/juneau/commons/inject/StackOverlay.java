@@ -46,7 +46,7 @@ import java.util.function.*;
  * extending {@link BasicBeanStore} so that it does <i>not</i> inherit the entries / defaults / parent storage
  * that a {@link BasicBeanStore} provides.  A {@code StackOverlay} is purely a stack of pluggable bean stores.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create an overlay-capable bean store.</jc>
  * 	StackOverlay <jv>overlay</jv> = <jk>new</jk> StackOverlay();
@@ -60,7 +60,7 @@ import java.util.function.*;
  * 	<jv>overlay</jv>.pop();
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link BasicBeanStore} - The bean store this overlay sits in front of.
  * </ul>
  *

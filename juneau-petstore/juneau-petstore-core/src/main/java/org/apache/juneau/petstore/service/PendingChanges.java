@@ -32,7 +32,7 @@ import org.apache.juneau.petstore.dto.*;
  * Obtained from {@link PetStore#pendingChanges()}.  All methods are synchronized; the store is a demo, not a
  * transactional system.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	PendingChanges <jv>pc</jv> = <jv>store</jv>.pendingChanges();
  * 	PendingChange <jv>c</jv> = <jv>pc</jv>.stage(1, <js>"price"</js>, <js>"42.50"</js>, <js>"alice"</js>);

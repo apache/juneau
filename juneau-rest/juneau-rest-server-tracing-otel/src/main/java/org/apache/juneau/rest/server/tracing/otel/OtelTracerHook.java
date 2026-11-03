@@ -35,7 +35,7 @@ import io.opentelemetry.context.propagation.*;
 /**
  * {@link TracerHook} bridge that opens an OpenTelemetry {@link Span} for every {@code @RestOp} call.
  *
- * <h5 class='topic'>Span shape</h5>
+ * <h2 class='topic'>Span shape</h2>
  *
  * <p>
  * Each request becomes a single span with kind {@link SpanKind#SERVER}, named after the HTTP method
@@ -55,7 +55,7 @@ import io.opentelemetry.context.propagation.*;
  * span status is set to {@link StatusCode#ERROR}, and an {@code exception.type} attribute carries the
  * exception's simple-name.
  *
- * <h5 class='topic'>W3C trace context propagation</h5>
+ * <h2 class='topic'>W3C trace context propagation</h2>
  *
  * <p>
  * Incoming {@code traceparent} / {@code tracestate} request headers are extracted via the configured
@@ -64,7 +64,7 @@ import io.opentelemetry.context.propagation.*;
  * up the active span's context automatically when the consumer's outbound HTTP client honors the OTel
  * {@link Context#current() current context} (the standard OTel client instrumentations do).
  *
- * <h5 class='topic'>Wiring</h5>
+ * <h2 class='topic'>Wiring</h2>
  *
  * <p class='bjava'>
  * 	<ja>@Configuration</ja>
@@ -84,7 +84,7 @@ import io.opentelemetry.context.propagation.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link TracerHook}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">Observability — Micrometer + OpenTelemetry</a>
  * 	<li class='link'><a class="doclink" href="https://opentelemetry.io/docs/specs/semconv/http/http-spans/">OpenTelemetry HTTP semantic conventions</a>

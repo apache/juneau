@@ -34,7 +34,7 @@ import org.apache.juneau.http.*;
  * through the single protected {@link #modify(Runnable)} choke-point, and {@link #unmodifiable()} returns a
  * point-in-time snapshot of type {@link Unmodifiable} whose {@code modify(...)} override throws.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  * </ul>
  */

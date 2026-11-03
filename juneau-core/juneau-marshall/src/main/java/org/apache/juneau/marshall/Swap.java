@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link SwapApply @SwapApply}.
  * </ul>
 
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapAnnotation">@Swap Annotation</a>
 
  * </ul>
@@ -81,7 +81,7 @@ public @interface Swap {
 	 * 		}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
 	 * </ul>
 	 *
@@ -119,7 +119,7 @@ public @interface Swap {
 	 * 	<jk>public class</jk> MyPojo {}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/TemplatedSwaps">Templated Swaps</a>
 	 * </ul>
 	 *

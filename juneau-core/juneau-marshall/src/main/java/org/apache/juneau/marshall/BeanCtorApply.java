@@ -31,13 +31,13 @@ import org.apache.juneau.commons.bean.*;
  * <b>content</b> concern ({@link #value()}), enabling {@link BeanCtor @BeanCtor} to be a pure data annotation
  * without marshall-specific application machinery.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@BeanCtorApply</ja>(on=<js>"Person(String,int)"</js>, value=<ja>@BeanCtor</ja>(properties=<js>"name,age"</js>))
  * 	<jk>public class</jk> MyConfig {}
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
  * </ul>
  */
@@ -58,7 +58,7 @@ public @interface BeanCtorApply {
 	/**
 	 * Dynamically apply this annotation to the specified constructors.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *
@@ -72,7 +72,7 @@ public @interface BeanCtorApply {
 	 * <p>
 	 * Identical to {@link #on()} except allows you to specify class objects instead of strings.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/DynamicallyAppliedAnnotations">Dynamically Applied Annotations</a>
 	 * </ul>
 	 *

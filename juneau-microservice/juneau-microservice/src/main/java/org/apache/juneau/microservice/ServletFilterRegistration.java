@@ -34,7 +34,7 @@ import jakarta.servlet.*;
  * Contribute one as a <c>@Bean</c> from a <c>@Configuration</c> class.  It is the container-neutral counterpart of
  * Spring Boot's {@code FilterRegistrationBean}, so the same registration works on Jetty and Tomcat.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Configuration</ja>
  * 	<jk>public class</jk> MyAppConfig {
@@ -49,7 +49,7 @@ import jakarta.servlet.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Order:</h5>
+ * <h2 class='section'>Order:</h2>
  * <p>
  * Filters run outermost first, by ascending {@link #getOrder() order}.  A bean-supplied {@link AuthFilterChain} is
  * mounted automatically at {@link #AUTH_ORDER}, so a registration at the default {@link #DEFAULT_ORDER} runs after
@@ -66,19 +66,19 @@ import jakarta.servlet.*;
  * on <js>"/console/*"</js> rejects a bad request before authentication ever sees it; the same filter on <js>"/*"</js>
  * at {@link #HIGHEST_PRECEDENCE} would also intercept authentication redirects and challenges.
  *
- * <h5 class='section'>Names:</h5>
+ * <h2 class='section'>Names:</h2>
  * <p>
  * More than one registration in an application needs a distinct bean name, because a <c>@Bean</c> of one type with the
  * same (default empty) name is a duplicate.  Distinct filters must be distinct instances: wrapping one filter instance
  * in two registrations fails at startup, because the container would otherwise initialize and destroy it twice.
  *
- * <h5 class='section'>Replacing the authentication mount:</h5>
+ * <h2 class='section'>Replacing the authentication mount:</h2>
  * <p>
  * An application that needs the {@link AuthFilterChain} on other dispatcher types, or at another position, registers it
  * itself: wrap the injected {@link AuthFilterChain} bean instance in a registration.  That registration then replaces
  * the automatic mount.  It must be the injected instance; a new instance is a second, separate filter.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty</a>
  * </ul>
  *

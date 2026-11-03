@@ -30,7 +30,7 @@ import org.apache.juneau.commons.io.*;
 /**
  * Utility class for finding regular or localized files on the classpath and file system.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Constructor a file source that looks for files in the "files" working directory, then in the
  * 	// package "foo.bar", then in the package "foo.bar.files", then in the package "files".</jc>
@@ -65,7 +65,7 @@ import org.apache.juneau.commons.io.*;
  * The default implementation of this interface is {@link BasicFileFinder}.
  * To instantiate subclasses, create a subclass-specific builder and pass it to the subclass constructor.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
  * 		<jk>public</jk> MyFileFinder(FileFinder.Builder <jv>builder</jv>) {

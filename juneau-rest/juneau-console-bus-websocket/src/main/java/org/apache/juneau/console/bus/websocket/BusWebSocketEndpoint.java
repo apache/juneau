@@ -41,7 +41,7 @@ import jakarta.websocket.*;
  * It reads the per-connection user properties of its {@link EndpointConfig}.  The container gives each handshake its
  * own copy of that map (WebSocket 2.1 and later; Jetty and Tomcat do), which is what keeps concurrent connections apart.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <jc>// Do not construct this class; register the endpoint instead:</jc>
  *   BusWebSockets.<jsm>register</jsm>(<jv>servletContext</jv>, JobsRest.<jsf>BUS</jsf>);

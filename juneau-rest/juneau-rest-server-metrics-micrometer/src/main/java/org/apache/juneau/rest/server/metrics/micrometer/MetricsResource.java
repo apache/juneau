@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * the {@link MetricsMixin mixin} flavor uses, so the two forms cannot drift.  Degrades to HTTP 501 when no
  * scrapeable registry bean is present.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link MetricsMixin}
  * 	<li class='jc'>{@link MetricsManager}
  * </ul>

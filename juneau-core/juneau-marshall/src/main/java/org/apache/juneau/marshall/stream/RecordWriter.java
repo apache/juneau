@@ -26,7 +26,7 @@ import java.io.*;
  * Single-rooted formats accept exactly one call (subsequent calls throw); multi-rooted formats
  * (jsonl, csv, sse) emit one line / row / event per call.
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
  * 	<jk>try</jk> (RecordWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.writeRecords(<jv>sb</jv>)) {
@@ -34,7 +34,7 @@ import java.io.*;
  * 	}
  * </p>
  *
- * <h5 class='section'>Streaming quality:</h5>
+ * <h2 class='section'>Streaming quality:</h2>
  * <ul>
  * 	<li>{@link #isStreaming()} == <jk>true</jk> &mdash; O(1)-memory streaming.  FULL-token formats
  * 		return a cursor that is also a {@link TokenWriter} (the structural surface).
@@ -43,13 +43,13 @@ import java.io.*;
  * 		serializer and the structural surface is not available.
  * </ul>
  *
- * <h5 class='section'>Resource ownership:</h5>
+ * <h2 class='section'>Resource ownership:</h2>
  * <p>
  * Every {@link RecordReader} / {@code RecordWriter} produced by a factory method
  * <b>closes what it was handed</b> &mdash; if the underlying input/output is {@link Closeable},
  * {@link #close()} closes it.  This contract is symmetric across all factory methods.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li>{@link RecordReader} &mdash; the pull-side counterpart.
  * 	<li>{@link TokenWriter} &mdash; structural extension for FULL-capability formats.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

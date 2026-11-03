@@ -24,7 +24,7 @@
  * POST and the capability-gated SSE stream on a REST resource.  The WebSocket transport is the separate
  * {@code juneau-console-bus-websocket} module.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  *   <ja>@Rest</ja>(path=<js>"/ops/jobs"</js>)
  *   <jk>public class</jk> JobsRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BusEventsMixin {

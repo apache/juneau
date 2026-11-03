@@ -28,7 +28,7 @@ import java.util.*;
  * Carries the resolved {@link Principal} and the set of roles associated with the authenticated subject.
  * The role set may be empty when no role claims are available (the principal is still valid).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='jc'>{@link AuthFilter}
  * 	<li class='jc'>{@link AuthFilterChain}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework — Servlet-Layer Authentication</a>

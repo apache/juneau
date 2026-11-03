@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.auth.oauth.OAuthFilter;
  * {@code getMcpOptions()} override, then never mutate it afterward (a request-time reader sees it with no
  * synchronization).
  *
- * <h5 class='section'>Token-validation mode:</h5>
+ * <h2 class='section'>Token-validation mode:</h2>
  * <p>
  * The validation mode (RFC 7662 introspection vs JWKS/issuer JWT verification) is selected by which
  * {@link TokenValidator} is supplied to {@link #setTokenValidator(TokenValidator)}:

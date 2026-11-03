@@ -42,7 +42,7 @@ import java.util.*;
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  * <br>Also used to define OpenAPI schema information for POJOs serialized through <c>OpenApiSerializer</c> and parsed through <c>OpenApiParser</c>.
  *
- * <h5 class='section'>Examples:</h5>
+ * <h2 class='section'>Examples:</h2>
  * <p class='bjava'>
  * 	<jc>// A response object thats a hex-encoded string</jc>
  * 	<ja>@Response</ja>(
@@ -88,7 +88,7 @@ import java.util.*;
  * 	)
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>
  * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger 2.0 Schema Object</a>
@@ -133,7 +133,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A constant string value</jc>
 	 * 	<ja>@Schema</ja>(const_=<js>"fixed-value"</js>)
@@ -145,7 +145,7 @@ public @interface Schema {
 	 * 	<jk>public int</jk> getMagicNumber() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -155,7 +155,7 @@ public @interface Schema {
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.1.3">JSON Schema Validation § 6.1.3</a>
 	 * </ul>
 	 *
@@ -178,7 +178,7 @@ public @interface Schema {
 	 * The format of this value is a string.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(
 	 * 		<ja>@Header</ja>(<js>"X-PetId"</js>)
@@ -195,7 +195,7 @@ public @interface Schema {
 	 * 	) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing.
@@ -220,13 +220,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property that provides conditional schema validation.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.3">JSON Schema Core § 10.2.2.3</a>
 	 * </ul>
 	 *
@@ -249,7 +249,7 @@ public @interface Schema {
 	 * The format is either individual values or a comma-delimited list.
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Comma-delimited list</jc>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
@@ -259,7 +259,7 @@ public @interface Schema {
 	 * 	) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -284,13 +284,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property that provides conditional schema validation.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.3">JSON Schema Core § 10.2.2.3</a>
 	 * </ul>
 	 *
@@ -309,13 +309,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property that provides conditional schema validation.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.3">JSON Schema Core § 10.2.2.3</a>
 	 * </ul>
 	 *
@@ -335,7 +335,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Schema</ja>(
 	 * 		type=<js>"string"</js>,
@@ -344,7 +344,7 @@ public @interface Schema {
 	 * 	<jk>public</jk> String getLegacyField() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.3">JSON Schema Core § 8.3</a>
 	 * </ul>
 	 *
@@ -362,13 +362,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property that replaces the older "definitions" keyword.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.2.4">JSON Schema Core § 8.2.4</a>
 	 * </ul>
 	 *
@@ -385,7 +385,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Schema</ja>(
 	 * 		$id=<js>"https://example.com/schemas/person.json"</js>,
@@ -394,7 +394,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Person {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.8.2.1">JSON Schema Core § 8.2.1</a>
 	 * </ul>
 	 *
@@ -408,7 +408,7 @@ public @interface Schema {
 	 * <p>
 	 * 	A JSON reference to the schema definition.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * </ul>
@@ -427,7 +427,7 @@ public @interface Schema {
 	/**
 	 * <mk>allOf</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -443,7 +443,7 @@ public @interface Schema {
 	 * <p>
 	 * Sets the ability to pass empty-valued heaver values.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -484,7 +484,7 @@ public @interface Schema {
 	 * <p>
 	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing.
@@ -520,7 +520,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A base64-encoded binary string</jc>
 	 * 	<ja>@Schema</ja>(
@@ -531,13 +531,13 @@ public @interface Schema {
 	 * 	<jk>public</jk> String getImageData() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.8.3">JSON Schema Validation § 8.3</a>
 	 * </ul>
 	 *
@@ -554,7 +554,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A string containing JSON data</jc>
 	 * 	<ja>@Schema</ja>(
@@ -564,13 +564,13 @@ public @interface Schema {
 	 * 	<jk>public</jk> String getJsonData() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.8.3">JSON Schema Validation § 8.3</a>
 	 * </ul>
 	 *
@@ -595,13 +595,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.5.4">JSON Schema Validation § 6.5.4</a>
 	 * </ul>
 	 *
@@ -619,13 +619,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.2.2.4">JSON Schema Core § 10.2.2.4</a>
 	 * </ul>
 	 *
@@ -644,20 +644,20 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Schema</ja>(deprecated=<jk>true</jk>)
 	 * 	<ja>@Deprecated</ja>
 	 * 	<jk>public</jk> String getOldMethod() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.9.3">JSON Schema Validation § 9.3</a>
 	 * </ul>
 	 *
@@ -671,7 +671,7 @@ public @interface Schema {
 	 * <p>
 	 * A brief description of the body. This could contain examples of use.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
@@ -688,7 +688,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -710,7 +710,7 @@ public @interface Schema {
 	/**
 	 * <mk>discriminator</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -754,7 +754,7 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Multiple examples of valid values</jc>
 	 * 	<ja>@Schema</ja>(
@@ -764,13 +764,13 @@ public @interface Schema {
 	 * 	<jk>public</jk> String getColor() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.9.5">JSON Schema Validation § 9.5</a>
 	 * </ul>
 	 *
@@ -789,7 +789,7 @@ public @interface Schema {
 	 * This is a JSON Schema Draft 2020-12 property. The legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
 	 * boolean form was removed in 10.0.0; use this numeric form instead.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A number that must be strictly less than 100</jc>
 	 * 	<ja>@Schema</ja>(
@@ -799,7 +799,7 @@ public @interface Schema {
 	 * 	<jk>public</jk> Double getPercentage() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -809,7 +809,7 @@ public @interface Schema {
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.3">JSON Schema Validation § 6.2.3</a>
 	 * </ul>
 	 *
@@ -828,7 +828,7 @@ public @interface Schema {
 	 * This is a JSON Schema Draft 2020-12 property. The legacy Swagger 2.0/OpenAPI 3.0/JSON Schema Draft 04
 	 * boolean form was removed in 10.0.0; use this numeric form instead.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// A number that must be strictly greater than 0</jc>
 	 * 	<ja>@Schema</ja>(
@@ -838,7 +838,7 @@ public @interface Schema {
 	 * 	<jk>public</jk> Double getPositiveNumber() {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -848,7 +848,7 @@ public @interface Schema {
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-validation.html#rfc.section.6.2.5">JSON Schema Validation § 6.2.5</a>
 	 * </ul>
 	 *
@@ -859,7 +859,7 @@ public @interface Schema {
 	/**
 	 * <mk>externalDocs</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -885,7 +885,7 @@ public @interface Schema {
 	 * <p>
 	 * Static strings are defined in <c>FormatType</c>.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPut</ja>
@@ -894,7 +894,7 @@ public @interface Schema {
 	 * 	) {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing.
@@ -940,12 +940,12 @@ public @interface Schema {
 	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>
 	 * </ul>
 	 *
@@ -970,7 +970,7 @@ public @interface Schema {
 	 * Required if <c>type</c> is <js>"array"</js>.
 	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing and parsing validation.
@@ -1013,7 +1013,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1041,7 +1041,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1078,7 +1078,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1102,7 +1102,7 @@ public @interface Schema {
 	/**
 	 * <mk>maxProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -1141,7 +1141,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1169,7 +1169,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1206,7 +1206,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1230,7 +1230,7 @@ public @interface Schema {
 	/**
 	 * <mk>minProperties</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -1262,7 +1262,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"integer"</js>, <js>"number"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1294,7 +1294,7 @@ public @interface Schema {
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPut</ja>
 	 * 	<jk>public void</jk> doPut(<ja>@Content</ja> <ja>@Schema</ja>(pattern=<js>"/\\w+\\.\\d+/"</js>) String <jv>input</jv>) {...}
@@ -1303,7 +1303,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"string"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1327,13 +1327,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property that provides tuple validation for arrays.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.10.3.1.1">JSON Schema Core § 10.3.1.1</a>
 	 * </ul>
 	 *
@@ -1351,7 +1351,7 @@ public @interface Schema {
 	/**
 	 * <mk>readOnly</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -1372,7 +1372,7 @@ public @interface Schema {
 	 * <br>On the client-side, this gets converted to a <c>RestCallException</c> which is thrown before the connection is made.
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
@@ -1389,7 +1389,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1423,7 +1423,7 @@ public @interface Schema {
 	 * <p>
 	 * Note that <jk>null</jk> values are already ignored.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Client-side schema-based serializing.
@@ -1460,7 +1460,7 @@ public @interface Schema {
 	 * at the Schema Object level. It is modeled after OpenAPI's {@code summary} keyword on Operation,
 	 * Info, and Tag objects.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@Schema</ja>(
 	 * 		summary=<js>"A pet available for adoption"</js>,
@@ -1473,7 +1473,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 	<li class='note'>
@@ -1495,7 +1495,7 @@ public @interface Schema {
 	/**
 	 * <mk>title</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
@@ -1510,7 +1510,7 @@ public @interface Schema {
 	 * <p>
 	 * The type of the parameter.
 	 *
-	 * <h5 class='section'>Examples:</h5>
+	 * <h4 class='section'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
@@ -1527,7 +1527,7 @@ public @interface Schema {
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing.
@@ -1567,11 +1567,11 @@ public @interface Schema {
 	 * 		<br>This type is currently not supported.
 	 * </ul>
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>Static strings are defined in <c>ParameterType</c>.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://swagger.io/specification#dataTypes">Swagger Data Types</a>
 	 * </ul>
 	 *
@@ -1596,13 +1596,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.11.3">JSON Schema Core § 11.3</a>
 	 * </ul>
 	 *
@@ -1620,13 +1620,13 @@ public @interface Schema {
 	 * <p>
 	 * This is a JSON Schema Draft 2020-12 property.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='extlink'><a class="doclink" href="https://json-schema.org/draft/2020-12/json-schema-core.html#rfc.section.11.3">JSON Schema Core § 11.3</a>
 	 * </ul>
 	 *
@@ -1652,7 +1652,7 @@ public @interface Schema {
 	 * <p>
 	 * Only allowed for the following types: <js>"array"</js>.
 	 *
-	 * <h5 class='section'>Used for:</h5>
+	 * <h4 class='section'>Used for:</h4>
 	 * <ul class='spaced-list'>
 	 * 	<li>
 	 * 		Server-side schema-based parsing validation.
@@ -1669,7 +1669,7 @@ public @interface Schema {
 	/**
 	 * <mk>xml</mk> field of the <a class="doclink" href="https://swagger.io/specification/v2#schemaObject">Swagger Schema Object</a>.
 	 *
-	 * <h5 class='section'>Notes:</h5><ul>
+	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		The format is a <a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a> object.
 	 * 		<br>Multiple lines are concatenated with newlines.

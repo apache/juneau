@@ -27,12 +27,12 @@ import org.apache.juneau.commons.utils.*;
  * This class extends {@link Holder}&lt;{@link Integer}&gt; and adds a convenience method for incrementing
  * the value, which is useful for counting operations in lambdas and loops.
  *
- * <h5 class='section'>Notes:</h5><ul>
+ * <h2 class='section'>Notes:</h2><ul>
  * 	<li class='note'>
  * 		This class is <b>not thread-safe</b>. For concurrent access, use {@link java.util.concurrent.atomic.AtomicInteger} instead.
  * </ul>
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a counter</jc>
  * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>create</jsm>();
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jsm>log</jsm>(<js>"Valid items: "</js> + <jv>counter</jv>.get());
  * </p>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
  * </ul>
  */
@@ -59,7 +59,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Creates a new integer value initialized to <c>0</c>.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>create</jsm>();
 	 * 	<jsm>assertEquals</jsm>(0, <jv>counter</jv>.get());
@@ -74,7 +74,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Creates a new integer value with the specified initial value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(42);
 	 * 	<jsm>assertEquals</jsm>(42, <jv>counter</jv>.get());
@@ -106,7 +106,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Adds the specified value to the current value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(10);
 	 * 	<jv>value</jv>.add(5);
@@ -125,7 +125,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Adds the specified value to the current value and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(10);
 	 * 	<jk>int</jk> <jv>result</jv> = <jv>value</jv>.addAndGet(5);  <jc>// Returns 15</jc>
@@ -145,7 +145,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Decrements the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jv>counter</jv>.decrement();
@@ -163,7 +163,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Decrements the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.decrementAndGet();  <jc>// Returns 4</jc>
@@ -185,7 +185,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * <p>
 	 * This is a convenience method commonly used for counting operations in lambdas and loops.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jk>int</jk> <jv>current</jv> = <jv>counter</jv>.getAndIncrement();  <jc>// Returns 5</jc>
@@ -204,7 +204,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Increments the value by 1.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jv>counter</jv>.increment();
@@ -222,7 +222,7 @@ public class IntegerHolder extends Holder<Integer> {
 	/**
 	 * Increments the value by 1 and returns the new value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>counter</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jk>int</jk> <jv>result</jv> = <jv>counter</jv>.incrementAndGet();  <jc>// Returns 6</jc>
@@ -244,7 +244,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(42);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.is(42));
@@ -265,7 +265,7 @@ public class IntegerHolder extends Holder<Integer> {
 	 * <p>
 	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	IntegerHolder <jv>value</jv> = IntegerHolder.<jsm>of</jsm>(5);
 	 * 	<jsm>assertTrue</jsm>(<jv>value</jv>.isAny(3, 5, 7));

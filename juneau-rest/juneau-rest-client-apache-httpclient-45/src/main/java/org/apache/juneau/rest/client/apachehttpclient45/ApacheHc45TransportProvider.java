@@ -25,7 +25,7 @@ import org.apache.juneau.rest.client.*;
  * Registered via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider} so that
  * {@code RestClient} can auto-discover Apache HttpClient 4.5 when this module is on the classpath.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

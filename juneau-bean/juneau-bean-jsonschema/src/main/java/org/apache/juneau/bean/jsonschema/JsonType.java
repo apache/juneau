@@ -26,7 +26,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * serialization/parsing behavior of <c>Enum</c> types so that they are represented in lowercase form (as per the
  * specification).
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// Produces 'number', not 'NUMBER'.</jc>
  * 	String <jv>json</jv> = Json.<jsm>from</jsm>(JsonType.<jsf>NUMBER</jsf>);

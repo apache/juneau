@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 /**
  * Identifies the default RDF namespaces at the package level.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
 
  * </ul>
@@ -67,7 +67,7 @@ public @interface RdfSchema {
 	 * <p>
 	 * Inherited by child packages.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 *
 	 * Contents of <c>package-info.java</c>...
 	 * <p class='bjava'>

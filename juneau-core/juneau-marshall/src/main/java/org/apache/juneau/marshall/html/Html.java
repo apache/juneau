@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * 	<li><ja>@Rest</ja>-annotated classes and <ja>@RestOp</ja>-annotated methods when used with {@link HtmlApply @HtmlApply}.
  * </ul>
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlAnnotation">@Html Annotation</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML</a>
  * </ul>
@@ -48,7 +48,7 @@ public @interface Html {
 	 * <p>
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Produces &lt;a href&#61;'...'&gt;drive&lt;/a&gt; when serialized to HTML.</jc>
 	 * 	<ja>@Html</ja>(anchorText=<js>"drive"</js>)
@@ -94,7 +94,7 @@ public @interface Html {
 	 * 	<li>Path-info-relative - e.g. <js>"myPath"</js>
 	 * </ul>
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jk>public class</jk> FileSpace {
 	 *
@@ -112,7 +112,7 @@ public @interface Html {
 	/**
 	 * When <jk>true</jk>, don't add headers to tables.
 	 *
-	 * <h5 class='section'>See Also:</h5><ul>
+	 * <h4 class='section'>See Also:</h4><ul>
 	 * 	<li class='jm'>{@link HtmlSerializer.Builder#addKeyValueTableHeaders()}
 	 * </ul>
 	 *
@@ -150,7 +150,7 @@ public @interface Html {
 	 * This is a simpler alternative to using {@link #render()} when you only need to apply CSS styling
 	 * without custom content transformation.
 	 *
-	 * <h5 class='figure'>Example:</h5>
+	 * <h4 class='figure'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Apply styling to a bean property</jc>
 	 * 	<ja>@Html</ja>(style=<js>"white-space:normal;min-width:200px"</js>)

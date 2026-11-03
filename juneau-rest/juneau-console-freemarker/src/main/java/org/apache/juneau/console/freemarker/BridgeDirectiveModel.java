@@ -33,7 +33,7 @@ import freemarker.template.utility.*;
  * contract's {@code bridges} list.  The FTL twin of {@code PageSpec.bridge(BridgeDecl)}.  {@code session} may be a
  * {@code servlet:} / {@code context:} URI; it is resolved against the current request.
  *
- * <h5 class='section'>Example:</h5>
+ * <h2 class='section'>Example:</h2>
  * <p class='bcode'>
  * 	&lt;@topic name="ops.jobs" retain=true publisher="server"/&gt;
  * 	&lt;@bridge id="ops" transport="sse" session="servlet:/juneau-bus/session" downstream="ops.jobs"/&gt;

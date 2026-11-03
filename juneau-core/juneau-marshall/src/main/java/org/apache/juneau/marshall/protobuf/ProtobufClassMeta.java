@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.protobuf.ProtobufFieldEntry.*;
  * are auto-assigned sequentially from 1, ordered by property name (alphabetical, computed locally here so the
  * numbering is stable regardless of {@code BeanMeta} ordering), skipping the reserved <c>19000&ndash;19999</c> band.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * </ul>
  */

@@ -25,7 +25,7 @@ package org.apache.juneau.rest.client;
  * Since the JDK transport ships in the {@code juneau-rest-client} artifact itself, it is always available
  * unless overridden by a sibling transport module with a lower priority value.
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
  * </ul>
  *

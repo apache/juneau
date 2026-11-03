@@ -29,7 +29,7 @@ import java.util.function.*;
  * Only entries that pass the filter (i.e., the predicate returns <jk>true</jk>) are actually stored in
  * the underlying map.
  *
- * <h5 class='section'>Features:</h5>
+ * <h2 class='section'>Features:</h2>
  * <ul class='spaced-list'>
  * 	<li><b>Flexible Filtering:</b> Use any {@link BiPredicate} to filter entries based on key, value, or both
  * 	<li><b>Optional Filter:</b> Filter is optional when using the builder - defaults to accepting all entries
@@ -41,7 +41,7 @@ import java.util.function.*;
  * 	<li><b>Filter on Add:</b> Filtering happens when entries are added via {@link #put(Object, Object)}, {@link #putAll(Map)}, etc.
  * </ul>
  *
- * <h5 class='section'>Usage:</h5>
+ * <h2 class='section'>Usage:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a filtered map that only accepts non-null values</jc>
  * 	FilteredMap&lt;String, String&gt; <jv>map</jv> = FilteredMap
@@ -56,7 +56,7 @@ import java.util.function.*;
  * 	<jc>// map now contains: {"key1"="value1", "key3"="value3"}</jc>
  * </p>
  *
- * <h5 class='section'>Example - Custom Map Type:</h5>
+ * <h2 class='section'>Example - Custom Map Type:</h2>
  * <p class='bjava'>
  * 	<jc>// Create a filtered TreeMap that only accepts positive values</jc>
  * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
@@ -70,7 +70,7 @@ import java.util.function.*;
  * 	<jv>map</jv>.put(<js>"c"</js>, 10);  <jc>// Added</jc>
  * </p>
  *
- * <h5 class='section'>Behavior Notes:</h5>
+ * <h2 class='section'>Behavior Notes:</h2>
  * <ul class='spaced-list'>
  * 	<li>Filtering is applied to all entry addition methods: {@link #put(Object, Object)}, {@link #putAll(Map)}, etc.
  * 	<li>If the filter returns <jk>false</jk>, the entry is silently ignored (not added)
@@ -82,12 +82,12 @@ import java.util.function.*;
  * 	<li>The underlying map type is determined by the <c>inner</c> method (defaults to {@link LinkedHashMap})
  * </ul>
  *
- * <h5 class='section'>Thread Safety:</h5>
+ * <h2 class='section'>Thread Safety:</h2>
  * <p>
  * This class is not thread-safe unless the underlying map is thread-safe. If thread safety is required,
  * use a thread-safe map type (e.g., {@link java.util.concurrent.ConcurrentHashMap}) via the <c>inner</c> method.
  *
- * <h5 class='section'>See Also:</h5>
+ * <h2 class='section'>See Also:</h2>
  * <ul>
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
@@ -103,7 +103,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	/**
 	 * Builder for creating {@link FilteredMap} instances.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h2 class='section'>Example:</h2>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -137,7 +137,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * This method can be called multiple times. When called multiple times, all filters are combined
 		 * using AND logic - an entry must pass all filters to be added to the map.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Filter out null values</jc>
 		 * 	Builder&lt;String, String&gt; <jv>b</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
@@ -168,7 +168,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * <p>
 		 * If not specified, a new {@link LinkedHashMap} will be created during {@link #build()}.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	<jc>// Use a TreeMap for sorted keys</jc>
 		 * 	Builder&lt;String, Integer&gt; <jv>b</jv> = FilteredMap.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -200,7 +200,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * this function before being added to the map. If not specified, keys must already be of the
 		 * correct type (or <c>Object.class</c> is used if types were not specified, which accepts any type).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 		 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -227,7 +227,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * this function before being added to the map. If not specified, values must already be of the
 		 * correct type (or <c>Object.class</c> is used if types were not specified, which accepts any type).
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 		 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -252,7 +252,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		 * <p>
 		 * This is a convenience method for setting both conversion functions in a single call.
 		 *
-		 * <h5 class='section'>Example:</h5>
+		 * <h4 class='section'>Example:</h4>
 		 * <p class='bjava'>
 		 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 		 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -319,7 +319,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * allowing any key and value types to be added. However, the generic type parameters should still be
 	 * specified for type safety.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Explicitly specify generic types using diamond operator</jc>
 	 * 	<jk>var</jk> <jv>map</jv> = FilteredMap
@@ -407,7 +407,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * adding it to the map. This is useful for validation, debugging, or pre-checking entries before
 	 * attempting to add them.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -435,7 +435,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * The returned predicate is the combined filter used internally by this map. If multiple filters
 	 * were set via the builder, they are combined using AND logic.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -510,27 +510,27 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * the types (if key/value types were specified when creating the map). After conversion and validation,
 	 * the entry is added using the standard {@link #put(Object, Object)} method, which applies the filter.
 	 *
-	 * <h5 class='section'>Type Conversion:</h5>
+	 * <h4 class='section'>Type Conversion:</h4>
 	 * <ul>
 	 * 	<li>If a key function is configured, the key is converted by applying the function
 	 * 	<li>If a value function is configured, the value is converted by applying the function
 	 * 	<li>If no function is configured, the object is used as-is (but may be validated if types were specified)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Type Validation:</h5>
+	 * <h4 class='section'>Type Validation:</h4>
 	 * <ul>
 	 * 	<li>If key type was specified (via {@link #create(Class, Class)}), the converted key must be an instance of that type
 	 * 	<li>If value type was specified (via {@link #create(Class, Class)}), the converted value must be an instance of that type
 	 * 	<li>If {@link #create()} was used (no types specified), <c>Object.class</c> is used, which accepts any type
 	 * </ul>
 	 *
-	 * <h5 class='section'>Return Value:</h5>
+	 * <h4 class='section'>Return Value:</h4>
 	 * <ul>
 	 * 	<li>If the entry is added successfully, returns the previous value associated with the key (or <jk>null</jk> if there was no mapping)
 	 * 	<li>If the entry is filtered out, returns <jk>null</jk> (even if there was a previous value)
 	 * </ul>
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -561,7 +561,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * This method iterates over all entries in the source map and adds each one using {@link #add(Object, Object)},
 	 * which applies conversion and validation before adding.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -598,7 +598,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * Each entry from the maps will be added using {@link #add(Object, Object)}, which applies
 	 * conversion and filtering.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
@@ -632,7 +632,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	 * in the array. Each pair is added using {@link #add(Object, Object)}, which applies
 	 * conversion and filtering.
 	 *
-	 * <h5 class='section'>Example:</h5>
+	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	FilteredMap&lt;String, Integer&gt; <jv>map</jv> = FilteredMap
 	 * 		.<jsm>create</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)

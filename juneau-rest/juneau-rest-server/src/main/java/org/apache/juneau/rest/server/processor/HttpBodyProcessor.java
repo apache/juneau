@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.*;
  * Response handler for {@link HttpBody} objects (transport-neutral replacement for the historical
  * Apache HttpClient 4.5 {@code HttpEntity}-keyed processor).
  *
- * <h5 class='section'>See Also:</h5><ul>
+ * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  */
