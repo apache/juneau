@@ -27,9 +27,9 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
- * @Rest(path="/mcp")
+ * &#64;Rest(path="/mcp")
  * public class MyMcpServlet extends McpRestServlet {
- *     @Override
+ *     &#64;Override
  *     protected McpServerConfig createMcpConfig() {
  *         return new McpServerConfig().setName("my-server").setVersion("1.0.0").addTool(new MyEchoTool());
  *     }

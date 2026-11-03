@@ -146,7 +146,7 @@ public class AdminServlet extends RestServlet {
 	 * @param req The current REST request &mdash; supplies the bean store for guard lookup.
 	 * @param res The current REST response.
 	 * @throws IOException If an I/O error occurs while writing the response.
-	 * @throws NotFound If no {@link RateLimitGuard} bean is registered on the importer's bean
+	 * @throws org.apache.juneau.http.response.NotFound If no {@link RateLimitGuard} bean is registered on the importer's bean
 	 * 	store.
 	 */
 	@RestGet(

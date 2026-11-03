@@ -32,9 +32,9 @@ import org.apache.juneau.rest.server.*;
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
- * @Rest(path="/api")
+ * &#64;Rest(path="/api")
  * public class MyResource extends BasicRestServlet implements org.apache.juneau.rest.server.mcp.v20250618.McpEndpoint {
- *     @Override
+ *     &#64;Override
  *     public McpServerConfig getMcpConfig() {
  *         return new McpServerConfig().addTool(new MyEchoTool());
  *     }

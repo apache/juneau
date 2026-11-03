@@ -28,6 +28,29 @@ updates:
     groups:
       codeql-action:
         patterns: ["github/codeql-action*"]
+  # The docs site lives on the 'docs' branch, but Dependabot only reads this file from the default branch,
+  # so its updates are configured here with target-branch. Docusaurus and its search plugin move together.
+  - package-ecosystem: "npm"
+    directory: "/"
+    target-branch: "docs"
+    open-pull-requests-limit: 5
+    schedule:
+      interval: "weekly"
+      day: "friday"
+    groups:
+      docusaurus:
+        patterns:
+          - "@docusaurus/*"
+          - "@easyops-cn/docusaurus-search-local"
+      npm-minor-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    target-branch: "docs"
+    schedule:
+      interval: "weekly"
+      day: "friday"
   # Explicitly disable npm/yarn for docs directory to prevent automatic workflows
   - package-ecosystem: "npm"
     directory: "/docs"

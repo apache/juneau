@@ -338,7 +338,7 @@
 						<verbose>true</verbose>
 						<additionalJOptions>
 							<additionalJOption>--allow-script-in-comments</additionalJOption>
-							<additionalJOption>-Xdoclint:none</additionalJOption>
+							<additionalJOption>-Xdoclint:reference,syntax</additionalJOption>
 							<additionalJOption>-header</additionalJOption>
 							<additionalJOption>&lt;a href="http://juneau.apache.org" target="_blank"&gt;&lt;img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;"&gt;Apache Juneau&lt;/a&gt;</additionalJOption>
 						</additionalJOptions>
@@ -367,7 +367,7 @@
 							<link>https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/</link>
 							<link>https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/</link>
 						</links>
-						<failOnError>false</failOnError>
+						<failOnError>true</failOnError>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -541,8 +541,12 @@
 				</reportSets>
 				<configuration>
 					<skip>false</skip>
-					<failOnError>false</failOnError>
+					<failOnError>true</failOnError>
 					<detectJavaApiLink>false</detectJavaApiLink>
+					<additionalJOptions>
+						<additionalJOption>--allow-script-in-comments</additionalJOption>
+						<additionalJOption>-Xdoclint:reference,syntax</additionalJOption>
+					</additionalJOptions>
 					<additionalOptions>
 						<additionalOption>-quiet</additionalOption>
 					</additionalOptions>

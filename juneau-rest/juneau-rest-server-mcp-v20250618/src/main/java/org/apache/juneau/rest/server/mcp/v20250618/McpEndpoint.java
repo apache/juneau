@@ -29,9 +29,9 @@ import org.apache.juneau.bean.mcp.v20250618.*;
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
- * @Rest(path="/api")
+ * &#64;Rest(path="/api")
  * public class MyResource extends BasicRestServlet implements McpEndpoint {
- *     @Override
+ *     &#64;Override
  *     public McpServerConfig getMcpConfig() {
  *         return new McpServerConfig().addTool(new MyEchoTool());
  *     }

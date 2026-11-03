@@ -48,13 +48,13 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
- * @Rest(path="/mcp")
+ * &#64;Rest(path="/mcp")
  * public class MyMcpServlet extends McpRestServlet {
- *     @Override
+ *     &#64;Override
  *     protected McpServerConfig createMcpConfig() {
  *         return new McpServerConfig().setName("my-server").setVersion("1.0.0").addTool(new MyEchoTool());
  *     }
- *     @Override                                            // optional
+ *     &#64;Override                                            // optional
  *     protected McpOptions createMcpOptions() {
  *         return new McpOptions()
  *             .setInstructions("Use tool 'echo' to test.")

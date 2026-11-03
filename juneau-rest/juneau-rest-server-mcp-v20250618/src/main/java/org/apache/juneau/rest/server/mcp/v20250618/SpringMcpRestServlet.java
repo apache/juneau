@@ -38,9 +38,9 @@ import org.apache.juneau.rest.server.springboot.*;
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
- * @Rest(path="/mcp")
+ * &#64;Rest(path="/mcp")
  * public class MyMcpResource extends SpringMcpRestServlet {
- * 	@Override
+ * 	&#64;Override
  * 	public McpServerConfig getMcpConfig() {
  * 		return new McpServerConfig().addTool(new MySpringAwareTool());
  * 	}

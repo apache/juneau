@@ -32,7 +32,8 @@
 
 const { chromium } = require('playwright');
 
-const PROBE_STATE = async function (want, ms) {
+// page.evaluate passes ONE argument, so the wanted state and the cap travel together as a [want, ms] pair.
+const PROBE_STATE = async function ([want, ms]) {
 	const dot = () => document.querySelector('.juneau-view-staleness');
 	const started = Date.now();
 	while (Date.now() - started < ms) {

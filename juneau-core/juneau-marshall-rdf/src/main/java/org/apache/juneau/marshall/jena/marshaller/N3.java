@@ -43,13 +43,13 @@ import org.apache.juneau.marshall.serializer.*;
  *
  * <h5 class='figure'>Example output (bean with name/age, N3/Turtle-like):</h5>
  * <p class='bcode'>
- * 	@prefix j: &lt;...&gt; .
+ * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 .
  * </p>
  *
  * <h5 class='figure'>Complex (nested address + array):</h5>
  * <p class='bcode'>
- * 	@prefix j: &lt;...&gt; .
+ * 	&#64;prefix j: &lt;...&gt; .
  * 	&lt;...&gt; a j:Person ; j:name "Alice" ; j:age 30 ;
  * 		j:address &lt;.../address&gt; ; j:tags &lt;.../tags&gt; .
  * 	&lt;.../address&gt; a j:Address ; j:street "123 Main St" ;

@@ -36,9 +36,9 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <h5 class='section'>Example:</h5>
  * <pre>
- * @Rest(path="/mcp")
+ * &#64;Rest(path="/mcp")
  * public class MyMcpServlet extends org.apache.juneau.rest.server.mcp.v20250618.McpRestServlet {
- *     @Override
+ *     &#64;Override
  *     protected McpServerConfig createMcpConfig() {
  *         return new McpServerConfig()
  *             .setName("my-server").setVersion("1.0.0")

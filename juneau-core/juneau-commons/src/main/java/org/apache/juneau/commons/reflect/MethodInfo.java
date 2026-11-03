@@ -275,7 +275,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <p class='bjava'>
 	 * 	<jc>// Get all @Marshalled annotations on this method and overridden methods</jc>
 	 * 	Stream&lt;AnnotationInfo&lt;Bean&gt;&gt; <jv>beans</jv> = <jv>methodInfo</jv>.getAnnotations(Bean.<jk>class</jk>);
-	 * 	<jc>// If method has @Beans({@Marshalled(...), @Marshalled(...)}), both individual @Marshalled instances are returned</jc>
+	 * 	<jc>// If method has @Beans({&#64;Marshalled(...), &#64;Marshalled(...)}), both individual &#64;Marshalled instances are returned</jc>
 	 * </p>
 	 *
 	 * @param <A> The annotation type.
