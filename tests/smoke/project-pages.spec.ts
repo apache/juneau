@@ -75,11 +75,8 @@ test.describe('desktop', () => {
     const link = () => page.getByRole('navigation', {name: RAIL}).getByRole('link', {name: 'Juneau Marshall'});
     await page.goto('/about/marshall/');
     const light = await link().evaluate((el) => getComputedStyle(el).color);
-    await page.addInitScript(() => {
-      localStorage.setItem('theme', 'dark');
-      document.documentElement.setAttribute('data-theme', 'dark');
-    });
-    await page.goto('/about/marshall/');
+    // Docusaurus namespaces the theme storage key, so select the theme with its URL parameter instead.
+    await page.goto('/about/marshall/?docusaurus-theme=dark');
     const dark = await link().evaluate((el) => getComputedStyle(el).color);
     expect(dark).not.toBe(light);
   });

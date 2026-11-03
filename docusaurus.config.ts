@@ -178,11 +178,22 @@ const config: Config = {
   // Render ```mermaid fenced blocks as diagrams (see themes below).
   markdown: {
     mermaid: true,
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
   },
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
+  // `v4: true` also turns on fasterByDefault (Rspack, needs @docusaurus/faster) and
+  // mdx1CompatDisabledByDefault since 3.9, so the v4 flags are spelled out with those two off.
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: {
+      removeLegacyPostBuildHeadAttribute: true,
+      useCssCascadeLayers: true,
+      siteStorageNamespacing: true,
+      fasterByDefault: false,
+      mdx1CompatDisabledByDefault: false,
+    },
   },
 
   // Set the production url of your site here
@@ -199,7 +210,6 @@ const config: Config = {
   projectName: 'juneau', // Usually your repo name.
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
 
   // Exposed to client-side components (e.g. <DependencyInfo>) via useDocusaurusContext().
   customFields: {
