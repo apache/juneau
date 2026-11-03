@@ -64,6 +64,13 @@ const tick = function () { return new Promise(function (r) { setImmediate(r); })
 	let ran = 0;
 	const items = Array.from({ length: 25 }, function (_, i) { return 'item ' + i; });
 	const p1 = NS.dialogs.confirm({ title: 'Delete?', body: 'Sure?', items: items, confirmLabel: 'Delete', tone: 'danger', renderer: 'list', action: function () { ran++; } });
+	out.header = {
+		present: !!q('.juneau-view-dialog > .juneau-view-dialog-header'),
+		titleInHeader: !!q('.juneau-view-dialog-header > .juneau-view-dialog-title'),
+		title: (q('.juneau-view-dialog-title') || {}).textContent,
+		dismissInHeader: !!q('.juneau-view-dialog-header > .juneau-view-dialog-dismiss'),
+		dismissLabel: (q('.juneau-view-dialog-dismiss') || { getAttribute: function () { return null; } }).getAttribute('aria-label')
+	};
 	out.builtIn = {
 		shown: !!q('.juneau-view-confirm-modal'),
 		listItems: q('.juneau-view-confirm-list').childNodes.length,
@@ -83,6 +90,13 @@ const tick = function () { return new Promise(function (r) { setImmediate(r); })
 	q('.juneau-view-dialog-cancel').dispatch('click');
 	out.builtIn.cancelResolved = await p2;
 	out.builtIn.actionRunsAfterCancel = ran;
+	const p3 = NS.dialogs.confirm({ title: 'Dismissable', action: function () { ran++; } });
+	const dismiss = q('.juneau-view-dialog-dismiss');
+	if (dismiss) dismiss.dispatch('click');
+	else q('.juneau-view-dialog-cancel').dispatch('click');
+	out.dismissResolved = await p3;
+	out.dismissGone = !q('.juneau-view-confirm-modal');
+	out.dismissActionRuns = ran;
 	await tick();
 	out.depthAfter = NS.dialogs.depth();
 

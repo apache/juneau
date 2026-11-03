@@ -104,4 +104,19 @@ class ViewsJs_Confirm_Test extends TestBase {
 		assertEquals(true, report().get("defaultTonePlain"));
 		assertEquals(0, ((Number)report().get("depthAfter")).intValue());
 	}
+
+	@Test void b06_builtInModalHasHeaderWithTitleAndDismiss() {
+		var h = (Map<?,?>)report().get("header");
+		assertEquals(true, h.get("present"));
+		assertEquals(true, h.get("titleInHeader"));
+		assertEquals("Delete?", h.get("title"));
+		assertEquals(true, h.get("dismissInHeader"));
+		assertEquals("Close", h.get("dismissLabel"));
+	}
+
+	@Test void b07_dismissButtonDismissesLikeCancel() {
+		assertEquals(false, report().get("dismissResolved"));
+		assertEquals(true, report().get("dismissGone"));
+		assertEquals(1, ((Number)report().get("dismissActionRuns")).intValue());
+	}
 }

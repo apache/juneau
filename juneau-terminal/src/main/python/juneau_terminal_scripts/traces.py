@@ -317,6 +317,17 @@ def _report_text(allowed, denied, stale, errors):
     return "\n".join(out) + "\n"
 
 
+_unreadable = None    # the full-log path the last gate() could not read, else None
+
+
+def failure_hint(default):
+    """The hint for a failed Traces row: `default` (the allowlist advice) for real traces, but when the last gate() failed
+    because the full log could not be read, a hint naming that log and $JUNEAU_TERMINAL_FULL_LOG instead."""
+    if _unreadable is None:
+        return default
+    return f"   Cannot read the full log {_unreadable} (set by {FULL_LOG_ENV}): check that it exists and is readable."
+
+
 def gate(id, title, allowlist_path, *, since=None, text="", extra=(), warn_only=False, full_run=True, report=None,
          label=None):
     """The Traces row.  Reads the full log since `since` (a mark()) (else `text`, the captured output of the gates), plus every string
@@ -325,6 +336,8 @@ def gate(id, title, allowlist_path, *, since=None, text="", extra=(), warn_only=
     log and no `text` the row ends skipped with a warning and returns 0, even when `extra` is given: `extra` is only ever
     scanned in addition to the gates' own output.  full_run=False (a skip flag was used) suppresses the stale-entry
     report.  report, when given, is a path that gets every trace, allowed or not."""
+    global _unreadable
+    _unreadable = None
     allowlist = load_allowlist(allowlist_path)
     with _row(id, title, label) as row:
         if since is not None and since.path is not None:
@@ -332,6 +345,7 @@ def gate(id, title, allowlist_path, *, since=None, text="", extra=(), warn_only=
             if source is None:
                 row.status = "fail"
                 row.summary = "full log unreadable"
+                _unreadable = since.path
                 _say("error", f"Trace guard failed: cannot read the full log {since.path}.", id)
                 return 1
         elif text:

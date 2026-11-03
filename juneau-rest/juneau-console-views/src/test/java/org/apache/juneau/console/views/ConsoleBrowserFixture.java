@@ -150,6 +150,12 @@ final class ConsoleBrowserFixture {
 		return this;
 	}
 
+	/** Makes the most recently added case run in a {@code width} x {@code height} viewport (default 1280 x 800). */
+	ConsoleBrowserFixture viewport(int width, int height) {
+		cases.get(cases.size() - 1).put("viewport", Map.of("width", width, "height", height));
+		return this;
+	}
+
 	/** Makes the most recently added case seed {@code localStorage} with {@code values} before any page script runs. */
 	ConsoleBrowserFixture storage(Map<String,String> values) {
 		cases.get(cases.size() - 1).put("storage", new LinkedHashMap<>(values));

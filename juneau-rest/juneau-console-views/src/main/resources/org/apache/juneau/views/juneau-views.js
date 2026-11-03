@@ -5609,10 +5609,20 @@
 			dialog.setAttribute("role", "dialog");
 			dialog.setAttribute("aria-modal", "true");
 
+			const header = document.createElement("div");
+			header.className = "juneau-view-dialog-header";
 			const title = document.createElement("h2");
 			title.className = "juneau-view-dialog-title";
 			title.textContent = opts.title;
-			dialog.appendChild(title);
+			header.appendChild(title);
+			const dismissBtn = document.createElement("button");
+			dismissBtn.type = "button";
+			dismissBtn.className = "juneau-view-dialog-dismiss";
+			dismissBtn.setAttribute("aria-label", "Close");
+			dismissBtn.textContent = "\u00D7";
+			dismissBtn.addEventListener("click", function () { settle(false); popLayer(backdrop); });
+			header.appendChild(dismissBtn);
+			dialog.appendChild(header);
 
 			if (opts.body) {
 				const body = document.createElement("p");

@@ -327,6 +327,26 @@
 		return hs.length;
 	}
 
+	// A nav row wider than the viewport scrolls sideways.  The row is focusable (so the keyboard can scroll it), shows an
+	// edge fade on each side that has more tabs (data-overflow-start / data-overflow-end, drawn in chrome.css), and
+	// starts with the active tab in view.
+	function wireNavOverflow(r) {
+		r.setAttribute("tabindex", "0");
+		const update = () => {
+			const max = r.scrollWidth - r.clientWidth;
+			r.setAttribute("data-overflow-start", max > 1 && r.scrollLeft > 1 ? "true" : "false");
+			r.setAttribute("data-overflow-end", max > 1 && r.scrollLeft < max - 1 ? "true" : "false");
+		};
+		const settle = () => {
+			const a = r.querySelector("[aria-current=page]");
+			if (a && r.scrollWidth > r.clientWidth) r.scrollLeft = Math.max(0, a.offsetLeft - (r.clientWidth - a.offsetWidth) / 2);
+			update();
+		};
+		r.addEventListener("scroll", update, { passive: true });
+		if (typeof ResizeObserver === "function") new ResizeObserver(update).observe(r);
+		if (typeof requestAnimationFrame === "function") requestAnimationFrame(settle);
+	}
+
 	function renderNav(doc, c, active) {
 		if (!c.nav || c.nav.length === 0) return null;
 		const nav = el(doc, "nav", "juneau-page-nav");
@@ -348,6 +368,7 @@
 				r.appendChild(a);
 			}
 			nav.appendChild(r);
+			wireNavOverflow(r);
 			return selected;
 		};
 		let sel = row(c.nav, "juneau-page-nav-sections", "juneau-page-nav-section", 0);

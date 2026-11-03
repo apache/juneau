@@ -274,6 +274,17 @@ class GateCase(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn(f"cannot read the full log {self.log}", out)
         self.assertNotIn("0 traces", out)
+        hint = traces.failure_hint("ALLOWLIST ADVICE")
+        self.assertIn(str(self.log), hint)
+        self.assertIn(traces.FULL_LOG_ENV, hint)
+        self.assertNotIn("ALLOWLIST ADVICE", hint)
+
+    def test_real_traces_keep_the_allowlist_hint(self):
+        since = traces.mark()
+        self.log.write_text(TWO_JS_ERRORS, encoding="utf-8")
+        code, _ = self.gate(since=since)
+        self.assertEqual(code, 1)
+        self.assertEqual(traces.failure_hint("ALLOWLIST ADVICE"), "ALLOWLIST ADVICE")
 
     def test_no_log_with_only_extra_is_still_a_skip(self):
         del os.environ[traces.FULL_LOG_ENV]

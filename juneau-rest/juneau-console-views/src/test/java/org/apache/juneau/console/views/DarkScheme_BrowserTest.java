@@ -108,6 +108,8 @@ class DarkScheme_BrowserTest extends TestBase {
 		var table = TableSpec.create("tbl").dataUrl("/rest/tbl/data").columns(Column.create("pod").label("Pod"), Column.create("cause").label("Cause")).columnConfig(true);
 		var cards = new ArrayList<Map<String,Object>>();
 		cards.add(new LinkedHashMap<>(Map.of("id", "tbl", "type", "datatables", "title", "Pods", "table", table.toCardBody())));
+		var empty = TableSpec.create("emp").dataUrl("/rest/emp/data").columns(Column.create("pod").label("Pod"), Column.create("cause").label("Cause"));
+		cards.add(new LinkedHashMap<>(Map.of("id", "emp", "type", "datatables", "title", "Empty", "table", empty.toCardBody())));
 		cards.add(new LinkedHashMap<>(Map.of("id", "kit", "type", "html", "template", "kit", "title", "Kit")));
 		if (chart)
 			cards.add((Map<String,Object>)Json.to(CHART_CARD, Map.class));
@@ -236,6 +238,7 @@ class DarkScheme_BrowserTest extends TestBase {
 		{"headerLink", "text", ".jc-header-link"},
 		{"cardTitle", "text", ".jc-card-title"},
 		{"tableHead", "text", "#tbl-body thead .dt-column-title"},
+		{"tableHeadEmpty", "text", "#emp-body thead .dt-column-title"},
 		{"tableRowOdd", "text", "#tbl-body tbody tr:nth-child(odd) td"},
 		{"tableRowEven", "text", "#tbl-body tbody tr:nth-child(even) td"},
 		{"filterText", "text", "#tbl-body .dt-search input"},
@@ -343,6 +346,8 @@ class DarkScheme_BrowserTest extends TestBase {
 		{"pageLink", "text", ".probe-chrome-link"},
 		{"chromeBgLink", "text", ".probe-chrome-bg-link"},
 		{"preCode", "text", ".jc-prose pre code"},
+		{"tableHeadEmpty", "text", "#emp-body thead .dt-column-title"},
+		{"tableHead", "text", "#tbl-body thead .dt-column-title"},
 	};
 	private static final String[][] ACCENT_FOCUS = {
 		{"focusCardLink", "outline", ".probe-link"},
@@ -388,7 +393,8 @@ class DarkScheme_BrowserTest extends TestBase {
 			.asset(DT_CSS, resource("/" + WebJarResolver.WEBJARS_ROOT + DT_CSS_FILE), "text/css")
 			.asset(CHARTS, resource(ConsoleChromeMixin.CHARTS_JS_RESOURCE), "text/javascript")
 			.asset(ECHARTS, resource(ECHARTS_RESOURCE), "text/javascript")
-			.asset("/rest/tbl/data", rows(), "application/json");
+			.asset("/rest/tbl/data", rows(), "application/json")
+			.asset("/rest/emp/data", "[]", "application/json");
 		for (var p : PALETTES)
 			f.asset(theme(p), resource("/org/apache/juneau/console/juneau-theme-" + p + ".css"), "text/css");
 

@@ -524,6 +524,20 @@ body:not(:has(> .jc-header, > .jc-chrome)) .juneau-page-nav { top: 0; }
   padding-right: var(--jc-space-3);
 }
 
+/* Edge fade on the side(s) of a scrolling row that still has tabs (set by juneau-console.js); a mask, so no colour. */
+.juneau-page-nav-sections[data-overflow-end="true"], .juneau-page-nav-children[data-overflow-end="true"] {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+.juneau-page-nav-sections[data-overflow-start="true"], .juneau-page-nav-children[data-overflow-start="true"] {
+  -webkit-mask-image: linear-gradient(to left, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to left, #000 calc(100% - 28px), transparent);
+}
+.juneau-page-nav-sections[data-overflow-start="true"][data-overflow-end="true"], .juneau-page-nav-children[data-overflow-start="true"][data-overflow-end="true"] {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+}
+
 .juneau-page-nav-sections:not(:last-child) {
   border-bottom-width: var(--jc-page-nav-hairline);
   border-bottom-style: solid;

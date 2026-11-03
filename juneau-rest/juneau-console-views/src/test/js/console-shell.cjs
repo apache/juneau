@@ -65,6 +65,14 @@ const PROBE = function (arg) {
 		function (a) { return a.dataset.juneauNavId || a.getAttribute('href'); });
 	const navEl = document.querySelector('nav.juneau-page-nav');
 	out.navLabel = navEl ? navEl.getAttribute('aria-label') : null;
+	out.navOverflow = Array.prototype.map.call(document.querySelectorAll('nav.juneau-page-nav > div'), function (r) {
+		const a = r.querySelector('[aria-current="page"]');
+		const rr = r.getBoundingClientRect(), ar = a ? a.getBoundingClientRect() : null;
+		return { cls: r.className, scrollWidth: r.scrollWidth, clientWidth: r.clientWidth, scrollLeft: Math.round(r.scrollLeft),
+			start: r.getAttribute('data-overflow-start'), end: r.getAttribute('data-overflow-end'), tabindex: r.getAttribute('tabindex'),
+			mask: getComputedStyle(r).webkitMaskImage || getComputedStyle(r).maskImage,
+			activeVisible: ar ? ar.left >= rr.left - 1 && ar.right <= rr.right + 1 : null };
+	});
 	out.childRows = document.querySelectorAll('nav.juneau-page-nav .juneau-page-nav-children').length;
 	out.probe = window.__probe === undefined ? null : JSON.parse(JSON.stringify(window.__probe)); // NOSONAR javascript:S7784 -- deliberate JSON round-trip: drops non-serialisable members (functions/undefined) that structuredClone would throw on
 	out.mounted = window.__mounted || null;
@@ -243,7 +251,7 @@ const CONTRAST = function (entries) { // NOSONAR javascript:S3776 - branching mi
 	const report = {};
 	try {
 		for (const c of spec.cases) {
-			const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, ...(c.colorScheme ? { colorScheme: c.colorScheme } : {}) });
+			const context = await browser.newContext({ viewport: c.viewport ?? { width: 1280, height: 800 }, ...(c.colorScheme ? { colorScheme: c.colorScheme } : {}) });
 			if (c.storage)
 				await context.addInitScript(seed => {
 					try { for (const k of Object.keys(seed)) localStorage.setItem(k, seed[k]); } catch (e) { /* opaque origin */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
