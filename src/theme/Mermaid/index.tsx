@@ -20,7 +20,7 @@ import type {Props} from '@theme/Mermaid';
 // shared chunk of every doc page. Diagrams only render in the browser anyway, so load the library on demand.
 const OriginalMermaid = lazy(() => import('@theme-original/Mermaid'));
 
-export default function Mermaid(props: Props): ReactNode {
+export default function Mermaid(props: Readonly<Props>): ReactNode {
   return (
     <BrowserOnly>
       {() => (

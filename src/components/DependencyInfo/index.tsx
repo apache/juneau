@@ -70,7 +70,7 @@ function bazelCoordinate(groupId: string, artifact: string, version: string): st
   ].join('\n');
 }
 
-function ArtifactRows(props: {
+function ArtifactRows(props: Readonly<{
   spec: ArtifactSpec;
   groupId: string;
   groupPath: string;
@@ -80,7 +80,7 @@ function ArtifactRows(props: {
   mavenOnly: boolean;
   bazel: boolean;
   showHeading: boolean;
-}): React.JSX.Element {
+}>): React.JSX.Element {
   const {spec, groupId, groupPath, version, modulePaths, javadocPackages, mavenOnly, bazel, showHeading} = props;
   const {artifact, bundle} = spec;
 
@@ -161,20 +161,21 @@ function ArtifactRows(props: {
   );
 }
 
-export default function DependencyInfo(props: Props): React.JSX.Element {
+export default function DependencyInfo(props: Readonly<Props>): React.JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   const version = (siteConfig.customFields?.juneauVersion as string) || FALLBACK_VERSION;
   const modulePaths = (siteConfig.customFields?.juneauModulePaths as Record<string, string>) || {};
   const javadocPackages = (siteConfig.customFields?.juneauJavadocPackages as Record<string, string>) || {};
 
   const groupId = props.groupId || DEFAULT_GROUP_ID;
-  const groupPath = groupId.replace(/\./g, '/');
+  const groupPath = groupId.replaceAll('.', '/');
 
-  const specs: ArtifactSpec[] = props.artifacts && props.artifacts.length
-    ? props.artifacts
-    : props.artifact
-      ? [{artifact: props.artifact, bundle: props.bundle, javadocPackage: props.javadocPackage}]
-      : [];
+  let specs: ArtifactSpec[] = [];
+  if (props.artifacts?.length) {
+    specs = props.artifacts;
+  } else if (props.artifact) {
+    specs = [{artifact: props.artifact, bundle: props.bundle, javadocPackage: props.javadocPackage}];
+  }
 
   const multi = specs.length > 1;
 

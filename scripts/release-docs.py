@@ -60,6 +60,7 @@ Push).  Without it the output is plain.
 
 # Identity guard — required for any push to ASF.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
+GIT_USER_EMAIL = "user.email"
 PLAN = [('prechecks', 'Prechecks'), ('promote', 'Promote')]
 
 
@@ -67,7 +68,7 @@ def identity_problem(repo_dir):
     """None when git is configured with the ASF committer identity; otherwise (status, reason, hint lines)."""
     try:
         result = subprocess.run(
-            ["git", "config", "--get", "user.email"],
+            ["git", "config", "--get", GIT_USER_EMAIL],
             cwd=repo_dir,
             capture_output=True,
             text=True,
@@ -75,7 +76,7 @@ def identity_problem(repo_dir):
         )
         email = result.stdout.strip()
     except Exception as e:
-        return ('fail', f"could not read git user.email: {e}", ())
+        return ('fail', f"could not read git {GIT_USER_EMAIL}: {e}", ())
 
     if email != REQUIRED_GIT_EMAIL:
         return ('fail', f"user.email is '{email or '(unset)'}', not the ASF committer identity '{REQUIRED_GIT_EMAIL}'",
@@ -96,7 +97,7 @@ def git_identity():
         result = subprocess.run(["git", "config", "--get", key], capture_output=True, text=True)
         return result.stdout.strip() if result.returncode == 0 else default
     try:
-        return get("user.name", "Documentation Promoter"), get("user.email", "docs@juneau.apache.org")
+        return get("user.name", "Documentation Promoter"), get(GIT_USER_EMAIL, "docs@juneau.apache.org")
     except Exception:
         return "Documentation Promoter", "docs@juneau.apache.org"
 
@@ -148,7 +149,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except Exception:
                     # Fallback to speaker-test
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
@@ -162,7 +163,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except Exception:
                     # Fallback to speaker-test with lower frequency
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
@@ -199,7 +200,7 @@ def promote(args, view, docs_dir):
         return 1
     view.say(f"Site directory: {site_dir}")
 
-    git = dict(parent='promote', tool='generic')
+    git = {'parent': 'promote', 'tool': 'generic'}
     with view.stage('promote', 'Promote', "Promoting asf-staging to asf-site") as step:
         if site_dir.exists() and (site_dir / '.git').exists():
             # Directory exists and is a git repo, update it
@@ -219,7 +220,7 @@ def promote(args, view, docs_dir):
                  label='Switch', title="Switching to detached HEAD at origin/asf-staging", **git)
 
         git_user, git_email = git_identity()
-        for key, value in (("user.name", git_user), ("user.email", git_email)):
+        for key, value in (("user.name", git_user), (GIT_USER_EMAIL, git_email)):
             subprocess.run(["git", "config", key, value], cwd=site_dir, check=False)
 
         if args.no_push:

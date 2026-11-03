@@ -10,6 +10,8 @@ import re
 import sys
 from pathlib import Path
 
+FENCE_RE = r'^(`{3,}|~{3,})'
+
 
 def is_heading_line(line):
     """Return (level, text) if line is a heading at column 0, else None."""
@@ -30,7 +32,7 @@ def get_heading_lines(lines):
     for i, line in enumerate(lines):
         stripped = line.rstrip('\n')
         # Track fenced code blocks
-        fence_match = re.match(r'^(`{3,}|~{3,})', stripped)
+        fence_match = re.match(FENCE_RE, stripped)
         if fence_match:
             marker = fence_match.group(1)[0]
             marker_len = len(fence_match.group(1))
@@ -90,7 +92,7 @@ def process_file(filepath):
                 fence_marker = None
                 for i, line in enumerate(new_lines):
                     stripped = line.rstrip('\n')
-                    fence_match = re.match(r'^(`{3,}|~{3,})', stripped)
+                    fence_match = re.match(FENCE_RE, stripped)
                     if fence_match:
                         marker = fence_match.group(1)[0]
                         marker_len = len(fence_match.group(1))
@@ -120,7 +122,7 @@ def process_file(filepath):
         fence_marker = None
         for i, line in enumerate(new_lines):
             stripped = line.rstrip('\n')
-            fence_match = re.match(r'^(`{3,}|~{3,})', stripped)
+            fence_match = re.match(FENCE_RE, stripped)
             if fence_match:
                 marker = fence_match.group(1)[0]
                 marker_len = len(fence_match.group(1))
@@ -218,7 +220,7 @@ def main():
                 for c in changes:
                     print(f"  {c}")
 
-    print(f"\n=== Heading Normalization Summary ===")
+    print("\n=== Heading Normalization Summary ===")
     print(f"Total .md files processed: {len(md_files)}")
     print(f"Files changed: {len(changed_files)}")
     print(f"  2a (H1 removed):   {len(files_2a)} files")
@@ -226,11 +228,11 @@ def main():
     print(f"  2c (H5/H6->H4):   {len(files_2c)} files")
     print(f"  2d (skip fix):     {len(files_2d)} files")
 
-    print(f"\nBefore heading counts:")
+    print("\nBefore heading counts:")
     for level in sorted(total_before.keys()):
         print(f"  H{level}: {total_before[level]}")
 
-    print(f"\nAfter heading counts:")
+    print("\nAfter heading counts:")
     for level in sorted(total_after.keys()):
         print(f"  H{level}: {total_after[level]}")
 

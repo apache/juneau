@@ -18,7 +18,7 @@ import {useHistory} from '@docusaurus/router';
 import {GROUPS, PROJECTS} from '@site/src/data/projects';
 import styles from './styles.module.css';
 
-type Props = {current?: string};
+type Props = Readonly<{current?: string}>;
 
 function MobileSelect({current}: Props): ReactNode {
   const history = useHistory();

@@ -44,7 +44,9 @@ CHECKS = [
     (16, 'guides'),
     (17, 'lockfile'),
 ]
-NAME_BY_NUM = {n: name for n, name in CHECKS}
+SIDEBARS_FILE = 'sidebars.ts'
+MDX_GLOB = '*.mdx'
+NAME_BY_NUM = dict(CHECKS)
 NUM_BY_NAME = {name: n for n, name in CHECKS}
 WARNING_CHECKS = {13, 14, 15}
 # sidebars.ts helpers that return their one argument unchanged in shape; the parser reads straight through them.
@@ -91,7 +93,7 @@ class Findings:
     def note(self, num, message, file=None, line=None):
         self.add('note', num, message, file, line)
 
-    def counts(self, strict):
+    def counts(self):
         errors = sum(1 for i in self.items if i['severity'] == 'error')
         warnings = sum(1 for i in self.items if i['severity'] == 'warning')
         return errors, warnings
@@ -416,7 +418,7 @@ def _github_anchor(heading):
     the result any further than this.
     """
     h = heading.strip().lower()
-    h = re.sub(r'`', '', h)
+    h = h.replace('`', '')
     h = re.sub(r'[^a-z0-9 \-_]', '', h)
     h = h.replace(' ', '-')
     return h
@@ -429,7 +431,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
     topics_dir = docs_dir / 'pages' / 'topics'
     guides_dir = docs_dir / 'pages' / 'guides'
     pages_dir = docs_dir / 'pages'
-    sidebars_path = docs_dir / 'sidebars.ts'
+    sidebars_path = docs_dir / SIDEBARS_FILE
     allowlist_path = docs_dir / 'scripts' / 'verify-docs-allowlist.txt'
 
     md_files = sorted(topics_dir.glob('*.md'), key=lambda p: p.name)
@@ -457,7 +459,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
             sidebar_tree = parse_sidebars(sidebars_path.read_text(encoding='utf-8'))
             doc_refs, landing_ids, preorder = collect_sidebar(sidebar_tree)
         except Exception as e:  # noqa: BLE001 - report parse failure as an error
-            findings.error(6, f'Failed to parse sidebars.ts: {e}', file='sidebars.ts')
+            findings.error(6, f'Failed to parse sidebars.ts: {e}', file=SIDEBARS_FILE)
     landing_set = set(landing_ids or [])
     referenced_ids = set(doc_refs or []) | landing_set
 
@@ -597,8 +599,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
     # --- 11. links ---------------------------------------------------------
     if on(11):
         md_link_re = re.compile(r'\]\(([^)\s]+)\)')
-        docs_topics_re = re.compile(r'/docs/topics/([^)\s#]+)')
-        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob('*.mdx')):
+        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob(MDX_GLOB)):
             text = page.read_text(encoding='utf-8')
             rel = page.relative_to(docs_dir).as_posix()
             in_topics = topics_dir in page.parents
@@ -638,7 +639,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
     # --- 12. imports -------------------------------------------------------
     if on(12):
         import_re = re.compile(r'@site/pages/topics/([^\s\'")]+)')
-        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob('*.mdx')):
+        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob(MDX_GLOB)):
             text = page.read_text(encoding='utf-8')
             rel = page.relative_to(docs_dir).as_posix()
             for line, m in _iter_lines_with(text, import_re):
@@ -652,7 +653,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
     if on(13):
         apidocs_re = re.compile(r'/site/apidocs/([^)\s\'">]+)')
         total = 0
-        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob('*.mdx')):
+        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob(MDX_GLOB)):
             text = page.read_text(encoding='utf-8')
             rel = page.relative_to(docs_dir).as_posix()
             for line, m in _iter_lines_with(text, apidocs_re):
@@ -685,7 +686,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
             if t.slug:
                 heading_anchors[t.slug] = anchors
         anchored_re = re.compile(r'/docs/topics/([A-Za-z0-9]+)#([^)\s"<>]+)')
-        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob('*.mdx')):
+        for page in sorted(pages_dir.rglob('*.md')) + sorted(pages_dir.rglob(MDX_GLOB)):
             text = page.read_text(encoding='utf-8')
             rel = page.relative_to(docs_dir).as_posix()
             for line, m in _iter_lines_with(text, anchored_re):
@@ -770,7 +771,7 @@ def _check_guides(guides, sidebar_tree, effid_to_topic, findings):
     sections = collect_section(sidebar_tree, GUIDES_LINK_ID)
     if len(sections) != 1:
         findings.error(16, f'Expected one sidebar category linking `{GUIDES_LINK_ID}`, found {len(sections)}',
-                       file='sidebars.ts')
+                       file=SIDEBARS_FILE)
         return
     listed, ref_slugs = [], []
     for kind, raw in sections[0]:
@@ -780,16 +781,16 @@ def _check_guides(guides, sidebar_tree, effid_to_topic, findings):
                 continue
             if ref_slugs:
                 findings.error(16, f'Sidebar doc `{raw}` follows a ref; the Guides category lists its refs last',
-                               file='sidebars.ts')
+                               file=SIDEBARS_FILE)
             if gid in guide_ids:
                 listed.append(gid)
             else:
-                findings.error(16, f'Sidebar doc `{raw}` has no file in pages/guides/', file='sidebars.ts')
+                findings.error(16, f'Sidebar doc `{raw}` has no file in pages/guides/', file=SIDEBARS_FILE)
         else:
             topic = effid_to_topic.get(_topics_id(raw))
             if topic is None:
                 findings.error(16, f'Sidebar ref `{raw}` in the Guides category does not resolve to a topic',
-                               file='sidebars.ts')
+                               file=SIDEBARS_FILE)
             ref_slugs.append(topic.slug if topic else None)
     for g in guides:
         if g.effective_id == landing:
@@ -800,14 +801,14 @@ def _check_guides(guides, sidebar_tree, effid_to_topic, findings):
         elif n > 1:
             findings.error(16, f'Guide is listed {n} times in the sidebar Guides category', file=f'guides/{g.name}')
     if listed != sorted(listed):
-        findings.error(16, f'Guides category order != file order: {listed}', file='sidebars.ts')
+        findings.error(16, f'Guides category order != file order: {listed}', file=SIDEBARS_FILE)
     # Every topic the landing lists as a guide must stay in the category as a ref, so that a sidebar
     # regeneration cannot drop it silently.
     page = next((g for g in guides if g.effective_id == landing), None)
     for slug in LANDING_TOPIC_ROW_RE.findall(page.body if page else ''):
         if slug not in ref_slugs:
             findings.error(16, f'Landing lists `/docs/topics/{slug}` but the Guides category has no ref to it',
-                           file='sidebars.ts')
+                           file=SIDEBARS_FILE)
 
 
 # ---------------------------------------------------------------------------
@@ -930,7 +931,7 @@ def main(argv=None):
     else:
         print_text_report(findings, file_count, enabled)
 
-    errors, warnings = findings.counts(args.strict)
+    errors, warnings = findings.counts()
     if errors > 0:
         return 1
     if args.strict and warnings > 0:

@@ -62,7 +62,8 @@ With juneau-terminal available, the run is one live view: Prechecks, build-docs.
 
 # Identity guard — required for any push to ASF.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
-STAGING_URL = "http://juneau.staged.apache.org"
+GIT_USER_EMAIL = "user.email"
+STAGING_URL = "https://juneau.staged.apache.org"
 BUILD_SCRIPT = Path(__file__).parent / 'build-docs.py'
 
 
@@ -70,7 +71,7 @@ def identity_problem(repo_dir):
     """None when git is configured with the ASF committer identity; otherwise (status, reason, hint lines)."""
     try:
         result = subprocess.run(
-            ["git", "config", "--get", "user.email"],
+            ["git", "config", "--get", GIT_USER_EMAIL],
             cwd=repo_dir,
             capture_output=True,
             text=True,
@@ -78,7 +79,7 @@ def identity_problem(repo_dir):
         )
         email = result.stdout.strip()
     except Exception as e:
-        return ('fail', f"could not read git user.email: {e}", ())
+        return ('fail', f"could not read git {GIT_USER_EMAIL}: {e}", ())
 
     if email != REQUIRED_GIT_EMAIL:
         return ('fail', f"user.email is '{email or '(unset)'}', not the ASF committer identity '{REQUIRED_GIT_EMAIL}'",
@@ -154,7 +155,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except Exception:
                     # Fallback to speaker-test
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
@@ -168,7 +169,7 @@ def play_sound(success=True):
                         capture_output=True,
                         timeout=5
                     )
-                except:
+                except Exception:
                     # Fallback to speaker-test with lower frequency
                     subprocess.run(
                         ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
@@ -193,7 +194,7 @@ def git_identity():
         result = subprocess.run(["git", "config", "--get", key], capture_output=True, text=True)
         return result.stdout.strip() if result.returncode == 0 else default
     try:
-        return get("user.name", "Documentation Builder"), get("user.email", "docs@juneau.apache.org")
+        return get("user.name", "Documentation Builder"), get(GIT_USER_EMAIL, "docs@juneau.apache.org")
     except Exception:
         return "Documentation Builder", "docs@juneau.apache.org"
 
@@ -208,7 +209,7 @@ def fail(view, message, *hints):
 
 def fetch_staging(view, staging_dir, remote_url):
     """Clone or update the asf-staging checkout and check out the asf-staging branch."""
-    git = dict(parent='stage', tool='generic')
+    git = {'parent': 'stage', 'tool': 'generic'}
     if staging_dir.exists() and (staging_dir / '.git').exists():
         # Directory exists and is a git repo, update it
         view.say("📁 Staging directory already exists, updating...")
@@ -266,7 +267,7 @@ def copy_build(view, build_dir, staging_dir):
 def commit_staging(view, staging_dir, message):
     """Add everything and commit it when there is a change."""
     git_user, git_email = git_identity()
-    for key, value in (("user.name", git_user), ("user.email", git_email)):
+    for key, value in (("user.name", git_user), (GIT_USER_EMAIL, git_email)):
         subprocess.run(["git", "config", key, value], cwd=staging_dir, check=False)
     view.cmd(["git", "add", "-A"], cwd=staging_dir, id='stage-add', label='Add', title="Adding all files",
              parent='stage', tool='generic')

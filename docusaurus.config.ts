@@ -11,8 +11,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import type {Config} from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
@@ -145,15 +145,15 @@ const baseThemeConfig: Preset.ThemeConfig = {
         items: [
           {
             label: 'Apache Foundation',
-            href: 'http://www.apache.org/foundation',
+            href: 'https://www.apache.org/foundation',
           },
           {
             label: 'License',
-            href: 'http://www.apache.org/licenses/',
+            href: 'https://www.apache.org/licenses/',
           },
           {
             label: 'ASF Security',
-            href: 'http://www.apache.org/security',
+            href: 'https://www.apache.org/security',
           },
         ],
       },

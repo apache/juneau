@@ -11,9 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import type {ReactNode} from 'react';
-import Link from '@docusaurus/Link';
-import {GROUPS, PROJECTS} from '@site/src/data/projects';
 import {defineConfig} from '@playwright/test';
 
 // Serves the existing build/ (nothing is built here). reuseExistingServer is false so a stray process

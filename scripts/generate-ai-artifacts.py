@@ -401,15 +401,11 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
             summary = one_line(rec["summary"])
             entries.append(f"- [{rec['title']}]({topic_url(rec, docs_root)}): {summary}")
         if entries:
-            lines.append(f"## {section['label']}")
-            lines.append("")
-            lines.extend(entries)
-            lines.append("")
+            lines.extend([f"## {section['label']}", "", *entries, ""])
 
     about = {r["id"]: r for r in records if r["source_type"] == "about"}
     if about:
-        lines.append("## About")
-        lines.append("")
+        lines.extend(["## About", ""])
         for project in project_index.load(docs_root)[1]:
             rec = about.get(f"about-{project['slug']}")
             if rec is not None:
@@ -417,8 +413,7 @@ def render_llms_txt(config: ExtractConfig, records: list[dict[str, Any]], curren
         lines.append("")
 
     migration = next((r for r in records if r["source_path"].endswith("27.V10MigrationGuide.md")), None)
-    lines.append("## Resources")
-    lines.append("")
+    lines.extend(["## Resources", ""])
     lines.append(f"- [Release notes {current_release}]({SITE_URL}/docs/release-notes/{current_release}): "
                  "What changed in the current release.")
     if migration:

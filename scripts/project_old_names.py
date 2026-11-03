@@ -46,6 +46,10 @@ def _pkg(*parts, tail=''):
     return re.compile(r'(?<![\w.])' + r'\.'.join(parts) + tail + r'(?!' + _W + r')')
 
 
+_RUN_FEATURE = 'run feature'
+_TOOL_SLUG = 'tool slug'
+
+
 def _slug(name):
     return re.compile(re.escape('/docs/topics/') + name + r'(?!' + _W + r')')
 
@@ -76,20 +80,20 @@ OLD_NAME_PATTERNS = (
     ('tool', _prefix('_'.join(('JUNEAU', 'SCRIPTS')) + '_')),
     ('tool', _word('_'.join(('RUN', 'MARKERS')))),
     ('tool', _word('_'.join(('RUN', 'ARTIFACTS')))),
-    ('tool slug', _slug('Juneau' + 'Run')),
-    ('tool slug', _slug('Juneau' + 'Test')),
-    ('tool slug', _slug('Juneau' + 'Test' + 'JUnitExtensions')),
+    (_TOOL_SLUG, _slug('Juneau' + 'Run')),
+    (_TOOL_SLUG, _slug('Juneau' + 'Test')),
+    (_TOOL_SLUG, _slug('Juneau' + 'Test' + 'JUnitExtensions')),
     # The run feature
-    ('run feature', re.compile('##' + r'run(?!\w)')),
-    ('run feature', _word('Run' + 'Event')),
-    ('run feature', _word('Run' + 'View' + 'Checks')),
-    ('run feature', _word('Run' + 'View' + 'CardType')),
-    ('run feature', _prefix('Run' + 'View' + r'(?:Def|Endpoints|Log|Mixin|Page|Source|_BrowserTest|Css_Test)(?![a-z0-9])')),
-    ('run feature', _tok(_JUNEAU, 'run', 'view')),
-    ('run feature', _tok('run', 'view')),
-    ('run feature', _word('run' + 'View')),
-    ('run feature', _word('_'.join(('run', 'view')))),
-    ('run feature', re.compile(r'(?<!\w)' + 'Run' + ' view' + r'(?!\w)')),
+    (_RUN_FEATURE, re.compile('##' + r'run(?!\w)')),
+    (_RUN_FEATURE, _word('Run' + 'Event')),
+    (_RUN_FEATURE, _word('Run' + 'View' + 'Checks')),
+    (_RUN_FEATURE, _word('Run' + 'View' + 'CardType')),
+    (_RUN_FEATURE, _prefix('Run' + 'View' + r'(?:Def|Endpoints|Log|Mixin|Page|Source|_BrowserTest|Css_Test)(?![a-z0-9])')),
+    (_RUN_FEATURE, _tok(_JUNEAU, 'run', 'view')),
+    (_RUN_FEATURE, _tok('run', 'view')),
+    (_RUN_FEATURE, _word('run' + 'View')),
+    (_RUN_FEATURE, _word('_'.join(('run', 'view')))),
+    (_RUN_FEATURE, re.compile(r'(?<!\w)' + 'Run' + ' view' + r'(?!\w)')),
     ('run feature slug', _slug('Driving' + 'ARun')),
     ('run feature slug', _slug('Run' + 'View' + 'Region')),
     # Other

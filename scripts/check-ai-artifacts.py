@@ -73,8 +73,8 @@ def check_readme_version(docs_root: Path, release: str) -> list[str]:
 def check_javadocs_link_consistency(docs_root: Path) -> list[str]:
     config = (docs_root / "docusaurus.config.ts").read_text(encoding="utf-8")
     matches = re.findall(r"href:\s*'pathname:///([^']+)'", config)
-    javadocs_links = sorted(link for link in matches if "javadocs" in link or "apidocs" in link)
-    unique = sorted(set(javadocs_links))
+    javadocs_links = {link for link in matches if "javadocs" in link or "apidocs" in link}
+    unique = sorted(javadocs_links)
     if len(unique) <= 1:
         return []
     return [f"Javadocs links are inconsistent in docusaurus.config.ts: {', '.join(unique)}."]

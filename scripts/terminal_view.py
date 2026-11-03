@@ -30,6 +30,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+BOOTSTRAP_FILE = 'bootstrap.py'
 CONSOLE_MODES = ('full', 'board', 'none')
 
 #: Every row build-docs.py draws, in order, as (id, label).  Skipped stages still draw, as skipped rows.
@@ -64,12 +65,12 @@ def load_toolkit(juneau_root):
         return None
     src = toolkit_dir(juneau_root)
     try:
-        if not (src / 'bootstrap.py').is_file():
-            raise ImportError(f"{src / 'bootstrap.py'} not found")
+        if not (src / BOOTSTRAP_FILE).is_file():
+            raise ImportError(f"{src / BOOTSTRAP_FILE} not found")
         sys.dont_write_bytecode = True   # nothing may write __pycache__ into the Juneau source tree
         bootstrap = sys.modules.get('bootstrap')
-        if bootstrap is None or Path(getattr(bootstrap, '__file__', '')).resolve() != (src / 'bootstrap.py').resolve():
-            spec = importlib.util.spec_from_file_location('bootstrap', src / 'bootstrap.py')
+        if bootstrap is None or Path(getattr(bootstrap, '__file__', '')).resolve() != (src / BOOTSTRAP_FILE).resolve():
+            spec = importlib.util.spec_from_file_location('bootstrap', src / BOOTSTRAP_FILE)
             bootstrap = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(bootstrap)
             sys.modules['bootstrap'] = bootstrap

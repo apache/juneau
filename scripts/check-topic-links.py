@@ -252,7 +252,7 @@ def main():
         
         for warning in warnings:
             if warning['type'] == 'title_mismatch':
-                print(f"TITLE MISMATCH:")
+                print("TITLE MISMATCH:")
                 print(f"  File: {warning['file']}:{warning['line']}")
                 print(f"  Slug: {warning['slug']}")
                 print(f"  Expected title: '{warning['expected_title']}'")
@@ -262,14 +262,14 @@ def main():
                 print(f"  Link: {warning['full_match']}")
                 print()
             elif warning['type'] == 'missing_anchor':
-                print(f"MISSING ANCHOR:")
+                print("MISSING ANCHOR:")
                 print(f"  File: {warning['file']}:{warning['line']}")
                 print(f"  Slug: {warning['slug']}")
                 print(f"  Anchor: '{warning['anchor']}'")
                 print(f"  Link: {warning['full_match']}")
                 print()
             elif warning['type'] == 'unknown_slug':
-                print(f"UNKNOWN SLUG:")
+                print("UNKNOWN SLUG:")
                 print(f"  File: {warning['file']}:{warning['line']}")
                 print(f"  Slug: {warning['slug']}")
                 print(f"  Title: '{warning['title']}'")

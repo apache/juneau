@@ -30,6 +30,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 CHAPTER_RE = re.compile(r'^\d\d$')
 TOPIC_ID_RE = re.compile(r"""(['"])topics/([^'"]+)\1""")
 TMP_SUFFIX = '.renumtmp'
+SIDEBARS_FILE = 'sidebars.ts'
 
 
 def _load_verify_docs():
@@ -69,7 +70,7 @@ def plan(docs_dir, chapter=None):
         if t.effective_id in by_id:
             raise RenumberError(f'duplicate effective id {t.effective_id}: {by_id[t.effective_id].name}, {t.name}')
         by_id[t.effective_id] = t
-    tree = vd.parse_sidebars((docs_dir / 'sidebars.ts').read_text(encoding='utf-8'))
+    tree = vd.parse_sidebars((docs_dir / SIDEBARS_FILE).read_text(encoding='utf-8'))
 
     mapping = {}   # old effective id -> (topic, new file name, new effective id)
 
@@ -215,7 +216,7 @@ def apply(docs_dir, result):
             new_text = rewrite_references(text, tokens, token_rx)
             if new_text != text:
                 writes[path] = (path, new_text)
-    sidebars = docs_dir / 'sidebars.ts'
+    sidebars = docs_dir / SIDEBARS_FILE
     sidebar_text = sidebars.read_text(encoding='utf-8')
     new_sidebar = patch_sidebars(sidebar_text, renames)
 
@@ -262,7 +263,7 @@ def parse_args(argv=None):
 def main(argv=None):
     args = parse_args(argv)
     docs_dir = Path(args.docs_dir).resolve() if args.docs_dir else SCRIPT_DIR.parent
-    for required in (docs_dir / 'pages' / 'topics', docs_dir / 'sidebars.ts'):
+    for required in (docs_dir / 'pages' / 'topics', docs_dir / SIDEBARS_FILE):
         if not required.exists():
             print(f'ERROR: not found: {required}', file=sys.stderr)
             return 2

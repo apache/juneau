@@ -30,6 +30,7 @@ import terminal_view
 from juneau_root import find_juneau_root
 
 # Module-level toggles flipped from main() so every run_command/stage_banner sees the choice.
+POM_FILE = 'pom.xml'
 DRY_RUN = False
 VERBOSE = False
 # The juneau-terminal live view, or plain output (the default, and whenever juneau-terminal is unavailable).
@@ -171,8 +172,8 @@ def generate_artifact_paths(master_root, docs_dir):
     jar_modules = 0
     for dirpath, dirnames, filenames in os.walk(master_root):
         dirnames[:] = [d for d in dirnames if d not in skip_dirs]
-        if 'pom.xml' in filenames:
-            pom = read_pom(os.path.join(dirpath, 'pom.xml'))
+        if POM_FILE in filenames:
+            pom = read_pom(os.path.join(dirpath, POM_FILE))
             if pom and pom[0]:
                 aid = pom[0]
                 jar_modules += pom[1] == 'jar'
@@ -384,8 +385,8 @@ def verify_apidocs(master_root):
     apidocs_dir = Path(master_root) / 'target' / 'site' / 'apidocs'
     
     if not apidocs_dir.exists():
-        say(f"ERROR: target/site/apidocs directory not found after generation!", 'error')
-        say(f"Contents of target/site:")
+        say("ERROR: target/site/apidocs directory not found after generation!", 'error')
+        say("Contents of target/site:")
         site_dir = Path(master_root) / 'target' / 'site'
         if site_dir.exists():
             for item in site_dir.iterdir():
@@ -400,7 +401,6 @@ def verify_apidocs(master_root):
 
 def get_current_release(master_root):
     """Get current release version using current-release.py script from master branch."""
-    script_dir = Path(__file__).parent
     master_scripts_dir = master_root / 'scripts'
     current_release_script = master_scripts_dir / 'current-release.py'
     
@@ -565,7 +565,7 @@ def check_entry_pages(master_root, docs_dir):
         say(f"WARNING: Entry pages checker not found at {checker_script}", 'warn')
         return
     cmd = ['python3', str(checker_script), '--docs-root', str(docs_dir)]
-    if (Path(master_root) / 'pom.xml').is_file():
+    if (Path(master_root) / POM_FILE).is_file():
         cmd += ['--juneau-root', str(master_root)]
     run_command(cmd, cwd=docs_dir, id='verify-entry-pages', label='Entry pages', title="Checking entry pages",
                 tool='generic', parent='verify')

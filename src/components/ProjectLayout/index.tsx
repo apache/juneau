@@ -18,7 +18,7 @@ import ProjectRail from '@site/src/components/ProjectRail';
 import {projectBySlug, topicForModule} from '@site/src/data/projects';
 import styles from './styles.module.css';
 
-type Props = {slug: string; children: ReactNode};
+type Props = Readonly<{slug: string; children: ReactNode}>;
 
 // Wraps a project page body under /about/<slug>/: the project rail beside the content, and the project's name,
 // tagline, Get started and Documentation buttons, module list (each module links to its topic when MODULE_DOCS has

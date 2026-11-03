@@ -33,7 +33,6 @@ import tempfile
 import threading
 import time
 import unicodedata
-import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -43,6 +42,7 @@ from juneau_root import find_juneau_root
 CASES_DIR_NAME = 'docs-images'
 SOURCES = {'ui': 'ui-cases.json', 'terminal': 'terminal-cases.json'}
 IMAGE_DIRS = ('topics', 'developer-info')
+HEX_COLOR = '#%02x%02x%02x'
 IMAGE_EXTS = ('.png', '.svg', '.jpg', '.jpeg', '.gif', '.webp')
 DEFAULT_PORT = 10000
 PROBE_PATH = '/console/store'
@@ -296,9 +296,9 @@ def color_256(n):
         return TERM_PALETTE[n]
     if n < 232:
         n -= 16
-        return '#%02x%02x%02x' % tuple(0 if c == 0 else 55 + 40 * c for c in (n // 36, n // 6 % 6, n % 6))
+        return HEX_COLOR % tuple(0 if c == 0 else 55 + 40 * c for c in (n // 36, n // 6 % 6, n % 6))
     v = 8 + 10 * (n - 232)
-    return '#%02x%02x%02x' % (v, v, v)
+    return HEX_COLOR % (v, v, v)
 
 
 def apply_sgr(style, params):
@@ -341,7 +341,7 @@ def apply_sgr(style, params):
             if i + 2 < len(codes) and codes[i + 1] == 5:
                 color, i = color_256(min(codes[i + 2], 255)), i + 2
             elif i + 4 < len(codes) and codes[i + 1] == 2:
-                color, i = '#%02x%02x%02x' % tuple(min(v, 255) for v in codes[i + 2:i + 5]), i + 4
+                color, i = HEX_COLOR % tuple(min(v, 255) for v in codes[i + 2:i + 5]), i + 4
             if color:
                 fg, bg = (color, bg) if c == 38 else (fg, color)
         i += 1
@@ -583,7 +583,7 @@ def looks_like_petstore(base_url, timeout=5):
     try:
         with urllib.request.urlopen(base_url.rstrip('/') + PROBE_PATH, timeout=timeout) as resp:
             return resp.status == 200
-    except (urllib.error.URLError, OSError, ValueError):
+    except (OSError, ValueError):   # URLError is an OSError
         return False
 
 
@@ -652,7 +652,10 @@ def port_holder(port):
             pid = line[1:]
         elif line.startswith('c') and cmd is None:
             cmd = line[1:]
-    return f'PID {pid}' + (f' ({cmd})' if cmd else '') if pid else None
+    if not pid:
+        return None
+    suffix = f' ({cmd})' if cmd else ''
+    return f'PID {pid}{suffix}'
 
 
 def port_in_use(url):
