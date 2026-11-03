@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,13 +100,13 @@ loadScripts(document, 'script');</script>
 implements <a href="YamlMetaProvider.html" title="interface in org.apache.juneau.marshall.yaml">YamlMetaProvider</a>, <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>, <a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></span></div>
 <div class="block">Serializes POJO models to YAML.
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Handles <c>Accept</c> types:  <bc>application/yaml, text/yaml</bc>
  <p>
  Produces <c>Content-Type</c> types:  <bc>application/yaml</bc>
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
  <p>
  The conversion is as follows...
  <ul class='spaced-list'>
@@ -142,7 +141,7 @@ implements <a href="YamlMetaProvider.html" title="interface in org.apache.juneau
  Typically, one of the predefined DEFAULT serializers will be sufficient.
  However, custom serializers can be constructed to fine-tune behavior.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Use one of the default serializers to serialize a POJO</jc>
    String <jv>yaml</jv> = YamlSerializer.<jsf>DEFAULT</jsf>.write(<jv>someObject</jv>);
@@ -157,13 +156,13 @@ implements <a href="YamlMetaProvider.html" title="interface in org.apache.juneau
    <jv>yaml</jv> = <jv>serializer</jv>.write(<jv>someObject</jv>);
  </p>
 
- <h5 class='figure'>Example output (LinkedHashMap of name/age):</h5>
+ <h2 class='figure'>Example output (LinkedHashMap of name/age):</h2>
  <p class='bcode'>
    name: Alice
    age: 30
  </p>
 
- <h5 class='figure'>Complex (nested bean + array; bean properties are sorted alphabetically by default):</h5>
+ <h2 class='figure'>Complex (nested bean + array; bean properties are sorted alphabetically by default):</h2>
  <p class='bcode'>
    address:
      city: Boston
@@ -177,7 +176,7 @@ implements <a href="YamlMetaProvider.html" title="interface in org.apache.juneau
      - c
  </p>
 
- <h5 class='section'>Limitations compared to JSON</h5>
+ <h2 class='section'>Limitations compared to JSON</h2>
  <p>
  The YAML serializer has fewer configuration options than <a href="../json/JsonSerializer.html" title="class in org.apache.juneau.marshall.json"><code>JsonSerializer</code></a>:
  <ul class='spaced-list'>
@@ -189,11 +188,11 @@ implements <a href="YamlMetaProvider.html" title="interface in org.apache.juneau
       No strict vs lax output modes; YAML output follows a consistent, human-readable style.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlSupport">YAML</a>
  </ul></div>
 </section>

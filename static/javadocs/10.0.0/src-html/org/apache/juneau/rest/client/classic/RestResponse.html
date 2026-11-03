@@ -54,7 +54,7 @@
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * Instances of this class are created by calling the {@link RestRequest#run()} method.</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;jc&gt;// Create a request and response, automatically closing both.&lt;/jc&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;jk&gt;try&lt;/jk&gt; (</span>
@@ -75,13 +75,13 @@
 <span class="source-line-no">062</span><span id="line-62"> *    }</span>
 <span class="source-line-no">063</span><span id="line-63"> * &lt;/p&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='note'&gt;This class implements {@link AutoCloseable} and can be used in try-with-resources blocks.</span>
 <span class="source-line-no">067</span><span id="line-67"> *       The {@link #close()} method allows unchecked exceptions to propagate for debuggability,</span>
 <span class="source-line-no">068</span><span id="line-68"> *       while catching and logging checked exceptions to follow AutoCloseable best practices.</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient"&gt;juneau-rest-client-classic&lt;/a&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> */</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">   /**</span>
 <span class="source-line-no">136</span><span id="line-136">    * Provides the ability to perform fluent-style assertions on the response character encoding.</span>
 <span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">139</span><span id="line-139">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">140</span><span id="line-140">    *    &lt;jc&gt;// Validates that the response content charset is UTF-8.&lt;/jc&gt;</span>
 <span class="source-line-no">141</span><span id="line-141">    *    &lt;jv&gt;client&lt;/jv&gt;</span>
@@ -167,7 +167,7 @@
 <span class="source-line-no">154</span><span id="line-154">   /**</span>
 <span class="source-line-no">155</span><span id="line-155">    * Provides the ability to perform fluent-style assertions on this response body.</span>
 <span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">158</span><span id="line-158">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    *    &lt;jc&gt;// Validates the response body equals the text "OK".&lt;/jc&gt;</span>
 <span class="source-line-no">160</span><span id="line-160">    *    &lt;jv&gt;client&lt;/jv&gt;</span>
@@ -219,7 +219,7 @@
 <span class="source-line-no">206</span><span id="line-206">    *       .getContent().as(MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">207</span><span id="line-207">    * &lt;/p&gt;</span>
 <span class="source-line-no">208</span><span id="line-208">    *</span>
-<span class="source-line-no">209</span><span id="line-209">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">210</span><span id="line-210">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">211</span><span id="line-211">    *       If no charset was found on the &lt;code&gt;Content-Type&lt;/code&gt; response header, &lt;js&gt;"UTF-8"&lt;/js&gt; is assumed.</span>
 <span class="source-line-no">212</span><span id="line-212">    *  &lt;li class='note'&gt;</span>
@@ -240,7 +240,7 @@
 <span class="source-line-no">227</span><span id="line-227">    * &lt;p&gt;</span>
 <span class="source-line-no">228</span><span id="line-228">    * A shortcut for calling &lt;c&gt;assertContent().is(&lt;jv&gt;value&lt;/jv&gt;)&lt;/c&gt;.</span>
 <span class="source-line-no">229</span><span id="line-229">    *</span>
-<span class="source-line-no">230</span><span id="line-230">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">231</span><span id="line-231">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">232</span><span id="line-232">    *    &lt;jc&gt;// Validates the response body equals the text "OK".&lt;/jc&gt;</span>
 <span class="source-line-no">233</span><span id="line-233">    *    &lt;jv&gt;client&lt;/jv&gt;</span>
@@ -275,7 +275,7 @@
 <span class="source-line-no">262</span><span id="line-262">   /**</span>
 <span class="source-line-no">263</span><span id="line-263">    * Provides the ability to perform fluent-style assertions on a response header.</span>
 <span class="source-line-no">264</span><span id="line-264">    *</span>
-<span class="source-line-no">265</span><span id="line-265">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">265</span><span id="line-265">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">266</span><span id="line-266">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">267</span><span id="line-267">    *    &lt;jc&gt;// Validates the content type header is provided.&lt;/jc&gt;</span>
 <span class="source-line-no">268</span><span id="line-268">    *    &lt;jv&gt;client&lt;/jv&gt;</span>
@@ -336,7 +336,7 @@
 <span class="source-line-no">323</span><span id="line-323">   /**</span>
 <span class="source-line-no">324</span><span id="line-324">    * Provides the ability to perform fluent-style assertions on the response {@link StatusLine} object.</span>
 <span class="source-line-no">325</span><span id="line-325">    *</span>
-<span class="source-line-no">326</span><span id="line-326">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">326</span><span id="line-326">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">327</span><span id="line-327">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">328</span><span id="line-328">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;</span>
 <span class="source-line-no">329</span><span id="line-329">    *       .get(&lt;jsf&gt;URI&lt;/jsf&gt;)</span>
@@ -354,7 +354,7 @@
 <span class="source-line-no">341</span><span id="line-341">   /**</span>
 <span class="source-line-no">342</span><span id="line-342">    * Provides the ability to perform fluent-style assertions on the response status code.</span>
 <span class="source-line-no">343</span><span id="line-343">    *</span>
-<span class="source-line-no">344</span><span id="line-344">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">344</span><span id="line-344">    * &lt;h4 class='section'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">345</span><span id="line-345">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">346</span><span id="line-346">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;client&lt;/jv&gt;</span>
 <span class="source-line-no">347</span><span id="line-347">    *       .get(&lt;jsf&gt;URI&lt;/jsf&gt;)</span>
@@ -392,7 +392,7 @@
 <span class="source-line-no">379</span><span id="line-379">    * &lt;p&gt;</span>
 <span class="source-line-no">380</span><span id="line-380">    * This method is idempotent and can be called multiple times without side effects.</span>
 <span class="source-line-no">381</span><span id="line-381">    *</span>
-<span class="source-line-no">382</span><span id="line-382">    * &lt;h5 class='section'&gt;Implementation Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">382</span><span id="line-382">    * &lt;h4 class='section'&gt;Implementation Notes:&lt;/h4&gt;</span>
 <span class="source-line-no">383</span><span id="line-383">    * &lt;p&gt;</span>
 <span class="source-line-no">384</span><span id="line-384">    * This implementation represents a compromise between strict AutoCloseable compliance and debuggability:</span>
 <span class="source-line-no">385</span><span id="line-385">    * &lt;ul&gt;</span>
@@ -573,7 +573,7 @@
 <span class="source-line-no">560</span><span id="line-560">    * &lt;p&gt;</span>
 <span class="source-line-no">561</span><span id="line-561">    * The entity is provided by calling setEntity.</span>
 <span class="source-line-no">562</span><span id="line-562">    *</span>
-<span class="source-line-no">563</span><span id="line-563">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">563</span><span id="line-563">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">564</span><span id="line-564">    *    &lt;li class='note'&gt;Unlike the {@link HttpResponse#getEntity()} method, this method never returns a &lt;jk&gt;null&lt;/jk&gt; response.</span>
 <span class="source-line-no">565</span><span id="line-565">    *       Instead, &lt;c&gt;getContent().isPresent()&lt;/c&gt; can be used to determine whether the response has a body.</span>
 <span class="source-line-no">566</span><span id="line-566">    * &lt;/ul&gt;</span>
@@ -791,7 +791,7 @@
 <span class="source-line-no">778</span><span id="line-778">   /**</span>
 <span class="source-line-no">779</span><span id="line-779">    * Associates a response entity with this response.</span>
 <span class="source-line-no">780</span><span id="line-780">    *</span>
-<span class="source-line-no">781</span><span id="line-781">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">781</span><span id="line-781">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">782</span><span id="line-782">    *    &lt;li class='note'&gt;If an entity has already been set for this response and it depends on an input stream</span>
 <span class="source-line-no">783</span><span id="line-783">    *       ({@link HttpEntity#isStreaming()} returns &lt;jk&gt;true&lt;/jk&gt;), it must be fully consumed in order to ensure</span>
 <span class="source-line-no">784</span><span id="line-784">    *       release of resources.</span>

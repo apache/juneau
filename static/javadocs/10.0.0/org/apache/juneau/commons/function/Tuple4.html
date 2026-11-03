@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,13 +92,13 @@ loadScripts(document, 'script');</script>
  This class is useful when you need a four-value composite key for HashMap lookups that properly implements
  <a href="#equals(java.lang.Object)"><code>equals(Object)</code></a> and <a href="#hashCode()"><code>hashCode()</code></a> based on content rather than identity.
 
- <h5 class='section'>Array Support:</h5>
+ <h2 class='section'>Array Support:</h2>
  <p>
  Unlike using arrays directly as HashMap keys, this class properly handles arrays by using
  content-based equality and hashing via <a href="../lang/HashCode.html#of(java.lang.Object...)"><code>HashCode.of(Object...)</code></a> which internally uses
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Arrays.html#hashCode(java.lang.Object%5B%5D)" title="class or interface in java.util" class="external-link"><code>Arrays.hashCode(Object[])</code></a> for arrays.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="Tuple1.html" title="class in org.apache.juneau.commons.function"><code>Tuple1</code></a>
    <li class='jc'><a href="Tuple2.html" title="class in org.apache.juneau.commons.function"><code>Tuple2</code></a>
    <li class='jc'><a href="Tuple3.html" title="class in org.apache.juneau.commons.function"><code>Tuple3</code></a>

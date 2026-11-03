@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -100,7 +99,7 @@ extends <a href="Consumer3.html" title="interface in org.apache.juneau.commons.f
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>, making it compatible with standard <a href="Consumer3.html" title="interface in org.apache.juneau.commons.function"><code>Consumer3</code></a> usage while still allowing
  the implementation to throw checked exceptions via <a href="#acceptThrows(A,B,C)"><code>acceptThrows(Object, Object, Object)</code></a>.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Functional interface - can be used with lambda expressions and method references
    <li>Exception support - allows checked exceptions to be thrown via <a href="#acceptThrows(A,B,C)"><code>acceptThrows(Object, Object, Object)</code></a>
@@ -108,7 +107,7 @@ extends <a href="Consumer3.html" title="interface in org.apache.juneau.commons.f
    <li>Dual interface - can be used as both Consumer3 and ThrowingConsumer3
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Three-argument operations that may throw I/O exceptions
    <li>Validation operations that may throw validation exceptions
@@ -116,7 +115,7 @@ extends <a href="Consumer3.html" title="interface in org.apache.juneau.commons.f
    <li>Operations that need to propagate checked exceptions
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Lambda with exception</jc>
    ThrowingConsumer3&lt;String,Integer,Boolean&gt; <jv>fileWriter</jv> = (<jv>path</jv>, <jv>content</jv>, <jv>append</jv>) -&gt; {
@@ -138,7 +137,7 @@ extends <a href="Consumer3.html" title="interface in org.apache.juneau.commons.f
    <jv>fileWriter</jv>.apply(<js>"/tmp/output.txt"</js>, <js>"Hello World"</js>, <jk>true</jk>);  <jc>// May throw RuntimeException</jc>
  </p>
 
- <h5 class='section'>Exception Handling:</h5>
+ <h2 class='section'>Exception Handling:</h2>
  <ul class='spaced-list'>
    <li><a href="#acceptThrows(A,B,C)"><code>acceptThrows(Object, Object, Object)</code></a> - Throws checked exceptions directly
    <li><a href="#apply(A,B,C)"><code>apply(Object, Object, Object)</code></a> - Wraps checked exceptions in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>
@@ -146,7 +145,7 @@ extends <a href="Consumer3.html" title="interface in org.apache.juneau.commons.f
    <li>Use <code>apply</code> when you want standard Consumer3 behavior
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ThrowingConsumer.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingConsumer</code></a> - Single-argument consumer that throws exceptions
    <li class='jc'><a href="ThrowingConsumer2.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingConsumer2</code></a> - Two-argument consumer that throws exceptions
    <li class='jc'><a href="ThrowingConsumer4.html" title="interface in org.apache.juneau.commons.function"><code>ThrowingConsumer4</code></a> - Four-argument consumer that throws exceptions
@@ -259,7 +258,7 @@ extends <a href="Consumer3.html" title="interface in org.apache.juneau.commons.f
  This is the functional method that implementations must provide. It allows checked exceptions
  to be thrown directly, unlike the standard <a href="Consumer3.html#apply(A,B,C)"><code>Consumer3.apply(Object, Object, Object)</code></a> method.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ThrowingConsumer3&lt;String,Integer,Boolean&gt; <jv>validator</jv> = (<jv>name</jv>, <jv>age</jv>, <jv>active</jv>) -&gt; {
       <jk>if</jk> (<jv>name</jv> == <jk>null</jk> || <jv>name</jv>.isEmpty()) {

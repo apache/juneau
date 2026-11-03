@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -85,7 +84,7 @@ loadScripts(document, 'script');</script>
  <p>
  Provides assertions for various common POJO types.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  <p>
  Provides simple testing that <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link"><code>Throwables</code></a> are being thrown correctly.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
       .message().contains(<js>"Bad thing happened."</js>);
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  </ul></div>
@@ -350,7 +349,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
  Various transform methods such as <a href="FluentListAssertion.html#asItem(int)"><code>FluentListAssertion.asItem(int)</code></a> and <a href="FluentBeanAssertion.html#asProperty(java.lang.String)"><code>FluentBeanAssertion.asProperty(String)</code></a>
  return generic any-assertions so that they can be easily transformed into other assertion types.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -380,7 +379,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="ArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">ArrayAssertion</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-125">assertArray</a></span><wbr><span class="parameters">(E[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on an array of POJOs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -410,7 +409,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="BeanAssertion.html" title="class in org.apache.juneau.bct.assertions">BeanAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-154">assertBean</a></span><wbr><span class="parameters">(T&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Java bean.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -441,7 +440,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="BeanListAssertion.html" title="class in org.apache.juneau.bct.assertions">BeanListAssertion</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-183">assertBeanList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a list of Java beans.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -472,7 +471,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BooleanAssertion.html" title="class in org.apache.juneau.bct.assertions">BooleanAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-209">assertBoolean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Boolean.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -499,7 +498,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>,<wbr>boolean[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-236">assertBooleanArray</a></span><wbr><span class="parameters">(boolean[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a boolean array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -532,7 +531,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
  more tied to general byte arrays and the latter returns an assertion more tied to dealing with binary streams
  that can be decoded or transformed into a string.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -565,7 +564,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
  more tied to general byte arrays and the latter returns an assertion more tied to dealing with binary streams
  that can be decoded or transformed into a string.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -593,7 +592,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
                                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Performs an assertion on the contents of an input stream.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -623,7 +622,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Character.html" title="class or interface in java.lang" class="external-link">Character</a>,<wbr>char[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-353">assertCharArray</a></span><wbr><span class="parameters">(char[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a char array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -650,7 +649,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="CollectionAssertion.html" title="class in org.apache.juneau.bct.assertions">CollectionAssertion</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-385">assertCollection</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a collection of POJOs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -685,7 +684,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <span class="return-type"><a href="ComparableAssertion.html" title="class in org.apache.juneau.bct.assertions">ComparableAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-412">assertComparable</a></span><wbr><span class="parameters">(T&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Comparable.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -714,7 +713,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="DateAssertion.html" title="class in org.apache.juneau.bct.assertions">DateAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-438">assertDate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link">Date</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Date.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -741,7 +740,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>,<wbr>double[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-465">assertDoubleArray</a></span><wbr><span class="parameters">(double[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a double array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -769,7 +768,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>,<wbr>float[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-492">assertFloatArray</a></span><wbr><span class="parameters">(float[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a float array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -797,7 +796,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr>int[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-519">assertIntArray</a></span><wbr><span class="parameters">(int[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on an int array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -825,7 +824,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="IntegerAssertion.html" title="class in org.apache.juneau.bct.assertions">IntegerAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-545">assertInteger</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on an Integer.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -852,7 +851,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="ListAssertion.html" title="class in org.apache.juneau.bct.assertions">ListAssertion</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-573">assertList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a list of POJOs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -882,7 +881,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="ListAssertion.html" title="class in org.apache.juneau.bct.assertions">ListAssertion</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-601">assertList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a stream of POJOs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -912,7 +911,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="LongAssertion.html" title="class in org.apache.juneau.bct.assertions">LongAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-629">assertLong</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Long.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -941,7 +940,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>,<wbr>long[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-656">assertLongArray</a></span><wbr><span class="parameters">(long[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a long array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -970,7 +969,7 @@ V&gt;&nbsp;<a href="MapAssertion.html" title="class in org.apache.juneau.bct.ass
 V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="class in org.apache.juneau.bct.assertions">MapAssertion</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-685">assertMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a map.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1001,7 +1000,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ObjectAssertion.html" title="class in org.apache.juneau.bct.assertions">ObjectAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-714">assertObject</a></span><wbr><span class="parameters">(T&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Java Object.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1032,7 +1031,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="AnyAssertion.html" title="class in org.apache.juneau.bct.assertions">AnyAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-743">assertOptional</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Java Object wrapped in an Optional.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1064,7 +1063,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
                                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Performs an assertion on the contents of a Reader.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1094,7 +1093,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="PrimitiveArrayAssertion.html" title="class in org.apache.juneau.bct.assertions">PrimitiveArrayAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link">Short</a>,<wbr>short[]&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-798">assertShortArray</a></span><wbr><span class="parameters">(short[]&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a short array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1122,7 +1121,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="StringAssertion.html" title="class in org.apache.juneau.bct.assertions">StringAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-825">assertString</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a String.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1150,7 +1149,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="StringListAssertion.html" title="class in org.apache.juneau.bct.assertions">StringListAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-856">assertStringList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a list of Strings.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1181,7 +1180,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <span class="return-type"><a href="ThrowableAssertion.html" title="class in org.apache.juneau.bct.assertions">ThrowableAssertion</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-884">assertThrowable</a></span><wbr><span class="parameters">(T&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Throwable.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1211,7 +1210,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ThrowableAssertion.html" title="class in org.apache.juneau.bct.assertions">ThrowableAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-904">assertThrown</a></span><wbr><span class="parameters">(<a href="../../commons/function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</span></div>
 <div class="block">Executes an arbitrary snippet of code and captures anything thrown from it as a Throwable assertion.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1234,7 +1233,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="VersionAssertion.html" title="class in org.apache.juneau.bct.assertions">VersionAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-938">assertVersion</a></span><wbr><span class="parameters">(<a href="../../commons/lang/Version.html" title="class in org.apache.juneau.commons.lang">Version</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a Version.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 
@@ -1261,7 +1260,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="MapAssertion.html" title="c
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ZonedDateTimeAssertion.html" title="class in org.apache.juneau.bct.assertions">ZonedDateTimeAssertion</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/bct/assertions/Assertions.html#line-964">assertZonedDateTime</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link">ZonedDateTime</a>&nbsp;value)</span></div>
 <div class="block">Performs an assertion on a ZonedDateTime.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>import static</jk> org.apache.juneau.bct.assertions.Assertions.*;
 

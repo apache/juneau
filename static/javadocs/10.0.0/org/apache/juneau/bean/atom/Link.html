@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
    <li><c>via</c> - The source of the information
  </ul>
 
- <h5 class='figure'>Schema</h5>
+ <h2 class='figure'>Schema</h2>
  <p class='bschema'>
    atomLink =
       element atom:link {
@@ -116,7 +115,7 @@ loadScripts(document, 'script');</script>
       }
  </p>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create links for an entry</jc>
    Entry <jv>entry</jv> = <jk>new</jk> Entry(...)
@@ -130,12 +129,12 @@ loadScripts(document, 'script');</script>
       );
  </p>
 
- <h5 class='section'>Specification:</h5>
+ <h2 class='section'>Specification:</h2>
  <p>
  Represents an <c>atomLink</c> construct in the
  <a class="doclink" href="https://tools.ietf.org/html/rfc4287#section-4.2.7">RFC 4287 - Section 4.2.7</a> specification.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanAtom">juneau-bean-atom</a>
    <li class='extlink'><a class="doclink" href="https://tools.ietf.org/html/rfc4287">RFC 4287 - The Atom Syndication Format</a>
    <li class='extlink'><a class="doclink" href="https://www.iana.org/assignments/link-relations/link-relations.xhtml">IANA Link Relations</a>
@@ -416,7 +415,7 @@ loadScripts(document, 'script');</script>
  The value can be of any of the following types: <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link"><code>URI</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URL.html" title="class or interface in java.net" class="external-link"><code>URL</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.
  Strings must be valid URIs.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Feed <jv>feed</jv> = <jk>new</jk> Feed(...)
       .setBase(<js>"http://example.org/"</js>);
@@ -441,7 +440,7 @@ loadScripts(document, 'script');</script>
  <p>
  Sets the URI of the referenced resource (required).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Link <jv>link</jv> = <jk>new</jk> Link()
       .setHref(<js>"http://example.org/posts/1"</js>);
@@ -464,7 +463,7 @@ loadScripts(document, 'script');</script>
  <p>
  Sets the language of the resource pointed to by the link.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Link <jv>link</jv> = <jk>new</jk> Link(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://example.org/post1.html"</js>)
       .setHreflang(<js>"en-US"</js>);
@@ -488,7 +487,7 @@ loadScripts(document, 'script');</script>
  <p>
  Sets the natural language of the element's content (xml:lang attribute).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Text <jv>title</jv> = <jk>new</jk> Text(<js>"text"</js>)
       .setText(<js>"Mon Blog"</js>)
@@ -514,7 +513,7 @@ loadScripts(document, 'script');</script>
  <p>
  Sets an advisory size in bytes of the linked resource.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Podcast episode with file size</jc>
    Link <jv>link</jv> = <jk>new</jk> Link(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://example.org/episode1.mp3"</js>)
@@ -543,7 +542,7 @@ loadScripts(document, 'script');</script>
  <js>"enclosure"</js>, <js>"via"</js>, <js>"first"</js>, <js>"last"</js>,
  <js>"previous"</js>, <js>"next"</js>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Link <jv>link</jv> = <jk>new</jk> Link()
       .setRel(<js>"alternate"</js>)
@@ -567,7 +566,7 @@ loadScripts(document, 'script');</script>
  <p>
  Sets human-readable information about the link.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Link <jv>link</jv> = <jk>new</jk> Link(<js>"related"</js>, <js>"text/html"</js>, <js>"http://example.org/related"</js>)
       .setTitle(<js>"Related Article"</js>);
@@ -593,7 +592,7 @@ loadScripts(document, 'script');</script>
  <p>
  This should be a valid MIME media type as defined by RFC 4287.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <ul class='spaced-list'>
    <li><js>"text/html"</js>
    <li><js>"application/pdf"</js>

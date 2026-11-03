@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,14 +92,14 @@ implements <a href="../../rest/server/processor/ResponseProcessor.html" title="i
  REST response content that is a <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a>, giving the JSON serving path the same gate the
  <code>juneau-console-views</code> HTML emitters already give every <code>Widget</code> they consume.
 
- <h5 class='section'>Why this is a <a href="../../rest/server/processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a>, not a <code>RestContext</code> hook</h5>
+ <h2 class='section'>Why this is a <a href="../../rest/server/processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a>, not a <code>RestContext</code> hook</h2>
  <p>
  <code>juneau-rest-server</code> does not (and must not) depend on this module, so a hard-coded validation step
  inside it cannot see <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a> without inverting that dependency. A <a href="../../rest/server/processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor"><code>ResponseProcessor</code></a> declared
  here, discovered by every classpath that carries this module via <code>ServiceLoader</code>, needs no such
  reflection or hoisted marker interface &mdash; see the class Javadoc.
 
- <h5 class='section'>Why <code>NEXT</code>, never <code>FINISHED</code></h5>
+ <h2 class='section'>Why <code>NEXT</code>, never <code>FINISHED</code></h2>
  <p>
  This processor validates and declines to handle: it never claims the response, so it cannot perturb chain
  ordering, content-type negotiation, or the <code>NotImplemented</code> fallthrough. Non-<a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a> content
@@ -108,14 +107,14 @@ implements <a href="../../rest/server/processor/ResponseProcessor.html" title="i
  <code>org.apache.juneau.rest.server.widget.Widget</code> SVL resolver &mdash; see the module Javadoc's naming
  collision note) costs one <code>instanceof</code> test and is otherwise untouched.
 
- <h5 class='section'>Why <code>InternalServerError</code> (500), not the caller's problem</h5>
+ <h2 class='section'>Why <code>InternalServerError</code> (500), not the caller's problem</h2>
  <p>
  A malformed <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a> reaching the serving path is a <b>server</b> defect &mdash; the client asked for
  a dialog correctly and the server built a broken one &mdash; not an inbound-validation failure of the kind
  <code>ValidationException</code> (400) is scoped to. The underlying <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> rides as the
  cause so the message names the failing rule.
 
- <h5 class='section'>Deliberately not deduplicated against <a href="ModalDef.html#checked()"><code>ModalDef.checked()</code></a>/<a href="FormDef.html#checked()"><code>FormDef.checked()</code></a></h5>
+ <h2 class='section'>Deliberately not deduplicated against <a href="ModalDef.html#checked()"><code>ModalDef.checked()</code></a>/<a href="FormDef.html#checked()"><code>FormDef.checked()</code></a></h2>
  <p>
  A widget that already called <code>checked()</code> is validated twice per response: once at build time, once
  here. No <code>validated</code> flag is added to skip the second pass &mdash; a mutable "already validated" flag
@@ -123,7 +122,7 @@ implements <a href="../../rest/server/processor/ResponseProcessor.html" title="i
  that this module's contract deliberately avoids elsewhere. <code>validate()</code> is cheap and idempotent, so the
  repeat costs nothing worth building around.
 
- <h5 class='section'>Traversal is top-level only</h5>
+ <h2 class='section'>Traversal is top-level only</h2>
  <p>
  Only <code>res.getContent()</code> itself is tested. Nested widgets are covered by the beans' own recursive
  <code>validate()</code> (e.g. <a href="ModalDef.html#validate()"><code>ModalDef.validate()</code></a> &rarr; <a href="FormDef.html#validate()"><code>FormDef.validate()</code></a>); a <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a>
@@ -131,7 +130,7 @@ implements <a href="../../rest/server/processor/ResponseProcessor.html" title="i
  that shape, and walking one would collide with the unrelated <code>examples.views.Widget</code> row-bean lists
  some example endpoints do return.
 
- <h5 class='section'>Escape hatch</h5>
+ <h2 class='section'>Escape hatch</h2>
  <p>
  A resource that must serve a deliberately-invalid <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a> can override the response-processor chain
  entirely with a <code>@Bean ResponseProcessorList</code> factory method, which replaces the whole list. There is

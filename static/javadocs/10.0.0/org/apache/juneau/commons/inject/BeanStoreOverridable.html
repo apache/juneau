@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
  <b>Mode INJECT</b> wiring pattern in the test-injection model &mdash; the overlay is installed before the SUT
  exists.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>var</jk> <jv>overlay</jv> = <jk>new</jk> TestBeanStore().override(MyService.<jk>class</jk>, <jv>mockSvc</jv>);
    <jk>var</jk> <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>()
@@ -117,7 +116,7 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>Why a self-typed interface:</h5>
+ <h2 class='section'>Why a self-typed interface:</h2>
  <p>
  The <code>B extends BeanStoreOverridable&lt;B&gt;</code> self-type lets the method return the concrete builder
  type rather than <code>BeanStoreOverridable&lt;?&gt;</code>, preserving the fluent chain at the call site:
@@ -128,7 +127,7 @@ loadScripts(document, 'script');</script>
       .add(JsonSerializer.<jk>class</jk>);     <jc>// fluent chain preserved</jc>
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> - The base lookup interface this layer extends.
    <li class='jc'><a href="BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a> - The default writable implementation with the <code>overridingParent</code> slot.
  </ul></div>

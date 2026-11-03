@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="OpenApiElement.html" title="class in org.apache.juneau.bean.openapi3">OpenApiElement</a></span></div>
 <div class="block">Lists the required security schemes for this operation.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>
  </ul></div>
 </section>
@@ -330,7 +329,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method is equivalent to calling <c>addRequirement(schemeName)</c> with no scopes.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Add API key authentication requirement</jc>
    SecurityRequirement <jv>requirement</jv> = <jk>new</jk> SecurityRequirement()
@@ -338,7 +337,7 @@ loadScripts(document, 'script');</script>
    <jc>// Results in: { "api_key": [] }</jc>
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#security-requirement-object">OpenAPI Specification &gt; Security Requirement Object</a>
    <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/authentication/">OpenAPI Authentication</a>
  </ul></div>

@@ -255,7 +255,7 @@ def test_promote_push_runs_paused(tmp_path, monkeypatch):
     site = tmp_path / 'site'
     (site / '.git').mkdir(parents=True)
     monkeypatch.setattr(release, 'site_dir_for', lambda docs_dir: site)
-    monkeypatch.setattr(release, 'get_git_remote_url', lambda: 'https://example.org/x.git')
+    monkeypatch.setattr(release, 'get_git_remote_url', lambda *a: 'https://example.org/x.git')
     monkeypatch.setattr(release.subprocess, 'run', lambda *a, **k: None)
     view = PushView()
     assert release.promote(argparse.Namespace(no_push=False), view, tmp_path) == 0
@@ -268,14 +268,14 @@ def test_stage_push_runs_paused(tmp_path, monkeypatch):
     staging = tmp_path / 'staging'
     staging.mkdir()
     monkeypatch.setattr(release_stage, 'staging_dir_for', lambda docs_dir: staging)
-    monkeypatch.setattr(release_stage, 'get_git_remote_url', lambda: 'https://example.org/x.git')
+    monkeypatch.setattr(release_stage, 'get_git_remote_url', lambda *a: 'https://example.org/x.git')
     monkeypatch.setattr(release_stage, 'BUILD_SCRIPT', Path(__file__))
-    monkeypatch.setattr(release_stage.subprocess, 'run', lambda *a, **k: types.SimpleNamespace(returncode=0))
+    monkeypatch.setattr(release_stage.subprocess, 'run', lambda *a, **k: types.SimpleNamespace(returncode=0, stdout=''))
     for name in ('fetch_staging', 'copy_build', 'commit_staging'):
         monkeypatch.setattr(release_stage, name, lambda *a, **k: None)
     monkeypatch.setattr(release_stage.webbrowser, 'open', lambda url: True)
     view = PushView()
-    args = argparse.Namespace(no_push=False, juneau_root=None, console=None, commit_message='m')
+    args = argparse.Namespace(no_push=False, use_existing_build=False, juneau_root=None, console=None, commit_message='m')
     assert release_stage.release_stage(args, view, tmp_path, None) == 0
     assert view.calls == [(['git', 'push'], 1)]
 

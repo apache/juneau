@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/Header.html" title="class or interface in org.apache.http" class="external-link">Header</a>&gt;</span></div>
 <div class="block">A simple list of HTTP headers with various convenience methods.
 
- <h5 class='figure'>Example</h5>
+ <h2 class='figure'>Example</h2>
  <p class='bjava'>
    HeaderList <jv>headers</jv> = HeaderList
       .<jsm>create</jsm>()
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
    HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"</js>));
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common</a>
  </ul></div>
 <dl class="notes">
@@ -569,7 +568,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="HeaderList.html" title="class in org.apache.juneau.http.classic.header">HeaderList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/http/classic/header/HeaderList.html#line-129">ofPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;pairs)</span></div>
 <div class="block">Creates a new <a href="HeaderList.html" title="class in org.apache.juneau.http.classic.header"><code>HeaderList</code></a> initialized with the specified name/value pairs.
 
- <h5 class='figure'>Example</h5>
+ <h4 class='figure'>Example</h4>
  <p class='bjava'>
    HeaderList <jv>headers</jv> = HeaderList.<jsm>ofPairs</jsm>(<js>"Accept"</js>, <js>"text/xml"</js>, <js>"Content-Type"</js>, <js>"text/xml"</js>);
  </p></div>
@@ -783,7 +782,7 @@ loadScripts(document, 'script');</script>
  Same as <a href="#get(java.lang.String,java.lang.Class)"><code>get(String, Class)</code></a> but the header name is pulled from the <a href="../../Header.html#name()"><code>Header.name()</code></a> or
    <a href="../../Header.html#value()"><code>Header.value()</code></a> annotations.
 
- <h5 class='figure'>Example</h5>
+ <h4 class='figure'>Example</h4>
  <p class='bjava'>
    Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
  </p></div>
@@ -834,7 +833,7 @@ loadScripts(document, 'script');</script>
    <li><c>X(String <jv>name</jv>, Object <jv>value</jv>)</c>
  </ul>
 
- <h5 class='figure'>Example</h5>
+ <h4 class='figure'>Example</h4>
  <p class='bjava'>
    BasicIntegerHeader <jv>age</jv> = headerList.get(<js>"Age"</js>, BasicIntegerHeader.<jk>class</jk>);
  </p></div>

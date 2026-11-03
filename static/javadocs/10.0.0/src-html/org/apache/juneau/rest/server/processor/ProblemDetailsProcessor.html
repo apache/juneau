@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *       continues; if no mapper matches, the processor returns {@code NEXT}.</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Mapper discovery&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Mapper discovery&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * The processor pulls registered {@link ProblemMapper}s from the resource's bean store in this order:</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;ul class='spaced-list'&gt;</span>
@@ -87,7 +87,7 @@
 <span class="source-line-no">074</span><span id="line-74"> * and ultimately to the built-in {@link ProblemAdapters#fromException(BasicHttpException)} fallback for</span>
 <span class="source-line-no">075</span><span id="line-75"> * {@link BasicHttpException} subclasses.</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
-<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;Localization seam&lt;/h5&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h2 class='section'&gt;Localization seam&lt;/h2&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;p&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> * Before serializing, the processor consults the bean store for a {@link ProblemLocalizationStrategy} bean and</span>
 <span class="source-line-no">080</span><span id="line-80"> * passes the resolved {@link Problem} (and {@code RestRequest.getLocale()}) through it. The default behavior is</span>
@@ -105,7 +105,7 @@
 <span class="source-line-no">092</span><span id="line-92"> * &lt;b&gt;{@code type} field policy.&lt;/b&gt; Serialized as-is. A {@code null} {@code type} is omitted from the JSON output</span>
 <span class="source-line-no">093</span><span id="line-93"> * rather than synthesized as {@code "type":"about:blank"} on the wire (preserves the absent-vs-explicit distinction).</span>
 <span class="source-line-no">094</span><span id="line-94"> *</span>
-<span class="source-line-no">095</span><span id="line-95"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">096</span><span id="line-96"> *    &lt;li class='jc'&gt;{@link Problem}</span>
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;li class='jc'&gt;{@link ProblemException}</span>
 <span class="source-line-no">098</span><span id="line-98"> *    &lt;li class='jc'&gt;{@link ProblemMapper}</span>

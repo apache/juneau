@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
    <li>Convenience methods for formatted logging using <a href="../utils/Shorts.html#fs(java.lang.String,java.lang.Object...)"><code>Shorts.fs(String, Object...)</code></a>
  </ul>
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul>
    <li>All standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link"><code>Logger</code></a> functionality via delegation
    <li>Convenience methods for formatted logging at all log levels
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
    <li>Printf-style formatting (rendered via <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>)
  </ul>
 
- <h5 class='section'>Format Support:</h5>
+ <h2 class='section'>Format Support:</h2>
  <p>
  The formatting methods use printf-style (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" title="class or interface in java.util" class="external-link"><code>Formatter</code></a>) placeholders. MessageFormat-style
  (<js>"{0}"</js>) patterns are <b>not</b> expanded here — use <a href="../utils/Shorts.html#mf(java.lang.String,java.lang.Object...)"><code>Shorts.mf(String, Object...)</code></a> /
@@ -119,7 +118,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a> by a non-Juneau handler.
  </p>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    RichLogger <jv>logger</jv> = RichLogger.getLogger(MyClass.<jk>class</jk>.getName());
 
@@ -130,7 +129,7 @@ loadScripts(document, 'script');</script>
    <jv>logger</jv>.fine(<js>"Debug value: %s"</js>, debugValue);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../utils/Shorts.html#fs(java.lang.String,java.lang.Object...)"><code>Shorts.fs(String, Object...)</code></a>
    <li class='jc'><a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Logger.html" title="class or interface in java.util.logging" class="external-link"><code>Logger</code></a>

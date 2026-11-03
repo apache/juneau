@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * configured instance as a bean, or return one from a {@code @Bean} factory method on the resource; the resolver picks it</span>
 <span class="source-line-no">032</span><span id="line-32"> * up via {@link RestContext#getRequestIdSettings()}.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='topic'&gt;Resolution behavior&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='topic'&gt;Resolution behavior&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;ol&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;If the request already carries a non-empty id under {@link #getAttributeKey() attributeKey} (idempotent re-entry</span>
 <span class="source-line-no">037</span><span id="line-37"> *       or a parent filter), that value is honored unchanged.</span>
@@ -55,14 +55,14 @@
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Otherwise a fresh id is minted via {@link #getIdSupplier() idSupplier}.</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ol&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='topic'&gt;Default validator &amp;mdash; sanitize-and-accept&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='topic'&gt;Default validator &amp;mdash; sanitize-and-accept&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * Unlike a reject-and-remint regex, the default validator {@linkplain Builder#validator(Predicate) accepts} any candidate</span>
 <span class="source-line-no">048</span><span id="line-48"> * that survives sanitization within the length cap.  The sanitizer already neutralizes CR/LF/control-character</span>
 <span class="source-line-no">049</span><span id="line-49"> * header-injection payloads (escaping them to inert, ASCII-safe {@code \\uXXXX}), so the default honors a cleaned form</span>
 <span class="source-line-no">050</span><span id="line-50"> * rather than discarding a slightly-dirty id.  Supply a stricter validator (e.g. UUID-only) to opt into reject-and-remint.</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging"&gt;Logging / Debugging&lt;/a&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/ul&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>

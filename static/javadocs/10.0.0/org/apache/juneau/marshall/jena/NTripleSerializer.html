@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
  <p>
  Produces one RDF triple per line in W3C N-Triples format. Simple, line-oriented, and easy to parse.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Serialize a bean to N-Triples string.</jc>
    Person <jv>person</jv> = <jk>new</jk> Person(<js>"Alice"</js>, 30);
@@ -117,13 +116,13 @@ loadScripts(document, 'script');</script>
    String <jv>nTriples</jv> = <jv>s</jv>.write(<jv>person</jv>);
  </p>
 
- <h5 class='figure'>Example output (bean with name/age):</h5>
+ <h2 class='figure'>Example output (bean with name/age):</h2>
  <p class='bcode'>
    &lt;...&gt; &lt;.../name&gt; "Alice" .
    &lt;...&gt; &lt;.../age&gt; "30"^^&lt;http://www.w3.org/2001/XMLSchema#int&gt; .
  </p>
 
- <h5 class='figure'>Complex (nested address + array):</h5>
+ <h2 class='figure'>Complex (nested address + array):</h2>
  <p class='bcode'>
    &lt;...&gt; &lt;.../name&gt; "Alice" .
    &lt;...&gt; &lt;.../age&gt; "30"^^... .
@@ -133,11 +132,11 @@ loadScripts(document, 'script');</script>
    &lt;.../address&gt; &lt;.../state&gt; "MA" .
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'>{doc jmr.RdfDetails}
  </ul></div>
 </section>

@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * append mode, and buffering options. It's particularly useful when you need to write files with</span>
 <span class="source-line-no">031</span><span id="line-31"> * specific encodings or control whether to append to existing files.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Fluent API - all methods return &lt;c&gt;this&lt;/c&gt; for method chaining</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Character encoding support - specify custom charset for file writing</span>
@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;Multiple file specification methods - accept File or String path</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Writing files with specific character encodings (UTF-8, ISO-8859-1, etc.)</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Appending to log files or data files</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Writing files where buffering improves performance</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;jc&gt;// Basic usage&lt;/jc&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -82,13 +82,13 @@
 <span class="source-line-no">069</span><span id="line-69"> *       .build();</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Character Encoding:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Character Encoding:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * By default, the builder uses the system's default charset ({@link Charset#defaultCharset()}).</span>
 <span class="source-line-no">075</span><span id="line-75"> * You can specify a custom charset using {@link #charset(Charset)} or {@link #charset(String)}.</span>
 <span class="source-line-no">076</span><span id="line-76"> * This is important when writing files that need to be read with a specific encoding.</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
-<span class="source-line-no">078</span><span id="line-78"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='jc'&gt;{@link FileReaderBuilder} - Builder for file readers</span>
 <span class="source-line-no">080</span><span id="line-80"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO"&gt;I/O Package&lt;/a&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">   /**</span>
 <span class="source-line-no">090</span><span id="line-90">    * Creates a new builder.</span>
 <span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">092</span><span id="line-92">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">093</span><span id="line-93">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">094</span><span id="line-94">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">095</span><span id="line-95">    *       .file(&lt;js&gt;"output.txt"&lt;/js&gt;)</span>
@@ -118,7 +118,7 @@
 <span class="source-line-no">105</span><span id="line-105">   /**</span>
 <span class="source-line-no">106</span><span id="line-106">    * Creates a new builder initialized with the specified file.</span>
 <span class="source-line-no">107</span><span id="line-107">    *</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">109</span><span id="line-109">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">110</span><span id="line-110">    *    File &lt;jv&gt;file&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; File(&lt;js&gt;"output.txt"&lt;/js&gt;);</span>
 <span class="source-line-no">111</span><span id="line-111">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;file&lt;/jv&gt;)</span>
@@ -136,7 +136,7 @@
 <span class="source-line-no">123</span><span id="line-123">   /**</span>
 <span class="source-line-no">124</span><span id="line-124">    * Creates a new builder initialized with the specified file path.</span>
 <span class="source-line-no">125</span><span id="line-125">    *</span>
-<span class="source-line-no">126</span><span id="line-126">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">126</span><span id="line-126">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">127</span><span id="line-127">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">128</span><span id="line-128">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;js&gt;"/path/to/output.txt"&lt;/js&gt;)</span>
 <span class="source-line-no">129</span><span id="line-129">    *       .append()</span>
@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    * existing file content rather than overwriting it. This is useful for log files or data</span>
 <span class="source-line-no">153</span><span id="line-153">    * files where you want to preserve existing content.</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">156</span><span id="line-156">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">157</span><span id="line-157">    *    &lt;jc&gt;// Append to log file&lt;/jc&gt;</span>
 <span class="source-line-no">158</span><span id="line-158">    *    Writer &lt;jv&gt;logWriter&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -187,7 +187,7 @@
 <span class="source-line-no">174</span><span id="line-174">    * &lt;p&gt;</span>
 <span class="source-line-no">175</span><span id="line-175">    * Boolean-arg form of {@link #append()}, useful when the setting is conditional.</span>
 <span class="source-line-no">176</span><span id="line-176">    *</span>
-<span class="source-line-no">177</span><span id="line-177">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">177</span><span id="line-177">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">178</span><span id="line-178">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">179</span><span id="line-179">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">180</span><span id="line-180">    *       .file(&lt;js&gt;"app.log"&lt;/js&gt;)</span>
@@ -211,7 +211,7 @@
 <span class="source-line-no">198</span><span id="line-198">    * {@link BufferedOutputStream}, which can significantly improve performance for multiple</span>
 <span class="source-line-no">199</span><span id="line-199">    * small writes by batching them together.</span>
 <span class="source-line-no">200</span><span id="line-200">    *</span>
-<span class="source-line-no">201</span><span id="line-201">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">202</span><span id="line-202">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">203</span><span id="line-203">    *    &lt;jc&gt;// Buffered writer for better performance&lt;/jc&gt;</span>
 <span class="source-line-no">204</span><span id="line-204">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -232,7 +232,7 @@
 <span class="source-line-no">219</span><span id="line-219">    * &lt;p&gt;</span>
 <span class="source-line-no">220</span><span id="line-220">    * Boolean-arg form of {@link #buffered()}, useful when the setting is conditional.</span>
 <span class="source-line-no">221</span><span id="line-221">    *</span>
-<span class="source-line-no">222</span><span id="line-222">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">225</span><span id="line-225">    *       .file(&lt;js&gt;"output.txt"&lt;/js&gt;)</span>
@@ -256,7 +256,7 @@
 <span class="source-line-no">243</span><span id="line-243">    * options. The file will be created if it doesn't exist (unless in append mode, where the</span>
 <span class="source-line-no">244</span><span id="line-244">    * file must exist or be creatable).</span>
 <span class="source-line-no">245</span><span id="line-245">    *</span>
-<span class="source-line-no">246</span><span id="line-246">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">246</span><span id="line-246">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">247</span><span id="line-247">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">248</span><span id="line-248">    *    &lt;jk&gt;try&lt;/jk&gt; (Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">249</span><span id="line-249">    *       .file(&lt;js&gt;"output.txt"&lt;/js&gt;)</span>
@@ -286,7 +286,7 @@
 <span class="source-line-no">273</span><span id="line-273">    * Specifying the encoding is important when writing files that need to be read with a specific</span>
 <span class="source-line-no">274</span><span id="line-274">    * character encoding.</span>
 <span class="source-line-no">275</span><span id="line-275">    *</span>
-<span class="source-line-no">276</span><span id="line-276">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">277</span><span id="line-277">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">278</span><span id="line-278">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">279</span><span id="line-279">    *       .file(&lt;js&gt;"data.txt"&lt;/js&gt;)</span>
@@ -309,7 +309,7 @@
 <span class="source-line-no">296</span><span id="line-296">    * This is a convenience method that accepts a charset name string and converts it to a</span>
 <span class="source-line-no">297</span><span id="line-297">    * {@link Charset} using {@link Charset#forName(String)}.</span>
 <span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">299</span><span id="line-299">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">300</span><span id="line-300">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">301</span><span id="line-301">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">302</span><span id="line-302">    *       .file(&lt;js&gt;"data.txt"&lt;/js&gt;)</span>
@@ -330,7 +330,7 @@
 <span class="source-line-no">317</span><span id="line-317">   /**</span>
 <span class="source-line-no">318</span><span id="line-318">    * Sets the file to write to.</span>
 <span class="source-line-no">319</span><span id="line-319">    *</span>
-<span class="source-line-no">320</span><span id="line-320">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">320</span><span id="line-320">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">321</span><span id="line-321">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">322</span><span id="line-322">    *    File &lt;jv&gt;f&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; File(&lt;js&gt;"output.txt"&lt;/js&gt;);</span>
 <span class="source-line-no">323</span><span id="line-323">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -349,7 +349,7 @@
 <span class="source-line-no">336</span><span id="line-336">   /**</span>
 <span class="source-line-no">337</span><span id="line-337">    * Sets the file path to write to.</span>
 <span class="source-line-no">338</span><span id="line-338">    *</span>
-<span class="source-line-no">339</span><span id="line-339">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">339</span><span id="line-339">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">340</span><span id="line-340">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">341</span><span id="line-341">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">342</span><span id="line-342">    *       .file(&lt;js&gt;"/path/to/output.txt"&lt;/js&gt;)</span>
@@ -371,7 +371,7 @@
 <span class="source-line-no">358</span><span id="line-358">    * Convenience overload for callers working with the NIO {@link Path} API, consistent with</span>
 <span class="source-line-no">359</span><span id="line-359">    * {@link PathReaderBuilder#path(Path)}.</span>
 <span class="source-line-no">360</span><span id="line-360">    *</span>
-<span class="source-line-no">361</span><span id="line-361">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">361</span><span id="line-361">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">362</span><span id="line-362">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">363</span><span id="line-363">    *    Writer &lt;jv&gt;writer&lt;/jv&gt; = FileWriterBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">364</span><span id="line-364">    *       .file(Paths.&lt;jsm&gt;get&lt;/jsm&gt;(&lt;js&gt;"/path/to/output.txt"&lt;/js&gt;))</span>

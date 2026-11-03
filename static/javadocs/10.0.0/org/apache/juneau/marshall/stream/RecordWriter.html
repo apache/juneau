@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
  Single-rooted formats accept exactly one call (subsequent calls throw); multi-rooted formats
  (jsonl, csv, sse) emit one line / row / event per call.
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
    <jk>try</jk> (RecordWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.writeRecords(<jv>sb</jv>)) {
@@ -104,7 +103,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
    }
  </p>
 
- <h5 class='section'>Streaming quality:</h5>
+ <h2 class='section'>Streaming quality:</h2>
  <ul>
    <li><a href="#isStreaming()"><code>isStreaming()</code></a> == <jk>true</jk> &mdash; O(1)-memory streaming.  FULL-token formats
       return a cursor that is also a <a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> (the structural surface).
@@ -113,13 +112,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/ja
       serializer and the structural surface is not available.
  </ul>
 
- <h5 class='section'>Resource ownership:</h5>
+ <h2 class='section'>Resource ownership:</h2>
  <p>
  Every <a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> / <code>RecordWriter</code> produced by a factory method
  <b>closes what it was handed</b> &mdash; if the underlying input/output is <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html" title="class or interface in java.io" class="external-link"><code>Closeable</code></a>,
  <a href="#close()"><code>close()</code></a> closes it.  This contract is symmetric across all factory methods.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li><a href="RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> &mdash; the pull-side counterpart.
    <li><a href="TokenWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWriter</code></a> &mdash; structural extension for FULL-capability formats.
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

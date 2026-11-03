@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
  <a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanProp</code></a> instead. To rename a property, use <a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>@BeanProp</code></a>
  (e.g. <c>@BeanProp("newName")</c>), not this annotation.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='ja'><a href="../commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean"><code>BeanProp</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanPropAnnotation">@BeanProp Annotation</a>
  </ul></div>
@@ -268,7 +267,7 @@ loadScripts(document, 'script');</script>
  Multiple view names are supported — a property tagged <code>view={"summary","detail"}</code> is included
  when <em>either</em> <code>"summary"</code> or <code>"detail"</code> is the active view (union semantics).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyBean {
 
@@ -285,7 +284,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingContext.Builder.html#activeView(java.lang.String)"><code>MarshallingContext.Builder.activeView(String)</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ViewProjection">View-Based Projection</a>
  </ul></div>
@@ -311,7 +310,7 @@ loadScripts(document, 'script');</script>
  The list of classes that make up the bean dictionary for this bean property, used during
  polymorphic marshalling.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#dictionary()"><code>Marshalled.dictionary()</code></a>
    <li class='ja'><a href="MarshalledConfig.html#dictionary()"><code>MarshalledConfig.dictionary()</code></a>
    <li class='ja'><a href="MarshalledConfig.html#dictionary_replace()"><code>MarshalledConfig.dictionary_replace()</code></a>
@@ -388,7 +387,7 @@ loadScripts(document, 'script');</script>
  During parsing, we will attempt to convert the value to the original form by using the
  <a href="MarshallingSession.html#convertToType(java.lang.Object,java.lang.Object)"><code>MarshallingSession.convertToType(Object, Class)</code></a> but there is no guarantee that this will succeed.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <ja>@MarshalledProp</ja>(format=<js>"$%.2f"</js>)
    <jk>public float</jk> <jf>price</jf>;
@@ -397,7 +396,7 @@ loadScripts(document, 'script');</script>
  <p>
  This annotation can also be used on private fields of a property like so:
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>public class</jk> MyBean {
 

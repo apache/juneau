@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li class="nav-bar-cell1-rev">Package</li>
@@ -70,7 +69,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Tracing SPI for <code>juneau-rest-server</code> &mdash; per-request span hook backed by a
  caller-supplied <a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a> bean.
 
- <h5 class='topic'>Opt-in</h5>
+ <h2 class='topic'>Opt-in</h2>
 
  <p>
  The SPI is off by default. A fresh <code>RestContext</code> built without any
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
       OpenTelemetry dependency on the core surface.
  </ul>
 
- <h5 class='topic'>Lifecycle</h5>
+ <h2 class='topic'>Lifecycle</h2>
 
  <p>
  For every <code>@RestOp</code> invocation, the framework opens a <a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a>
@@ -103,7 +102,7 @@ loadScripts(document, 'script');</script>
  neutral carrier type. Server-only tracing SPI types (<code>TraceContextExtractor</code>,
  <code>TraceOperation</code>, <code>TraceContexts</code>) remain in this package.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>
    <li class='jc'><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a>

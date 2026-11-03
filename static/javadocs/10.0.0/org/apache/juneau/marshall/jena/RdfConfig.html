@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used primarily for specifying bean configuration properties on REST classes and methods.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'>{doc jmr.RdfDetails}
  </ul></div>
 </section>
@@ -294,12 +293,12 @@ loadScripts(document, 'script');</script>
  When present, this value overrides the <a href="../serializer/Serializer.Builder.html#addBeanTypes()"><code>Serializer.Builder#addBeanTypes()</code></a> setting and is
  provided to customize the behavior of specific serializers in a <a href="../serializer/SerializerSet.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializerSet</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="../serializer/Serializer.Builder.html#addBeanTypes()"><code>Serializer.Builder.addBeanTypes()</code></a>
  </ul></div>
 <dl class="notes">
@@ -318,12 +317,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfConfig.html#line-84">addLiteralTypes</a></span></div>
 <div class="block">Add XSI data types to non-<c>String</c> literals.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#addLiteralTypes()"><code>RdfSerializer.Builder.addLiteralTypes()</code></a>
  </ul></div>
 <dl class="notes">
@@ -351,12 +350,12 @@ loadScripts(document, 'script');</script>
  If disabled, the parser has to search through the model to find any resources without incoming predicates to
  identify root notes, which can introduce a considerable performance degradation.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#addRootProperty()"><code>RdfSerializer.Builder.addRootProperty()</code></a>
  </ul></div>
 <dl class="notes">
@@ -388,7 +387,7 @@ loadScripts(document, 'script');</script>
       <js>"MULTI_VALUED"</js> - Multi-valued properties.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
       lost.
@@ -396,7 +395,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#collectionFormat(org.apache.juneau.marshall.jena.RdfCollectionFormat)"><code>RdfSerializer.Builder.collectionFormat(RdfCollectionFormat)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#collectionFormat(org.apache.juneau.marshall.jena.RdfCollectionFormat)"><code>RdfParser.Builder.collectionFormat(RdfCollectionFormat)</code></a>
  </ul></div>
@@ -423,12 +422,12 @@ loadScripts(document, 'script');</script>
  If disabled, then the data structure will first be crawled looking for namespaces that will be encountered before
  the root element is serialized.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#disableAutoDetectNamespaces()"><code>RdfSerializer.Builder.disableAutoDetectNamespaces()</code></a>
  </ul></div>
 <dl class="notes">
@@ -456,12 +455,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#disableUseXmlNamespaces()"><code>RdfSerializer.Builder.disableUseXmlNamespaces()</code></a>
  </ul></div>
 <dl class="notes">
@@ -480,12 +479,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfConfig.html#line-207">juneauBpNs</a></span></div>
 <div class="block">Default XML namespace for bean properties.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#juneauBpNs(org.apache.juneau.marshall.xml.Namespace)"><code>RdfSerializer.Builder.juneauBpNs(Namespace)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#juneauBpNs(org.apache.juneau.marshall.xml.Namespace)"><code>RdfParser.Builder.juneauBpNs(Namespace)</code></a>
  </ul></div>
@@ -505,12 +504,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jena/RdfConfig.html#line-224">juneauNs</a></span></div>
 <div class="block">XML namespace for Juneau properties.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#juneauNs(org.apache.juneau.marshall.xml.Namespace)"><code>RdfSerializer.Builder.juneauNs(Namespace)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#juneauNs(org.apache.juneau.marshall.xml.Namespace)"><code>RdfParser.Builder.juneauNs(Namespace)</code></a>
  </ul></div>
@@ -561,12 +560,12 @@ loadScripts(document, 'script');</script>
       http://www.dajobe.org/2004/01/turtle/
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#language(java.lang.String)"><code>RdfSerializer.Builder.language(String)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#language(java.lang.String)"><code>RdfParser.Builder.language(String)</code></a>
  </ul></div>
@@ -599,12 +598,12 @@ loadScripts(document, 'script');</script>
  This setting is typically only useful if the beans being parsed into do not have a bean property
  annotated with <a href="Rdf.html#beanUri()"><code>@Rdf(beanUri=true)</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#looseCollections()"><code>RdfSerializer.Builder.looseCollections()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#looseCollections()"><code>RdfParser.Builder.looseCollections()</code></a>
  </ul></div>
@@ -627,12 +626,12 @@ loadScripts(document, 'script');</script>
  <p>
  Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_disableAbbrevBaseUri()"><code>RdfSerializer.Builder.n3_disableAbbrevBaseUri()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_disableAbbrevBaseUri()"><code>RdfParser.Builder.n3_disableAbbrevBaseUri()</code></a>
  </ul></div>
@@ -655,12 +654,12 @@ loadScripts(document, 'script');</script>
  <p>
  Don't print object lists as comma separated lists.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_disableObjectLists()"><code>RdfSerializer.Builder.n3_disableObjectLists()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_disableObjectLists()"><code>RdfParser.Builder.n3_disableObjectLists()</code></a>
  </ul></div>
@@ -683,12 +682,12 @@ loadScripts(document, 'script');</script>
  <p>
  Disallow the use doubles as <c>123.456</c>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_disableUseDoubles()"><code>RdfSerializer.Builder.n3_disableUseDoubles()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_disableUseDoubles()"><code>RdfParser.Builder.n3_disableUseDoubles()</code></a>
  </ul></div>
@@ -711,12 +710,12 @@ loadScripts(document, 'script');</script>
  <p>
  Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_disableUsePropertySymbols()"><code>RdfSerializer.Builder.n3_disableUsePropertySymbols()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_disableUsePropertySymbols()"><code>RdfParser.Builder.n3_disableUsePropertySymbols()</code></a>
  </ul></div>
@@ -739,12 +738,12 @@ loadScripts(document, 'script');</script>
  <p>
  Disallow the use of <c>"""</c> to delimit long strings.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_disableUseTripleQuotedStrings()"><code>RdfSerializer.Builder.n3_disableUseTripleQuotedStrings()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_disableUseTripleQuotedStrings()"><code>RdfParser.Builder.n3_disableUseTripleQuotedStrings()</code></a>
  </ul></div>
@@ -767,12 +766,12 @@ loadScripts(document, 'script');</script>
  <p>
  Width to indent properties.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_indentProperty(int)"><code>RdfSerializer.Builder.n3_indentProperty(int)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_indentProperty(int)"><code>RdfParser.Builder.n3_indentProperty(int)</code></a>
  </ul></div>
@@ -795,12 +794,12 @@ loadScripts(document, 'script');</script>
  <p>
  Minimum gap between items on a line.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_minGap(int)"><code>RdfSerializer.Builder.n3_minGap(int)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_minGap(int)"><code>RdfParser.Builder.n3_minGap(int)</code></a>
  </ul></div>
@@ -823,12 +822,12 @@ loadScripts(document, 'script');</script>
  <p>
  Width of the property column.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_propertyColumn(int)"><code>RdfSerializer.Builder.n3_propertyColumn(int)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_propertyColumn(int)"><code>RdfParser.Builder.n3_propertyColumn(int)</code></a>
  </ul></div>
@@ -851,12 +850,12 @@ loadScripts(document, 'script');</script>
  <p>
  If the subject is shorter than this value, the first property may go on the same line.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_subjectColumn(int)"><code>RdfSerializer.Builder.n3_subjectColumn(int)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_subjectColumn(int)"><code>RdfParser.Builder.n3_subjectColumn(int)</code></a>
  </ul></div>
@@ -880,12 +879,12 @@ loadScripts(document, 'script');</script>
  Width of the property column.
  <br>Must be longer than <c>propertyColumn</c>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#n3_widePropertyLen(int)"><code>RdfSerializer.Builder.n3_widePropertyLen(int)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#n3_widePropertyLen(int)"><code>RdfParser.Builder.n3_widePropertyLen(int)</code></a>
  </ul></div>
@@ -908,12 +907,12 @@ loadScripts(document, 'script');</script>
  <p>
  The default list of namespaces associated with this serializer.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#namespaces(org.apache.juneau.marshall.xml.Namespace...)"><code>RdfSerializer.Builder.namespaces(Namespace...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -953,12 +952,12 @@ loadScripts(document, 'script');</script>
  <p>
  URIs in the graph are, by default, checked prior to serialization.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_allowBadUris()"><code>RdfSerializer.Builder.rdfxml_allowBadUris()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_allowBadUris()"><code>RdfParser.Builder.rdfxml_allowBadUris()</code></a>
  </ul></div>
@@ -981,12 +980,12 @@ loadScripts(document, 'script');</script>
  <p>
  The XML attribute quote character.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_attributeQuoteChar(char)"><code>RdfSerializer.Builder.rdfxml_attributeQuoteChar(char)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_attributeQuoteChar(char)"><code>RdfParser.Builder.rdfxml_attributeQuoteChar(char)</code></a>
  </ul></div>
@@ -1011,12 +1010,12 @@ loadScripts(document, 'script');</script>
  {doc http://www.w3.org/TR/rdf-syntax-grammar RDF Syntax Grammar} indicating grammar
  rules that will not be used.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_blockRules(java.lang.String)"><code>RdfSerializer.Builder.rdfxml_blockRules(String)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_blockRules(java.lang.String)"><code>RdfParser.Builder.rdfxml_blockRules(String)</code></a>
  </ul></div>
@@ -1042,12 +1041,12 @@ loadScripts(document, 'script');</script>
  attribute value that starts with the URI of that mapping is written as starting with the corresponding entity
  invocation.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_disableShowDoctypeDeclaration()"><code>RdfSerializer.Builder.rdfxml_disableShowDoctypeDeclaration()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_disableShowDoctypeDeclaration()"><code>RdfParser.Builder.rdfxml_disableShowDoctypeDeclaration()</code></a>
  </ul></div>
@@ -1070,12 +1069,12 @@ loadScripts(document, 'script');</script>
  <p>
  Sets ARP to look for RDF embedded within an enclosing XML document.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li>
       {doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
  </ul></div>
@@ -1108,12 +1107,12 @@ loadScripts(document, 'script');</script>
    <li><js>"strict-fatal"</js>
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li>
       {doc ext.ARP/ARPOptions.html#setDefaultErrorMode() ARPOptions.setDefaultErrorMode()}
    <li>
@@ -1155,7 +1154,7 @@ loadScripts(document, 'script');</script>
       {doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul></div>
@@ -1179,12 +1178,12 @@ loadScripts(document, 'script');</script>
  Whether to use long ID's for anon resources.
  <br>Short ID's are easier to read, but can run out of memory on very large models.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_longId()"><code>RdfSerializer.Builder.rdfxml_longId()</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_longId()"><code>RdfParser.Builder.rdfxml_longId()</code></a>
  </ul></div>
@@ -1229,12 +1228,12 @@ loadScripts(document, 'script');</script>
  To switch off relative URIs use the value <js>""</js>.
  Relative URIs of any of these types are output where possible if and only if the option has been specified.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_relativeUris(java.lang.String)"><code>RdfSerializer.Builder.rdfxml_relativeUris(String)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_relativeUris(java.lang.String)"><code>RdfParser.Builder.rdfxml_relativeUris(String)</code></a>
  </ul></div>
@@ -1265,12 +1264,12 @@ loadScripts(document, 'script');</script>
       In this case the encoding is shown in the XML declaration.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_showXmlDeclaration(java.lang.String)"><code>RdfSerializer.Builder.rdfxml_showXmlDeclaration(String)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_showXmlDeclaration(java.lang.String)"><code>RdfParser.Builder.rdfxml_showXmlDeclaration(String)</code></a>
  </ul></div>
@@ -1293,12 +1292,12 @@ loadScripts(document, 'script');</script>
  <p>
  The number of spaces with which to indent XML child elements.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_tab(int)"><code>RdfSerializer.Builder.rdfxml_tab(int)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_tab(int)"><code>RdfParser.Builder.rdfxml_tab(int)</code></a>
  </ul></div>
@@ -1321,12 +1320,12 @@ loadScripts(document, 'script');</script>
  <p>
  The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfSerializer.Builder.html#rdfxml_xmlbase(java.lang.String)"><code>RdfSerializer.Builder.rdfxml_xmlbase(String)</code></a>
    <li class='jm'><a href="RdfParser.Builder.html#rdfxml_xmlbase(java.lang.String)"><code>RdfParser.Builder.rdfxml_xmlbase(String)</code></a>
  </ul></div>
@@ -1349,12 +1348,12 @@ loadScripts(document, 'script');</script>
  <p>
  If <js>"true"</js>, whitespace in text elements will be automatically trimmed.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="RdfParser.Builder.html#trimWhitespace()"><code>RdfParser.Builder.trimWhitespace()</code></a>
  </ul></div>
 <dl class="notes">

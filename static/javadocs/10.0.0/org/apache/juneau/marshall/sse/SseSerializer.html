@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,11 +97,11 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <div class="block">Serializes <a href="SseEvent.html" title="class in org.apache.juneau.marshall.sse"><code>SseEvent</code></a> objects to the <c>text/event-stream</c> wire format defined by the
  <a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG Server-Sent Events spec</a>.
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Produces <c>Content-Type</c> types: <bc>text/event-stream</bc>.
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
  <p>
  Accepts any of the following as input and emits one wire event per element followed by a blank
  line (the spec's "dispatch" boundary):
@@ -118,11 +117,11 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
  REST infrastructure flushes the underlying TCP socket and the event is delivered immediately to the
  client.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
  </ul></div>
 </section>

@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -76,7 +75,7 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public @interface </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/http/remote/Remote.html#line-31">Remote</a></span></div>
 <div class="block">Identifies a proxy against a REST interface.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxies</a>
  </ul></div>
 </section>
@@ -200,7 +199,7 @@ loadScripts(document, 'script');</script>
  the classic Apache-HttpClient transport accepts subclasses of
  <c>org.apache.juneau.http.classic.header.HeaderList</c>; other transports may ignore the value.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supplier class must provide a public no-arg constructor.
    <li class='note'>
@@ -225,7 +224,7 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies headers to set on all requests.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$P{mySystemProperty}"</js>).
@@ -257,7 +256,7 @@ loadScripts(document, 'script');</script>
  suppressed).  A method-level constant of the same name (see <code>@RemoteOp(queryData=...)</code> and the verb
  annotations) takes precedence over the interface-level value declared here.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -292,7 +291,7 @@ loadScripts(document, 'script');</script>
  suppressed).  A method-level constant of the same name (see <code>@RemoteOp(formData=...)</code> and the verb
  annotations) takes precedence over the interface-level value declared here.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -322,7 +321,7 @@ loadScripts(document, 'script');</script>
    <li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$P{mySystemProperty}"</js>).
@@ -375,7 +374,7 @@ loadScripts(document, 'script');</script>
  <code>baseUrl</code> (see <code>@RemoteOp(baseUrl=...)</code> and the verb annotations), then this interface-level value,
  then the client root URL.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$S{mySystemProperty}"</js>).
@@ -413,7 +412,7 @@ loadScripts(document, 'script');</script>
  <p>
  A method-level <a href="RemoteOp.html#contentType()"><code>RemoteOp.contentType()</code></a> (or verb-annotation equivalent) overrides this default.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -442,7 +441,7 @@ loadScripts(document, 'script');</script>
  <p>
  A method-level <a href="RemoteOp.html#accept()"><code>RemoteOp.accept()</code></a> (or verb-annotation equivalent) overrides this default.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -487,7 +486,7 @@ loadScripts(document, 'script');</script>
    <jk>public</jk> Object method3()  {...}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$P{mySystemProperty}"</js>).
@@ -511,7 +510,7 @@ loadScripts(document, 'script');</script>
  <p>
  The default value is <js>"Client-Version"</js>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
       (e.g. <js>"$P{mySystemProperty}"</js>).
@@ -538,7 +537,7 @@ loadScripts(document, 'script');</script>
  any method-level (<code>@RemoteOp/@RemoteGet/...(interceptors=...)</code>) interceptors; the three sets are unioned in
  the order builder &rarr; interface &rarr; method (method-level runs closest to the call).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       The member type is <code>Class&lt;?&gt;[]</code> (not <code>Class&lt;? extends RestCallInterceptor&gt;[]</code>) because
       <c>RestCallInterceptor</c> lives in the <code>juneau-rest-client</code> module, which this annotation's module
@@ -568,7 +567,7 @@ loadScripts(document, 'script');</script>
  duration parser.  A method-level <code>timeout</code> (<code>@RemoteOp/@RemoteGet/...</code>) overrides this default.
  Connect timeouts remain a client-level setting (not configurable per call).
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -593,7 +592,7 @@ loadScripts(document, 'script');</script>
  A value of <code>0</code> (the default) disables retries.  A positive method-level <code>retries</code> overrides this
  default.  See <code>@RemoteOp(retries=...)</code> for the retry trigger statuses and the (hard) safety gating rules.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -619,7 +618,7 @@ loadScripts(document, 'script');</script>
  request with a non-repeatable body is never retried.  The effective value is the logical OR of this default and
  the method-level value.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -645,7 +644,7 @@ loadScripts(document, 'script');</script>
  <code>throws</code> clause matched, a generic exception is thrown.  The effective value is the logical OR of this
  default and the method-level value.  See <code>@RemoteOp(throwOnError=...)</code>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).
@@ -679,7 +678,7 @@ loadScripts(document, 'script');</script>
  <code>allowPrivateUrls(...)</code> setting, and the <js>"RestClient.allowPrivateUrls"</js> system property: any one
  of the three opting in is sufficient.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
       (<c>RestClient.getRemote(...)</c>).

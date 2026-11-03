@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"> * The single public parser for the {@code $}-search language (design §5.1).  Engines call it; a {@link BeanQuery}</span>
 <span class="source-line-no">026</span><span id="line-26"> * itself carries only the raw strings.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;Grammar&lt;/h5&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;h2 class='section'&gt;Grammar&lt;/h2&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * A column's expression is one of:</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;ul&gt;</span>
@@ -54,26 +54,26 @@
 <span class="source-line-no">041</span><span id="line-41"> *       {@code $not} combine within one column.</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;Literal dollar&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h2 class='section'&gt;Literal dollar&lt;/h2&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * {@code $$} is a literal {@code $} everywhere.  A token that starts with {@code $$} is always a pattern (never an</span>
 <span class="source-line-no">047</span><span id="line-47"> * operator), and every {@code $$} inside a literal decodes to a single {@code $}.  So {@code $$eq(x)} is the literal</span>
 <span class="source-line-no">048</span><span id="line-48"> * text {@code $eq(x)}, while {@code $eq(x)} is the operator.</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Quoting&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;Quoting&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * A quoted literal argument (design §5.1) may contain its own delimiter by doubling it &amp;mdash; {@code ""} inside a</span>
 <span class="source-line-no">053</span><span id="line-53"> * double-quoted value, or {@code ''} inside a single-quoted value, decodes to one literal quote character of that</span>
 <span class="source-line-no">054</span><span id="line-54"> * same kind.  So {@code $eq("a""b")} is the literal text {@code a"b}.  This doubling decode is independent of, and</span>
 <span class="source-line-no">055</span><span id="line-55"> * composes with, the {@code $$} &amp;rarr; {@code $} decoding above.</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;h5 class='section'&gt;Errors&lt;/h5&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;h2 class='section'&gt;Errors&lt;/h2&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * An unknown {@code $name(...)}, a malformed expression (unclosed/unbalanced parentheses, junk after the close paren,</span>
 <span class="source-line-no">060</span><span id="line-60"> * a stray comma, a wrong argument count), or an empty expression throws {@link BeanQuerySyntaxException}.  There is no</span>
 <span class="source-line-no">061</span><span id="line-61"> * "incomplete draft" state on the server: a request-facing adapter catches the exception and surfaces the message.</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *    &lt;jk&gt;try&lt;/jk&gt; {</span>
 <span class="source-line-no">066</span><span id="line-66"> *       SearchExpression &lt;jv&gt;node&lt;/jv&gt; = SearchExpressionParser.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"$gt(10)"&lt;/js&gt;, SearchOperatorSet.&lt;jsm&gt;standard&lt;/jsm&gt;());</span>

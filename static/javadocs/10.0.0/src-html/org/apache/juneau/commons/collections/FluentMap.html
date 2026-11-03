@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * This class wraps an underlying map and provides a fluent API for adding entries. All methods return</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;c&gt;this&lt;/c&gt; to allow method chaining. The underlying map can be any {@link Map} implementation.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;&lt;b&gt;Fluent API:&lt;/b&gt; All methods return &lt;c&gt;this&lt;/c&gt; for method chaining</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;&lt;b&gt;Arbitrary Map Support:&lt;/b&gt; Works with any map implementation</span>
@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;b&gt;Transparent Interface:&lt;/b&gt; Implements the full {@link Map} interface, so it can be used anywhere a map is expected</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;jc&gt;// Create a FluentMap wrapping a LinkedHashMap&lt;/jc&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    FluentMap&amp;lt;String, String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FluentMap&amp;lt;&amp;gt;(&lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;());</span>
@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;jv&gt;map&lt;/jv&gt;.aa(&lt;jv&gt;other&lt;/jv&gt;);</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h5 class='section'&gt;Example - Conditional Building:&lt;/h5&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='section'&gt;Example - Conditional Building:&lt;/h2&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;includeDebug&lt;/jv&gt; = &lt;jk&gt;true&lt;/jk&gt;;</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;includeTest&lt;/jv&gt; = &lt;jk&gt;false&lt;/jk&gt;;</span>
@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64"> *       .ai(&lt;jv&gt;includeTest&lt;/jv&gt;, &lt;js&gt;"test"&lt;/js&gt;, &lt;js&gt;"true"&lt;/js&gt;);    &lt;jc&gt;// Not added&lt;/jc&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Behavior Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;Behavior Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;All map operations are delegated to the underlying map</span>
 <span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;The fluent methods ({@link #a(Object, Object)}, {@link #aa(Map)}, {@link #ai(boolean, Object, Object)}) return &lt;c&gt;this&lt;/c&gt; for chaining</span>
@@ -85,12 +85,12 @@
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;The underlying map is stored by reference (not copied), so modifications affect the original map</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;p&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * This class is not thread-safe unless the underlying map is thread-safe. If thread safety is required,</span>
 <span class="source-line-no">078</span><span id="line-78"> * use a thread-safe map type (e.g., {@link java.util.concurrent.ConcurrentHashMap}).</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;ul&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">    * This is a convenience method that calls {@link #put(Object, Object)} and returns &lt;c&gt;this&lt;/c&gt;</span>
 <span class="source-line-no">109</span><span id="line-109">    * for method chaining.</span>
 <span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">112</span><span id="line-112">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">113</span><span id="line-113">    *    FluentMap&amp;lt;String, String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FluentMap&amp;lt;&amp;gt;(&lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;());</span>
 <span class="source-line-no">114</span><span id="line-114">    *    &lt;jv&gt;map&lt;/jv&gt;.a(&lt;js&gt;"key1"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;).a(&lt;js&gt;"key2"&lt;/js&gt;, &lt;js&gt;"value2"&lt;/js&gt;);</span>
@@ -143,7 +143,7 @@
 <span class="source-line-no">130</span><span id="line-130">    * This is a convenience method that calls {@link #putAll(Map)} and returns &lt;c&gt;this&lt;/c&gt;</span>
 <span class="source-line-no">131</span><span id="line-131">    * for method chaining. If the specified map is &lt;jk&gt;null&lt;/jk&gt;, this is a no-op.</span>
 <span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">133</span><span id="line-133">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">134</span><span id="line-134">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">135</span><span id="line-135">    *    FluentMap&amp;lt;String, String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FluentMap&amp;lt;&amp;gt;(&lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;());</span>
 <span class="source-line-no">136</span><span id="line-136">    *    Map&amp;lt;String, String&amp;gt; &lt;jv&gt;other&lt;/jv&gt; = Map.of(&lt;js&gt;"key1"&lt;/js&gt;, &lt;js&gt;"value1"&lt;/js&gt;, &lt;js&gt;"key2"&lt;/js&gt;, &lt;js&gt;"value2"&lt;/js&gt;);</span>
@@ -167,7 +167,7 @@
 <span class="source-line-no">154</span><span id="line-154">    * If the condition is &lt;jk&gt;false&lt;/jk&gt;, the entry is not added and this method returns &lt;c&gt;this&lt;/c&gt;</span>
 <span class="source-line-no">155</span><span id="line-155">    * without modifying the map.</span>
 <span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">158</span><span id="line-158">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;includeDebug&lt;/jv&gt; = &lt;jk&gt;true&lt;/jk&gt;;</span>
 <span class="source-line-no">160</span><span id="line-160">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;includeTest&lt;/jv&gt; = &lt;jk&gt;false&lt;/jk&gt;;</span>
@@ -198,7 +198,7 @@
 <span class="source-line-no">185</span><span id="line-185">    * If the predicate returns &lt;jk&gt;false&lt;/jk&gt;, the entry is not added and this method returns &lt;c&gt;this&lt;/c&gt;</span>
 <span class="source-line-no">186</span><span id="line-186">    * without modifying the map.</span>
 <span class="source-line-no">187</span><span id="line-187">    *</span>
-<span class="source-line-no">188</span><span id="line-188">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">188</span><span id="line-188">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">189</span><span id="line-189">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">190</span><span id="line-190">    *    FluentMap&amp;lt;String, String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; FluentMap&amp;lt;&amp;gt;(&lt;jk&gt;new&lt;/jk&gt; LinkedHashMap&amp;lt;&amp;gt;())</span>
 <span class="source-line-no">191</span><span id="line-191">    *       .a(&lt;js&gt;"host"&lt;/js&gt;, &lt;js&gt;"localhost"&lt;/js&gt;)</span>

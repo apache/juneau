@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * Bridges SLF4J MDC context from the request (dispatch) thread to the {@link java.util.concurrent.CompletableFuture}</span>
 <span class="source-line-no">028</span><span id="line-28"> * completion thread.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='topic'&gt;Problem&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='topic'&gt;Problem&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * When a {@code @RestOp} method returns a {@link java.util.concurrent.CompletableFuture}, the {@link AsyncResponseProcessor}</span>
 <span class="source-line-no">033</span><span id="line-33"> * registers a {@link java.util.concurrent.CompletionStage#whenComplete(BiConsumer) whenComplete} callback that runs on</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> * SLF4J's {@code MDC} is backed by a {@link ThreadLocal}, so any diagnostic context set by an upstream filter</span>
 <span class="source-line-no">036</span><span id="line-36"> * (e.g. {@code requestId}, {@code userId}) is invisible to log statements emitted inside that callback.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='topic'&gt;Solution&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='topic'&gt;Solution&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * {@code MdcAsyncListener} provides a single factory method, {@link #wrap(BiConsumer, Map)}, that wraps a</span>
 <span class="source-line-no">041</span><span id="line-41"> * {@code whenComplete} callback with the standard MDC snapshot-restore-clear pattern:</span>
@@ -62,20 +62,20 @@
 <span class="source-line-no">049</span><span id="line-49"> *       any MDC state the completion thread itself had before the callback.</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/ol&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='topic'&gt;Lazy skip&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='topic'&gt;Lazy skip&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * {@link #snapshot()} returns {@code null} when the request thread's MDC is empty or when SLF4J is absent.</span>
 <span class="source-line-no">055</span><span id="line-55"> * {@link #wrap(BiConsumer, Map)} returns the original callback unchanged when the snapshot is {@code null}, so no</span>
 <span class="source-line-no">056</span><span id="line-56"> * work is done on the completion thread for the common case of no MDC state.</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='topic'&gt;SLF4J detection&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='topic'&gt;SLF4J detection&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * {@code MdcAsyncListener} uses {@link Class#forName(String)} to probe for {@code org.slf4j.MDC} at class-load</span>
 <span class="source-line-no">061</span><span id="line-61"> * time. SLF4J is NOT a compile-time dependency of {@code juneau-rest-server}. If SLF4J is absent from the</span>
 <span class="source-line-no">062</span><span id="line-62"> * runtime classpath, the class gracefully degrades: {@link #isAvailable()} returns {@code false},</span>
 <span class="source-line-no">063</span><span id="line-63"> * {@link #snapshot()} returns {@code null}, and {@link #wrap(BiConsumer, Map)} returns the original callback.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='topic'&gt;Limitation&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='topic'&gt;Limitation&lt;/h2&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * This class bridges SLF4J MDC only. Users of Log4j2's {@code ThreadContext} directly (without the SLF4J facade)</span>
 <span class="source-line-no">068</span><span id="line-68"> * will not benefit from this listener. That is documented as a v1 limitation; the SLF4J MDC is the lingua franca</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,20 +92,20 @@ loadScripts(document, 'script');</script>
    <a href="../toml/TomlSerializer.html#DEFAULT_READABLE"><code>TomlSerializer.DEFAULT_READABLE</code></a> with <a href="../toml/TomlParser.html#DEFAULT"><code>TomlParser.DEFAULT</code></a> and exposes the full
    static shortcut surface bound to its own <a href="#DEFAULT"><code>DEFAULT</code></a> instance.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Using static shortcuts.</jc>
    String <jv>toml</jv> = TomlR.<jsm>of</jsm>(<jv>myPojo</jv>);
    MyPojo <jv>myPojo</jv> = TomlR.<jsm>to</jsm>(<jv>toml</jv>, MyPojo.<jk>class</jk>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>Because Java <i>hides</i> (does not override) static members, this class redeclares the
       entire static shortcut surface of <a href="Toml.html" title="class in org.apache.juneau.marshall.marshaller"><code>Toml</code></a> so that every shortcut is bound to this class's
       readable <a href="#DEFAULT"><code>DEFAULT</code></a> rather than the <a href="Toml.html#DEFAULT"><code>Toml.DEFAULT</code></a>.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  </ul></div>
 </section>

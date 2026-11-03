@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * and optional handling for missing files. It's particularly useful when you need to read files</span>
 <span class="source-line-no">031</span><span id="line-31"> * with specific encodings or handle cases where files may not exist.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Fluent API - all methods return &lt;c&gt;this&lt;/c&gt; for method chaining</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Character encoding support - specify custom charset for file reading</span>
@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;Multiple file specification methods - accept File, String path, or Path</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Reading files with specific character encodings (UTF-8, ISO-8859-1, etc.)</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Handling optional configuration files that may not exist</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Reading files where encoding must be explicitly specified</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Basic usage&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -80,13 +80,13 @@
 <span class="source-line-no">067</span><span id="line-67"> *       .build();</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/p&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;Character Encoding:&lt;/h5&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;Character Encoding:&lt;/h2&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;p&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * By default, the builder uses the system's default charset ({@link Charset#defaultCharset()}).</span>
 <span class="source-line-no">073</span><span id="line-73"> * You can specify a custom charset using {@link #charset(Charset)} or {@link #charset(String)}.</span>
 <span class="source-line-no">074</span><span id="line-74"> * This is important when reading files that were written with a specific encoding.</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='jc'&gt;{@link FileWriterBuilder} - Builder for file writers</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='jc'&gt;{@link PathReaderBuilder} - Builder for Path-based readers</span>
 <span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO"&gt;I/O Package&lt;/a&gt;</span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">   /**</span>
 <span class="source-line-no">088</span><span id="line-88">    * Creates a new builder.</span>
 <span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">090</span><span id="line-90">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">091</span><span id="line-91">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">092</span><span id="line-92">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">093</span><span id="line-93">    *       .file(&lt;js&gt;"data.txt"&lt;/js&gt;)</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">   /**</span>
 <span class="source-line-no">104</span><span id="line-104">    * Creates a new builder initialized with the specified file.</span>
 <span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">108</span><span id="line-108">    *    File &lt;jv&gt;file&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; File(&lt;js&gt;"config.properties"&lt;/js&gt;);</span>
 <span class="source-line-no">109</span><span id="line-109">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;(&lt;jv&gt;file&lt;/jv&gt;)</span>
@@ -145,7 +145,7 @@
 <span class="source-line-no">132</span><span id="line-132">    * method will return a {@link StringReader} with empty content instead of throwing a</span>
 <span class="source-line-no">133</span><span id="line-133">    * {@link FileNotFoundException}. This is useful for optional configuration files.</span>
 <span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">135</span><span id="line-135">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">    *    &lt;jc&gt;// Without allowNoFile - throws exception if file doesn't exist&lt;/jc&gt;</span>
 <span class="source-line-no">138</span><span id="line-138">    *    Reader &lt;jv&gt;reader1&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">    * &lt;p&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    * Boolean-arg form of {@link #allowNoFile()}, useful when the setting is conditional.</span>
 <span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">162</span><span id="line-162">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">163</span><span id="line-163">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">164</span><span id="line-164">    *       .file(&lt;js&gt;"optional.txt"&lt;/js&gt;)</span>
@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">    * this method returns an empty {@link StringReader}. Otherwise, it creates an</span>
 <span class="source-line-no">183</span><span id="line-183">    * {@link InputStreamReader} with the specified character encoding.</span>
 <span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">186</span><span id="line-186">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">187</span><span id="line-187">    *    &lt;jk&gt;try&lt;/jk&gt; (Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">188</span><span id="line-188">    *       .file(&lt;js&gt;"data.txt"&lt;/js&gt;)</span>
@@ -226,7 +226,7 @@
 <span class="source-line-no">213</span><span id="line-213">    * Specifying the encoding is important when reading files that were written with a specific</span>
 <span class="source-line-no">214</span><span id="line-214">    * character encoding.</span>
 <span class="source-line-no">215</span><span id="line-215">    *</span>
-<span class="source-line-no">216</span><span id="line-216">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">216</span><span id="line-216">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">217</span><span id="line-217">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">218</span><span id="line-218">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">219</span><span id="line-219">    *       .file(&lt;js&gt;"data.txt"&lt;/js&gt;)</span>
@@ -249,7 +249,7 @@
 <span class="source-line-no">236</span><span id="line-236">    * This is a convenience method that accepts a charset name string and converts it to a</span>
 <span class="source-line-no">237</span><span id="line-237">    * {@link Charset} using {@link Charset#forName(String)}.</span>
 <span class="source-line-no">238</span><span id="line-238">    *</span>
-<span class="source-line-no">239</span><span id="line-239">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">239</span><span id="line-239">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">240</span><span id="line-240">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">241</span><span id="line-241">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">242</span><span id="line-242">    *       .file(&lt;js&gt;"data.txt"&lt;/js&gt;)</span>
@@ -270,7 +270,7 @@
 <span class="source-line-no">257</span><span id="line-257">   /**</span>
 <span class="source-line-no">258</span><span id="line-258">    * Sets the file to read from.</span>
 <span class="source-line-no">259</span><span id="line-259">    *</span>
-<span class="source-line-no">260</span><span id="line-260">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">260</span><span id="line-260">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">261</span><span id="line-261">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    *    File &lt;jv&gt;f&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; File(&lt;js&gt;"config.properties"&lt;/js&gt;);</span>
 <span class="source-line-no">263</span><span id="line-263">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -289,7 +289,7 @@
 <span class="source-line-no">276</span><span id="line-276">   /**</span>
 <span class="source-line-no">277</span><span id="line-277">    * Sets the file path to read from.</span>
 <span class="source-line-no">278</span><span id="line-278">    *</span>
-<span class="source-line-no">279</span><span id="line-279">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">279</span><span id="line-279">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">280</span><span id="line-280">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">281</span><span id="line-281">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">282</span><span id="line-282">    *       .file(&lt;js&gt;"/path/to/file.txt"&lt;/js&gt;)</span>
@@ -311,7 +311,7 @@
 <span class="source-line-no">298</span><span id="line-298">    * Convenience overload for callers working with the NIO {@link Path} API, consistent with</span>
 <span class="source-line-no">299</span><span id="line-299">    * {@link PathReaderBuilder#path(Path)}.</span>
 <span class="source-line-no">300</span><span id="line-300">    *</span>
-<span class="source-line-no">301</span><span id="line-301">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">301</span><span id="line-301">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">302</span><span id="line-302">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">303</span><span id="line-303">    *    Reader &lt;jv&gt;reader&lt;/jv&gt; = FileReaderBuilder.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">304</span><span id="line-304">    *       .file(Paths.&lt;jsm&gt;get&lt;/jsm&gt;(&lt;js&gt;"/path/to/file.txt"&lt;/js&gt;))</span>

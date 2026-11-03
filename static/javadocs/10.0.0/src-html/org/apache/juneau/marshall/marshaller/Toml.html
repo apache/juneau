@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26">/**</span>
 <span class="source-line-no">027</span><span id="line-27"> * TOML marshaller combining {@link TomlSerializer} and {@link TomlParser}.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='figure'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> *    &lt;jc&gt;// Serialize a config map to TOML&lt;/jc&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> *    Map&amp;lt;String, Object&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = Map.of(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"myapp"&lt;/js&gt;, &lt;js&gt;"port"&lt;/js&gt;, 8080);</span>
@@ -60,13 +60,13 @@
 <span class="source-line-no">047</span><span id="line-47"> *    JsonMap &lt;jv&gt;parsed&lt;/jv&gt; = &lt;jv&gt;m&lt;/jv&gt;.read(&lt;jv&gt;toml&lt;/jv&gt;, JsonMap.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='figure'&gt;Example output (Map of name/age):&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='figure'&gt;Example output (Map of name/age):&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    name = "Alice"</span>
 <span class="source-line-no">053</span><span id="line-53"> *    age = 30</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='figure'&gt;Complex (nested table + array):&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='figure'&gt;Complex (nested table + array):&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *    name = "Alice"</span>
 <span class="source-line-no">059</span><span id="line-59"> *    age = 30</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    String &lt;jv&gt;string&lt;/jv&gt; = Toml.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='link'&gt;&lt;a href="https://toml.io/en/v1.0.0"&gt;TOML v1.0.0 Specification&lt;/a&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;/ul&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> */</span>

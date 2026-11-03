@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> * ({@code kind:"line", x:..., series:[...]}) byte-for-byte; the other kinds emit {@code helper:{kind, ...}}, and</span>
 <span class="source-line-no">040</span><span id="line-40"> * {@code raw} emits neither (its {@link #option(JsonMap)} is the whole chart).</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;jv&gt;page&lt;/jv&gt;.card(ChartDef.&lt;jsm&gt;line&lt;/jsm&gt;(&lt;js&gt;"orders-trend"&lt;/js&gt;).title(&lt;js&gt;"Orders"&lt;/js&gt;).src(&lt;js&gt;"/console/store/stats/daily"&lt;/js&gt;)</span>
 <span class="source-line-no">045</span><span id="line-45"> *       .x(&lt;js&gt;"day"&lt;/js&gt;).series(&lt;js&gt;"placed"&lt;/js&gt;, &lt;js&gt;"Placed"&lt;/js&gt;).series(&lt;js&gt;"delivered"&lt;/js&gt;, &lt;js&gt;"Delivered"&lt;/js&gt;).toCardSpec());</span>
@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">    * A click on a tile publishes the row's {@link #tileFields(String...)} as {@code meta} (the tile's {@code row} is</span>
 <span class="source-line-no">140</span><span id="line-140">    * always &lt;jk&gt;null&lt;/jk&gt;); a click on a group does nothing.</span>
 <span class="source-line-no">141</span><span id="line-141">    *</span>
-<span class="source-line-no">142</span><span id="line-142">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">142</span><span id="line-142">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">143</span><span id="line-143">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">144</span><span id="line-144">    *    ChartDef.&lt;jsm&gt;treemap&lt;/jsm&gt;(&lt;js&gt;"fleet"&lt;/js&gt;).src(&lt;js&gt;"/api/hosts"&lt;/js&gt;).groupBy(&lt;js&gt;"region"&lt;/js&gt;, &lt;js&gt;"cluster"&lt;/js&gt;).label(&lt;js&gt;"host"&lt;/js&gt;)</span>
 <span class="source-line-no">145</span><span id="line-145">    *       .colorBy(&lt;js&gt;"health"&lt;/js&gt;, ChartDef.&lt;jsm&gt;legendItem&lt;/jsm&gt;(&lt;js&gt;"ok"&lt;/js&gt;, &lt;js&gt;"Healthy"&lt;/js&gt;, &lt;js&gt;"ok"&lt;/js&gt;),</span>

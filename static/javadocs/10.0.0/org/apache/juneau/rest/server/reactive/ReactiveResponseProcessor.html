@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <div class="block">Response processor that bridges <a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>
  return values from <code>@RestOp</code> handlers to Juneau's response pipeline.
 
- <h5 class='topic'>Activation (opt-in)</h5>
+ <h2 class='topic'>Activation (opt-in)</h2>
  <p>
  This processor ships in the opt-in <code>juneau-rest-server-reactive</code> module and is <b>not</b> wired
  into <code>DefaultConfig</code>. A bare <code>juneau-rest-server</code> has zero reactive behavior. When the
@@ -97,7 +96,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
  by <code>RestContext</code> via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> and this processor is front-loaded ahead of
  <code>AsyncResponseProcessor</code> in the chain &mdash; no <code>@Rest(responseProcessors=...)</code> entry required.
 
- <h5 class='topic'>What it handles</h5>
+ <h2 class='topic'>What it handles</h2>
  <p>
  This is the single, shared spine for all reactive return-type support. It natively understands the
  JDK type <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link"><code>Flow.Publisher&lt;T&gt;</code></a> (no external dependency
@@ -111,7 +110,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
  and collapse onto the existing <a href="../processor/AsyncResponseProcessor.html" title="class in org.apache.juneau.rest.server.processor"><code>AsyncResponseProcessor</code></a> async path, inheriting its timeout,
  completion-executor (<code>@Rest(asyncCompletionExecutor)</code>), and MDC bridging behavior for free.
 
- <h5 class='topic'>Response shapes for multi-value streams</h5>
+ <h2 class='topic'>Response shapes for multi-value streams</h2>
  <p>
  A streaming publisher is rendered as one of three shapes, selected by the negotiated response media
  type (the handler's <code>Content-Type</code>, then the request
@@ -132,7 +131,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
       so a slow producer never blocks the request thread.
  </ul>
 
- <h5 class='topic'>Backpressure</h5>
+ <h2 class='topic'>Backpressure</h2>
  <p>
  Streaming subscribers request one element at a time (<code>request(1)</code> on subscribe and again after
  each frame is written and flushed). Because writing to the servlet output stream blocks until the
@@ -140,7 +139,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
  client's drain rate and the server-side buffer does not grow without bound. Buffer-shape subscribers
  request <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html#MAX_VALUE" title="class or interface in java.lang" class="external-link"><code>Long.MAX_VALUE</code></a> since the collection is bounded by the publisher's own completion.
 
- <h5 class='topic'>Threading, executors, and MDC</h5>
+ <h2 class='topic'>Threading, executors, and MDC</h2>
  <p>
  Buffer-shape responses route through <a href="../processor/AsyncResponseProcessor.html" title="class in org.apache.juneau.rest.server.processor"><code>AsyncResponseProcessor</code></a> and therefore honor
  <code>@Rest(asyncCompletionExecutor)</code> and the SLF4J MDC bridge. Streaming-shape
@@ -150,7 +149,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
  <code>onNext</code> / terminal callback via <a href="../processor/MdcAsyncListener.html" title="class in org.apache.juneau.rest.server.processor"><code>MdcAsyncListener</code></a> so log statements emitted while writing
  a frame see the request's diagnostic context.
 
- <h5 class='topic'>Synchronous fallback</h5>
+ <h2 class='topic'>Synchronous fallback</h2>
  <p>
  In environments where <code>ServletRequest.startAsync()</code> is unsupported (notably Juneau's
  <code>MockServletRequest</code>), streaming subscribes synchronously and blocks the request thread until

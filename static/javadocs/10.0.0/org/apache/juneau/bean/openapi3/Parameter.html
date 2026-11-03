@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  locations including the path, query string, headers, or cookies. Each parameter has a name, location, and schema
  that defines its type and constraints.
 
- <h5 class='section'>OpenAPI Specification:</h5>
+ <h2 class='section'>OpenAPI Specification:</h2>
  <p>
  The Parameter Object is composed of the following fields:
  <ul class='spaced-list'>
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
    <li><c>examples</c> (map of <a href="Example.html" title="class in org.apache.juneau.bean.openapi3"><code>Example</code></a>) - Examples of the parameter's potential value
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a query parameter</jc>
    Parameter <jv>param</jv> = <jk>new</jk> Parameter()
@@ -126,7 +125,7 @@ loadScripts(document, 'script');</script>
       .setExplode(<jk>true</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#parameter-object">OpenAPI Specification &gt; Parameter Object</a>
    <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/describing-parameters/">OpenAPI Describing Parameters</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  Setting a scheme preset or <a href="#token(java.lang.String)"><code>token(String)</code></a> clears any previously-registered auth-params and vice versa, so
  a built value carries either a token68 or an auth-param list, never both.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    String <jv>value</jv> = ProxyAuthorization.<jsm>create</jsm>()
       .digest()
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
    <jc>// =&gt; "Digest username=\"Mufasa\", realm=\"...\", uri=\"/dir/index.html\", qop=auth, nc=00000001, response=\"...\""</jc>
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ProxyAuthorization.html" title="class in org.apache.juneau.http.header"><code>ProxyAuthorization</code></a>
    <li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7235'>RFC 7235 - HTTP/1.1 Authentication</a>
  </ul></div>

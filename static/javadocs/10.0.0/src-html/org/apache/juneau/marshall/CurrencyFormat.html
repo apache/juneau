@@ -48,14 +48,14 @@
 <span class="source-line-no">035</span><span id="line-35"> * The default is {@link #ISO_CODE} which preserves the historical wire output ({@link Currency#toString()} /</span>
 <span class="source-line-no">036</span><span id="line-36"> * {@link Currency#getCurrencyCode()}).</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='topic'&gt;Locale composability&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='topic'&gt;Locale composability&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * {@link #SYMBOL} and {@link #DISPLAY_NAME} are locale-sensitive — they consult the supplied {@link Locale}</span>
 <span class="source-line-no">042</span><span id="line-42"> * (typically the {@link MarshallingContext#getLocale()} resolved through the {@link MarshallingSession}).</span>
 <span class="source-line-no">043</span><span id="line-43"> * {@link #ISO_CODE} ignores the locale.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='topic'&gt;Round-trip caveat&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='topic'&gt;Round-trip caveat&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;b&gt;Round-trip is strictly guaranteed only for {@link #ISO_CODE}.&lt;/b&gt;  {@code SYMBOL} parsing of a token</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> * locale, and {@code DISPLAY_NAME} parsing is even less reliable ({@code "Dollar"} matches at least eight</span>
 <span class="source-line-no">051</span><span id="line-51"> * ISO codes). For machine-to-machine wires, prefer {@link #ISO_CODE}.</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='topic'&gt;Precedence (highest to lowest)&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;ol&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;{@link MarshalledProp#currencyFormat() @MarshalledProp(currencyFormat=…)} on the bean property.</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@link Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61"> *    &lt;li&gt;The default constant ({@link #ISO_CODE}).</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;/ol&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='topic'&gt;Parser leniency&lt;/h5&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;h2 class='topic'&gt;Parser leniency&lt;/h2&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * Parsers SHALL try {@link Currency#getInstance(String)} first regardless of the parser-side</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> * {@link #SYMBOL} / {@link #DISPLAY_NAME}, the parser falls back to a best-effort iterate-and-match scan</span>
 <span class="source-line-no">070</span><span id="line-70"> * against {@link Currency#getAvailableCurrencies()}.</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='topic'&gt;Binary serializers&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='topic'&gt;Binary serializers&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;p&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this</span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">   /**</span>
 <span class="source-line-no">086</span><span id="line-86">    * ISO 4217 currency code (the default).</span>
 <span class="source-line-no">087</span><span id="line-87">    *</span>
-<span class="source-line-no">088</span><span id="line-88">    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88">    * &lt;h4 class='figure'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">089</span><span id="line-89">    * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">090</span><span id="line-90">    *    USD</span>
 <span class="source-line-no">091</span><span id="line-91">    *    EUR</span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100">   /**</span>
 <span class="source-line-no">101</span><span id="line-101">    * Currency symbol per {@link Currency#getSymbol(Locale)}.</span>
 <span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * &lt;h5 class='figure'&gt;Example (locale {@code en_US}):&lt;/h5&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    * &lt;h4 class='figure'&gt;Example (locale {@code en_US}):&lt;/h4&gt;</span>
 <span class="source-line-no">104</span><span id="line-104">    * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">    *    $</span>
 <span class="source-line-no">106</span><span id="line-106">    *    €</span>
@@ -130,7 +130,7 @@
 <span class="source-line-no">117</span><span id="line-117">   /**</span>
 <span class="source-line-no">118</span><span id="line-118">    * Localized display name per {@link Currency#getDisplayName(Locale)}.</span>
 <span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;h5 class='figure'&gt;Example (locale {@code en_US}):&lt;/h5&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;h4 class='figure'&gt;Example (locale {@code en_US}):&lt;/h4&gt;</span>
 <span class="source-line-no">121</span><span id="line-121">    * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">122</span><span id="line-122">    *    US Dollar</span>
 <span class="source-line-no">123</span><span id="line-123">    *    Euro</span>

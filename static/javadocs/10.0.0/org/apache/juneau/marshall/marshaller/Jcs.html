@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
    Parsing uses the standard <a href="../json/JsonParser.html" title="class in org.apache.juneau.marshall.json"><code>JsonParser</code></a> since JCS output is valid JSON.
  </p>
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Using static convenience methods.</jc>
    String <jv>s</jv> = Jcs.<jsm>of</jsm>(<jv>myBean</jv>);
@@ -105,12 +104,12 @@ loadScripts(document, 'script');</script>
    MyBean <jv>b</jv> = <jv>jcs</jv>.read(<jv>s</jv>, MyBean.<jk>class</jk>);
  </p>
 
- <h5 class='figure'>Example output (bean with name/age):</h5>
+ <h2 class='figure'>Example output (bean with name/age):</h2>
  <p class='bjson'>
    {<jok>"age"</jok>:<jov>30</jov>,<jok>"name"</jok>:<jov>"Alice"</jov>}
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a> and <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> values beyond IEEE 754 double
       precision range will lose precision or throw during serialization.
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = Jcs.<jsm>of</jsm>(<jv>myPojo</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785 — JSON Canonicalization Scheme</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Jcs">JCS</a>
    <li class='jc'><a href="../jcs/JcsSerializer.html" title="class in org.apache.juneau.marshall.jcs"><code>JcsSerializer</code></a>

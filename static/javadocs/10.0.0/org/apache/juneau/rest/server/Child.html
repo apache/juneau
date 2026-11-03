@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  <a href="Rest.html#mixinDefs()"><code>@Rest(mixinDefs=...)</code></a>. This is the host-side complement to
  <a href="Rest.html#children()"><code>@Rest(children=...)</code></a> (which takes bare classes and offers no seed hook).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@Rest</ja>(
       childrenDefs=<ja>@Child</ja>(type=FooChild.<jk>class</jk>, maxInput=<js>"10M"</js>)
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
    <jk>public class</jk> MyResource { ... }
  </p>
 
- <h5 class='section'>Seed semantics</h5>
+ <h2 class='section'>Seed semantics</h2>
  <p>
  Unlike <a href="Mixin.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Mixin</code></a> overrides (which win over an <i>inherited</i> chain), children are
  <b>isolated</b> from the host's resolution chain by design, so a <code>@Child</code> seed doesn't override
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  There is no <code>noInherit()</code> member on <code>@Child</code> itself (nothing to cut in an isolated context), and
  no <code>path()</code>/<code>paths()</code> re-mount member (the child's own <code>@Rest(path)</code> stays authoritative).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='ja'><a href="Rest.html#childrenDefs()"><code>Rest.childrenDefs()</code></a>
    <li class='ja'><a href="Rest.html#children()"><code>Rest.children()</code></a>
  </ul></div>

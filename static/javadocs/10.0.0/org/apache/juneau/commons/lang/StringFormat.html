@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  rendering use <a href="../utils/StringUtils.html#mformat(java.lang.String,java.lang.Object...)"><code>StringUtils.mformat(String, Object...)</code></a> / <code>Shorts.mf(...)</code>/<code>Shorts.mfs(...)</code>
  (backed by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/text/MessageFormat.html" title="class or interface in java.text" class="external-link"><code>MessageFormat</code></a>).
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul>
    <li><b>Printf grammar:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, <js>"%1$s"</js>, etc.</li>
    <li><b>Thread-Safe:</b> Immutable class, safe for concurrent use</li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
        (rather than throwing) and a fast path avoids <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Formatter.html" title="class or interface in java.util" class="external-link"><code>Formatter</code></a> for simple <js>"%s"</js> tokens</li>
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Simple printf</jc>
    StringFormat <jv>fmt</jv> = StringFormat.<jsm>ofPrintf</jsm>(<js>"Hello %s, you have %d items"</js>);
@@ -111,13 +110,13 @@ loadScripts(document, 'script');</script>
    <jc>// Returns: "Alice loves Bob, and Alice also loves Charlie"</jc>
  </p>
 
- <h5 class='section'>Caching:</h5>
+ <h2 class='section'>Caching:</h2>
  <p>
  Use <a href="#ofPrintf(java.lang.String)"><code>ofPrintf(String)</code></a> to get cached instances. The cache is thread-safe and limited to 1000 entries.
  For uncached instances, use the constructor directly.
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is immutable and thread-safe. Multiple threads can safely use the same instance concurrently.
  </p></div>
@@ -374,7 +373,7 @@ loadScripts(document, 'script');</script>
    <li><b>StringFormat tokens (complex):</b> <js>"[S:z0:%.2f]"</js> - Complex printf placeholder (format='z', index=0, content)</li>
  </ul>
 
- <h5 class='section'>Token Format:</h5>
+ <h4 class='section'>Token Format:</h4>
  <ul>
    <li><b>L</b> = Literal token</li>
    <li><b>S</b> = StringFormat (printf) token</li>
@@ -383,7 +382,7 @@ loadScripts(document, 'script');</script>
    <li><b>Content:</b> The format string content (for complex tokens)</li>
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    StringFormat <jv>fmt</jv> = StringFormat.<jsm>ofPrintf</jsm>(<js>"Hello %s, you have %d items"</js>);
    <jv>fmt</jv>.<jsm>toPattern</jsm>();

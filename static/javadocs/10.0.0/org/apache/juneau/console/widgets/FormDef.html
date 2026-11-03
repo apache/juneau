@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,18 +87,18 @@ loadScripts(document, 'script');</script>
 implements <a href="Widget.html" title="interface in org.apache.juneau.console.widgets">Widget</a></span></div>
 <div class="block">The declarative source of a row-action modal's input form (the form half of a <code>present=dialog</code> action).
 
- <h5 class='section'>A widget contract driven by a view-module runtime</h5>
+ <h2 class='section'>A widget contract driven by a view-module runtime</h2>
  <p>
  Like <a href="ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a>, this is a general widget contract that lives in this module while the browser runtime that
  paints it ships with the rich-view module.  Nothing here depends on that module.
 
- <h5 class='section'>Flat or sectioned</h5>
+ <h2 class='section'>Flat or sectioned</h2>
  <p>
  A form declares either a flat <a href="#fields"><code>fields</code></a> list or an ordered list of <a href="FormDef.Section.html" title="class in org.apache.juneau.console.widgets"><code>FormDef.Section</code></a>s, never both: the flat list
  <i>is</i> the single-section case.  Sections render as a ribbon-format strip above one visible pane; they are a
  layout of one dialog, not a stack of dialogs, so they cost nothing against the runtime's modal-depth cap.
 
- <h5 class='section'>Typed inputs, not markup</h5>
+ <h2 class='section'>Typed inputs, not markup</h2>
  <p>
  The client paints <a href="#fields"><code>fields</code></a> as native <code>&lt;input&gt;</code> / <code>&lt;textarea&gt;</code> / <code>&lt;select&gt;</code> /
  <code>&lt;button&gt;</code> elements via <code>createElement</code>.  Labels and option text use <code>textContent</code>; prefills use
@@ -112,7 +111,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
  shipped <code>juneau-views.js</code> ignores it.
  </p>
 
- <h5 class='section'>Per-widget contract version (fail-loud when a form is present)</h5>
+ <h2 class='section'>Per-widget contract version (fail-loud when a form is present)</h2>
  <p>
  This bean <a href="Widget.html#validate()"><code>validates</code></a> fail-closed and carries an instance <a href="#contractVersion"><code>contractVersion</code></a>.  The
  version defaults to <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a> from the instant the form is constructed &mdash; a raw
@@ -125,7 +124,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
  three makes every form-bearing dialog refuse to open.
  </p>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    FormDef <jv>form</jv> = FormDef.<jsm>create</jsm>()
       .field(FormDef.Input.<jsm>of</jsm>(<js>"resolution"</js>, <js>"Resolution comment"</js>, <js>"textarea"</js>)
@@ -133,7 +132,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
          .value(<js>""</js>));
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a>
    <li class='jc'><a href="ActionRef.html" title="class in org.apache.juneau.console.widgets"><code>ActionRef</code></a>

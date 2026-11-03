@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  (with the backends declared <code>provided</code>), and any consumer can implement this interface for a backend
  Juneau does not cover.
 
- <h5 class='topic'>Explicit selection (no auto-drive)</h5>
+ <h2 class='topic'>Explicit selection (no auto-drive)</h2>
 
  <p>
  Consistent with Juneau's explicit-over-magic stance, the backend is <b>explicitly declared</b> by registering a
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  declared, <a href="LoggersManager.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersManager</code></a> drives <a href="JulLogBackend.html" title="class in org.apache.juneau.rest.server.management"><code>JulLogBackend</code></a> &mdash; the endpoint never silently classpath-scans
  for, and then drives, a backend the operator didn't choose.
 
- <h5 class='topic'>Level contract</h5>
+ <h2 class='topic'>Level contract</h2>
 
  <p>
  Levels are exchanged as backend-native level-name strings (e.g. JUL <code>"FINE"</code>/<code>"INFO"</code>, Logback /
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
  <b>process-lifetime-only</b> (they do not rewrite the backend's configuration file). The root logger is
  addressed under the key <code>"ROOT"</code>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="JulLogBackend.html" title="class in org.apache.juneau.rest.server.management"><code>JulLogBackend</code></a>
    <li class='jc'><a href="LoggersManager.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersManager</code></a>
    <li class='jc'><a href="LoggersSettings.html" title="class in org.apache.juneau.rest.server.management"><code>LoggersSettings</code></a>

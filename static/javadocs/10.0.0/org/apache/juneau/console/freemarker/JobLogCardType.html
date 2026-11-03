@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -102,7 +101,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
  <code>targetId</code> is the key's own value.  The shape rules are <a href="../views/JobLogChecks.html" title="class in org.apache.juneau.console.views"><code>JobLogChecks</code></a>, shared with
  <a href="../views/JobLogRegion.html" title="class in org.apache.juneau.console.views"><code>JobLogRegion</code></a>.  There is no typed builder; build it with <a href="CardSpec.html#of(java.lang.String,java.lang.String)"><code>CardSpec.of(String, String)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bcode'>
    &lt;@card type="job-log" id="rebuild" title="Rebuild index"&gt;
    { submit: { endpoint: '/ops/jobs/rebuild', fields: [ { name: 'shards', label: 'Shards', type: 'number', default: 4 } ] },

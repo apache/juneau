@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -86,14 +85,14 @@ loadScripts(document, 'script');</script>
  field navigation (e.g., <code>"user.address.city"</code>). The framework uses a chain-of-responsibility
  pattern, trying each registered extractor until one can handle the property access.</p>
 
- <h5 class='section'>Extraction Strategy:</h5>
+ <h2 class='section'>Extraction Strategy:</h2>
  <p>The two-phase approach ensures efficient and flexible property access:</p>
  <ol>
     <li><b><a href="#canExtract(org.apache.juneau.bct.BeanConverter,java.lang.Object,java.lang.String)"><code>canExtract(BeanConverter, Object, String)</code></a>:</b> Quick check if this extractor can handle the property</li>
     <li><b><a href="#extract(org.apache.juneau.bct.BeanConverter,java.lang.Object,java.lang.String)"><code>extract(BeanConverter, Object, String)</code></a>:</b> Perform the actual property extraction</li>
  </ol>
 
- <h5 class='section'>Common Use Cases:</h5>
+ <h2 class='section'>Common Use Cases:</h2>
  <ul>
     <li><b>JavaBean properties:</b> Standard getter methods and public fields</li>
     <li><b>Map-style access:</b> Key-based property retrieval from Map objects</li>
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
     <li><b>Dynamic properties:</b> Computed or cached property values</li>
  </ul>
 
- <h5 class='section'>Implementation Example:</h5>
+ <h2 class='section'>Implementation Example:</h2>
  <p class='bjava'>
     <jc>// Custom extractor for database entities</jc>
     <jk>public class</jk> DatabaseEntityExtractor <jk>implements</jk> PropertyExtractor {
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
     }
  </p>
 
- <h5 class='section'>Registration and Usage:</h5>
+ <h2 class='section'>Registration and Usage:</h2>
  <p class='bjava'>
     <jk>var</jk> <jv>converter</jv> = BasicBeanConverter.<jsm>builder</jsm>()
        .defaultSettings() <jc>// Adds standard extractors</jc>
@@ -140,7 +139,7 @@ loadScripts(document, 'script');</script>
        .build();
  </p>
 
- <h5 class='section'>Best Practices:</h5>
+ <h2 class='section'>Best Practices:</h2>
  <ul>
     <li><b>Fast canExtract() checks:</b> Use efficient type checking and avoid expensive operations</li>
     <li><b>Handle edge cases:</b> Gracefully handle null objects and invalid property names</li>

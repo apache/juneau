@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -97,7 +96,7 @@ implements jakarta.servlet.ServletContainerInitializer</span></div>
  (<a href="../Rest.html#paths()"><code>@Rest(paths)</code></a> / <code>getPaths()</code>) via
  <a href="../RestContext.html#resolveTopLevelPaths(java.lang.Class,java.lang.Object,org.apache.juneau.commons.inject.BeanStore)"><code>RestContext.resolveTopLevelPaths(...)</code></a> &mdash; <b>not</b> <code>path()</code> (child-composition).
 
- <h5 class='section'>Activation:</h5>
+ <h2 class='section'>Activation:</h2>
 
  <p>
  Opt-in via the context init parameter <code>juneau.rest.auto-register=true</code> (parity with the
@@ -112,7 +111,7 @@ implements jakarta.servlet.ServletContainerInitializer</span></div>
    <xt>&lt;/context-param&gt;</xt>
  </p>
 
- <h5 class='section'>Behavior:</h5>
+ <h2 class='section'>Behavior:</h2>
 
  <p>
  For each handled class that is concrete, carries a <a href="../Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a> annotation, is no-arg
@@ -120,7 +119,7 @@ implements jakarta.servlet.ServletContainerInitializer</span></div>
  servlet context at each resolved path. Classes that resolve to no top-level paths (pure mixins /
  child-composed resources) or that cannot be instantiated with a no-arg constructor are skipped.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jm'><a href="../RestContext.html#resolveTopLevelPaths(java.lang.Class,java.lang.Object,org.apache.juneau.commons.inject.BeanStore)"><code>RestContext.resolveTopLevelPaths(Class, Object, org.apache.juneau.commons.inject.BeanStore)</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>
  </ul></div>

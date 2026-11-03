@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * for small maps (typically less than 10 entries) where the overhead of a {@link HashMap} is not</span>
 <span class="source-line-no">035</span><span id="line-35"> * justified.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;b&gt;Unmodifiable:&lt;/b&gt; All mutation operations throw {@link UnsupportedOperationException}</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;Fixed Keys and Values:&lt;/b&gt; Keys and values are set at construction time</span>
@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;&lt;b&gt;Predictable Performance:&lt;/b&gt; O(n) lookup time, but faster than {@link HashMap} for small n</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;Immutable configuration maps with a fixed set of known keys</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;Small lookup tables that should not be modified</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;Situations where map size is small and keys are known at compile time</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/ul&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Create an unmodifiable map with fixed keys and values&lt;/jc&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *    String[] &lt;jv&gt;keys&lt;/jv&gt; = {&lt;js&gt;"host"&lt;/js&gt;, &lt;js&gt;"port"&lt;/js&gt;, &lt;js&gt;"timeout"&lt;/js&gt;};</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;jv&gt;config&lt;/jv&gt;.put(&lt;js&gt;"port"&lt;/js&gt;, 9090);  &lt;jc&gt;// Throws UnsupportedOperationException&lt;/jc&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;Restrictions:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;Restrictions:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;li&gt;&lt;b&gt;Immutable:&lt;/b&gt; Cannot add, remove, or modify entries after construction</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li&gt;&lt;b&gt;Fixed Size:&lt;/b&gt; Size is determined at construction time</span>
@@ -90,19 +90,19 @@
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li&gt;&lt;b&gt;Array Length:&lt;/b&gt; Keys and values arrays must have the same length</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;h5 class='section'&gt;Performance Characteristics:&lt;/h5&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;h2 class='section'&gt;Performance Characteristics:&lt;/h2&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li&gt;&lt;b&gt;get(key):&lt;/b&gt; O(n) - Linear search through keys array</span>
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;li&gt;&lt;b&gt;size():&lt;/b&gt; O(1) - Direct array length access</span>
 <span class="source-line-no">084</span><span id="line-84"> *    &lt;li&gt;&lt;b&gt;Memory:&lt;/b&gt; Lower overhead than {@link HashMap} for small maps</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;/ul&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *</span>
-<span class="source-line-no">087</span><span id="line-87"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;p&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * This class is thread-safe since it's immutable after construction. Multiple threads can safely</span>
 <span class="source-line-no">090</span><span id="line-90"> * read from a SimpleMap concurrently without synchronization.</span>
 <span class="source-line-no">091</span><span id="line-91"> *</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;h5 class='section'&gt;Example - Configuration Map:&lt;/h5&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;h2 class='section'&gt;Example - Configuration Map:&lt;/h2&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> *    &lt;jc&gt;// Create immutable configuration&lt;/jc&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *    SimpleMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;defaults&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</span>
@@ -114,14 +114,14 @@
 <span class="source-line-no">101</span><span id="line-101"> *    &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;defaults&lt;/jv&gt;;</span>
 <span class="source-line-no">102</span><span id="line-102"> * &lt;/p&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> *</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;h5 class='section'&gt;Comparison with Map.of():&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;h2 class='section'&gt;Comparison with Map.of():&lt;/h2&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">106</span><span id="line-106"> *    &lt;li&gt;&lt;b&gt;Null Support:&lt;/b&gt; SimpleMap supports null keys/values, Map.of() does not</span>
 <span class="source-line-no">107</span><span id="line-107"> *    &lt;li&gt;&lt;b&gt;Insertion Order:&lt;/b&gt; SimpleMap preserves insertion order, Map.of() does not</span>
 <span class="source-line-no">108</span><span id="line-108"> *    &lt;li&gt;&lt;b&gt;Size Limit:&lt;/b&gt; Map.of() limited to 10 entries, SimpleMap has no limit</span>
 <span class="source-line-no">109</span><span id="line-109"> * &lt;/ul&gt;</span>
 <span class="source-line-no">110</span><span id="line-110"> *</span>
-<span class="source-line-no">111</span><span id="line-111"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">111</span><span id="line-111"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">112</span><span id="line-112"> * &lt;ul&gt;</span>
 <span class="source-line-no">113</span><span id="line-113"> *    &lt;li class='jc'&gt;{@link SimpleMap} - The modifiable version of this class</span>
 <span class="source-line-no">114</span><span id="line-114"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</span>
@@ -203,7 +203,7 @@
 <span class="source-line-no">190</span><span id="line-190">    * For true immutability, ensure the arrays are not modified after passing them</span>
 <span class="source-line-no">191</span><span id="line-191">    * to this constructor.</span>
 <span class="source-line-no">192</span><span id="line-192">    *</span>
-<span class="source-line-no">193</span><span id="line-193">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">194</span><span id="line-194">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">195</span><span id="line-195">    *    String[] &lt;jv&gt;keys&lt;/jv&gt; = {&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"age"&lt;/js&gt;, &lt;js&gt;"city"&lt;/js&gt;};</span>
 <span class="source-line-no">196</span><span id="line-196">    *    Object[] &lt;jv&gt;values&lt;/jv&gt; = {&lt;js&gt;"John"&lt;/js&gt;, 30, &lt;js&gt;"NYC"&lt;/js&gt;};</span>
@@ -252,7 +252,7 @@
 <span class="source-line-no">239</span><span id="line-239">    * &lt;p&gt;</span>
 <span class="source-line-no">240</span><span id="line-240">    * The returned set is unmodifiable and backed by the underlying entries array.</span>
 <span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">242</span><span id="line-242">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">243</span><span id="line-243">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">244</span><span id="line-244">    *    SimpleMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</span>
 <span class="source-line-no">245</span><span id="line-245">    *       &lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;},</span>
@@ -279,7 +279,7 @@
 <span class="source-line-no">266</span><span id="line-266">    * for comparison. For small maps (typically less than 10 entries), this is often faster than</span>
 <span class="source-line-no">267</span><span id="line-267">    * the hash lookup in {@link HashMap}.</span>
 <span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">269</span><span id="line-269">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">270</span><span id="line-270">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">271</span><span id="line-271">    *    SimpleMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</span>
 <span class="source-line-no">272</span><span id="line-272">    *       &lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"age"&lt;/js&gt;, &lt;js&gt;"score"&lt;/js&gt;},</span>
@@ -308,7 +308,7 @@
 <span class="source-line-no">295</span><span id="line-295">    * &lt;p&gt;</span>
 <span class="source-line-no">296</span><span id="line-296">    * The returned set is unmodifiable and backed by the underlying keys array.</span>
 <span class="source-line-no">297</span><span id="line-297">    *</span>
-<span class="source-line-no">298</span><span id="line-298">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">298</span><span id="line-298">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">299</span><span id="line-299">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">300</span><span id="line-300">    *    SimpleMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleMap&amp;lt;&amp;gt;(</span>
 <span class="source-line-no">301</span><span id="line-301">    *       &lt;jk&gt;new&lt;/jk&gt; String[]{&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;},</span>

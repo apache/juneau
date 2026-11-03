@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
  environment variable such as <code>MY_SECTION_MY_KEY</code> satisfy a lookup for <code>MySection/myKey</code>, or
  <code>MY_PROP</code> satisfy <code>my.prop</code> / <code>myProp</code>.
 
- <h5 class='section'>Candidate order</h5>
+ <h2 class='section'>Candidate order</h2>
  <p>
  The requested name is always tried <b>verbatim first</b>, so exact-match behavior is preserved unchanged (an
  already-canonical key resolves with no transformation, and a source that defines the literal name wins).  Only on a
@@ -117,7 +116,7 @@ implements <a href="PropertySource.html" title="interface in org.apache.juneau.c
  logical key and the decorator generates the environment-convention spellings to probe.  It never tries to reverse a
  flat env name back into a <code>section/key</code> pair.
 
- <h5 class='section'>Usage</h5>
+ <h2 class='section'>Usage</h2>
  <p class='bjava'>
    <jc>// Wrap the system-env source so env vars bind relaxedly.</jc>
    <jv>settings</jv> = Settings.<jsm>create</jsm>().addSource(<jk>new</jk> RelaxedPropertySource(Settings.<jsf>SYSTEM_ENV_SOURCE</jsf>)).build();

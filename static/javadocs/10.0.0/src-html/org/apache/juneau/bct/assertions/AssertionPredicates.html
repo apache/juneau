@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;{@link FluentListAssertion#isEach(Predicate...)}</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;/ul&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;jc&gt;// Asserts that a list contains te specified values.&lt;/jc&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    List&amp;lt;Object&amp;gt; &lt;jv&gt;myList&lt;/jv&gt; = AList.&lt;jsm&gt;of&lt;/jsm&gt;(...);</span>
@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> *       .is(&lt;jsm&gt;eq&lt;/jsm&gt;(&lt;js&gt;"foo"&lt;/js&gt;), &lt;jsm&gt;any&lt;/jsm&gt;(), &lt;jsm&gt;match&lt;/jsm&gt;(&lt;js&gt;"bar*"&lt;/js&gt;));</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;/p&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;ul&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview"&gt;Juneau Ecosystem&lt;/a&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
@@ -333,73 +333,74 @@
 <span class="source-line-no">320</span><span id="line-320">    *       &lt;li&gt;{@link Pattern#LITERAL LITERAL}</span>
 <span class="source-line-no">321</span><span id="line-321">    *       &lt;li&gt;{@link Pattern#UNICODE_CHARACTER_CLASS UNICODE_CHARACTER_CLASS}</span>
 <span class="source-line-no">322</span><span id="line-322">    *       &lt;li&gt;{@link Pattern#COMMENTS COMMENTS}</span>
-<span class="source-line-no">323</span><span id="line-323">    * @return A new predicate.</span>
-<span class="source-line-no">324</span><span id="line-324">    */</span>
-<span class="source-line-no">325</span><span id="line-325">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; regex(String expression, int flags) {</span>
-<span class="source-line-no">326</span><span id="line-326">      reqnn("expression", expression);</span>
-<span class="source-line-no">327</span><span id="line-327">      var p = Pattern.compile(expression, flags);</span>
-<span class="source-line-no">328</span><span id="line-328">      return test(x -&gt; x != null &amp;&amp; p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);</span>
-<span class="source-line-no">329</span><span id="line-329">   }</span>
-<span class="source-line-no">330</span><span id="line-330"></span>
-<span class="source-line-no">331</span><span id="line-331">   /**</span>
-<span class="source-line-no">332</span><span id="line-332">    * Predicate that wraps another predicate.</span>
-<span class="source-line-no">333</span><span id="line-333">    *</span>
-<span class="source-line-no">334</span><span id="line-334">    * &lt;p&gt;</span>
-<span class="source-line-no">335</span><span id="line-335">    * If the predicate extends from {@link AssertionPredicate}, the assertion error</span>
-<span class="source-line-no">336</span><span id="line-336">    * message is &lt;js&gt;"Value did not pass test."&lt;/js&gt; followed by the inner assertion error.</span>
-<span class="source-line-no">337</span><span id="line-337">    * Otherwise the message is &lt;js&gt;"Value did not pass test.  Value='%s'."&lt;/js&gt;</span>
-<span class="source-line-no">338</span><span id="line-338">    *</span>
-<span class="source-line-no">339</span><span id="line-339">    * @param &lt;T&gt; The object type being tested.</span>
-<span class="source-line-no">340</span><span id="line-340">    * @param predicate The predicate to run.</span>
-<span class="source-line-no">341</span><span id="line-341">    * @return A new predicate.</span>
-<span class="source-line-no">342</span><span id="line-342">    */</span>
-<span class="source-line-no">343</span><span id="line-343">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; test(Predicate&lt;T&gt; predicate) {</span>
-<span class="source-line-no">344</span><span id="line-344">      return new AssertionPredicate&lt;&gt;(predicate, null);</span>
-<span class="source-line-no">345</span><span id="line-345">   }</span>
-<span class="source-line-no">346</span><span id="line-346"></span>
-<span class="source-line-no">347</span><span id="line-347">   /**</span>
-<span class="source-line-no">348</span><span id="line-348">    * Predicate that wraps another predicate.</span>
-<span class="source-line-no">349</span><span id="line-349">    *</span>
-<span class="source-line-no">350</span><span id="line-350">    * &lt;p&gt;</span>
-<span class="source-line-no">351</span><span id="line-351">    * If the message specified is &lt;jk&gt;null&lt;/jk&gt; and the predicate extends from {@link AssertionPredicate}, the assertion error</span>
-<span class="source-line-no">352</span><span id="line-352">    * message is &lt;js&gt;"Value did not pass test."&lt;/js&gt; followed by the inner assertion error.</span>
-<span class="source-line-no">353</span><span id="line-353">    * Otherwise the message is &lt;js&gt;"Value did not pass test.  Value='%s'."&lt;/js&gt;</span>
-<span class="source-line-no">354</span><span id="line-354">    *</span>
-<span class="source-line-no">355</span><span id="line-355">    * @param &lt;T&gt; The object type being tested.</span>
-<span class="source-line-no">356</span><span id="line-356">    * @param predicate The predicate to run.</span>
-<span class="source-line-no">357</span><span id="line-357">    * @param msg</span>
-<span class="source-line-no">358</span><span id="line-358">    *    The error message if predicate fails.</span>
-<span class="source-line-no">359</span><span id="line-359">    *    &lt;br&gt;Supports printf-style arguments.</span>
-<span class="source-line-no">360</span><span id="line-360">    * @param args</span>
-<span class="source-line-no">361</span><span id="line-361">    *    Optional message arguments.</span>
-<span class="source-line-no">362</span><span id="line-362">    *    &lt;br&gt;Can contain {@code #VALUE} to specify the value itself as an argument.</span>
-<span class="source-line-no">363</span><span id="line-363">    *    &lt;br&gt;Can contain {@link Function functions} to apply to the tested value.</span>
-<span class="source-line-no">364</span><span id="line-364">    * @return A new predicate.</span>
-<span class="source-line-no">365</span><span id="line-365">    */</span>
-<span class="source-line-no">366</span><span id="line-366">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; test(Predicate&lt;T&gt; predicate, String msg, Object...args) {</span>
-<span class="source-line-no">367</span><span id="line-367">      return new AssertionPredicate&lt;&gt;(predicate, msg, args);</span>
-<span class="source-line-no">368</span><span id="line-368">   }</span>
-<span class="source-line-no">369</span><span id="line-369"></span>
-<span class="source-line-no">370</span><span id="line-370">   /**</span>
-<span class="source-line-no">371</span><span id="line-371">    * Predicate that returns &lt;jk&gt;true&lt;/jk&gt; if the tested value is the specified or child type.</span>
-<span class="source-line-no">372</span><span id="line-372">    *</span>
-<span class="source-line-no">373</span><span id="line-373">    * &lt;p&gt;</span>
-<span class="source-line-no">374</span><span id="line-374">    * Assertion error message is &lt;js&gt;"Value was not expected type.  Expected='%s', Actual='%s'."&lt;/js&gt;.</span>
-<span class="source-line-no">375</span><span id="line-375">    *</span>
-<span class="source-line-no">376</span><span id="line-376">    * @param &lt;T&gt; The object type being tested.</span>
-<span class="source-line-no">377</span><span id="line-377">    * @param type The specified type.</span>
-<span class="source-line-no">378</span><span id="line-378">    * @return A new predicate.</span>
-<span class="source-line-no">379</span><span id="line-379">    */</span>
-<span class="source-line-no">380</span><span id="line-380">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; type(Class&lt;?&gt; type) {</span>
-<span class="source-line-no">381</span><span id="line-381">      reqnn("type", type);</span>
-<span class="source-line-no">382</span><span id="line-382">      return test(x -&gt; x != null &amp;&amp; type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, cn(type), TYPENAME);</span>
-<span class="source-line-no">383</span><span id="line-383">   }</span>
-<span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">   /**</span>
-<span class="source-line-no">386</span><span id="line-386">    * Constructor.</span>
-<span class="source-line-no">387</span><span id="line-387">    */</span>
-<span class="source-line-no">388</span><span id="line-388">   protected AssertionPredicates() {} // HTT - utility class; instantiation via subclass is theoretical</span>
-<span class="source-line-no">389</span><span id="line-389">}</span>
+<span class="source-line-no">323</span><span id="line-323">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">324</span><span id="line-324">    * @return A new predicate.</span>
+<span class="source-line-no">325</span><span id="line-325">    */</span>
+<span class="source-line-no">326</span><span id="line-326">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; regex(String expression, int flags) {</span>
+<span class="source-line-no">327</span><span id="line-327">      reqnn("expression", expression);</span>
+<span class="source-line-no">328</span><span id="line-328">      var p = Pattern.compile(expression, flags);</span>
+<span class="source-line-no">329</span><span id="line-329">      return test(x -&gt; x != null &amp;&amp; p.matcher(s(x)).matches(), MSG_valueDidNotMatchPattern, expression, VALUE);</span>
+<span class="source-line-no">330</span><span id="line-330">   }</span>
+<span class="source-line-no">331</span><span id="line-331"></span>
+<span class="source-line-no">332</span><span id="line-332">   /**</span>
+<span class="source-line-no">333</span><span id="line-333">    * Predicate that wraps another predicate.</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;p&gt;</span>
+<span class="source-line-no">336</span><span id="line-336">    * If the predicate extends from {@link AssertionPredicate}, the assertion error</span>
+<span class="source-line-no">337</span><span id="line-337">    * message is &lt;js&gt;"Value did not pass test."&lt;/js&gt; followed by the inner assertion error.</span>
+<span class="source-line-no">338</span><span id="line-338">    * Otherwise the message is &lt;js&gt;"Value did not pass test.  Value='%s'."&lt;/js&gt;</span>
+<span class="source-line-no">339</span><span id="line-339">    *</span>
+<span class="source-line-no">340</span><span id="line-340">    * @param &lt;T&gt; The object type being tested.</span>
+<span class="source-line-no">341</span><span id="line-341">    * @param predicate The predicate to run.</span>
+<span class="source-line-no">342</span><span id="line-342">    * @return A new predicate.</span>
+<span class="source-line-no">343</span><span id="line-343">    */</span>
+<span class="source-line-no">344</span><span id="line-344">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; test(Predicate&lt;T&gt; predicate) {</span>
+<span class="source-line-no">345</span><span id="line-345">      return new AssertionPredicate&lt;&gt;(predicate, null);</span>
+<span class="source-line-no">346</span><span id="line-346">   }</span>
+<span class="source-line-no">347</span><span id="line-347"></span>
+<span class="source-line-no">348</span><span id="line-348">   /**</span>
+<span class="source-line-no">349</span><span id="line-349">    * Predicate that wraps another predicate.</span>
+<span class="source-line-no">350</span><span id="line-350">    *</span>
+<span class="source-line-no">351</span><span id="line-351">    * &lt;p&gt;</span>
+<span class="source-line-no">352</span><span id="line-352">    * If the message specified is &lt;jk&gt;null&lt;/jk&gt; and the predicate extends from {@link AssertionPredicate}, the assertion error</span>
+<span class="source-line-no">353</span><span id="line-353">    * message is &lt;js&gt;"Value did not pass test."&lt;/js&gt; followed by the inner assertion error.</span>
+<span class="source-line-no">354</span><span id="line-354">    * Otherwise the message is &lt;js&gt;"Value did not pass test.  Value='%s'."&lt;/js&gt;</span>
+<span class="source-line-no">355</span><span id="line-355">    *</span>
+<span class="source-line-no">356</span><span id="line-356">    * @param &lt;T&gt; The object type being tested.</span>
+<span class="source-line-no">357</span><span id="line-357">    * @param predicate The predicate to run.</span>
+<span class="source-line-no">358</span><span id="line-358">    * @param msg</span>
+<span class="source-line-no">359</span><span id="line-359">    *    The error message if predicate fails.</span>
+<span class="source-line-no">360</span><span id="line-360">    *    &lt;br&gt;Supports printf-style arguments.</span>
+<span class="source-line-no">361</span><span id="line-361">    * @param args</span>
+<span class="source-line-no">362</span><span id="line-362">    *    Optional message arguments.</span>
+<span class="source-line-no">363</span><span id="line-363">    *    &lt;br&gt;Can contain {@code #VALUE} to specify the value itself as an argument.</span>
+<span class="source-line-no">364</span><span id="line-364">    *    &lt;br&gt;Can contain {@link Function functions} to apply to the tested value.</span>
+<span class="source-line-no">365</span><span id="line-365">    * @return A new predicate.</span>
+<span class="source-line-no">366</span><span id="line-366">    */</span>
+<span class="source-line-no">367</span><span id="line-367">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; test(Predicate&lt;T&gt; predicate, String msg, Object...args) {</span>
+<span class="source-line-no">368</span><span id="line-368">      return new AssertionPredicate&lt;&gt;(predicate, msg, args);</span>
+<span class="source-line-no">369</span><span id="line-369">   }</span>
+<span class="source-line-no">370</span><span id="line-370"></span>
+<span class="source-line-no">371</span><span id="line-371">   /**</span>
+<span class="source-line-no">372</span><span id="line-372">    * Predicate that returns &lt;jk&gt;true&lt;/jk&gt; if the tested value is the specified or child type.</span>
+<span class="source-line-no">373</span><span id="line-373">    *</span>
+<span class="source-line-no">374</span><span id="line-374">    * &lt;p&gt;</span>
+<span class="source-line-no">375</span><span id="line-375">    * Assertion error message is &lt;js&gt;"Value was not expected type.  Expected='%s', Actual='%s'."&lt;/js&gt;.</span>
+<span class="source-line-no">376</span><span id="line-376">    *</span>
+<span class="source-line-no">377</span><span id="line-377">    * @param &lt;T&gt; The object type being tested.</span>
+<span class="source-line-no">378</span><span id="line-378">    * @param type The specified type.</span>
+<span class="source-line-no">379</span><span id="line-379">    * @return A new predicate.</span>
+<span class="source-line-no">380</span><span id="line-380">    */</span>
+<span class="source-line-no">381</span><span id="line-381">   public static final &lt;T&gt; AssertionPredicate&lt;T&gt; type(Class&lt;?&gt; type) {</span>
+<span class="source-line-no">382</span><span id="line-382">      reqnn("type", type);</span>
+<span class="source-line-no">383</span><span id="line-383">      return test(x -&gt; x != null &amp;&amp; type.isAssignableFrom(x.getClass()), MSG_valueWasNotExpectedType, cn(type), TYPENAME);</span>
+<span class="source-line-no">384</span><span id="line-384">   }</span>
+<span class="source-line-no">385</span><span id="line-385"></span>
+<span class="source-line-no">386</span><span id="line-386">   /**</span>
+<span class="source-line-no">387</span><span id="line-387">    * Constructor.</span>
+<span class="source-line-no">388</span><span id="line-388">    */</span>
+<span class="source-line-no">389</span><span id="line-389">   protected AssertionPredicates() {} // HTT - utility class; instantiation via subclass is theoretical</span>
+<span class="source-line-no">390</span><span id="line-390">}</span>
 
 
 

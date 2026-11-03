@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * The returned {@link SimpleLock} instances automatically acquire the lock when created and release</span>
 <span class="source-line-no">033</span><span id="line-33"> * it when {@link SimpleLock#close()} is called (either explicitly or automatically via try-with-resources).</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Using read lock with try-with-resources&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock();</span>
@@ -63,13 +63,13 @@
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Lock is automatically released when exiting try block&lt;/jc&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * This class inherits all thread-safety guarantees from {@link ReentrantReadWriteLock}.</span>
 <span class="source-line-no">056</span><span id="line-56"> * Multiple threads can hold read locks simultaneously, but write locks are exclusive.</span>
 <span class="source-line-no">057</span><span id="line-57"> * Read and write locks cannot be held simultaneously by different threads.</span>
 <span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='note'&gt;The returned {@link SimpleLock} instances are not thread-safe themselves and should</span>
 <span class="source-line-no">061</span><span id="line-61"> *       not be shared between threads. Each thread should call {@link #read()} or {@link #write()} separately.</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='note'&gt;Each call to {@link #read()} or {@link #write()} returns a new {@link SimpleLock} instance.</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='note'&gt;For fair ordering, use {@link #SimpleReadWriteLock(boolean)} with &lt;jk&gt;true&lt;/jk&gt;.</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='jc'&gt;{@link SimpleLock} - The auto-closeable lock wrapper</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link ReentrantReadWriteLock} - The underlying lock implementation</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;/ul&gt;</span>
@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line-86">    * {@link SimpleReadWriteLock} instance but don't want any actual synchronization overhead.</span>
 <span class="source-line-no">087</span><span id="line-87">    * All lock operations on this instance are no-ops and return {@link SimpleLock#NO_OP}.</span>
 <span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">089</span><span id="line-89">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">090</span><span id="line-90">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">091</span><span id="line-91">    *    &lt;jc&gt;// Use NO_OP when locking is disabled&lt;/jc&gt;</span>
 <span class="source-line-no">092</span><span id="line-92">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = isLockingEnabled() ? &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;</span>
@@ -109,7 +109,7 @@
 <span class="source-line-no">096</span><span id="line-96">    *    }</span>
 <span class="source-line-no">097</span><span id="line-97">    * &lt;/p&gt;</span>
 <span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">100</span><span id="line-100">    *    &lt;li class='note'&gt;Calling {@link #read()} or {@link #write()} on this instance returns {@link SimpleLock#NO_OP}.</span>
 <span class="source-line-no">101</span><span id="line-101">    *    &lt;li class='note'&gt;Closing the returned {@link SimpleLock} has no effect.</span>
 <span class="source-line-no">102</span><span id="line-102">    *    &lt;li class='note'&gt;This instance is thread-safe and can be shared across threads.</span>
@@ -144,7 +144,7 @@
 <span class="source-line-no">131</span><span id="line-131">    * &lt;p&gt;</span>
 <span class="source-line-no">132</span><span id="line-132">    * Creates a new read-write lock with the specified fairness policy.</span>
 <span class="source-line-no">133</span><span id="line-133">    *</span>
-<span class="source-line-no">134</span><span id="line-134">    * &lt;h5 class='section'&gt;Fair vs Unfair:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">    * &lt;h4 class='section'&gt;Fair vs Unfair:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">135</span><span id="line-135">    *    &lt;li class='note'&gt;&lt;b&gt;Fair locks&lt;/b&gt; (&lt;jk&gt;true&lt;/jk&gt;): Threads acquire locks in approximately</span>
 <span class="source-line-no">136</span><span id="line-136">    *       FIFO order. Provides fairness but may have lower throughput under high contention.</span>
 <span class="source-line-no">137</span><span id="line-137">    *    &lt;li class='note'&gt;&lt;b&gt;Unfair locks&lt;/b&gt; (&lt;jk&gt;false&lt;/jk&gt;): No ordering guarantee. Generally provides</span>
@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    * it when {@link SimpleLock#close()} is called. Multiple threads can hold read locks simultaneously,</span>
 <span class="source-line-no">153</span><span id="line-153">    * but a write lock cannot be acquired while any read locks are held.</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">156</span><span id="line-156">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">157</span><span id="line-157">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock();</span>
 <span class="source-line-no">158</span><span id="line-158">    *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;readLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.read()) {</span>
@@ -175,7 +175,7 @@
 <span class="source-line-no">162</span><span id="line-162">    *    &lt;jc&gt;// Lock is automatically released&lt;/jc&gt;</span>
 <span class="source-line-no">163</span><span id="line-163">    * &lt;/p&gt;</span>
 <span class="source-line-no">164</span><span id="line-164">    *</span>
-<span class="source-line-no">165</span><span id="line-165">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">166</span><span id="line-166">    *    &lt;li class='note'&gt;This method blocks until the read lock can be acquired.</span>
 <span class="source-line-no">167</span><span id="line-167">    *    &lt;li class='note'&gt;Multiple threads can hold read locks concurrently.</span>
 <span class="source-line-no">168</span><span id="line-168">    *    &lt;li class='note'&gt;Read locks cannot be acquired while a write lock is held by another thread.</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">    * it when {@link SimpleLock#close()} is called. Write locks are exclusive - only one thread can</span>
 <span class="source-line-no">185</span><span id="line-185">    * hold a write lock at a time, and no read locks can be held while a write lock is active.</span>
 <span class="source-line-no">186</span><span id="line-186">    *</span>
-<span class="source-line-no">187</span><span id="line-187">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">187</span><span id="line-187">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">188</span><span id="line-188">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">189</span><span id="line-189">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;lock&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SimpleReadWriteLock();</span>
 <span class="source-line-no">190</span><span id="line-190">    *    &lt;jk&gt;try&lt;/jk&gt; (&lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;writeLock&lt;/jv&gt; = &lt;jv&gt;lock&lt;/jv&gt;.write()) {</span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">    *    &lt;jc&gt;// Lock is automatically released&lt;/jc&gt;</span>
 <span class="source-line-no">195</span><span id="line-195">    * &lt;/p&gt;</span>
 <span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">197</span><span id="line-197">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">198</span><span id="line-198">    *    &lt;li class='note'&gt;This method blocks until the write lock can be acquired.</span>
 <span class="source-line-no">199</span><span id="line-199">    *    &lt;li class='note'&gt;Write locks are exclusive - only one thread can hold a write lock at a time.</span>
 <span class="source-line-no">200</span><span id="line-200">    *    &lt;li class='note'&gt;Write locks cannot be acquired while any read locks are held by other threads.</span>

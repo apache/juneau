@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * Contribute one as a &lt;c&gt;@Bean&lt;/c&gt; from a &lt;c&gt;@Configuration&lt;/c&gt; class.  It is the container-neutral counterpart of</span>
 <span class="source-line-no">035</span><span id="line-35"> * Spring Boot's {@code FilterRegistrationBean}, so the same registration works on Jetty and Tomcat.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *    &lt;ja&gt;@Configuration&lt;/ja&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;jk&gt;public class&lt;/jk&gt; MyAppConfig {</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> *    }</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/p&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;Order:&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;Order:&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * Filters run outermost first, by ascending {@link #getOrder() order}.  A bean-supplied {@link AuthFilterChain} is</span>
 <span class="source-line-no">055</span><span id="line-55"> * mounted automatically at {@link #AUTH_ORDER}, so a registration at the default {@link #DEFAULT_ORDER} runs after</span>
@@ -79,19 +79,19 @@
 <span class="source-line-no">066</span><span id="line-66"> * on &lt;js&gt;"/console/*"&lt;/js&gt; rejects a bad request before authentication ever sees it; the same filter on &lt;js&gt;"/*"&lt;/js&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * at {@link #HIGHEST_PRECEDENCE} would also intercept authentication redirects and challenges.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;Names:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;Names:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * More than one registration in an application needs a distinct bean name, because a &lt;c&gt;@Bean&lt;/c&gt; of one type with the</span>
 <span class="source-line-no">072</span><span id="line-72"> * same (default empty) name is a duplicate.  Distinct filters must be distinct instances: wrapping one filter instance</span>
 <span class="source-line-no">073</span><span id="line-73"> * in two registrations fails at startup, because the container would otherwise initialize and destroy it twice.</span>
 <span class="source-line-no">074</span><span id="line-74"> *</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;h5 class='section'&gt;Replacing the authentication mount:&lt;/h5&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;h2 class='section'&gt;Replacing the authentication mount:&lt;/h2&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * &lt;p&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * An application that needs the {@link AuthFilterChain} on other dispatcher types, or at another position, registers it</span>
 <span class="source-line-no">078</span><span id="line-78"> * itself: wrap the injected {@link AuthFilterChain} bean instance in a registration.  That registration then replaces</span>
 <span class="source-line-no">079</span><span id="line-79"> * the automatic mount.  It must be the injected instance; a new instance is a second, separate filter.</span>
 <span class="source-line-no">080</span><span id="line-80"> *</span>
-<span class="source-line-no">081</span><span id="line-81"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty"&gt;juneau-microservice-jetty&lt;/a&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>

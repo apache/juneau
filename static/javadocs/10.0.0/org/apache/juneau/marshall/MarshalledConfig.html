@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -268,12 +267,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Context.Builder.html#debug()"><code>Context.Builder.debug()</code></a>
  </ul></div>
 <dl class="notes">
@@ -305,7 +304,7 @@ loadScripts(document, 'script');</script>
  <p>
  This setting tells the parsers which classes to look for when resolving <js>"_type"</js> attributes.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#dictionary()"><code>Marshalled.dictionary()</code></a>
    <li class='ja'><a href="MarshalledProp.html#dictionary()"><code>MarshalledProp.dictionary()</code></a>
    <li class='ja'><a href="#dictionary_replace()"><code>dictionary_replace()</code></a>
@@ -331,7 +330,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as <a href="#dictionary()"><code>dictionary()</code></a> but replaces any existing value.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#dictionary()"><code>Marshalled.dictionary()</code></a>
    <li class='ja'><a href="MarshalledProp.html#dictionary()"><code>MarshalledProp.dictionary()</code></a>
    <li class='ja'><a href="#dictionary()"><code>dictionary()</code></a>
@@ -356,12 +355,12 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies the default locale for serializer and parser sessions.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingSession.Builder.html#locale(java.util.Locale)"><code>MarshallingSession.Builder.locale(Locale)</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#locale(java.util.Locale)"><code>MarshallingContext.Builder.locale(Locale)</code></a>
  </ul></div>
@@ -384,12 +383,12 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies the default media type value for serializer and parser sessions.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingSession.Builder.html#mediaType(org.apache.juneau.commons.http.MediaType)"><code>MarshallingSession.Builder.mediaType(MediaType)</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#mediaType(org.apache.juneau.commons.http.MediaType)"><code>MarshallingContext.Builder.mediaType(MediaType)</code></a>
  </ul></div>
@@ -439,7 +438,7 @@ loadScripts(document, 'script');</script>
  <br>When multiple swaps are applicable to the same class, the media type pattern defined by
  <a href="swap/spi/ObjectSwap.html#forMediaTypes()"><code>ObjectSwap.forMediaTypes()</code></a> or <a href="Swap.html#mediaTypes()"><code>@Swap(mediaTypes)</code></a> are used to come up with the best match.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingContext.Builder.html#swaps(java.lang.Object...)"><code>MarshallingContext.Builder.swaps(Class...)</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps#per-media-type-swaps">Per-media-type swaps</a>
@@ -467,7 +466,7 @@ loadScripts(document, 'script');</script>
  <p>
  Same as <a href="#swaps()"><code>swaps()</code></a> but replaces any existing value.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingContext.Builder.html#swaps(java.lang.Object...)"><code>MarshallingContext.Builder.swaps(Class...)</code></a>
  </ul></div>
 <dl class="notes">
@@ -729,12 +728,12 @@ loadScripts(document, 'script');</script>
  <p>
  Specifies the default timezone for serializer and parser sessions.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="MarshallingSession.Builder.html#timeZone(java.util.TimeZone)"><code>MarshallingSession.Builder.timeZone(TimeZone)</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#timeZone(java.util.TimeZone)"><code>MarshallingContext.Builder.timeZone(TimeZone)</code></a>
  </ul></div>
@@ -758,14 +757,14 @@ loadScripts(document, 'script');</script>
  This specifies the name of the bean property used to store the dictionary name of a bean type so that the
  parser knows the data type to reconstruct.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Default value: <js>"_type"</js>.
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='ja'><a href="Marshalled.html#typePropertyName()"><code>Marshalled.typePropertyName()</code></a>
    <li class='jm'><a href="MarshallingContext.Builder.html#typePropertyName(java.lang.String)"><code>MarshallingContext.Builder.typePropertyName(String)</code></a>
  </ul></div>

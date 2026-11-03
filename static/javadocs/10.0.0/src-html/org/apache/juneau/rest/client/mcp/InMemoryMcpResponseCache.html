@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * Entries are partitioned by {@code scope}, so the same {@code key} in two different scopes never collides.</span>
 <span class="source-line-no">029</span><span id="line-29"> * A non-positive {@code ttlMs} passed to {@link #put(String, String, Object, long)} means the entry never expires.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Size bound / eviction policy:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='section'&gt;Size bound / eviction policy:&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * The cache is bounded at {@link #DEFAULT_MAX_ENTRIES} total entries (across all scopes combined) by default,</span>
 <span class="source-line-no">034</span><span id="line-34"> * overridable via {@link #InMemoryMcpResponseCache(int)}. Once the cap is reached, inserting one more entry</span>

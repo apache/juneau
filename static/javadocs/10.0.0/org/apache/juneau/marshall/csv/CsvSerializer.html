@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -102,7 +101,7 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
  becomes a row and bean properties become columns. The first row typically contains column headers derived
  from bean property names.
 
- <h5 class='section'>JSON Parity Features (opt-in):</h5>
+ <h2 class='section'>JSON Parity Features (opt-in):</h2>
  <ul>
    <li><b>Type discriminator</b> — <a href="../serializer/Serializer.Builder.html#addBeanTypes()"><code>addBeanTypes()</code></a>.<a href="../serializer/Serializer.Builder.html#addRootType()"><code>addRootType()</code></a>
        adds a <code>_type</code> column for polymorphic parsing.
@@ -113,30 +112,30 @@ implements <a href="CsvMetaProvider.html" title="interface in org.apache.juneau.
    <li><b>Null marker</b> — <a href="CsvSerializer.Builder.html#nullValue(java.lang.String)"><code>nullValue("&lt;NULL&gt;")</code></a> (default) for unambiguous null.
  </ul>
 
- <h5 class='section'>Data Structures Not Supported:</h5>
+ <h2 class='section'>Data Structures Not Supported:</h2>
  <ul>
    <li><b>Parent/inherited properties</b> — Hierarchy flattens; may collide with child names.
    <li><b>Optional wrappers</b> — May serialize as the inner value; round-trip differs from tree formats.
  </ul>
 
- <h5 class='section'>Best Supported:</h5>
+ <h2 class='section'>Best Supported:</h2>
  <p>
  Collections of flat beans or maps whose properties are primitives, strings, numbers, enums, dates,
  byte arrays, or (with <code>allowNestedStructures</code>) nested beans, maps, and lists.
 
- <h5 class='figure'>Example output (list of maps with a,b):</h5>
+ <h2 class='figure'>Example output (list of maps with a,b):</h2>
  <p class='bcode'>
    a,b
    foo,bar
  </p>
 
- <h5 class='figure'>Complex (list of beans with nested address, flattened):</h5>
+ <h2 class='figure'>Complex (list of beans with nested address, flattened):</h2>
  <p class='bcode'>
    name,age,address_street,address_city,address_state,tags
    Alice,30,123 Main St,Boston,MA,"a,b,c"
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul></div>
 </section>

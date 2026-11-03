@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
  append mode, and buffering options. It's particularly useful when you need to write files with
  specific encodings or control whether to append to existing files.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Fluent API - all methods return <c>this</c> for method chaining
    <li>Character encoding support - specify custom charset for file writing
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
    <li>Multiple file specification methods - accept File or String path
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Writing files with specific character encodings (UTF-8, ISO-8859-1, etc.)
    <li>Appending to log files or data files
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
    <li>Writing files where buffering improves performance
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Basic usage</jc>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -126,13 +125,13 @@ loadScripts(document, 'script');</script>
       .build();
  </p>
 
- <h5 class='section'>Character Encoding:</h5>
+ <h2 class='section'>Character Encoding:</h2>
  <p>
  By default, the builder uses the system's default charset (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html#defaultCharset()" title="class or interface in java.nio.charset" class="external-link"><code>Charset.defaultCharset()</code></a>).
  You can specify a custom charset using <a href="#charset(java.nio.charset.Charset)"><code>charset(Charset)</code></a> or <a href="#charset(java.lang.String)"><code>charset(String)</code></a>.
  This is important when writing files that need to be read with a specific encoding.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="FileReaderBuilder.html" title="class in org.apache.juneau.commons.io"><code>FileReaderBuilder</code></a> - Builder for file readers
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO">I/O Package</a>
  </ul></div>
@@ -265,7 +264,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-101">create</a></span>()</div>
 <div class="block">Creates a new builder.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"output.txt"</js>)
@@ -283,7 +282,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-119">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;file)</span></div>
 <div class="block">Creates a new builder initialized with the specified file.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    File <jv>file</jv> = <jk>new</jk> File(<js>"output.txt"</js>);
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>(<jv>file</jv>)
@@ -304,7 +303,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-136">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Creates a new builder initialized with the specified file path.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>(<js>"/path/to/output.txt"</js>)
       .append()
@@ -329,7 +328,7 @@ loadScripts(document, 'script');</script>
  existing file content rather than overwriting it. This is useful for log files or data
  files where you want to preserve existing content.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Append to log file</jc>
    Writer <jv>logWriter</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -353,7 +352,7 @@ loadScripts(document, 'script');</script>
  <p>
  Boolean-arg form of <a href="#append()"><code>append()</code></a>, useful when the setting is conditional.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"app.log"</js>)
@@ -379,7 +378,7 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/BufferedOutputStream.html" title="class or interface in java.io" class="external-link"><code>BufferedOutputStream</code></a>, which can significantly improve performance for multiple
  small writes by batching them together.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Buffered writer for better performance</jc>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -402,7 +401,7 @@ loadScripts(document, 'script');</script>
  <p>
  Boolean-arg form of <a href="#buffered()"><code>buffered()</code></a>, useful when the setting is conditional.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"output.txt"</js>)
@@ -429,7 +428,7 @@ loadScripts(document, 'script');</script>
  options. The file will be created if it doesn't exist (unless in append mode, where the
  file must exist or be creatable).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jk>try</jk> (Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"output.txt"</js>)
@@ -458,7 +457,7 @@ loadScripts(document, 'script');</script>
  Specifying the encoding is important when writing files that need to be read with a specific
  character encoding.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"data.txt"</js>)
@@ -483,7 +482,7 @@ loadScripts(document, 'script');</script>
  This is a convenience method that accepts a charset name string and converts it to a
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html" title="class or interface in java.nio.charset" class="external-link"><code>Charset</code></a> using <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/charset/Charset.html#forName(java.lang.String)" title="class or interface in java.nio.charset" class="external-link"><code>Charset.forName(String)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"data.txt"</js>)
@@ -506,7 +505,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-331">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/File.html" title="class or interface in java.io" class="external-link">File</a>&nbsp;value)</span></div>
 <div class="block">Sets the file to write to.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    File <jv>f</jv> = <jk>new</jk> File(<js>"output.txt"</js>);
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
@@ -527,7 +526,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileWriterBuilder.html" title="class in org.apache.juneau.commons.io">FileWriterBuilder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/io/FileWriterBuilder.html#line-349">file</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Sets the file path to write to.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(<js>"/path/to/output.txt"</js>)
@@ -551,7 +550,7 @@ loadScripts(document, 'script');</script>
  Convenience overload for callers working with the NIO <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link"><code>Path</code></a> API, consistent with
  <a href="PathReaderBuilder.html#path(java.nio.file.Path)"><code>PathReaderBuilder.path(Path)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Writer <jv>writer</jv> = FileWriterBuilder.<jsm>create</jsm>()
       .file(Paths.<jsm>get</jsm>(<js>"/path/to/output.txt"</js>))

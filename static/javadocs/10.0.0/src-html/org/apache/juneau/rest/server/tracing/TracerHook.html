@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * OpenTelemetry {@code io.opentelemetry.api.trace.Span}, a Brave {@code Span}, an application</span>
 <span class="source-line-no">030</span><span id="line-30"> * tracing object, etc.) and surface the close / status / error transitions through the {@code Scope}.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='topic'&gt;Off-by-default contract&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='topic'&gt;Off-by-default contract&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * {@code juneau-rest-server} resolves the {@code TracerHook} via</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * registers a {@code TracerHook} bean &amp;mdash; typically via {@code @Bean TracerHook} on the resource</span>
 <span class="source-line-no">041</span><span id="line-41"> * or its parent.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='topic'&gt;Usage&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='topic'&gt;Usage&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;ja&gt;@Rest&lt;/ja&gt;</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> *    }</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='topic'&gt;Lifecycle&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='topic'&gt;Lifecycle&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * For each {@code @RestOp} invocation, the framework:</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> * Implementations &lt;b&gt;must&lt;/b&gt; be thread-safe &amp;mdash; the same {@code TracerHook} bean is invoked</span>
 <span class="source-line-no">072</span><span id="line-72"> * concurrently from every request thread for the lifetime of the {@code RestContext}.</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link NoOpTracerHook}</span>
 <span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='jc'&gt;{@link Scope}</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='jc'&gt;{@link TraceContextCarrier}</span>

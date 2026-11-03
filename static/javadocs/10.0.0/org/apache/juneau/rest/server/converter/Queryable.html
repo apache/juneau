@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -123,7 +122,7 @@ implements <a href="RestConverter.html" title="interface in org.apache.juneau.re
  session's <c>total</c>/<c>matched</c> row counts &mdash; each header is set only when the corresponding count
  is present.  Without it, neither header is set.  The response body itself stays a bare list either way.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@Rest</ja>(converters=Queryable.<jk>class</jk>)
    <jk>public class</jk> PeopleResource <jk>extends</jk> BasicRestServlet {
@@ -155,7 +154,7 @@ implements <a href="RestConverter.html" title="interface in org.apache.juneau.re
    X-BeanQuery-Matched: 7
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="QueryableSettings.html" title="class in org.apache.juneau.rest.server.converter"><code>QueryableSettings</code></a> - Per-resource limits and defaults for this converter.
    <li class='jc'><a href="../../../http/BeanQueryRequest.html" title="class in org.apache.juneau.http"><code>BeanQueryRequest</code></a> - The request parameters this converter binds.
    <li class='jc'><a href="../../../commons/beanquery/InMemoryBeanQueryContext.html" title="class in org.apache.juneau.commons.beanquery"><code>InMemoryBeanQueryContext</code></a> - The engine this converter drives.

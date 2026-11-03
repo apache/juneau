@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> *       {@link ActionResult} (a {@code cancelled} / {@code cancelled-after-effect} outcome).</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Authorization: the stream URL is the capability&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Authorization: the stream URL is the capability&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * The stream is a held-open &lt;b&gt;GET&lt;/b&gt;, so {@link org.apache.juneau.rest.server.filter.LoopbackBoundary} applies only</span>
 <span class="source-line-no">045</span><span id="line-45"> * its &lt;b&gt;Host&lt;/b&gt; check (DNS-rebinding stays covered on every request); the Origin/CSRF/JSON checks apply to non-safe</span>
@@ -64,13 +64,13 @@
 <span class="source-line-no">051</span><span id="line-51"> * {@code 429}.  A resume value grants nothing: it only picks a position inside a job the caller already holds the</span>
 <span class="source-line-no">052</span><span id="line-52"> * capability for, and it is checked only after the {@code 404}, so a bad value cannot reveal whether a job exists.</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;Server-side hard limits&lt;/h5&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='section'&gt;Server-side hard limits&lt;/h2&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> * Every limit is enforced in {@link AsyncJob} / {@link AsyncJobRegistry}, not here and not on the client: the hard</span>
 <span class="source-line-no">057</span><span id="line-57"> * timeout, the per-job output cap, the concurrent-job cap and the per-job subscriber cap.  The stream loop simply</span>
 <span class="source-line-no">058</span><span id="line-58"> * drains the job until it is terminal, which the timeout guarantees will happen.</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;ja&gt;@Rest&lt;/ja&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet &lt;jk&gt;implements&lt;/jk&gt; AsyncJobsMixin {</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> *    }</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='jc'&gt;{@link AsyncJobRegistry}</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link AsyncJob}</span>

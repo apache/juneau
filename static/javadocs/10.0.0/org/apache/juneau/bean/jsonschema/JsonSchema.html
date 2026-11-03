@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
  <p>
  This implementation follows the JSON Schema Draft 2020-12 specification.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a simple schema for a person object</jc>
    JsonSchema <jv>schema</jv> = <jk>new</jk> JsonSchema()
@@ -150,7 +149,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Key Features:</h5>
+ <h2 class='section'>Key Features:</h2>
  <ul class='spaced-list'>
    <li><b>Draft 2020-12 Support:</b> Includes all properties from the latest JSON Schema specification
    <li><b>Backward Compatibility:</b> Deprecated Draft 04 properties (like <c>id</c> and <c>definitions</c>) are still supported
@@ -160,7 +159,7 @@ loadScripts(document, 'script');</script>
    <li><b>Auto Generation:</b> Use <a href="JsonSchemaBeanGenerator.html" title="class in org.apache.juneau.bean.jsonschema"><code>JsonSchemaBeanGenerator</code></a> to generate schemas from Java types
  </ul>
 
- <h5 class='section'>Common Use Cases:</h5>
+ <h2 class='section'>Common Use Cases:</h2>
 
  <p><b>1. Simple Type Constraints:</b>
  <p class='bjava'>
@@ -238,7 +237,7 @@ loadScripts(document, 'script');</script>
       );
  </p>
 
- <h5 class='section'>Migration from Draft 04:</h5>
+ <h2 class='section'>Migration from Draft 04:</h2>
  <ul class='spaced-list'>
    <li>Use <a href="#setIdUri(java.lang.Object)"><code>setIdUri(Object)</code></a> instead of <a href="#setId(java.lang.Object)"><code>setId(Object)</code></a> (deprecated)
    <li>Use <a href="#setDefs(java.util.Map)"><code>setDefs(Map)</code></a> instead of <a href="#setDefinitions(java.util.Map)"><code>setDefinitions(Map)</code></a> (deprecated but still works)
@@ -246,7 +245,7 @@ loadScripts(document, 'script');</script>
    <li>Use <a href="#setExclusiveMinimum(java.lang.Number)"><code>setExclusiveMinimum(Number)</code></a> with a numeric value instead of a boolean flag
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-core.html">JSON Schema 2020-12 Core</a>
    <li class='link'><a href="https://json-schema.org/draft/2020-12/json-schema-validation.html">JSON Schema 2020-12 Validation</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonSchema">juneau-bean-jsonschema</a>

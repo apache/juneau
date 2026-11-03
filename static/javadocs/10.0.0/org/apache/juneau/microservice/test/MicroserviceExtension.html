@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
  <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a> (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with
  <a href="../../bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a> mock-bean injection and convenience parameter resolution.
 
- <h5 class='topic'>Lifecycle (per class)</h5>
+ <h2 class='topic'>Lifecycle (per class)</h2>
 
  <p>
  The microservice is built + <a href="../Microservice.html#start()"><code>started</code></a> once in <code>beforeAll</code> and
@@ -98,7 +97,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
  one-way, the bean store is closed, and each <code>start()</code> adds a JVM shutdown hook). The bound port is read
  from the live <code>ServerConnector</code> (never hard-coded), mirroring the established fixture pattern.
 
- <h5 class='topic'>Mock-bean injection</h5>
+ <h2 class='topic'>Mock-bean injection</h2>
 
  <p>
  <a href="../../bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a> declarations are discovered via
@@ -107,7 +106,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
  them from startup. <b>Mode OVERLAY</b> pushes the overrides onto the booted instance's bean store for the
  class duration and pops them in teardown.
 
- <h5 class='topic'>Parameter resolution</h5>
+ <h2 class='topic'>Parameter resolution</h2>
 
  <p>
  Resolves <a href="../../rest/client/RestClient.html" title="class in org.apache.juneau.rest.client"><code>RestClient</code></a> (bound to the booted root URL), <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a>, <a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a>,

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
    <li>Other dependency injection frameworks
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    BeanStore <jv>beanStore</jv> = ...;
 
@@ -115,7 +114,7 @@ loadScripts(document, 'script');</script>
    Map&lt;String, MyService&gt; <jv>allServices</jv> = <jv>beanStore</jv>.getBeansOfType(MyService.<jk>class</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://docs.spring.io/spring-framework/reference/core/beans.html">Spring Framework - The IoC Container</a>
  </ul></div>
 </section>
@@ -334,7 +333,7 @@ loadScripts(document, 'script');</script>
  (subtype, factory-method names, builder hooks, etc.).  For more control over instantiation,
  use <a href="BeanInstantiator.html#of(java.lang.Class,org.apache.juneau.commons.inject.BeanStore)"><code>BeanInstantiator.of(Class, BeanStore)</code></a> directly.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Instantiate a bean using this store for parameter resolution</jc>
    MyService <jv>service</jv> = <jv>beanStore</jv>.instantiate(MyService.<jk>class</jk>);
@@ -425,7 +424,7 @@ loadScripts(document, 'script');</script>
  The default implementation returns <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#empty()" title="class or interface in java.util" class="external-link"><code>Optional.empty()</code></a>.
  Override in concrete stores (see <a href="BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a>) to enable factory-method scanning.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Filter only</jc>
    <jv>beanStore</jv>.createBeanFromMethod(RichLogger.<jk>class</jk>, <jv>resource</jv>,
@@ -488,7 +487,7 @@ loadScripts(document, 'script');</script>
  synthetic method, it is an instance method and <c>onClassOrObject</c> is a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>, or one of its parameters
  cannot be resolved from this store plus <c>extraBeans</c>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Invoke one specific @Bean factory method, instead of searching by return type.</jc>
    MethodInfo <jv>m</jv> = ClassInfo.<jsm>of</jsm>(MyResource.<jk>class</jk>).getDeclaredMethod(<jv>x</jv> -&gt; <jv>x</jv>.hasName(<js>"cacheIndicator"</js>)).get();

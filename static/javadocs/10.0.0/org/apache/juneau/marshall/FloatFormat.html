@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
  The default is <a href="#NaN_AS_NULL"><code>NaN_AS_NULL</code></a> which is JSON-spec-compliant per RFC 8259 §6 (non-finite floats
  are not valid JSON tokens; emitting <code>null</code> is the closest valid representation).
 
- <h5 class='topic'>Precedence (highest to lowest)</h5>
+ <h2 class='topic'>Precedence (highest to lowest)</h2>
  <ol>
    <li><a href="MarshalledProp.html#floatFormat()"><code>@MarshalledProp(floatFormat=…)</code></a> on the bean property.
    <li><a href="Marshalled.html#floatFormat()"><code>@Marshalled(floatFormat=…)</code></a> on the bean class.
@@ -112,7 +111,7 @@ loadScripts(document, 'script');</script>
    <li>The default constant (<a href="#NaN_AS_NULL"><code>NaN_AS_NULL</code></a>).
  </ol>
 
- <h5 class='topic'>Parser leniency</h5>
+ <h2 class='topic'>Parser leniency</h2>
 
  <p>
  Parsers SHALL accept all of the following wire shapes regardless of the parser-side
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
       preserved as <code>null</code> when reading into a boxed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link"><code>Float</code></a>.
  </ul>
 
- <h5 class='topic'>JSON-spec compliance</h5>
+ <h2 class='topic'>JSON-spec compliance</h2>
 
  <p>
  <a href="#NaN_AS_NUMBER"><code>NaN_AS_NUMBER</code></a> is <b>non-standard JSON</b> per RFC 8259 §6 — JSON does not permit <code>NaN</code> /
@@ -133,7 +132,7 @@ loadScripts(document, 'script');</script>
  but strict-mode consumers (e.g. some browser <code>JSON.parse</code> pipelines) will reject them. Use only
  when you control both ends of the wire.
 
- <h5 class='topic'>Binary serializers</h5>
+ <h2 class='topic'>Binary serializers</h2>
 
  <p>
  Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit native IEEE-754 floats regardless

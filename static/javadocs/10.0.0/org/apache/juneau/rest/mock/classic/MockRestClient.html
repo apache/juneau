@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -109,7 +108,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  The following shows a simple example of invoking a PUT method on a simple REST interface and asserting the correct status code and response body:
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <jk>public class</jk> MockTest {
 
@@ -192,7 +191,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
    directly on the underlying <code>HttpServletRequest</code> object.  The following example shows how
    this can be used to directly set roles on the request object to perform security testing.
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
    <jk>public class</jk> A {
@@ -215,7 +214,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
    Debug mode is provided that will cause your HTTP requests and responses to be sent to the console:
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    MockRestClient <jv>client</jv> = MockRestClient
       .<jsm>create</jsm>(MyRest.<jk>class</jk>)
@@ -227,7 +226,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
    The class can also be used for testing of <a href="../../../http/remote/Remote.html" title="annotation interface in org.apache.juneau.http.remote"><code>@Remote</code></a>-annotated interfaces against <a href="../../server/Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a>-annotated resources.
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <jc>// Our remote resource to test.</jc>
    <ja>@Remote</ja>
@@ -261,11 +260,11 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
    }
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock</a>
  </ul></div>
 </section>
@@ -604,7 +603,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.mock.classic.MockRestClient.Builder)">
 <h3>MockRestClient</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-660">MockRestClient</a></span><wbr><span class="parameters">(<a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-658">MockRestClient</a></span><wbr><span class="parameters">(<a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -623,7 +622,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="build(java.lang.Object)">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-472">build</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-470">build</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient</code></a> with no registered serializer or parser.
 
  <p>
@@ -643,7 +642,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="buildJson(java.lang.Object)">
 <h3>buildJson</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-490">buildJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-488">buildJson</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient</code></a> with JSON marshalling support.
 
  <p>
@@ -663,7 +662,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="buildJson5(java.lang.Object)">
 <h3>buildJson5</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-508">buildJson5</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-506">buildJson5</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient</code></a> with Simplified-JSON marshalling support.
 
  <p>
@@ -683,7 +682,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="buildJson5Lax(java.lang.Object)">
 <h3>buildJson5Lax</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-529">buildJson5Lax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-527">buildJson5Lax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient</code></a> with Simplified-JSON marshalling support.
 
  <p>
@@ -706,7 +705,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="buildJsonLax(java.lang.Object)">
 <h3>buildJsonLax</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-550">buildJsonLax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-548">buildJsonLax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient</code></a> with JSON marshalling support.
 
  <p>
@@ -729,7 +728,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="buildLax(java.lang.Object)">
 <h3>buildLax</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-571">buildLax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-569">buildLax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient</code></a> with no registered serializer or parser.
 
  <p>
@@ -752,7 +751,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="create(java.lang.Object)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-583">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-581">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.Builder.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient.Builder</code></a>configured with the specified REST implementation bean or bean class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -766,7 +765,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="createLax(java.lang.Object)">
 <h3>createLax</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-598">createLax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MockRestClient.Builder.html" title="class in org.apache.juneau.rest.mock.classic">MockRestClient.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-596">createLax</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;impl)</span></div>
 <div class="block">Creates a new <a href="../../client/classic/RestClient.Builder.html" title="class in org.apache.juneau.rest.client.classic"><code>RestClient.Builder</code></a>configured with the specified REST implementation bean or bean class.
 
  <p>
@@ -783,7 +782,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="callback(java.lang.String)">
 <h3>callback</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-673">callback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callString)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-671">callback</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;callString)</span>
                          throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#callback(java.lang.String)">RestClient</a></code></span></div>
 <div class="block">Performs a REST call where the entire call is specified in a simple string.
@@ -821,7 +820,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-678">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-676">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#close()">RestClient</a></code></span></div>
 <div class="block">Calls <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Closeable.html#close()" title="class or interface in java.io" class="external-link"><code>Closeable.close()</code></a> on the underlying <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/impl/client/CloseableHttpClient.html" title="class or interface in org.apache.http.impl.client" class="external-link"><code>CloseableHttpClient</code></a>.
@@ -845,7 +844,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="delete(java.lang.Object)">
 <h3>delete</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-687">delete</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-685">delete</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                        throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#delete(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Perform a <c>DELETE</c> request against the specified URI.</div>
@@ -873,7 +872,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="flush()">
 <h3>flush</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-692">flush</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-690">flush</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -886,7 +885,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="formPost(java.lang.Object)">
 <h3>formPost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-697">formPost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-695">formPost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                          throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#formPost(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Same as <a href="../../client/classic/RestClient.html#formPost(java.lang.Object,java.lang.Object)"><code>RestClient.formPost(Object, Object)</code></a> but doesn't specify the input yet.</div>
@@ -914,7 +913,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="formPost(java.lang.Object,java.lang.Object)">
 <h3>formPost</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-702">formPost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-700">formPost</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</span>
                          throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#formPost(java.lang.Object,java.lang.Object)">RestClient</a></code></span></div>
@@ -955,7 +954,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="formPostPairs(java.lang.Object,java.lang.String...)">
 <h3>formPostPairs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-707">formPostPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-705">formPostPairs</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;parameters)</span>
                               throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#formPostPairs(java.lang.Object,java.lang.String...)">RestClient</a></code></span></div>
@@ -988,7 +987,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-712">get</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-710">get</a></span>()
                     throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#get()">RestClient</a></code></span></div>
 <div class="block">Perform a <c>GET</c> request against the root URI.</div>
@@ -1006,7 +1005,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="get(java.lang.Object)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-717">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-715">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                     throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#get(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Perform a <c>GET</c> request against the specified URI.</div>
@@ -1034,7 +1033,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getCurrentClientRequest()">
 <h3>getCurrentClientRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpRequest.html" title="class or interface in org.apache.http" class="external-link">HttpRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-731">getCurrentClientRequest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpRequest.html" title="class or interface in org.apache.http" class="external-link">HttpRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-729">getCurrentClientRequest</a></span>()</div>
 <div class="block">Returns the current client-side REST request.
 
  <p>
@@ -1049,7 +1048,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getCurrentClientResponse()">
 <h3>getCurrentClientResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestResponse.html" title="class in org.apache.juneau.rest.mock.classic">MockRestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-742">getCurrentClientResponse</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestResponse.html" title="class in org.apache.juneau.rest.mock.classic">MockRestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-740">getCurrentClientResponse</a></span>()</div>
 <div class="block">Returns the current client-side REST response.
 
  <p>
@@ -1064,7 +1063,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getCurrentServerRequest()">
 <h3>getCurrentServerRequest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-753">getCurrentServerRequest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-751">getCurrentServerRequest</a></span>()</div>
 <div class="block">Returns the current server-side REST request.
 
  <p>
@@ -1079,7 +1078,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getCurrentServerResponse()">
 <h3>getCurrentServerResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MockServletResponse.html" title="class in org.apache.juneau.rest.mock">MockServletResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-764">getCurrentServerResponse</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../MockServletResponse.html" title="class in org.apache.juneau.rest.mock">MockServletResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-762">getCurrentServerResponse</a></span>()</div>
 <div class="block">Returns the current server-side REST response.
 
  <p>
@@ -1094,7 +1093,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getMetrics()">
 <h3>getMetrics</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnectionMetrics.html" title="class or interface in org.apache.http" class="external-link">HttpConnectionMetrics</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-766">getMetrics</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnectionMetrics.html" title="class or interface in org.apache.http" class="external-link">HttpConnectionMetrics</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-764">getMetrics</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html#getMetrics--" title="class or interface in org.apache.http" class="external-link">getMetrics</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html" title="class or interface in org.apache.http" class="external-link">HttpConnection</a></code></dd>
@@ -1104,7 +1103,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="getSocketTimeout()">
 <h3>getSocketTimeout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-769">getSocketTimeout</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-767">getSocketTimeout</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html#getSocketTimeout--" title="class or interface in org.apache.http" class="external-link">getSocketTimeout</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html" title="class or interface in org.apache.http" class="external-link">HttpConnection</a></code></dd>
@@ -1114,7 +1113,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="head(java.lang.Object)">
 <h3>head</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-772">head</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-770">head</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                      throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#head(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Perform a <c>HEAD</c> request against the specified URI.</div>
@@ -1142,7 +1141,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="isOpen()">
 <h3>isOpen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-777">isOpen</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-775">isOpen</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html#isOpen--" title="class or interface in org.apache.http" class="external-link">isOpen</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html" title="class or interface in org.apache.http" class="external-link">HttpConnection</a></code></dd>
@@ -1152,7 +1151,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="isResponseAvailable(int)">
 <h3>isResponseAvailable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-780">isResponseAvailable</a></span><wbr><span class="parameters">(int&nbsp;timeout)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-778">isResponseAvailable</a></span><wbr><span class="parameters">(int&nbsp;timeout)</span>
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1165,7 +1164,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="isStale()">
 <h3>isStale</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-785">isStale</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-783">isStale</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html#isStale--" title="class or interface in org.apache.http" class="external-link">isStale</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html" title="class or interface in org.apache.http" class="external-link">HttpConnection</a></code></dd>
@@ -1175,7 +1174,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="options(java.lang.Object)">
 <h3>options</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-788">options</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-786">options</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                         throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#options(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Perform an <c>OPTIONS</c> request against the specified URI.</div>
@@ -1203,7 +1202,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="patch(java.lang.Object)">
 <h3>patch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-793">patch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-791">patch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                       throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#patch(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Same as <a href="../../client/classic/RestClient.html#patch(java.lang.Object,java.lang.Object)"><code>RestClient.patch(Object, Object)</code></a> but don't specify the input yet.
@@ -1234,7 +1233,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="patch(java.lang.Object,java.lang.Object)">
 <h3>patch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-798">patch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-796">patch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</span>
                       throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#patch(java.lang.Object,java.lang.Object)">RestClient</a></code></span></div>
@@ -1282,7 +1281,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="patch(java.lang.Object,java.lang.String,org.apache.juneau.http.classic.header.ContentType)">
 <h3>patch</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-803">patch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-801">patch</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/classic/header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;contentType)</span>
                       throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
@@ -1314,7 +1313,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="post(java.lang.Object)">
 <h3>post</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-808">post</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-806">post</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                      throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#post(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Same as <a href="../../client/classic/RestClient.html#post(java.lang.Object,java.lang.Object)"><code>RestClient.post(Object, Object)</code></a> but don't specify the input yet.
@@ -1323,7 +1322,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  You must call either <a href="../../client/classic/RestRequest.html#content(java.lang.Object)"><code>RestRequest.content(Object)</code></a> or <a href="../../client/classic/RestRequest.html#formData(java.lang.String,java.lang.Object)"><code>RestRequest.formData(String, Object)</code></a> to set the
  contents on the result object.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Use <a href="../../client/classic/RestClient.html#formPost(java.lang.Object,java.lang.Object)"><code>RestClient.formPost(Object, Object)</code></a> for <c>application/x-www-form-urlencoded</c> form posts.
  </ul></div>
 <dl class="notes">
@@ -1350,13 +1349,13 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="post(java.lang.Object,java.lang.Object)">
 <h3>post</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-813">post</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-811">post</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</span>
                      throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#post(java.lang.Object,java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Perform a <c>POST</c> request against the specified URI.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>Use <a href="../../client/classic/RestClient.html#formPost(java.lang.Object,java.lang.Object)"><code>RestClient.formPost(Object, Object)</code></a> for <c>application/x-www-form-urlencoded</c> form posts.
  </ul></div>
 <dl class="notes">
@@ -1400,7 +1399,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="post(java.lang.Object,java.lang.String,org.apache.juneau.http.classic.header.ContentType)">
 <h3>post</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-818">post</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-816">post</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/classic/header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;contentType)</span>
                      throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
@@ -1432,7 +1431,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="put(java.lang.Object)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-823">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-821">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                     throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#put(java.lang.Object)">RestClient</a></code></span></div>
 <div class="block">Same as <a href="../../client/classic/RestClient.html#put(java.lang.Object,java.lang.Object)"><code>RestClient.put(Object, Object)</code></a> but don't specify the input yet.
@@ -1464,7 +1463,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="put(java.lang.Object,java.lang.Object)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-828">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-826">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</span>
                     throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#put(java.lang.Object,java.lang.Object)">RestClient</a></code></span></div>
@@ -1510,7 +1509,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="put(java.lang.Object,java.lang.String,org.apache.juneau.http.classic.header.ContentType)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-833">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-831">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;body,
  <a href="../../../http/classic/header/ContentType.html" title="class in org.apache.juneau.http.classic.header">ContentType</a>&nbsp;contentType)</span>
                     throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
@@ -1542,7 +1541,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="receiveResponseEntity(org.apache.http.HttpResponse)">
 <h3>receiveResponseEntity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-838">receiveResponseEntity</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-836">receiveResponseEntity</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;response)</span>
                            throws <span class="exceptions"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpException.html" title="class or interface in org.apache.http" class="external-link">HttpException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
@@ -1557,7 +1556,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="receiveResponseHeader()">
 <h3>receiveResponseHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-847">receiveResponseHeader</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-845">receiveResponseHeader</a></span>()
                                    throws <span class="exceptions"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpException.html" title="class or interface in org.apache.http" class="external-link">HttpException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
@@ -1572,7 +1571,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="request(org.apache.juneau.rest.client.classic.RestOperation)">
 <h3>request</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-884">request</a></span><wbr><span class="parameters">(<a href="../../client/classic/RestOperation.html" title="class in org.apache.juneau.rest.client.classic">RestOperation</a>&nbsp;op)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-882">request</a></span><wbr><span class="parameters">(<a href="../../client/classic/RestOperation.html" title="class in org.apache.juneau.rest.client.classic">RestOperation</a>&nbsp;op)</span>
                         throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#request(org.apache.juneau.rest.client.classic.RestOperation)">RestClient</a></code></span></div>
 <div class="block">Perform an arbitrary request against the specified URI.
@@ -1596,7 +1595,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="request(java.lang.String,java.lang.Object)">
 <h3>request</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-889">request</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-887">request</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url)</span>
                         throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../client/classic/RestClient.html#request(java.lang.String,java.lang.Object)">RestClient</a></code></span></div>
@@ -1628,7 +1627,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="request(java.lang.String,java.lang.Object,boolean)">
 <h3>request</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-894">request</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-892">request</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  boolean&nbsp;hasBody)</span>
                         throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
@@ -1666,7 +1665,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="request(java.lang.String,java.lang.Object,java.lang.Object)">
 <h3>request</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-899">request</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-897">request</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;url,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;body)</span>
                         throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
@@ -1719,7 +1718,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="sendRequestEntity(org.apache.http.HttpEntityEnclosingRequest)">
 <h3>sendRequestEntity</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-904">sendRequestEntity</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntityEnclosingRequest.html" title="class or interface in org.apache.http" class="external-link">HttpEntityEnclosingRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-902">sendRequestEntity</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpEntityEnclosingRequest.html" title="class or interface in org.apache.http" class="external-link">HttpEntityEnclosingRequest</a>&nbsp;request)</span>
                        throws <span class="exceptions"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpException.html" title="class or interface in org.apache.http" class="external-link">HttpException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
@@ -1734,7 +1733,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="sendRequestHeader(org.apache.http.HttpRequest)">
 <h3>sendRequestHeader</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-920">sendRequestHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpRequest.html" title="class or interface in org.apache.http" class="external-link">HttpRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-918">sendRequestHeader</a></span><wbr><span class="parameters">(<a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpRequest.html" title="class or interface in org.apache.http" class="external-link">HttpRequest</a>&nbsp;request)</span>
                        throws <span class="exceptions"><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpException.html" title="class or interface in org.apache.http" class="external-link">HttpException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
@@ -1749,7 +1748,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="setSocketTimeout(int)">
 <h3>setSocketTimeout</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-951">setSocketTimeout</a></span><wbr><span class="parameters">(int&nbsp;timeout)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-949">setSocketTimeout</a></span><wbr><span class="parameters">(int&nbsp;timeout)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html#setSocketTimeout-int-" title="class or interface in org.apache.http" class="external-link">setSocketTimeout</a></code>&nbsp;in interface&nbsp;<code><a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpConnection.html" title="class or interface in org.apache.http" class="external-link">HttpConnection</a></code></dd>
@@ -1759,7 +1758,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="shutdown()">
 <h3>shutdown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-956">shutdown</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-954">shutdown</a></span>()
               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -1772,7 +1771,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="createRequest(java.net.URI,java.lang.String,boolean)">
 <h3>createRequest</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-982">createRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MockRestRequest.html" title="class in org.apache.juneau.rest.mock.classic">MockRestRequest</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-980">createRequest</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/URI.html" title="class or interface in java.net" class="external-link">URI</a>&nbsp;uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;method,
  boolean&nbsp;hasBody)</span>
                                  throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>
@@ -1782,7 +1781,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
  <p>
  Subclasses can override this method to provide their own specialized <a href="../../client/classic/RestRequest.html" title="class in org.apache.juneau.rest.client.classic"><code>RestRequest</code></a> objects.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='warn'>The SSRF guard of <code>@Remote</code> calls travels on the request's <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/protocol/HttpContext.html" title="class or interface in org.apache.http.protocol" class="external-link"><code>HttpContext</code></a>, which an
       override of <a href="../../client/classic/RestRequest.html#run()"><code>RestRequest.run()</code></a> in the returned request's class may drop (by copying the request, or
       sending it with another context), and depends on this client's connection manager, which a request bound to a different client does not use.  So an SSRF-guard-active
@@ -1807,7 +1806,7 @@ implements <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/http
 <li>
 <section class="detail" id="createResponse(org.apache.juneau.rest.client.classic.RestRequest,org.apache.http.HttpResponse,org.apache.juneau.marshall.parser.Parser)">
 <h3>createResponse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MockRestResponse.html" title="class in org.apache.juneau.rest.mock.classic">MockRestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-987">createResponse</a></span><wbr><span class="parameters">(<a href="../../client/classic/RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="MockRestResponse.html" title="class in org.apache.juneau.rest.mock.classic">MockRestResponse</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/mock/classic/MockRestClient.html#line-985">createResponse</a></span><wbr><span class="parameters">(<a href="../../client/classic/RestRequest.html" title="class in org.apache.juneau.rest.client.classic">RestRequest</a>&nbsp;req,
  <a href="https://hc.apache.org/httpcomponents-core-4.4.x/current/httpcore/apidocs/org/apache/http/HttpResponse.html" title="class or interface in org.apache.http" class="external-link">HttpResponse</a>&nbsp;httpResponse,
  <a href="../../../marshall/parser/Parser.html" title="class in org.apache.juneau.marshall.parser">Parser</a>&nbsp;parser)</span>
                                    throws <span class="exceptions"><a href="../../client/classic/RestCallException.html" title="class in org.apache.juneau.rest.client.classic">RestCallException</a></span></div>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,17 +92,17 @@ loadScripts(document, 'script');</script>
  On the commons-side construction path (<code>BeanMeta.of(Class, BeanConfigContext)</code>) the session is
  <jk>null</jk> and these operations are skipped; the bean-modeling code runs in raw-reflection mode.
 
- <h5 class='section'>Method parameter typing:</h5>
+ <h2 class='section'>Method parameter typing:</h2>
  <p>
  The <code>targetType</code> parameters are typed as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link"><code>Object</code></a> because the marshalling layer expresses them
  as <code>ClassMeta&lt;?&gt;</code> — a marshalling-side type that <code>commons.bean</code> cannot reference.  Callers in
  the bean-modeling layer pass through whatever opaque type-metadata handle they received; the
  <code>MarshallingSession</code> implementation interprets it as a <code>ClassMeta</code>.
 
- <h5 class='topic'>Thread safety</h5>
+ <h2 class='topic'>Thread safety</h2>
  Thread safety depends on implementation.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='ja'><a href="BeanConfigContext.html" title="class in org.apache.juneau.commons.bean"><code>BeanConfigContext</code></a> — bean-modeling configuration counterpart.
  </ul></div>
 </section>

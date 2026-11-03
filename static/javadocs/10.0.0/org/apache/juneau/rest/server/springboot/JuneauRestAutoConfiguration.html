@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Opt-in Spring Boot auto-configuration that mounts every <a href="../servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> bean at its
  self-declared top-level path without an explicit <code>ServletRegistrationBean</code> per servlet.
 
- <h5 class='section'>Activation:</h5>
+ <h2 class='section'>Activation:</h2>
 
  <p>
  Gated behind the property <code>juneau.rest.auto-register=true</code> (no default &mdash;
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
    juneau.rest.auto-register=true
  </p>
 
- <h5 class='section'>Behavior:</h5>
+ <h2 class='section'>Behavior:</h2>
 
  <p>
  When active, a single <code>ServletContextInitializer</code> bean walks all <a href="../servlet/RestServlet.html" title="class in org.apache.juneau.rest.server.servlet"><code>RestServlet</code></a> beans
@@ -116,7 +115,7 @@ loadScripts(document, 'script');</script>
       is skipped (it is presumably composed as a child or mounted some other way).
  </ol>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="JuneauServletRegistrations.html" title="class in org.apache.juneau.rest.server.springboot"><code>JuneauServletRegistrations</code></a>
    <li class='jm'><a href="../RestContext.html#resolveTopLevelPaths(java.lang.Class,java.lang.Object,org.apache.juneau.commons.inject.BeanStore)"><code>RestContext.resolveTopLevelPaths(Class, Object, BeanStore)</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>

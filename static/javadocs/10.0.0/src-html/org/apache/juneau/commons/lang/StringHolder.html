@@ -40,12 +40,12 @@
 <span class="source-line-no">027</span><span id="line-27"> * This class extends {@link Holder}&amp;lt;{@link String}&amp;gt; and adds convenience methods for string</span>
 <span class="source-line-no">028</span><span id="line-28"> * equality testing, which are useful in lambdas and conditional logic.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> *       This class is &lt;b&gt;not thread-safe&lt;/b&gt;. For concurrent access, use synchronization or atomic classes.</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;/ul&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// Create a mutable string&lt;/jc&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *    StringHolder &lt;jv&gt;name&lt;/jv&gt; = StringHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;);</span>
@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48"> *    }</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;/p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang"&gt;Lang Package&lt;/a&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/ul&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> */</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60">   /**</span>
 <span class="source-line-no">061</span><span id="line-61">    * Creates a new empty string value.</span>
 <span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">064</span><span id="line-64">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">065</span><span id="line-65">    *    StringHolder &lt;jv&gt;name&lt;/jv&gt; = StringHolder.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">066</span><span id="line-66">    *    &lt;jsm&gt;assertNull&lt;/jsm&gt;(&lt;jv&gt;name&lt;/jv&gt;.get());</span>
@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75">   /**</span>
 <span class="source-line-no">076</span><span id="line-76">    * Creates a new string value with the specified initial value.</span>
 <span class="source-line-no">077</span><span id="line-77">    *</span>
-<span class="source-line-no">078</span><span id="line-78">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">078</span><span id="line-78">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">079</span><span id="line-79">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">080</span><span id="line-80">    *    StringHolder &lt;jv&gt;name&lt;/jv&gt; = StringHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"Hello"&lt;/js&gt;);</span>
 <span class="source-line-no">081</span><span id="line-81">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"Hello"&lt;/js&gt;, &lt;jv&gt;name&lt;/jv&gt;.get());</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
 <span class="source-line-no">111</span><span id="line-111">    * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.</span>
 <span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">113</span><span id="line-113">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">114</span><span id="line-114">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">115</span><span id="line-115">    *    StringHolder &lt;jv&gt;name&lt;/jv&gt; = StringHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;);</span>
 <span class="source-line-no">116</span><span id="line-116">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;name&lt;/jv&gt;.is(&lt;js&gt;"John"&lt;/js&gt;));</span>
@@ -148,7 +148,7 @@
 <span class="source-line-no">135</span><span id="line-135">    * &lt;p&gt;</span>
 <span class="source-line-no">136</span><span id="line-136">    * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.</span>
 <span class="source-line-no">137</span><span id="line-137">    *</span>
-<span class="source-line-no">138</span><span id="line-138">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">138</span><span id="line-138">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">139</span><span id="line-139">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">140</span><span id="line-140">    *    StringHolder &lt;jv&gt;name&lt;/jv&gt; = StringHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;);</span>
 <span class="source-line-no">141</span><span id="line-141">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;name&lt;/jv&gt;.isAny(&lt;js&gt;"John"&lt;/js&gt;, &lt;js&gt;"Jane"&lt;/js&gt;, &lt;js&gt;"Bob"&lt;/js&gt;));</span>

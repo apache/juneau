@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
  This implementation extends <a href="../../../commons/inject/BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a> and delegates to Spring's <code>ApplicationContext</code>
  for bean resolution when beans are not found in the local store or parent stores.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a Spring bean store</jc>
    ApplicationContext <jv>appContext</jv> = ...;
@@ -108,7 +107,7 @@ loadScripts(document, 'script');</script>
    Map&lt;String, MyService&gt; <jv>allServices</jv> = <jv>beanStore</jv>.getBeansOfType(MyService.<jk>class</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot</a>
    <li class='jc'><a href="../../../commons/inject/BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a>
    <li class='jic'><a href="../../../commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a>

@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * Compose into a host resource via {@link Rest#mixins() @Rest(mixins=WidgetsMixin.class)}; the asset URLs then become</span>
 <span class="source-line-no">034</span><span id="line-34"> * available alongside the host's own endpoints.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;These assets still need the view runtime beside them&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='section'&gt;These assets still need the view runtime beside them&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * The bytes live here, but they are &lt;b&gt;not&lt;/b&gt; a standalone widget runtime: the calendar script</span>
 <span class="source-line-no">039</span><span id="line-39"> * resolves its glyphs through the rich-view module's icon registry ({@code juneau-icons.js}) and pushes its</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> * these assets from before they moved, reading the bytes from &lt;b&gt;this&lt;/b&gt; module's classpath.  An existing</span>
 <span class="source-line-no">048</span><span id="line-48"> * application therefore keeps working unchanged; a new one composes this mixin.</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Contract-version handshake:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;Contract-version handshake:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * Each {@code *_CONTRACT_VERSION} constant is the handshake stamp the matching runtime bakes in.</span>
 <span class="source-line-no">053</span><span id="line-53"> * {@link #CALENDAR_CONTRACT_VERSION} aliases {@link CalendarDef#CONTRACT_VERSION};</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> * {@link #HEADER_CONTRACT_VERSION} is a literal (the header bean is gone). The three are deliberately distinct from one another: a calendar-envelope</span>
 <span class="source-line-no">056</span><span id="line-56"> * revision must never force a header or bar-sidecar bump, or vice-versa.</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Cache-busting + versioned URLs:&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Cache-busting + versioned URLs:&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * {@link #widgetAssetUrl(String)} carries the same {@code ?v=&lt;buildVersion&gt;-&lt;hash8&gt;} content-sensitive cache-buster</span>
 <span class="source-line-no">061</span><span id="line-61"> * shape the views mixin uses: an 8-hex-char content hash of the asset's own served bytes, computed once and cached.</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> * {@code buildVersion} resolves this module's implementation version rather than a neighbouring module's.  The two</span>
 <span class="source-line-no">067</span><span id="line-67"> * modules share the hash function, not a cache.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;The serving-path {@code Widget.validate()} gate&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;The serving-path {@code Widget.validate()} gate&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * This class also nests {@link WidgetValidationProcessor}, a {@link ResponseProcessor} that calls</span>
 <span class="source-line-no">072</span><span id="line-72"> * {@link Widget#validate()} on any REST response content that is a {@link Widget}, fail-closed, ahead of every</span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85"> * processor is itself a serving-framework type, so nesting it here keeps that rule literally true rather than</span>
 <span class="source-line-no">086</span><span id="line-86"> * requiring an amendment.</span>
 <span class="source-line-no">087</span><span id="line-87"> *</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;ul&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *    &lt;li class='jc'&gt;{@link CalendarDef}</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;li class='jc'&gt;{@link WidgetValidationProcessor}</span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100">   /**</span>
 <span class="source-line-no">101</span><span id="line-101">    * The URL path at which the reusable-calendar runtime is served (relative to the host mount).</span>
 <span class="source-line-no">102</span><span id="line-102">    *</span>
-<span class="source-line-no">103</span><span id="line-103">    * &lt;h5 class='section'&gt;Load order is a contract, not a preference:&lt;/h5&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    * &lt;h4 class='section'&gt;Load order is a contract, not a preference:&lt;/h4&gt;</span>
 <span class="source-line-no">104</span><span id="line-104">    * &lt;p&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">    * This {@code &lt;script&gt;} MUST come after the view module's {@code juneau-views.js}.  The calendar's</span>
 <span class="source-line-no">106</span><span id="line-106">    * {@code "+N more"} popover is pushed onto the ONE shared layer stack that script publishes, so Escape, focus</span>
@@ -264,14 +264,14 @@
 <span class="source-line-no">251</span><span id="line-251">    * REST response content that is a {@link Widget}, giving the JSON serving path the same gate the</span>
 <span class="source-line-no">252</span><span id="line-252">    * {@code juneau-console-views} HTML emitters already give every {@code Widget} they consume.</span>
 <span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * &lt;h5 class='section'&gt;Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook&lt;/h5&gt;</span>
+<span class="source-line-no">254</span><span id="line-254">    * &lt;h2 class='section'&gt;Why this is a {@link ResponseProcessor}, not a {@code RestContext} hook&lt;/h2&gt;</span>
 <span class="source-line-no">255</span><span id="line-255">    * &lt;p&gt;</span>
 <span class="source-line-no">256</span><span id="line-256">    * {@code juneau-rest-server} does not (and must not) depend on this module, so a hard-coded validation step</span>
 <span class="source-line-no">257</span><span id="line-257">    * inside it cannot see {@link Widget} without inverting that dependency. A {@link ResponseProcessor} declared</span>
 <span class="source-line-no">258</span><span id="line-258">    * here, discovered by every classpath that carries this module via {@code ServiceLoader}, needs no such</span>
 <span class="source-line-no">259</span><span id="line-259">    * reflection or hoisted marker interface &amp;mdash; see the class Javadoc.</span>
 <span class="source-line-no">260</span><span id="line-260">    *</span>
-<span class="source-line-no">261</span><span id="line-261">    * &lt;h5 class='section'&gt;Why {@code NEXT}, never {@code FINISHED}&lt;/h5&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    * &lt;h2 class='section'&gt;Why {@code NEXT}, never {@code FINISHED}&lt;/h2&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    * &lt;p&gt;</span>
 <span class="source-line-no">263</span><span id="line-263">    * This processor validates and declines to handle: it never claims the response, so it cannot perturb chain</span>
 <span class="source-line-no">264</span><span id="line-264">    * ordering, content-type negotiation, or the {@code NotImplemented} fallthrough. Non-{@link Widget} content</span>
@@ -279,14 +279,14 @@
 <span class="source-line-no">266</span><span id="line-266">    * {@code org.apache.juneau.rest.server.widget.Widget} SVL resolver &amp;mdash; see the module Javadoc's naming</span>
 <span class="source-line-no">267</span><span id="line-267">    * collision note) costs one {@code instanceof} test and is otherwise untouched.</span>
 <span class="source-line-no">268</span><span id="line-268">    *</span>
-<span class="source-line-no">269</span><span id="line-269">    * &lt;h5 class='section'&gt;Why {@code InternalServerError} (500), not the caller's problem&lt;/h5&gt;</span>
+<span class="source-line-no">269</span><span id="line-269">    * &lt;h2 class='section'&gt;Why {@code InternalServerError} (500), not the caller's problem&lt;/h2&gt;</span>
 <span class="source-line-no">270</span><span id="line-270">    * &lt;p&gt;</span>
 <span class="source-line-no">271</span><span id="line-271">    * A malformed {@link Widget} reaching the serving path is a &lt;b&gt;server&lt;/b&gt; defect &amp;mdash; the client asked for</span>
 <span class="source-line-no">272</span><span id="line-272">    * a dialog correctly and the server built a broken one &amp;mdash; not an inbound-validation failure of the kind</span>
 <span class="source-line-no">273</span><span id="line-273">    * {@code ValidationException} (400) is scoped to. The underlying {@link IllegalArgumentException} rides as the</span>
 <span class="source-line-no">274</span><span id="line-274">    * cause so the message names the failing rule.</span>
 <span class="source-line-no">275</span><span id="line-275">    *</span>
-<span class="source-line-no">276</span><span id="line-276">    * &lt;h5 class='section'&gt;Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}&lt;/h5&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">    * &lt;h2 class='section'&gt;Deliberately not deduplicated against {@link ModalDef#checked()}/{@link FormDef#checked()}&lt;/h2&gt;</span>
 <span class="source-line-no">277</span><span id="line-277">    * &lt;p&gt;</span>
 <span class="source-line-no">278</span><span id="line-278">    * A widget that already called {@code checked()} is validated twice per response: once at build time, once</span>
 <span class="source-line-no">279</span><span id="line-279">    * here. No {@code validated} flag is added to skip the second pass &amp;mdash; a mutable "already validated" flag</span>
@@ -294,7 +294,7 @@
 <span class="source-line-no">281</span><span id="line-281">    * that this module's contract deliberately avoids elsewhere. {@code validate()} is cheap and idempotent, so the</span>
 <span class="source-line-no">282</span><span id="line-282">    * repeat costs nothing worth building around.</span>
 <span class="source-line-no">283</span><span id="line-283">    *</span>
-<span class="source-line-no">284</span><span id="line-284">    * &lt;h5 class='section'&gt;Traversal is top-level only&lt;/h5&gt;</span>
+<span class="source-line-no">284</span><span id="line-284">    * &lt;h2 class='section'&gt;Traversal is top-level only&lt;/h2&gt;</span>
 <span class="source-line-no">285</span><span id="line-285">    * &lt;p&gt;</span>
 <span class="source-line-no">286</span><span id="line-286">    * Only {@code res.getContent()} itself is tested. Nested widgets are covered by the beans' own recursive</span>
 <span class="source-line-no">287</span><span id="line-287">    * {@code validate()} (e.g. {@link ModalDef#validate()} &amp;rarr; {@link FormDef#validate()}); a {@link Widget}</span>
@@ -302,7 +302,7 @@
 <span class="source-line-no">289</span><span id="line-289">    * that shape, and walking one would collide with the unrelated {@code examples.views.Widget} row-bean lists</span>
 <span class="source-line-no">290</span><span id="line-290">    * some example endpoints do return.</span>
 <span class="source-line-no">291</span><span id="line-291">    *</span>
-<span class="source-line-no">292</span><span id="line-292">    * &lt;h5 class='section'&gt;Escape hatch&lt;/h5&gt;</span>
+<span class="source-line-no">292</span><span id="line-292">    * &lt;h2 class='section'&gt;Escape hatch&lt;/h2&gt;</span>
 <span class="source-line-no">293</span><span id="line-293">    * &lt;p&gt;</span>
 <span class="source-line-no">294</span><span id="line-294">    * A resource that must serve a deliberately-invalid {@link Widget} can override the response-processor chain</span>
 <span class="source-line-no">295</span><span id="line-295">    * entirely with a {@code @Bean ResponseProcessorList} factory method, which replaces the whole list. There is</span>

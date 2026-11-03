@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  the resource's bean store); the server-side processor picks it up automatically when an opted-in operation
  throws or returns a matching exception.
 
- <h5 class='section'>Discovery model</h5>
+ <h2 class='section'>Discovery model</h2>
  <p>
  The processor collects all <code>ProblemMapper</code> beans visible from the resource's bean store, then picks the
  <b>most-specific</b> mapper for the exception class hierarchy (a mapper whose <a href="#getExceptionType()"><code>getExceptionType()</code></a> is the
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  mapper is tried, finally falling back to the default <code>ProblemAdapters.fromException(...)</code> adaptation in
  <code>juneau-rest-common</code> for <code>BasicHttpException</code> subclasses.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>public class</jk> MyDomainProblemMapper <jk>implements</jk> ProblemMapper&lt;MyDomainException&gt; {
 
@@ -131,7 +130,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a>
    <li class='jc'><a href="ProblemException.html" title="class in org.apache.juneau.bean.rfc7807"><code>ProblemException</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails">RFC 7807 / 9457 Problem Details</a>

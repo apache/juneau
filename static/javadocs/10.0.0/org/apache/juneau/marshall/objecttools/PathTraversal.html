@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
  Leading slashes in URLs are ignored.
  So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Construct an unstructured POJO model</jc>
    JsonMap <jv>map</jv> = JsonMap.<jsm>ofText</jsm>(<js>""</js>
@@ -180,7 +179,7 @@ loadScripts(document, 'script');</script>
  of index numbers on GET requests to return a map/bean with a specified attribute value.
  <br>The syntax is <code>@attr=val</code>, where attr is the attribute name on the child map, and val is the matching value.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
    Map <jv>map</jv> = <jv>pathTraversal</jv>.getMap(<js>"/items/@name=foo"</js>);
@@ -516,7 +515,7 @@ loadScripts(document, 'script');</script>
  <p>
  Will convert object to the specified type per <a href="../MarshallingSession.html#convertToType(java.lang.Object,java.lang.Object)"><code>MarshallingSession.convertToType(Object, Class)</code></a>.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    PathTraversal <jv>pathTraversal</jv> = <jk>new</jk> PathTraversal(<jv>object</jv>);
 
@@ -561,7 +560,7 @@ loadScripts(document, 'script');</script>
  <p>
  The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    PathTraversal <jv>pathTraversal</jv> = <jk>new</jk> PathTraversal(<jv>object</jv>);
 
@@ -590,7 +589,7 @@ loadScripts(document, 'script');</script>
  <p>
  The array can be arbitrarily long to indicate arbitrarily complex data structures.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Use the <a href="#get(java.lang.String,java.lang.Class)"><code>get(String, Class)</code></a> method instead if you don't need a parameterized map/collection.
  </ul></div>
@@ -1005,7 +1004,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method expands the POJO model as necessary to create the new element.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       You can only post to three types of nodes:
       <ul>

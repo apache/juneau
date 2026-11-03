@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
  <a href="../entity/MultipartBody.html" title="class in org.apache.juneau.http.entity"><code>MultipartBody</code></a> and the <code>multipart/form-data</code> <code>Content-Type</code>
  (with its generated boundary) is applied automatically.
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <ja>@Remote</ja>(path=<js>"/api"</js>)
    <jk>public interface</jk> UploadService {
@@ -96,7 +95,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Body-mode exclusivity:</h5>
+ <h2 class='section'>Body-mode exclusivity:</h2>
  <p>
  A method is either <i>multipart</i> (<code>@Multipart</code> + one or more <a href="../Part.html" title="annotation interface in org.apache.juneau.http"><code>@Part</code></a>
  parameters) or <i>single-body</i> (<a href="../Content.html" title="annotation interface in org.apache.juneau.http"><code>@Content</code></a>), never both.  Declaring both
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
  parameter without <code>@Multipart</code> &mdash; is rejected at proxy-build time with an
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>
       <b>Escape hatch (Option B):</b> for advanced cases you can still hand-assemble a
       <a href="../entity/MultipartBody.html" title="class in org.apache.juneau.http.entity"><code>MultipartBody</code></a> and pass it as a single
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
       ignores this annotation.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
    <li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578">RFC 7578 — multipart/form-data</a>
  </ul></div>

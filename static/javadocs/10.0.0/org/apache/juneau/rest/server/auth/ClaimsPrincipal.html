@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -103,7 +102,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  copied and exposed as an unmodifiable view. <code>ClaimsPrincipal</code> can be safely cached and
  shared across requests.
 
- <h5 class='section'>Type coercion contract for <a href="#getClaim(java.lang.String,java.lang.Class)"><code>getClaim(String, Class)</code></a>:</h5>
+ <h2 class='section'>Type coercion contract for <a href="#getClaim(java.lang.String,java.lang.Class)"><code>getClaim(String, Class)</code></a>:</h2>
 
  <ul>
    <li>If the underlying value is already an instance of the requested type, it is returned directly.
@@ -120,7 +119,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
  <code>List&lt;String&gt;</code>, callers can read it back as <code>List.class</code> or pull individual
  elements via <a href="#getClaims()"><code>getClaims()</code></a> and operate on the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> directly.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="Auth.html" title="annotation interface in org.apache.juneau.rest.server.auth"><code>Auth</code></a>
    <li class='jc'><a href="TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a>
    <li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7519#section-4">RFC 7519 &sect;4 &mdash; JWT Claims</a>

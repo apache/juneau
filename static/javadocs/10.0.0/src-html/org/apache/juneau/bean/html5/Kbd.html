@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * of input such as voice commands or menu selections. It is commonly styled with a monospace font</span>
 <span class="source-line-no">028</span><span id="line-28"> * to distinguish it from regular text and often appears in documentation, tutorials, and help pages.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bcode w800'&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> *    &lt;jc&gt;// Simple keyboard shortcut&lt;/jc&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    Kbd &lt;jv&gt;simple&lt;/jv&gt; = &lt;jsm&gt;kbd&lt;/jsm&gt;(&lt;js&gt;"Ctrl+S"&lt;/js&gt;);</span>
@@ -94,30 +94,29 @@
 <span class="source-line-no">081</span><span id="line-81"> *       &lt;li class='jm'&gt;{@link HtmlBuilder#kbd(Object...) kbd(Object...)}</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;/p&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;/ul&gt;</span>
-<span class="source-line-no">089</span><span id="line-89"> */</span>
-<span class="source-line-no">090</span><span id="line-90">@Marshalled(typeName = "kbd")</span>
-<span class="source-line-no">091</span><span id="line-91">public class Kbd extends HtmlElementMixed&lt;Kbd&gt; {</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Creates an empty {@link Kbd} element.</span>
-<span class="source-line-no">095</span><span id="line-95">    */</span>
-<span class="source-line-no">096</span><span id="line-96">   public Kbd() {}</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   /**</span>
-<span class="source-line-no">099</span><span id="line-99">    * Creates a {@link Kbd} element with the specified child nodes.</span>
-<span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * @param children The child nodes.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   public Kbd(Object...children) {</span>
-<span class="source-line-no">104</span><span id="line-104">      children(children);</span>
-<span class="source-line-no">105</span><span id="line-105">   }</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">}</span>
+<span class="source-line-no">084</span><span id="line-84"> *</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanHtml5"&gt;juneau-bean-html5&lt;/a&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;/ul&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> */</span>
+<span class="source-line-no">089</span><span id="line-89">@Marshalled(typeName = "kbd")</span>
+<span class="source-line-no">090</span><span id="line-90">public class Kbd extends HtmlElementMixed&lt;Kbd&gt; {</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   /**</span>
+<span class="source-line-no">093</span><span id="line-93">    * Creates an empty {@link Kbd} element.</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   public Kbd() {}</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   /**</span>
+<span class="source-line-no">098</span><span id="line-98">    * Creates a {@link Kbd} element with the specified child nodes.</span>
+<span class="source-line-no">099</span><span id="line-99">    *</span>
+<span class="source-line-no">100</span><span id="line-100">    * @param children The child nodes.</span>
+<span class="source-line-no">101</span><span id="line-101">    */</span>
+<span class="source-line-no">102</span><span id="line-102">   public Kbd(Object...children) {</span>
+<span class="source-line-no">103</span><span id="line-103">      children(children);</span>
+<span class="source-line-no">104</span><span id="line-104">   }</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">}</span>
 
 
 

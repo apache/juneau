@@ -154,47 +154,48 @@
 <span class="source-line-no">141</span><span id="line-141"> *    on this interface to be overridden by annotations defined on the implemented class.</span>
 <span class="source-line-no">142</span><span id="line-142"> * &lt;/p&gt;</span>
 <span class="source-line-no">143</span><span id="line-143"> *</span>
-<span class="source-line-no">144</span><span id="line-144"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">145</span><span id="line-145"> *    &lt;ul class='javatreec'&gt;</span>
-<span class="source-line-no">146</span><span id="line-146"> *       &lt;li class='jc'&gt;{@link BasicRestServlet}</span>
-<span class="source-line-no">147</span><span id="line-147"> *       &lt;li class='jc'&gt;{@link BasicRestServletGroup}</span>
-<span class="source-line-no">148</span><span id="line-148"> *       &lt;li class='jc'&gt;{@link BasicRestResource}</span>
-<span class="source-line-no">149</span><span id="line-149"> *       &lt;li class='jc'&gt;{@link BasicRestResourceGroup}</span>
-<span class="source-line-no">150</span><span id="line-150"> * &lt;/ul&gt;</span>
-<span class="source-line-no">151</span><span id="line-151"> *    &lt;li class='link'&gt;{doc jrs.AnnotatedClasses}</span>
-<span class="source-line-no">152</span><span id="line-152"> * &lt;/ul&gt;</span>
-<span class="source-line-no">153</span><span id="line-153"> */</span>
-<span class="source-line-no">154</span><span id="line-154">// @formatter:off</span>
-<span class="source-line-no">155</span><span id="line-155">@Rest(</span>
-<span class="source-line-no">156</span><span id="line-156">   serializers={</span>
-<span class="source-line-no">157</span><span id="line-157">      RdfXmlSerializer.class,</span>
-<span class="source-line-no">158</span><span id="line-158">      RdfXmlAbbrevSerializer.class,</span>
-<span class="source-line-no">159</span><span id="line-159">      TurtleSerializer.class,</span>
-<span class="source-line-no">160</span><span id="line-160">      NTripleSerializer.class,</span>
-<span class="source-line-no">161</span><span id="line-161">      N3Serializer.class,</span>
-<span class="source-line-no">162</span><span id="line-162">      JsonLdSerializer.class,</span>
-<span class="source-line-no">163</span><span id="line-163">      NQuadsSerializer.class,</span>
-<span class="source-line-no">164</span><span id="line-164">      TriGSerializer.class,</span>
-<span class="source-line-no">165</span><span id="line-165">      TriXSerializer.class,</span>
-<span class="source-line-no">166</span><span id="line-166">      RdfJsonSerializer.class,</span>
-<span class="source-line-no">167</span><span id="line-167">      RdfThriftSerializer.class,</span>
-<span class="source-line-no">168</span><span id="line-168">      RdfProtoSerializer.class</span>
-<span class="source-line-no">169</span><span id="line-169">   },</span>
-<span class="source-line-no">170</span><span id="line-170">   parsers={</span>
-<span class="source-line-no">171</span><span id="line-171">      RdfXmlParser.class,</span>
-<span class="source-line-no">172</span><span id="line-172">      TurtleParser.class,</span>
-<span class="source-line-no">173</span><span id="line-173">      NTripleParser.class,</span>
-<span class="source-line-no">174</span><span id="line-174">      N3Parser.class,</span>
-<span class="source-line-no">175</span><span id="line-175">      JsonLdParser.class,</span>
-<span class="source-line-no">176</span><span id="line-176">      NQuadsParser.class,</span>
-<span class="source-line-no">177</span><span id="line-177">      TriGParser.class,</span>
-<span class="source-line-no">178</span><span id="line-178">      TriXParser.class,</span>
-<span class="source-line-no">179</span><span id="line-179">      RdfJsonParser.class,</span>
-<span class="source-line-no">180</span><span id="line-180">      RdfThriftParser.class,</span>
-<span class="source-line-no">181</span><span id="line-181">      RdfProtoParser.class</span>
-<span class="source-line-no">182</span><span id="line-182">   }</span>
-<span class="source-line-no">183</span><span id="line-183">)</span>
-<span class="source-line-no">184</span><span id="line-184">public interface BasicUniversalJenaConfig extends BasicUniversalConfig {}</span>
+<span class="source-line-no">144</span><span id="line-144"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
+<span class="source-line-no">145</span><span id="line-145"> *    &lt;li&gt;Related base classes:</span>
+<span class="source-line-no">146</span><span id="line-146"> *    &lt;ul class='javatreec'&gt;</span>
+<span class="source-line-no">147</span><span id="line-147"> *       &lt;li class='jc'&gt;{@link BasicRestServlet}</span>
+<span class="source-line-no">148</span><span id="line-148"> *       &lt;li class='jc'&gt;{@link BasicRestServletGroup}</span>
+<span class="source-line-no">149</span><span id="line-149"> *       &lt;li class='jc'&gt;{@link BasicRestResource}</span>
+<span class="source-line-no">150</span><span id="line-150"> *       &lt;li class='jc'&gt;{@link BasicRestResourceGroup}</span>
+<span class="source-line-no">151</span><span id="line-151"> *    &lt;/ul&gt;</span>
+<span class="source-line-no">152</span><span id="line-152"> *    &lt;li class='link'&gt;{doc jrs.AnnotatedClasses}</span>
+<span class="source-line-no">153</span><span id="line-153"> * &lt;/ul&gt;</span>
+<span class="source-line-no">154</span><span id="line-154"> */</span>
+<span class="source-line-no">155</span><span id="line-155">// @formatter:off</span>
+<span class="source-line-no">156</span><span id="line-156">@Rest(</span>
+<span class="source-line-no">157</span><span id="line-157">   serializers={</span>
+<span class="source-line-no">158</span><span id="line-158">      RdfXmlSerializer.class,</span>
+<span class="source-line-no">159</span><span id="line-159">      RdfXmlAbbrevSerializer.class,</span>
+<span class="source-line-no">160</span><span id="line-160">      TurtleSerializer.class,</span>
+<span class="source-line-no">161</span><span id="line-161">      NTripleSerializer.class,</span>
+<span class="source-line-no">162</span><span id="line-162">      N3Serializer.class,</span>
+<span class="source-line-no">163</span><span id="line-163">      JsonLdSerializer.class,</span>
+<span class="source-line-no">164</span><span id="line-164">      NQuadsSerializer.class,</span>
+<span class="source-line-no">165</span><span id="line-165">      TriGSerializer.class,</span>
+<span class="source-line-no">166</span><span id="line-166">      TriXSerializer.class,</span>
+<span class="source-line-no">167</span><span id="line-167">      RdfJsonSerializer.class,</span>
+<span class="source-line-no">168</span><span id="line-168">      RdfThriftSerializer.class,</span>
+<span class="source-line-no">169</span><span id="line-169">      RdfProtoSerializer.class</span>
+<span class="source-line-no">170</span><span id="line-170">   },</span>
+<span class="source-line-no">171</span><span id="line-171">   parsers={</span>
+<span class="source-line-no">172</span><span id="line-172">      RdfXmlParser.class,</span>
+<span class="source-line-no">173</span><span id="line-173">      TurtleParser.class,</span>
+<span class="source-line-no">174</span><span id="line-174">      NTripleParser.class,</span>
+<span class="source-line-no">175</span><span id="line-175">      N3Parser.class,</span>
+<span class="source-line-no">176</span><span id="line-176">      JsonLdParser.class,</span>
+<span class="source-line-no">177</span><span id="line-177">      NQuadsParser.class,</span>
+<span class="source-line-no">178</span><span id="line-178">      TriGParser.class,</span>
+<span class="source-line-no">179</span><span id="line-179">      TriXParser.class,</span>
+<span class="source-line-no">180</span><span id="line-180">      RdfJsonParser.class,</span>
+<span class="source-line-no">181</span><span id="line-181">      RdfThriftParser.class,</span>
+<span class="source-line-no">182</span><span id="line-182">      RdfProtoParser.class</span>
+<span class="source-line-no">183</span><span id="line-183">   }</span>
+<span class="source-line-no">184</span><span id="line-184">)</span>
+<span class="source-line-no">185</span><span id="line-185">public interface BasicUniversalJenaConfig extends BasicUniversalConfig {}</span>
 
 
 

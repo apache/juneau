@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
  expiry (see <a href="#setClock(java.time.Clock)"><code>setClock(Clock)</code></a>). Operators inject a shared/rotating-key <a href="RequestStateCodec.html" title="interface in org.apache.juneau.rest.server.mcp.v20260728"><code>RequestStateCodec</code></a> here
  for multi-instance or restart-durable resumption.
 
- <h5 class='section'>Trust model:</h5>
+ <h2 class='section'>Trust model:</h2>
  <ul>
    <li><b><code>requestState</code> is a bearer token.</b> Anyone holding a sealed <code>requestState</code> can resume
       the paused operation until it expires; the token is not bound to a caller identity. It must be

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Bridges SLF4J MDC context from the request (dispatch) thread to the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a>
  completion thread.
 
- <h5 class='topic'>Problem</h5>
+ <h2 class='topic'>Problem</h2>
  <p>
  When a <code>@RestOp</code> method returns a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a>, the <a href="AsyncResponseProcessor.html" title="class in org.apache.juneau.rest.server.processor"><code>AsyncResponseProcessor</code></a>
  registers a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html#whenComplete(java.util.function.BiConsumer)" title="class or interface in java.util.concurrent" class="external-link"><code>whenComplete</code></a> callback that runs on
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  SLF4J's <code>MDC</code> is backed by a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ThreadLocal.html" title="class or interface in java.lang" class="external-link"><code>ThreadLocal</code></a>, so any diagnostic context set by an upstream filter
  (e.g. <code>requestId</code>, <code>userId</code>) is invisible to log statements emitted inside that callback.
 
- <h5 class='topic'>Solution</h5>
+ <h2 class='topic'>Solution</h2>
  <p>
  <code>MdcAsyncListener</code> provides a single factory method, <a href="#wrap(java.util.function.BiConsumer,java.util.Map)"><code>wrap(BiConsumer, Map)</code></a>, that wraps a
  <code>whenComplete</code> callback with the standard MDC snapshot-restore-clear pattern:
@@ -105,20 +104,20 @@ loadScripts(document, 'script');</script>
        any MDC state the completion thread itself had before the callback.
  </ol>
 
- <h5 class='topic'>Lazy skip</h5>
+ <h2 class='topic'>Lazy skip</h2>
  <p>
  <a href="#snapshot()"><code>snapshot()</code></a> returns <code>null</code> when the request thread's MDC is empty or when SLF4J is absent.
  <a href="#wrap(java.util.function.BiConsumer,java.util.Map)"><code>wrap(BiConsumer, Map)</code></a> returns the original callback unchanged when the snapshot is <code>null</code>, so no
  work is done on the completion thread for the common case of no MDC state.
 
- <h5 class='topic'>SLF4J detection</h5>
+ <h2 class='topic'>SLF4J detection</h2>
  <p>
  <code>MdcAsyncListener</code> uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#forName(java.lang.String)" title="class or interface in java.lang" class="external-link"><code>Class.forName(String)</code></a> to probe for <code>org.slf4j.MDC</code> at class-load
  time. SLF4J is NOT a compile-time dependency of <code>juneau-rest-server</code>. If SLF4J is absent from the
  runtime classpath, the class gracefully degrades: <a href="#isAvailable()"><code>isAvailable()</code></a> returns <code>false</code>,
  <a href="#snapshot()"><code>snapshot()</code></a> returns <code>null</code>, and <a href="#wrap(java.util.function.BiConsumer,java.util.Map)"><code>wrap(BiConsumer, Map)</code></a> returns the original callback.
 
- <h5 class='topic'>Limitation</h5>
+ <h2 class='topic'>Limitation</h2>
  <p>
  This class bridges SLF4J MDC only. Users of Log4j2's <code>ThreadContext</code> directly (without the SLF4J facade)
  will not benefit from this listener. That is documented as a v1 limitation; the SLF4J MDC is the lingua franca

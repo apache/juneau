@@ -53,13 +53,13 @@
 <span class="source-line-no">040</span><span id="line-40"> * theme name are all rejected (fail closed). There is deliberately &lt;b&gt;no&lt;/b&gt; {@code default=}: if the tag is</span>
 <span class="source-line-no">041</span><span id="line-41"> * present, that &lt;i&gt;is&lt;/i&gt; the theme.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Nameless form:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Nameless form:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * Without {@code name=}, the directive inherits the page theme as its seed: {@code &lt;@console theme="…"&gt;} if given,</span>
 <span class="source-line-no">046</span><span id="line-46"> * else the {@link PageSpec#theme(String)} value, else {@code open}. It never conflicts with a page-spec theme, so</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@code &lt;@theme&gt;&lt;@token …/&gt;&lt;/@theme&gt;} customises whatever theme the page already selected.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Custom tokens:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Custom tokens:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * The named stock palette is the &lt;b&gt;seed&lt;/b&gt;: this directive opens a {@link ThemeBuildContext} holding a</span>
 <span class="source-line-no">052</span><span id="line-52"> * {@code Theme.Builder} copied from the named stock palette, renders the nested body so each {@code &lt;@token&gt;} folds</span>
@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62"> * whose target is not a light-theme token or alias, a {@link Theme#OPEN} token, a chrome role alias or another dark</span>
 <span class="source-line-no">063</span><span id="line-63"> * declaration is rejected.</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p class='bftl'&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &amp;lt;#-- Stock palette only: links juneau-theme-light-brown.css, no inline block. --&amp;gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &amp;lt;@theme name="light-brown"/&amp;gt;</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    &amp;lt;@theme name="light-brown"&amp;gt;&amp;lt;@token name="--jc-accent-selected" value="#8a5a1a"/&amp;gt;&amp;lt;/@theme&amp;gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;How the link lands:&lt;/h5&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;How the link lands:&lt;/h2&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> * &lt;p&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> * {@code &lt;@theme&gt;} must be nested inside {@code &lt;@console&gt;}; it records the resolved stock-theme URL (via</span>
 <span class="source-line-no">077</span><span id="line-77"> * {@link ConsoleChromeMixin#themeAssetUrl(org.apache.juneau.rest.server.RestRequest, String)}) and the optional</span>

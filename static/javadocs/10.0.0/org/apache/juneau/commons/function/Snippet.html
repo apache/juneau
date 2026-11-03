@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -83,7 +82,7 @@ loadScripts(document, 'script');</script>
  but your code may throw checked exceptions. Unlike <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html" title="class or interface in java.lang" class="external-link"><code>Runnable</code></a>, the <a href="#run()"><code>run()</code></a> method can throw any
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link"><code>Throwable</code></a>, making it suitable for exception testing and fluent API patterns.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Functional interface - can be used with lambda expressions and method references
    <li>Exception support - allows checked exceptions to be thrown
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
    <li>Testing support - useful for exception testing scenarios
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Exception testing - verifying that code throws expected exceptions
    <li>Fluent interfaces - passing code snippets to builder methods
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
    <li>Error handling - passing error-prone code to handlers
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Exception testing</jc>
    Snippet <jv>code</jv> = () -&gt; {
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Comparison with Runnable:</h5>
+ <h2 class='section'>Comparison with Runnable:</h2>
  <ul class='spaced-list'>
    <li><b>Runnable:</b> Cannot throw checked exceptions (must catch and wrap)
    <li><b>Snippet:</b> Can throw any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link"><code>Throwable</code></a> (checked or unchecked)
@@ -131,7 +130,7 @@ loadScripts(document, 'script');</script>
    <li><b>Snippet:</b> Used for exception testing and fluent APIs
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem</a>
  </ul></div>
 </section>
@@ -178,7 +177,7 @@ loadScripts(document, 'script');</script>
  This method is the functional method of this interface. It can throw any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link"><code>Throwable</code></a>,
  including checked exceptions, which distinguishes it from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Runnable.html#run()" title="class or interface in java.lang" class="external-link"><code>Runnable.run()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Snippet <jv>snippet</jv> = () -&gt; {
       <jc>// Code that may throw exceptions</jc>

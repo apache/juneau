@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> * It supports various pattern formats for identifying classes and their members, with intelligent</span>
 <span class="source-line-no">038</span><span id="line-38"> * matching that handles inner classes, method signatures, and field names.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;jc&gt;// Create a map that associates visibility levels with specific classes/methods&lt;/jc&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    ReflectionMap&amp;lt;Visibility&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52"> *    Stream&amp;lt;Visibility&amp;gt; &lt;jv&gt;methodVisibility&lt;/jv&gt; = &lt;jv&gt;map&lt;/jv&gt;.find(&lt;jv&gt;secretMethod&lt;/jv&gt;);</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h5 class='section'&gt;Supported Pattern Formats:&lt;/h5&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='section'&gt;Supported Pattern Formats:&lt;/h2&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * The following pattern formats are supported for mapping keys:</span>
@@ -173,7 +173,7 @@
 <span class="source-line-no">160</span><span id="line-160"> *       &lt;/ul&gt;</span>
 <span class="source-line-no">161</span><span id="line-161"> * &lt;/ul&gt;</span>
 <span class="source-line-no">162</span><span id="line-162"> *</span>
-<span class="source-line-no">163</span><span id="line-163"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">163</span><span id="line-163"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">164</span><span id="line-164"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">165</span><span id="line-165"> *    &lt;li&gt;Method and constructor patterns without parentheses match any method signature.</span>
 <span class="source-line-no">166</span><span id="line-166"> *    &lt;li&gt;Method and constructor argument types can be specified with simple or fully qualified names.</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169"> *    &lt;li&gt;Patterns are case-sensitive.</span>
 <span class="source-line-no">170</span><span id="line-170"> * &lt;/ul&gt;</span>
 <span class="source-line-no">171</span><span id="line-171"> *</span>
-<span class="source-line-no">172</span><span id="line-172"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">172</span><span id="line-172"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">173</span><span id="line-173"> * &lt;ul class='seealso'&gt;</span>
 <span class="source-line-no">174</span><span id="line-174"> *    &lt;li class='jc'&gt;{@link ClassInfo}</span>
 <span class="source-line-no">175</span><span id="line-175"> *    &lt;li class='jc'&gt;{@link MethodInfo}</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">   /**</span>
 <span class="source-line-no">188</span><span id="line-188">    * Builder for creating {@link ReflectionMap} instances.</span>
 <span class="source-line-no">189</span><span id="line-189">    *</span>
-<span class="source-line-no">190</span><span id="line-190">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">191</span><span id="line-191">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">192</span><span id="line-192">    *    ReflectionMap&amp;lt;String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
 <span class="source-line-no">193</span><span id="line-193">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -235,7 +235,7 @@
 <span class="source-line-no">222</span><span id="line-222">       * and associates them with the specified value. Multiple patterns can be specified in a single</span>
 <span class="source-line-no">223</span><span id="line-223">       * key using comma-delimited format.</span>
 <span class="source-line-no">224</span><span id="line-224">       *</span>
-<span class="source-line-no">225</span><span id="line-225">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">225</span><span id="line-225">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">226</span><span id="line-226">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">227</span><span id="line-227">       *    Builder&amp;lt;String&amp;gt; &lt;jv&gt;builder&lt;/jv&gt; = ReflectionMap.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">228</span><span id="line-228">       *</span>
@@ -514,7 +514,7 @@
 <span class="source-line-no">501</span><span id="line-501">   /**</span>
 <span class="source-line-no">502</span><span id="line-502">    * Creates a new builder for constructing a {@link ReflectionMap}.</span>
 <span class="source-line-no">503</span><span id="line-503">    *</span>
-<span class="source-line-no">504</span><span id="line-504">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">504</span><span id="line-504">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">505</span><span id="line-505">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">506</span><span id="line-506">    *    ReflectionMap&amp;lt;String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
 <span class="source-line-no">507</span><span id="line-507">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -654,7 +654,7 @@
 <span class="source-line-no">641</span><span id="line-641">    * This method searches for mappings that match the given class, including patterns for</span>
 <span class="source-line-no">642</span><span id="line-642">    * the fully qualified name, simple name, inner class names, and wildcard patterns.</span>
 <span class="source-line-no">643</span><span id="line-643">    *</span>
-<span class="source-line-no">644</span><span id="line-644">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">644</span><span id="line-644">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">645</span><span id="line-645">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">646</span><span id="line-646">    *    ReflectionMap&amp;lt;String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
 <span class="source-line-no">647</span><span id="line-647">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -681,7 +681,7 @@
 <span class="source-line-no">668</span><span id="line-668">    * This method searches for mappings that match the given constructor, considering both</span>
 <span class="source-line-no">669</span><span id="line-669">    * the declaring class and parameter types.</span>
 <span class="source-line-no">670</span><span id="line-670">    *</span>
-<span class="source-line-no">671</span><span id="line-671">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">671</span><span id="line-671">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">672</span><span id="line-672">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">673</span><span id="line-673">    *    ReflectionMap&amp;lt;String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
 <span class="source-line-no">674</span><span id="line-674">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -707,7 +707,7 @@
 <span class="source-line-no">694</span><span id="line-694">    * This method searches for mappings that match the given field, considering both</span>
 <span class="source-line-no">695</span><span id="line-695">    * the declaring class and field name.</span>
 <span class="source-line-no">696</span><span id="line-696">    *</span>
-<span class="source-line-no">697</span><span id="line-697">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">697</span><span id="line-697">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">698</span><span id="line-698">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">699</span><span id="line-699">    *    ReflectionMap&amp;lt;String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
 <span class="source-line-no">700</span><span id="line-700">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -733,7 +733,7 @@
 <span class="source-line-no">720</span><span id="line-720">    * This method searches for mappings that match the given method, considering the</span>
 <span class="source-line-no">721</span><span id="line-721">    * declaring class, method name, and parameter types.</span>
 <span class="source-line-no">722</span><span id="line-722">    *</span>
-<span class="source-line-no">723</span><span id="line-723">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">723</span><span id="line-723">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">724</span><span id="line-724">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">725</span><span id="line-725">    *    ReflectionMap&amp;lt;String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = ReflectionMap</span>
 <span class="source-line-no">726</span><span id="line-726">    *       .&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>

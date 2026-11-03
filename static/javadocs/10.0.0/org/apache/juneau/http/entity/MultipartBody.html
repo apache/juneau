@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
  per-part <code>Content-Type</code>, and a body writer.  When <a href="#writeTo(java.io.OutputStream)"><code>writeTo(OutputStream)</code></a> is called the
  parts are streamed directly — no full-body buffering occurs.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jv>body</jv> = MultipartBody.<jsm>builder</jsm>()
       .field(<js>"title"</js>, <js>"My Report"</js>)
@@ -104,7 +103,7 @@ implements <a href="../HttpBody.html" title="interface in org.apache.juneau.http
  <a href="#isRepeatable()"><code>isRepeatable()</code></a> returns <code>false</code> when any part wraps a one-shot stream, and <code>true</code>
  when all parts are repeatable (e.g. strings, files, byte arrays).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">Next-Generation REST Client</a>
    <li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578">RFC 7578 — Returning Values from Forms: multipart/form-data</a>
  </ul></div>

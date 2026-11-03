@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
  and assign the resulting string to <a href="#setData(java.lang.String)"><code>setData(...)</code></a>. The serializer will
  split that string on <code>\n</code> into multiple <c>data:</c> lines per spec.
 
- <h5 class='figure'>Example: build and serialize an event:</h5>
+ <h2 class='figure'>Example: build and serialize an event:</h2>
  <p class='bjava'>
    SseEvent <jv>event</jv> = <jk>new</jk> SseEvent()
       .setEvent(<js>"progress"</js>)
@@ -113,11 +112,11 @@ loadScripts(document, 'script');</script>
    String <jv>wire</jv> = Sse.<jsm>of</jsm>(<jv>event</jv>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is not thread safe.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE</a>
    <li class='link'><a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG HTML §9.2 — Server-sent events</a>
  </ul></div>

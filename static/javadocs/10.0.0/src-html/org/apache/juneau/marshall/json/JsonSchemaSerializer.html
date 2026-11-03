@@ -42,21 +42,21 @@
 <span class="source-line-no">029</span><span id="line-29">/**</span>
 <span class="source-line-no">030</span><span id="line-30"> * Serializes POJO metadata to HTTP responses as JSON-Schema.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='topic'&gt;Media types&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='topic'&gt;Media types&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;application/json+schema, text/json+schema&lt;/bc&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * Produces &lt;c&gt;Content-Type&lt;/c&gt; types:  &lt;bc&gt;application/json&lt;/bc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;h2 class='topic'&gt;Description&lt;/h2&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport"&gt;JSON&lt;/a&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;/ul&gt;</span>
@@ -117,7 +117,7 @@
 <span class="source-line-no">104</span><span id="line-104">       * &lt;p&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">       * The description is the result of calling {@link ClassMeta#getName()}.</span>
 <span class="source-line-no">106</span><span id="line-106">       *</span>
-<span class="source-line-no">107</span><span id="line-107">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">108</span><span id="line-108">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...) JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}</span>
 <span class="source-line-no">109</span><span id="line-109">       * &lt;/ul&gt;</span>
 <span class="source-line-no">110</span><span id="line-110">       *</span>
@@ -144,7 +144,7 @@
 <span class="source-line-no">131</span><span id="line-131">       *    &lt;li class='ja'&gt;{@link Marshalled#example() Marshalled(example)}</span>
 <span class="source-line-no">132</span><span id="line-132">       * &lt;/ul&gt;</span>
 <span class="source-line-no">133</span><span id="line-133">       *</span>
-<span class="source-line-no">134</span><span id="line-134">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">134</span><span id="line-134">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">135</span><span id="line-135">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...) JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)}</span>
 <span class="source-line-no">136</span><span id="line-136">       * &lt;/ul&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">       *</span>
@@ -164,7 +164,7 @@
 <span class="source-line-no">151</span><span id="line-151">       * &lt;p&gt;</span>
 <span class="source-line-no">152</span><span id="line-152">       * Identifies whether nested descriptions are allowed in schema definitions.</span>
 <span class="source-line-no">153</span><span id="line-153">       *</span>
-<span class="source-line-no">154</span><span id="line-154">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">154</span><span id="line-154">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">155</span><span id="line-155">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions() JsonSchemaGenerator.Builder#allowNestedDescriptions()}</span>
 <span class="source-line-no">156</span><span id="line-156">       * &lt;/ul&gt;</span>
 <span class="source-line-no">157</span><span id="line-157">       *</span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line-168">       * &lt;p&gt;</span>
 <span class="source-line-no">169</span><span id="line-169">       * Identifies whether nested examples are allowed in schema definitions.</span>
 <span class="source-line-no">170</span><span id="line-170">       *</span>
-<span class="source-line-no">171</span><span id="line-171">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">171</span><span id="line-171">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">172</span><span id="line-172">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples() JsonSchemaGenerator.Builder#allowNestedExamples()}</span>
 <span class="source-line-no">173</span><span id="line-173">       * &lt;/ul&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">       *</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
 <span class="source-line-no">190</span><span id="line-190">       * This setting is ignored if {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs() JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.</span>
 <span class="source-line-no">191</span><span id="line-191">       *</span>
-<span class="source-line-no">192</span><span id="line-192">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class) JsonSchemaGenerator.Builder#beanDefMapper(Class)}</span>
 <span class="source-line-no">194</span><span id="line-194">       * &lt;/ul&gt;</span>
 <span class="source-line-no">195</span><span id="line-195">       *</span>

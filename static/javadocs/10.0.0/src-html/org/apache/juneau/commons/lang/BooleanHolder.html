@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * boolean references to lambdas, inner classes, or methods. Unlike {@link Flag}, this class supports three</span>
 <span class="source-line-no">031</span><span id="line-31"> * states: &lt;c&gt;true&lt;/c&gt;, &lt;c&gt;false&lt;/c&gt;, and &lt;c&gt;null&lt;/c&gt;.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *       This class is &lt;b&gt;not thread-safe&lt;/b&gt;. For concurrent access, use {@link AtomicBoolean} instead.</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li class='note'&gt;</span>
@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> *       two states (&lt;c&gt;true&lt;/c&gt;/&lt;c&gt;false&lt;/c&gt;), consider using {@link Flag} instead.</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;jc&gt;// Create a boolean value to track if a condition was met&lt;/jc&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *    BooleanHolder &lt;jv&gt;found&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55"> *    }</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang"&gt;Lang Package&lt;/a&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='jc'&gt;{@link Flag}</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68">   /**</span>
 <span class="source-line-no">069</span><span id="line-69">    * Creates a new boolean value initialized to &lt;c&gt;false&lt;/c&gt;.</span>
 <span class="source-line-no">070</span><span id="line-70">    *</span>
-<span class="source-line-no">071</span><span id="line-71">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">071</span><span id="line-71">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">072</span><span id="line-72">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">073</span><span id="line-73">    *    BooleanHolder &lt;jv&gt;value&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">074</span><span id="line-74">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jk&gt;false&lt;/jk&gt;, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">   /**</span>
 <span class="source-line-no">084</span><span id="line-84">    * Creates a new boolean value with the specified initial value.</span>
 <span class="source-line-no">085</span><span id="line-85">    *</span>
-<span class="source-line-no">086</span><span id="line-86">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">086</span><span id="line-86">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">087</span><span id="line-87">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">088</span><span id="line-88">    *    BooleanHolder &lt;jv&gt;value&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">089</span><span id="line-89">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">    * &lt;p&gt;</span>
 <span class="source-line-no">112</span><span id="line-112">    * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.</span>
 <span class="source-line-no">113</span><span id="line-113">    *</span>
-<span class="source-line-no">114</span><span id="line-114">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">114</span><span id="line-114">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">115</span><span id="line-115">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">116</span><span id="line-116">    *    BooleanHolder &lt;jv&gt;value&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">117</span><span id="line-117">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.is(&lt;jk&gt;true&lt;/jk&gt;));</span>
@@ -149,7 +149,7 @@
 <span class="source-line-no">136</span><span id="line-136">    * &lt;p&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">    * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each value.</span>
 <span class="source-line-no">138</span><span id="line-138">    *</span>
-<span class="source-line-no">139</span><span id="line-139">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">139</span><span id="line-139">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">140</span><span id="line-140">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">141</span><span id="line-141">    *    BooleanHolder &lt;jv&gt;value&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">142</span><span id="line-142">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.isAny(&lt;jk&gt;true&lt;/jk&gt;, &lt;jk&gt;null&lt;/jk&gt;));</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">   /**</span>
 <span class="source-line-no">159</span><span id="line-159">    * Returns &lt;c&gt;true&lt;/c&gt; if the value is not set to &lt;c&gt;true&lt;/c&gt; (i.e., it's &lt;c&gt;false&lt;/c&gt; or &lt;c&gt;null&lt;/c&gt;).</span>
 <span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">162</span><span id="line-162">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">163</span><span id="line-163">    *    BooleanHolder &lt;jv&gt;value&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;false&lt;/jk&gt;);</span>
 <span class="source-line-no">164</span><span id="line-164">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;value&lt;/jv&gt;.isNotTrue()) {</span>
@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">   /**</span>
 <span class="source-line-no">174</span><span id="line-174">    * Returns &lt;c&gt;true&lt;/c&gt; if the value is set to &lt;c&gt;true&lt;/c&gt;.</span>
 <span class="source-line-no">175</span><span id="line-175">    *</span>
-<span class="source-line-no">176</span><span id="line-176">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">176</span><span id="line-176">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">177</span><span id="line-177">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">178</span><span id="line-178">    *    BooleanHolder &lt;jv&gt;value&lt;/jv&gt; = BooleanHolder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">179</span><span id="line-179">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;value&lt;/jv&gt;.isTrue()) {</span>

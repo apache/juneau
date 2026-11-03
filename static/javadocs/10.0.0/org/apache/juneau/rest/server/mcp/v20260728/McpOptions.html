@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  them in place &mdash; callers never <code>new</code> a replacement nested config, so the "must return a stable
  instance" footgun the pre-consolidation hooks warned about cannot recur.
 
- <h5 class='section'>The subscription broker default:</h5>
+ <h2 class='section'>The subscription broker default:</h2>
  <p>
  <a href="#getSubscriptionBroker()"><code>getSubscriptionBroker()</code></a> defaults to <jk>null</jk>, meaning "framework-derived": the binding lazily
  derives a <a href="../BasicMcpSubscriptionBroker.html" title="class in org.apache.juneau.rest.server.mcp"><code>BasicMcpSubscriptionBroker</code></a> sized from <a href="#getSubscriptions()"><code>getSubscriptions()</code></a>'s
@@ -108,14 +107,14 @@ loadScripts(document, 'script');</script>
  subscribers and publishers across unrelated registries). Call <a href="#setSubscriptionBroker(org.apache.juneau.rest.server.mcp.McpSubscriptionBroker)"><code>setSubscriptionBroker(McpSubscriptionBroker)</code></a>
  to supply a custom broker instead (for example one shared across multiple bindings on purpose).
 
- <h5 class='section'>The idleTimeoutMs / heartbeatIntervalMs caveat:</h5>
+ <h2 class='section'>The idleTimeoutMs / heartbeatIntervalMs caveat:</h2>
  <p>
  When configuring <a href="#subscriptions(java.util.function.Consumer)"><code>subscriptions(Consumer)</code></a>, keep
  <a href="McpSubscriptionsConfig.html#getHeartbeatIntervalMs()"><code>heartbeatIntervalMs</code></a> below
  <a href="McpSubscriptionsConfig.html#getIdleTimeoutMs()"><code>idleTimeoutMs</code></a> (see that method's Javadoc) &mdash; otherwise
  the idle-timeout watchdog can reap a perfectly healthy connection between two heartbeats.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <pre>
  McpOptions <jv>options</jv> = <jk>new</jk> McpOptions()
      .setInstructions(<js>"Use tool 'echo' to test."</js>)

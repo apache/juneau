@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
  <p>
  The <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> interface defines how variables are converted to values.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>public class</jk> SystemPropertiesVar <jk>extends</jk> SimpleVar {
 
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
    System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to $S{java.home}"</js>));
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Marshall Simple Variable Language</a>
  </ul></div>
 </section>
@@ -270,7 +269,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Default string variable resolver with support for system properties, environment
  variables, and the built-in <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog.
 
- <h5 class='section'>Built-in <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> bindings:</h5>
+ <h4 class='section'>Built-in <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> bindings:</h4>
  <ul>
    <li><c>$S{key[,default]}</c> - <a href="vars/SystemPropertiesVar.html" title="class in org.apache.juneau.commons.svl.vars"><code>SystemPropertiesVar</code></a>
    <li><c>$E{key[,default]}</c> - <a href="vars/EnvVariablesVar.html" title="class in org.apache.juneau.commons.svl.vars"><code>EnvVariablesVar</code></a>
@@ -280,7 +279,7 @@ loadScripts(document, 'script');</script>
    <li><c>$MF{key[,default]}</c> - <a href="vars/ManifestFileVar.html" title="class in org.apache.juneau.commons.svl.vars"><code>ManifestFileVar</code></a>
  </ul>
 
- <h5 class='section'>Built-in <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog:</h5>
+ <h4 class='section'>Built-in <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog:</h4>
  <p>
  Ships ~68 built-in functions across 10 categories — string, type-conversion, arithmetic,
  boolean, conditional, regex, encoding, date/time, random/UUID, and JSON-navigation.
@@ -432,7 +431,7 @@ loadScripts(document, 'script');</script>
  <a href="VarTemplate.html#asSupplierWithFreshSessions(org.apache.juneau.commons.svl.VarResolver)"><code>VarTemplate.asSupplierWithFreshSessions(VarResolver)</code></a> for a threadsafe re-evaluating
  Supplier.
 
- <h5 class='section'>Compile-binding contract:</h5>
+ <h4 class='section'>Compile-binding contract:</h4>
  <p>
  The compiled template is bound to <i>this</i> resolver. Cached <a href="Var.html" title="class in org.apache.juneau.commons.svl"><code>Var</code></a> (and, in the
  future, function) references are resolved at compile time. Passing the compiled template

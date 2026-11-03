@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
  <a href="ReactiveResponseProcessor.html" title="class in org.apache.juneau.rest.server.reactive"><code>ReactiveResponseProcessor</code></a> understands: a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a> (single value) or a
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link"><code>Flow.Publisher</code></a> (a stream of values).
 
- <h5 class='topic'>Why this exists</h5>
+ <h2 class='topic'>Why this exists</h2>
  <p>
  The opt-in <code>juneau-rest-server-reactive</code> module handles <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link"><code>Flow.Publisher</code></a>
  (and, via the existing <code>AsyncResponseProcessor</code>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a>) using only JDK APIs &mdash;
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  convert those types into the JDK-native shapes, so the streaming / buffering / SSE / NDJSON plumbing
  is implemented exactly once in the core.
 
- <h5 class='topic'>Registration</h5>
+ <h2 class='topic'>Registration</h2>
  <p>
  Adapters are discovered via the JDK <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> mechanism. A bridge module (or a
  consumer who wants a custom adapter) ships a

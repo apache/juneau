@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -87,7 +86,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Pairs <a href="../jsonl/JsonlSerializer.html" title="class in org.apache.juneau.marshall.jsonl"><code>JsonlSerializer</code></a> and <a href="../jsonl/JsonlParser.html" title="class in org.apache.juneau.marshall.jsonl"><code>JsonlParser</code></a> into a single class with convenience
  to/of methods.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Serialize to JSONL using instance</jc>
    Jsonl <jv>jsonl</jv> = <jk>new</jk> Jsonl();
@@ -99,14 +98,14 @@ loadScripts(document, 'script');</script>
    List&lt;MyBean&gt; <jv>in</jv> = Jsonl.<jsm>to</jsm>(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  </p>
 
- <h5 class='figure'>Example output (List of beans):</h5>
+ <h2 class='figure'>Example output (List of beans):</h2>
  <p class='bjson'>
  {"name":"Alice","age":30}
  {"name":"Bob","age":25}
  {"name":"Carol","age":35}
  </p>
 
- <h5 class='figure'>Complex (bean with nested object and array):</h5>
+ <h2 class='figure'>Complex (bean with nested object and array):</h2>
  <p class='bjson'>
  {"name":"Alice","age":30,"address":{"street":"123 Main St","city":"Boston"},"tags":["a","b","c"]}
  {"name":"Bob","age":25,"address":{"street":"456 Oak Ave","city":"Portland"},"tags":["d","e"]}
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = Jsonl.<jsm>of</jsm>(<jv>myPojo</jv>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  </ul></div>
 </section>

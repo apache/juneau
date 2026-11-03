@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -82,7 +81,7 @@ loadScripts(document, 'script');</script>
  under <a href="#prefix()"><code>prefix()</code></a> via <a href="ConfigPropertiesBinder.html" title="class in org.apache.juneau.commons.inject"><code>ConfigPropertiesBinder</code></a>, and the bound instance is auto-registered
  into the current <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a>.
 
- <h5 class='section'>Binding order and lifecycle</h5>
+ <h2 class='section'>Binding order and lifecycle</h2>
  <p>
  The whole-object config bind runs <b>after</b> <code>@Value</code>/<code>@Inject</code> field-and-method injection and
  <b>before</b> any <a href="PostConstruct.html" title="annotation interface in org.apache.juneau.commons.inject"><code>@PostConstruct</code></a> method — so a
@@ -90,14 +89,14 @@ loadScripts(document, 'script');</script>
  <code>@Value</code> or <code>@Inject</code> are left to the injection engine and are never overwritten by config binding,
  even when a matching <code>prefix.fieldName</code> key exists.
 
- <h5 class='section'>Caller-scoped sources</h5>
+ <h2 class='section'>Caller-scoped sources</h2>
  <p>
  The bind consults any <a href="../settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings"><code>PropertySource</code></a>-typed beans in the
  active <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a> <b>ahead of</b> the global <a href="../settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>
  chain, so a caller can layer overriding or supplementary sources without mutating the shared
  <code>Settings.get()</code> singleton.
 
- <h5 class='section'>Not inherited</h5>
+ <h2 class='section'>Not inherited</h2>
  <p>
  This annotation is <b>not</b> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Inherited.html" title="class or interface in java.lang.annotation" class="external-link"><code>@Inherited</code></a>: the <a href="BeanInstantiator.html" title="class in org.apache.juneau.commons.inject"><code>BeanInstantiator</code></a>
  trigger fires only when the <i>exact declared type</i> being instantiated carries the annotation — a subclass or
@@ -109,7 +108,7 @@ loadScripts(document, 'script');</script>
  type still triggers nested binding under the enclosing type's prefix, since the annotation lookup there walks the
  declared field type's class hierarchy rather than requiring an exact-type match.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@ConfigProperties</ja>(prefix = <js>"MyService"</js>)
    <jk>public class</jk> MyServiceProperties {
@@ -124,7 +123,7 @@ loadScripts(document, 'script');</script>
  <code>@Value</code> fields internally and separately be the target of another class's nested
  <code>@ConfigProperties</code> bind.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ConfigProperties">@ConfigProperties Annotation Basics</a>
  </ul></div>
 <dl class="notes">

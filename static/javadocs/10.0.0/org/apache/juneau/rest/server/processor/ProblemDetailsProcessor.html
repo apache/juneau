@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -108,7 +107,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
       continues; if no mapper matches, the processor returns <code>NEXT</code>.
  </ul>
 
- <h5 class='section'>Mapper discovery</h5>
+ <h2 class='section'>Mapper discovery</h2>
  <p>
  The processor pulls registered <a href="../../../bean/rfc7807/ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807"><code>ProblemMapper</code></a>s from the resource's bean store in this order:
  <ul class='spaced-list'>
@@ -127,7 +126,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
  and ultimately to the built-in <a href="../../../bean/rfc7807/adapter/ProblemAdapters.html#fromException(org.apache.juneau.http.response.BasicHttpException)"><code>ProblemAdapters.fromException(BasicHttpException)</code></a> fallback for
  <a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response"><code>BasicHttpException</code></a> subclasses.
 
- <h5 class='section'>Localization seam</h5>
+ <h2 class='section'>Localization seam</h2>
  <p>
  Before serializing, the processor consults the bean store for a <a href="../../../bean/rfc7807/ProblemLocalizationStrategy.html" title="interface in org.apache.juneau.bean.rfc7807"><code>ProblemLocalizationStrategy</code></a> bean and
  passes the resolved <a href="../../../bean/rfc7807/Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a> (and <code>RestRequest.getLocale()</code>) through it. The default behavior is
@@ -145,7 +144,7 @@ implements <a href="ResponseProcessor.html" title="interface in org.apache.junea
  <b><code>type</code> field policy.</b> Serialized as-is. A <code>null</code> <code>type</code> is omitted from the JSON output
  rather than synthesized as <code>"type":"about:blank"</code> on the wire (preserves the absent-vs-explicit distinction).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../../../bean/rfc7807/Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a>
    <li class='jc'><a href="../../../bean/rfc7807/ProblemException.html" title="class in org.apache.juneau.bean.rfc7807"><code>ProblemException</code></a>
    <li class='jc'><a href="../../../bean/rfc7807/ProblemMapper.html" title="interface in org.apache.juneau.bean.rfc7807"><code>ProblemMapper</code></a>

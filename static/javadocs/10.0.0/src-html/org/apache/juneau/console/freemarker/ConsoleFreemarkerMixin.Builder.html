@@ -47,7 +47,7 @@
 <span class="source-line-no">034</span><span id="line-34"> * ({@code org/apache/juneau/console/base.ftlh}) &amp;mdash; and the {@code &lt;@tag&gt;} macro it defines &amp;mdash; resolvable</span>
 <span class="source-line-no">035</span><span id="line-35"> * from any consumer template, without shadowing the consumer's own {@code basePath}-rooted template tree.</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Used INSTEAD OF {@link FreemarkerMixin}, not beside it:&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='section'&gt;Used INSTEAD OF {@link FreemarkerMixin}, not beside it:&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * Register it typed as either {@link FreemarkerMixin} or {@code ConsoleFreemarkerMixin} &amp;mdash; both declared</span>
 <span class="source-line-no">040</span><span id="line-40"> * return types work. {@code FreemarkerViewRenderer} finds the exact-type {@code FreemarkerMixin} bean when one is</span>
@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56"> *    }</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;Consumer {@code /templates} is never shadowed:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h2 class='section'&gt;Consumer {@code /templates} is never shadowed:&lt;/h2&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * The augmented {@link Configuration}'s {@code TemplateLoader} tries the consumer's own {@code basePath}-derived</span>
 <span class="source-line-no">062</span><span id="line-62"> * loader &lt;b&gt;first&lt;/b&gt;; the reserved template is addressed by its full classpath-root-relative path</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68"> *    &amp;lt;#include "/org/apache/juneau/console/base.ftlh"&amp;gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/p&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='section'&gt;Consumer-supplied {@code Configuration} is the same instance, then fill-missing stamped:&lt;/h5&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='section'&gt;Consumer-supplied {@code Configuration} is the same instance, then fill-missing stamped:&lt;/h2&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * When the request's {@code BeanStore} already has a {@code Configuration} bean (Spring/Spring-Boot autoconfig, or</span>
 <span class="source-line-no">074</span><span id="line-74"> * a microservice {@code BasicBeanStore.put}), {@link #resolveConfiguration} still returns that &lt;b&gt;same instance&lt;/b&gt;</span>
@@ -449,7 +449,7 @@
 <span class="source-line-no">436</span><span id="line-436">       * Defaults to the {@code juneau.console.devMode} system property. Intended for development and tests; it parses</span>
 <span class="source-line-no">437</span><span id="line-437">       * and validates the contract on every render.</span>
 <span class="source-line-no">438</span><span id="line-438">       *</span>
-<span class="source-line-no">439</span><span id="line-439">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">439</span><span id="line-439">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">440</span><span id="line-440">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">441</span><span id="line-441">       *    &lt;ja&gt;@Bean&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; FreemarkerMixin freemarker() {</span>
 <span class="source-line-no">442</span><span id="line-442">       *       &lt;jk&gt;return&lt;/jk&gt; ConsoleFreemarkerMixin.&lt;jsm&gt;create&lt;/jsm&gt;().devMode(&lt;jk&gt;true&lt;/jk&gt;).basePath(&lt;js&gt;"/templates/"&lt;/js&gt;).build();</span>
@@ -476,7 +476,7 @@
 <span class="source-line-no">463</span><span id="line-463">       * (the last also logs a warning in {@link #devMode(boolean) dev mode}). The URL path itself is never rewritten,</span>
 <span class="source-line-no">464</span><span id="line-464">       * so any context-path prefix must be added by the template.</span>
 <span class="source-line-no">465</span><span id="line-465">       *</span>
-<span class="source-line-no">466</span><span id="line-466">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">466</span><span id="line-466">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">467</span><span id="line-467">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">468</span><span id="line-468">       *    &lt;ja&gt;@Bean&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; FreemarkerMixin freemarker() {</span>
 <span class="source-line-no">469</span><span id="line-469">       *       &lt;jk&gt;return&lt;/jk&gt; ConsoleFreemarkerMixin.&lt;jsm&gt;create&lt;/jsm&gt;()</span>

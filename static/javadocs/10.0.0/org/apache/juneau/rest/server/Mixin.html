@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -80,7 +79,7 @@ loadScripts(document, 'script');</script>
  is the host-side complement to <a href="Rest.html#mixins()"><code>@Rest(mixins=...)</code></a> (which takes bare classes and offers
  no override hook).
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <ja>@Rest</ja>(
       mixinDefs=<ja>@Mixin</ja>(type=FooMixin.<jk>class</jk>, guards=AdminGuard.<jk>class</jk>)
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
  Here <code>AdminGuard</code> is applied to <code>FooMixin</code>'s endpoints as declared by the host, without
  <code>FooMixin</code> having to declare it.
 
- <h5 class='section'>Override semantics</h5>
+ <h2 class='section'>Override semantics</h2>
  <p>
  The override slots mirror the same <code>@Rest</code> attributes and resolve through the existing host&rarr;mixin
  inheritance chain, exactly as if the value had been declared on the mixin class itself, but at the
@@ -116,7 +115,7 @@ loadScripts(document, 'script');</script>
  <p>
  <a href="#path()"><code>path()</code></a>/<a href="#paths()"><code>paths()</code></a> re-mount the mixin's endpoints under host-chosen prefix(es).
 
- <h5 class='section'>Merging a mixin's list attributes into the host</h5>
+ <h2 class='section'>Merging a mixin's list attributes into the host</h2>
  <p>
  The override slots above apply the <i>host's</i> values to the <i>mixin's</i> endpoints.  The separate opt-in
  <a href="#mergeIntoHost()"><code>mergeIntoHost()</code></a> directive does the reverse: it appends the <i>mixin's</i> own list-shaped
@@ -124,7 +123,7 @@ loadScripts(document, 'script');</script>
  <code>@RestOp</code> methods pick them up too.  It defaults to <code>false</code> (host endpoints see only the host's
  chain, as before) and is only settable on a rich <code>@Mixin</code> &mdash; see <a href="#mergeIntoHost()"><code>mergeIntoHost()</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='ja'><a href="Rest.html#mixinDefs()"><code>Rest.mixinDefs()</code></a>
    <li class='ja'><a href="Rest.html#mixins()"><code>Rest.mixins()</code></a>
  </ul></div>
@@ -349,7 +348,7 @@ loadScripts(document, 'script');</script>
  <code>@Mixin</code> that leaves it <code>false</code>, so existing resources are unaffected.  The mixin still mounts
  its own endpoints as usual &mdash; this directive is purely additive to the host chain.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Auto-wire JspMixin's JspViewRenderer into the host so the host's own @RestOp methods can</jc>
    <jc>// return JspView (no need to also list JspViewRenderer in the host's @Rest(responseProcessors)).</jc>

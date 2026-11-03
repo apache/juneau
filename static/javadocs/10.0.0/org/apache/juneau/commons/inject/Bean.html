@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  Used on methods and fields of <a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a>-managed objects to denote methods and fields that override and
  customize beans used by the framework.
 
- <h5 class='figure'>Example</h5>
+ <h2 class='figure'>Example</h2>
  <p class='bcode'>
    <jc>// Rest resource that uses a customized logger.</jc>
    <ja>@Rest</ja>
@@ -100,7 +99,7 @@ loadScripts(document, 'script');</script>
  <p>
    The <a href="#name()"><code>name()</code></a>/<a href="#value()"><code>value()</code></a> attributes are used to differentiate between named beans.
  </p>
- <h5 class='figure'>Example</h5>
+ <h2 class='figure'>Example</h2>
  <p class='bcode'>
    <jc>// Customized default request headers.</jc>
    <ja>@Bean</ja>(<js>"defaultRequestHeaders"</js>)
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
  <p>
    The <a href="#methodScope()"><code>methodScope()</code></a> attribute is used to define beans in the scope of specific <code>@RestOp</code>-annotated methods.
  </p>
- <h5 class='figure'>Example</h5>
+ <h2 class='figure'>Example</h2>
  <p class='bcode'>
    <jc>// Set a default header on a specific REST method.</jc>
    <jc>// Input parameter is the default header list builder with all annotations applied.</jc>
@@ -132,7 +131,7 @@ loadScripts(document, 'script');</script>
    This annotation can also be used to inject arbitrary beans into the bean store which allows them to be
    passed as resolved parameters on <code>@RestOp</code>-annotated methods.
  </p>
- <h5 class='figure'>Example</h5>
+ <h2 class='figure'>Example</h2>
  <p class='bcode'>
    <jc>// Custom beans injected into the bean store.</jc>
    <ja>@Bean</ja> MyBean <jv>myBean1</jv> = <jk>new</jk> MyBean();
@@ -147,14 +146,14 @@ loadScripts(document, 'script');</script>
    This annotation can also be used on uninitialized fields.  When fields are uninitialized, they will
    be set during initialization based on beans found in the bean store.
  </p>
- <h5 class='figure'>Example</h5>
+ <h2 class='figure'>Example</h2>
  <p class='bcode'>
    <jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
    <ja>@Bean</ja> RichLogger <jf>logger</jf>;
    <ja>@Bean</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that the BeanStore itself can be accessed this way.</jc>
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>Methods and fields can be static or non-static.
    <li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
    <li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.
@@ -165,13 +164,13 @@ loadScripts(document, 'script');</script>
       <a href="#methodScope()"><code>methodScope()</code></a> annotation can be used to apply to method-level only (when applicable).
  </ul>
 
- <h5 class='section'>Bean names:</h5>
+ <h2 class='section'>Bean names:</h2>
  <p>
    Each <code>@Bean</code> method registers its own result.  Two methods returning the same type are distinguished by name,
    and both beans are kept.  Factory methods on <ja>@Rest</ja> resources and <ja>@Configuration</ja> classes
    are the common use.
  </p>
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Two beans of the same type, distinguished by name.  Each method's own result is registered.</jc>
    <ja>@Rest</ja>
@@ -189,7 +188,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Precedence (since 10.0.0):</h5>
+ <h2 class='section'>Precedence (since 10.0.0):</h2>
  <p>
    <code>@Bean</code> acts as a <i>programmable default</i>, analogous to Spring's
    <c>&#64;ConditionalOnMissingBean</c>.  When a REST context resolves a framework-managed bean
@@ -217,7 +216,7 @@ loadScripts(document, 'script');</script>
    <code>@Bean</code> method's type with a Spring-native override such as <c>&#64;Primary</c>).
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>BeanStore</code></a>
    <li class='jc'><a href="WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a>
  </ul></div>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,7 +92,7 @@ loadScripts(document, 'script');</script>
  <a href="../Rest.html#mixins()"><code>@Rest(mixins=EchoMixin.class)</code></a>; the <code>/echo/*</code> URL becomes
  available alongside the host's own endpoints with no further wiring.
 
- <h5 class='section'>Configurable mount path:</h5>
+ <h2 class='section'>Configurable mount path:</h2>
 
  <p>
  The default mount <code>/echo/*</code> can be overridden via the SVL variable
@@ -115,7 +114,7 @@ loadScripts(document, 'script');</script>
  <code>/debug/echo/*</code> alias must now either set <code>-Djuneau.echo.path=debug/echo</code> or
  compose a second instance with the override.
 
- <h5 class='section'>Mixin-only deployment:</h5>
+ <h2 class='section'>Mixin-only deployment:</h2>
 
  <p>
  This resource is designed for composition via <code>@Rest(mixins=...)</code>. The mount path is
@@ -123,7 +122,7 @@ loadScripts(document, 'script');</script>
  <a href="#echo(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,java.lang.String)"><code>echo(org.apache.juneau.rest.server.RestRequest, org.apache.juneau.rest.server.RestResponse, java.lang.String)</code></a>; a class-level <code>@Rest(paths=...)</code> declaration would be silently ignored
  under the mixin pattern (see <a href="../Rest.html#paths()"><code>@Rest(paths)</code></a> Javadoc).
 
- <h5 class='figure'>Composition example:</h5>
+ <h2 class='figure'>Composition example:</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>(
@@ -143,7 +142,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Enablement:</h5>
+ <h2 class='section'>Enablement:</h2>
 
  <p>
  The endpoint is <b>disabled by default</b>. Reachability is controlled by an explicit, non-logging switch and is
@@ -175,7 +174,7 @@ loadScripts(document, 'script');</script>
  Host-level <a href="../Rest.html#guards()"><code>@Rest(guards=...)</code></a> inherit onto the mixed-in <code>/echo/*</code> operation, so declaring
  guards at the host authorizes the endpoint.
 
- <h5 class='section'>Sensitive-header redaction:</h5>
+ <h2 class='section'>Sensitive-header redaction:</h2>
 
  <p>
  Token-bearing headers must never be reflected back to the caller (would defeat any auth scheme
@@ -191,7 +190,7 @@ loadScripts(document, 'script');</script>
  <a href="../../../http/RedactedHeaders.html#REDACTED"><code>RedactedHeaders.REDACTED</code></a> and <a href="../../../http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a> respectively; masking is
  performed by delegating to <a href="../../../http/RedactedHeaders.html#redact(java.lang.String,java.lang.String,java.util.Collection)"><code>RedactedHeaders.redact(String, String, java.util.Collection)</code></a>.
 
- <h5 class='section'>Body capture and truncation:</h5>
+ <h2 class='section'>Body capture and truncation:</h2>
 
  <p>
  The handler reads up to <a href="EchoMixin.Builder.html#bodyLimit(long)"><code>bodyLimit</code></a> bytes (default
@@ -200,7 +199,7 @@ loadScripts(document, 'script');</script>
  portion is truncated and the <code>truncated</code> flag is set to <code>true</code> so callers can see
  the response is incomplete.
 
- <h5 class='section'>Response shape:</h5>
+ <h2 class='section'>Response shape:</h2>
 
  <p class='bjson'>
    {
@@ -221,7 +220,7 @@ loadScripts(document, 'script');</script>
  The endpoint is excluded from generated Swagger / OpenAPI specs via
  <a href="../OpSwagger.html#ignore()"><code>@OpSwagger(ignore=true)</code></a>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="AdminMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>AdminMixin</code></a>
    <li class='jc'><a href="RouteIndexMixin.html" title="class in org.apache.juneau.rest.server.ops"><code>RouteIndexMixin</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Mixins and Multi-Mount Paths</a>

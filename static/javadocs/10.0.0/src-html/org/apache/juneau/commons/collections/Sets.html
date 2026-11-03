@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * collections, arrays, sorting, and applying modifiers like unmodifiable or sparse modes. Sets automatically</span>
 <span class="source-line-no">033</span><span id="line-33"> * handle duplicates - adding the same element multiple times will result in only one occurrence in the final set.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;Fluent API - all methods return &lt;c&gt;this&lt;/c&gt; for method chaining</span>
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;Multiple add methods - single elements, varargs, collections, arrays</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Automatic deduplication - duplicate elements are automatically removed</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// Basic usage&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    Set&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = Sets.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -115,12 +115,12 @@
 <span class="source-line-no">102</span><span id="line-102"> *       .buildFiltered();</span>
 <span class="source-line-no">103</span><span id="line-103"> * &lt;/p&gt;</span>
 <span class="source-line-no">104</span><span id="line-104"> *</span>
-<span class="source-line-no">105</span><span id="line-105"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">105</span><span id="line-105"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">106</span><span id="line-106"> * &lt;p&gt;</span>
 <span class="source-line-no">107</span><span id="line-107"> * This class is &lt;b&gt;not thread-safe&lt;/b&gt;. Each builder instance should be used by a single thread or</span>
 <span class="source-line-no">108</span><span id="line-108"> * properly synchronized.</span>
 <span class="source-line-no">109</span><span id="line-109"> *</span>
-<span class="source-line-no">110</span><span id="line-110"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">110</span><span id="line-110"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">111</span><span id="line-111"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsCollections"&gt;Collections Package&lt;/a&gt;</span>
 <span class="source-line-no">112</span><span id="line-112"> *    &lt;li class='jc'&gt;{@link Lists}</span>
 <span class="source-line-no">113</span><span id="line-113"> *    &lt;li class='jc'&gt;{@link Maps}</span>
@@ -352,7 +352,7 @@
 <span class="source-line-no">339</span><span id="line-339">    * &lt;p&gt;</span>
 <span class="source-line-no">340</span><span id="line-340">    * This is a convenience method that calls {@link #build()} and wraps the result in a {@link FluentSet}.</span>
 <span class="source-line-no">341</span><span id="line-341">    *</span>
-<span class="source-line-no">342</span><span id="line-342">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">342</span><span id="line-342">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">343</span><span id="line-343">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">344</span><span id="line-344">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">345</span><span id="line-345">    *</span>
@@ -379,7 +379,7 @@
 <span class="source-line-no">366</span><span id="line-366">    *    &lt;li&gt;Otherwise: Uses {@link HashSet} (or synchronized HashSet if concurrent)</span>
 <span class="source-line-no">367</span><span id="line-367">    * &lt;/ul&gt;</span>
 <span class="source-line-no">368</span><span id="line-368">    *</span>
-<span class="source-line-no">369</span><span id="line-369">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">369</span><span id="line-369">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">370</span><span id="line-370">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">371</span><span id="line-371">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">372</span><span id="line-372">    *</span>
@@ -447,7 +447,7 @@
 <span class="source-line-no">434</span><span id="line-434">    *    &lt;li&gt;Empty {@link Collection Collections}</span>
 <span class="source-line-no">435</span><span id="line-435">    * &lt;/ul&gt;</span>
 <span class="source-line-no">436</span><span id="line-436">    *</span>
-<span class="source-line-no">437</span><span id="line-437">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">437</span><span id="line-437">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">438</span><span id="line-438">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">439</span><span id="line-439">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">440</span><span id="line-440">    *</span>
@@ -489,7 +489,7 @@
 <span class="source-line-no">476</span><span id="line-476">    * &lt;p&gt;</span>
 <span class="source-line-no">477</span><span id="line-477">    * Note: Filtering is applied at build time, not when adding elements.</span>
 <span class="source-line-no">478</span><span id="line-478">    *</span>
-<span class="source-line-no">479</span><span id="line-479">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">479</span><span id="line-479">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">480</span><span id="line-480">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">481</span><span id="line-481">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">482</span><span id="line-482">    *</span>
@@ -591,7 +591,7 @@
 <span class="source-line-no">578</span><span id="line-578">    * &lt;p&gt;</span>
 <span class="source-line-no">579</span><span id="line-579">    * This is useful when the set needs to be accessed from multiple threads.</span>
 <span class="source-line-no">580</span><span id="line-580">    *</span>
-<span class="source-line-no">581</span><span id="line-581">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">581</span><span id="line-581">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">582</span><span id="line-582">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">583</span><span id="line-583">    *    &lt;jc&gt;// Create a thread-safe set using synchronized HashSet&lt;/jc&gt;</span>
 <span class="source-line-no">584</span><span id="line-584">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = Sets.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -628,7 +628,7 @@
 <span class="source-line-no">615</span><span id="line-615">    * &lt;p&gt;</span>
 <span class="source-line-no">616</span><span id="line-616">    * This is useful when the set needs to be accessed from multiple threads.</span>
 <span class="source-line-no">617</span><span id="line-617">    *</span>
-<span class="source-line-no">618</span><span id="line-618">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">618</span><span id="line-618">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">619</span><span id="line-619">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">620</span><span id="line-620">    *    &lt;jc&gt;// Conditionally create a thread-safe set&lt;/jc&gt;</span>
 <span class="source-line-no">621</span><span id="line-621">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = Sets.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -655,7 +655,7 @@
 <span class="source-line-no">642</span><span id="line-642">    * Note: If {@link #sorted()} was previously called, calling this method will override it.</span>
 <span class="source-line-no">643</span><span id="line-643">    * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final set type.</span>
 <span class="source-line-no">644</span><span id="line-644">    *</span>
-<span class="source-line-no">645</span><span id="line-645">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">645</span><span id="line-645">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">646</span><span id="line-646">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">647</span><span id="line-647">    *    &lt;jc&gt;// Create an ordered set (preserves insertion order)&lt;/jc&gt;</span>
 <span class="source-line-no">648</span><span id="line-648">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = Sets.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -682,7 +682,7 @@
 <span class="source-line-no">669</span><span id="line-669">    * Note: If {@link #sorted()} was previously called, calling this method with &lt;c&gt;true&lt;/c&gt; will override it.</span>
 <span class="source-line-no">670</span><span id="line-670">    * The last method called ({@link #ordered()} or {@link #sorted()}) determines the final set type.</span>
 <span class="source-line-no">671</span><span id="line-671">    *</span>
-<span class="source-line-no">672</span><span id="line-672">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">672</span><span id="line-672">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">673</span><span id="line-673">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">674</span><span id="line-674">    *    &lt;jc&gt;// Conditionally create an ordered set&lt;/jc&gt;</span>
 <span class="source-line-no">675</span><span id="line-675">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;set&lt;/jv&gt; = Sets.&lt;jsm&gt;create&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;)</span>

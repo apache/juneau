@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -114,7 +113,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
       caller-supplied <a href="JwtTokenValidator.Builder.html#jwkSource(com.nimbusds.jose.jwk.source.JWKSource)"><code>jwkSource(...)</code></a> is unaffected.
  </ul>
 
- <h5 class='topic'>Usage</h5>
+ <h2 class='topic'>Usage</h2>
 
  <p class='bjava'>
    <jk>var</jk> validator = JwtTokenValidator.<jsm>create</jsm>()
@@ -129,7 +128,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
       .build();
  </p>
 
- <h5 class='topic'>Security notes</h5>
+ <h2 class='topic'>Security notes</h2>
 
  <ul>
    <li>Never disable <code>iss</code> / <code>aud</code> validation. The builder enforces them.
@@ -138,7 +137,7 @@ implements <a href="../TokenValidator.html" title="interface in org.apache.junea
    <li>Rotate JWKS keys on a schedule. <code>JwksCache</code> picks up new keys after the configured TTL.
  </ul>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="../TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a>
    <li class='jc'><a href="../BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a>

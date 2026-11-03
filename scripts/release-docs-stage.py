@@ -51,6 +51,9 @@ Options:
                        then sibling ../juneau); passed on to build-docs.py
     --console          Console output when the Juneau checkout has juneau-terminal: full, board
                        (default) or none (also $JUNEAU_TERMINAL_CONSOLE)
+    --use-existing-build
+                       Stage the build/ directory as it is, without running build-docs.py (the
+                       staging build must already exist; scripts/push.py uses this path)
 
 With juneau-terminal available, the run is one live view: Prechecks, build-docs.py's rows, Stage push
 (Fetch, Copy, Commit, Push) and the staged URL.  Without it the output is plain.
@@ -96,16 +99,19 @@ def staging_dir_for(docs_dir):
     return Path(docs_dir).parent / 'asf-staging'
 
 
-def stage_plan():
-    """The run's top-level rows, in order, as (id, label): Prechecks, build-docs.py's rows, Stage push and URL."""
-    return [('prechecks', 'Prechecks'), *terminal_view.BUILD_ROWS, ('stage', 'Stage push'), ('url', 'URL')]
+def stage_plan(use_existing_build=False):
+    """The run's top-level rows, in order, as (id, label): Prechecks, build-docs.py's rows (unless the existing build
+    is used), Stage push and URL."""
+    build_rows = [] if use_existing_build else list(terminal_view.BUILD_ROWS)
+    return [('prechecks', 'Prechecks'), *build_rows, ('stage', 'Stage push'), ('url', 'URL')]
 
 
-def get_git_remote_url():
-    """Get the git remote URL."""
+def get_git_remote_url(repo_dir=None):
+    """Get the git remote URL (of repo_dir, default the current directory's repository)."""
     try:
         result = subprocess.run(
             ["git", "config", "--get", "remote.origin.url"],
+            cwd=repo_dir,
             capture_output=True,
             text=True,
             check=True
@@ -274,34 +280,41 @@ def commit_staging(view, staging_dir, message):
         view.skip('stage-commit', 'Commit', "commit", "no changes", parent='stage')
 
 
-def release_stage(args, view, docs_dir, juneau_root):
-    """Prechecks, the staging build, then the asf-staging commit and push; returns the exit code."""
-    build_dir = docs_dir / 'build'
-    staging_dir = staging_dir_for(docs_dir)
-
-    # Prechecks — must hold before any work begins.
-    view.banner("Prechecks")
-    if not view.prechecks([("Git identity (apache.org email)", lambda: identity_problem(docs_dir)),
-                           ("Docs branch", lambda: branch_problem(docs_dir))]):
-        return 1
-
-    # Build the documentation for staging; under the view its rows join this run's.
-    view.banner("Building documentation for staging")
+def build_for_staging(view, docs_dir, juneau_root, *, juneau_root_given=False, console=None, extra_args=()):
+    """Run build-docs.py --staging (its rows join this run's view); returns None on success, else the failing exit
+    code.  Failures are reported on the view.  juneau_root_given passes --juneau-root on; extra_args go on as is."""
     if not BUILD_SCRIPT.exists():
         return fail(view, f"ERROR: {BUILD_SCRIPT} not found")
-    build_cmd = [sys.executable, str(BUILD_SCRIPT), '--staging']
-    if args.juneau_root is not None:
+    build_cmd = [sys.executable, str(BUILD_SCRIPT), '--staging', *extra_args]
+    if juneau_root_given:
         build_cmd += ['--juneau-root', str(juneau_root)]
-    if args.console is not None:
-        build_cmd += ['--console', args.console]
+    if console is not None:
+        build_cmd += ['--console', console]
     with view.handoff() as extra:
         code = subprocess.run(build_cmd, cwd=docs_dir, env={**os.environ, **extra}).returncode
     if code != 0:
         return fail(view, "Documentation build failed. Aborting.")
-    if not build_dir.exists():
-        return fail(view, f"ERROR: Build directory not found at {build_dir}", "Documentation build may have failed.")
+    if not (docs_dir / 'build').exists():
+        return fail(view, f"ERROR: Build directory not found at {docs_dir / 'build'}", "Documentation build may have failed.")
+    return None
 
-    remote_url = get_git_remote_url()
+
+def staged_commit_line(staging_dir):
+    """One line naming the commit at the head of the staging checkout, or None when it can't be read."""
+    result = subprocess.run(["git", "log", "-1", "--format=%h %s"], cwd=staging_dir, capture_output=True, text=True,
+                            check=False)
+    return result.stdout.strip() or None if result.returncode == 0 else None
+
+
+def publish_build(args, view, docs_dir):
+    """Stage the existing build/ directory: fetch, copy, commit, push asf-staging and open the URL; returns the exit
+    code.  args needs no_push and commit_message.  Shared by release_stage() and scripts/push.py."""
+    build_dir = docs_dir / 'build'
+    staging_dir = staging_dir_for(docs_dir)
+    if not build_dir.exists():
+        return fail(view, f"ERROR: Build directory not found at {build_dir}", "Run build-docs.py --staging first.")
+
+    remote_url = get_git_remote_url(docs_dir)
     if not remote_url:
         return fail(view, "ERROR: Could not determine git remote URL")
     if not staging_dir.parent.exists():
@@ -337,8 +350,32 @@ def release_stage(args, view, docs_dir, juneau_root):
                 view.say(f"   Please visit {STAGING_URL} manually", 'warn')
 
     view.say("✅ Documentation staging deployment complete!")
+    commit_line = staged_commit_line(staging_dir)
+    if commit_line:
+        view.say(f"Staged commit: {commit_line}")
     view.say(f"Staging directory: {staging_dir} (persistent, reused for future deployments)")
     return 0
+
+
+def release_stage(args, view, docs_dir, juneau_root):
+    """Prechecks, the staging build (unless --use-existing-build), then the asf-staging commit and push; returns the
+    exit code."""
+    # Prechecks — must hold before any work begins.
+    view.banner("Prechecks")
+    if not view.prechecks([("Git identity (apache.org email)", lambda: identity_problem(docs_dir)),
+                           ("Docs branch", lambda: branch_problem(docs_dir))]):
+        return 1
+
+    if args.use_existing_build:
+        view.say("Using the existing build/ directory (--use-existing-build)")
+    else:
+        # Build the documentation for staging; under the view its rows join this run's.
+        view.banner("Building documentation for staging")
+        code = build_for_staging(view, docs_dir, juneau_root, juneau_root_given=args.juneau_root is not None,
+                                 console=args.console)
+        if code is not None:
+            return code
+    return publish_build(args, view, docs_dir)
 
 
 def main():
@@ -364,6 +401,11 @@ def main():
         default=None,
         help='Juneau source checkout (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)'
     )
+    parser.add_argument(
+        '--use-existing-build',
+        action='store_true',
+        help='Stage the existing build/ directory without running build-docs.py (it must be a --staging build)'
+    )
     terminal_view.add_console_argument(parser)
 
     args = parser.parse_args()
@@ -377,9 +419,11 @@ def main():
         header = ["Juneau Docs"]
         if args.no_push:
             header.append("--no-push: nothing is pushed")
+        if args.use_existing_build:
+            header.append("--use-existing-build: no build")
         lines = [f"Docs: {docs_dir}", f"Staging: {staging_dir_for(docs_dir)}"]
         code = view.session("Stage", lambda: release_stage(args, view, docs_dir, juneau_root),
-                            header=header, lines=lines, plan=stage_plan(), repo=docs_dir, mode='push')
+                            header=header, lines=lines, plan=stage_plan(args.use_existing_build), repo=docs_dir, mode='push')
     else:
         print("=" * 79)
         print("Release Documentation to Staging Branch")

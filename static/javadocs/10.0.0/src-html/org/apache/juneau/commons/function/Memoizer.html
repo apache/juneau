@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * and a {@link #reset()} method to clear the cache, forcing recomputation on the next call to {@link #get()}.</span>
 <span class="source-line-no">031</span><span id="line-31"> * It also inherits all Optional-like convenience methods from {@link NullableSupplier}.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jc&gt;// Create a memoizer&lt;/jc&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    Memoizer&amp;lt;String&amp;gt; &lt;jv&gt;supplier&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Memoizer&amp;lt;&amp;gt;(() -&amp;gt; expensiveComputation());</span>
@@ -64,13 +64,13 @@
 <span class="source-line-no">051</span><span id="line-51"> *    String &lt;jv&gt;result3&lt;/jv&gt; = &lt;jv&gt;supplier&lt;/jv&gt;.get();  &lt;jc&gt;// Recomputes&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> * This class is thread-safe for both {@link #get()} and {@link #reset()} operations.</span>
 <span class="source-line-no">057</span><span id="line-57"> * If multiple threads call get() simultaneously after a reset, the supplier may be invoked</span>
 <span class="source-line-no">058</span><span id="line-58"> * multiple times, but only one result will be cached.</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;li&gt;The supplier may be called multiple times if threads race, but only one result is cached.</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;li&gt;The cached value can be &lt;jk&gt;null&lt;/jk&gt; if the supplier returns &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;Inherits all Optional-like methods from {@link NullableSupplier} (isPresent(), isEmpty(), map(), orElse(), etc.).</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='jm'&gt;{@link Suppliers#memoizer(Supplier)}</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link NullableSupplier} - Base interface providing Optional-like methods</span>
@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">    * This method is thread-safe and is particularly useful for testing when you need to</span>
 <span class="source-line-no">134</span><span id="line-134">    * inject a specific value without invoking the supplier.</span>
 <span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">136</span><span id="line-136">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">137</span><span id="line-137">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">138</span><span id="line-138">    *    &lt;jc&gt;// Create a memoizer&lt;/jc&gt;</span>
 <span class="source-line-no">139</span><span id="line-139">    *    Memoizer&amp;lt;String&amp;gt; &lt;jv&gt;supplier&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Memoizer&amp;lt;&amp;gt;(() -&amp;gt; &lt;js&gt;"computed"&lt;/js&gt;);</span>

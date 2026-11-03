@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  hatch.  Values are emitted as bare tokens when possible and quoted automatically when they are not valid tokens
  (e.g. IPv6 node identifiers such as <c>"[2001:db8::1]:8080"</c>).  Call <a href="#next()"><code>next()</code></a> to start a new hop.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    String <jv>value</jv> = Forwarded.<jsm>create</jsm>()
       .forValue(<js>"192.0.2.60"</js>)
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
    <jc>// =&gt; "for=192.0.2.60;proto=http;by=203.0.113.43, for=198.51.100.17"</jc>
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="Forwarded.html" title="class in org.apache.juneau.http.header"><code>Forwarded</code></a>
    <li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7239'>RFC 7239 - Forwarded HTTP Extension</a>
  </ul></div>

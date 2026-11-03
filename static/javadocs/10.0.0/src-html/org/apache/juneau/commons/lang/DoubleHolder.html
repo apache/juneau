@@ -39,12 +39,12 @@
 <span class="source-line-no">026</span><span id="line-26"> * This class extends {@link Holder}&amp;lt;{@link Double}&amp;gt; and provides a convenient way to pass mutable</span>
 <span class="source-line-no">027</span><span id="line-27"> * double references to lambdas, inner classes, or methods.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> *       This class is &lt;b&gt;not thread-safe&lt;/b&gt;.</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;/ul&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;jc&gt;// Create a double value to track a running sum&lt;/jc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    DoubleHolder &lt;jv&gt;sum&lt;/jv&gt; = DoubleHolder.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;jsm&gt;log&lt;/jsm&gt;(&lt;js&gt;"Total: "&lt;/js&gt; + &lt;jv&gt;sum&lt;/jv&gt;.get());</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang"&gt;Lang Package&lt;/a&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;/ul&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> */</span>
@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56">   /**</span>
 <span class="source-line-no">057</span><span id="line-57">    * Creates a new double value initialized to &lt;c&gt;0.0&lt;/c&gt;.</span>
 <span class="source-line-no">058</span><span id="line-58">    *</span>
-<span class="source-line-no">059</span><span id="line-59">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">060</span><span id="line-60">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">061</span><span id="line-61">    *    DoubleHolder &lt;jv&gt;value&lt;/jv&gt; = DoubleHolder.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
 <span class="source-line-no">062</span><span id="line-62">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(0.0, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71">   /**</span>
 <span class="source-line-no">072</span><span id="line-72">    * Creates a new double value with the specified initial value.</span>
 <span class="source-line-no">073</span><span id="line-73">    *</span>
-<span class="source-line-no">074</span><span id="line-74">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">074</span><span id="line-74">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">075</span><span id="line-75">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">076</span><span id="line-76">    *    DoubleHolder &lt;jv&gt;value&lt;/jv&gt; = DoubleHolder.&lt;jsm&gt;of&lt;/jsm&gt;(3.14159);</span>
 <span class="source-line-no">077</span><span id="line-77">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(3.14159, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101">    * using absolute difference. The comparison returns &lt;jk&gt;true&lt;/jk&gt; if the absolute difference between</span>
 <span class="source-line-no">102</span><span id="line-102">    * the two values is less than or equal to the specified precision.</span>
 <span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    *    DoubleHolder &lt;jv&gt;value&lt;/jv&gt; = DoubleHolder.&lt;jsm&gt;of&lt;/jsm&gt;(3.14159);</span>
 <span class="source-line-no">107</span><span id="line-107">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.is(3.14, 0.01));      &lt;jc&gt;// Within 0.01&lt;/jc&gt;</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">    * This method handles &lt;jk&gt;null&lt;/jk&gt; values safely and performs precision-based equality comparison</span>
 <span class="source-line-no">139</span><span id="line-139">    * for each value using absolute difference.</span>
 <span class="source-line-no">140</span><span id="line-140">    *</span>
-<span class="source-line-no">141</span><span id="line-141">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">141</span><span id="line-141">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">142</span><span id="line-142">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">143</span><span id="line-143">    *    DoubleHolder &lt;jv&gt;value&lt;/jv&gt; = DoubleHolder.&lt;jsm&gt;of&lt;/jsm&gt;(3.14159);</span>
 <span class="source-line-no">144</span><span id="line-144">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.isAny(0.01, 2.5, 3.15, 5.0));   &lt;jc&gt;// Matches 3.15 within 0.01&lt;/jc&gt;</span>

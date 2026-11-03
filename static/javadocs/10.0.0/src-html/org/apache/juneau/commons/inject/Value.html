@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.commons.settings.Settings#get() Settings.get()}), then coerced to the</span>
 <span class="source-line-no">031</span><span id="line-31"> * target Java type via {@link org.apache.juneau.commons.settings.Settings#toType(String, Class)}.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;jc&gt;// Field injection with default.&lt;/jc&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;ja&gt;@Value&lt;/ja&gt;(&lt;js&gt;"${db.timeout.ms:5000}"&lt;/js&gt;)</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    ) { ... }</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Resolution order:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Resolution order:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;ol&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Thread-local override ({@link org.apache.juneau.commons.settings.Settings#setLocal Settings.setLocal})</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;Global override ({@link org.apache.juneau.commons.settings.Settings#setGlobal Settings.setGlobal})</span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59"> * via FQN-based detection in {@link JsrSupport}; no compile-time Spring dependency is introduced in</span>
 <span class="source-line-no">060</span><span id="line-60"> * {@code juneau-commons}.</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='note'&gt;{@code @Value} and {@code @Inject} on the same site is invalid and throws</span>
 <span class="source-line-no">064</span><span id="line-64"> *       a {@code BeanCreationException}. {@code @Value} resolves strings/primitives; {@code @Inject}</span>
 <span class="source-line-no">065</span><span id="line-65"> *       resolves beans.</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67"> *       a {@code BeanCreationException} is thrown.  For reference types, {@code null} is injected.</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation"&gt;@Value Annotation Basics&lt;/a&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> */</span>

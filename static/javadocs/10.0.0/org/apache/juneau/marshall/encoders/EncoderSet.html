@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -82,7 +81,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Represents the set of <a href="Encoder.html" title="class in org.apache.juneau.marshall.encoders"><code>encoders</code></a> keyed by codings.
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
 
  Maintains a set of encoders and the codings that they can handle.
 
@@ -90,7 +89,7 @@ loadScripts(document, 'script');</script>
  The <a href="#getEncoderMatch(java.lang.String)"><code>getEncoderMatch(String)</code></a> and <a href="#getEncoder(java.lang.String)"><code>getEncoder(String)</code></a> methods are then used to find appropriate
  encoders for specific <c>Accept-Encoding</c> and <c>Content-Encoding</c> header values.
 
- <h5 class='topic'>Match ordering</h5>
+ <h2 class='topic'>Match ordering</h2>
 
  Encoders are matched against <c>Accept-Encoding</c> strings in the order they exist in this group.
 
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
  For example, calling <code>groupBuilder.add(E1.<jk>class</jk>,E2.<jk>class</jk>).add(E3.<jk>class</jk>,
  E4.<jk>class</jk>)</code> will result in the order <c>E3, E4, E1, E2</c>.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create an encoder group with support for gzip compression.</jc>
    EncoderSet <jv>encoders</jv> = EncoderSet
@@ -114,11 +113,11 @@ loadScripts(document, 'script');</script>
    Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallEncoders">Encoders</a>
 
  </ul></div>

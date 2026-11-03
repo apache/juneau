@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * Renamed from {@code Value} in 10.0.0 to resolve an import-name collision with the {@code @Value} injection annotation.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Mutable value container with fluent API</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;Optional-like methods: {@link #get()}, {@link #orElse(Object)}, {@link #ifPresent(Consumer)}, {@link #map(Function)}</span>
@@ -62,13 +62,13 @@
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Method chaining for all setter operations</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;li class='warn'&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *       This class is &lt;b&gt;not thread-safe&lt;/b&gt;. For concurrent access, consider using atomic classes like</span>
 <span class="source-line-no">055</span><span id="line-55"> *       {@link java.util.concurrent.atomic.AtomicReference}.</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;/ul&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Examples:&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;jc&gt;// Basic usage&lt;/jc&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;name&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;);</span>
@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84"> *    &lt;jv&gt;monitored&lt;/jv&gt;.set(&lt;js&gt;"updated"&lt;/js&gt;);  &lt;jc&gt;// Triggers listener&lt;/jc&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;/p&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *</span>
-<span class="source-line-no">087</span><span id="line-87"> * &lt;h5 class='section'&gt;Specialized Value Classes:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;h2 class='section'&gt;Specialized Value Classes:&lt;/h2&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;p&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * For primitive types and common use cases, specialized subclasses are available with additional convenience methods:</span>
 <span class="source-line-no">090</span><span id="line-90"> * &lt;ul class='spaced-list'&gt;</span>
@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98"> *    &lt;li&gt;{@link Flag} - For non-nullable boolean flags (true/false only, no null state)</span>
 <span class="source-line-no">099</span><span id="line-99"> * &lt;/ul&gt;</span>
 <span class="source-line-no">100</span><span id="line-100"> *</span>
-<span class="source-line-no">101</span><span id="line-101"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">101</span><span id="line-101"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang"&gt;Lang Package&lt;/a&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> *    &lt;li class='jc'&gt;{@link ValueListener}</span>
 <span class="source-line-no">104</span><span id="line-104"> *    &lt;li class='jc'&gt;{@link IntegerHolder}</span>
@@ -130,7 +130,7 @@
 <span class="source-line-no">117</span><span id="line-117">   /**</span>
 <span class="source-line-no">118</span><span id="line-118">    * Creates a new empty value (with &lt;c&gt;null&lt;/c&gt; as the initial value).</span>
 <span class="source-line-no">119</span><span id="line-119">    *</span>
-<span class="source-line-no">120</span><span id="line-120">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">120</span><span id="line-120">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">121</span><span id="line-121">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">122</span><span id="line-122">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;empty&lt;/jsm&gt;();</span>
 <span class="source-line-no">123</span><span id="line-123">    *    &lt;jsm&gt;assertNull&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.get());</span>
@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">   /**</span>
 <span class="source-line-no">145</span><span id="line-145">    * Creates a new value with the specified initial value.</span>
 <span class="source-line-no">146</span><span id="line-146">    *</span>
-<span class="source-line-no">147</span><span id="line-147">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">148</span><span id="line-148">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">149</span><span id="line-149">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</span>
 <span class="source-line-no">150</span><span id="line-150">    *    &lt;jsm&gt;assertEquals&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;, &lt;jv&gt;value&lt;/jv&gt;.get());</span>
@@ -231,7 +231,7 @@
 <span class="source-line-no">218</span><span id="line-218">    * &lt;p&gt;</span>
 <span class="source-line-no">219</span><span id="line-219">    * This method is analogous to {@link Optional#filter(Predicate)}.</span>
 <span class="source-line-no">220</span><span id="line-220">    *</span>
-<span class="source-line-no">221</span><span id="line-221">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">221</span><span id="line-221">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</span>
 <span class="source-line-no">224</span><span id="line-224">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;filtered&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.filter(&lt;jv&gt;s&lt;/jv&gt; -&amp;gt; &lt;jv&gt;s&lt;/jv&gt;.length() &amp;gt; 3);</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">    * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Holder} rather</span>
 <span class="source-line-no">247</span><span id="line-247">    * than a simple value. This is analogous to {@link Optional#flatMap(Function)}.</span>
 <span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">250</span><span id="line-250">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">251</span><span id="line-251">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</span>
 <span class="source-line-no">252</span><span id="line-252">    *    Holder&amp;lt;Integer&amp;gt; &lt;jv&gt;length&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.flatMap(&lt;jv&gt;s&lt;/jv&gt; -&amp;gt; Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;s&lt;/jv&gt;.length()));</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285">   /**</span>
 <span class="source-line-no">286</span><span id="line-286">    * Returns the current value and then sets it to the specified value.</span>
 <span class="source-line-no">287</span><span id="line-287">    *</span>
-<span class="source-line-no">288</span><span id="line-288">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">288</span><span id="line-288">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">289</span><span id="line-289">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">290</span><span id="line-290">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"old"&lt;/js&gt;);</span>
 <span class="source-line-no">291</span><span id="line-291">    *    String &lt;jv&gt;oldValue&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.getAndSet(&lt;js&gt;"new"&lt;/js&gt;);  &lt;jc&gt;// Returns "old"&lt;/jc&gt;</span>
@@ -320,7 +320,7 @@
 <span class="source-line-no">307</span><span id="line-307">    * &lt;p&gt;</span>
 <span class="source-line-no">308</span><span id="line-308">    * This is useful for "consuming" a value, ensuring it can only be retrieved once.</span>
 <span class="source-line-no">309</span><span id="line-309">    *</span>
-<span class="source-line-no">310</span><span id="line-310">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">310</span><span id="line-310">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">311</span><span id="line-311">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">312</span><span id="line-312">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"data"&lt;/js&gt;);</span>
 <span class="source-line-no">313</span><span id="line-313">    *    String &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;value&lt;/jv&gt;.getAndUnset();  &lt;jc&gt;// Returns "data"&lt;/jc&gt;</span>
@@ -343,7 +343,7 @@
 <span class="source-line-no">330</span><span id="line-330">   /**</span>
 <span class="source-line-no">331</span><span id="line-331">    * If a value is present (not &lt;jk&gt;null&lt;/jk&gt;), invokes the specified consumer with the value, otherwise does nothing.</span>
 <span class="source-line-no">332</span><span id="line-332">    *</span>
-<span class="source-line-no">333</span><span id="line-333">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">333</span><span id="line-333">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">334</span><span id="line-334">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">335</span><span id="line-335">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</span>
 <span class="source-line-no">336</span><span id="line-336">    *    &lt;jv&gt;value&lt;/jv&gt;.ifPresent(&lt;jsm&gt;System.out&lt;/jsm&gt;::&lt;jv&gt;println&lt;/jv&gt;);  &lt;jc&gt;// Prints "hello"&lt;/jc&gt;</span>
@@ -366,7 +366,7 @@
 <span class="source-line-no">353</span><span id="line-353">    * This method uses {@code eq()} for equality comparison, which handles &lt;jk&gt;null&lt;/jk&gt; values safely</span>
 <span class="source-line-no">354</span><span id="line-354">    * and performs deep equality checks for arrays and collections.</span>
 <span class="source-line-no">355</span><span id="line-355">    *</span>
-<span class="source-line-no">356</span><span id="line-356">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">356</span><span id="line-356">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">357</span><span id="line-357">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">358</span><span id="line-358">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</span>
 <span class="source-line-no">359</span><span id="line-359">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(&lt;jv&gt;value&lt;/jv&gt;.is(&lt;js&gt;"hello"&lt;/js&gt;));</span>
@@ -410,7 +410,7 @@
 <span class="source-line-no">397</span><span id="line-397">    * &lt;p&gt;</span>
 <span class="source-line-no">398</span><span id="line-398">    * Only one listener can be registered at a time. Calling this method again will replace the previous listener.</span>
 <span class="source-line-no">399</span><span id="line-399">    *</span>
-<span class="source-line-no">400</span><span id="line-400">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">400</span><span id="line-400">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">401</span><span id="line-401">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">402</span><span id="line-402">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"initial"&lt;/js&gt;);</span>
 <span class="source-line-no">403</span><span id="line-403">    *    &lt;jv&gt;value&lt;/jv&gt;.listener(&lt;jv&gt;newValue&lt;/jv&gt; -&amp;gt; &lt;jsm&gt;log&lt;/jsm&gt;(&lt;js&gt;"Changed to: "&lt;/js&gt; + &lt;jv&gt;newValue&lt;/jv&gt;));</span>
@@ -433,7 +433,7 @@
 <span class="source-line-no">420</span><span id="line-420">    * &lt;p&gt;</span>
 <span class="source-line-no">421</span><span id="line-421">    * If this value is empty (&lt;jk&gt;null&lt;/jk&gt;), returns an empty value without applying the mapper.</span>
 <span class="source-line-no">422</span><span id="line-422">    *</span>
-<span class="source-line-no">423</span><span id="line-423">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">423</span><span id="line-423">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">424</span><span id="line-424">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">425</span><span id="line-425">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;name&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"john"&lt;/js&gt;);</span>
 <span class="source-line-no">426</span><span id="line-426">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;upper&lt;/jv&gt; = &lt;jv&gt;name&lt;/jv&gt;.map(String::toUpperCase);</span>
@@ -505,7 +505,7 @@
 <span class="source-line-no">492</span><span id="line-492">    * &lt;p&gt;</span>
 <span class="source-line-no">493</span><span id="line-493">    * If a {@link ValueListener} is registered, it will be notified of the change.</span>
 <span class="source-line-no">494</span><span id="line-494">    *</span>
-<span class="source-line-no">495</span><span id="line-495">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">495</span><span id="line-495">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">496</span><span id="line-496">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">497</span><span id="line-497">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;empty&lt;/jsm&gt;();</span>
 <span class="source-line-no">498</span><span id="line-498">    *    &lt;jv&gt;value&lt;/jv&gt;.set(&lt;js&gt;"hello"&lt;/js&gt;).set(&lt;js&gt;"world"&lt;/js&gt;);  &lt;jc&gt;// Method chaining&lt;/jc&gt;</span>
@@ -525,7 +525,7 @@
 <span class="source-line-no">512</span><span id="line-512">   /**</span>
 <span class="source-line-no">513</span><span id="line-513">    * Sets the value only if the specified condition is &lt;jk&gt;true&lt;/jk&gt;.</span>
 <span class="source-line-no">514</span><span id="line-514">    *</span>
-<span class="source-line-no">515</span><span id="line-515">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">515</span><span id="line-515">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">516</span><span id="line-516">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">517</span><span id="line-517">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"old"&lt;/js&gt;);</span>
 <span class="source-line-no">518</span><span id="line-518">    *    &lt;jv&gt;value&lt;/jv&gt;.setIf(&lt;jk&gt;true&lt;/jk&gt;, &lt;js&gt;"new"&lt;/js&gt;);   &lt;jc&gt;// Sets to "new"&lt;/jc&gt;</span>
@@ -549,7 +549,7 @@
 <span class="source-line-no">536</span><span id="line-536">    * &lt;p&gt;</span>
 <span class="source-line-no">537</span><span id="line-537">    * If the value is already set, this method does nothing.</span>
 <span class="source-line-no">538</span><span id="line-538">    *</span>
-<span class="source-line-no">539</span><span id="line-539">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">539</span><span id="line-539">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">540</span><span id="line-540">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">541</span><span id="line-541">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;empty&lt;/jsm&gt;();</span>
 <span class="source-line-no">542</span><span id="line-542">    *    &lt;jv&gt;value&lt;/jv&gt;.setIfEmpty(&lt;js&gt;"first"&lt;/js&gt;);   &lt;jc&gt;// Sets value to "first"&lt;/jc&gt;</span>
@@ -577,7 +577,7 @@
 <span class="source-line-no">564</span><span id="line-564">    * &lt;p&gt;</span>
 <span class="source-line-no">565</span><span id="line-565">    * If the current value is &lt;jk&gt;null&lt;/jk&gt;, this is a no-op.</span>
 <span class="source-line-no">566</span><span id="line-566">    *</span>
-<span class="source-line-no">567</span><span id="line-567">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">567</span><span id="line-567">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">568</span><span id="line-568">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">569</span><span id="line-569">    *    Holder&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = Holder.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"hello"&lt;/js&gt;);</span>
 <span class="source-line-no">570</span><span id="line-570">    *    &lt;jv&gt;value&lt;/jv&gt;.update(String::toUpperCase);</span>

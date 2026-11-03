@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
  via the RFC 6902 <code>"op"</code> member rather than the default <code>"_type"</code> property. This class hand-wires
  that configuration once so callers don't have to repeat it.
 
- <h5 class='figure'>Examples:</h5>
+ <h2 class='figure'>Examples:</h2>
  <p class='bjava'>
    <jc>// Using instance.</jc>
    JsonPatchMarshaller <jv>m</jv> = <jk>new</jk> JsonPatchMarshaller();
@@ -113,12 +112,12 @@ loadScripts(document, 'script');</script>
    String <jv>string</jv> = JsonPatchMarshaller.<jsm>of</jsm>(<jv>patch</jv>);
  </p>
 
- <h5 class='figure'>Example output:</h5>
+ <h2 class='figure'>Example output:</h2>
  <p class='bjson'>
    [{<js>"op"</js>:<js>"add"</js>,<js>"path"</js>:<js>"/a/b/c"</js>,<js>"value"</js>:<js>"foo"</js>},{<js>"op"</js>:<js>"remove"</js>,<js>"path"</js>:<js>"/a/b/c"</js>}]
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanJsonPatch">juneau-bean-jsonpatch</a>
  </ul></div>

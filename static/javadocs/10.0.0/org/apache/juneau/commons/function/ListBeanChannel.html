@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,7 +100,7 @@ implements <a href="BeanChannel.html" title="interface in org.apache.juneau.comm
  in memory is acceptable. For large datasets or database-backed scenarios, implement
  <a href="BeanChannel.html" title="interface in org.apache.juneau.commons.function"><code>BeanChannel</code></a> (or <a href="BeanConsumer.html" title="interface in org.apache.juneau.commons.function"><code>BeanConsumer</code></a> / <a href="BeanSupplier.html" title="interface in org.apache.juneau.commons.function"><code>BeanSupplier</code></a>) directly.
 
- <h5 class='section'>Example (getter-only round-trip property):</h5>
+ <h2 class='section'>Example (getter-only round-trip property):</h2>
  <p class='bjava'>
    <jk>public class</jk> ItemCollection {
       <jk>private final</jk> ListBeanChannel&lt;Item&gt; <jv>items</jv> = <jk>new</jk> ListBeanChannel&lt;&gt;();
@@ -112,7 +111,7 @@ implements <a href="BeanChannel.html" title="interface in org.apache.juneau.comm
    }
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BeanChannel.html" title="interface in org.apache.juneau.commons.function"><code>BeanChannel</code></a> - Round-trip lifecycle interface
    <li class='jc'><a href="BeanConsumer.html" title="interface in org.apache.juneau.commons.function"><code>BeanConsumer</code></a> - Parse-only lifecycle interface
    <li class='jc'><a href="BeanSupplier.html" title="interface in org.apache.juneau.commons.function"><code>BeanSupplier</code></a> - Serialize-only lifecycle interface
@@ -215,7 +214,7 @@ implements <a href="BeanChannel.html" title="interface in org.apache.juneau.comm
  This is the functional method that implementations must provide. It allows checked exceptions
  to be thrown directly, unlike the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html#accept(T)" title="class or interface in java.util.function" class="external-link"><code>Consumer.accept(Object)</code></a> method.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ThrowingConsumer&lt;String&gt; <jv>validator</jv> = (<jv>value</jv>) -&gt; {
       <jk>if</jk> (<jv>value</jv> == <jk>null</jk> || <jv>value</jv>.isEmpty()) {

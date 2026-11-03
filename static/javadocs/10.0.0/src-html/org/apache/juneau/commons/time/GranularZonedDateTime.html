@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> * rolling by 1 will advance the year, while a precision of {@link ChronoField#HOUR_OF_DAY} means</span>
 <span class="source-line-no">040</span><span id="line-40"> * rolling by 1 will advance the hour.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;ISO8601 Parsing:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;ISO8601 Parsing:&lt;/h2&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * The {@link #of(String)} method can parse various ISO8601 timestamp formats:</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;ul&gt;</span>
@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;li&gt;&lt;js&gt;"2011-01-15T12:30:45.123456789"&lt;/js&gt; → {@link ChronoField#NANO_OF_SECOND} (4-9 digits)</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;jc&gt;// Parse an ISO8601 timestamp with year precision&lt;/jc&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *    GranularZonedDateTime &lt;jv&gt;gdt&lt;/jv&gt; = GranularZonedDateTime.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"2011"&lt;/js&gt;);</span>
@@ -95,11 +95,11 @@
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;jc&gt;// Result: 2011-01-15T14:00:00Z&lt;/jc&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> * &lt;/p&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> *</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> * &lt;p&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> * This class is immutable and thread-safe.</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
-<span class="source-line-no">089</span><span id="line-89"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *    &lt;li class='jm'&gt;{@link ZonedDateTime}</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;li class='jm'&gt;{@link ChronoField}</span>
 <span class="source-line-no">092</span><span id="line-92"> *    &lt;li class='jm'&gt;{@link DateUtils}</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">    * based on the format. If no timezone is specified in the string, the system default</span>
 <span class="source-line-no">139</span><span id="line-139">    * timezone is used.</span>
 <span class="source-line-no">140</span><span id="line-140">    *</span>
-<span class="source-line-no">141</span><span id="line-141">    * &lt;h5 class='section'&gt;Supported Formats:&lt;/h5&gt;</span>
+<span class="source-line-no">141</span><span id="line-141">    * &lt;h4 class='section'&gt;Supported Formats:&lt;/h4&gt;</span>
 <span class="source-line-no">142</span><span id="line-142">    * &lt;ul&gt;</span>
 <span class="source-line-no">143</span><span id="line-143">    *    &lt;li&gt;Date: &lt;js&gt;"2011"&lt;/js&gt;, &lt;js&gt;"2011-01"&lt;/js&gt;, &lt;js&gt;"2011-01-15"&lt;/js&gt;</span>
 <span class="source-line-no">144</span><span id="line-144">    *    &lt;li&gt;DateTime: &lt;js&gt;"2011-01-15T12"&lt;/js&gt;, &lt;js&gt;"2011-01-15T12:30"&lt;/js&gt;, &lt;js&gt;"2011-01-15T12:30:45"&lt;/js&gt;</span>
@@ -160,14 +160,14 @@
 <span class="source-line-no">147</span><span id="line-147">    *    &lt;li&gt;With timezone: &lt;js&gt;"2011-01-15T12:30:45Z"&lt;/js&gt;, &lt;js&gt;"2011-01-15T12:30:45+05:30"&lt;/js&gt;, &lt;js&gt;"2011-01-15T12:30:45-05:30"&lt;/js&gt;</span>
 <span class="source-line-no">148</span><span id="line-148">    * &lt;/ul&gt;</span>
 <span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * &lt;h5 class='section'&gt;Timezone Handling:&lt;/h5&gt;</span>
+<span class="source-line-no">150</span><span id="line-150">    * &lt;h4 class='section'&gt;Timezone Handling:&lt;/h4&gt;</span>
 <span class="source-line-no">151</span><span id="line-151">    * &lt;ul&gt;</span>
 <span class="source-line-no">152</span><span id="line-152">    *    &lt;li&gt;If the string contains a timezone (Z, +HH:mm, -HH:mm, etc.), that timezone is used.</span>
 <span class="source-line-no">153</span><span id="line-153">    *    &lt;li&gt;If no timezone is specified, the system default timezone is used.</span>
 <span class="source-line-no">154</span><span id="line-154">    *    &lt;li&gt;For time-only formats (starting with "T"), the current date is used with the specified or default timezone.</span>
 <span class="source-line-no">155</span><span id="line-155">    * &lt;/ul&gt;</span>
 <span class="source-line-no">156</span><span id="line-156">    *</span>
-<span class="source-line-no">157</span><span id="line-157">    * &lt;h5 class='section'&gt;Precision Detection:&lt;/h5&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">    * &lt;h4 class='section'&gt;Precision Detection:&lt;/h4&gt;</span>
 <span class="source-line-no">158</span><span id="line-158">    * &lt;p&gt;</span>
 <span class="source-line-no">159</span><span id="line-159">    * The precision is automatically determined from the format:</span>
 <span class="source-line-no">160</span><span id="line-160">    * &lt;ul&gt;</span>
@@ -205,7 +205,7 @@
 <span class="source-line-no">192</span><span id="line-192">    *    &lt;li&gt;Time-only formats (starting with "T") - uses the clock's instant to get the current date</span>
 <span class="source-line-no">193</span><span id="line-193">    * &lt;/ul&gt;</span>
 <span class="source-line-no">194</span><span id="line-194">    *</span>
-<span class="source-line-no">195</span><span id="line-195">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">196</span><span id="line-196">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">197</span><span id="line-197">    *    &lt;jc&gt;// Parse with a fixed clock for deterministic testing&lt;/jc&gt;</span>
 <span class="source-line-no">198</span><span id="line-198">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;clock&lt;/jv&gt; = Clock.&lt;jsm&gt;fixed&lt;/jsm&gt;(Instant.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"2000-01-01T12:00:00Z"&lt;/js&gt;), ZoneOffset.&lt;jsf&gt;UTC&lt;/jsf&gt;);</span>
@@ -247,7 +247,7 @@
 <span class="source-line-no">234</span><span id="line-234">    *    &lt;li&gt;Time-only formats (starting with "T") - uses the clock's instant to get the current date</span>
 <span class="source-line-no">235</span><span id="line-235">    * &lt;/ul&gt;</span>
 <span class="source-line-no">236</span><span id="line-236">    *</span>
-<span class="source-line-no">237</span><span id="line-237">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">238</span><span id="line-238">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">239</span><span id="line-239">    *    &lt;jc&gt;// Parse with default timezone and a fixed clock&lt;/jc&gt;</span>
 <span class="source-line-no">240</span><span id="line-240">    *    &lt;jk&gt;var&lt;/jk&gt; &lt;jv&gt;clock&lt;/jv&gt; = Clock.&lt;jsm&gt;fixed&lt;/jsm&gt;(Instant.&lt;jsm&gt;parse&lt;/jsm&gt;(&lt;js&gt;"2000-01-01T12:00:00Z"&lt;/js&gt;), ZoneOffset.&lt;jsf&gt;UTC&lt;/jsf&gt;);</span>
@@ -869,7 +869,7 @@
 <span class="source-line-no">856</span><span id="line-856">    * This method creates a new GranularZonedDateTime by adding the specified amount to the</span>
 <span class="source-line-no">857</span><span id="line-857">    * specified field. The precision of the returned object remains the same as this object.</span>
 <span class="source-line-no">858</span><span id="line-858">    *</span>
-<span class="source-line-no">859</span><span id="line-859">    * &lt;h5 class='section'&gt;Supported Fields:&lt;/h5&gt;</span>
+<span class="source-line-no">859</span><span id="line-859">    * &lt;h4 class='section'&gt;Supported Fields:&lt;/h4&gt;</span>
 <span class="source-line-no">860</span><span id="line-860">    * &lt;ul&gt;</span>
 <span class="source-line-no">861</span><span id="line-861">    *    &lt;li&gt;{@link ChronoField#YEAR}</span>
 <span class="source-line-no">862</span><span id="line-862">    *    &lt;li&gt;{@link ChronoField#MONTH_OF_YEAR}</span>
@@ -881,7 +881,7 @@
 <span class="source-line-no">868</span><span id="line-868">    *    &lt;li&gt;{@link ChronoField#NANO_OF_SECOND}</span>
 <span class="source-line-no">869</span><span id="line-869">    * &lt;/ul&gt;</span>
 <span class="source-line-no">870</span><span id="line-870">    *</span>
-<span class="source-line-no">871</span><span id="line-871">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">871</span><span id="line-871">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">872</span><span id="line-872">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">873</span><span id="line-873">    *    &lt;jc&gt;// Create a datetime with hour precision&lt;/jc&gt;</span>
 <span class="source-line-no">874</span><span id="line-874">    *    GranularZonedDateTime &lt;jv&gt;gdt&lt;/jv&gt; = GranularZonedDateTime.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"2011-01-15T12Z"&lt;/js&gt;);</span>
@@ -909,7 +909,7 @@
 <span class="source-line-no">896</span><span id="line-896">    * This is a convenience method that calls {@link #roll(ChronoField, int)} using this</span>
 <span class="source-line-no">897</span><span id="line-897">    * object's precision field.</span>
 <span class="source-line-no">898</span><span id="line-898">    *</span>
-<span class="source-line-no">899</span><span id="line-899">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">899</span><span id="line-899">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">900</span><span id="line-900">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">901</span><span id="line-901">    *    &lt;jc&gt;// Create a datetime with year precision&lt;/jc&gt;</span>
 <span class="source-line-no">902</span><span id="line-902">    *    GranularZonedDateTime &lt;jv&gt;gdt&lt;/jv&gt; = GranularZonedDateTime.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"2011"&lt;/js&gt;);</span>

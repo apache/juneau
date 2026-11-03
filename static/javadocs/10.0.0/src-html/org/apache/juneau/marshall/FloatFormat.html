@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * The default is {@link #NaN_AS_NULL} which is JSON-spec-compliant per RFC 8259 §6 (non-finite floats</span>
 <span class="source-line-no">037</span><span id="line-37"> * are not valid JSON tokens; emitting {@code null} is the closest valid representation).</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='topic'&gt;Precedence (highest to lowest)&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;ol&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link MarshalledProp#floatFormat() @MarshalledProp(floatFormat=…)} on the bean property.</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;{@link Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;The default constant ({@link #NaN_AS_NULL}).</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ol&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='topic'&gt;Parser leniency&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='topic'&gt;Parser leniency&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;p&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * Parsers SHALL accept all of the following wire shapes regardless of the parser-side</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> *       preserved as {@code null} when reading into a boxed {@link Double} / {@link Float}.</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='topic'&gt;JSON-spec compliance&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='topic'&gt;JSON-spec compliance&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * {@link #NaN_AS_NUMBER} is &lt;b&gt;non-standard JSON&lt;/b&gt; per RFC 8259 §6 — JSON does not permit {@code NaN} /</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68"> * but strict-mode consumers (e.g. some browser {@code JSON.parse} pipelines) will reject them. Use only</span>
 <span class="source-line-no">069</span><span id="line-69"> * when you control both ends of the wire.</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='topic'&gt;Binary serializers&lt;/h5&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='topic'&gt;Binary serializers&lt;/h2&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit native IEEE-754 floats regardless</span>

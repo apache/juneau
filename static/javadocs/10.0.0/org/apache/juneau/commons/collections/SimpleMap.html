@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  for small maps (typically less than 10 entries) where the overhead of a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a> is not
  justified.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li><b>Unmodifiable:</b> All mutation operations throw <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>
    <li><b>Fixed Keys and Values:</b> Keys and values are set at construction time
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
    <li><b>Predictable Performance:</b> O(n) lookup time, but faster than <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a> for small n
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Immutable configuration maps with a fixed set of known keys
    <li>Small lookup tables that should not be modified
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
    <li>Situations where map size is small and keys are known at compile time
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create an unmodifiable map with fixed keys and values</jc>
    String[] <jv>keys</jv> = {<js>"host"</js>, <js>"port"</js>, <js>"timeout"</js>};
@@ -134,7 +133,7 @@ loadScripts(document, 'script');</script>
    <jv>config</jv>.put(<js>"port"</js>, 9090);  <jc>// Throws UnsupportedOperationException</jc>
  </p>
 
- <h5 class='section'>Restrictions:</h5>
+ <h2 class='section'>Restrictions:</h2>
  <ul class='spaced-list'>
    <li><b>Immutable:</b> Cannot add, remove, or modify entries after construction
    <li><b>Fixed Size:</b> Size is determined at construction time
@@ -142,19 +141,19 @@ loadScripts(document, 'script');</script>
    <li><b>Array Length:</b> Keys and values arrays must have the same length
  </ul>
 
- <h5 class='section'>Performance Characteristics:</h5>
+ <h2 class='section'>Performance Characteristics:</h2>
  <ul class='spaced-list'>
    <li><b>get(key):</b> O(n) - Linear search through keys array
    <li><b>size():</b> O(1) - Direct array length access
    <li><b>Memory:</b> Lower overhead than <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a> for small maps
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe since it's immutable after construction. Multiple threads can safely
  read from a SimpleMap concurrently without synchronization.
 
- <h5 class='section'>Example - Configuration Map:</h5>
+ <h2 class='section'>Example - Configuration Map:</h2>
  <p class='bjava'>
    <jc>// Create immutable configuration</jc>
    SimpleMap&lt;String,Object&gt; <jv>defaults</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
@@ -166,14 +165,14 @@ loadScripts(document, 'script');</script>
    <jk>return</jk> <jv>defaults</jv>;
  </p>
 
- <h5 class='section'>Comparison with Map.of():</h5>
+ <h2 class='section'>Comparison with Map.of():</h2>
  <ul class='spaced-list'>
    <li><b>Null Support:</b> SimpleMap supports null keys/values, Map.of() does not
    <li><b>Insertion Order:</b> SimpleMap preserves insertion order, Map.of() does not
    <li><b>Size Limit:</b> Map.of() limited to 10 entries, SimpleMap has no limit
  </ul>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="SimpleMap.html" title="class in org.apache.juneau.commons.collections"><code>SimpleMap</code></a> - The modifiable version of this class
    <li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
@@ -292,7 +291,7 @@ loadScripts(document, 'script');</script>
  For true immutability, ensure the arrays are not modified after passing them
  to this constructor.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    String[] <jv>keys</jv> = {<js>"name"</js>, <js>"age"</js>, <js>"city"</js>};
    Object[] <jv>values</jv> = {<js>"John"</js>, 30, <js>"NYC"</js>};
@@ -332,7 +331,7 @@ loadScripts(document, 'script');</script>
  <p>
  The returned set is unmodifiable and backed by the underlying entries array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
       <jk>new</jk> String[]{<js>"a"</js>, <js>"b"</js>},
@@ -364,7 +363,7 @@ loadScripts(document, 'script');</script>
  for comparison. For small maps (typically less than 10 entries), this is often faster than
  the hash lookup in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link"><code>HashMap</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
       <jk>new</jk> String[]{<js>"age"</js>, <js>"score"</js>},
@@ -396,7 +395,7 @@ loadScripts(document, 'script');</script>
  <p>
  The returned set is unmodifiable and backed by the underlying keys array.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    SimpleMap&lt;String,Integer&gt; <jv>map</jv> = <jk>new</jk> SimpleMap&lt;&gt;(
       <jk>new</jk> String[]{<js>"x"</js>, <js>"y"</js>, <js>"z"</js>},

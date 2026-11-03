@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
    <li class='jc'><a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestPathParam</code></a>
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
  </ul></div>
 </section>
@@ -358,8 +357,8 @@ loadScripts(document, 'script');</script>
  If the specified type is an HTTP part type (extends from <a href="../../../http/HttpHeader.html" title="interface in org.apache.juneau.http"><code>HttpHeader</code></a>/<a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http"><code>HttpPart</code></a>), then looks for
  one of the following constructors:
  <ul class='javatree'>
-   <li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
-   <li class=' jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+   <li class='jm'><c><jk>public</jk> T(String <jv>value</jv>);</c>
+   <li class='jm'><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
  </ul>
 
  <p>
@@ -387,8 +386,8 @@ loadScripts(document, 'script');</script>
  If the specified type is an HTTP part type (extends from <a href="../../../http/HttpHeader.html" title="interface in org.apache.juneau.http"><code>HttpHeader</code></a>/<a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http"><code>HttpPart</code></a>), then looks for
  one of the following constructors:
  <ul class='javatree'>
-   <li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
-   <li class=' jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+   <li class='jm'><c><jk>public</jk> T(String <jv>value</jv>);</c>
+   <li class='jm'><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
  </ul>
 
  <p>
@@ -545,7 +544,7 @@ loadScripts(document, 'script');</script>
                   throws <span class="exceptions"><a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block">Matches the specified pattern against this part value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Matcher <jv>matcher</jv> = <jv>request</jv>
       .getHeader(<js>"Content-Type"</js>)
@@ -572,7 +571,7 @@ loadScripts(document, 'script');</script>
                   throws <span class="exceptions"><a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block">Matches the specified pattern against this part value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Matcher <jv>matcher</jv> = <jv>request</jv>
       .getHeader(<js>"Content-Type"</js>)
@@ -600,7 +599,7 @@ loadScripts(document, 'script');</script>
                   throws <span class="exceptions"><a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block">Matches the specified pattern against this part value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Matcher <jv>matcher</jv> = <jv>request</jv>
       .getHeader(<js>"Content-Type"</js>)
@@ -627,7 +626,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bct/assertions/FluentListAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentListAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.server.httppart">RequestHttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestHttpPart.html#line-324">assertCsvArray</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on comma-separated string parameters.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jv>request</jv>
       .getQueryParam(<js>"allow"</js>)
@@ -645,7 +644,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bct/assertions/FluentZonedDateTimeAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentZonedDateTimeAssertion</a>&lt;<a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.server.httppart">RequestHttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestHttpPart.html#line-340">assertDate</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on a date parameter.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jv>request</jv>
       .getQueryParam(<js>"time"</js>)
@@ -663,7 +662,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bct/assertions/FluentIntegerAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentIntegerAssertion</a>&lt;<a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.server.httppart">RequestHttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestHttpPart.html#line-356">assertInteger</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on an integer parameter.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jv>request</jv>
       .getQueryParam(<js>"age"</js>)
@@ -681,7 +680,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bct/assertions/FluentLongAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentLongAssertion</a>&lt;<a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.server.httppart">RequestHttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestHttpPart.html#line-372">assertLong</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on a long parameter.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jv>request</jv>
       .getQueryParam(<js>"length"</js>)
@@ -699,7 +698,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../bct/assertions/FluentStringAssertion.html" title="class in org.apache.juneau.bct.assertions">FluentStringAssertion</a>&lt;<a href="RequestHttpPart.html" title="class in org.apache.juneau.rest.server.httppart">RequestHttpPart</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestHttpPart.html#line-397">assertString</a></span>()</div>
 <div class="block">Provides the ability to perform fluent-style assertions on this parameter.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jv>request</jv>
       .getQueryParam(<js>"foo"</js>)

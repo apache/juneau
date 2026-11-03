@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ extends <a href="RecordWriter.html" title="interface in org.apache.juneau.marsha
  format.  This is a format-neutral surface; the same writer methods work across every Juneau
  format that implements <a href="TokenWritable.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenWritable</code></a> (the structural-token role).
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder();
    <jk>try</jk> (TokenWriter <jv>w</jv> = Json.<jsf>DEFAULT</jsf>.writeTokens(<jv>sb</jv>)) {
@@ -111,7 +110,7 @@ extends <a href="RecordWriter.html" title="interface in org.apache.juneau.marsha
    <jc>// sb is now: {"a":1,"b":[true,null]}</jc>
  </p>
 
- <h5 class='section'>Contract:</h5>
+ <h2 class='section'>Contract:</h2>
  <ul>
    <li>The writer is <b>purely structural</b>.  It bypasses object swaps and <code>@Schema</code>
       annotations &mdash; that is the role of the POJO databind path on
@@ -123,7 +122,7 @@ extends <a href="RecordWriter.html" title="interface in org.apache.juneau.marsha
    <li>Concrete implementations are not required to be thread-safe.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li><a href="TokenReader.html" title="interface in org.apache.juneau.marshall.stream"><code>TokenReader</code></a> &mdash; the pull-side counterpart.
    <li><a href="TokenType.html" title="enum class in org.apache.juneau.marshall.stream"><code>TokenType</code></a> &mdash; the format-neutral token vocabulary.
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>

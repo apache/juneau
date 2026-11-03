@@ -47,11 +47,11 @@
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Arguments and argument-types of client-side &lt;ja&gt;@RemoteResource&lt;/ja&gt;-annotated interfaces.</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;/ul&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Arguments and argument-types of server-side @RestOp-annotated methods&lt;/h5&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h2 class='topic'&gt;Arguments and argument-types of server-side @RestOp-annotated methods&lt;/h2&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * Annotation that can be applied to a parameter of a &lt;ja&gt;@RestOp&lt;/ja&gt;-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/mypath/{p1}/{p2}/*"&lt;/js&gt;)</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;jk&gt;public void&lt;/jk&gt; myMethod(&lt;ja&gt;@Request&lt;/ja&gt; MyRequest &lt;jv&gt;requestBean&lt;/jv&gt;) {...}</span>
@@ -98,11 +98,11 @@
 <span class="source-line-no">085</span><span id="line-85"> * &lt;br&gt;Schema-based serialization and parsing is allowed just as if used as individual parameter types.</span>
 <span class="source-line-no">086</span><span id="line-86"> *</span>
 <span class="source-line-no">087</span><span id="line-87"> *</span>
-<span class="source-line-no">088</span><span id="line-88"> * &lt;h5 class='topic'&gt;Arguments and argument-types of client-side @RemoteResource-annotated interfaces&lt;/h5&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;h2 class='topic'&gt;Arguments and argument-types of client-side @RemoteResource-annotated interfaces&lt;/h2&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;p&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * Annotation applied to Java method arguments of interface proxies to denote a bean with remote resource annotations.</span>
 <span class="source-line-no">091</span><span id="line-91"> *</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">094</span><span id="line-94"> *    &lt;ja&gt;@RemoteResource&lt;/ja&gt;(path=&lt;js&gt;"/myproxy"&lt;/js&gt;)</span>
 <span class="source-line-no">095</span><span id="line-95"> *    &lt;jk&gt;public interface&lt;/jk&gt; MyProxy {</span>
@@ -144,26 +144,25 @@
 <span class="source-line-no">131</span><span id="line-131"> *    }</span>
 <span class="source-line-no">132</span><span id="line-132"> * &lt;/p&gt;</span>
 <span class="source-line-no">133</span><span id="line-133"> *</span>
-<span class="source-line-no">134</span><span id="line-134"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">134</span><span id="line-134"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">135</span><span id="line-135"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Request"&gt;@Request&lt;/a&gt;</span>
 <span class="source-line-no">136</span><span id="line-136"> * &lt;/ul&gt;</span>
-<span class="source-line-no">137</span><span id="line-137"> * &lt;p&gt;</span>
-<span class="source-line-no">138</span><span id="line-138"> */</span>
-<span class="source-line-no">139</span><span id="line-139">@Documented</span>
-<span class="source-line-no">140</span><span id="line-140">@Target({ PARAMETER, TYPE, METHOD })</span>
-<span class="source-line-no">141</span><span id="line-141">@Retention(RUNTIME)</span>
-<span class="source-line-no">142</span><span id="line-142">@Inherited</span>
-<span class="source-line-no">143</span><span id="line-143">public @interface Request {</span>
-<span class="source-line-no">144</span><span id="line-144"></span>
-<span class="source-line-no">145</span><span id="line-145">   /**</span>
-<span class="source-line-no">146</span><span id="line-146">    * Optional description for the exposed API.</span>
-<span class="source-line-no">147</span><span id="line-147">    *</span>
-<span class="source-line-no">148</span><span id="line-148">    * @return The annotation value.</span>
-<span class="source-line-no">149</span><span id="line-149">    * @since 9.2.0</span>
-<span class="source-line-no">150</span><span id="line-150">    */</span>
-<span class="source-line-no">151</span><span id="line-151">   String[] description() default {};</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">}</span>
+<span class="source-line-no">137</span><span id="line-137"> */</span>
+<span class="source-line-no">138</span><span id="line-138">@Documented</span>
+<span class="source-line-no">139</span><span id="line-139">@Target({ PARAMETER, TYPE, METHOD })</span>
+<span class="source-line-no">140</span><span id="line-140">@Retention(RUNTIME)</span>
+<span class="source-line-no">141</span><span id="line-141">@Inherited</span>
+<span class="source-line-no">142</span><span id="line-142">public @interface Request {</span>
+<span class="source-line-no">143</span><span id="line-143"></span>
+<span class="source-line-no">144</span><span id="line-144">   /**</span>
+<span class="source-line-no">145</span><span id="line-145">    * Optional description for the exposed API.</span>
+<span class="source-line-no">146</span><span id="line-146">    *</span>
+<span class="source-line-no">147</span><span id="line-147">    * @return The annotation value.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @since 9.2.0</span>
+<span class="source-line-no">149</span><span id="line-149">    */</span>
+<span class="source-line-no">150</span><span id="line-150">   String[] description() default {};</span>
+<span class="source-line-no">151</span><span id="line-151"></span>
+<span class="source-line-no">152</span><span id="line-152">}</span>
 
 
 

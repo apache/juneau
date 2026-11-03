@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> * overrides via the SUT's builder) and &lt;b&gt;Mode OVERLAY&lt;/b&gt; (existing-instance push/pop against a long-lived</span>
 <span class="source-line-no">043</span><span id="line-43"> * SUT's bean store).  See {@link JuneauBeanStoreExtension} for the full Mode INJECT / Mode OVERLAY contracts.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;Applies to:&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;h2 class='section'&gt;Applies to:&lt;/h2&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;&lt;b&gt;Fields&lt;/b&gt; &amp;mdash; the field's current value (read via reflection) is registered as the override.</span>
 <span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;&lt;b&gt;Methods&lt;/b&gt; &amp;mdash; a parameterless factory method whose return type is type-compatible with the</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> *       {@link Scope#CLASS}).</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;ja&gt;@ExtendWith&lt;/ja&gt;(JuneauBeanStoreExtension.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;jk&gt;class&lt;/jk&gt; MyResourceTest {</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> *    }</span>
 <span class="source-line-no">072</span><span id="line-72"> * &lt;/p&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link JuneauBeanStoreExtension} - The JUnit 5 extension that discovers and applies these annotations.</span>
 <span class="source-line-no">076</span><span id="line-76"> *    &lt;li class='jc'&gt;{@link TestBeanStore} - The overlay builder the extension populates.</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li class='je'&gt;{@link Scope} - Per-method vs per-class lifecycle selector.</span>

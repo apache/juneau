@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  This class provides a cached wrapper around Java <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Package.html" title="class or interface in java.lang" class="external-link"><code>Package</code></a> objects, extending the standard API with
  convenient methods for accessing package annotations and metadata. Instances are cached and reused for efficiency.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Cached instances - package info objects are cached and reused
    <li>Annotation support - get annotations declared on the package
@@ -99,14 +98,14 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
    <li>Thread-safe - instances are immutable and safe for concurrent access
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Accessing package-level annotations
    <li>Working with package metadata
    <li>Building frameworks that need to analyze package information
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Get PackageInfo from a class</jc>
    PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
@@ -119,7 +118,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
       <jv>pi</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> - Class introspection
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  </ul></div>
@@ -494,7 +493,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Package.html#getName()" title="class or interface in java.lang" class="external-link"><code>Package.getName()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(String.<jk>class</jk>);
    String <jv>name</jv> = <jv>pi</jv>.getName();  <jc>// "java.lang"</jc>
@@ -681,7 +680,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Package.html#toString()" title="class or interface in java.lang" class="external-link"><code>Package.toString()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    PackageInfo <jv>pi</jv> = PackageInfo.<jsm>of</jsm>(String.<jk>class</jk>);
    String <jv>s</jv> = <jv>pi</jv>.toString();  <jc>// "package java.lang"</jc>

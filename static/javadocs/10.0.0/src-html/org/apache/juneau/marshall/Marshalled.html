@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;&lt;ja&gt;@Rest&lt;/ja&gt;-annotated classes and &lt;ja&gt;@RestOp&lt;/ja&gt;-annotated methods when used with {@link MarshalledApply @MarshalledApply}.</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshalledAnnotation"&gt;@Marshalled Annotation&lt;/a&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> */</span>
@@ -109,7 +109,7 @@
 <span class="source-line-no">096</span><span id="line-96">    * &lt;p&gt;</span>
 <span class="source-line-no">097</span><span id="line-97">    * The list of classes that make up the bean dictionary for all properties in this class and all subclasses.</span>
 <span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">100</span><span id="line-100">    *    &lt;li class='ja'&gt;{@link MarshalledProp#dictionary()}</span>
 <span class="source-line-no">101</span><span id="line-101">    *    &lt;li class='ja'&gt;{@link MarshalledConfig#dictionary()}</span>
 <span class="source-line-no">102</span><span id="line-102">    *    &lt;li class='ja'&gt;{@link MarshalledConfig#dictionary_replace()}</span>
@@ -234,13 +234,13 @@
 <span class="source-line-no">221</span><span id="line-221">    * &lt;p&gt;</span>
 <span class="source-line-no">222</span><span id="line-222">    * Examples are used in cases such as POJO examples in Swagger documents.</span>
 <span class="source-line-no">223</span><span id="line-223">    *</span>
-<span class="source-line-no">224</span><span id="line-224">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">225</span><span id="line-225">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">226</span><span id="line-226">    *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(example=&lt;js&gt;"{foo:'bar'}"&lt;/js&gt;)</span>
 <span class="source-line-no">227</span><span id="line-227">    *    &lt;jk&gt;public class&lt;/jk&gt; MyClass {...}</span>
 <span class="source-line-no">228</span><span id="line-228">    * &lt;/p&gt;</span>
 <span class="source-line-no">229</span><span id="line-229">    *</span>
-<span class="source-line-no">230</span><span id="line-230">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">231</span><span id="line-231">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">232</span><span id="line-232">    *       Setting applies to specified class and all subclasses.</span>
 <span class="source-line-no">233</span><span id="line-233">    *    &lt;li class='note'&gt;</span>
@@ -257,7 +257,7 @@
 <span class="source-line-no">244</span><span id="line-244">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver"&gt;VarResolver.DEFAULT&lt;/a&gt; (e.g. &lt;js&gt;"$C{myConfigVar}"&lt;/js&gt;).</span>
 <span class="source-line-no">245</span><span id="line-245">    * &lt;/ul&gt;</span>
 <span class="source-line-no">246</span><span id="line-246">    *</span>
-<span class="source-line-no">247</span><span id="line-247">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">247</span><span id="line-247">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">248</span><span id="line-248">    *    &lt;li class='ja'&gt;{@link Example}</span>
 <span class="source-line-no">249</span><span id="line-249">    * &lt;/ul&gt;</span>
 <span class="source-line-no">250</span><span id="line-250">    *</span>
@@ -280,81 +280,80 @@
 <span class="source-line-no">267</span><span id="line-267">    * interface/abstract class so that instances of the implementation class are used when instantiated (e.g. during a</span>
 <span class="source-line-no">268</span><span id="line-268">    * parse).</span>
 <span class="source-line-no">269</span><span id="line-269">    *</span>
-<span class="source-line-no">270</span><span id="line-270">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">270</span><span id="line-270">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">271</span><span id="line-271">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">272</span><span id="line-272">    *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(implClass=MyInterfaceImpl.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">273</span><span id="line-273">    *    &lt;jk&gt;public class&lt;/jk&gt; MyInterface {...}</span>
-<span class="source-line-no">274</span><span id="line-274">    * &lt;p&gt;</span>
-<span class="source-line-no">275</span><span id="line-275">    *</span>
-<span class="source-line-no">276</span><span id="line-276">    * @return The annotation value.</span>
-<span class="source-line-no">277</span><span id="line-277">    */</span>
-<span class="source-line-no">278</span><span id="line-278">   Class&lt;?&gt; implClass() default void.class;</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   /**</span>
-<span class="source-line-no">281</span><span id="line-281">    * Bean property interceptor.</span>
-<span class="source-line-no">282</span><span id="line-282">    *</span>
-<span class="source-line-no">283</span><span id="line-283">    * &lt;p&gt;</span>
-<span class="source-line-no">284</span><span id="line-284">    * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">287</span><span id="line-287">    *    &lt;li class='jc'&gt;{@link BeanInterceptor}</span>
-<span class="source-line-no">288</span><span id="line-288">    * &lt;/ul&gt;</span>
-<span class="source-line-no">289</span><span id="line-289">    *</span>
-<span class="source-line-no">290</span><span id="line-290">    * @return The annotation value.</span>
-<span class="source-line-no">291</span><span id="line-291">    */</span>
-<span class="source-line-no">292</span><span id="line-292">   Class&lt;? extends BeanInterceptor&lt;?&gt;&gt; interceptor() default BeanInterceptor.Void.class;</span>
-<span class="source-line-no">293</span><span id="line-293"></span>
-<span class="source-line-no">294</span><span id="line-294">   /**</span>
-<span class="source-line-no">295</span><span id="line-295">    * An identifying name for this class.</span>
-<span class="source-line-no">296</span><span id="line-296">    *</span>
-<span class="source-line-no">297</span><span id="line-297">    * &lt;p&gt;</span>
-<span class="source-line-no">298</span><span id="line-298">    * The name is used to identify the class type during parsing when it cannot be inferred through reflection.</span>
-<span class="source-line-no">299</span><span id="line-299">    * &lt;br&gt;For example, if a bean property is of type &lt;c&gt;Object&lt;/c&gt;, then the serializer will add the name to the</span>
-<span class="source-line-no">300</span><span id="line-300">    * output so that the class can be determined during parsing.</span>
-<span class="source-line-no">301</span><span id="line-301">    *</span>
-<span class="source-line-no">302</span><span id="line-302">    * &lt;p&gt;</span>
-<span class="source-line-no">303</span><span id="line-303">    * It is also used to specify element names in XML.</span>
-<span class="source-line-no">304</span><span id="line-304">    *</span>
-<span class="source-line-no">305</span><span id="line-305">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">306</span><span id="line-306">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">307</span><span id="line-307">    *    &lt;jc&gt;// Use _type='mybean' to identify this bean.&lt;/jc&gt;</span>
-<span class="source-line-no">308</span><span id="line-308">    *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"mybean"&lt;/js&gt;)</span>
-<span class="source-line-no">309</span><span id="line-309">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
-<span class="source-line-no">310</span><span id="line-310">    * &lt;/p&gt;</span>
-<span class="source-line-no">311</span><span id="line-311">    *</span>
-<span class="source-line-no">312</span><span id="line-312">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">313</span><span id="line-313">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
-<span class="source-line-no">314</span><span id="line-314">    * &lt;/ul&gt;</span>
-<span class="source-line-no">315</span><span id="line-315">    *</span>
-<span class="source-line-no">316</span><span id="line-316">    * @return The annotation value.</span>
-<span class="source-line-no">317</span><span id="line-317">    */</span>
-<span class="source-line-no">318</span><span id="line-318">   String typeName() default "";</span>
-<span class="source-line-no">319</span><span id="line-319"></span>
-<span class="source-line-no">320</span><span id="line-320">   /**</span>
-<span class="source-line-no">321</span><span id="line-321">    * The property name to use for representing the type name.</span>
-<span class="source-line-no">322</span><span id="line-322">    *</span>
-<span class="source-line-no">323</span><span id="line-323">    * &lt;p&gt;</span>
-<span class="source-line-no">324</span><span id="line-324">    * This can be used to override the name used for the &lt;js&gt;"_type"&lt;/js&gt; property used by the {@link #typeName()} setting.</span>
-<span class="source-line-no">325</span><span id="line-325">    *</span>
-<span class="source-line-no">326</span><span id="line-326">    * &lt;p&gt;</span>
-<span class="source-line-no">327</span><span id="line-327">    * The default value if not specified is &lt;js&gt;"_type"&lt;/js&gt;.</span>
-<span class="source-line-no">328</span><span id="line-328">    *</span>
-<span class="source-line-no">329</span><span id="line-329">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">330</span><span id="line-330">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">331</span><span id="line-331">    *    &lt;jc&gt;// Use 'type' instead of '_type' for bean names.&lt;/jc&gt;</span>
-<span class="source-line-no">332</span><span id="line-332">    *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typePropertyName=&lt;js&gt;"type"&lt;/js&gt;)</span>
-<span class="source-line-no">333</span><span id="line-333">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
-<span class="source-line-no">334</span><span id="line-334">    * &lt;/p&gt;</span>
-<span class="source-line-no">335</span><span id="line-335">    *</span>
-<span class="source-line-no">336</span><span id="line-336">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">337</span><span id="line-337">    *    &lt;li class='ja'&gt;{@link MarshalledConfig#typePropertyName()}</span>
-<span class="source-line-no">338</span><span id="line-338">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
-<span class="source-line-no">339</span><span id="line-339">    * &lt;/ul&gt;</span>
-<span class="source-line-no">340</span><span id="line-340">    *</span>
-<span class="source-line-no">341</span><span id="line-341">    * @return The annotation value.</span>
-<span class="source-line-no">342</span><span id="line-342">    */</span>
-<span class="source-line-no">343</span><span id="line-343">   String typePropertyName() default "";</span>
-<span class="source-line-no">344</span><span id="line-344">}</span>
+<span class="source-line-no">274</span><span id="line-274">    *</span>
+<span class="source-line-no">275</span><span id="line-275">    * @return The annotation value.</span>
+<span class="source-line-no">276</span><span id="line-276">    */</span>
+<span class="source-line-no">277</span><span id="line-277">   Class&lt;?&gt; implClass() default void.class;</span>
+<span class="source-line-no">278</span><span id="line-278"></span>
+<span class="source-line-no">279</span><span id="line-279">   /**</span>
+<span class="source-line-no">280</span><span id="line-280">    * Bean property interceptor.</span>
+<span class="source-line-no">281</span><span id="line-281">    *</span>
+<span class="source-line-no">282</span><span id="line-282">    * &lt;p&gt;</span>
+<span class="source-line-no">283</span><span id="line-283">    * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.</span>
+<span class="source-line-no">284</span><span id="line-284">    *</span>
+<span class="source-line-no">285</span><span id="line-285">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">286</span><span id="line-286">    *    &lt;li class='jc'&gt;{@link BeanInterceptor}</span>
+<span class="source-line-no">287</span><span id="line-287">    * &lt;/ul&gt;</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * @return The annotation value.</span>
+<span class="source-line-no">290</span><span id="line-290">    */</span>
+<span class="source-line-no">291</span><span id="line-291">   Class&lt;? extends BeanInterceptor&lt;?&gt;&gt; interceptor() default BeanInterceptor.Void.class;</span>
+<span class="source-line-no">292</span><span id="line-292"></span>
+<span class="source-line-no">293</span><span id="line-293">   /**</span>
+<span class="source-line-no">294</span><span id="line-294">    * An identifying name for this class.</span>
+<span class="source-line-no">295</span><span id="line-295">    *</span>
+<span class="source-line-no">296</span><span id="line-296">    * &lt;p&gt;</span>
+<span class="source-line-no">297</span><span id="line-297">    * The name is used to identify the class type during parsing when it cannot be inferred through reflection.</span>
+<span class="source-line-no">298</span><span id="line-298">    * &lt;br&gt;For example, if a bean property is of type &lt;c&gt;Object&lt;/c&gt;, then the serializer will add the name to the</span>
+<span class="source-line-no">299</span><span id="line-299">    * output so that the class can be determined during parsing.</span>
+<span class="source-line-no">300</span><span id="line-300">    *</span>
+<span class="source-line-no">301</span><span id="line-301">    * &lt;p&gt;</span>
+<span class="source-line-no">302</span><span id="line-302">    * It is also used to specify element names in XML.</span>
+<span class="source-line-no">303</span><span id="line-303">    *</span>
+<span class="source-line-no">304</span><span id="line-304">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">305</span><span id="line-305">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">306</span><span id="line-306">    *    &lt;jc&gt;// Use _type='mybean' to identify this bean.&lt;/jc&gt;</span>
+<span class="source-line-no">307</span><span id="line-307">    *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typeName=&lt;js&gt;"mybean"&lt;/js&gt;)</span>
+<span class="source-line-no">308</span><span id="line-308">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
+<span class="source-line-no">309</span><span id="line-309">    * &lt;/p&gt;</span>
+<span class="source-line-no">310</span><span id="line-310">    *</span>
+<span class="source-line-no">311</span><span id="line-311">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">312</span><span id="line-312">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
+<span class="source-line-no">313</span><span id="line-313">    * &lt;/ul&gt;</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * @return The annotation value.</span>
+<span class="source-line-no">316</span><span id="line-316">    */</span>
+<span class="source-line-no">317</span><span id="line-317">   String typeName() default "";</span>
+<span class="source-line-no">318</span><span id="line-318"></span>
+<span class="source-line-no">319</span><span id="line-319">   /**</span>
+<span class="source-line-no">320</span><span id="line-320">    * The property name to use for representing the type name.</span>
+<span class="source-line-no">321</span><span id="line-321">    *</span>
+<span class="source-line-no">322</span><span id="line-322">    * &lt;p&gt;</span>
+<span class="source-line-no">323</span><span id="line-323">    * This can be used to override the name used for the &lt;js&gt;"_type"&lt;/js&gt; property used by the {@link #typeName()} setting.</span>
+<span class="source-line-no">324</span><span id="line-324">    *</span>
+<span class="source-line-no">325</span><span id="line-325">    * &lt;p&gt;</span>
+<span class="source-line-no">326</span><span id="line-326">    * The default value if not specified is &lt;js&gt;"_type"&lt;/js&gt;.</span>
+<span class="source-line-no">327</span><span id="line-327">    *</span>
+<span class="source-line-no">328</span><span id="line-328">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">329</span><span id="line-329">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">330</span><span id="line-330">    *    &lt;jc&gt;// Use 'type' instead of '_type' for bean names.&lt;/jc&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    *    &lt;ja&gt;@Marshalled&lt;/ja&gt;(typePropertyName=&lt;js&gt;"type"&lt;/js&gt;)</span>
+<span class="source-line-no">332</span><span id="line-332">    *    &lt;jk&gt;public class&lt;/jk&gt; MyBean {...}</span>
+<span class="source-line-no">333</span><span id="line-333">    * &lt;/p&gt;</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">336</span><span id="line-336">    *    &lt;li class='ja'&gt;{@link MarshalledConfig#typePropertyName()}</span>
+<span class="source-line-no">337</span><span id="line-337">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
+<span class="source-line-no">338</span><span id="line-338">    * &lt;/ul&gt;</span>
+<span class="source-line-no">339</span><span id="line-339">    *</span>
+<span class="source-line-no">340</span><span id="line-340">    * @return The annotation value.</span>
+<span class="source-line-no">341</span><span id="line-341">    */</span>
+<span class="source-line-no">342</span><span id="line-342">   String typePropertyName() default "";</span>
+<span class="source-line-no">343</span><span id="line-343">}</span>
 
 
 

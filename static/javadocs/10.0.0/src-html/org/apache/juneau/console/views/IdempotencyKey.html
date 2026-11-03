@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26"> * A server-minted idempotency key for a row-action submit, bound at mint time to the {@code (action, targetId)} pair</span>
 <span class="source-line-no">027</span><span id="line-27"> * it was issued for.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h5 class='section'&gt;Why the key is server-minted and bound, not a client UUID&lt;/h5&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='section'&gt;Why the key is server-minted and bound, not a client UUID&lt;/h2&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * The key is minted &lt;b&gt;when the modal opens&lt;/b&gt; &amp;mdash; the server is already in the loop then, since the modal-open</span>
 <span class="source-line-no">032</span><span id="line-32"> * confirmation is server-rendered against the current record &amp;mdash; so a double-click, an impatient re-submit and a</span>
@@ -53,13 +53,13 @@
 <span class="source-line-no">040</span><span id="line-40"> * {@code (action, targetId)} does not {@link #matches(String, String) match} the binding is a &lt;b&gt;named refusal&lt;/b&gt;,</span>
 <span class="source-line-no">041</span><span id="line-41"> * never a replayed success.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Unforgeability&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Unforgeability&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> * The key value is {@value #KEY_BYTES} random bytes ({@value #KEY_BITS}&amp;nbsp;bits) from {@link SecureRandom},</span>
 <span class="source-line-no">046</span><span id="line-46"> * hex-encoded &amp;mdash; well beyond the ≥128-bit bar, matching {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s</span>
 <span class="source-line-no">047</span><span id="line-47"> * 256-bit reference.  The binding is what makes it safe; the width is what makes it unguessable.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Example &amp;mdash; the artifact-bound pattern (the default):&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Example &amp;mdash; the artifact-bound pattern (the default):&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jc&gt;// At modal-open: mint a key bound to this action + this row.&lt;/jc&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    IdempotencyKey &lt;jv&gt;key&lt;/jv&gt; = IdempotencyKey.&lt;jsm&gt;mint&lt;/jsm&gt;(&lt;js&gt;"ack"&lt;/js&gt;, &lt;jv&gt;incidentId&lt;/jv&gt;);</span>
@@ -70,7 +70,7 @@
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;jk&gt;return&lt;/jk&gt; ActionResult.&lt;jsm&gt;refusal&lt;/jsm&gt;(&lt;js&gt;"write-guard:idempotency-binding-mismatch"&lt;/js&gt;);</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;The row-less, self-targeted pattern (the opt-in)&lt;/h5&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;h2 class='section'&gt;The row-less, self-targeted pattern (the opt-in)&lt;/h2&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * &lt;p&gt;</span>
 <span class="source-line-no">062</span><span id="line-62"> * A dialog opened from a view's &lt;b&gt;ribbon&lt;/b&gt; has no row, so at mint time there is no artifact id to bind to.</span>
 <span class="source-line-no">063</span><span id="line-63"> * {@link #mintSelfTargeted(String)} mints a key whose {@link #targetId()} &lt;b&gt;is its own {@link #value()}&lt;/b&gt;, and</span>
@@ -90,7 +90,7 @@
 <span class="source-line-no">077</span><span id="line-77"> *       per-dialog opt-in rather than a blanket client-side precedence rule.</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;/ul&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;h5 class='section'&gt;Example &amp;mdash; the self-targeted pattern:&lt;/h5&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;h2 class='section'&gt;Example &amp;mdash; the self-targeted pattern:&lt;/h2&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;jc&gt;// At modal-open on a ribbon-hosted dialog: there is no row, so the key targets itself.&lt;/jc&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *    IdempotencyKey &lt;jv&gt;key&lt;/jv&gt; = IdempotencyKey.&lt;jsm&gt;mintSelfTargeted&lt;/jsm&gt;(&lt;js&gt;"create"&lt;/js&gt;);</span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line-88"> *       &lt;jk&gt;return&lt;/jk&gt; ActionResult.&lt;jsm&gt;refusal&lt;/jsm&gt;(&lt;js&gt;"write-guard:idempotency-binding-mismatch"&lt;/js&gt;);</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;/p&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> *</span>
-<span class="source-line-no">091</span><span id="line-91"> * &lt;h5 class='section'&gt;What a self-targeted key does and does not guarantee&lt;/h5&gt;</span>
+<span class="source-line-no">091</span><span id="line-91"> * &lt;h2 class='section'&gt;What a self-targeted key does and does not guarantee&lt;/h2&gt;</span>
 <span class="source-line-no">092</span><span id="line-92"> * &lt;p&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> * A self-targeted key binds to {@code (action, one-opened-dialog)} &amp;mdash; &lt;b&gt;not&lt;/b&gt; {@code (action, artifact)}.</span>
 <span class="source-line-no">094</span><span id="line-94"> * It is minted per modal-open, and it is &lt;b&gt;single-execution, replay-on-duplicate&lt;/b&gt;: it stops one opened dialog's</span>
@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101"> * the unchanged {@link #mint(String, String)} binds to a real artifact identity, and that guarantee is strictly</span>
 <span class="source-line-no">102</span><span id="line-102"> * stronger; it stays available to any consumer that has an artifact to bind to.</span>
 <span class="source-line-no">103</span><span id="line-103"> *</span>
-<span class="source-line-no">104</span><span id="line-104"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> * &lt;ul&gt;</span>
 <span class="source-line-no">106</span><span id="line-106"> *    &lt;li class='jc'&gt;{@link org.apache.juneau.console.widgets.ModalDef}</span>
 <span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='jc'&gt;{@link ActionResult}</span>

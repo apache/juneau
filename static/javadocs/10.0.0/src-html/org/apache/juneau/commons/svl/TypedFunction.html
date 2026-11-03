@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * construction via reflection; per-call dispatch picks the matching overload by argument count</span>
 <span class="source-line-no">032</span><span id="line-32"> * and runs one reflective invoke + N {@link ArgCoercer} coercions.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Method-resolution rules:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Method-resolution rules:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;ul&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;The subclass declares one or more public methods named {@code invoke}. Each must have a</span>
 <span class="source-line-no">037</span><span id="line-37"> *       distinct fixed-arity (or be the single variadic overload — see below).</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> *       fixed-arity overloads as long as the arity counts don't overlap.</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Example — multi-arity:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Example — multi-arity:&lt;/h2&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;jk&gt;public class&lt;/jk&gt; Substring &lt;jk&gt;extends&lt;/jk&gt; TypedFunction {</span>
 <span class="source-line-no">052</span><span id="line-52"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String name() { &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;"substring"&lt;/js&gt;; }</span>

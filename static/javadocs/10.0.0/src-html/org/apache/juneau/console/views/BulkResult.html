@@ -37,13 +37,13 @@
 <span class="source-line-no">024</span><span id="line-24"> * The response shape of an {@code aggregate}-mode bulk action ({@link RowAction.BulkMode#AGGREGATE}) &amp;mdash;</span>
 <span class="source-line-no">025</span><span id="line-25"> * one outcome per id submitted in the matching {@link BulkRequest}.</span>
 <span class="source-line-no">026</span><span id="line-26"> *</span>
-<span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;Own, independently-versioned contract&lt;/h5&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> * &lt;h2 class='section'&gt;Own, independently-versioned contract&lt;/h2&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * {@link #CONTRACT_VERSION} is this type's own wire contract, never aliased to {@code VIEW}, {@code ACTION_RESULT},</span>
 <span class="source-line-no">030</span><span id="line-30"> * or {@link BulkMutateDef#CONTRACT_VERSION} &amp;mdash; each of those versions what it defines (a view's shape, a</span>
 <span class="source-line-no">031</span><span id="line-31"> * single-row action's outcome, a bulk-mutate action list) and this one versions only this response shape.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;ja&gt;@RestPost&lt;/ja&gt;(path=&lt;js&gt;"/changes/abort"&lt;/js&gt;)</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;jk&gt;public&lt;/jk&gt; BulkResult abortChanges(&lt;ja&gt;@Content&lt;/ja&gt; BulkRequest &lt;jv&gt;request&lt;/jv&gt;) {</span>

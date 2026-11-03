@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * {@link MetricsRecorder} bridge that records every {@code @RestOp} call as a Micrometer</span>
 <span class="source-line-no">030</span><span id="line-30"> * {@link Timer} sample on the configured {@link MeterRegistry}.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='topic'&gt;Metric shape&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='topic'&gt;Metric shape&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * Each call records to one Timer named (by default) {@value #DEFAULT_TIMER_NAME} with four tags:</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> * convention so existing dashboards / alerts that scrape {@code http.server.requests} from Spring</span>
 <span class="source-line-no">052</span><span id="line-52"> * Boot services keep working when those services are reimplemented on Juneau.</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='topic'&gt;Wiring&lt;/h5&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h2 class='topic'&gt;Wiring&lt;/h2&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;ja&gt;@Configuration&lt;/ja&gt;</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73"> * The {@code MetricsRecorder} bean is picked up by {@code juneau-rest-server} through the</span>
 <span class="source-line-no">074</span><span id="line-74"> * {@code RestContext}'s bean store and invoked once per {@code @RestOp} call.</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='topic'&gt;Customizing the metric name&lt;/h5&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='topic'&gt;Customizing the metric name&lt;/h2&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;p&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> * Pass a non-default name to the two-arg constructor when the default</span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89"> * recorder-level timer name. Per-op tags added via {@link org.apache.juneau.rest.server.RestOp#metricTags()}</span>
 <span class="source-line-no">090</span><span id="line-90"> * are merged into the standard tag set as additional {@code key=value} pairs.</span>
 <span class="source-line-no">091</span><span id="line-91"> *</span>
-<span class="source-line-no">092</span><span id="line-92"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">093</span><span id="line-93"> *    &lt;li class='jc'&gt;{@link MetricsRecorder}</span>
 <span class="source-line-no">094</span><span id="line-94"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability"&gt;Observability — Micrometer + OpenTelemetry&lt;/a&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://micrometer.io/docs/concepts"&gt;Micrometer Concepts&lt;/a&gt;</span>

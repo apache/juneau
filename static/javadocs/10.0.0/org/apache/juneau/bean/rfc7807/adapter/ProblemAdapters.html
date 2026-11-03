@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -88,7 +87,7 @@ loadScripts(document, 'script');</script>
  bean module stays free of any <code>juneau-rest-common</code> dependency. The package is co-located with the bean's
  package namespace so the cross-reference is discoverable from <a href="../Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a>'s javadoc.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jk>try</jk> {
       ...
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='section'>Notes:</h5>
+ <h2 class='section'>Notes:</h2>
  <ul class='spaced-list'>
    <li><code>type</code> is intentionally left <code>null</code>. RFC 7807 &sect;3.1 defines <code>about:blank</code> as the default
       when the field is absent; the bean serializes a <code>null</code> <code>type</code> as an omitted field rather than as
@@ -107,7 +106,7 @@ loadScripts(document, 'script');</script>
       <c><jk>new</jk> NotFound()</c> case where the message would just echo <code>"Not Found"</code>.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../Problem.html" title="class in org.apache.juneau.bean.rfc7807"><code>Problem</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanRfc7807">juneau-bean-rfc7807</a>
  </ul></div>

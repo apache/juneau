@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -79,7 +78,7 @@ loadScripts(document, 'script');</script>
  <p>
  Used primarily for specifying bean configuration properties on REST classes and methods.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  </ul></div>
 </section>
@@ -166,12 +165,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Parser.Builder.html#autoCloseStreams()"><code>Parser.Builder.autoCloseStreams()</code></a>
  </ul></div>
 <dl class="notes">
@@ -200,12 +199,12 @@ loadScripts(document, 'script');</script>
    <li><js>"BASE64"</js>
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="../MarshallingContextable.Builder.html#binaryFormat(org.apache.juneau.marshall.BinaryFormat)"><code>MarshallingContextable.Builder.binaryFormat(BinaryFormat)</code></a>
  </ul></div>
 <dl class="notes">
@@ -228,7 +227,7 @@ loadScripts(document, 'script');</script>
  When parse errors occur, this specifies the number of lines of input before and after the
  error location to be printed as part of the exception message.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Format: integer
    <li class='note'>
@@ -237,7 +236,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Parser.Builder.html#debugOutputLines(int)"><code>Parser.Builder.debugOutputLines(int)</code></a>
  </ul></div>
 <dl class="notes">
@@ -259,7 +258,7 @@ loadScripts(document, 'script');</script>
  <p>
  Class used to listen for errors and warnings that occur during parsing.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Parser.Builder.html#listener(java.lang.Class)"><code>Parser.Builder.listener(Class)</code></a>
  </ul></div>
 <dl class="notes">
@@ -302,14 +301,14 @@ loadScripts(document, 'script');</script>
  <p>
  Used when passing in input streams and byte arrays to <a href="Parser.html#read(java.lang.Object,java.lang.Class)"><code>Parser.read(Object, Class)</code></a>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       <js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="ReaderParser.Builder.html#streamCharset(java.nio.charset.Charset)"><code>ReaderParser.Builder.streamCharset(Charset)</code></a>
  </ul></div>
 <dl class="notes">
@@ -337,12 +336,12 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Parser.Builder.html#trimStrings()"><code>Parser.Builder.trimStrings()</code></a>
  </ul></div>
 <dl class="notes">
@@ -374,12 +373,12 @@ loadScripts(document, 'script');</script>
    <li><js>"SKIP"</js> — do not call the setter at all.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Parser.Builder.html#nulls(org.apache.juneau.marshall.Nulls)"><code>Parser.Builder.nulls(Nulls)</code></a>
  </ul></div>
 <dl class="notes">
@@ -413,7 +412,7 @@ loadScripts(document, 'script');</script>
    <li><js>"false"</js> (default)
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
       This only allows for multi-input streams for the following parsers:
       <ul>
@@ -430,7 +429,7 @@ loadScripts(document, 'script');</script>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h4 class='section'>See Also:</h4><ul>
    <li class='jm'><a href="Parser.Builder.html#unbuffered()"><code>Parser.Builder.unbuffered()</code></a>
  </ul></div>
 <dl class="notes">

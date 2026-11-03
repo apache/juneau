@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  It supports various pattern formats for identifying classes and their members, with intelligent
  matching that handles inner classes, method signatures, and field names.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a map that associates visibility levels with specific classes/methods</jc>
    ReflectionMap&lt;Visibility&gt; <jv>map</jv> = ReflectionMap
@@ -106,7 +105,7 @@ loadScripts(document, 'script');</script>
    Stream&lt;Visibility&gt; <jv>methodVisibility</jv> = <jv>map</jv>.find(<jv>secretMethod</jv>);
  </p>
 
- <h5 class='section'>Supported Pattern Formats:</h5>
+ <h2 class='section'>Supported Pattern Formats:</h2>
 
  <p>
  The following pattern formats are supported for mapping keys:
@@ -214,7 +213,7 @@ loadScripts(document, 'script');</script>
       </ul>
  </ul>
 
- <h5 class='section'>Notes:</h5>
+ <h2 class='section'>Notes:</h2>
  <ul class='spaced-list'>
    <li>Method and constructor patterns without parentheses match any method signature.
    <li>Method and constructor argument types can be specified with simple or fully qualified names.
@@ -223,7 +222,7 @@ loadScripts(document, 'script');</script>
    <li>Patterns are case-sensitive.
  </ul>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul class='seealso'>
    <li class='jc'><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a>
    <li class='jc'><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a>
@@ -351,7 +350,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;V&gt;</span>&nbsp;<span class="return-type"><a href="ReflectionMap.Builder.html" title="class in org.apache.juneau.commons.reflect">ReflectionMap.Builder</a>&lt;V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionMap.html#line-517">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;c)</span></div>
 <div class="block">Creates a new builder for constructing a <a href="ReflectionMap.html" title="class in org.apache.juneau.commons.reflect"><code>ReflectionMap</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
       .<jsm>create</jsm>(String.<jk>class</jk>)
@@ -379,7 +378,7 @@ loadScripts(document, 'script');</script>
  This method searches for mappings that match the given class, including patterns for
  the fully qualified name, simple name, inner class names, and wildcard patterns.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
       .<jsm>create</jsm>(String.<jk>class</jk>)
@@ -409,7 +408,7 @@ loadScripts(document, 'script');</script>
  This method searches for mappings that match the given constructor, considering both
  the declaring class and parameter types.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
       .<jsm>create</jsm>(String.<jk>class</jk>)
@@ -438,7 +437,7 @@ loadScripts(document, 'script');</script>
  This method searches for mappings that match the given field, considering both
  the declaring class and field name.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
       .<jsm>create</jsm>(String.<jk>class</jk>)
@@ -467,7 +466,7 @@ loadScripts(document, 'script');</script>
  This method searches for mappings that match the given method, considering the
  declaring class, method name, and parameter types.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    ReflectionMap&lt;String&gt; <jv>map</jv> = ReflectionMap
       .<jsm>create</jsm>(String.<jk>class</jk>)

@@ -40,13 +40,13 @@
 <span class="source-line-no">027</span><span id="line-27"> * An in-memory, per-process registry of {@link AsyncJob async jobs} &amp;mdash; the single-process job store a future</span>
 <span class="source-line-no">028</span><span id="line-28"> * async write variant runs on.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Single-process, by decision&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Single-process, by decision&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * Job state lives only in this object's heap, which is enough for a single-user loopback console and a documented</span>
 <span class="source-line-no">033</span><span id="line-33"> * limitation for anything else: a process restart drops every in-flight job, exactly as a restart invalidates</span>
 <span class="source-line-no">034</span><span id="line-34"> * every {@link org.apache.juneau.rest.server.filter.SynchronizerToken}.  There is deliberately no store abstraction.</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;The id is the capability; the caps are load-bearing&lt;/h5&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;h2 class='section'&gt;The id is the capability; the caps are load-bearing&lt;/h2&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * Each job is keyed by an unguessable {@value #CAPABILITY_BITS}-bit {@link SecureRandom} id</span>
 <span class="source-line-no">039</span><span id="line-39"> * ({@value #CAPABILITY_BYTES} bytes, hex-encoded), matching</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53"> *       {@link AsyncJob#acquireSubscriber()}.</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/ul&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;De-duplication by {@link IdempotencyKey}&lt;/h5&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;h2 class='section'&gt;De-duplication by {@link IdempotencyKey}&lt;/h2&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;p&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * {@link #tryCreate(IdempotencyKey)} / {@link #create(IdempotencyKey)} register a job under an idempotency key's</span>
 <span class="source-line-no">059</span><span id="line-59"> * {@link IdempotencyKey#value() value}; submitting again with a key that is already registered returns the</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67"> * heap (see {@link #sweepTimeouts()}), its key is forgotten too, and the same key starts a fresh job.  A duplicate</span>
 <span class="source-line-no">068</span><span id="line-68"> * never counts against {@link #MAX_CONCURRENT_JOBS}, since it creates nothing.</span>
 <span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    AsyncJobRegistry &lt;jv&gt;registry&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; AsyncJobRegistry();</span>
 <span class="source-line-no">073</span><span id="line-73"> *    IdempotencyKey &lt;jv&gt;key&lt;/jv&gt; = IdempotencyKey.&lt;jsm&gt;mintSelfTargeted&lt;/jsm&gt;(&lt;js&gt;"create"&lt;/js&gt;);</span>
@@ -90,7 +90,7 @@
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;jsm&gt;assert&lt;/jsm&gt; &lt;jv&gt;first&lt;/jv&gt; == &lt;jv&gt;again&lt;/jv&gt;;</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;/p&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> *</span>
-<span class="source-line-no">080</span><span id="line-80"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;ul&gt;</span>
 <span class="source-line-no">082</span><span id="line-82"> *    &lt;li class='jc'&gt;{@link AsyncJob}</span>
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;li class='jc'&gt;{@link AsyncJobsMixin}</span>

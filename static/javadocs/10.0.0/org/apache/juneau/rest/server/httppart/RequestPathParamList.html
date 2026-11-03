@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
    <jk>public</jk> Object myMethod(RequestPathParamList <jv>path</jv>) {...}
  </p>
 
- <h5 class='figure'>Example:</h5>
+ <h2 class='figure'>Example:</h2>
  <p class='bjava'>
    <ja>@RestPost</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
    <jk>public void</jk> doGet(RequestPathParamList <jv>path</jv>) {
@@ -150,7 +149,7 @@ loadScripts(document, 'script');</script>
    </ul>
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart"><code>RequestPathParam</code></a>
    <li class='ja'><a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http"><code>Path</code></a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerHttpParts">HTTP parts in REST servers</a>
@@ -623,12 +622,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRemainder()">
 <h3>getRemainder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-451">getRemainder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-452">getRemainder</a></span>()</div>
 <div class="block">Returns the decoded remainder of the URL following any path pattern matches.
 
  <p>
  The behavior of path remainder is shown below given the path pattern "/foo/*":
  <table class='styled'>
+   <caption>Path remainder behavior</caption>
    <tr>
       <th>URL</th>
       <th>Path Remainder</th>
@@ -663,7 +663,7 @@ loadScripts(document, 'script');</script>
    </tr>
  </table>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// REST method</jc>
    <ja>@RestGet</ja>(<js>"/foo/{bar}/*"</js>)
@@ -683,7 +683,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getRemainderUndecoded()">
 <h3>getRemainderUndecoded</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-464">getRemainderUndecoded</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-465">getRemainderUndecoded</a></span>()</div>
 <div class="block">Same as <a href="#getRemainder()"><code>getRemainder()</code></a> but doesn't decode characters.
 
  <p>
@@ -697,7 +697,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSorted()">
 <h3>getSorted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-471">getSorted</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-472">getSorted</a></span>()</div>
 <div class="block">Returns all headers in sorted order.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -708,7 +708,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parser(org.apache.juneau.marshall.httppart.HttpPartParserSession)">
 <h3>parser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-486">parser</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-487">parser</a></span><wbr><span class="parameters">(<a href="../../../marshall/httppart/HttpPartParserSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartParserSession</a>&nbsp;value)</span></div>
 <div class="block">Sets the parser to use for part values.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -721,7 +721,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.lang.String)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-498">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-499">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Remove parameters.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -734,7 +734,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(org.apache.juneau.http.HttpPart...)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-514">set</a></span><wbr><span class="parameters">(<a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;parameters)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-515">set</a></span><wbr><span class="parameters">(<a href="../../../http/HttpPart.html" title="interface in org.apache.juneau.http">HttpPart</a>...&nbsp;parameters)</span></div>
 <div class="block">Sets request header values.
 
  <p>
@@ -751,7 +751,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-537">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-538">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Sets a parameter value.
 
@@ -772,7 +772,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stream(java.lang.String)">
 <h3>stream</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-549">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-550">stream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns all headers with the specified name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -785,7 +785,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="subset(java.lang.String...)">
 <h3>subset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-559">subset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RequestPathParamList.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParamList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-560">subset</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Returns a copy of this object but only with the specified param names copied.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -798,13 +798,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="properties()">
 <h3>properties</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-563">properties</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../../commons/collections/FluentMap.html" title="class in org.apache.juneau.commons.collections">FluentMap</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-564">properties</a></span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-570">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-571">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html#equals(java.lang.Object)" title="class or interface in java.util" class="external-link">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</code></dd>
@@ -818,7 +818,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-575">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-576">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html#hashCode()" title="class or interface in java.util" class="external-link">hashCode</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</code></dd>
@@ -832,7 +832,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-580">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/httppart/RequestPathParamList.html#line-581">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html#toString()" title="class or interface in java.util" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html" title="class or interface in java.util" class="external-link">AbstractCollection</a>&lt;<a href="RequestPathParam.html" title="class in org.apache.juneau.rest.server.httppart">RequestPathParam</a>&gt;</code></dd>

@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * {@link Rest#mixins() @Rest(mixins=ThatMixin.class)}. Mixins compose through the existing sub-context</span>
 <span class="source-line-no">032</span><span id="line-32"> * model; {@code RestMixin} does &lt;b&gt;not&lt;/b&gt; change that composition mechanism.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Opt-in, not mandatory:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Opt-in, not mandatory:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * Extending {@code RestMixin} is &lt;b&gt;optional&lt;/b&gt;. A bare {@code @Rest} POJO with no base class remains a</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * base-less; the new single-responsibility op-mixins extend this base to make the triad membership</span>
 <span class="source-line-no">041</span><span id="line-41"> * explicit.</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Builder support:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Builder support:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * The fluent programmatic-builder surface ({@link RestBuilder}/ {@link Builder}) lets a mixin be configured</span>
@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48"> * over {@link Rest @Rest} annotation values.  Use {@link #builder(Class)} for the common case, or subclass</span>
 <span class="source-line-no">049</span><span id="line-49"> * {@link Builder} for capability mixins that add their own setters.</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;Reaching the host resource:&lt;/h5&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;h2 class='section'&gt;Reaching the host resource:&lt;/h2&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * Because a mixin's {@code @RestOp} methods are bound to a per-mixin {@link RestContext} sub-context (the</span>
@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64"> *    }</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='jc'&gt;{@link RestServlet}</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='jc'&gt;{@link RestResource}</span>
 <span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='jm'&gt;{@link #getHostContext()}</span>
@@ -171,7 +171,7 @@
 <span class="source-line-no">158</span><span id="line-158">    * {@link RestContext#getParentContext() parent linkage}, so it is usable at config time and does not depend</span>
 <span class="source-line-no">159</span><span id="line-159">    * on an in-flight request.</span>
 <span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * &lt;h5 class='section'&gt;Edge cases:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;h4 class='section'&gt;Edge cases:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">162</span><span id="line-162">    *    &lt;li class='note'&gt;&lt;b&gt;Standalone / no host&lt;/b&gt; &amp;mdash; when a {@code RestMixin} subclass is instantiated</span>
 <span class="source-line-no">163</span><span id="line-163">    *       directly rather than composed via {@link Rest#mixins() @Rest(mixins=...)}, this returns {@code null},</span>
 <span class="source-line-no">164</span><span id="line-164">    *       mirroring {@link RestContext#getParentContext()}'s top-level contract.  Callers needing host-only</span>

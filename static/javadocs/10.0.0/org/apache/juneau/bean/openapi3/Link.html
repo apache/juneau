@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -89,7 +88,7 @@ loadScripts(document, 'script');</script>
  the caller's ability to successfully invoke it, rather it provides a known relationship and traversal mechanism
  between responses and other operations.
 
- <h5 class='section'>OpenAPI Specification:</h5>
+ <h2 class='section'>OpenAPI Specification:</h2>
  <p>
  The Link Object is composed of the following fields:
  <ul class='spaced-list'>
@@ -101,7 +100,7 @@ loadScripts(document, 'script');</script>
    <li><c>server</c> (<a href="Server.html" title="class in org.apache.juneau.bean.openapi3"><code>Server</code></a>) - A server object to be used by the target operation
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Create a link to another operation</jc>
    Link <jv>link</jv> = <jk>new</jk> Link()
@@ -112,7 +111,7 @@ loadScripts(document, 'script');</script>
       .setDescription(<js>"The id value returned in the response can be used as userId parameter in GET /users/{userId}"</js>);
  </p>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://spec.openapis.org/oas/v3.0.0#link-object">OpenAPI Specification &gt; Link Object</a>
    <li class='link'><a class="doclink" href="https://swagger.io/docs/specification/links/">OpenAPI Links</a>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3">juneau-bean-openapi-v3</a>

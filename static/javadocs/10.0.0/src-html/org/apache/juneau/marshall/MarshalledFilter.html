@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> * {@link Marshalled @Marshalled} annotation. Filters can be registered with serializers and parsers to customize</span>
 <span class="source-line-no">051</span><span id="line-51"> * how specific classes are handled.</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Define a custom filter for MyBean&lt;/jc&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;jk&gt;public class&lt;/jk&gt; MyMarshalledFilter &lt;jk&gt;extends&lt;/jk&gt; MarshalledFilter.Builder&amp;lt;MyBean&amp;gt; {</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> *       .build();</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;/p&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;ul&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;li class='ja'&gt;{@link Marshalled @Marshalled}</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li class='jc'&gt;{@link BeanInterceptor}</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
 <span class="source-line-no">190</span><span id="line-190">       * Adds to the list of classes that make up the bean dictionary for this bean.</span>
 <span class="source-line-no">191</span><span id="line-191">       *</span>
-<span class="source-line-no">192</span><span id="line-192">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">       *    &lt;li class='ja'&gt;{@link Marshalled#dictionary()}</span>
 <span class="source-line-no">194</span><span id="line-194">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
 <span class="source-line-no">195</span><span id="line-195">       * &lt;/ul&gt;</span>
@@ -251,7 +251,7 @@
 <span class="source-line-no">238</span><span id="line-238">       * &lt;p&gt;</span>
 <span class="source-line-no">239</span><span id="line-239">       * Specifies properties to exclude from the bean class.</span>
 <span class="source-line-no">240</span><span id="line-240">       *</span>
-<span class="source-line-no">241</span><span id="line-241">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">242</span><span id="line-242">       *    &lt;li class='ja'&gt;{@link BeanType#excludeProperties()}</span>
 <span class="source-line-no">243</span><span id="line-243">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanPropertiesExcludes(Class, String)}</span>
 <span class="source-line-no">244</span><span id="line-244">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanPropertiesExcludes(String, String)}</span>
@@ -276,7 +276,7 @@
 <span class="source-line-no">263</span><span id="line-263">       * &lt;p&gt;</span>
 <span class="source-line-no">264</span><span id="line-264">       * When enabled, fluent setters are detected on beans.</span>
 <span class="source-line-no">265</span><span id="line-265">       *</span>
-<span class="source-line-no">266</span><span id="line-266">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">266</span><span id="line-266">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">267</span><span id="line-267">       *    &lt;li class='ja'&gt;{@link BeanType#findFluentSetters()}</span>
 <span class="source-line-no">268</span><span id="line-268">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#findFluentSetters()}</span>
 <span class="source-line-no">269</span><span id="line-269">       * &lt;/ul&gt;</span>
@@ -319,7 +319,7 @@
 <span class="source-line-no">306</span><span id="line-306">       * &lt;p&gt;</span>
 <span class="source-line-no">307</span><span id="line-307">       * The interceptor to use for intercepting and altering getter and setter calls.</span>
 <span class="source-line-no">308</span><span id="line-308">       *</span>
-<span class="source-line-no">309</span><span id="line-309">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">310</span><span id="line-310">       *    &lt;li class='ja'&gt;{@link Marshalled#interceptor()}</span>
 <span class="source-line-no">311</span><span id="line-311">       *    &lt;li class='jc'&gt;{@link BeanInterceptor}</span>
 <span class="source-line-no">312</span><span id="line-312">       * &lt;/ul&gt;</span>
@@ -355,7 +355,7 @@
 <span class="source-line-no">342</span><span id="line-342">       * Identifies a class to be used as the interface class for this and all subclasses.</span>
 <span class="source-line-no">343</span><span id="line-343">       * When specified, only the list of properties defined on the interface class will be used during serialization.</span>
 <span class="source-line-no">344</span><span id="line-344">       *</span>
-<span class="source-line-no">345</span><span id="line-345">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">345</span><span id="line-345">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">346</span><span id="line-346">       *    &lt;li class='ja'&gt;{@link BeanType#interfaceClass()}</span>
 <span class="source-line-no">347</span><span id="line-347">       * &lt;/ul&gt;</span>
 <span class="source-line-no">348</span><span id="line-348">       *</span>
@@ -387,7 +387,7 @@
 <span class="source-line-no">374</span><span id="line-374">       * &lt;p&gt;</span>
 <span class="source-line-no">375</span><span id="line-375">       * Specifies the set and order of names of properties associated with the bean class.</span>
 <span class="source-line-no">376</span><span id="line-376">       *</span>
-<span class="source-line-no">377</span><span id="line-377">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">377</span><span id="line-377">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">378</span><span id="line-378">       *    &lt;li class='ja'&gt;{@link BeanType#properties()}</span>
 <span class="source-line-no">379</span><span id="line-379">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanProperties(Class, String)}</span>
 <span class="source-line-no">380</span><span id="line-380">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanProperties(String, String)}</span>
@@ -412,7 +412,7 @@
 <span class="source-line-no">399</span><span id="line-399">       * &lt;p&gt;</span>
 <span class="source-line-no">400</span><span id="line-400">       * The class to use for calculating bean property names.</span>
 <span class="source-line-no">401</span><span id="line-401">       *</span>
-<span class="source-line-no">402</span><span id="line-402">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">402</span><span id="line-402">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">403</span><span id="line-403">       *    &lt;li class='ja'&gt;{@link BeanType#propertyNamer()}</span>
 <span class="source-line-no">404</span><span id="line-404">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#propertyNamer(Class)}</span>
 <span class="source-line-no">405</span><span id="line-405">       *    &lt;li class='jc'&gt;{@link PropertyNamer}</span>
@@ -448,7 +448,7 @@
 <span class="source-line-no">435</span><span id="line-435">       * &lt;p&gt;</span>
 <span class="source-line-no">436</span><span id="line-436">       * Specifies one or more properties on a bean that are read-only despite having valid getters.</span>
 <span class="source-line-no">437</span><span id="line-437">       *</span>
-<span class="source-line-no">438</span><span id="line-438">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">438</span><span id="line-438">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">439</span><span id="line-439">       *    &lt;li class='ja'&gt;{@link BeanType#readOnlyProperties()}</span>
 <span class="source-line-no">440</span><span id="line-440">       *    &lt;li class='ja'&gt;{@link BeanProp#ro()}</span>
 <span class="source-line-no">441</span><span id="line-441">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanPropertiesReadOnly(Class, String)}</span>
@@ -471,7 +471,7 @@
 <span class="source-line-no">458</span><span id="line-458">      /**</span>
 <span class="source-line-no">459</span><span id="line-459">       * Opt out of alphabetical property sorting for this specific bean.</span>
 <span class="source-line-no">460</span><span id="line-460">       *</span>
-<span class="source-line-no">461</span><span id="line-461">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">461</span><span id="line-461">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">462</span><span id="line-462">       *    &lt;li class='ja'&gt;{@link BeanType#unsorted()}</span>
 <span class="source-line-no">463</span><span id="line-463">       *    &lt;li class='jf'&gt;{@link MarshallingContext.Builder#unsortedProperties()}</span>
 <span class="source-line-no">464</span><span id="line-464">       * &lt;/ul&gt;</span>
@@ -486,7 +486,7 @@
 <span class="source-line-no">473</span><span id="line-473">      /**</span>
 <span class="source-line-no">474</span><span id="line-474">       * Opt out of alphabetical property sorting for this specific bean.</span>
 <span class="source-line-no">475</span><span id="line-475">       *</span>
-<span class="source-line-no">476</span><span id="line-476">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">476</span><span id="line-476">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">477</span><span id="line-477">       *    &lt;li class='ja'&gt;{@link BeanType#unsorted()}</span>
 <span class="source-line-no">478</span><span id="line-478">       *    &lt;li class='jf'&gt;{@link MarshallingContext.Builder#unsortedProperties()}</span>
 <span class="source-line-no">479</span><span id="line-479">       * &lt;/ul&gt;</span>
@@ -508,7 +508,7 @@
 <span class="source-line-no">495</span><span id="line-495">       * Identifies a stop class for this class and all subclasses.</span>
 <span class="source-line-no">496</span><span id="line-496">       * Identical in purpose to the stop class specified by {@link Introspector#getBeanInfo(Class, Class)}.</span>
 <span class="source-line-no">497</span><span id="line-497">       *</span>
-<span class="source-line-no">498</span><span id="line-498">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">498</span><span id="line-498">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">499</span><span id="line-499">       *    &lt;li class='ja'&gt;{@link BeanType#stopClass()}</span>
 <span class="source-line-no">500</span><span id="line-500">       * &lt;/ul&gt;</span>
 <span class="source-line-no">501</span><span id="line-501">       *</span>
@@ -540,7 +540,7 @@
 <span class="source-line-no">527</span><span id="line-527">       * &lt;p&gt;</span>
 <span class="source-line-no">528</span><span id="line-528">       * Specifies the dictionary type name for this bean.</span>
 <span class="source-line-no">529</span><span id="line-529">       *</span>
-<span class="source-line-no">530</span><span id="line-530">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">530</span><span id="line-530">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">531</span><span id="line-531">       *    &lt;li class='ja'&gt;{@link Marshalled#typeName()}</span>
 <span class="source-line-no">532</span><span id="line-532">       * &lt;/ul&gt;</span>
 <span class="source-line-no">533</span><span id="line-533">       *</span>
@@ -558,7 +558,7 @@
 <span class="source-line-no">545</span><span id="line-545">       * &lt;p&gt;</span>
 <span class="source-line-no">546</span><span id="line-546">       * Specifies one or more properties on a bean that are write-only despite having valid setters.</span>
 <span class="source-line-no">547</span><span id="line-547">       *</span>
-<span class="source-line-no">548</span><span id="line-548">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">548</span><span id="line-548">       * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">549</span><span id="line-549">       *    &lt;li class='ja'&gt;{@link BeanType#writeOnlyProperties()}</span>
 <span class="source-line-no">550</span><span id="line-550">       *    &lt;li class='ja'&gt;{@link BeanProp#wo()}</span>
 <span class="source-line-no">551</span><span id="line-551">       *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanPropertiesWriteOnly(Class, String)}</span>

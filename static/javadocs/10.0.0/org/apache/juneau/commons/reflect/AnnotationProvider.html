@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -93,9 +92,9 @@ loadScripts(document, 'script');</script>
    <li>Caches results for performance
  </ul>
 
- <h5 class='section'>Annotation Order of Precedence:</h5>
+ <h2 class='section'>Annotation Order of Precedence:</h2>
 
- <h6 class='topic'>For Classes (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ClassInfo, AnnotationTraversal...)</code></a>):</h6>
+ <h3 class='topic'>For Classes (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ClassInfo, AnnotationTraversal...)</code></a>):</h3>
  <p>
  Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  <ol>
@@ -120,7 +119,7 @@ loadScripts(document, 'script');</script>
    <jc>// 7. @Annotation on package-info.java</jc>
  </p>
 
- <h6 class='topic'>For Methods (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, MethodInfo, AnnotationTraversal...)</code></a>):</h6>
+ <h3 class='topic'>For Methods (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, MethodInfo, AnnotationTraversal...)</code></a>):</h3>
  <p>
  Annotations are returned in <b>child-to-parent</b> order with the following precedence:
  <ol>
@@ -130,7 +129,7 @@ loadScripts(document, 'script');</script>
    <li><b>Declared annotations</b> on overridden parent methods (child-to-parent order)
  </ol>
 
- <h6 class='topic'>For Fields (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.FieldInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, FieldInfo, AnnotationTraversal...)</code></a>):</h6>
+ <h3 class='topic'>For Fields (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.FieldInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, FieldInfo, AnnotationTraversal...)</code></a>):</h3>
  <p>
  Annotations are returned with the following precedence:
  <ol>
@@ -138,7 +137,7 @@ loadScripts(document, 'script');</script>
    <li><b>Declared annotations</b> on the field
  </ol>
 
- <h6 class='topic'>For Constructors (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ConstructorInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ConstructorInfo, AnnotationTraversal...)</code></a>):</h6>
+ <h3 class='topic'>For Constructors (<a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ConstructorInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ConstructorInfo, AnnotationTraversal...)</code></a>):</h3>
  <p>
  Annotations are returned with the following precedence:
  <ol>
@@ -146,7 +145,7 @@ loadScripts(document, 'script');</script>
    <li><b>Declared annotations</b> on the constructor
  </ol>
 
- <h5 class='section'>Runtime Annotations:</h5>
+ <h2 class='section'>Runtime Annotations:</h2>
  <p>
  Runtime annotations are concrete objects that implement annotation interfaces, added programmatically via the
  builder's <a href="AnnotationProvider.Builder.html#addRuntimeAnnotations(java.util.List)"><code>AnnotationProvider.Builder.addRuntimeAnnotations(List)</code></a> method. They allow you to dynamically apply annotations
@@ -191,7 +190,7 @@ loadScripts(document, 'script');</script>
  For example, a runtime <code>@Marshalled</code> annotation on a class will be found before any <code>@Marshalled</code> annotation
  declared directly on that class.
 
- <h5 class='section'>Comparison with ElementInfo Methods:</h5>
+ <h2 class='section'>Comparison with ElementInfo Methods:</h2>
  <p>
  The methods in this class differ from <a href="ClassInfo.html#getAnnotations()"><code>ClassInfo.getAnnotations()</code></a>, <a href="MethodInfo.html#getAnnotations()"><code>MethodInfo.getAnnotations()</code></a>, etc.:
  <ul>
@@ -200,7 +199,7 @@ loadScripts(document, 'script');</script>
    <li><b>Precedence</b>: Runtime annotations are inserted at each level with higher priority than declared annotations.
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create with default settings</jc>
    AnnotationProvider <jv>provider</jv> = AnnotationProvider.<jsm>create</jsm>().build();
@@ -218,7 +217,7 @@ loadScripts(document, 'script');</script>
    Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>myAnnotations</jv> = <jv>provider</jv>.find(MyAnnotation.<jk>class</jk>, MyClass.<jk>class</jk>);
  </p>
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="AnnotationProvider.html" title="class in org.apache.juneau.commons.reflect"><code>AnnotationProvider</code></a>
    <li class='jc'><a href="AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect"><code>AnnotationInfo</code></a>
@@ -470,7 +469,7 @@ loadScripts(document, 'script');</script>
  This method provides a flexible API for traversing annotations.
  It uses <a href="AnnotationTraversal.html" title="enum class in org.apache.juneau.commons.reflect"><code>AnnotationTraversal</code></a> enums to configure what elements to search and in what order.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Search class only</jc>
    List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>l1</jv> =
@@ -508,7 +507,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method provides a flexible, stream-based API for traversing constructor annotations without creating intermediate lists.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Search constructor annotations</jc>
    Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
@@ -538,7 +537,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method provides a flexible, stream-based API for traversing field annotations without creating intermediate lists.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Search field annotations</jc>
    Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
@@ -568,7 +567,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method provides a flexible API for traversing method annotations.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Search method and matching parent methods</jc>
    List&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>l1</jv> =
@@ -602,7 +601,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method provides a flexible, stream-based API for traversing parameter annotations without creating intermediate lists.
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this parameter
    <li><a href="AnnotationTraversal.html#MATCHING_PARAMETERS"><code>MATCHING_PARAMETERS</code></a> - Matching parameters in parent methods/constructors (child-to-parent)
@@ -612,7 +611,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Default:</b> If no traversals are specified, defaults to: <code>SELF, MATCHING_PARAMETERS, PARAMETER_TYPE</code>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Search parameter, matching parameters, and parameter type (child-to-parent)</jc>
    Stream&lt;AnnotationInfo&lt;MyAnnotation&gt;&gt; <jv>s1</jv> =
@@ -650,7 +649,7 @@ loadScripts(document, 'script');</script>
  This method provides a flexible API for traversing all class annotations.
  Unlike <a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ClassInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ClassInfo, AnnotationTraversal...)</code></a>, this method does not filter by annotation type.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Get all annotations from class only</jc>
    List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
@@ -680,7 +679,7 @@ loadScripts(document, 'script');</script>
  This method provides a flexible, stream-based API for traversing all constructor annotations without creating intermediate lists.
  Unlike <a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ConstructorInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ConstructorInfo, AnnotationTraversal...)</code></a>, this method does not filter by annotation type.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Get all annotations from constructor</jc>
    Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
@@ -706,7 +705,7 @@ loadScripts(document, 'script');</script>
  This method provides a flexible, stream-based API for traversing all field annotations without creating intermediate lists.
  Unlike <a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.FieldInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, FieldInfo, AnnotationTraversal...)</code></a>, this method does not filter by annotation type.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Get all annotations from field</jc>
    Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
@@ -732,7 +731,7 @@ loadScripts(document, 'script');</script>
  This method provides a flexible API for traversing all method annotations.
  Unlike <a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.MethodInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, MethodInfo, AnnotationTraversal...)</code></a>, this method does not filter by annotation type.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Get all annotations from method and matching parent methods</jc>
    List&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>l1</jv> =
@@ -762,7 +761,7 @@ loadScripts(document, 'script');</script>
  This method provides a flexible, stream-based API for traversing all parameter annotations without creating intermediate lists.
  Unlike <a href="#find(java.lang.Class,org.apache.juneau.commons.reflect.ParameterInfo,org.apache.juneau.commons.reflect.AnnotationTraversal...)"><code>find(Class, ParameterInfo, AnnotationTraversal...)</code></a>, this method does not filter by annotation type.
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this parameter
    <li><a href="AnnotationTraversal.html#MATCHING_PARAMETERS"><code>MATCHING_PARAMETERS</code></a> - Matching parameters in parent methods/constructors (child-to-parent)
@@ -772,7 +771,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Default:</b> If no traversals are specified, defaults to: <code>SELF, MATCHING_PARAMETERS, PARAMETER_TYPE</code>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Get all annotations from parameter, matching parameters, and parameter type</jc>
    Stream&lt;AnnotationInfo&lt;Annotation&gt;&gt; <jv>s1</jv> =
@@ -806,7 +805,7 @@ loadScripts(document, 'script');</script>
    find(<jv>type</jv>, <jv>clazz</jv>, <jv>traversals</jv>).findFirst().isPresent()
  </p>
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this class
    <li><a href="AnnotationTraversal.html#PARENTS"><code>PARENTS</code></a> - Parent classes and interfaces (child-to-parent order)
@@ -817,7 +816,7 @@ loadScripts(document, 'script');</script>
  <b>Default:</b> If no traversals are specified, defaults to: <code>PARENTS, PACKAGE</code>
  <br>Note: <code>PARENTS</code> includes the class itself plus all parent classes and interfaces.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if class has @MyAnnotation anywhere in hierarchy</jc>
    <jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
@@ -852,7 +851,7 @@ loadScripts(document, 'script');</script>
    find(<jv>type</jv>, <jv>constructor</jv>, <jv>traversals</jv>).findFirst().isPresent()
  </p>
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this constructor
  </ul>
@@ -860,7 +859,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Default:</b> If no traversals are specified, defaults to: <code>SELF</code>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if constructor has @MyAnnotation</jc>
    <jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>ci</jv>);
@@ -892,7 +891,7 @@ loadScripts(document, 'script');</script>
    find(<jv>type</jv>, <jv>field</jv>, <jv>traversals</jv>).findFirst().isPresent()
  </p>
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this field
  </ul>
@@ -900,7 +899,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Default:</b> If no traversals are specified, defaults to: <code>SELF</code>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if field has @MyAnnotation</jc>
    <jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>fi</jv>);
@@ -932,7 +931,7 @@ loadScripts(document, 'script');</script>
    find(<jv>type</jv>, <jv>method</jv>, <jv>traversals</jv>).findFirst().isPresent()
  </p>
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this method
    <li><a href="AnnotationTraversal.html#MATCHING_METHODS"><code>MATCHING_METHODS</code></a> - Matching methods in parent classes (child-to-parent)
@@ -943,7 +942,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Default:</b> If no traversals are specified, defaults to: <code>SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE</code>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if method has @MyAnnotation anywhere in hierarchy</jc>
    <jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>mi</jv>);
@@ -978,7 +977,7 @@ loadScripts(document, 'script');</script>
    find(<jv>type</jv>, <jv>parameter</jv>, <jv>traversals</jv>).findFirst().isPresent()
  </p>
 
- <h5 class='section'>Supported Traversal Types:</h5>
+ <h4 class='section'>Supported Traversal Types:</h4>
  <ul>
    <li><a href="AnnotationTraversal.html#SELF"><code>SELF</code></a> - Annotations declared directly on this parameter
    <li><a href="AnnotationTraversal.html#MATCHING_PARAMETERS"><code>MATCHING_PARAMETERS</code></a> - Matching parameters in parent methods/constructors (child-to-parent)
@@ -988,7 +987,7 @@ loadScripts(document, 'script');</script>
  <p>
  <b>Default:</b> If no traversals are specified, defaults to: <code>SELF, MATCHING_PARAMETERS, PARAMETER_TYPE</code>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if parameter has @MyAnnotation anywhere in hierarchy</jc>
    <jk>boolean</jk> <jv>hasIt</jv> = has(MyAnnotation.<jk>class</jk>, <jv>pi</jv>);

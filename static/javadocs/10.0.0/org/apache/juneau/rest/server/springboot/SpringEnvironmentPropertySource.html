@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
  <code>application.properties</code>, command-line args, environment variables, and any custom
  <code>org.springframework.core.env.PropertySource</code> that Spring loads.
 
- <h5 class='section'>Lifecycle:</h5>
+ <h2 class='section'>Lifecycle:</h2>
  <p>
  <a href="SpringBeanStore.html" title="class in org.apache.juneau.rest.server.springboot"><code>SpringBeanStore</code></a> registers one instance per <code>ApplicationContext</code> in
  <a href="../../../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>, shared by every store on that context.  It is removed
@@ -104,7 +103,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
  want explicit lifecycle control can construct the source directly and add it via <code>Settings.get().addSource(...)</code>;
  such instances are not shared.
 
- <h5 class='section'>Miss cache:</h5>
+ <h2 class='section'>Miss cache:</h2>
  <p>
  Juneau's builder keys (e.g. <code>MarshallingContext.unsortedProperties</code>) are not valid Spring Boot property names,
  so Spring walks every raw property source for each of them.  This source remembers up to 4096 such keys that were
@@ -115,14 +114,14 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
  call <a href="#invalidate()"><code>invalidate()</code></a> after such a change.  Setting <code>juneau.spring.missCache.disable=true</code> in the Spring
  Environment before the first lookup turns the cache off.
 
- <h5 class='section'>Lazy resolution:</h5>
+ <h2 class='section'>Lazy resolution:</h2>
  <p>
  The <code>Environment</code> is resolved lazily on the first <a href="#get(java.lang.String)"><code>get(String)</code></a> call so that
  constructors that build the source from an <code>ApplicationContext</code> do not interact with the
  context until a lookup actually happens.  This matters for tests that mock the context and assert
  "no interactions" until a Spring-side bean is requested.
 
- <h5 class='section'>Ordering:</h5>
+ <h2 class='section'>Ordering:</h2>
  <p>
  Because <code>Settings</code> walks property sources in reverse insertion order, the Spring
  <code>Environment</code> bridge — registered when Spring creates the bean store — shadows any
@@ -130,7 +129,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
  <code>ConfigPropertySourceProvider</code>.  Programmatic <code>addSource()</code> calls made after the
  Spring context is built (e.g. from a user-provided microservice <code>Config</code>) still win.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">@Value Annotation Basics</a>
    <li class='jc'><a href="SpringBeanStore.html" title="class in org.apache.juneau.rest.server.springboot"><code>SpringBeanStore</code></a>
  </ul></div>

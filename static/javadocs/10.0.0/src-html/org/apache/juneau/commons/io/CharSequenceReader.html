@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * implementation. Unlike {@link StringReader}, which only works with {@link String}, this class can</span>
 <span class="source-line-no">029</span><span id="line-29"> * read from {@link StringBuilder}, {@link StringBuffer}, or any other {@link CharSequence} implementation.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> *    &lt;li&gt;Generic CharSequence support - works with String, StringBuilder, StringBuffer, and other CharSequence types</span>
 <span class="source-line-no">034</span><span id="line-34"> *    &lt;li&gt;Efficient reading - optimized for different CharSequence types</span>
@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;No mark support - mark/reset operations are not supported</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;/ul&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Use Cases:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Use Cases:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Reading from StringBuilder or StringBuffer instances</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Converting CharSequence data to Reader for APIs that require Reader</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Testing scenarios where you need a Reader from in-memory data</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Read from String&lt;/jc&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    CharSequenceReader &lt;jv&gt;reader1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; CharSequenceReader(&lt;js&gt;"Hello World"&lt;/js&gt;);</span>
@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63">    *    }</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Performance:&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;Performance:&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * This class optimizes reading based on the CharSequence type:</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;ul class='spaced-list'&gt;</span>
@@ -86,13 +86,13 @@
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li&gt;Other CharSequence - falls back to character-by-character reading via {@link CharSequence#charAt(int)}</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;/ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;Thread Safety:&lt;/h2&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;p&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> * This class is not thread-safe. If the underlying CharSequence is modified by another thread</span>
 <span class="source-line-no">079</span><span id="line-79"> * while reading, the behavior is undefined. For thread-safe reading, ensure the CharSequence</span>
 <span class="source-line-no">080</span><span id="line-80"> * is not modified during reading, or use external synchronization.</span>
 <span class="source-line-no">081</span><span id="line-81"> *</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">083</span><span id="line-83"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsIO"&gt;I/O Package&lt;/a&gt;</span>
 <span class="source-line-no">084</span><span id="line-84"> * &lt;/ul&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> */</span>
@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101">    * Creates a new CharSequenceReader that reads from the specified CharSequence. If the</span>
 <span class="source-line-no">102</span><span id="line-102">    * CharSequence is &lt;jk&gt;null&lt;/jk&gt;, it is treated as an empty string.</span>
 <span class="source-line-no">103</span><span id="line-103">    *</span>
-<span class="source-line-no">104</span><span id="line-104">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">104</span><span id="line-104">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">105</span><span id="line-105">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">    *    &lt;jc&gt;// From String&lt;/jc&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    *    CharSequenceReader &lt;jv&gt;reader1&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; CharSequenceReader(&lt;js&gt;"Hello"&lt;/js&gt;);</span>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -106,7 +105,7 @@ loadScripts(document, 'script');</script>
       IdP; the validator caches successful responses for a short TTL.
  </ul>
 
- <h5 class='topic'>Contract</h5>
+ <h2 class='topic'>Contract</h2>
 
  <p>
  On success, return a non-null <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/security/Principal.html" title="class or interface in java.security" class="external-link"><code>Principal</code></a>. On failure, throw <a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a>
@@ -120,7 +119,7 @@ loadScripts(document, 'script');</script>
  header &mdash; the guard does not pre-trim or unquote. Validators should treat it as untrusted input
  (no logging of full tokens, no exception messages echoing the token, etc.).
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="BearerTokenGuard.html" title="class in org.apache.juneau.rest.server.auth"><code>BearerTokenGuard</code></a>
    <li class='jc'><a href="AuthenticationException.html" title="class in org.apache.juneau.rest.server.auth"><code>AuthenticationException</code></a>
    <li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6750">RFC 6750 &mdash; Bearer Token Usage</a>

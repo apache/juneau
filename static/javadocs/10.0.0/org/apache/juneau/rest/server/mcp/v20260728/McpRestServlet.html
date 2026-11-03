@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -115,8 +114,23 @@ loadScripts(document, 'script');</script>
  notification) renders as a genuinely empty HTTP body instead of the framework's default four-byte
  <code>null</code> JSON literal.
 
- <h5 class='section'>Example:</h5>
- <pre></div>
+ <h2 class='section'>Example:</h2>
+ <pre>
+ &#64;Rest(path="/mcp")
+ public class MyMcpServlet extends McpRestServlet {
+     &#64;Override
+     protected McpServerConfig createMcpConfig() {
+         return new McpServerConfig().setName("my-server").setVersion("1.0.0").addTool(new MyEchoTool());
+     }
+     &#64;Override                                            // optional
+     protected McpOptions createMcpOptions() {
+         return new McpOptions()
+             .setInstructions("Use tool 'echo' to test.")
+             .cache(c -&gt; c.setToolsList(new McpCacheHint().setTtlMs(60_000)))
+             .subscriptions(s -&gt; s.setQueueSize(2048));
+     }
+ }
+ </pre></div>
 </section>
 <section class="summary">
 <ul class="summary-list">

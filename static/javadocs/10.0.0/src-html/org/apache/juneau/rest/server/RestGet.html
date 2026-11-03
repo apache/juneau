@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * This is a specialized subtype of &lt;c&gt;&lt;ja&gt;{@link RestOp @RestOp}(method=&lt;jsf&gt;GET&lt;/jsf&gt;)&lt;/c&gt;.</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods"&gt;@RestOp-Annotated Method&lt;/a&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"></span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
@@ -155,13 +155,13 @@
 <span class="source-line-no">142</span><span id="line-142">    * &lt;p&gt;</span>
 <span class="source-line-no">143</span><span id="line-143">    * The default character encoding for the request and response if not specified on the request.</span>
 <span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">145</span><span id="line-145">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">147</span><span id="line-147">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">148</span><span id="line-148">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">149</span><span id="line-149">    * &lt;/ul&gt;</span>
 <span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">151</span><span id="line-151">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">152</span><span id="line-152">    *    &lt;li class='ja'&gt;{@link Rest#defaultCharset}</span>
 <span class="source-line-no">153</span><span id="line-153">    * &lt;/ul&gt;</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169">    *       &lt;li class='jm'&gt;{@link RestRequest#getAttributes()}.</span>
 <span class="source-line-no">170</span><span id="line-170">    *    &lt;/ul&gt;</span>
 <span class="source-line-no">171</span><span id="line-171">    *</span>
-<span class="source-line-no">172</span><span id="line-172">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">172</span><span id="line-172">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">173</span><span id="line-173">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    *    &lt;jc&gt;// Defined via annotation resolving to a config file setting with default value.&lt;/jc&gt;</span>
 <span class="source-line-no">175</span><span id="line-175">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(defaultRequestAttributes={&lt;js&gt;"Foo=bar"&lt;/js&gt;, &lt;js&gt;"Baz: $C{REST/myAttributeValue}"&lt;/js&gt;})</span>
@@ -194,14 +194,14 @@
 <span class="source-line-no">181</span><span id="line-181">    *    }</span>
 <span class="source-line-no">182</span><span id="line-182">    * &lt;/p&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    *</span>
-<span class="source-line-no">184</span><span id="line-184">    * &lt;/ul&gt;</span>
-<span class="source-line-no">185</span><span id="line-185">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">186</span><span id="line-186">    *    &lt;li class='note'&gt;</span>
-<span class="source-line-no">187</span><span id="line-187">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">188</span><span id="line-188">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
-<span class="source-line-no">189</span><span id="line-189">    * &lt;/ul&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">    *</span>
-<span class="source-line-no">191</span><span id="line-191">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;  *    &lt;li class='ja'&gt;{@link Rest#defaultRequestAttributes()}</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    *    &lt;li class='note'&gt;</span>
+<span class="source-line-no">186</span><span id="line-186">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
+<span class="source-line-no">187</span><span id="line-187">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">188</span><span id="line-188">    * &lt;/ul&gt;</span>
+<span class="source-line-no">189</span><span id="line-189">    *</span>
+<span class="source-line-no">190</span><span id="line-190">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">191</span><span id="line-191">    *    &lt;li class='ja'&gt;{@link Rest#defaultRequestAttributes()}</span>
 <span class="source-line-no">192</span><span id="line-192">    * &lt;/ul&gt;</span>
 <span class="source-line-no">193</span><span id="line-193">    *</span>
 <span class="source-line-no">194</span><span id="line-194">    * @return The annotation value.</span>
@@ -214,14 +214,14 @@
 <span class="source-line-no">201</span><span id="line-201">    * &lt;p&gt;</span>
 <span class="source-line-no">202</span><span id="line-202">    * Specifies default values for request headers if they're not passed in through the request.</span>
 <span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">205</span><span id="line-205">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">206</span><span id="line-206">    *    &lt;jc&gt;// Assume "text/json" Accept value when Accept not specified&lt;/jc&gt;</span>
 <span class="source-line-no">207</span><span id="line-207">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/*"&lt;/js&gt;, defaultRequestHeaders={&lt;js&gt;"Accept: text/json"&lt;/js&gt;})</span>
 <span class="source-line-no">208</span><span id="line-208">    *    &lt;jk&gt;public&lt;/jk&gt; String doGet()  {...}</span>
 <span class="source-line-no">209</span><span id="line-209">    * &lt;/p&gt;</span>
 <span class="source-line-no">210</span><span id="line-210">    *</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">211</span><span id="line-211">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">212</span><span id="line-212">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">213</span><span id="line-213">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">214</span><span id="line-214">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
@@ -241,13 +241,13 @@
 <span class="source-line-no">228</span><span id="line-228">    * &lt;p&gt;</span>
 <span class="source-line-no">229</span><span id="line-229">    * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.</span>
 <span class="source-line-no">230</span><span id="line-230">    *</span>
-<span class="source-line-no">231</span><span id="line-231">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">231</span><span id="line-231">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">232</span><span id="line-232">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">233</span><span id="line-233">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/*"&lt;/js&gt;, defaultRequestQueryData={&lt;js&gt;"foo=bar"&lt;/js&gt;})</span>
 <span class="source-line-no">234</span><span id="line-234">    *    &lt;jk&gt;public&lt;/jk&gt; String doGet(&lt;ja&gt;@Query&lt;/ja&gt;(&lt;js&gt;"foo"&lt;/js&gt;) String &lt;jv&gt;foo&lt;/jv&gt;)  {...}</span>
 <span class="source-line-no">235</span><span id="line-235">    * &lt;/p&gt;</span>
 <span class="source-line-no">236</span><span id="line-236">    *</span>
-<span class="source-line-no">237</span><span id="line-237">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">238</span><span id="line-238">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">239</span><span id="line-239">    *       You can use either &lt;js&gt;':'&lt;/js&gt; or &lt;js&gt;'='&lt;/js&gt; as the key/value delimiter.</span>
 <span class="source-line-no">240</span><span id="line-240">    *    &lt;li class='note'&gt;</span>
@@ -267,14 +267,14 @@
 <span class="source-line-no">254</span><span id="line-254">    * &lt;p&gt;</span>
 <span class="source-line-no">255</span><span id="line-255">    * Specifies default values for response headers if they're not overwritten during the request.</span>
 <span class="source-line-no">256</span><span id="line-256">    *</span>
-<span class="source-line-no">257</span><span id="line-257">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">257</span><span id="line-257">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">258</span><span id="line-258">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">259</span><span id="line-259">    *    &lt;jc&gt;// Assume "text/json" Accept value when Accept not specified&lt;/jc&gt;</span>
 <span class="source-line-no">260</span><span id="line-260">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/*"&lt;/js&gt;, defaultResponseHeaders={&lt;js&gt;"Content-Type: text/json"&lt;/js&gt;})</span>
 <span class="source-line-no">261</span><span id="line-261">    *    &lt;jk&gt;public&lt;/jk&gt; String doGet()  {...}</span>
 <span class="source-line-no">262</span><span id="line-262">    * &lt;/p&gt;</span>
 <span class="source-line-no">263</span><span id="line-263">    *</span>
-<span class="source-line-no">264</span><span id="line-264">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">264</span><span id="line-264">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">265</span><span id="line-265">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">266</span><span id="line-266">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">267</span><span id="line-267">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
@@ -299,7 +299,7 @@
 <span class="source-line-no">286</span><span id="line-286">    *       The description of the method in the Swagger page.</span>
 <span class="source-line-no">287</span><span id="line-287">    * &lt;/ul&gt;</span>
 <span class="source-line-no">288</span><span id="line-288">    *</span>
-<span class="source-line-no">289</span><span id="line-289">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">289</span><span id="line-289">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">290</span><span id="line-290">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">291</span><span id="line-291">    *       Corresponds to the swagger field &lt;c&gt;/paths/{path}/{method}/description&lt;/c&gt;.</span>
 <span class="source-line-no">292</span><span id="line-292">    *    &lt;li class='note'&gt;</span>
@@ -321,7 +321,7 @@
 <span class="source-line-no">308</span><span id="line-308">    * This value overrides encoders specified at the class level using {@link Rest#encoders()}.</span>
 <span class="source-line-no">309</span><span id="line-309">    * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit EncoderSet.Inherit} class can be used to include values from the parent class.</span>
 <span class="source-line-no">310</span><span id="line-310">    *</span>
-<span class="source-line-no">311</span><span id="line-311">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">312</span><span id="line-312">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">313</span><span id="line-313">    *    &lt;jc&gt;// Define a REST resource that handles GZIP compression.&lt;/jc&gt;</span>
 <span class="source-line-no">314</span><span id="line-314">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(</span>
@@ -348,7 +348,7 @@
 <span class="source-line-no">335</span><span id="line-335">    * For programmatic equivalents, contribute a {@link EncoderSet} bean via</span>
 <span class="source-line-no">336</span><span id="line-336">    * {@link Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).</span>
 <span class="source-line-no">337</span><span id="line-337">    *</span>
-<span class="source-line-no">338</span><span id="line-338">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">338</span><span id="line-338">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">339</span><span id="line-339">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders"&gt;Encoders in REST servers&lt;/a&gt;</span>
 <span class="source-line-no">340</span><span id="line-340">    * &lt;/ul&gt;</span>
 <span class="source-line-no">341</span><span id="line-341">    *</span>
@@ -377,7 +377,7 @@
 <span class="source-line-no">364</span><span id="line-364">    * Matchers are used to allow multiple Java methods to handle requests assigned to the same URL path pattern, but</span>
 <span class="source-line-no">365</span><span id="line-365">    * differing based on some request attribute, such as a specific header value.</span>
 <span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">368</span><span id="line-368">    *    &lt;li class='jac'&gt;{@link RestMatcher}</span>
 <span class="source-line-no">369</span><span id="line-369">    * &lt;/ul&gt;</span>
 <span class="source-line-no">370</span><span id="line-370">    *</span>
@@ -396,7 +396,7 @@
 <span class="source-line-no">383</span><span id="line-383">    * &lt;p&gt;</span>
 <span class="source-line-no">384</span><span id="line-384">    * The path can contain variables that get resolved to {@link org.apache.juneau.http.Path @Path} parameters.</span>
 <span class="source-line-no">385</span><span id="line-385">    *</span>
-<span class="source-line-no">386</span><span id="line-386">    * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">386</span><span id="line-386">    * &lt;h4 class='figure'&gt;Examples:&lt;/h4&gt;</span>
 <span class="source-line-no">387</span><span id="line-387">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">388</span><span id="line-388">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(path=&lt;js&gt;"/myurl/{foo}/{bar}/{baz}/*"&lt;/js&gt;)</span>
 <span class="source-line-no">389</span><span id="line-389">    * &lt;/p&gt;</span>
@@ -407,7 +407,7 @@
 <span class="source-line-no">394</span><span id="line-394">    * &lt;p&gt;</span>
 <span class="source-line-no">395</span><span id="line-395">    * Note that you can also use {@link #value()} to specify the path.</span>
 <span class="source-line-no">396</span><span id="line-396">    *</span>
-<span class="source-line-no">397</span><span id="line-397">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">397</span><span id="line-397">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">398</span><span id="line-398">    *    &lt;li class='ja'&gt;{@link org.apache.juneau.http.Path}</span>
 <span class="source-line-no">399</span><span id="line-399">    * &lt;/ul&gt;</span>
 <span class="source-line-no">400</span><span id="line-400">    *</span>
@@ -429,13 +429,13 @@
 <span class="source-line-no">416</span><span id="line-416">    *    &lt;li&gt;&lt;js&gt;""&lt;/js&gt; (default) &amp;mdash; inherit from {@link Rest#problemDetails()}.</span>
 <span class="source-line-no">417</span><span id="line-417">    * &lt;/ul&gt;</span>
 <span class="source-line-no">418</span><span id="line-418">    *</span>
-<span class="source-line-no">419</span><span id="line-419">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">419</span><span id="line-419">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">420</span><span id="line-420">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">421</span><span id="line-421">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">422</span><span id="line-422">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">423</span><span id="line-423">    * &lt;/ul&gt;</span>
 <span class="source-line-no">424</span><span id="line-424">    *</span>
-<span class="source-line-no">425</span><span id="line-425">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">425</span><span id="line-425">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">426</span><span id="line-426">    *    &lt;li class='ja'&gt;{@link Rest#problemDetails()}</span>
 <span class="source-line-no">427</span><span id="line-427">    * &lt;/ul&gt;</span>
 <span class="source-line-no">428</span><span id="line-428">    *</span>
@@ -456,7 +456,7 @@
 <span class="source-line-no">443</span><span id="line-443">    *    &lt;li&gt;&lt;js&gt;""&lt;/js&gt; (default) &amp;mdash; inherit from {@link Rest#debugMarshalling()}.</span>
 <span class="source-line-no">444</span><span id="line-444">    * &lt;/ul&gt;</span>
 <span class="source-line-no">445</span><span id="line-445">    *</span>
-<span class="source-line-no">446</span><span id="line-446">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">446</span><span id="line-446">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">447</span><span id="line-447">    *    &lt;li class='ja'&gt;{@link Rest#debugMarshalling()}</span>
 <span class="source-line-no">448</span><span id="line-448">    * &lt;/ul&gt;</span>
 <span class="source-line-no">449</span><span id="line-449">    *</span>
@@ -476,7 +476,7 @@
 <span class="source-line-no">463</span><span id="line-463">    *    &lt;li&gt;&lt;js&gt;""&lt;/js&gt; (default) &amp;mdash; inherits the resource-level setting.</span>
 <span class="source-line-no">464</span><span id="line-464">    * &lt;/ul&gt;</span>
 <span class="source-line-no">465</span><span id="line-465">    *</span>
-<span class="source-line-no">466</span><span id="line-466">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">466</span><span id="line-466">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">467</span><span id="line-467">    *    &lt;li class='ja'&gt;{@link RestOp#observability()}</span>
 <span class="source-line-no">468</span><span id="line-468">    * &lt;/ul&gt;</span>
 <span class="source-line-no">469</span><span id="line-469">    *</span>
@@ -493,7 +493,7 @@
 <span class="source-line-no">480</span><span id="line-480">    * specific operation through a dedicated thread pool. Empty string (default) inherits from</span>
 <span class="source-line-no">481</span><span id="line-481">    * {@link Rest#asyncCompletionExecutor()}.</span>
 <span class="source-line-no">482</span><span id="line-482">    *</span>
-<span class="source-line-no">483</span><span id="line-483">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">483</span><span id="line-483">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">484</span><span id="line-484">    *    &lt;li class='ja'&gt;{@link RestOp#asyncCompletionExecutor()}</span>
 <span class="source-line-no">485</span><span id="line-485">    *    &lt;li class='ja'&gt;{@link Rest#asyncCompletionExecutor()}</span>
 <span class="source-line-no">486</span><span id="line-486">    * &lt;/ul&gt;</span>
@@ -506,7 +506,7 @@
 <span class="source-line-no">493</span><span id="line-493">   /**</span>
 <span class="source-line-no">494</span><span id="line-494">    * Per-operation metric name override. Empty string (default) uses the recorder's own name derivation.</span>
 <span class="source-line-no">495</span><span id="line-495">    *</span>
-<span class="source-line-no">496</span><span id="line-496">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">496</span><span id="line-496">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">497</span><span id="line-497">    *    &lt;li class='ja'&gt;{@link RestOp#metricName()}</span>
 <span class="source-line-no">498</span><span id="line-498">    * &lt;/ul&gt;</span>
 <span class="source-line-no">499</span><span id="line-499">    *</span>
@@ -519,7 +519,7 @@
 <span class="source-line-no">506</span><span id="line-506">    * Per-operation metric tags. Format: comma-separated {@code key=value} pairs.</span>
 <span class="source-line-no">507</span><span id="line-507">    * Empty string (default) means no additional tags.</span>
 <span class="source-line-no">508</span><span id="line-508">    *</span>
-<span class="source-line-no">509</span><span id="line-509">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">509</span><span id="line-509">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">510</span><span id="line-510">    *    &lt;li class='ja'&gt;{@link RestOp#metricTags()}</span>
 <span class="source-line-no">511</span><span id="line-511">    * &lt;/ul&gt;</span>
 <span class="source-line-no">512</span><span id="line-512">    *</span>
@@ -534,13 +534,13 @@
 <span class="source-line-no">521</span><span id="line-521">    * &lt;p&gt;</span>
 <span class="source-line-no">522</span><span id="line-522">    * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.</span>
 <span class="source-line-no">523</span><span id="line-523">    *</span>
-<span class="source-line-no">524</span><span id="line-524">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">524</span><span id="line-524">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">525</span><span id="line-525">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">526</span><span id="line-526">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
 <span class="source-line-no">527</span><span id="line-527">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">528</span><span id="line-528">    * &lt;/ul&gt;</span>
 <span class="source-line-no">529</span><span id="line-529">    *</span>
-<span class="source-line-no">530</span><span id="line-530">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">530</span><span id="line-530">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">531</span><span id="line-531">    *    &lt;li class='jm'&gt;{@link RestOpContext#getSupportedAcceptTypes()}</span>
 <span class="source-line-no">532</span><span id="line-532">    * &lt;/ul&gt;</span>
 <span class="source-line-no">533</span><span id="line-533">    *</span>
@@ -557,7 +557,7 @@
 <span class="source-line-no">544</span><span id="line-544">    * Merged on top of resource-level {@link Rest#allowedSerializerOptions()} values.</span>
 <span class="source-line-no">545</span><span id="line-545">    * Use {@link #noInherit()} to replace rather than extend the resource-level list.</span>
 <span class="source-line-no">546</span><span id="line-546">    *</span>
-<span class="source-line-no">547</span><span id="line-547">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">547</span><span id="line-547">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">548</span><span id="line-548">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties"&gt;Safe Properties&lt;/a&gt;</span>
 <span class="source-line-no">549</span><span id="line-549">    * &lt;/ul&gt;</span>
 <span class="source-line-no">550</span><span id="line-550">    *</span>
@@ -574,7 +574,7 @@
 <span class="source-line-no">561</span><span id="line-561">    * Merged on top of resource-level {@link Rest#allowedParserOptions()} values.</span>
 <span class="source-line-no">562</span><span id="line-562">    * Use {@link #noInherit()} to replace rather than extend the resource-level list.</span>
 <span class="source-line-no">563</span><span id="line-563">    *</span>
-<span class="source-line-no">564</span><span id="line-564">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">564</span><span id="line-564">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">565</span><span id="line-565">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions#safe-properties"&gt;Safe Properties&lt;/a&gt;</span>
 <span class="source-line-no">566</span><span id="line-566">    * &lt;/ul&gt;</span>
 <span class="source-line-no">567</span><span id="line-567">    *</span>
@@ -591,7 +591,7 @@
 <span class="source-line-no">578</span><span id="line-578">    * Prevents the named property from inheriting values from the enclosing {@code @Rest} annotation.</span>
 <span class="source-line-no">579</span><span id="line-579">    * The {@code noInherit} attribute itself is never inherited.</span>
 <span class="source-line-no">580</span><span id="line-580">    *</span>
-<span class="source-line-no">581</span><span id="line-581">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">581</span><span id="line-581">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">582</span><span id="line-582">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SessionOptions"&gt;Session Options via HTTP&lt;/a&gt;</span>
 <span class="source-line-no">583</span><span id="line-583">    * &lt;/ul&gt;</span>
 <span class="source-line-no">584</span><span id="line-584">    *</span>
@@ -605,7 +605,7 @@
 <span class="source-line-no">592</span><span id="line-592">    * &lt;p&gt;</span>
 <span class="source-line-no">593</span><span id="line-593">    * An expression defining if a user with the specified roles are allowed to access this method.</span>
 <span class="source-line-no">594</span><span id="line-594">    *</span>
-<span class="source-line-no">595</span><span id="line-595">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">595</span><span id="line-595">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">596</span><span id="line-596">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">597</span><span id="line-597">    *    &lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</span>
 <span class="source-line-no">598</span><span id="line-598">    *</span>
@@ -618,7 +618,7 @@
 <span class="source-line-no">605</span><span id="line-605">    *    }</span>
 <span class="source-line-no">606</span><span id="line-606">    * &lt;/p&gt;</span>
 <span class="source-line-no">607</span><span id="line-607">    *</span>
-<span class="source-line-no">608</span><span id="line-608">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">608</span><span id="line-608">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">609</span><span id="line-609">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">610</span><span id="line-610">    *       Supports any of the following expression constructs:</span>
 <span class="source-line-no">611</span><span id="line-611">    *       &lt;ul&gt;</span>
@@ -660,7 +660,7 @@
 <span class="source-line-no">647</span><span id="line-647">    * &lt;p&gt;</span>
 <span class="source-line-no">648</span><span id="line-648">    * Used in conjunction with {@link #roleGuard()} is used with patterns.</span>
 <span class="source-line-no">649</span><span id="line-649">    *</span>
-<span class="source-line-no">650</span><span id="line-650">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">650</span><span id="line-650">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">651</span><span id="line-651">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">652</span><span id="line-652">    *    &lt;jk&gt;public class&lt;/jk&gt; MyResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</span>
 <span class="source-line-no">653</span><span id="line-653">    *</span>
@@ -695,7 +695,7 @@
 <span class="source-line-no">682</span><span id="line-682">    * This value overrides serializers specified at the class level using {@link Rest#serializers()}.</span>
 <span class="source-line-no">683</span><span id="line-683">    * The {@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit SerializerSet.Inherit} class can be used to include values from the parent class.</span>
 <span class="source-line-no">684</span><span id="line-684">    *</span>
-<span class="source-line-no">685</span><span id="line-685">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">685</span><span id="line-685">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">686</span><span id="line-686">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">687</span><span id="line-687">    *    &lt;jc&gt;// Define a REST resource that can produce JSON and HTML.&lt;/jc&gt;</span>
 <span class="source-line-no">688</span><span id="line-688">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(</span>
@@ -722,7 +722,7 @@
 <span class="source-line-no">709</span><span id="line-709">    * For programmatic equivalents, contribute a {@link SerializerSet} bean via</span>
 <span class="source-line-no">710</span><span id="line-710">    * {@link Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).</span>
 <span class="source-line-no">711</span><span id="line-711">    *</span>
-<span class="source-line-no">712</span><span id="line-712">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">712</span><span id="line-712">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">713</span><span id="line-713">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Marshalling"&gt;Marshalling&lt;/a&gt;</span>
 <span class="source-line-no">714</span><span id="line-714">    * &lt;/ul&gt;</span>
 <span class="source-line-no">715</span><span id="line-715">    *</span>
@@ -744,7 +744,7 @@
 <span class="source-line-no">731</span><span id="line-731">    *       The summary of the method in the Swagger page.</span>
 <span class="source-line-no">732</span><span id="line-732">    * &lt;/ul&gt;</span>
 <span class="source-line-no">733</span><span id="line-733">    *</span>
-<span class="source-line-no">734</span><span id="line-734">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">734</span><span id="line-734">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">735</span><span id="line-735">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">736</span><span id="line-736">    *       Corresponds to the swagger field &lt;c&gt;/paths/{path}/{method}/summary&lt;/c&gt;.</span>
 <span class="source-line-no">737</span><span id="line-737">    *    &lt;li class='note'&gt;</span>
@@ -766,7 +766,7 @@
 <span class="source-line-no">753</span><span id="line-753">    * The format of this annotation is JSON when all individual parts are concatenated.</span>
 <span class="source-line-no">754</span><span id="line-754">    * &lt;br&gt;The starting and ending &lt;js&gt;'{'&lt;/js&gt;/&lt;js&gt;'}'&lt;/js&gt; characters around the entire value are optional.</span>
 <span class="source-line-no">755</span><span id="line-755">    *</span>
-<span class="source-line-no">756</span><span id="line-756">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">756</span><span id="line-756">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">757</span><span id="line-757">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">758</span><span id="line-758">    *    &lt;ja&gt;@RestGet&lt;/ja&gt;(</span>
 <span class="source-line-no">759</span><span id="line-759">    *       path=&lt;js&gt;"/{propertyName}"&lt;/js&gt;,</span>
@@ -785,7 +785,7 @@
 <span class="source-line-no">772</span><span id="line-772">    *    )</span>
 <span class="source-line-no">773</span><span id="line-773">    * &lt;/p&gt;</span>
 <span class="source-line-no">774</span><span id="line-774">    *</span>
-<span class="source-line-no">775</span><span id="line-775">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">775</span><span id="line-775">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">776</span><span id="line-776">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">777</span><span id="line-777">    *       The format is &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2"&gt;juneau-bean-swagger-v2&lt;/a&gt;.</span>
 <span class="source-line-no">778</span><span id="line-778">    *       &lt;br&gt;Multiple lines are concatenated with newlines.</span>
@@ -798,7 +798,7 @@
 <span class="source-line-no">785</span><span id="line-785">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">786</span><span id="line-786">    * &lt;/ul&gt;</span>
 <span class="source-line-no">787</span><span id="line-787">    *</span>
-<span class="source-line-no">788</span><span id="line-788">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">788</span><span id="line-788">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">789</span><span id="line-789">    *    &lt;li class='ja'&gt;{@link OpSwagger}</span>
 <span class="source-line-no">790</span><span id="line-790">    *    &lt;li class='jc'&gt;{@link SwaggerProvider}</span>
 <span class="source-line-no">791</span><span id="line-791">    * &lt;/ul&gt;</span>

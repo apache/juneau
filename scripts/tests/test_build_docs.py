@@ -216,7 +216,38 @@ def test_verify_stage_runs_every_checker_in_order(monkeypatch, tmp_path, skip_ma
     for name in ('generate_artifact_paths', 'get_current_release', 'ensure_apidocs_symlink', 'resolve_javadocs_version'):
         monkeypatch.setattr(build_docs, name, lambda *a, **kw: None)
     calls = []
-    for name in ('verify_docs_integrity', 'check_project_pages', 'check_entry_pages'):
+    for name in ('verify_docs_integrity', 'check_project_pages', 'check_entry_pages', 'check_doc_inventory'):
         monkeypatch.setattr(build_docs, name, lambda *a, n=name: calls.append(n))
     assert build_docs.build(args, tmp_path / 'juneau', tmp_path) == 0
-    assert calls == ['verify_docs_integrity', 'check_project_pages', 'check_entry_pages']
+    assert calls == ['verify_docs_integrity', 'check_project_pages', 'check_entry_pages', 'check_doc_inventory']
+
+
+def test_check_doc_inventory_runs_as_a_child_of_verify(monkeypatch, tmp_path):
+    calls = []
+    monkeypatch.setattr(build_docs, 'run_command', lambda cmd, **kw: calls.append((cmd, kw)))
+    build_docs.check_doc_inventory(tmp_path)
+    (cmd, kw), = calls
+    assert cmd[1].endswith('check-doc-inventory.py')
+    assert cmd[2:] == ['--docs-dir', str(tmp_path)]
+    assert kw['id'] == 'verify-inventory' and kw['label'] == 'Doc inventory'
+    assert kw['parent'] == 'verify' and kw['cwd'] == tmp_path
+
+
+def test_skip_maven_still_runs_the_link_checks_when_the_juneau_checkout_exists(monkeypatch, tmp_path):
+    args = argparse.Namespace(skip_npm=True, skip_maven=True, skip_verify=True, skip_copy=True, staging=False)
+    monkeypatch.setattr(build_docs, 'DRY_RUN', True)
+    real_plan = build_docs.row_plan
+    monkeypatch.setattr(build_docs, 'row_plan', lambda a, d=None: [
+        (id, label, reason if id == 'links' else 'skipped') for id, label, reason in real_plan(a, d)])
+    for name in ('generate_artifact_paths', 'get_current_release', 'ensure_apidocs_symlink', 'resolve_javadocs_version'):
+        monkeypatch.setattr(build_docs, name, lambda *a, **kw: None)
+    calls = []
+    for name in ('check_topic_links', 'check_ai_artifacts', 'check_code_fences', 'check_java_fences', 'check_guide_snippets'):
+        monkeypatch.setattr(build_docs, name, lambda *a, n=name: calls.append(n))
+    juneau = tmp_path / 'juneau'
+    juneau.mkdir()
+    assert build_docs.build(args, juneau, tmp_path) == 0
+    assert len(calls) == 5
+    calls.clear()
+    assert build_docs.build(args, tmp_path / 'missing', tmp_path) == 0
+    assert calls == []

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -101,13 +100,13 @@ loadScripts(document, 'script');</script>
 implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau.marshall.cbor">CborMetaProvider</a>, <a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a>, <a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></span></div>
 <div class="block">Serializes POJO models to CBOR (RFC 8949).
 
- <h5 class='section'>Media types:</h5>
+ <h2 class='section'>Media types:</h2>
 
  Handles <c>Accept</c> types:  <bc>application/cbor</bc>
  <p>
  Produces <c>Content-Type</c> types: <bc>application/cbor</bc>
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
  <p>
  Java-to-CBOR type mapping:
  <ul class='spaced-list'>
@@ -123,13 +122,13 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
    <li>All other types → fallback to <code>toString()</code> as string
  </ul>
 
- <h5 class='section'>Behavior-specific subclasses:</h5>
+ <h2 class='section'>Behavior-specific subclasses:</h2>
  <ul class='spaced-list'>
    <li><a href="CborSerializer.SpacedHex.html" title="class in org.apache.juneau.marshall.cbor"><code>CborSerializer.SpacedHex</code></a> — Spaced-hex text output for debugging
    <li><a href="CborSerializer.Base64.html" title="class in org.apache.juneau.marshall.cbor"><code>CborSerializer.Base64</code></a> — Base64 text output
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Serialize a bean to CBOR bytes using the default serializer</jc>
    byte[] <jv>cbor</jv> = CborSerializer.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
@@ -139,7 +138,7 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
    byte[] <jv>cbor</jv> = <jv>s</jv>.write(<jv>myBean</jv>);
  </p>
 
- <h5 class='section'>Round-trip notes:</h5>
+ <h2 class='section'>Round-trip notes:</h2>
  <ul class='spaced-list'>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a> — emitted losslessly as a native CBOR integer when it fits CBOR's integer
       range (<code>-2^64 .. 2^64-1</code>), otherwise as a lossless decimal string.
@@ -151,11 +150,11 @@ implements <a href="CborMetaProvider.html" title="interface in org.apache.juneau
    <li>Semantic tags (major type 6) not emitted unless <a href="CborSerializer.Builder.html#useTags(boolean)"><code>useTags(true)</code></a>.
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR</a>
    <li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  </ul></div>

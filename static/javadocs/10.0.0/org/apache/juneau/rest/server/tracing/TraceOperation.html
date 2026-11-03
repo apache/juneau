@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -91,7 +90,7 @@ loadScripts(document, 'script');</script>
  <code>juneau-rest-server-tracing-otel</code>) a low-cardinality span name plus a small set of attributes
  derived from resolved request arguments, without either side depending on the other's types.
 
- <h5 class='topic'>Default operation</h5>
+ <h2 class='topic'>Default operation</h2>
 
  <p>
  <a href="#DEFAULT"><code>DEFAULT</code></a> carries no span name and no attributes. It is the value
@@ -100,7 +99,7 @@ loadScripts(document, 'script');</script>
  whatever span name / attributes it would otherwise derive from the <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server"><code>RestRequest</code></a>
  itself (HTTP method, route, etc.); it is not required to name every span after a non-HTTP operation.
 
- <h5 class='topic'>Attribute-name constants</h5>
+ <h2 class='topic'>Attribute-name constants</h2>
 
  <p>
  The attribute-name constants declared here are the exact, pinned MCP/GenAI span-attribute keys that
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
  levels may change in a future semantic-conventions release; this pin must be re-checked before any
  OpenTelemetry or semantic-conventions dependency upgrade touches MCP tracing.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a>
    <li class='jc'><a href="TraceContextExtractor.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TraceContextExtractor</code></a>
    <li class='jc'><a href="TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -104,7 +103,7 @@ loadScripts(document, 'script');</script>
  For strict (RFC 8259) JSON behavior, use <a href="../collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>. For a neutral, marshaller-agnostic
  base with no language coupling, use <a href="../collections/MarshalledMap.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledMap</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Construct an empty Map</jc>
    Json5Map <jv>map</jv> = Json5Map.<jsm>of</jsm>();
@@ -116,7 +115,7 @@ loadScripts(document, 'script');</script>
    String <jv>s</jv> = <jv>map</jv>.toString();  <jc>// "{a:'A',b:{c:'C',d:123}}"</jc>
  </p>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>This class is not thread safe.
  </ul></div>
 <dl class="notes">
@@ -642,7 +641,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Json5Map.html" title="class in org.apache.juneau.marshall.json5">Json5Map</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json5/Json5Map.html#line-258">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</span></div>
 <div class="block">Construct a map initialized with the specified key/value pairs.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    Json5Map <jv>map</jv> = <jk>new</jk> Json5Map(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>);
  </p></div>

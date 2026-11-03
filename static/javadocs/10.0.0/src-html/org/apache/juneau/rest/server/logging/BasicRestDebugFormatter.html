@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> *       below); otherwise a suppression placeholder + byte count.</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Secure-by-default body handling&lt;/h5&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;h2 class='section'&gt;Secure-by-default body handling&lt;/h2&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * Bodies are &lt;b&gt;never dumped by default&lt;/b&gt;. Dumping is a deliberate operator opt-in behind a single environment-variable</span>
 <span class="source-line-no">049</span><span id="line-49"> * master gate, {@code JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES}:</span>
@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * No bytes appear in any placeholder in any representation.</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Header redaction and sanitization&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> * &lt;h2 class='section'&gt;Header redaction and sanitization&lt;/h2&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;p&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> * Values for a widened, formatter-local credential-bearing header set are masked with {@link RedactedHeaders#REDACTED}.</span>
 <span class="source-line-no">071</span><span id="line-71"> * The set starts from {@link RedactedHeaders#DEFAULT} plus {@code X-Auth-Token}, {@code X-Authorization},</span>
@@ -89,14 +89,14 @@
 <span class="source-line-no">076</span><span id="line-76"> * text, placeholders) is sanitized against CR/LF/control-char log forging via {@link DebugTextSanitizer}, in</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;b&gt;mask &amp;rarr; escape &amp;rarr; cap&lt;/b&gt; order.</span>
 <span class="source-line-no">078</span><span id="line-78"> *</span>
-<span class="source-line-no">079</span><span id="line-79"> * &lt;h5 class='section'&gt;Bounds&lt;/h5&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> * &lt;h2 class='section'&gt;Bounds&lt;/h2&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;p&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> * Bodies are bounded by {@link #bodyCap()} bytes (default &lt;b&gt;8&amp;nbsp;KB&lt;/b&gt;) at capture time; headers by</span>
 <span class="source-line-no">082</span><span id="line-82"> * {@link #maxHeaders(int)}/{@link #maxHeaderScan(int)}/{@link #maxFieldLength(int)}; the URI by {@link #maxUriLength(int)}.</span>
 <span class="source-line-no">083</span><span id="line-83"> * The 8&amp;nbsp;KB body cap is deliberately smaller than {@code EchoMixin}'s 1&amp;nbsp;MB body cap &amp;mdash; debug logging is</span>
 <span class="source-line-no">084</span><span id="line-84"> * intended for low-volume operator diagnostics; the two caps are independent by design.</span>
 <span class="source-line-no">085</span><span id="line-85"> *</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">087</span><span id="line-87"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging"&gt;Logging / Debugging&lt;/a&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> * &lt;/ul&gt;</span>
 <span class="source-line-no">089</span><span id="line-89"> *</span>

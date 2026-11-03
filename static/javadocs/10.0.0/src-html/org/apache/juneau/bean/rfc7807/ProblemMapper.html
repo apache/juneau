@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * the resource's bean store); the server-side processor picks it up automatically when an opted-in operation</span>
 <span class="source-line-no">028</span><span id="line-28"> * throws or returns a matching exception.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Discovery model&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Discovery model&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * The processor collects all {@code ProblemMapper} beans visible from the resource's bean store, then picks the</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;b&gt;most-specific&lt;/b&gt; mapper for the exception class hierarchy (a mapper whose {@link #getExceptionType()} is the</span>
@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * mapper is tried, finally falling back to the default {@code ProblemAdapters.fromException(...)} adaptation in</span>
 <span class="source-line-no">037</span><span id="line-37"> * {@code juneau-rest-common} for {@code BasicHttpException} subclasses.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;jk&gt;public class&lt;/jk&gt; MyDomainProblemMapper &lt;jk&gt;implements&lt;/jk&gt; ProblemMapper&amp;lt;MyDomainException&amp;gt; {</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68"> *    }</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;/p&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jc'&gt;{@link Problem}</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li class='jc'&gt;{@link ProblemException}</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerProblemDetails"&gt;RFC 7807 / 9457 Problem Details&lt;/a&gt;</span>

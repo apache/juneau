@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -298,7 +297,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <div class="block">Buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> for Parquet, bound to this live session.  Calls
  <code>parse(input, List.class, Object.class)</code> once and iterates the result.
 
- <h5 class='section'>Why this stays buffered (not O(1) streaming):</h5>
+ <h4 class='section'>Why this stays buffered (not O(1) streaming):</h4>
  <p>
  Although a Parquet file is logically row-shaped, it is <b>not</b> a forward, element-at-a-time
  wire format.  Its metadata footer (schema + row-group/column-chunk offsets) lives at the

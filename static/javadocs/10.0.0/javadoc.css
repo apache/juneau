@@ -1024,7 +1024,7 @@ div.block {
 	font-family: 'DejaVu Sans', Arial, Helvetica, sans-serif;
 }
 
-h5.section {
+h2.section, h3.section, h4.section, h5.section, h6.section {
 	font-weight:bold;
 	font-size: 12px;
 	color: #4E4E4E;
@@ -1266,7 +1266,7 @@ table.unstyled tr:nth-child(2n+2) { background-color:white; }
 table.unstyled tr:nth-child(2n+3) { background-color:white; }
 
 /*--- Juneau topic headers ---*/
-h2.topic, h3.topic, h4.topic {
+h2.topic, h3.topic, h4.topic, h5.topic, h6.topic {
 	margin-bottom:20px; margin-top:25px; padding-top:3px; padding-left:25px; color:#2c4557; border-top:2px groove #9eadc0;
 	background-image:url('data:image/gif;base64,R0lGODlhEAAQAIQfACZJcSdKcjFTejVWfT5fhUFih0ZnjEhojUxskFFwk1Z0l1d1mFp4ml98nmaComiEpGuHpnKNq3SOrHiRroGZtYeeuJGmv5erwp+yx6O1yqm6zrDA0sTQ3s3X4+Dn7v///yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEAAB8ALAAAAAAQABAAAAVk4CeOZGmWgmEQG/k0MHw4UY0gY1PvfG3kvaBhUqk4IMgkcuGrdJ7QaCfDiBgunKx2m1VYP5KNeEze0H4VjHrNVh9+HodlTq9bEr9PhMLv+ykOAyIaNEE8ACMFiouMigEnkJGQIQA7');
 	background-repeat:no-repeat; background-position:left center; cursor:zoom-out; max-width:1000px;
@@ -1274,7 +1274,7 @@ h2.topic, h3.topic, h4.topic {
 
 h2.topic { font-size:14pt; }
 h4.topic { font-size:12pt; }
-h5.topic {
+h5.topic, h6.topic {
 	font-size:11pt;
 	background:linear-gradient(to bottom, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
 	background:-moz-linear-gradient(top, #F5F5F5, #DEE3E9) repeat scroll 0% 0% transparent;
@@ -1284,7 +1284,7 @@ h5.topic {
 .topic p { max-width:800px; }
 div.topic { margin-left:10px; max-width:950px; }
 
-h5.figure { color:#2c4557; margin-left:30px; margin-right:30px; margin-top:10px; margin-bottom:0px; font-style:italic; }
+h2.figure, h3.figure, h4.figure, h5.figure, h6.figure { color:#2c4557; margin-left:30px; margin-right:30px; margin-top:10px; margin-bottom:0px; font-style:italic; }
 
 /*--- Override how Javadoc handles unordered lists inside .footer ---*/
 ul.normal { margin-top:0px; }
@@ -1326,7 +1326,7 @@ body > p:first-child {
 }
 
 /* Header styles */
-h5.toc, h5.topic { color:#2C4557; padding:5px 30px; margin-bottom:0px; border-radius:10px 10px 10px 0px; text-decoration:none; }
+h5.toc, h2.topic, h3.topic, h4.topic, h5.topic, h6.topic { color:#2C4557; padding:5px 30px; margin-bottom:0px; border-radius:10px 10px 10px 0px; text-decoration:none; }
 
 /* Light-colored title on package summary pages */
 div.docSummary > div.block,

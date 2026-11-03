@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * Used to compare version numbers.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;h5 class='section'&gt;Equality vs. matching:&lt;/h5&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Equality vs. matching:&lt;/h2&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * {@link #equals(Object)}, {@link #hashCode()} and {@link #compareTo(Version)} are &lt;b&gt;strict&lt;/b&gt; and</span>
 <span class="source-line-no">033</span><span id="line-33"> * mutually consistent &amp;mdash; two versions are only equal when their full part sequences are identical</span>
@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">   /**</span>
 <span class="source-line-no">145</span><span id="line-145">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified version is at least this version.</span>
 <span class="source-line-no">146</span><span id="line-146">    *</span>
-<span class="source-line-no">147</span><span id="line-147">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">148</span><span id="line-148">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">149</span><span id="line-149">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2"&lt;/js&gt;).isAtLeast(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1"&lt;/js&gt;)));</span>
 <span class="source-line-no">150</span><span id="line-150">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2"&lt;/js&gt;).isAtLeast(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"2"&lt;/js&gt;)));</span>
@@ -175,7 +175,7 @@
 <span class="source-line-no">162</span><span id="line-162">   /**</span>
 <span class="source-line-no">163</span><span id="line-163">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified version is at least this version.</span>
 <span class="source-line-no">164</span><span id="line-164">    *</span>
-<span class="source-line-no">165</span><span id="line-165">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">166</span><span id="line-166">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">167</span><span id="line-167">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).isAtLeast(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;)));</span>
 <span class="source-line-no">168</span><span id="line-168">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).isAtLeast(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;)));</span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">   /**</span>
 <span class="source-line-no">195</span><span id="line-195">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified version is at most this version.</span>
 <span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">197</span><span id="line-197">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">198</span><span id="line-198">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">199</span><span id="line-199">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).isAtMost(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1"&lt;/js&gt;)));</span>
 <span class="source-line-no">200</span><span id="line-200">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).isAtMost(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"2"&lt;/js&gt;)));</span>
@@ -225,7 +225,7 @@
 <span class="source-line-no">212</span><span id="line-212">   /**</span>
 <span class="source-line-no">213</span><span id="line-213">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified version is at most this version.</span>
 <span class="source-line-no">214</span><span id="line-214">    *</span>
-<span class="source-line-no">215</span><span id="line-215">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">215</span><span id="line-215">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">217</span><span id="line-217">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).isAtMost(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;)));</span>
 <span class="source-line-no">218</span><span id="line-218">    *    &lt;jsm&gt;assertFalse&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).isAtMost(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;)));</span>
@@ -260,7 +260,7 @@
 <span class="source-line-no">247</span><span id="line-247">    * consistent with {@link #hashCode()} and must never be used as the basis for hash- or tree-based collection</span>
 <span class="source-line-no">248</span><span id="line-248">    * membership.</span>
 <span class="source-line-no">249</span><span id="line-249">    *</span>
-<span class="source-line-no">250</span><span id="line-250">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">250</span><span id="line-250">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">251</span><span id="line-251">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">252</span><span id="line-252">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).matches(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;)));</span>
 <span class="source-line-no">253</span><span id="line-253">    *    &lt;jsm&gt;assertTrue&lt;/jsm&gt;(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2.3"&lt;/js&gt;).matches(Version.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"1.2"&lt;/js&gt;)));</span>

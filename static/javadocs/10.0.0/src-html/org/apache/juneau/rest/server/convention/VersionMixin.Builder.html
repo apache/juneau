@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> * {@link Rest#mixins() @Rest(mixins=VersionMixin.class)}; the {@code /version} URL becomes available</span>
 <span class="source-line-no">038</span><span id="line-38"> * alongside the host's own endpoints with no further wiring.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Configurable mount path:&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Configurable mount path:&lt;/h2&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * The default mount {@code /version} can be overridden via the SVL variable</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> * {@code -Djuneau.version.path=info} (or {@code about}), compose a second instance with the</span>
 <span class="source-line-no">061</span><span id="line-61"> * desired override, or subclass and supply their own {@code @RestGet(path=...)} method.</span>
 <span class="source-line-no">062</span><span id="line-62"> *</span>
-<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Mixin-only deployment:&lt;/h5&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h2 class='section'&gt;Mixin-only deployment:&lt;/h2&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * This resource is designed for composition via {@code @Rest(mixins=...)}. The mount path is</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68"> * {@link #getInfo}; a class-level {@code @Rest(paths=...)} declaration would be silently</span>
 <span class="source-line-no">069</span><span id="line-69"> * ignored under the mixin pattern (see {@link Rest#paths() @Rest(paths)} Javadoc).</span>
 <span class="source-line-no">070</span><span id="line-70"> *</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;h5 class='figure'&gt;Composition example:&lt;/h5&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;h2 class='figure'&gt;Composition example:&lt;/h2&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
 <span class="source-line-no">073</span><span id="line-73"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/api"&lt;/js&gt;, mixins=VersionMixin.&lt;jk&gt;class&lt;/jk&gt;)</span>
@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84"> *    }</span>
 <span class="source-line-no">085</span><span id="line-85"> * &lt;/p&gt;</span>
 <span class="source-line-no">086</span><span id="line-86"> *</span>
-<span class="source-line-no">087</span><span id="line-87"> * &lt;h5 class='section'&gt;Default lookup chain:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;h2 class='section'&gt;Default lookup chain:&lt;/h2&gt;</span>
 <span class="source-line-no">088</span><span id="line-88"> *</span>
 <span class="source-line-no">089</span><span id="line-89"> * &lt;p&gt;</span>
 <span class="source-line-no">090</span><span id="line-90"> * The default {@link Builder#fromManifest() fromManifest()} reader walks the</span>
@@ -118,7 +118,7 @@
 <span class="source-line-no">105</span><span id="line-105"> * explicit {@link Builder#fromManifest(ClassLoader) fromManifest(importerClassLoader)} call so the</span>
 <span class="source-line-no">106</span><span id="line-106"> * lookup starts from the importer's classloader rather than the framework's.</span>
 <span class="source-line-no">107</span><span id="line-107"> *</span>
-<span class="source-line-no">108</span><span id="line-108"> * &lt;h5 class='section'&gt;Output:&lt;/h5&gt;</span>
+<span class="source-line-no">108</span><span id="line-108"> * &lt;h2 class='section'&gt;Output:&lt;/h2&gt;</span>
 <span class="source-line-no">109</span><span id="line-109"> *</span>
 <span class="source-line-no">110</span><span id="line-110"> * &lt;p&gt;</span>
 <span class="source-line-no">111</span><span id="line-111"> * The endpoint returns a JSON map &amp;mdash; e.g.:</span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124"> * Endpoints are excluded from generated Swagger / OpenAPI specs via</span>
 <span class="source-line-no">125</span><span id="line-125"> * {@link OpSwagger#ignore() @OpSwagger(ignore=true)}.</span>
 <span class="source-line-no">126</span><span id="line-126"> *</span>
-<span class="source-line-no">127</span><span id="line-127"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">127</span><span id="line-127"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">128</span><span id="line-128"> *    &lt;li class='jc'&gt;{@link FaviconMixin}</span>
 <span class="source-line-no">129</span><span id="line-129"> *    &lt;li class='jc'&gt;{@link SeoMixin}</span>
 <span class="source-line-no">130</span><span id="line-130"> *    &lt;li class='jc'&gt;{@link WellKnownMixin}</span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">    * programmatic {@link RestBuilder}(carrying any {@code @Rest}-level overrides such as {@code path}) so those</span>
 <span class="source-line-no">195</span><span id="line-195">    * values take precedence over the mixin class's own {@link Rest @Rest} annotation.</span>
 <span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * &lt;h5 class='section'&gt;Why worker + builder, not the flavor Builder:&lt;/h5&gt;</span>
+<span class="source-line-no">197</span><span id="line-197">    * &lt;h4 class='section'&gt;Why worker + builder, not the flavor Builder:&lt;/h4&gt;</span>
 <span class="source-line-no">198</span><span id="line-198">    * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">199</span><span id="line-199">    *    &lt;li&gt;Takes the already-built &lt;b&gt;worker bean&lt;/b&gt; (not the flavor {@link Builder}) so the flavor can be</span>
 <span class="source-line-no">200</span><span id="line-200">    *       constructed from ANY independently-supplied worker &amp;mdash; e.g. a user's own {@code @Bean VersionProvider}</span>

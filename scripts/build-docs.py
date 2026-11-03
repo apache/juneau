@@ -570,6 +570,17 @@ def check_entry_pages(master_root, docs_dir):
     run_command(cmd, cwd=docs_dir, id='verify-entry-pages', label='Entry pages', title="Checking entry pages",
                 tool='generic', parent='verify')
 
+def check_doc_inventory(docs_dir):
+    """Run the doc-inventory checker (a child row of Verify): every module in projects.ts has its topic pages."""
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'check-doc-inventory.py'
+    if not checker_script.exists():
+        say(f"WARNING: Doc inventory checker not found at {checker_script}", 'warn')
+        return
+    run_command(['python3', str(checker_script), '--docs-dir', str(docs_dir)], cwd=docs_dir,
+                id='verify-inventory', label='Doc inventory', title="Checking doc inventory", tool='generic',
+                parent='verify')
+
 def check_ai_artifacts(master_root, docs_dir):
     """Run AI artifact drift checks (a child row of Links)."""
     script_dir = Path(__file__).parent
@@ -613,6 +624,8 @@ def check_guide_snippets(master_root, docs_dir):
 def build(args, master_root, docs_dir):
     """Every build stage, one row each; returns the exit code (failures raise or exit)."""
     rows = {id: reason for id, _label, reason in row_plan(args, None if DRY_RUN else dev_server_reason(docs_dir))}
+    if args.skip_maven and master_root and Path(master_root).exists():
+        rows['links'] = None    # the link checks read the Juneau sources, not Maven output: run them when it is there
 
     with VIEW.stage('clean', 'Clean', "Cleaning build directory") as step:
         # Check prerequisites
@@ -713,6 +726,7 @@ def build(args, master_root, docs_dir):
             verify_docs_integrity(docs_dir)
             check_project_pages(docs_dir)
             check_entry_pages(master_root, docs_dir)
+            check_doc_inventory(docs_dir)
 
     # Checks that require sibling repos — skip in --skip-maven / CI smoke runs
     # where only the docs repo is checked out.

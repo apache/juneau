@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ implements <a href="../../commons/conversion/Converter.html" title="interface in
  This converter provides a convenient way to convert objects between different types using
  the same conversion logic that's used throughout the Juneau framework.
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Convert a string to an integer</jc>
    Integer <jv>result</jv> = GenericConverter.INSTANCE.convertTo(Integer.<jk>class</jk>, <js>"123"</js>);
@@ -105,11 +104,11 @@ implements <a href="../../commons/conversion/Converter.html" title="interface in
    MyBean <jv>bean</jv> = GenericConverter.INSTANCE.convertTo(MyBean.<jk>class</jk>, <jv>map</jv>);
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe. The singleton instance can be safely shared across multiple threads.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jm'><a href="../../commons/conversion/Converter.html" title="interface in org.apache.juneau.commons.conversion"><code>Converter</code></a>
    <li class='jm'><a href="../MarshallingContext.html#DEFAULT_SESSION"><code>MarshallingContext.DEFAULT_SESSION</code></a>
    <li class='jm'><a href="../MarshallingSession.html#convertToType(java.lang.Object,java.lang.Object)"><code>MarshallingSession.convertToType(Object, Class)</code></a>

@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,7 +98,7 @@ loadScripts(document, 'script');</script>
  Only elements that pass the filter (i.e., the predicate returns <jk>true</jk>) are actually stored in
  the underlying list.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li><b>Flexible Filtering:</b> Use any <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link"><code>Predicate</code></a> to filter elements based on any criteria
    <li><b>Optional Filter:</b> Filter is optional when using the builder - defaults to accepting all elements
@@ -111,7 +110,7 @@ loadScripts(document, 'script');</script>
    <li><b>Filter on Add:</b> Filtering happens when elements are added via <a href="#add(E)"><code>add(Object)</code></a>, <a href="#addAll(java.util.Collection)"><code>addAll(Collection)</code></a>, etc.
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create a filtered list that only accepts non-null values</jc>
    FilteredList&lt;String&gt; <jv>list</jv> = FilteredList
@@ -126,7 +125,7 @@ loadScripts(document, 'script');</script>
    <jc>// list now contains: ["value1", "value3"]</jc>
  </p>
 
- <h5 class='section'>Example - Custom List Type:</h5>
+ <h2 class='section'>Example - Custom List Type:</h2>
  <p class='bjava'>
    <jc>// Create a filtered ArrayList that only accepts positive numbers</jc>
    FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
@@ -140,7 +139,7 @@ loadScripts(document, 'script');</script>
    <jv>list</jv>.add(10);  <jc>// Added</jc>
  </p>
 
- <h5 class='section'>Behavior Notes:</h5>
+ <h2 class='section'>Behavior Notes:</h2>
  <ul class='spaced-list'>
    <li>Filtering is applied to all element addition methods: <a href="#add(E)"><code>add(Object)</code></a>, <a href="#addAll(java.util.Collection)"><code>addAll(Collection)</code></a>, etc.
    <li>If the filter returns <jk>false</jk>, the element is silently ignored (not added)
@@ -150,12 +149,12 @@ loadScripts(document, 'script');</script>
    <li>The underlying list type is determined by the <c>inner</c> method (defaults to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link"><code>ArrayList</code></a>)
  </ul>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is not thread-safe unless the underlying list is thread-safe. If thread safety is required,
  use a thread-safe list type (e.g., <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CopyOnWriteArrayList.html" title="class or interface in java.util.concurrent" class="external-link"><code>CopyOnWriteArrayList</code></a>) via the <c>inner</c> method.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  </ul></div>
@@ -419,7 +418,7 @@ loadScripts(document, 'script');</script>
  allowing any element types to be added. However, the generic type parameter should still be
  specified for type safety.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Explicitly specify generic types using diamond operator</jc>
    <jk>var</jk> <jv>list</jv> = FilteredList
@@ -511,7 +510,7 @@ loadScripts(document, 'script');</script>
  adding it to the list. This is useful for validation, debugging, or pre-checking elements before
  attempting to add them.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
       .<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -541,7 +540,7 @@ loadScripts(document, 'script');</script>
  The returned predicate is the combined filter used internally by this list. If multiple filters
  were set via the builder, they are combined using AND logic.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
       .<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -806,25 +805,25 @@ loadScripts(document, 'script');</script>
  the type (if element type was specified when creating the list). After conversion and validation,
  the element is added using the standard <a href="#add(E)"><code>add(Object)</code></a> method, which applies the filter.
 
- <h5 class='section'>Type Conversion:</h5>
+ <h4 class='section'>Type Conversion:</h4>
  <ul>
    <li>If an element function is configured, the element is converted by applying the function
    <li>If no function is configured, the object is used as-is (but may be validated if types were specified)
  </ul>
 
- <h5 class='section'>Type Validation:</h5>
+ <h4 class='section'>Type Validation:</h4>
  <ul>
    <li>If element type was specified (via <a href="#create(java.lang.Class)"><code>create(Class)</code></a>), the converted element must be an instance of that type
    <li>If <a href="#create()"><code>create()</code></a> was used (no types specified), <c>Object.class</c> is used, which accepts any type
  </ul>
 
- <h5 class='section'>Return Value:</h5>
+ <h4 class='section'>Return Value:</h4>
  <ul>
    <li>If the element is added successfully, returns <jk>true</jk>
    <li>If the element is filtered out, returns <jk>false</jk>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
       .<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -854,7 +853,7 @@ loadScripts(document, 'script');</script>
  This method iterates over all elements in the source collection and adds each one using <a href="#addConverted(java.lang.Object)"><code>addConverted(Object)</code></a>,
  which applies conversion and validation before adding.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
       .<jsm>create</jsm>(Integer.<jk>class</jk>)
@@ -890,7 +889,7 @@ loadScripts(document, 'script');</script>
  Each element from the collections/arrays will be added using <a href="#add(E)"><code>add(Object)</code></a>, which applies
  conversion and filtering.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    FilteredList&lt;Integer&gt; <jv>list</jv> = FilteredList
       .<jsm>create</jsm>(Integer.<jk>class</jk>)

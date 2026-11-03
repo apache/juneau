@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,11 +98,11 @@ loadScripts(document, 'script');</script>
 implements <a href="MarkdownMetaProvider.html" title="interface in org.apache.juneau.marshall.markdown">MarkdownMetaProvider</a>, <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></span></div>
 <div class="block">Parses Markdown fragment-mode output (tables and lists) back to POJOs.
 
- <h5 class='topic'>Media types</h5>
+ <h2 class='topic'>Media types</h2>
  <p>
  Handles <c>Content-Type</c> types:  <bc>text/markdown, text/x-markdown</bc>
 
- <h5 class='topic'>Description</h5>
+ <h2 class='topic'>Description</h2>
  <p>
  Parses Markdown tables and bulleted lists produced by <a href="MarkdownSerializer.html" title="class in org.apache.juneau.marshall.markdown"><code>MarkdownSerializer</code></a> back into Java objects.
  The following mappings apply:
@@ -114,7 +113,7 @@ implements <a href="MarkdownMetaProvider.html" title="interface in org.apache.ju
    <li>Table cells containing backtick-wrapped JSON5 values are parsed via <a href="../json5/Json5Parser.html" title="class in org.apache.juneau.marshall.json5"><code>Json5Parser</code></a>.
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Parse a Markdown table to a bean</jc>
    String <jv>md</jv> = <js>"| Property | Value |\n|---|---|\n| name | Alice |\n| age | 30 |"</js>;
@@ -126,7 +125,7 @@ implements <a href="MarkdownMetaProvider.html" title="interface in org.apache.ju
    MyBean <jv>parsed</jv> = MarkdownParser.<jsf>DEFAULT</jsf>.read(<jv>md</jv>, MyBean.<jk>class</jk>);
  </p>
 
- <h5 class='section'>Limitations:</h5><ul>
+ <h2 class='section'>Limitations:</h2><ul>
    <li class='note'>Multi-line string values cannot round-trip; newlines in cells are literal <code>&lt;br&gt;</code> text.
    <li class='note'>The configured null value string (default: <code>*null*</code>) is interpreted as <code>null</code>, not as the literal string.
    <li class='note'>Without a target type, table cell values are auto-detected as Integer, Long, Double, Boolean, or String.
@@ -134,7 +133,7 @@ implements <a href="MarkdownMetaProvider.html" title="interface in org.apache.ju
    <li class='note'>This class is thread safe and reusable.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown</a>
  </ul></div>
 </section>

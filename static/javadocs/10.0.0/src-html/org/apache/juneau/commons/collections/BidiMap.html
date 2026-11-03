@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * This implementation provides efficient bidirectional lookups by maintaining two internal maps:</span>
 <span class="source-line-no">031</span><span id="line-31"> * a forward map for key-to-value lookups and a reverse map for value-to-key lookups.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='section'&gt;Features:&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> *    &lt;li&gt;Implements the standard {@link Map} interface for forward key→value lookups</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;Provides {@link #getKey(Object)} method for reverse value→key lookups</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Thread-safety: Not thread-safe by default; external synchronization required if accessed by multiple threads</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h2 class='section'&gt;Usage:&lt;/h2&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    &lt;jc&gt;// Create a bidirectional map&lt;/jc&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *    BidiMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = BidiMap.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -69,14 +69,14 @@
 <span class="source-line-no">056</span><span id="line-56"> *    String &lt;jv&gt;key&lt;/jv&gt; = &lt;jv&gt;map&lt;/jv&gt;.getKey(2);  &lt;jc&gt;// Returns "two"&lt;/jc&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> *</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;Null Handling:&lt;/h5&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h2 class='section'&gt;Null Handling:&lt;/h2&gt;</span>
 <span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> * The {@link Builder#add(Object, Object)}/{@link Builder#build()} construction path filters out entries with</span>
 <span class="source-line-no">062</span><span id="line-62"> * null keys or values.</span>
 <span class="source-line-no">063</span><span id="line-63"> * {@link #put(Object, Object)} and {@link #putAll(Map)} perform &lt;b&gt;no&lt;/b&gt; null filtering after construction —</span>
 <span class="source-line-no">064</span><span id="line-64"> * null keys and values are stored in both the forward and reverse maps unconditionally.</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;h5 class='section'&gt;Unmodifiable Instances:&lt;/h5&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> * &lt;h2 class='section'&gt;Unmodifiable Instances:&lt;/h2&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;jc&gt;// Create an unmodifiable bidirectional map&lt;/jc&gt;</span>
 <span class="source-line-no">069</span><span id="line-69"> *    BidiMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = BidiMap.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73"> *       .build();</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;/p&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
-<span class="source-line-no">076</span><span id="line-76"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;</span>
 <span class="source-line-no">077</span><span id="line-77"> * &lt;ul&gt;</span>
 <span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="../../../../../index.html#juneau-commons"&gt;Overview &amp;gt; juneau-commons&lt;/a&gt;</span>
 <span class="source-line-no">079</span><span id="line-79"> * &lt;/ul&gt;</span>
@@ -105,7 +105,7 @@
 <span class="source-line-no">092</span><span id="line-92">    * &lt;p&gt;</span>
 <span class="source-line-no">093</span><span id="line-93">    * Provides a fluent API for constructing bidirectional maps.</span>
 <span class="source-line-no">094</span><span id="line-94">    *</span>
-<span class="source-line-no">095</span><span id="line-95">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">095</span><span id="line-95">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">096</span><span id="line-96">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">097</span><span id="line-97">    *    BidiMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = BidiMap.&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">098</span><span id="line-98">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
@@ -271,7 +271,7 @@
 <span class="source-line-no">258</span><span id="line-258">    * &lt;p&gt;</span>
 <span class="source-line-no">259</span><span id="line-259">    * This is the reverse lookup operation that makes this a bidirectional map.</span>
 <span class="source-line-no">260</span><span id="line-260">    *</span>
-<span class="source-line-no">261</span><span id="line-261">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">261</span><span id="line-261">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">262</span><span id="line-262">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">263</span><span id="line-263">    *    BidiMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = BidiMap.&lt;jsm&gt;create&lt;/jsm&gt;().add(&lt;js&gt;"two"&lt;/js&gt;, 2).build();</span>
 <span class="source-line-no">264</span><span id="line-264">    *    String &lt;jv&gt;key&lt;/jv&gt; = &lt;jv&gt;map&lt;/jv&gt;.getKey(2);  &lt;jc&gt;// Returns "two"&lt;/jc&gt;</span>

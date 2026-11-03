@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ implements <a href="VarFunction.html" title="interface in org.apache.juneau.comm
  construction via reflection; per-call dispatch picks the matching overload by argument count
  and runs one reflective invoke + N <code>ArgCoercer</code> coercions.
 
- <h5 class='section'>Method-resolution rules:</h5>
+ <h2 class='section'>Method-resolution rules:</h2>
  <ul>
    <li>The subclass declares one or more public methods named <code>invoke</code>. Each must have a
       distinct fixed-arity (or be the single variadic overload — see below).
@@ -113,7 +112,7 @@ implements <a href="VarFunction.html" title="interface in org.apache.juneau.comm
       fixed-arity overloads as long as the arity counts don't overlap.
  </ul>
 
- <h5 class='section'>Example — multi-arity:</h5>
+ <h2 class='section'>Example — multi-arity:</h2>
  <p class='bjava'>
    <jk>public class</jk> Substring <jk>extends</jk> TypedFunction {
       <ja>@Override</ja> <jk>public</jk> String name() { <jk>return</jk> <js>"substring"</js>; }

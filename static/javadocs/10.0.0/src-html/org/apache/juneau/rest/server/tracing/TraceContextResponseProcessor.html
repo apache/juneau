@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * {@code tracestate}) so a client calling this server can read the resulting trace identifiers back</span>
 <span class="source-line-no">031</span><span id="line-31"> * off the response.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;h5 class='topic'&gt;How it works&lt;/h5&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;h2 class='topic'&gt;How it works&lt;/h2&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * A {@link TracerHook} bridge (e.g. the OpenTelemetry bridge in {@code juneau-rest-server-tracing-otel})</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> * also keeps this processor free of any OpenTelemetry (or other tracer) dependency &amp;mdash; it works</span>
 <span class="source-line-no">050</span><span id="line-50"> * with any {@code TracerHook} bridge that populates the two attributes.</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='topic'&gt;Off-by-default behavior&lt;/h5&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;h2 class='topic'&gt;Off-by-default behavior&lt;/h2&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * The first action in {@link #process(RestOpSession)} is a single request-attribute read. When no</span>
@@ -72,14 +72,14 @@
 <span class="source-line-no">059</span><span id="line-59"> * itself gated on {@code RestContext.responseTraceparent} (default {@code true}); setting it to</span>
 <span class="source-line-no">060</span><span id="line-60"> * {@code false} keeps the processor out of the chain entirely.</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='topic'&gt;Already-committed responses&lt;/h5&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h2 class='topic'&gt;Already-committed responses&lt;/h2&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;p&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * If the response has already been committed (for example a streaming / SSE handler that flushed its</span>
 <span class="source-line-no">066</span><span id="line-66"> * headers before returning), the headers can no longer be set. In that case the processor logs a</span>
 <span class="source-line-no">067</span><span id="line-67"> * {@link Level#FINE FINE} message and skips the write &amp;mdash; it never throws.</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='jc'&gt;{@link TracerHook}</span>
 <span class="source-line-no">071</span><span id="line-71"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://www.w3.org/TR/trace-context/"&gt;W3C Trace Context&lt;/a&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability"&gt;Observability — Micrometer + OpenTelemetry&lt;/a&gt;</span>

@@ -25,7 +25,7 @@ Run from the docs checkout root.
 | Option | Argument | Default | Meaning |
 |---|---|---|---|
 | `--skip-npm` | none | off | Skip `npm ci` and the Docusaurus build. |
-| `--skip-maven` | none | off | Skip `mvn clean install`, `mvn site`, the apidocs check, the javadoc and site copies, and the link checks. The Juneau checkout may then be missing. |
+| `--skip-maven` | none | off | Skip `mvn clean install`, `mvn site`, the apidocs check, the javadoc and site copies, and (when the Juneau checkout is missing) the link checks. With a Juneau checkout present the link checks still run, since they read its sources, not Maven output. The Juneau checkout may be missing. |
 | `--skip-copy` | none | off | Skip copying the Maven site into `static/site` and the `.asf.yaml` copy. The versioned javadocs copy still runs. |
 | `--skip-verify` | none | off | Skip the documentation-integrity, project-page and entry-page checks (`verify-docs.py`, `check-project-pages.py`, `check-entry-pages.py`). |
 | `--staging` | none | off | Build with `SITE_URL=https://juneau.staged.apache.org`. |
@@ -46,7 +46,7 @@ Run from the docs checkout root.
 8. Regenerates `artifact-packages.json` (module to base javadoc package), then points `static/site/apidocs` at the committed `static/javadocs/<version>` with a relative symlink.
 9. **Docs build:** runs `npm run build`, setting `JUNEAU_VERSION` and, with `--staging`, `SITE_URL`.
 10. Copies the Juneau checkout's `.asf.yaml` into `build/` (not with `--skip-copy` or `--skip-maven`).
-11. **Verify:** runs `verify-docs.py` (Integrity), `check-project-pages.py` (Project pages) and `check-entry-pages.py` (Entry pages, with `--juneau-root` when the Juneau checkout has a `pom.xml`), three child rows of the Verify stage.
+11. **Verify:** runs `verify-docs.py` (Integrity), `check-project-pages.py` (Project pages) and `check-entry-pages.py` (Entry pages, with `--juneau-root` when the Juneau checkout has a `pom.xml`) and `check-doc-inventory.py` (Doc inventory), four child rows of the Verify stage.
 12. **Links:** runs `check-topic-links.py --juneau-root <root>`, `check-ai-artifacts.py --juneau-root <root>`, `check-code-fences.py --docs-root <docs>`, `check-java-fences.py --docs-root <docs> --strict` (a ` ```java ` fence that does not parse fails the build unless it is marked ` ```java fragment `) and `check-guide-snippets.py --juneau-root <root>` (every ` guide=FILE#REGION ` fence must match its region in the Juneau checkout's `juneau-examples/juneau-examples-guides` module).
 13. Prints the location of the build and, after a complete build with no skips, the stage and release commands.
 

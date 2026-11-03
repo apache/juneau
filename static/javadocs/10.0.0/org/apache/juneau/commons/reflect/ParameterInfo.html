@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -95,7 +94,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  It supports resolving parameter names from bytecode (when compiled with <c>-parameters</c>) or from
  <ja>@Name</ja> annotations.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Parameter introspection - access parameter metadata, type, annotations
    <li>Name resolution - resolve parameter names from bytecode or annotations
@@ -104,7 +103,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
    <li>Annotation support - get annotations declared on the parameter
  </ul>
 
- <h5 class='section'>Use Cases:</h5>
+ <h2 class='section'>Use Cases:</h2>
  <ul class='spaced-list'>
    <li>Introspecting parameter metadata for code generation or analysis
    <li>Resolving parameter names for dependency injection frameworks
@@ -113,7 +112,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
    <li>Building frameworks that need to analyze method/constructor signatures
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Get ParameterInfo from a method</jc>
    MethodInfo <jv>mi</jv> = ...;
@@ -130,7 +129,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
       <jv>param</jv>.getAnnotations(MyAnnotation.<jk>class</jk>).toList();
  </p>
 
- <h5 class='section'>Parameter Name Resolution:</h5>
+ <h2 class='section'>Parameter Name Resolution:</h2>
  <p>
  Parameter names are resolved in the following order:
  <ol class='spaced-list'>
@@ -139,7 +138,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
    <li><c>arg0</c>, <c>arg1</c>, etc. (fallback if names unavailable)
  </ol>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> - Method introspection
    <li class='jc'><a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> - Constructor introspection
    <li class='jc'><a href="ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableInfo</code></a> - Common executable functionality
@@ -409,7 +408,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  This convenience method automatically determines the declaring executable from the parameter
  and finds the matching ParameterInfo.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Parameter <jv>p</jv> = ...;
    ParameterInfo <jv>pi</jv> = ParameterInfo.<jsm>of</jsm>(<jv>p</jv>);
@@ -460,7 +459,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html#getAnnotatedType()" title="class or interface in java.lang.reflect" class="external-link"><code>Parameter.getAnnotatedType()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get annotated type: void method(@NotNull String value)</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -536,7 +535,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html#getDeclaringExecutable()" title="class or interface in java.lang.reflect" class="external-link"><code>Parameter.getDeclaringExecutable()</code></a> but returns <a href="ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableInfo</code></a> instead.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get the method or constructor that declares this parameter</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -608,7 +607,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  For methods, searches matching methods (same signature) in parent classes/interfaces
  for parameters at the same index with matching name and type.
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Constructor with different parameter counts:</jc>
    <jk>class</jk> A {
@@ -650,7 +649,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html#getModifiers()" title="class or interface in java.lang.reflect" class="external-link"><code>Parameter.getModifiers()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if parameter is final</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -710,7 +709,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html#getParameterizedType()" title="class or interface in java.lang.reflect" class="external-link"><code>Parameter.getParameterizedType()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get generic type information for parameter: List&lt;String&gt; values</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -905,7 +904,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html#isImplicit()" title="class or interface in java.lang.reflect" class="external-link"><code>Parameter.isImplicit()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Filter out implicit parameters</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -938,7 +937,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <b>Note:</b> This method is different from <a href="#hasName()"><code>hasName()</code></a> which also checks for the presence
  of a <c>@Name</c> annotation. This method only checks if the name is present in the bytecode.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if parameter name is in bytecode</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -968,7 +967,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Same as calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Parameter.html#isSynthetic()" title="class or interface in java.lang.reflect" class="external-link"><code>Parameter.isSynthetic()</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Filter out compiler-generated parameters</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -1013,7 +1012,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
  <p>
  Only returns <jk>true</jk> for the last parameter of a variable arity method.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Check if this is a varargs parameter</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -1048,7 +1047,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
    <li>Varargs indicator (if applicable)
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h4 class='section'>Examples:</h4>
  <p class='bjava'>
    <jc>// Simple parameter</jc>
    ParameterInfo <jv>pi</jv> = ...;
@@ -1146,7 +1145,7 @@ implements <a href="Annotatable.html" title="interface in org.apache.juneau.comm
    <li>If not found in the bean store, checks the <c>otherBeans</c> parameter.
  </ul>
 
- <h5 class='section'>Parameter Resolution:</h5>
+ <h4 class='section'>Parameter Resolution:</h4>
  <ul class='spaced-list'>
    <li><b>Single beans</b> - Resolved using <a href="../inject/BeanStore.html#getBean(java.lang.Class)"><code>BeanStore.getBean(Class)</code></a> or <a href="../inject/BeanStore.html#getBean(java.lang.Class,java.lang.String)"><code>BeanStore.getBean(Class, String)</code></a>.
       If not found, checks <c>otherBeans</c> for a compatible instance.

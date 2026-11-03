@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -92,7 +91,7 @@ loadScripts(document, 'script');</script>
  rolling by 1 will advance the year, while a precision of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html#HOUR_OF_DAY" title="class or interface in java.time.temporal" class="external-link"><code>ChronoField.HOUR_OF_DAY</code></a> means
  rolling by 1 will advance the hour.
 
- <h5 class='section'>ISO8601 Parsing:</h5>
+ <h2 class='section'>ISO8601 Parsing:</h2>
  <p>
  The <a href="#of(java.lang.String)"><code>of(String)</code></a> method can parse various ISO8601 timestamp formats:
  <ul>
@@ -116,7 +115,7 @@ loadScripts(document, 'script');</script>
    <li><js>"2011-01-15T12:30:45.123456789"</js> → <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html#NANO_OF_SECOND" title="class or interface in java.time.temporal" class="external-link"><code>ChronoField.NANO_OF_SECOND</code></a> (4-9 digits)
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h2 class='section'>Example:</h2>
  <p class='bjava'>
    <jc>// Parse an ISO8601 timestamp with year precision</jc>
    GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(<js>"2011"</js>);
@@ -135,11 +134,11 @@ loadScripts(document, 'script');</script>
    <jc>// Result: 2011-01-15T14:00:00Z</jc>
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is immutable and thread-safe.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jm'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/ZonedDateTime.html" title="class or interface in java.time" class="external-link"><code>ZonedDateTime</code></a>
    <li class='jm'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html" title="class or interface in java.time.temporal" class="external-link"><code>ChronoField</code></a>
    <li class='jm'><a href="../utils/DateUtils.html" title="class in org.apache.juneau.commons.utils"><code>DateUtils</code></a>
@@ -377,7 +376,7 @@ loadScripts(document, 'script');</script>
  based on the format. If no timezone is specified in the string, the system default
  timezone is used.
 
- <h5 class='section'>Supported Formats:</h5>
+ <h4 class='section'>Supported Formats:</h4>
  <ul>
    <li>Date: <js>"2011"</js>, <js>"2011-01"</js>, <js>"2011-01-15"</js>
    <li>DateTime: <js>"2011-01-15T12"</js>, <js>"2011-01-15T12:30"</js>, <js>"2011-01-15T12:30:45"</js>
@@ -386,14 +385,14 @@ loadScripts(document, 'script');</script>
    <li>With timezone: <js>"2011-01-15T12:30:45Z"</js>, <js>"2011-01-15T12:30:45+05:30"</js>, <js>"2011-01-15T12:30:45-05:30"</js>
  </ul>
 
- <h5 class='section'>Timezone Handling:</h5>
+ <h4 class='section'>Timezone Handling:</h4>
  <ul>
    <li>If the string contains a timezone (Z, +HH:mm, -HH:mm, etc.), that timezone is used.
    <li>If no timezone is specified, the system default timezone is used.
    <li>For time-only formats (starting with "T"), the current date is used with the specified or default timezone.
  </ul>
 
- <h5 class='section'>Precision Detection:</h5>
+ <h4 class='section'>Precision Detection:</h4>
  <p>
  The precision is automatically determined from the format:
  <ul>
@@ -436,7 +435,7 @@ loadScripts(document, 'script');</script>
    <li>Time-only formats (starting with "T") - uses the clock's instant to get the current date
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Parse with a fixed clock for deterministic testing</jc>
    <jk>var</jk> <jv>clock</jv> = Clock.<jsm>fixed</jsm>(Instant.<jsm>parse</jsm>(<js>"2000-01-01T12:00:00Z"</js>), ZoneOffset.<jsf>UTC</jsf>);
@@ -483,7 +482,7 @@ loadScripts(document, 'script');</script>
    <li>Time-only formats (starting with "T") - uses the clock's instant to get the current date
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Parse with default timezone and a fixed clock</jc>
    <jk>var</jk> <jv>clock</jv> = Clock.<jsm>fixed</jsm>(Instant.<jsm>parse</jsm>(<js>"2000-01-01T12:00:00Z"</js>), ZoneOffset.<jsf>UTC</jsf>);
@@ -606,7 +605,7 @@ loadScripts(document, 'script');</script>
  This method creates a new GranularZonedDateTime by adding the specified amount to the
  specified field. The precision of the returned object remains the same as this object.
 
- <h5 class='section'>Supported Fields:</h5>
+ <h4 class='section'>Supported Fields:</h4>
  <ul>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html#YEAR" title="class or interface in java.time.temporal" class="external-link"><code>ChronoField.YEAR</code></a>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html#MONTH_OF_YEAR" title="class or interface in java.time.temporal" class="external-link"><code>ChronoField.MONTH_OF_YEAR</code></a>
@@ -618,7 +617,7 @@ loadScripts(document, 'script');</script>
    <li><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/temporal/ChronoField.html#NANO_OF_SECOND" title="class or interface in java.time.temporal" class="external-link"><code>ChronoField.NANO_OF_SECOND</code></a>
  </ul>
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a datetime with hour precision</jc>
    GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(<js>"2011-01-15T12Z"</js>);
@@ -647,7 +646,7 @@ loadScripts(document, 'script');</script>
  This is a convenience method that calls <a href="#roll(java.time.temporal.ChronoField,int)"><code>roll(ChronoField, int)</code></a> using this
  object's precision field.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Create a datetime with year precision</jc>
    GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(<js>"2011"</js>);

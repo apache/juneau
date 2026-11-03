@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31"> * It's commonly used for caching scenarios where you need to uniquely identify objects based on</span>
 <span class="source-line-no">032</span><span id="line-32"> * multiple configuration parameters or attributes.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Usage Pattern:&lt;/h5&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h2 class='section'&gt;Usage Pattern:&lt;/h2&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> *    &lt;jc&gt;// Create a composite key from multiple values&lt;/jc&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    HashKey &lt;jv&gt;key&lt;/jv&gt; = HashKey.&lt;jsm&gt;of&lt;/jsm&gt;(</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"> *    MyObject &lt;jv&gt;cached&lt;/jv&gt; = &lt;jv&gt;cache&lt;/jv&gt;.&lt;jsm&gt;get&lt;/jsm&gt;(&lt;jv&gt;lookupKey&lt;/jv&gt;);  &lt;jc&gt;// Returns myObject&lt;/jc&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;Important Notes:&lt;/h5&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;Important Notes:&lt;/h2&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;ul class='spaced-list'&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *       &lt;b&gt;All relevant values must be included&lt;/b&gt; - When using {@code HashKey} for caching, ensure all</span>
@@ -83,7 +83,7 @@
 <span class="source-line-no">070</span><span id="line-70"> *       handled correctly in equality comparisons.</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *</span>
-<span class="source-line-no">073</span><span id="line-73"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;jc&gt;// Create keys for caching based on configuration&lt;/jc&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *    HashKey &lt;jv&gt;key1&lt;/jv&gt; = HashKey.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"json"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;, &lt;jk&gt;false&lt;/jk&gt;);</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    * will produce equal {@code HashKey} instances, while different orders or values will produce</span>
 <span class="source-line-no">104</span><span id="line-104">    * different keys.</span>
 <span class="source-line-no">105</span><span id="line-105">    *</span>
-<span class="source-line-no">106</span><span id="line-106">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">108</span><span id="line-108">    *    HashKey &lt;jv&gt;key1&lt;/jv&gt; = HashKey.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>
 <span class="source-line-no">109</span><span id="line-109">    *    HashKey &lt;jv&gt;key2&lt;/jv&gt; = HashKey.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;jk&gt;true&lt;/jk&gt;);</span>

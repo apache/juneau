@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * {@link org.apache.juneau.http.entity.MultipartBody} and the {@code multipart/form-data} {@code Content-Type}</span>
 <span class="source-line-no">033</span><span id="line-33"> * (with its generated boundary) is applied automatically.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='figure'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;ja&gt;@Remote&lt;/ja&gt;(path=&lt;js&gt;"/api"&lt;/js&gt;)</span>
 <span class="source-line-no">038</span><span id="line-38"> *    &lt;jk&gt;public interface&lt;/jk&gt; UploadService {</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44"> *    }</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/p&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Body-mode exclusivity:&lt;/h5&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h2 class='section'&gt;Body-mode exclusivity:&lt;/h2&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * A method is either &lt;i&gt;multipart&lt;/i&gt; ({@code @Multipart} + one or more {@link org.apache.juneau.http.Part @Part}</span>
 <span class="source-line-no">050</span><span id="line-50"> * parameters) or &lt;i&gt;single-body&lt;/i&gt; ({@link org.apache.juneau.http.Content @Content}), never both.  Declaring both</span>
@@ -65,7 +65,7 @@
 <span class="source-line-no">052</span><span id="line-52"> * parameter without {@code @Multipart} &amp;mdash; is rejected at proxy-build time with an</span>
 <span class="source-line-no">053</span><span id="line-53"> * {@link IllegalArgumentException}.</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
-<span class="source-line-no">055</span><span id="line-55"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;b&gt;Escape hatch (Option B):&lt;/b&gt; for advanced cases you can still hand-assemble a</span>
 <span class="source-line-no">058</span><span id="line-58"> *       {@link org.apache.juneau.http.entity.MultipartBody} and pass it as a single</span>
@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62"> *       ignores this annotation.</span>
 <span class="source-line-no">063</span><span id="line-63"> * &lt;/ul&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient"&gt;Next-Generation REST Client&lt;/a&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='extlink'&gt;&lt;a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578"&gt;RFC 7578 — multipart/form-data&lt;/a&gt;</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;/ul&gt;</span>

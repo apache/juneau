@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -102,7 +101,7 @@ loadScripts(document, 'script');</script>
  <p>
  Renamed from <code>Value</code> in 10.0.0 to resolve an import-name collision with the <code>@Value</code> injection annotation.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Mutable value container with fluent API
    <li>Optional-like methods: <a href="#get()"><code>get()</code></a>, <a href="#orElse(T)"><code>orElse(Object)</code></a>, <a href="#ifPresent(java.util.function.Consumer)"><code>ifPresent(Consumer)</code></a>, <a href="#map(java.util.function.Function)"><code>map(Function)</code></a>
@@ -111,13 +110,13 @@ loadScripts(document, 'script');</script>
    <li>Method chaining for all setter operations
  </ul>
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='warn'>
       This class is <b>not thread-safe</b>. For concurrent access, consider using atomic classes like
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference</code></a>.
  </ul>
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Basic usage</jc>
    Holder&lt;String&gt; <jv>name</jv> = Holder.<jsm>of</jsm>(<js>"John"</js>);
@@ -146,7 +145,7 @@ loadScripts(document, 'script');</script>
    <jv>monitored</jv>.set(<js>"updated"</js>);  <jc>// Triggers listener</jc>
  </p>
 
- <h5 class='section'>Specialized Value Classes:</h5>
+ <h2 class='section'>Specialized Value Classes:</h2>
  <p>
  For primitive types and common use cases, specialized subclasses are available with additional convenience methods:
  <ul class='spaced-list'>
@@ -160,7 +159,7 @@ loadScripts(document, 'script');</script>
    <li><a href="Flag.html" title="class in org.apache.juneau.commons.lang"><code>Flag</code></a> - For non-nullable boolean flags (true/false only, no null state)
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsLang">Lang Package</a>
    <li class='jc'><a href="ValueListener.html" title="interface in org.apache.juneau.commons.lang"><code>ValueListener</code></a>
    <li class='jc'><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang"><code>IntegerHolder</code></a>
@@ -378,7 +377,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-130">empty</a></span>()</div>
 <div class="block">Creates a new empty value (with <c>null</c> as the initial value).
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
    <jsm>assertNull</jsm>(<jv>value</jv>.get());
@@ -411,7 +410,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-157">of</a></span><wbr><span class="parameters">(T&nbsp;object)</span></div>
 <div class="block">Creates a new value with the specified initial value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
    <jsm>assertEquals</jsm>(<js>"hello"</js>, <jv>value</jv>.get());
@@ -472,7 +471,7 @@ loadScripts(document, 'script');</script>
  <p>
  This method is analogous to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#filter(java.util.function.Predicate)" title="class or interface in java.util" class="external-link"><code>Optional.filter(Predicate)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
    Holder&lt;String&gt; <jv>filtered</jv> = <jv>value</jv>.filter(<jv>s</jv> -&gt; <jv>s</jv>.length() &gt; 3);
@@ -500,7 +499,7 @@ loadScripts(document, 'script');</script>
  This method is similar to <a href="#map(java.util.function.Function)"><code>map(Function)</code></a>, but the mapping function returns a <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a> rather
  than a simple value. This is analogous to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html#flatMap(java.util.function.Function)" title="class or interface in java.util" class="external-link"><code>Optional.flatMap(Function)</code></a>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
    Holder&lt;Integer&gt; <jv>length</jv> = <jv>value</jv>.flatMap(<jv>s</jv> -&gt; Holder.<jsm>of</jsm>(<jv>s</jv>.length()));
@@ -538,7 +537,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-298">getAndSet</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Returns the current value and then sets it to the specified value.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
    String <jv>oldValue</jv> = <jv>value</jv>.getAndSet(<js>"new"</js>);  <jc>// Returns "old"</jc>
@@ -561,7 +560,7 @@ loadScripts(document, 'script');</script>
  <p>
  This is useful for "consuming" a value, ensuring it can only be retrieved once.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"data"</js>);
    String <jv>result</jv> = <jv>value</jv>.getAndUnset();  <jc>// Returns "data"</jc>
@@ -589,7 +588,7 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-344">ifPresent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">If a value is present (not <jk>null</jk>), invokes the specified consumer with the value, otherwise does nothing.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
    <jv>value</jv>.ifPresent(<jsm>System.out</jsm>::<jv>println</jv>);  <jc>// Prints "hello"</jc>
@@ -613,7 +612,7 @@ loadScripts(document, 'script');</script>
  This method uses <code>eq()</code> for equality comparison, which handles <jk>null</jk> values safely
  and performs deep equality checks for arrays and collections.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
    <jsm>assertTrue</jsm>(<jv>value</jv>.is(<js>"hello"</js>));
@@ -668,7 +667,7 @@ loadScripts(document, 'script');</script>
  <p>
  Only one listener can be registered at a time. Calling this method again will replace the previous listener.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"initial"</js>);
    <jv>value</jv>.listener(<jv>newValue</jv> -&gt; <jsm>log</jsm>(<js>"Changed to: "</js> + <jv>newValue</jv>));
@@ -698,7 +697,7 @@ loadScripts(document, 'script');</script>
  <p>
  If this value is empty (<jk>null</jk>), returns an empty value without applying the mapper.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>name</jv> = Holder.<jsm>of</jsm>(<js>"john"</js>);
    Holder&lt;String&gt; <jv>upper</jv> = <jv>name</jv>.map(String::toUpperCase);
@@ -782,7 +781,7 @@ loadScripts(document, 'script');</script>
  <p>
  If a <a href="ValueListener.html" title="interface in org.apache.juneau.commons.lang"><code>ValueListener</code></a> is registered, it will be notified of the change.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
    <jv>value</jv>.set(<js>"hello"</js>).set(<js>"world"</js>);  <jc>// Method chaining</jc>
@@ -803,7 +802,7 @@ loadScripts(document, 'script');</script>
  <a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Sets the value only if the specified condition is <jk>true</jk>.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"old"</js>);
    <jv>value</jv>.setIf(<jk>true</jk>, <js>"new"</js>);   <jc>// Sets to "new"</jc>
@@ -828,7 +827,7 @@ loadScripts(document, 'script');</script>
  <p>
  If the value is already set, this method does nothing.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>empty</jsm>();
    <jv>value</jv>.setIfEmpty(<js>"first"</js>);   <jc>// Sets value to "first"</jc>
@@ -862,7 +861,7 @@ loadScripts(document, 'script');</script>
  <p>
  If the current value is <jk>null</jk>, this is a no-op.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    Holder&lt;String&gt; <jv>value</jv> = Holder.<jsm>of</jsm>(<js>"hello"</js>);
    <jv>value</jv>.update(String::toUpperCase);

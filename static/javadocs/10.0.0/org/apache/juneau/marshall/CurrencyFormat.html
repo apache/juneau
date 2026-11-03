@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -99,14 +98,14 @@ loadScripts(document, 'script');</script>
  The default is <a href="#ISO_CODE"><code>ISO_CODE</code></a> which preserves the historical wire output (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#toString()" title="class or interface in java.util" class="external-link"><code>Currency.toString()</code></a> /
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#getCurrencyCode()" title="class or interface in java.util" class="external-link"><code>Currency.getCurrencyCode()</code></a>).
 
- <h5 class='topic'>Locale composability</h5>
+ <h2 class='topic'>Locale composability</h2>
 
  <p>
  <a href="#SYMBOL"><code>SYMBOL</code></a> and <a href="#DISPLAY_NAME"><code>DISPLAY_NAME</code></a> are locale-sensitive — they consult the supplied <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Locale.html" title="class or interface in java.util" class="external-link"><code>Locale</code></a>
  (typically the <a href="MarshallingContext.html#getLocale()"><code>MarshallingContext.getLocale()</code></a> resolved through the <a href="MarshallingSession.html" title="class in org.apache.juneau.marshall"><code>MarshallingSession</code></a>).
  <a href="#ISO_CODE"><code>ISO_CODE</code></a> ignores the locale.
 
- <h5 class='topic'>Round-trip caveat</h5>
+ <h2 class='topic'>Round-trip caveat</h2>
 
  <p>
  <b>Round-trip is strictly guaranteed only for <a href="#ISO_CODE"><code>ISO_CODE</code></a>.</b>  <code>SYMBOL</code> parsing of a token
@@ -114,7 +113,7 @@ loadScripts(document, 'script');</script>
  locale, and <code>DISPLAY_NAME</code> parsing is even less reliable (<code>"Dollar"</code> matches at least eight
  ISO codes). For machine-to-machine wires, prefer <a href="#ISO_CODE"><code>ISO_CODE</code></a>.
 
- <h5 class='topic'>Precedence (highest to lowest)</h5>
+ <h2 class='topic'>Precedence (highest to lowest)</h2>
  <ol>
    <li><a href="MarshalledProp.html#currencyFormat()"><code>@MarshalledProp(currencyFormat=…)</code></a> on the bean property.
    <li><a href="Marshalled.html#currencyFormat()"><code>@Marshalled(currencyFormat=…)</code></a> on the bean class.
@@ -125,7 +124,7 @@ loadScripts(document, 'script');</script>
    <li>The default constant (<a href="#ISO_CODE"><code>ISO_CODE</code></a>).
  </ol>
 
- <h5 class='topic'>Parser leniency</h5>
+ <h2 class='topic'>Parser leniency</h2>
 
  <p>
  Parsers SHALL try <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#getInstance(java.lang.String)" title="class or interface in java.util" class="external-link"><code>Currency.getInstance(String)</code></a> first regardless of the parser-side
@@ -133,7 +132,7 @@ loadScripts(document, 'script');</script>
  <a href="#SYMBOL"><code>SYMBOL</code></a> / <a href="#DISPLAY_NAME"><code>DISPLAY_NAME</code></a>, the parser falls back to a best-effort iterate-and-match scan
  against <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#getAvailableCurrencies()" title="class or interface in java.util" class="external-link"><code>Currency.getAvailableCurrencies()</code></a>.
 
- <h5 class='topic'>Binary serializers</h5>
+ <h2 class='topic'>Binary serializers</h2>
 
  <p>
  Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this
@@ -253,7 +252,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/CurrencyFormat.html#line-98">ISO_CODE</a></span></div>
 <div class="block">ISO 4217 currency code (the default).
 
- <h5 class='figure'>Example:</h5>
+ <h4 class='figure'>Example:</h4>
  <p class='bcode'>
    USD
    EUR
@@ -270,7 +269,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/CurrencyFormat.html#line-115">SYMBOL</a></span></div>
 <div class="block">Currency symbol per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#getSymbol(java.util.Locale)" title="class or interface in java.util" class="external-link"><code>Currency.getSymbol(Locale)</code></a>.
 
- <h5 class='figure'>Example (locale <code>en_US</code>):</h5>
+ <h4 class='figure'>Example (locale <code>en_US</code>):</h4>
  <p class='bcode'>
    $
    €
@@ -289,7 +288,7 @@ the order they are declared.</div>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/CurrencyFormat.html#line-131">DISPLAY_NAME</a></span></div>
 <div class="block">Localized display name per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#getDisplayName(java.util.Locale)" title="class or interface in java.util" class="external-link"><code>Currency.getDisplayName(Locale)</code></a>.
 
- <h5 class='figure'>Example (locale <code>en_US</code>):</h5>
+ <h4 class='figure'>Example (locale <code>en_US</code>):</h4>
  <p class='bcode'>
    US Dollar
    Euro

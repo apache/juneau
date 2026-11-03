@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -102,7 +101,7 @@ implements <a href="../config/event/ConfigEventListener.html" title="interface i
  Your microservice class must be specified as the <jk>Main-Class</jk> entry in the manifest file of your microservice
  jar file if it's an executable jar.
 
- <h5 class='topic'>Microservice Configuration</h5>
+ <h2 class='topic'>Microservice Configuration</h2>
 
  This class defines the following method for accessing configuration for your microservice:
  <ul class='spaced-list'>
@@ -114,7 +113,7 @@ implements <a href="../config/event/ConfigEventListener.html" title="interface i
       <a href="#getManifest()"><code>getManifest()</code></a> - The manifest file for the main jar file.
  </ul>
 
- <h5 class='topic'>Lifecycle Methods</h5>
+ <h2 class='topic'>Lifecycle Methods</h2>
 
  Subclasses must implement the following lifecycle methods:
  <ul class='spaced-list'>
@@ -128,7 +127,7 @@ implements <a href="../config/event/ConfigEventListener.html" title="interface i
       <a href="#kill()"><code>kill()</code></a> - Can be used to forcibly shut down the service.  Doesn't get called during normal operation.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice</a>
  </ul></div>
 </section>
@@ -530,7 +529,7 @@ implements <a href="../config/event/ConfigEventListener.html" title="interface i
  <p>
  This method can be called from the class constructor.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bini'>
    <cc>#--------------------------</cc>
    <cc># My section</cc>
@@ -662,7 +661,7 @@ implements <a href="../config/event/ConfigEventListener.html" title="interface i
  <p>
  This method can be called from the class constructor.
 
- <h5 class='section'>Example:</h5>
+ <h4 class='section'>Example:</h4>
  <p class='bjava'>
    <jc>// Get Main-Class from manifest file.</jc>
    String <jv>mainClass</jv> = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);

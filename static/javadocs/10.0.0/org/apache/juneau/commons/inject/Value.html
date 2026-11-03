@@ -26,7 +26,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -81,7 +80,7 @@ loadScripts(document, 'script');</script>
  <a href="../settings/Settings.html#get()"><code>Settings.get()</code></a>), then coerced to the
  target Java type via <a href="../settings/Settings.html#toType(java.lang.String,java.lang.Class)"><code>Settings.toType(String, Class)</code></a>.
 
- <h5 class='section'>Examples:</h5>
+ <h2 class='section'>Examples:</h2>
  <p class='bjava'>
    <jc>// Field injection with default.</jc>
    <ja>@Value</ja>(<js>"${db.timeout.ms:5000}"</js>)
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
    ) { ... }
  </p>
 
- <h5 class='section'>Resolution order:</h5>
+ <h2 class='section'>Resolution order:</h2>
  <ol>
    <li>Thread-local override (<a href="../settings/Settings.html#setLocal(java.lang.String,java.lang.String)"><code>Settings.setLocal</code></a>)
    <li>Global override (<a href="../settings/Settings.html#setGlobal(java.lang.String,java.lang.String)"><code>Settings.setGlobal</code></a>)
@@ -110,7 +109,7 @@ loadScripts(document, 'script');</script>
  via FQN-based detection in <a href="JsrSupport.html" title="class in org.apache.juneau.commons.inject"><code>JsrSupport</code></a>; no compile-time Spring dependency is introduced in
  <code>juneau-commons</code>.
 
- <h5 class='section'>Notes:</h5><ul>
+ <h2 class='section'>Notes:</h2><ul>
    <li class='note'><code>@Value</code> and <code>@Inject</code> on the same site is invalid and throws
       a <code>BeanCreationException</code>. <code>@Value</code> resolves strings/primitives; <code>@Inject</code>
       resolves beans.
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
       a <code>BeanCreationException</code> is thrown.  For reference types, <code>null</code> is injected.
  </ul>
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">@Value Annotation Basics</a>
  </ul></div>
 </section>

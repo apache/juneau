@@ -42,14 +42,14 @@
 <span class="source-line-no">029</span><span id="line-29"> * WHATWG parse state machine (&lt;a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html"&gt;HTML §9.2&lt;/a&gt;).</span>
 <span class="source-line-no">030</span><span id="line-30"> * Designed for long-lived SSE streams that outlive any reasonable per-call buffer.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;Why a separate class:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;h2 class='section'&gt;Why a separate class:&lt;/h2&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * No other Juneau marshaller ships a separate iterator-style helper. SSE warrants the deviation</span>
 <span class="source-line-no">035</span><span id="line-35"> * because SSE responses are open until the client disconnects or the server pushes its last event;</span>
 <span class="source-line-no">036</span><span id="line-36"> * forcing callers through the eager {@code List&lt;SseEvent&gt;} path would defeat the entire point of</span>
 <span class="source-line-no">037</span><span id="line-37"> * using SSE.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='figure'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *    &lt;jk&gt;try&lt;/jk&gt; (SseEventReader &lt;jv&gt;r&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; SseEventReader(&lt;jv&gt;responseReader&lt;/jv&gt;)) {</span>
 <span class="source-line-no">042</span><span id="line-42"> *       &lt;jk&gt;while&lt;/jk&gt; (&lt;jv&gt;r&lt;/jv&gt;.hasNext()) {</span>
@@ -59,11 +59,11 @@
 <span class="source-line-no">046</span><span id="line-46"> *    }</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='warn'&gt;This class is not thread safe.</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Sse"&gt;SSE&lt;/a&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;/ul&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> */</span>

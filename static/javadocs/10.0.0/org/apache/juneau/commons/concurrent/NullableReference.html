@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -98,7 +97,7 @@ loadScripts(document, 'script');</script>
  concurrent environments where you need to atomically update a reference while also having Optional-like
  operations.
 
- <h5 class='section'>Features:</h5>
+ <h2 class='section'>Features:</h2>
  <ul class='spaced-list'>
    <li>Extends AtomicReference - inherits all atomic operations (get, set, compareAndSet, etc.)
    <li>Optional-like API - provides isPresent(), isEmpty(), map(), orElse(), etc.
@@ -106,7 +105,7 @@ loadScripts(document, 'script');</script>
    <li>Null-safe - handles null values gracefully (null represents "empty")
  </ul>
 
- <h5 class='section'>Usage:</h5>
+ <h2 class='section'>Usage:</h2>
  <p class='bjava'>
    <jc>// Create an empty reference</jc>
    NullableReference&lt;String&gt; <jv>ref</jv> = NullableReference.<jsm>empty</jsm>();
@@ -126,13 +125,13 @@ loadScripts(document, 'script');</script>
    <jv>ref</jv>.compareAndSet(<js>"value"</js>, <js>"newValue"</js>);
  </p>
 
- <h5 class='section'>Thread Safety:</h5>
+ <h2 class='section'>Thread Safety:</h2>
  <p>
  This class is thread-safe. All operations inherit thread-safety from <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference</code></a>.
  Multiple threads can safely call methods like <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html#get()" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference.get()</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html#set(V)" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference.set(Object)</code></a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html#compareAndSet(V,V)" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference.compareAndSet(Object, Object)</code></a>,
  and the Optional-like methods concurrently.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/atomic/AtomicReference.html" title="class or interface in java.util.concurrent.atomic" class="external-link"><code>AtomicReference</code></a> - Base class providing atomic operations
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> - Java's Optional class
    <li class='jc'><a href="../function/NullableSupplier.html" title="interface in org.apache.juneau.commons.function"><code>NullableSupplier</code></a> - Similar functionality for suppliers

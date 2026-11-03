@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -84,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="block">The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal <a href="ActionResult.html" title="class in org.apache.juneau.console.views"><code>ActionResult</code></a> when
  the write is asynchronous.
 
- <h5 class='section'>Why this is not a new <code>RowAction</code> wire field</h5>
+ <h2 class='section'>Why this is not a new <code>RowAction</code> wire field</h2>
  <p>
  Whether an action is asynchronous is a property of the <b>response</b>, not of the declared action: the same
  <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> POST returns either a terminal <a href="ActionResult.html" title="class in org.apache.juneau.console.views"><code>ActionResult</code></a> (synchronous) or this pointer (asynchronous).
@@ -92,14 +91,14 @@ loadScripts(document, 'script');</script>
  <code>juneau-views.js</code> runtime routes to the streaming path purely by recognizing a <a href="#streamUrl"><code>streamUrl</code></a> in the 2xx
  body.  It carries no data to render, only capability pointers, so it needs no version handshake of its own.
 
- <h5 class='section'>The URLs are capabilities</h5>
+ <h2 class='section'>The URLs are capabilities</h2>
  <p>
  <a href="#streamUrl"><code>streamUrl</code></a> points at the SSE progress stream and <a href="#cancelUrl"><code>cancelUrl</code></a> at the cancel endpoint; both embed the
  job's unguessable <a href="AsyncJobRegistry.html#CAPABILITY_BITS">256</a>-bit id (see <a href="AsyncJob.html" title="class in org.apache.juneau.console.views"><code>AsyncJob</code></a>), which is the whole of the
  access control.  The browser <code>EventSource</code> that consumes <a href="#streamUrl"><code>streamUrl</code></a> cannot set a CSRF header,
  which is precisely why the id must be unguessable rather than CSRF-gated.
 
- <h5 class='section'>See Also:</h5>
+ <h2 class='section'>See Also:</h2>
  <ul>
    <li class='jc'><a href="AsyncJobsMixin.html" title="interface in org.apache.juneau.console.views"><code>AsyncJobsMixin</code></a>
    <li class='jc'><a href="AsyncJob.html" title="class in org.apache.juneau.console.views"><code>AsyncJob</code></a>

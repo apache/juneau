@@ -30,7 +30,6 @@ loadScripts(document, 'script');</script>
 <!-- ========= START OF TOP NAVBAR ======= -->
 <div class="top-nav" id="navbar-top">
 <div class="skip-nav"><a href="#skip-navbar-top" title="Skip navigation links">Skip navigation links</a></div>
-<div class="about-language"><a href="http://juneau.apache.org" target="_blank"><img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;">Apache Juneau</a></div>
 <ul id="navbar-top-firstrow" class="nav-list" title="Navigation">
 <li><a href="../../../../../../index.html">Overview</a></li>
 <li><a href="package-summary.html">Package</a></li>
@@ -94,7 +93,7 @@ loadScripts(document, 'script');</script>
  OpenTelemetry <code>io.opentelemetry.api.trace.Span</code>, a Brave <code>Span</code>, an application
  tracing object, etc.) and surface the close / status / error transitions through the <code>Scope</code>.
 
- <h5 class='topic'>Off-by-default contract</h5>
+ <h2 class='topic'>Off-by-default contract</h2>
 
  <p>
  <code>juneau-rest-server</code> resolves the <code>TracerHook</code> via
@@ -105,7 +104,7 @@ loadScripts(document, 'script');</script>
  registers a <code>TracerHook</code> bean &mdash; typically via <code>@Bean TracerHook</code> on the resource
  or its parent.
 
- <h5 class='topic'>Usage</h5>
+ <h2 class='topic'>Usage</h2>
 
  <p class='bjava'>
    <ja>@Rest</ja>
@@ -118,7 +117,7 @@ loadScripts(document, 'script');</script>
    }
  </p>
 
- <h5 class='topic'>Lifecycle</h5>
+ <h2 class='topic'>Lifecycle</h2>
 
  <p>
  For each <code>@RestOp</code> invocation, the framework:
@@ -136,7 +135,7 @@ loadScripts(document, 'script');</script>
  Implementations <b>must</b> be thread-safe &mdash; the same <code>TracerHook</code> bean is invoked
  concurrently from every request thread for the lifetime of the <code>RestContext</code>.
 
- <h5 class='section'>See Also:</h5><ul>
+ <h2 class='section'>See Also:</h2><ul>
    <li class='jc'><a href="NoOpTracerHook.html" title="class in org.apache.juneau.rest.server.tracing"><code>NoOpTracerHook</code></a>
    <li class='jc'><a href="Scope.html" title="interface in org.apache.juneau.rest.server.tracing"><code>Scope</code></a>
    <li class='jc'><a href="../../../http/tracing/TraceContextCarrier.html" title="interface in org.apache.juneau.http.tracing"><code>TraceContextCarrier</code></a>
