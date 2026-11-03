@@ -765,121 +765,124 @@
 <span class="source-line-no">752</span><span id="line-752">    *</span>
 <span class="source-line-no">753</span><span id="line-753">    * @throws IllegalArgumentException If this modal is not well-formed.</span>
 <span class="source-line-no">754</span><span id="line-754">    */</span>
-<span class="source-line-no">755</span><span id="line-755">   @Override</span>
-<span class="source-line-no">756</span><span id="line-756">   public void validate() {</span>
-<span class="source-line-no">757</span><span id="line-757">      if (ib(title))</span>
-<span class="source-line-no">758</span><span id="line-758">         throw iaex("ModalDef title must not be null or blank.");</span>
-<span class="source-line-no">759</span><span id="line-759">      if (fields != null)</span>
-<span class="source-line-no">760</span><span id="line-760">         for (var f : fields) {</span>
-<span class="source-line-no">761</span><span id="line-761">            if (f == null)</span>
-<span class="source-line-no">762</span><span id="line-762">               throw iaex("ModalDef field must not be null.");</span>
-<span class="source-line-no">763</span><span id="line-763">            if (f.label == null || f.label.isBlank())</span>
-<span class="source-line-no">764</span><span id="line-764">               throw iaex("ModalDef.Field label must not be null or blank.");</span>
-<span class="source-line-no">765</span><span id="line-765">            if (f.kind != null &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))</span>
-<span class="source-line-no">766</span><span id="line-766">               throw iaex("ModalDef.Field kind must be '" + FIELD_KIND_TEXT + "' or '" + FIELD_KIND_CODE</span>
-<span class="source-line-no">767</span><span id="line-767">                  + "', not '" + f.kind + "'.");</span>
-<span class="source-line-no">768</span><span id="line-768">         }</span>
-<span class="source-line-no">769</span><span id="line-769">      validateChildActions();</span>
-<span class="source-line-no">770</span><span id="line-770">      validateSteps();</span>
-<span class="source-line-no">771</span><span id="line-771">      if (chrome != null &amp;&amp; chrome.isBlank())</span>
-<span class="source-line-no">772</span><span id="line-772">         throw iaex("ModalDef chrome must not be blank.");</span>
-<span class="source-line-no">773</span><span id="line-773">      if (nav != null &amp;&amp; ! (eqa(nav, NAV_PILL, NAV_FOLDER)))</span>
-<span class="source-line-no">774</span><span id="line-774">         throw iaex("ModalDef nav must be '" + NAV_PILL + "' or '" + NAV_FOLDER + "', not '" + nav + "'.");</span>
-<span class="source-line-no">775</span><span id="line-775">      if (form != null)</span>
-<span class="source-line-no">776</span><span id="line-776">         form.validate();</span>
-<span class="source-line-no">777</span><span id="line-777">      if (barSlot != null)</span>
-<span class="source-line-no">778</span><span id="line-778">         barSlot.validate();</span>
-<span class="source-line-no">779</span><span id="line-779">   }</span>
-<span class="source-line-no">780</span><span id="line-780"></span>
-<span class="source-line-no">781</span><span id="line-781">   /** The {@link #steps} half of {@link #validate()}: non-blank unique ids and well-formed display fields. */</span>
-<span class="source-line-no">782</span><span id="line-782">   private void validateSteps() {</span>
-<span class="source-line-no">783</span><span id="line-783">      if (steps == null)</span>
-<span class="source-line-no">784</span><span id="line-784">         return;</span>
-<span class="source-line-no">785</span><span id="line-785">      var seen = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">786</span><span id="line-786">      for (var st : steps) {</span>
-<span class="source-line-no">787</span><span id="line-787">         if (st == null)</span>
-<span class="source-line-no">788</span><span id="line-788">            throw iaex("ModalDef.Step must not be null.");</span>
-<span class="source-line-no">789</span><span id="line-789">         if (st.id == null || st.id.isBlank())</span>
-<span class="source-line-no">790</span><span id="line-790">            throw iaex("ModalDef.Step id must not be null or blank.");</span>
-<span class="source-line-no">791</span><span id="line-791">         if (! seen.add(st.id))</span>
-<span class="source-line-no">792</span><span id="line-792">            throw iaex("ModalDef.Step id '" + st.id + "' is declared more than once on this modal.");</span>
-<span class="source-line-no">793</span><span id="line-793">         if (st.fields != null)</span>
-<span class="source-line-no">794</span><span id="line-794">            for (var f : st.fields) {</span>
-<span class="source-line-no">795</span><span id="line-795">               if (f == null || f.label == null || f.label.isBlank())</span>
-<span class="source-line-no">796</span><span id="line-796">                  throw iaex("ModalDef.Step '" + st.id + "' field label must not be null or blank.");</span>
-<span class="source-line-no">797</span><span id="line-797">               if (f.kind != null &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))</span>
-<span class="source-line-no">798</span><span id="line-798">                  throw iaex("ModalDef.Step '" + st.id + "' field kind must be '" + FIELD_KIND_TEXT + "' or '"</span>
-<span class="source-line-no">799</span><span id="line-799">                     + FIELD_KIND_CODE + "', not '" + f.kind + "'.");</span>
-<span class="source-line-no">800</span><span id="line-800">            }</span>
-<span class="source-line-no">801</span><span id="line-801">      }</span>
-<span class="source-line-no">802</span><span id="line-802">   }</span>
-<span class="source-line-no">803</span><span id="line-803"></span>
-<span class="source-line-no">804</span><span id="line-804">   /**</span>
-<span class="source-line-no">805</span><span id="line-805">    * The {@link #childActions} half of {@link #validate()}.</span>
-<span class="source-line-no">806</span><span id="line-806">    *</span>
-<span class="source-line-no">807</span><span id="line-807">    * &lt;p&gt;</span>
-<span class="source-line-no">808</span><span id="line-808">    * {@link ChildAction#of(String,String)} already argument-checks {@code id} and {@code label}; they are</span>
-<span class="source-line-no">809</span><span id="line-809">    * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the</span>
-<span class="source-line-no">810</span><span id="line-810">    * factory.</span>
-<span class="source-line-no">811</span><span id="line-811">    */</span>
-<span class="source-line-no">812</span><span id="line-812">   private void validateChildActions() {</span>
-<span class="source-line-no">813</span><span id="line-813">      if (childActions == null)</span>
-<span class="source-line-no">814</span><span id="line-814">         return;</span>
-<span class="source-line-no">815</span><span id="line-815">      var seen = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">816</span><span id="line-816">      for (var c : childActions) {</span>
-<span class="source-line-no">817</span><span id="line-817">         if (c == null)</span>
-<span class="source-line-no">818</span><span id="line-818">            throw iaex("ModalDef.ChildAction must not be null.");</span>
-<span class="source-line-no">819</span><span id="line-819">         if (c.id == null || c.id.isBlank())</span>
-<span class="source-line-no">820</span><span id="line-820">            throw iaex("ModalDef.ChildAction id must not be null or blank.");</span>
-<span class="source-line-no">821</span><span id="line-821">         if (c.label == null || c.label.isBlank())</span>
-<span class="source-line-no">822</span><span id="line-822">            throw iaex("ModalDef.ChildAction label must not be null or blank.");</span>
-<span class="source-line-no">823</span><span id="line-823">         if (! seen.add(c.id))</span>
-<span class="source-line-no">824</span><span id="line-824">            throw iaex("ModalDef.ChildAction id '" + c.id + "' is declared more than once on this modal.");</span>
-<span class="source-line-no">825</span><span id="line-825">         if (Boolean.TRUE.equals(c.carryDrafts)) {</span>
-<span class="source-line-no">826</span><span id="line-826">            if (form == null)</span>
-<span class="source-line-no">827</span><span id="line-827">               throw iaex("ModalDef.ChildAction '" + c.id + "' declares carryDrafts, but this modal declares "</span>
-<span class="source-line-no">828</span><span id="line-828">                  + "no form - there is nothing to collect drafts from.");</span>
-<span class="source-line-no">829</span><span id="line-829">            if (c.form == null || c.form.isBlank())</span>
-<span class="source-line-no">830</span><span id="line-830">               throw iaex("ModalDef.ChildAction '" + c.id + "' declares carryDrafts, but declares no form URL "</span>
-<span class="source-line-no">831</span><span id="line-831">                  + "- a confirm-only child issues no form GET, so the drafts would be dropped silently.");</span>
-<span class="source-line-no">832</span><span id="line-832">         }</span>
-<span class="source-line-no">833</span><span id="line-833">      }</span>
-<span class="source-line-no">834</span><span id="line-834">   }</span>
-<span class="source-line-no">835</span><span id="line-835"></span>
-<span class="source-line-no">836</span><span id="line-836">   /**</span>
-<span class="source-line-no">837</span><span id="line-837">    * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} should invoke.</span>
-<span class="source-line-no">838</span><span id="line-838">    *</span>
-<span class="source-line-no">839</span><span id="line-839">    * &lt;p&gt;</span>
-<span class="source-line-no">840</span><span id="line-840">    * {@link #contractVersion} is guaranteed present on every modal from construction, so this is &lt;b&gt;no longer</span>
-<span class="source-line-no">841</span><span id="line-841">    * required for versioning&lt;/b&gt;.  It stays &lt;b&gt;strongly recommended&lt;/b&gt; for one remaining duty and</span>
-<span class="source-line-no">842</span><span id="line-842">    * is &lt;b&gt;redundant-but-harmless&lt;/b&gt; for another:</span>
-<span class="source-line-no">843</span><span id="line-843">    * &lt;ul&gt;</span>
-<span class="source-line-no">844</span><span id="line-844">    *    &lt;li&gt;&lt;b&gt;Non-REST producers&lt;/b&gt; (a direct {@code Json.of(...)} serialization, or any consumer marshalling a</span>
-<span class="source-line-no">845</span><span id="line-845">    *       modal outside a REST response) have no other gate: calling this is the only fail-closed structural</span>
-<span class="source-line-no">846</span><span id="line-846">    *       {@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as</span>
-<span class="source-line-no">847</span><span id="line-847">    *       contract-&lt;i&gt;valid&lt;/i&gt; with no complaint.</span>
-<span class="source-line-no">848</span><span id="line-848">    *    &lt;li&gt;&lt;b&gt;REST responses&lt;/b&gt; are validated independently:</span>
-<span class="source-line-no">849</span><span id="line-849">    *       {@link WidgetsMixin.WidgetValidationProcessor</span>
-<span class="source-line-no">850</span><span id="line-850">    *       WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a</span>
-<span class="source-line-no">851</span><span id="line-851">    *       {@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.</span>
-<span class="source-line-no">852</span><span id="line-852">    *       Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case</span>
-<span class="source-line-no">853</span><span id="line-853">    *       above.</span>
-<span class="source-line-no">854</span><span id="line-854">    * &lt;/ul&gt;</span>
-<span class="source-line-no">855</span><span id="line-855">    * When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and recurses into</span>
-<span class="source-line-no">856</span><span id="line-856">    * {@link FormDef#checked()}.</span>
-<span class="source-line-no">857</span><span id="line-857">    *</span>
-<span class="source-line-no">858</span><span id="line-858">    * @return This object.</span>
-<span class="source-line-no">859</span><span id="line-859">    * @throws IllegalArgumentException If this modal (or its form) is not well-formed.</span>
-<span class="source-line-no">860</span><span id="line-860">    */</span>
-<span class="source-line-no">861</span><span id="line-861">   public ModalDef checked() {</span>
-<span class="source-line-no">862</span><span id="line-862">      if (form != null) {</span>
-<span class="source-line-no">863</span><span id="line-863">         contractVersion = CONTRACT_VERSION;</span>
-<span class="source-line-no">864</span><span id="line-864">         form.checked();</span>
-<span class="source-line-no">865</span><span id="line-865">      }</span>
-<span class="source-line-no">866</span><span id="line-866">      validate();</span>
-<span class="source-line-no">867</span><span id="line-867">      return this;</span>
-<span class="source-line-no">868</span><span id="line-868">   }</span>
-<span class="source-line-no">869</span><span id="line-869">}</span>
+<span class="source-line-no">755</span><span id="line-755">   /** The message for a token that is neither of its two allowed values. */</span>
+<span class="source-line-no">756</span><span id="line-756">   private static String notOneOf(String what, String a, String b, String actual) {</span>
+<span class="source-line-no">757</span><span id="line-757">      return what + " must be '" + a + "' or '" + b + "', not '" + actual + "'.";</span>
+<span class="source-line-no">758</span><span id="line-758">   }</span>
+<span class="source-line-no">759</span><span id="line-759"></span>
+<span class="source-line-no">760</span><span id="line-760">   @Override</span>
+<span class="source-line-no">761</span><span id="line-761">   public void validate() {</span>
+<span class="source-line-no">762</span><span id="line-762">      if (ib(title))</span>
+<span class="source-line-no">763</span><span id="line-763">         throw iaex("ModalDef title must not be null or blank.");</span>
+<span class="source-line-no">764</span><span id="line-764">      if (fields != null)</span>
+<span class="source-line-no">765</span><span id="line-765">         for (var f : fields) {</span>
+<span class="source-line-no">766</span><span id="line-766">            if (f == null)</span>
+<span class="source-line-no">767</span><span id="line-767">               throw iaex("ModalDef field must not be null.");</span>
+<span class="source-line-no">768</span><span id="line-768">            if (f.label == null || f.label.isBlank())</span>
+<span class="source-line-no">769</span><span id="line-769">               throw iaex("ModalDef.Field label must not be null or blank.");</span>
+<span class="source-line-no">770</span><span id="line-770">            if (f.kind != null &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))</span>
+<span class="source-line-no">771</span><span id="line-771">               throw iaex(notOneOf("ModalDef.Field kind", FIELD_KIND_TEXT, FIELD_KIND_CODE, f.kind));</span>
+<span class="source-line-no">772</span><span id="line-772">         }</span>
+<span class="source-line-no">773</span><span id="line-773">      validateChildActions();</span>
+<span class="source-line-no">774</span><span id="line-774">      validateSteps();</span>
+<span class="source-line-no">775</span><span id="line-775">      if (chrome != null &amp;&amp; chrome.isBlank())</span>
+<span class="source-line-no">776</span><span id="line-776">         throw iaex("ModalDef chrome must not be blank.");</span>
+<span class="source-line-no">777</span><span id="line-777">      if (nav != null &amp;&amp; ! (eqa(nav, NAV_PILL, NAV_FOLDER)))</span>
+<span class="source-line-no">778</span><span id="line-778">         throw iaex(notOneOf("ModalDef nav", NAV_PILL, NAV_FOLDER, nav));</span>
+<span class="source-line-no">779</span><span id="line-779">      if (form != null)</span>
+<span class="source-line-no">780</span><span id="line-780">         form.validate();</span>
+<span class="source-line-no">781</span><span id="line-781">      if (barSlot != null)</span>
+<span class="source-line-no">782</span><span id="line-782">         barSlot.validate();</span>
+<span class="source-line-no">783</span><span id="line-783">   }</span>
+<span class="source-line-no">784</span><span id="line-784"></span>
+<span class="source-line-no">785</span><span id="line-785">   /** The {@link #steps} half of {@link #validate()}: non-blank unique ids and well-formed display fields. */</span>
+<span class="source-line-no">786</span><span id="line-786">   private void validateSteps() {</span>
+<span class="source-line-no">787</span><span id="line-787">      if (steps == null)</span>
+<span class="source-line-no">788</span><span id="line-788">         return;</span>
+<span class="source-line-no">789</span><span id="line-789">      var seen = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">790</span><span id="line-790">      for (var st : steps) {</span>
+<span class="source-line-no">791</span><span id="line-791">         if (st == null)</span>
+<span class="source-line-no">792</span><span id="line-792">            throw iaex("ModalDef.Step must not be null.");</span>
+<span class="source-line-no">793</span><span id="line-793">         if (st.id == null || st.id.isBlank())</span>
+<span class="source-line-no">794</span><span id="line-794">            throw iaex("ModalDef.Step id must not be null or blank.");</span>
+<span class="source-line-no">795</span><span id="line-795">         if (! seen.add(st.id))</span>
+<span class="source-line-no">796</span><span id="line-796">            throw iaex("ModalDef.Step id '" + st.id + "' is declared more than once on this modal.");</span>
+<span class="source-line-no">797</span><span id="line-797">         if (st.fields != null)</span>
+<span class="source-line-no">798</span><span id="line-798">            for (var f : st.fields) {</span>
+<span class="source-line-no">799</span><span id="line-799">               if (f == null || f.label == null || f.label.isBlank())</span>
+<span class="source-line-no">800</span><span id="line-800">                  throw iaex("ModalDef.Step '" + st.id + "' field label must not be null or blank.");</span>
+<span class="source-line-no">801</span><span id="line-801">               if (f.kind != null &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))</span>
+<span class="source-line-no">802</span><span id="line-802">                  throw iaex(notOneOf("ModalDef.Step '" + st.id + "' field kind", FIELD_KIND_TEXT, FIELD_KIND_CODE, f.kind));</span>
+<span class="source-line-no">803</span><span id="line-803">            }</span>
+<span class="source-line-no">804</span><span id="line-804">      }</span>
+<span class="source-line-no">805</span><span id="line-805">   }</span>
+<span class="source-line-no">806</span><span id="line-806"></span>
+<span class="source-line-no">807</span><span id="line-807">   /**</span>
+<span class="source-line-no">808</span><span id="line-808">    * The {@link #childActions} half of {@link #validate()}.</span>
+<span class="source-line-no">809</span><span id="line-809">    *</span>
+<span class="source-line-no">810</span><span id="line-810">    * &lt;p&gt;</span>
+<span class="source-line-no">811</span><span id="line-811">    * {@link ChildAction#of(String,String)} already argument-checks {@code id} and {@code label}; they are</span>
+<span class="source-line-no">812</span><span id="line-812">    * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the</span>
+<span class="source-line-no">813</span><span id="line-813">    * factory.</span>
+<span class="source-line-no">814</span><span id="line-814">    */</span>
+<span class="source-line-no">815</span><span id="line-815">   private void validateChildActions() {</span>
+<span class="source-line-no">816</span><span id="line-816">      if (childActions == null)</span>
+<span class="source-line-no">817</span><span id="line-817">         return;</span>
+<span class="source-line-no">818</span><span id="line-818">      var seen = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">819</span><span id="line-819">      for (var c : childActions) {</span>
+<span class="source-line-no">820</span><span id="line-820">         if (c == null)</span>
+<span class="source-line-no">821</span><span id="line-821">            throw iaex("ModalDef.ChildAction must not be null.");</span>
+<span class="source-line-no">822</span><span id="line-822">         if (c.id == null || c.id.isBlank())</span>
+<span class="source-line-no">823</span><span id="line-823">            throw iaex("ModalDef.ChildAction id must not be null or blank.");</span>
+<span class="source-line-no">824</span><span id="line-824">         if (c.label == null || c.label.isBlank())</span>
+<span class="source-line-no">825</span><span id="line-825">            throw iaex("ModalDef.ChildAction label must not be null or blank.");</span>
+<span class="source-line-no">826</span><span id="line-826">         if (! seen.add(c.id))</span>
+<span class="source-line-no">827</span><span id="line-827">            throw iaex("ModalDef.ChildAction id '" + c.id + "' is declared more than once on this modal.");</span>
+<span class="source-line-no">828</span><span id="line-828">         if (Boolean.TRUE.equals(c.carryDrafts)) {</span>
+<span class="source-line-no">829</span><span id="line-829">            if (form == null)</span>
+<span class="source-line-no">830</span><span id="line-830">               throw iaex("ModalDef.ChildAction '" + c.id + "' declares carryDrafts, but this modal declares "</span>
+<span class="source-line-no">831</span><span id="line-831">                  + "no form - there is nothing to collect drafts from.");</span>
+<span class="source-line-no">832</span><span id="line-832">            if (c.form == null || c.form.isBlank())</span>
+<span class="source-line-no">833</span><span id="line-833">               throw iaex("ModalDef.ChildAction '" + c.id + "' declares carryDrafts, but declares no form URL "</span>
+<span class="source-line-no">834</span><span id="line-834">                  + "- a confirm-only child issues no form GET, so the drafts would be dropped silently.");</span>
+<span class="source-line-no">835</span><span id="line-835">         }</span>
+<span class="source-line-no">836</span><span id="line-836">      }</span>
+<span class="source-line-no">837</span><span id="line-837">   }</span>
+<span class="source-line-no">838</span><span id="line-838"></span>
+<span class="source-line-no">839</span><span id="line-839">   /**</span>
+<span class="source-line-no">840</span><span id="line-840">    * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} should invoke.</span>
+<span class="source-line-no">841</span><span id="line-841">    *</span>
+<span class="source-line-no">842</span><span id="line-842">    * &lt;p&gt;</span>
+<span class="source-line-no">843</span><span id="line-843">    * {@link #contractVersion} is guaranteed present on every modal from construction, so this is &lt;b&gt;no longer</span>
+<span class="source-line-no">844</span><span id="line-844">    * required for versioning&lt;/b&gt;.  It stays &lt;b&gt;strongly recommended&lt;/b&gt; for one remaining duty and</span>
+<span class="source-line-no">845</span><span id="line-845">    * is &lt;b&gt;redundant-but-harmless&lt;/b&gt; for another:</span>
+<span class="source-line-no">846</span><span id="line-846">    * &lt;ul&gt;</span>
+<span class="source-line-no">847</span><span id="line-847">    *    &lt;li&gt;&lt;b&gt;Non-REST producers&lt;/b&gt; (a direct {@code Json.of(...)} serialization, or any consumer marshalling a</span>
+<span class="source-line-no">848</span><span id="line-848">    *       modal outside a REST response) have no other gate: calling this is the only fail-closed structural</span>
+<span class="source-line-no">849</span><span id="line-849">    *       {@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as</span>
+<span class="source-line-no">850</span><span id="line-850">    *       contract-&lt;i&gt;valid&lt;/i&gt; with no complaint.</span>
+<span class="source-line-no">851</span><span id="line-851">    *    &lt;li&gt;&lt;b&gt;REST responses&lt;/b&gt; are validated independently:</span>
+<span class="source-line-no">852</span><span id="line-852">    *       {@link WidgetsMixin.WidgetValidationProcessor</span>
+<span class="source-line-no">853</span><span id="line-853">    *       WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a</span>
+<span class="source-line-no">854</span><span id="line-854">    *       {@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.</span>
+<span class="source-line-no">855</span><span id="line-855">    *       Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case</span>
+<span class="source-line-no">856</span><span id="line-856">    *       above.</span>
+<span class="source-line-no">857</span><span id="line-857">    * &lt;/ul&gt;</span>
+<span class="source-line-no">858</span><span id="line-858">    * When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and recurses into</span>
+<span class="source-line-no">859</span><span id="line-859">    * {@link FormDef#checked()}.</span>
+<span class="source-line-no">860</span><span id="line-860">    *</span>
+<span class="source-line-no">861</span><span id="line-861">    * @return This object.</span>
+<span class="source-line-no">862</span><span id="line-862">    * @throws IllegalArgumentException If this modal (or its form) is not well-formed.</span>
+<span class="source-line-no">863</span><span id="line-863">    */</span>
+<span class="source-line-no">864</span><span id="line-864">   public ModalDef checked() {</span>
+<span class="source-line-no">865</span><span id="line-865">      if (form != null) {</span>
+<span class="source-line-no">866</span><span id="line-866">         contractVersion = CONTRACT_VERSION;</span>
+<span class="source-line-no">867</span><span id="line-867">         form.checked();</span>
+<span class="source-line-no">868</span><span id="line-868">      }</span>
+<span class="source-line-no">869</span><span id="line-869">      validate();</span>
+<span class="source-line-no">870</span><span id="line-870">      return this;</span>
+<span class="source-line-no">871</span><span id="line-871">   }</span>
+<span class="source-line-no">872</span><span id="line-872">}</span>
 
 
 

@@ -1215,7 +1215,7 @@
 <a class="jxr_linenumber" name="L1207" href="#L1207">1207</a> <em class="jxr_javadoccomment">	 * Selectors are {@code div.dt-container div.dt-search input} (0,2,3) so they beat DataTables'</em>
 <a class="jxr_linenumber" name="L1208" href="#L1208">1208</a> <em class="jxr_javadoccomment">	 * {@code div.dt-container .dt-search input { border: 1px solid #aaa }} (0,2,2).</em>
 <a class="jxr_linenumber" name="L1209" href="#L1209">1209</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 	@Test <strong class="jxr_keyword">void</strong> p01_viewsCss_toolbarSearchInputHasGreyBorderAndText() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1210" href="#L1210">1210</a> 	@Test <strong class="jxr_keyword">void</strong> p01a_viewsCss_toolbarSearchInputHasGreyBorderAndText() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L1211" href="#L1211">1211</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 <a class="jxr_linenumber" name="L1212" href="#L1212">1212</a> 		assertTrue(body.contains(<span class="jxr_string">"--jc-chrome-control-border: var(--jc-control-border, #ced4da);"</span>), body);
 <a class="jxr_linenumber" name="L1213" href="#L1213">1213</a> 		assertTrue(body.contains(<span class="jxr_string">"--jc-chrome-button-border: var(--jc-chrome-control-border);"</span>), body);
@@ -1238,83 +1238,93 @@
 <a class="jxr_linenumber" name="L1230" href="#L1230">1230</a> 		assertTrue(region.contains(<span class="jxr_string">"-webkit-appearance: none"</span>), region);
 <a class="jxr_linenumber" name="L1231" href="#L1231">1231</a> 		assertTrue(region.contains(<span class="jxr_string">"box-shadow: none"</span>), region);
 <a class="jxr_linenumber" name="L1232" href="#L1232">1232</a> 		assertTrue(body.contains(<span class="jxr_string">"--jc-chrome-control-radius: 3.2px"</span>), body);
-<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 		assertTrue(body.contains(<span class="jxr_string">"color: var(--jc-placeholder, #b4b5b6)"</span>), body);
-<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 		assertTrue(body.contains(<span class="jxr_string">".dt-search input::placeholder"</span>), body);
-<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 		assertTrue(body.contains(<span class="jxr_string">".dt-search input::-webkit-input-placeholder"</span>), body);
-<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 		assertTrue(body.contains(<span class="jxr_string">"div.dt-container div.dt-search input:focus,"</span>), body);
-<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 		assertTrue(body.contains(<span class="jxr_string">"div.dt-container div.dt-search input:focus-visible,"</span>), body);
-<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		<strong class="jxr_keyword">var</strong> focusStart = body.indexOf(<span class="jxr_string">"div.dt-container div.dt-search input:focus,"</span>);
-<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 		<strong class="jxr_keyword">var</strong> focusEnd = body.indexOf(<span class="jxr_string">"}"</span>, focusStart);
-<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 		<strong class="jxr_keyword">var</strong> focusRegion = body.substring(focusStart, focusEnd);
-<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 		assertTrue(focusRegion.contains(<span class="jxr_string">"outline: none"</span>), focusRegion);
-<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 		assertTrue(focusRegion.contains(<span class="jxr_string">"box-shadow: none"</span>), focusRegion);
-<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 		assertTrue(body.contains(<span class="jxr_string">"--jc-chrome-control-focus-border: var(--jc-accent);"</span>), body);
-<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 		assertFalse(focusRegion.contains(<span class="jxr_string">"border-color"</span>), focusRegion);
-<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 		assertFalse(focusRegion.contains(<span class="jxr_string">"outline-offset"</span>), focusRegion);
-<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		assertFalse(focusRegion.contains(<span class="jxr_string">"2px"</span>), focusRegion);
-<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 	}
-<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 
-<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> <em class="jxr_javadoccomment">	 * The expanded-row Detail View is a flush content card: {@code --jc-card-bg} fill, inner padding,</em>
-<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> <em class="jxr_javadoccomment">	 * {@code margin: 0}, and child-row cells with {@code padding: 0} so the gray well cannot halo the panel.</em>
-<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 	@Test <strong class="jxr_keyword">void</strong> p02_viewsCss_detailExpanderSurfaceIsOpaqueContentCard() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 		assertTrue(body.contains(<span class="jxr_string">"table[data-juneau-view] &gt; tbody &gt; tr.child,\n"</span>
-<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 			+ <span class="jxr_string">"table[data-juneau-view] &gt; tbody &gt; tr.child &gt; td,\n"</span>
-<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 			+ <span class="jxr_string">"table.dataTable &gt; tbody &gt; tr.child,\n"</span>
-<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 			+ <span class="jxr_string">"table.dataTable &gt; tbody &gt; tr.child &gt; td {"</span>), body);
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 		<strong class="jxr_keyword">var</strong> start = body.indexOf(<span class="jxr_string">"table[data-juneau-view] &gt; tbody &gt; tr.child,"</span>);
-<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 		<strong class="jxr_keyword">var</strong> end = body.indexOf(<span class="jxr_string">"}"</span>, start);
-<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 		<strong class="jxr_keyword">var</strong> child = body.substring(start, end);
-<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 		assertTrue(child.contains(<span class="jxr_string">"background-color: var(--jc-card-bg)"</span>), child);
-<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 		assertTrue(child.contains(<span class="jxr_string">"padding: 0"</span>), child);
-<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 		assertTrue(child.contains(<span class="jxr_string">"border: none"</span>), child);
-<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 
-<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 		assertTrue(body.contains(<span class="jxr_string">".juneau-view-detail-panel {\n\tmargin: 0;"</span>), body);
-<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 		<strong class="jxr_keyword">var</strong> panelStart = body.indexOf(<span class="jxr_string">".juneau-view-detail-panel {\n\tmargin: 0;"</span>);
-<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 		<strong class="jxr_keyword">var</strong> panelEnd = body.indexOf(<span class="jxr_string">"}"</span>, panelStart);
-<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 		<strong class="jxr_keyword">var</strong> panel = body.substring(panelStart, panelEnd);
-<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		assertTrue(panel.contains(<span class="jxr_string">"background-color: var(--jc-card-bg)"</span>), panel);
-<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		assertFalse(panel.contains(<span class="jxr_string">"background: #fff"</span>), panel);
-<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 
-<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		assertTrue(body.contains(<span class="jxr_string">".juneau-view-detail-panel .jc-card"</span>),
-<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 			<span class="jxr_string">"nested .jc-card inside the detail panel must be pinned"</span>);
-<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 		<strong class="jxr_keyword">var</strong> nestedStart = body.indexOf(<span class="jxr_string">".juneau-view-detail-panel .jc-card"</span>);
-<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 		<strong class="jxr_keyword">var</strong> nestedEnd = body.indexOf(<span class="jxr_string">"}"</span>, nestedStart);
-<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 		<strong class="jxr_keyword">var</strong> nested = body.substring(nestedStart, nestedEnd);
-<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 		assertTrue(nested.contains(<span class="jxr_string">"margin: 0"</span>), nested);
-<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 		assertFalse(nested.contains(<span class="jxr_string">"padding:"</span>),
-<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 			<span class="jxr_string">"expanded-row cards inherit content-card padding; this rule must not add a fatter inset: "</span> + nested);
-<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 	}
+<a class="jxr_linenumber" name="L1233" href="#L1233">1233</a> 	}
+<a class="jxr_linenumber" name="L1234" href="#L1234">1234</a> 
+<a class="jxr_linenumber" name="L1235" href="#L1235">1235</a> 	<em class="jxr_javadoccomment">/** DF-3, continued: the toolbar search placeholder colour. */</em>
+<a class="jxr_linenumber" name="L1236" href="#L1236">1236</a> 	@Test <strong class="jxr_keyword">void</strong> p01b_viewsCss_toolbarSearchInputPlaceholderIsGrey() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1237" href="#L1237">1237</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L1238" href="#L1238">1238</a> 		assertTrue(body.contains(<span class="jxr_string">"color: var(--jc-placeholder, #b4b5b6)"</span>), body);
+<a class="jxr_linenumber" name="L1239" href="#L1239">1239</a> 		assertTrue(body.contains(<span class="jxr_string">".dt-search input::placeholder"</span>), body);
+<a class="jxr_linenumber" name="L1240" href="#L1240">1240</a> 		assertTrue(body.contains(<span class="jxr_string">".dt-search input::-webkit-input-placeholder"</span>), body);
+<a class="jxr_linenumber" name="L1241" href="#L1241">1241</a> 	}
+<a class="jxr_linenumber" name="L1242" href="#L1242">1242</a> 
+<a class="jxr_linenumber" name="L1243" href="#L1243">1243</a> 	<em class="jxr_javadoccomment">/** DF-3, continued: focusing the toolbar search input draws no outline, glow or offset ring of its own. */</em>
+<a class="jxr_linenumber" name="L1244" href="#L1244">1244</a> 	@Test <strong class="jxr_keyword">void</strong> p01c_viewsCss_toolbarSearchInputFocusHasNoRing() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1245" href="#L1245">1245</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L1246" href="#L1246">1246</a> 		assertTrue(body.contains(<span class="jxr_string">"div.dt-container div.dt-search input:focus,"</span>), body);
+<a class="jxr_linenumber" name="L1247" href="#L1247">1247</a> 		assertTrue(body.contains(<span class="jxr_string">"div.dt-container div.dt-search input:focus-visible,"</span>), body);
+<a class="jxr_linenumber" name="L1248" href="#L1248">1248</a> 		<strong class="jxr_keyword">var</strong> focusStart = body.indexOf(<span class="jxr_string">"div.dt-container div.dt-search input:focus,"</span>);
+<a class="jxr_linenumber" name="L1249" href="#L1249">1249</a> 		<strong class="jxr_keyword">var</strong> focusEnd = body.indexOf(<span class="jxr_string">"}"</span>, focusStart);
+<a class="jxr_linenumber" name="L1250" href="#L1250">1250</a> 		<strong class="jxr_keyword">var</strong> focusRegion = body.substring(focusStart, focusEnd);
+<a class="jxr_linenumber" name="L1251" href="#L1251">1251</a> 		assertTrue(focusRegion.contains(<span class="jxr_string">"outline: none"</span>), focusRegion);
+<a class="jxr_linenumber" name="L1252" href="#L1252">1252</a> 		assertTrue(focusRegion.contains(<span class="jxr_string">"box-shadow: none"</span>), focusRegion);
+<a class="jxr_linenumber" name="L1253" href="#L1253">1253</a> 		assertTrue(body.contains(<span class="jxr_string">"--jc-chrome-control-focus-border: var(--jc-accent);"</span>), body);
+<a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		assertFalse(focusRegion.contains(<span class="jxr_string">"border-color"</span>), focusRegion);
+<a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 		assertFalse(focusRegion.contains(<span class="jxr_string">"outline-offset"</span>), focusRegion);
+<a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 		assertFalse(focusRegion.contains(<span class="jxr_string">"2px"</span>), focusRegion);
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 	}
+<a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> <em class="jxr_javadoccomment">	 * The expanded-row Detail View is a flush content card: {@code --jc-card-bg} fill, inner padding,</em>
+<a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> <em class="jxr_javadoccomment">	 * {@code margin: 0}, and child-row cells with {@code padding: 0} so the gray well cannot halo the panel.</em>
+<a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1263" href="#L1263">1263</a> 	@Test <strong class="jxr_keyword">void</strong> p02_viewsCss_detailExpanderSurfaceIsOpaqueContentCard() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1264" href="#L1264">1264</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+<a class="jxr_linenumber" name="L1265" href="#L1265">1265</a> 		assertTrue(body.contains(<span class="jxr_string">"table[data-juneau-view] &gt; tbody &gt; tr.child,\n"</span>
+<a class="jxr_linenumber" name="L1266" href="#L1266">1266</a> 			+ <span class="jxr_string">"table[data-juneau-view] &gt; tbody &gt; tr.child &gt; td,\n"</span>
+<a class="jxr_linenumber" name="L1267" href="#L1267">1267</a> 			+ <span class="jxr_string">"table.dataTable &gt; tbody &gt; tr.child,\n"</span>
+<a class="jxr_linenumber" name="L1268" href="#L1268">1268</a> 			+ <span class="jxr_string">"table.dataTable &gt; tbody &gt; tr.child &gt; td {"</span>), body);
+<a class="jxr_linenumber" name="L1269" href="#L1269">1269</a> 		<strong class="jxr_keyword">var</strong> start = body.indexOf(<span class="jxr_string">"table[data-juneau-view] &gt; tbody &gt; tr.child,"</span>);
+<a class="jxr_linenumber" name="L1270" href="#L1270">1270</a> 		<strong class="jxr_keyword">var</strong> end = body.indexOf(<span class="jxr_string">"}"</span>, start);
+<a class="jxr_linenumber" name="L1271" href="#L1271">1271</a> 		<strong class="jxr_keyword">var</strong> child = body.substring(start, end);
+<a class="jxr_linenumber" name="L1272" href="#L1272">1272</a> 		assertTrue(child.contains(<span class="jxr_string">"background-color: var(--jc-card-bg)"</span>), child);
+<a class="jxr_linenumber" name="L1273" href="#L1273">1273</a> 		assertTrue(child.contains(<span class="jxr_string">"padding: 0"</span>), child);
+<a class="jxr_linenumber" name="L1274" href="#L1274">1274</a> 		assertTrue(child.contains(<span class="jxr_string">"border: none"</span>), child);
+<a class="jxr_linenumber" name="L1275" href="#L1275">1275</a> 
+<a class="jxr_linenumber" name="L1276" href="#L1276">1276</a> 		assertTrue(body.contains(<span class="jxr_string">".juneau-view-detail-panel {\n\tmargin: 0;"</span>), body);
+<a class="jxr_linenumber" name="L1277" href="#L1277">1277</a> 		<strong class="jxr_keyword">var</strong> panelStart = body.indexOf(<span class="jxr_string">".juneau-view-detail-panel {\n\tmargin: 0;"</span>);
+<a class="jxr_linenumber" name="L1278" href="#L1278">1278</a> 		<strong class="jxr_keyword">var</strong> panelEnd = body.indexOf(<span class="jxr_string">"}"</span>, panelStart);
+<a class="jxr_linenumber" name="L1279" href="#L1279">1279</a> 		<strong class="jxr_keyword">var</strong> panel = body.substring(panelStart, panelEnd);
+<a class="jxr_linenumber" name="L1280" href="#L1280">1280</a> 		assertTrue(panel.contains(<span class="jxr_string">"background-color: var(--jc-card-bg)"</span>), panel);
+<a class="jxr_linenumber" name="L1281" href="#L1281">1281</a> 		assertFalse(panel.contains(<span class="jxr_string">"background: #fff"</span>), panel);
 <a class="jxr_linenumber" name="L1282" href="#L1282">1282</a> 
-<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 	<em class="jxr_comment">// q) views composes the console-ui shell script</em>
-<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 
-<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> <em class="jxr_javadoccomment">	 * {@code views} takes a compile-scope dependency on {@code console-ui} so that an application</em>
-<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> <em class="jxr_javadoccomment">	 * composing only {@link ViewsMixin} can still serve the console shell at the same stable path</em>
-<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> <em class="jxr_javadoccomment">	 * {@link org.apache.juneau.console.ConsoleChromeMixin} uses, without separately composing that mixin.</em>
-<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 	@Test <strong class="jxr_keyword">void</strong> q01_consoleJs_served() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 		cWithMixin.get(ViewsMixin.CONSOLE_JS_PATH).run()
-<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 			.assertStatus(200)
-<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 			.assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"text/javascript"</span>)
-<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).isContains(<span class="jxr_string">"max-age"</span>)
-<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 			.assertContent().asString().isContains(<span class="jxr_string">"window.JuneauConsole"</span>);
-<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> 	}
-<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> 
-<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> 	@Test <strong class="jxr_keyword">void</strong> q03_consoleJsPath_singleSourceOfTruth() {
-<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> 		assertEquals(<span class="jxr_string">"/juneau-console.js"</span>, ViewsMixin.CONSOLE_JS_PATH);
-<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 		assertEquals(ViewsMixin.CONSOLE_JS_PATH, org.apache.juneau.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED);
-<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 	}
-<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 
-<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 	@Test <strong class="jxr_keyword">void</strong> q02_hostWithoutMixin_consoleJsRouteIs404() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 		cNoMixin.get(ViewsMixin.CONSOLE_JS_PATH).run().assertStatus(404);
-<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 	}
-<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 
-<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> }
+<a class="jxr_linenumber" name="L1283" href="#L1283">1283</a> 		assertTrue(body.contains(<span class="jxr_string">".juneau-view-detail-panel .jc-card"</span>),
+<a class="jxr_linenumber" name="L1284" href="#L1284">1284</a> 			<span class="jxr_string">"nested .jc-card inside the detail panel must be pinned"</span>);
+<a class="jxr_linenumber" name="L1285" href="#L1285">1285</a> 		<strong class="jxr_keyword">var</strong> nestedStart = body.indexOf(<span class="jxr_string">".juneau-view-detail-panel .jc-card"</span>);
+<a class="jxr_linenumber" name="L1286" href="#L1286">1286</a> 		<strong class="jxr_keyword">var</strong> nestedEnd = body.indexOf(<span class="jxr_string">"}"</span>, nestedStart);
+<a class="jxr_linenumber" name="L1287" href="#L1287">1287</a> 		<strong class="jxr_keyword">var</strong> nested = body.substring(nestedStart, nestedEnd);
+<a class="jxr_linenumber" name="L1288" href="#L1288">1288</a> 		assertTrue(nested.contains(<span class="jxr_string">"margin: 0"</span>), nested);
+<a class="jxr_linenumber" name="L1289" href="#L1289">1289</a> 		assertFalse(nested.contains(<span class="jxr_string">"padding:"</span>),
+<a class="jxr_linenumber" name="L1290" href="#L1290">1290</a> 			<span class="jxr_string">"expanded-row cards inherit content-card padding; this rule must not add a fatter inset: "</span> + nested);
+<a class="jxr_linenumber" name="L1291" href="#L1291">1291</a> 	}
+<a class="jxr_linenumber" name="L1292" href="#L1292">1292</a> 
+<a class="jxr_linenumber" name="L1293" href="#L1293">1293</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1294" href="#L1294">1294</a> 	<em class="jxr_comment">// q) views composes the console-ui shell script</em>
+<a class="jxr_linenumber" name="L1295" href="#L1295">1295</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L1296" href="#L1296">1296</a> 
+<a class="jxr_linenumber" name="L1297" href="#L1297">1297</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1298" href="#L1298">1298</a> <em class="jxr_javadoccomment">	 * {@code views} takes a compile-scope dependency on {@code console-ui} so that an application</em>
+<a class="jxr_linenumber" name="L1299" href="#L1299">1299</a> <em class="jxr_javadoccomment">	 * composing only {@link ViewsMixin} can still serve the console shell at the same stable path</em>
+<a class="jxr_linenumber" name="L1300" href="#L1300">1300</a> <em class="jxr_javadoccomment">	 * {@link org.apache.juneau.console.ConsoleChromeMixin} uses, without separately composing that mixin.</em>
+<a class="jxr_linenumber" name="L1301" href="#L1301">1301</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1302" href="#L1302">1302</a> 	@Test <strong class="jxr_keyword">void</strong> q01_consoleJs_served() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1303" href="#L1303">1303</a> 		cWithMixin.get(ViewsMixin.CONSOLE_JS_PATH).run()
+<a class="jxr_linenumber" name="L1304" href="#L1304">1304</a> 			.assertStatus(200)
+<a class="jxr_linenumber" name="L1305" href="#L1305">1305</a> 			.assertHeader(<span class="jxr_string">"Content-Type"</span>).isContains(<span class="jxr_string">"text/javascript"</span>)
+<a class="jxr_linenumber" name="L1306" href="#L1306">1306</a> 			.assertHeader(<span class="jxr_string">"Cache-Control"</span>).isContains(<span class="jxr_string">"max-age"</span>)
+<a class="jxr_linenumber" name="L1307" href="#L1307">1307</a> 			.assertContent().asString().isContains(<span class="jxr_string">"window.JuneauConsole"</span>);
+<a class="jxr_linenumber" name="L1308" href="#L1308">1308</a> 	}
+<a class="jxr_linenumber" name="L1309" href="#L1309">1309</a> 
+<a class="jxr_linenumber" name="L1310" href="#L1310">1310</a> 	@Test <strong class="jxr_keyword">void</strong> q03_consoleJsPath_singleSourceOfTruth() {
+<a class="jxr_linenumber" name="L1311" href="#L1311">1311</a> 		assertEquals(<span class="jxr_string">"/juneau-console.js"</span>, ViewsMixin.CONSOLE_JS_PATH);
+<a class="jxr_linenumber" name="L1312" href="#L1312">1312</a> 		assertEquals(ViewsMixin.CONSOLE_JS_PATH, org.apache.juneau.console.ConsoleChromeMixin.CONSOLE_JS_PATH_UNPREFIXED);
+<a class="jxr_linenumber" name="L1313" href="#L1313">1313</a> 	}
+<a class="jxr_linenumber" name="L1314" href="#L1314">1314</a> 
+<a class="jxr_linenumber" name="L1315" href="#L1315">1315</a> 	@Test <strong class="jxr_keyword">void</strong> q02_hostWithoutMixin_consoleJsRouteIs404() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1316" href="#L1316">1316</a> 		cNoMixin.get(ViewsMixin.CONSOLE_JS_PATH).run().assertStatus(404);
+<a class="jxr_linenumber" name="L1317" href="#L1317">1317</a> 	}
+<a class="jxr_linenumber" name="L1318" href="#L1318">1318</a> 
+<a class="jxr_linenumber" name="L1319" href="#L1319">1319</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

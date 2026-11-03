@@ -760,121 +760,124 @@
 <a class="jxr_linenumber" name="L752" href="#L752">752</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L753" href="#L753">753</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If this modal is not well-formed.</em>
 <a class="jxr_linenumber" name="L754" href="#L754">754</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	@Override
-<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate() {
-<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">if</strong> (ib(title))
-<a class="jxr_linenumber" name="L758" href="#L758">758</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef title must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L759" href="#L759">759</a> 		<strong class="jxr_keyword">if</strong> (fields != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L760" href="#L760">760</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields) {
-<a class="jxr_linenumber" name="L761" href="#L761">761</a> 				<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L762" href="#L762">762</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef field must not be null."</span>);
-<a class="jxr_linenumber" name="L763" href="#L763">763</a> 				<strong class="jxr_keyword">if</strong> (f.label == <strong class="jxr_keyword">null</strong> || f.label.isBlank())
-<a class="jxr_linenumber" name="L764" href="#L764">764</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Field label must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> 				<strong class="jxr_keyword">if</strong> (f.kind != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
-<a class="jxr_linenumber" name="L766" href="#L766">766</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Field kind must be '"</span> + FIELD_KIND_TEXT + <span class="jxr_string">"' or '"</span> + FIELD_KIND_CODE
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> 						+ <span class="jxr_string">"', not '"</span> + f.kind + <span class="jxr_string">"'."</span>);
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> 			}
-<a class="jxr_linenumber" name="L769" href="#L769">769</a> 		validateChildActions();
-<a class="jxr_linenumber" name="L770" href="#L770">770</a> 		validateSteps();
-<a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<strong class="jxr_keyword">if</strong> (chrome != <strong class="jxr_keyword">null</strong> &amp;&amp; chrome.isBlank())
-<a class="jxr_linenumber" name="L772" href="#L772">772</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef chrome must not be blank."</span>);
-<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		<strong class="jxr_keyword">if</strong> (nav != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (eqa(nav, NAV_PILL, NAV_FOLDER)))
-<a class="jxr_linenumber" name="L774" href="#L774">774</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef nav must be '"</span> + NAV_PILL + <span class="jxr_string">"' or '"</span> + NAV_FOLDER + <span class="jxr_string">"', not '"</span> + nav + <span class="jxr_string">"'."</span>);
-<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<strong class="jxr_keyword">if</strong> (form != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L776" href="#L776">776</a> 			form.validate();
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		<strong class="jxr_keyword">if</strong> (barSlot != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L778" href="#L778">778</a> 			barSlot.validate();
-<a class="jxr_linenumber" name="L779" href="#L779">779</a> 	}
-<a class="jxr_linenumber" name="L780" href="#L780">780</a> 
-<a class="jxr_linenumber" name="L781" href="#L781">781</a> 	<em class="jxr_javadoccomment">/** The {@link #steps} half of {@link #validate()}: non-blank unique ids and well-formed display fields. */</em>
-<a class="jxr_linenumber" name="L782" href="#L782">782</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateSteps() {
-<a class="jxr_linenumber" name="L783" href="#L783">783</a> 		<strong class="jxr_keyword">if</strong> (steps == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L784" href="#L784">784</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> 		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L786" href="#L786">786</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st : steps) {
-<a class="jxr_linenumber" name="L787" href="#L787">787</a> 			<strong class="jxr_keyword">if</strong> (st == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L788" href="#L788">788</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step must not be null."</span>);
-<a class="jxr_linenumber" name="L789" href="#L789">789</a> 			<strong class="jxr_keyword">if</strong> (st.id == <strong class="jxr_keyword">null</strong> || st.id.isBlank())
-<a class="jxr_linenumber" name="L790" href="#L790">790</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step id must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L791" href="#L791">791</a> 			<strong class="jxr_keyword">if</strong> (! seen.add(st.id))
-<a class="jxr_linenumber" name="L792" href="#L792">792</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step id '"</span> + st.id + <span class="jxr_string">"' is declared more than once on this modal."</span>);
-<a class="jxr_linenumber" name="L793" href="#L793">793</a> 			<strong class="jxr_keyword">if</strong> (st.fields != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L794" href="#L794">794</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : st.fields) {
-<a class="jxr_linenumber" name="L795" href="#L795">795</a> 					<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong> || f.label == <strong class="jxr_keyword">null</strong> || f.label.isBlank())
-<a class="jxr_linenumber" name="L796" href="#L796">796</a> 						<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step '"</span> + st.id + <span class="jxr_string">"' field label must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L797" href="#L797">797</a> 					<strong class="jxr_keyword">if</strong> (f.kind != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
-<a class="jxr_linenumber" name="L798" href="#L798">798</a> 						<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step '"</span> + st.id + <span class="jxr_string">"' field kind must be '"</span> + FIELD_KIND_TEXT + <span class="jxr_string">"' or '"</span>
-<a class="jxr_linenumber" name="L799" href="#L799">799</a> 							+ FIELD_KIND_CODE + <span class="jxr_string">"', not '"</span> + f.kind + <span class="jxr_string">"'."</span>);
-<a class="jxr_linenumber" name="L800" href="#L800">800</a> 				}
-<a class="jxr_linenumber" name="L801" href="#L801">801</a> 		}
-<a class="jxr_linenumber" name="L802" href="#L802">802</a> 	}
-<a class="jxr_linenumber" name="L803" href="#L803">803</a> 
-<a class="jxr_linenumber" name="L804" href="#L804">804</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L805" href="#L805">805</a> <em class="jxr_javadoccomment">	 * The {@link #childActions} half of {@link #validate()}.</em>
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L807" href="#L807">807</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L808" href="#L808">808</a> <em class="jxr_javadoccomment">	 * {@link ChildAction#of(String,String)} already argument-checks {@code id} and {@code label}; they are</em>
-<a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">	 * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the</em>
-<a class="jxr_linenumber" name="L810" href="#L810">810</a> <em class="jxr_javadoccomment">	 * factory.</em>
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateChildActions() {
-<a class="jxr_linenumber" name="L813" href="#L813">813</a> 		<strong class="jxr_keyword">if</strong> (childActions == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L814" href="#L814">814</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L815" href="#L815">815</a> 		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : childActions) {
-<a class="jxr_linenumber" name="L817" href="#L817">817</a> 			<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L818" href="#L818">818</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction must not be null."</span>);
-<a class="jxr_linenumber" name="L819" href="#L819">819</a> 			<strong class="jxr_keyword">if</strong> (c.id == <strong class="jxr_keyword">null</strong> || c.id.isBlank())
-<a class="jxr_linenumber" name="L820" href="#L820">820</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction id must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			<strong class="jxr_keyword">if</strong> (c.label == <strong class="jxr_keyword">null</strong> || c.label.isBlank())
-<a class="jxr_linenumber" name="L822" href="#L822">822</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction label must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L823" href="#L823">823</a> 			<strong class="jxr_keyword">if</strong> (! seen.add(c.id))
-<a class="jxr_linenumber" name="L824" href="#L824">824</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction id '"</span> + c.id + <span class="jxr_string">"' is declared more than once on this modal."</span>);
-<a class="jxr_linenumber" name="L825" href="#L825">825</a> 			<strong class="jxr_keyword">if</strong> (Boolean.TRUE.equals(c.carryDrafts)) {
-<a class="jxr_linenumber" name="L826" href="#L826">826</a> 				<strong class="jxr_keyword">if</strong> (form == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L827" href="#L827">827</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction '"</span> + c.id + <span class="jxr_string">"' declares carryDrafts, but this modal declares "</span>
-<a class="jxr_linenumber" name="L828" href="#L828">828</a> 						+ <span class="jxr_string">"no form - there is nothing to collect drafts from."</span>);
-<a class="jxr_linenumber" name="L829" href="#L829">829</a> 				<strong class="jxr_keyword">if</strong> (c.form == <strong class="jxr_keyword">null</strong> || c.form.isBlank())
-<a class="jxr_linenumber" name="L830" href="#L830">830</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction '"</span> + c.id + <span class="jxr_string">"' declares carryDrafts, but declares no form URL "</span>
-<a class="jxr_linenumber" name="L831" href="#L831">831</a> 						+ <span class="jxr_string">"- a confirm-only child issues no form GET, so the drafts would be dropped silently."</span>);
-<a class="jxr_linenumber" name="L832" href="#L832">832</a> 			}
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 		}
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 	}
-<a class="jxr_linenumber" name="L835" href="#L835">835</a> 
-<a class="jxr_linenumber" name="L836" href="#L836">836</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L837" href="#L837">837</a> <em class="jxr_javadoccomment">	 * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} should invoke.</em>
-<a class="jxr_linenumber" name="L838" href="#L838">838</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L839" href="#L839">839</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 * {@link #contractVersion} is guaranteed present on every modal from construction, so this is &lt;b&gt;no longer</em>
-<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 * required for versioning&lt;/b&gt;.  It stays &lt;b&gt;strongly recommended&lt;/b&gt; for one remaining duty and</em>
-<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * is &lt;b&gt;redundant-but-harmless&lt;/b&gt; for another:</em>
-<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Non-REST producers&lt;/b&gt; (a direct {@code Json.of(...)} serialization, or any consumer marshalling a</em>
-<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * 		modal outside a REST response) have no other gate: calling this is the only fail-closed structural</em>
-<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * 		{@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as</em>
-<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * 		contract-&lt;i&gt;valid&lt;/i&gt; with no complaint.</em>
-<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;REST responses&lt;/b&gt; are validated independently:</em>
-<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * 		{@link WidgetsMixin.WidgetValidationProcessor</em>
-<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * 		WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a</em>
-<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * 		{@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.</em>
-<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * 		Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case</em>
-<a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * 		above.</em>
-<a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and recurses into</em>
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 * {@link FormDef#checked()}.</em>
-<a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If this modal (or its form) is not well-formed.</em>
-<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L861" href="#L861">861</a> 	<strong class="jxr_keyword">public</strong> ModalDef checked() {
-<a class="jxr_linenumber" name="L862" href="#L862">862</a> 		<strong class="jxr_keyword">if</strong> (form != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L863" href="#L863">863</a> 			contractVersion = CONTRACT_VERSION;
-<a class="jxr_linenumber" name="L864" href="#L864">864</a> 			form.checked();
-<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		}
-<a class="jxr_linenumber" name="L866" href="#L866">866</a> 		validate();
-<a class="jxr_linenumber" name="L867" href="#L867">867</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 	}
-<a class="jxr_linenumber" name="L869" href="#L869">869</a> }
+<a class="jxr_linenumber" name="L755" href="#L755">755</a> 	<em class="jxr_javadoccomment">/** The message for a token that is neither of its two allowed values. */</em>
+<a class="jxr_linenumber" name="L756" href="#L756">756</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String notOneOf(String what, String a, String b, String actual) {
+<a class="jxr_linenumber" name="L757" href="#L757">757</a> 		<strong class="jxr_keyword">return</strong> what + <span class="jxr_string">" must be '"</span> + a + <span class="jxr_string">"' or '"</span> + b + <span class="jxr_string">"', not '"</span> + actual + <span class="jxr_string">"'."</span>;
+<a class="jxr_linenumber" name="L758" href="#L758">758</a> 	}
+<a class="jxr_linenumber" name="L759" href="#L759">759</a> 
+<a class="jxr_linenumber" name="L760" href="#L760">760</a> 	@Override
+<a class="jxr_linenumber" name="L761" href="#L761">761</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> validate() {
+<a class="jxr_linenumber" name="L762" href="#L762">762</a> 		<strong class="jxr_keyword">if</strong> (ib(title))
+<a class="jxr_linenumber" name="L763" href="#L763">763</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef title must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L764" href="#L764">764</a> 		<strong class="jxr_keyword">if</strong> (fields != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : fields) {
+<a class="jxr_linenumber" name="L766" href="#L766">766</a> 				<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef field must not be null."</span>);
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> 				<strong class="jxr_keyword">if</strong> (f.label == <strong class="jxr_keyword">null</strong> || f.label.isBlank())
+<a class="jxr_linenumber" name="L769" href="#L769">769</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Field label must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L770" href="#L770">770</a> 				<strong class="jxr_keyword">if</strong> (f.kind != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
+<a class="jxr_linenumber" name="L771" href="#L771">771</a> 					<strong class="jxr_keyword">throw</strong> iaex(notOneOf(<span class="jxr_string">"ModalDef.Field kind"</span>, FIELD_KIND_TEXT, FIELD_KIND_CODE, f.kind));
+<a class="jxr_linenumber" name="L772" href="#L772">772</a> 			}
+<a class="jxr_linenumber" name="L773" href="#L773">773</a> 		validateChildActions();
+<a class="jxr_linenumber" name="L774" href="#L774">774</a> 		validateSteps();
+<a class="jxr_linenumber" name="L775" href="#L775">775</a> 		<strong class="jxr_keyword">if</strong> (chrome != <strong class="jxr_keyword">null</strong> &amp;&amp; chrome.isBlank())
+<a class="jxr_linenumber" name="L776" href="#L776">776</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef chrome must not be blank."</span>);
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 		<strong class="jxr_keyword">if</strong> (nav != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (eqa(nav, NAV_PILL, NAV_FOLDER)))
+<a class="jxr_linenumber" name="L778" href="#L778">778</a> 			<strong class="jxr_keyword">throw</strong> iaex(notOneOf(<span class="jxr_string">"ModalDef nav"</span>, NAV_PILL, NAV_FOLDER, nav));
+<a class="jxr_linenumber" name="L779" href="#L779">779</a> 		<strong class="jxr_keyword">if</strong> (form != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L780" href="#L780">780</a> 			form.validate();
+<a class="jxr_linenumber" name="L781" href="#L781">781</a> 		<strong class="jxr_keyword">if</strong> (barSlot != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L782" href="#L782">782</a> 			barSlot.validate();
+<a class="jxr_linenumber" name="L783" href="#L783">783</a> 	}
+<a class="jxr_linenumber" name="L784" href="#L784">784</a> 
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> 	<em class="jxr_javadoccomment">/** The {@link #steps} half of {@link #validate()}: non-blank unique ids and well-formed display fields. */</em>
+<a class="jxr_linenumber" name="L786" href="#L786">786</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateSteps() {
+<a class="jxr_linenumber" name="L787" href="#L787">787</a> 		<strong class="jxr_keyword">if</strong> (steps == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L788" href="#L788">788</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L789" href="#L789">789</a> 		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L790" href="#L790">790</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> st : steps) {
+<a class="jxr_linenumber" name="L791" href="#L791">791</a> 			<strong class="jxr_keyword">if</strong> (st == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L792" href="#L792">792</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step must not be null."</span>);
+<a class="jxr_linenumber" name="L793" href="#L793">793</a> 			<strong class="jxr_keyword">if</strong> (st.id == <strong class="jxr_keyword">null</strong> || st.id.isBlank())
+<a class="jxr_linenumber" name="L794" href="#L794">794</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step id must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L795" href="#L795">795</a> 			<strong class="jxr_keyword">if</strong> (! seen.add(st.id))
+<a class="jxr_linenumber" name="L796" href="#L796">796</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step id '"</span> + st.id + <span class="jxr_string">"' is declared more than once on this modal."</span>);
+<a class="jxr_linenumber" name="L797" href="#L797">797</a> 			<strong class="jxr_keyword">if</strong> (st.fields != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L798" href="#L798">798</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : st.fields) {
+<a class="jxr_linenumber" name="L799" href="#L799">799</a> 					<strong class="jxr_keyword">if</strong> (f == <strong class="jxr_keyword">null</strong> || f.label == <strong class="jxr_keyword">null</strong> || f.label.isBlank())
+<a class="jxr_linenumber" name="L800" href="#L800">800</a> 						<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.Step '"</span> + st.id + <span class="jxr_string">"' field label must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L801" href="#L801">801</a> 					<strong class="jxr_keyword">if</strong> (f.kind != <strong class="jxr_keyword">null</strong> &amp;&amp; ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
+<a class="jxr_linenumber" name="L802" href="#L802">802</a> 						<strong class="jxr_keyword">throw</strong> iaex(notOneOf(<span class="jxr_string">"ModalDef.Step '"</span> + st.id + <span class="jxr_string">"' field kind"</span>, FIELD_KIND_TEXT, FIELD_KIND_CODE, f.kind));
+<a class="jxr_linenumber" name="L803" href="#L803">803</a> 				}
+<a class="jxr_linenumber" name="L804" href="#L804">804</a> 		}
+<a class="jxr_linenumber" name="L805" href="#L805">805</a> 	}
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 
+<a class="jxr_linenumber" name="L807" href="#L807">807</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L808" href="#L808">808</a> <em class="jxr_javadoccomment">	 * The {@link #childActions} half of {@link #validate()}.</em>
+<a class="jxr_linenumber" name="L809" href="#L809">809</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L810" href="#L810">810</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> <em class="jxr_javadoccomment">	 * {@link ChildAction#of(String,String)} already argument-checks {@code id} and {@code label}; they are</em>
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> <em class="jxr_javadoccomment">	 * re-checked here as the wire-level backstop for a bean-deserialized instance that never went through the</em>
+<a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">	 * factory.</em>
+<a class="jxr_linenumber" name="L814" href="#L814">814</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L815" href="#L815">815</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> validateChildActions() {
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> 		<strong class="jxr_keyword">if</strong> (childActions == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L817" href="#L817">817</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L818" href="#L818">818</a> 		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L819" href="#L819">819</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : childActions) {
+<a class="jxr_linenumber" name="L820" href="#L820">820</a> 			<strong class="jxr_keyword">if</strong> (c == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction must not be null."</span>);
+<a class="jxr_linenumber" name="L822" href="#L822">822</a> 			<strong class="jxr_keyword">if</strong> (c.id == <strong class="jxr_keyword">null</strong> || c.id.isBlank())
+<a class="jxr_linenumber" name="L823" href="#L823">823</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction id must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L824" href="#L824">824</a> 			<strong class="jxr_keyword">if</strong> (c.label == <strong class="jxr_keyword">null</strong> || c.label.isBlank())
+<a class="jxr_linenumber" name="L825" href="#L825">825</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction label must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L826" href="#L826">826</a> 			<strong class="jxr_keyword">if</strong> (! seen.add(c.id))
+<a class="jxr_linenumber" name="L827" href="#L827">827</a> 				<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction id '"</span> + c.id + <span class="jxr_string">"' is declared more than once on this modal."</span>);
+<a class="jxr_linenumber" name="L828" href="#L828">828</a> 			<strong class="jxr_keyword">if</strong> (Boolean.TRUE.equals(c.carryDrafts)) {
+<a class="jxr_linenumber" name="L829" href="#L829">829</a> 				<strong class="jxr_keyword">if</strong> (form == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L830" href="#L830">830</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction '"</span> + c.id + <span class="jxr_string">"' declares carryDrafts, but this modal declares "</span>
+<a class="jxr_linenumber" name="L831" href="#L831">831</a> 						+ <span class="jxr_string">"no form - there is nothing to collect drafts from."</span>);
+<a class="jxr_linenumber" name="L832" href="#L832">832</a> 				<strong class="jxr_keyword">if</strong> (c.form == <strong class="jxr_keyword">null</strong> || c.form.isBlank())
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"ModalDef.ChildAction '"</span> + c.id + <span class="jxr_string">"' declares carryDrafts, but declares no form URL "</span>
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 						+ <span class="jxr_string">"- a confirm-only child issues no form GET, so the drafts would be dropped silently."</span>);
+<a class="jxr_linenumber" name="L835" href="#L835">835</a> 			}
+<a class="jxr_linenumber" name="L836" href="#L836">836</a> 		}
+<a class="jxr_linenumber" name="L837" href="#L837">837</a> 	}
+<a class="jxr_linenumber" name="L838" href="#L838">838</a> 
+<a class="jxr_linenumber" name="L839" href="#L839">839</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L840" href="#L840">840</a> <em class="jxr_javadoccomment">	 * The serving-path hook every app {@code @RestGet} that returns a {@link ModalDef} should invoke.</em>
+<a class="jxr_linenumber" name="L841" href="#L841">841</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L842" href="#L842">842</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L843" href="#L843">843</a> <em class="jxr_javadoccomment">	 * {@link #contractVersion} is guaranteed present on every modal from construction, so this is &lt;b&gt;no longer</em>
+<a class="jxr_linenumber" name="L844" href="#L844">844</a> <em class="jxr_javadoccomment">	 * required for versioning&lt;/b&gt;.  It stays &lt;b&gt;strongly recommended&lt;/b&gt; for one remaining duty and</em>
+<a class="jxr_linenumber" name="L845" href="#L845">845</a> <em class="jxr_javadoccomment">	 * is &lt;b&gt;redundant-but-harmless&lt;/b&gt; for another:</em>
+<a class="jxr_linenumber" name="L846" href="#L846">846</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L847" href="#L847">847</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;Non-REST producers&lt;/b&gt; (a direct {@code Json.of(...)} serialization, or any consumer marshalling a</em>
+<a class="jxr_linenumber" name="L848" href="#L848">848</a> <em class="jxr_javadoccomment">	 * 		modal outside a REST response) have no other gate: calling this is the only fail-closed structural</em>
+<a class="jxr_linenumber" name="L849" href="#L849">849</a> <em class="jxr_javadoccomment">	 * 		{@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as</em>
+<a class="jxr_linenumber" name="L850" href="#L850">850</a> <em class="jxr_javadoccomment">	 * 		contract-&lt;i&gt;valid&lt;/i&gt; with no complaint.</em>
+<a class="jxr_linenumber" name="L851" href="#L851">851</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;&lt;b&gt;REST responses&lt;/b&gt; are validated independently:</em>
+<a class="jxr_linenumber" name="L852" href="#L852">852</a> <em class="jxr_javadoccomment">	 * 		{@link WidgetsMixin.WidgetValidationProcessor</em>
+<a class="jxr_linenumber" name="L853" href="#L853">853</a> <em class="jxr_javadoccomment">	 * 		WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a</em>
+<a class="jxr_linenumber" name="L854" href="#L854">854</a> <em class="jxr_javadoccomment">	 * 		{@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.</em>
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> <em class="jxr_javadoccomment">	 * 		Calling it anyway is safe (validation is idempotent) and remains the only gate for the non-REST case</em>
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> <em class="jxr_javadoccomment">	 * 		above.</em>
+<a class="jxr_linenumber" name="L857" href="#L857">857</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L858" href="#L858">858</a> <em class="jxr_javadoccomment">	 * When a {@link #form} is present it also re-stamps {@link #CONTRACT_VERSION} on the form and recurses into</em>
+<a class="jxr_linenumber" name="L859" href="#L859">859</a> <em class="jxr_javadoccomment">	 * {@link FormDef#checked()}.</em>
+<a class="jxr_linenumber" name="L860" href="#L860">860</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L861" href="#L861">861</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L862" href="#L862">862</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If this modal (or its form) is not well-formed.</em>
+<a class="jxr_linenumber" name="L863" href="#L863">863</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L864" href="#L864">864</a> 	<strong class="jxr_keyword">public</strong> ModalDef checked() {
+<a class="jxr_linenumber" name="L865" href="#L865">865</a> 		<strong class="jxr_keyword">if</strong> (form != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L866" href="#L866">866</a> 			contractVersion = CONTRACT_VERSION;
+<a class="jxr_linenumber" name="L867" href="#L867">867</a> 			form.checked();
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		}
+<a class="jxr_linenumber" name="L869" href="#L869">869</a> 		validate();
+<a class="jxr_linenumber" name="L870" href="#L870">870</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L871" href="#L871">871</a> 	}
+<a class="jxr_linenumber" name="L872" href="#L872">872</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
