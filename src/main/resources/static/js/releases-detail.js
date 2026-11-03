@@ -26,20 +26,9 @@
 (function () {
 	'use strict';
 
-	// The views toolkit pack (<@page toolkit="views">) loads juneau-icons.js generically, so the icon sprite
-	// defaults to the "original" pack. This app wants Material Symbols. Select it here — this
-	// file is in the page's init= list, parsed after juneau-icons.js and before the DOMContentLoaded mount, so
-	// icons.pack() reloads the sprite in time for the ribbon/paging glyphs. (This is JuneauViews.icons.pack, the
-	// icon-sprite selector — NOT the console CSS theme (<@theme>).)
-	function selectIconPack() {
-		var icons = globalThis.JuneauViews && globalThis.JuneauViews.icons;
-		if (icons && typeof icons.pack === 'function')
-			icons.pack('material');
-	}
-
 	// Row-detail header icon.  The header pattern (Juneau buildDetailHeader) shows a titled icon tile when the
-	// detail config carries an `icon` name, resolved through JuneauViews.icons.resolveIcon.  The Material pack
-	// selected above ships only the ribbon/paging glyphs, so this app registers its OWN release-marker glyph as
+	// detail config carries an `icon` name, resolved through JuneauViews.icons.resolveIcon.  The stock icon
+	// sprite ships only the ribbon/paging glyphs, so this app registers its OWN release-marker glyph as
 	// self-contained inline SVG (not a sprite <use>), which renders under any pack.  ORIGINAL artwork authored
 	// for this app, licensed Apache-2.0 with the rest of the tree — a plain filled bookmark/ribbon, no Material
 	// path and no Salesforce/IRS/SLDS artwork.  Fill is currentColor so it takes the icon tile's contrast colour.
@@ -116,7 +105,6 @@
 		});
 	}
 
-	selectIconPack();
 	registerDetailIcon();
 	register();
 })();

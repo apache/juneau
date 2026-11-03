@@ -38,8 +38,10 @@
             { data: 'milestoneUrl', title: 'Milestone', orderable: false, searchable: true, render: { id: 'linked' }, href: '{milestoneUrl}', defaultVisible: false }
         ],
         ribbon: [
-            { type: 'option', id: 'dropped-only', title: 'Dropped only', group: 'filters', column: 'status', value: '$eq(DROPPED)', persist: true, symbol: 'filter_alt' },
-            { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+            { type: 'option', id: 'dropped-only', title: 'Dropped only', group: 'filter', column: 'status', value: '$eq(DROPPED)', persist: true, symbol: 'filter_alt' },
+            { type: 'collapseAll', group: 'viewing' },
+            { type: 'export', group: 'viewing', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+            { type: 'resetDefaults', group: 'page' },
             { type: 'refresh' }
         ],
         columnConfig: true,

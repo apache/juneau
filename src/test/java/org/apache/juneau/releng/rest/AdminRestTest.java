@@ -74,15 +74,13 @@ class AdminRestTest {
 	}
 
 	@Test
-	void b03_releasesDetailScriptOptsIntoMaterialIconPack() throws IOException {
-		// With the views toolkit pack, base.ftlh does not hardcode juneau-icons.js or its pack attribute — the pack
-		// loop loads it generically (default "original"). The Material opt-in lives in the Releases page's init
-		// script, which selects it via JuneauViews.icons.pack() before the mount.
+	void b03_releasesUsesTheStockIconPack() throws IOException {
+		// The Releases page uses the stock Juneau sprite like every other console app. The Material pack it used
+		// to force drew first/last page as bar + chevron (|< >|) instead of the standard doubled chevrons.
 		var base = readClasspathResource("/templates/base.ftlh");
-		assertFalse(base.contains("data-juneau-icon-pack"), "base.ftlh must not hardcode the icon pack anymore: " + base);
+		assertFalse(base.contains("data-juneau-icon-pack"), "base.ftlh must not hardcode the icon pack: " + base);
 		var script = readClasspathResource("/static/js/releases-detail.js");
-		assertTrue(script.contains("icons.pack('material')"),
-			"releases-detail.js must select the Material icon sprite: " + script);
+		assertFalse(script.contains("icons.pack("), "releases-detail.js must not force an icon pack: " + script);
 	}
 
 	private static String readClasspathResource(String path) throws IOException {

@@ -226,7 +226,8 @@ function headerCells(page: Page): Locator {
 
 async function openViewSettings(page: Page): Promise<Locator> {
   // juneau-config.js mountChooser: a "Columns" toolbar button (aria-label "Columns") opens a role=dialog titled
-  // "View Settings" (h2#juneau-config-title) with one `.juneau-config-col-row[data-col=<data>]` per catalog column.
+  // "View Settings" with one `.juneau-config-col-row[data-col=<data>]` per shown column and one
+  // `.juneau-config-avail[data-col=<data>]` per hidden one.
   await page.getByRole('button', { name: 'Columns', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'View Settings' });
   await expect(dialog).toBeVisible();
@@ -241,11 +242,11 @@ test.describe('Releases View Settings', () => {
     await expect(releasesTable(page).getByText('9.2.0', { exact: true }).first()).toBeVisible();
   });
 
-  test('unchecking a column and applying hides it, and the choice survives a reload', async ({ page }) => {
+  test('removing a column and applying hides it, and the choice survives a reload', async ({ page }) => {
     await expect(headerCells(page).filter({ hasText: /^Stage$/ })).toHaveCount(1);
 
     const dialog = await openViewSettings(page);
-    await dialog.locator('.juneau-config-col-row[data-col="stage"] input.juneau-config-col-vis').uncheck();
+    await dialog.locator('.juneau-config-col-row[data-col="stage"] .juneau-config-col-remove').click();
     await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
 
     await expect(headerCells(page).filter({ hasText: /^Stage$/ })).toHaveCount(0);
@@ -264,7 +265,8 @@ test.describe('Releases View Settings', () => {
     await expect(headerCells(page).filter({ hasText: /^GitHub$/ })).toHaveCount(0);
 
     const dialog = await openViewSettings(page);
-    await dialog.locator('.juneau-config-col-row[data-col="githubReleaseUrl"] input.juneau-config-col-vis').check();
+    // Hidden columns sit in the Available list; a double click adds one to the view.
+    await dialog.locator('.juneau-config-avail[data-col="githubReleaseUrl"]').dblclick();
     await dialog.getByRole('button', { name: 'Apply', exact: true }).click();
 
     await expect(headerCells(page).filter({ hasText: /^GitHub$/ })).toHaveCount(1);
