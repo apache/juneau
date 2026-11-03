@@ -110,7 +110,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<includes>
-						<include>**/*Test.class</include>
+						<include>**/*Test.java</include>
 					</includes>
 					<systemPropertyVariables>
 						<java.locale.providers>JRE,COMPAT,SPI,CLDR</java.locale.providers>

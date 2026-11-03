@@ -43,6 +43,10 @@
 
 		<juneau.compare.version>9.0.1</juneau.compare.version>
 		<junit.version>6.0.3</junit.version>
+		<!-- Pinned below apache parent 40's 3.6.0, which finds no tests in most modules (0 run in juneau-commons and juneau-marshall). -->
+		<surefire.version>3.5.4</surefire.version>
+		<!-- Pinned below apache parent 40's RAT 0.18, which crashes with an NPE on some modules and scans target/. -->
+		<version.apache-rat-plugin>0.16.1</version.apache-rat-plugin>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.15</jacoco.plugin.version>
 		<!-- Default so surefire's @{argLine} late binding resolves when jacoco is skipped. -->

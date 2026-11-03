@@ -405,7 +405,8 @@ class _PerfOutput:
 	"""Where PERF-GUARD lines go: notes on the Perf row when a console view owns the screen, else print.  Every line
 	also goes to the report file."""
 
-	def __init__(self, report_file):
+	def __init__(self, report_file, step="perf"):
+		self.step = step
 		run = _juneau.load()[0]
 		self.run = run if run.console_owns_screen() else None
 		self.report_file = Path(report_file)
@@ -414,7 +415,7 @@ class _PerfOutput:
 	def line(self, text, level="info"):
 		self.lines.append(text)
 		if self.run is not None:
-			self.run.note(level, text, step="perf")
+			self.run.note(level, text, step=self.step)
 		else:
 			print(text)
 
@@ -524,6 +525,82 @@ def _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, ou
 		summary = f"✓ {checked} checked" + (f" · {len(new_modules)} without a baseline" if new_modules else "")
 	summary += f" → {out.report_file}"
 	return (1 if over and enforce else 0), summary
+
+
+TEST_COUNT_REPORT = Path(__file__).resolve().parent.parent / "target" / "test-count-guard.txt"
+TEST_COUNT_TOP = 5
+
+
+def module_seconds(stats: dict) -> dict:
+	"""{module path: summed Surefire class seconds} from discover_module_stats()."""
+	return {module: sum(b["seconds"] for b in buckets.values()) for module, buckets in stats.items()}
+
+
+def module_test_total(stats: dict) -> int:
+	"""Total test count over discover_module_stats()."""
+	return sum(b["tests"] for buckets in stats.values() for b in buckets.values())
+
+
+def test_count_check(records, total: int, seconds: dict, threshold: float = 0.10, window: int = 20, min_runs: int = 5):
+	"""Compare `total` (this run's test count) with the median of recent passing runs of the same command shape.
+
+	records are the run history with this run's own `tests` record possibly last (dropped when its count equals
+	`total`).  Returns (verdict, expected, lines): verdict is "ok", "drop" or "no-history"; lines are the report lines.
+	On a drop, names the modules whose Surefire time collapsed (under 10% of their median, or absent) since those
+	lost the tests; history keeps no per-module counts.
+	"""
+	runs = [r for r in _juneau.same_shape_runs(records) if r.get("ok") is True]
+	if runs and runs[-1].get("tests") == total:
+		runs = runs[:-1]
+	counts = [r["tests"] for r in runs if isinstance(r.get("tests"), int) and r["tests"] > 0][-window:]
+	if len(counts) < min_runs:
+		return "no-history", None, [f"TEST-COUNT: {_juneau.no_baseline_line(len(counts))}; skipping check."]
+	expected = statistics.median(counts)
+	if total >= expected * (1 - threshold):
+		return "ok", expected, [f"TEST-COUNT: {total} tests ran (recent median {expected:g})."]
+	pct = (expected - total) / expected * 100
+	lines = [f"TEST-COUNT WARN: {total} tests ran, {pct:.0f}% below the recent median of {expected:g} "
+			 f"(last {len(counts)} passing runs, threshold {threshold * 100:.0f}%)."]
+	history: dict = {}
+	for record in runs[-window:]:
+		for module, value in ((record.get("series") or {}).get("surefire_s") or {}).items():
+			if isinstance(value, (int, float)) and not isinstance(value, bool):
+				history.setdefault(module, []).append(value)
+	lost = []
+	for module, values in history.items():
+		median = statistics.median(values)
+		now = seconds.get(module, 0.0)
+		if len(values) >= min_runs and median >= 1.0 and now < median * 0.1:
+			lost.append((median - now, module, median, now))
+	lost.sort(reverse=True)
+	if lost:
+		lines.append("  Modules whose Surefire time collapsed (likely lost tests): " + ", ".join(
+			f"{module} ({median:.1f}s -> {now:.1f}s)" for _, module, median, now in lost[:TEST_COUNT_TOP])
+			+ (f", and {len(lost) - TEST_COUNT_TOP} more" if len(lost) > TEST_COUNT_TOP else "") + ".")
+	else:
+		lines.append("  No single module's Surefire time collapsed; check the Surefire version and its includes.")
+	lines.append("  Warn only. Tune with JUNEAU_CI_TEST_COUNT_THRESHOLD.")
+	return "drop", expected, lines
+
+
+def run_test_count_guard(stats: dict, records, report_file=None) -> int:
+	"""Test-count guard: warns when this run's test count dropped sharply below recent runs.  Never fails (returns 0).
+	The report goes to report_file (target/test-count-guard.txt)."""
+	run = _juneau.load()[0]
+	threshold = float(os.environ.get("JUNEAU_CI_TEST_COUNT_THRESHOLD", "0.10"))
+	with run.row("test-count", "Test count", label="Test count") as row:
+		out = _PerfOutput(report_file or TEST_COUNT_REPORT, step="test-count")
+		total = module_test_total(stats)
+		verdict, expected, lines = test_count_check(records, total, module_seconds(stats), threshold)
+		for text in lines:
+			if verdict == "ok":
+				out.report_only(text)
+			else:
+				out.line(text, "warn" if verdict == "drop" else "info")
+		out.write()
+		summary = {"ok": f"✓ {total} tests", "no-history": "no history → skipped"}.get(verdict)
+		row.summary = (summary or f"⚠ {total} tests, expected ~{expected:g}") + f" → {out.report_file}"
+	return 0
 
 
 SUITE_LINE = re.compile(r"^suite\s*=")
@@ -1013,6 +1090,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		perf_exit = run_perf_guard(test_elapsed, PERF_BASELINE, module_times_, enforce=args.enforce_perf, unmapped=unmapped)
 		if perf_exit != 0:
 			return perf_exit
+		run_test_count_guard(discover_module_stats(REPO_ROOT), _test_history())
 		py_exit = script_tests()
 		if py_exit != 0:
 			return py_exit
@@ -1023,6 +1101,14 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		full_run = not (args.no_container or args.no_js_tests or _js_skipped)
 		return run_trace_guard(since, args.warn_traces, full_run)
 	return exit_code
+
+
+def _test_history():
+	"""test.py's run history for this repo; [] when history is off."""
+	try:
+		return _juneau.load()[0].HistoryStore(REPO_ROOT, "test").read()
+	except Exception:
+		return []
 
 
 def _rebaseline_from_history(window, min_runs):

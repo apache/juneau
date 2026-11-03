@@ -78,7 +78,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<includes>
-						<include>**/*Test.class</include>
+						<include>**/*Test.java</include>
 					</includes>
 					<!-- This module has the JUnit5 engine on its test classpath (junit-jupiter dependency above)
 					     and contains @Tag("manual") tests (e.g. BsonArrayDebug_Test), so it's one of the few

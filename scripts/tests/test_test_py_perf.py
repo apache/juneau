@@ -468,3 +468,52 @@ def test_rebaseline_with_too_few_runs_of_the_newest_sig_says_so_and_writes_nothi
     assert test_mod.rebaseline(baseline, records, window=20, min_runs=5) == 1
     assert baseline.read_text(encoding="utf-8") == FILE
     assert "no baseline for this command shape (1 run)" in capsys.readouterr().out
+
+
+# ---- the test-count guard ----------------------------------------------------------------------------------------------
+def runs(*counts, sig="s", ok=True, surefire=None):
+    return [{"step": "tests", "sig": sig, "ok": ok, "tests": c, "series": {"surefire_s": surefire or {}}} for c in counts]
+
+
+def test_count_within_threshold_is_ok(test_mod):
+    verdict, expected, _ = test_mod.test_count_check(runs(100, 100, 100, 100, 100), 91, {})
+    assert (verdict, expected) == ("ok", 100)
+
+
+def test_count_drop_warns_and_names_collapsed_modules(test_mod):
+    sf = {"mod-a": 20.0, "mod-b": 10.0}
+    history = runs(*[158000] * 5, surefire=sf)
+    verdict, expected, lines = test_mod.test_count_check(history, 56000, {"mod-a": 0.5, "mod-b": 9.0})
+    assert verdict == "drop" and expected == 158000
+    assert lines[0] == ("TEST-COUNT WARN: 56000 tests ran, 65% below the recent median of 158000 "
+                        "(last 5 passing runs, threshold 10%).")
+    assert "mod-a (20.0s -> 0.5s)" in lines[1] and "mod-b" not in lines[1]
+
+
+def test_count_drop_with_no_collapsed_module_says_so(test_mod):
+    verdict, _, lines = test_mod.test_count_check(runs(*[100] * 5), 10, {})
+    assert verdict == "drop" and "No single module" in lines[1]
+
+
+def test_count_with_too_little_history_is_an_info_note(test_mod):
+    verdict, expected, lines = test_mod.test_count_check(runs(100, 100), 1, {})
+    assert (verdict, expected) == ("no-history", None)
+    assert lines == ["TEST-COUNT: no baseline for this command shape (2 runs); skipping check."]
+
+
+def test_count_ignores_failed_runs_other_shapes_and_this_runs_own_record(test_mod):
+    history = runs(100, 100, 100, 100, 100) + runs(5, ok=False) + runs(100, sig="old")[:0]
+    history = runs(5, sig="other") + history + runs(40)       # newest record is this run's
+    verdict, expected, _ = test_mod.test_count_check(history, 40, {})
+    assert verdict == "drop" and expected == 100
+
+
+def test_count_guard_never_fails_and_writes_a_report(test_mod, tmp_path, monkeypatch):
+    monkeypatch.setenv("JUNEAU_CI_TEST_COUNT_THRESHOLD", "0.5")
+    stats = {"m": {"core": {"tests": 60, "seconds": 1.0}}}
+    report = tmp_path / "tc.txt"
+    assert test_mod.run_test_count_guard(stats, runs(*[100] * 5), report_file=report) == 0
+    assert "TEST-COUNT: 60 tests ran (recent median 100)." in report.read_text(encoding="utf-8")
+    monkeypatch.setenv("JUNEAU_CI_TEST_COUNT_THRESHOLD", "0.1")
+    assert test_mod.run_test_count_guard(stats, runs(*[100] * 5), report_file=report) == 0
+    assert "TEST-COUNT WARN: 60 tests ran, 40% below" in report.read_text(encoding="utf-8")
