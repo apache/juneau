@@ -3118,6 +3118,11 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'doc',
+					id: 'release-notes/9.2.1',
+					label: '9.2.1',
+				},
+				{
+					type: 'doc',
 					id: 'release-notes/9.2.0',
 					label: '9.2.0',
 				},

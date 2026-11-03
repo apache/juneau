@@ -142,7 +142,7 @@ def test_articles(top):
 
 def test_release_notes(top):
     notes = top['Release Notes']
-    assert [n['label'] for n in notes['items']] == ['10.0.0', '9.2.0', '9.1.0', '9.0.1', '9.0.0', '8.x', '7.x', '6.x', '5.x']
+    assert [n['label'] for n in notes['items']] == ['10.0.0', '9.2.1', '9.2.0', '9.1.0', '9.0.1', '9.0.0', '8.x', '7.x', '6.x', '5.x']
     v10 = notes['items'][0]
     assert v10['type'] == 'category' and len(v10['items']) == 5
     assert all(i['type'] == 'doc' for i in v10['items'])

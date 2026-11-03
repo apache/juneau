@@ -39,7 +39,7 @@ const SAMPLES = [
 // The newest published release. Update it at release time together with the Downloads page and the announcement
 // bar in docusaurus.config.ts (New Release Guidelines, step 6.4). static/javadocs/releases.json is not used here:
 // it also lists unreleased SNAPSHOT javadoc builds and records build dates.
-const LATEST_RELEASE = {version: '9.2.0', released: '2026-01-05'};
+const LATEST_RELEASE = {version: '9.2.1', released: '2026-11-03'};
 
 function ProjectCards() {
   // Registers the #projects anchor so the footer's /#projects link passes Docusaurus' broken-anchor check.
