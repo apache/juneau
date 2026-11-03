@@ -24,13 +24,13 @@ from jrm_release.runner import Runner
 pytestmark = pytest.mark.usefixtures("clean_env")
 
 
-def test_row_labels_are_zero_padded_unique_and_cover_all_25_steps():
+def test_row_labels_are_zero_padded_unique_and_cover_all_27_steps():
     labels = [inventory.row_label(s) for s in inventory.STEPS]
-    assert len(labels) == 25 == len(set(labels))
+    assert len(labels) == 27 == len(set(labels))
     assert labels[0] == "01 Prerequisites"
     assert labels[4] == "05 Build verify"
     assert labels[15] == "16 Vote wait (72h)"
-    assert labels[24] == "25 Finalize"
+    assert labels[26] == "27 Finalize"
 
 
 def test_longest_label_is_18_characters():
@@ -144,7 +144,7 @@ def test_fresh_run_is_run_1_and_stops_at_the_proposal_email():
     assert states(dividers)["compose-propose-email"] == "stops"
     assert {s for k, s in states(dividers).items() if k != "compose-propose-email"} == {"later"}
     assert [d[0] for d in dividers] == ["compose-propose-email", "compose-vote-email", "vote-gate",
-                                        "compose-result-email", "compose-announce-email"]
+                                        "compose-result-email", "compose-announce-email", "reporter-release"]
 
 
 def test_resume_after_the_proposal_pause_marks_it_passed_and_numbers_the_run():
@@ -213,7 +213,7 @@ def recorded_session_kwargs(home, monkeypatch, *, features, revert=False, extra_
 def test_new_toolkit_gets_numbered_plan_run_and_dividers(home, monkeypatch):
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"})
     assert kw["plan"][0] == ("prerequisites", "01 Prerequisites")
-    assert len(kw["plan"]) == 25
+    assert len(kw["plan"]) == 27
     assert kw["run"] == 1
     assert [d[0] for d in kw["dividers"]][0] == "compose-propose-email"
     assert "history_alias" not in kw
@@ -239,7 +239,7 @@ def test_revert_plan_is_the_six_rows_with_no_dividers_or_run(home, monkeypatch):
 def test_history_disabled_still_records_the_same_keywords(home, monkeypatch):
     monkeypatch.setenv("JUNEAU_TERMINAL_HISTORY", "0")
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"})
-    assert kw["run"] == 1 and len(kw["plan"]) == 25
+    assert kw["run"] == 1 and len(kw["plan"]) == 27
 
 
 # ---- gated Maven bar, count and history alias ----------------------------------------------------------------------
@@ -363,13 +363,13 @@ class StubRegistry:
         self.step(name, title, label)
 
 
-def test_skip_step_keeps_25_rows_and_25_plan_entries(home, monkeypatch):
+def test_skip_step_keeps_27_rows_and_27_plan_entries(home, monkeypatch):
     deps = release.Deps(run=FakeRunner(), steps=SimpleNamespace(Registry=StubRegistry), lock=None)
     reg = release.registry(deps, release.impl_map())
-    assert len(reg.names) == 25
+    assert len(reg.names) == 27
     assert reg._labels["build-verify"] == "05 Build verify"
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"}, extra_argv=["--skip-step", "javadoc-verify"])
-    assert len(kw["plan"]) == 25
+    assert len(kw["plan"]) == 27
 
 
 def test_resume_with_a_vote_email_pending_passes_it_and_stops_at_the_vote_gate():
@@ -377,14 +377,14 @@ def test_resume_with_a_vote_email_pending_passes_it_and_stops_at_the_vote_gate()
     assert n == 4
     assert states(dividers) == {"compose-propose-email": "passed", "compose-vote-email": "passed",
                                 "vote-gate": "stops", "compose-result-email": "later",
-                                "compose-announce-email": "later"}
+                                "compose-announce-email": "later", "reporter-release": "later"}
 
 
 def test_start_step_at_the_announce_email_passes_all_earlier_dividers():
     n, dividers = board.divider_plan(args(start_step="compose-announce-email"), FakeRf(attempts=5))
     assert states(dividers) == {"compose-propose-email": "passed", "compose-vote-email": "passed",
                                 "vote-gate": "passed", "compose-result-email": "passed",
-                                "compose-announce-email": "stops"}
+                                "compose-announce-email": "stops", "reporter-release": "later"}
 
 
 def test_start_step_after_every_pause_has_no_stop():

@@ -78,7 +78,7 @@ Under `--dry-run` the secret checks report `skipped (dry run)`. The branch tip i
 5. For a new release, reads the params file (`--params`, else `<home>/params/<version>.yml`; none is an error) and runs the whole preflight before anything is created or asked. Every problem is listed together. A resume runs the `tools` and secrets groups. Skipped for `--revert`.
 6. Starts a fresh `run.json` from the resolved details and records the params file.
 7. Takes a non-blocking lock (`.lock` in the run directory) and runs the steps in order, checkpointing `run.json` after each. A second `release.py` on the same release exits 1 with the holder's pid.
-8. The 25 steps fall in three phases: release candidate (prerequisites through `vote-gate`), vote (`vote-tally`, result email) and promote (`nexus-release` through `finalize`). The run never asks a question. Where it needs you it pauses (exit 0), prints what to do and the command to continue, and records the pause in `run.json`; see Pauses.
+8. The 27 steps fall in three phases: release candidate (prerequisites through `vote-gate`), vote (`vote-tally`, result email) and promote (`nexus-release` through `finalize`). The run never asks a question. Where it needs you it pauses (exit 0), prints what to do and the command to continue, and records the pause in `run.json`; see Pauses.
 9. `--revert` runs five rows instead: drop the Nexus staging repository, remove the RC from dist/dev, delete the RC tag, restore the poms the release plugin changed (then verify the root version), record the revert. The command is the confirmation: there is no typed confirmation on the CLI (the Release page still types `RC<n>` before it drops an RC). Each row checks remote state first, so a rerun is harmless.
 
 ## Pauses
@@ -87,7 +87,8 @@ A pause ends the attempt with exit 0 and status `paused`. `run.json` records `pa
 
 | Pause | What you do | How you continue |
 |---|---|---|
-| `propose`, `vote`, `result`, `announce` email | Send the mail from `emails/<kind>.eml.txt` | `release.py --resume` |
+| `propose`, `vote`, `result`, `announce` email | Send the mail from `emails/<kind>.eml.txt`; send the announce mail in plain-text mode (Gmail: ⋮ > Plain text mode), because announce@apache.org rejects any text/html part, and send announce@ as its own mail if dev@ already got it | `release.py --resume` |
+| `reporter-release` | Add the version and date at `https://reporter.apache.org/addrelease.html?juneau` (the page is opened for you) | `release.py --resume` |
 | `vote-gate` | Wait for the vote to close | `release.py --resume` |
 | `vote-tally`, vote still open | Wait for the deadline in `voteDeadline` | `release.py --resume` after it |
 | `vote-tally`, no valid `vote:` block | Fill in `vote:` in the params file | `release.py --resume` |
@@ -97,6 +98,8 @@ Details:
 
 - A plain `--resume` after an unsent mail records it as sent, so send it first. `--start-step` at an email step writes the mail again.
 - The Javadoc check and the follow-up checklist are files: `javadoc-report.txt` and `followup.md` in the run directory. A release diff that is not clean fails the step (`release-diff.txt` lists it): run `--revert` and bump `rc`.
+- `reporter-release` is a pause, not an API call: reporter.apache.org is behind ASF committer basic auth and has no documented endpoint, so the script opens the page and records the pause (`emailPending: "reporter"`); `--resume` acknowledges it.
+- `dist-cleanup` (after the announce mail) lists `dist/release/juneau`, keeps `KEYS` and the new version, and removes every other entry in one `svnmucc` commit (`Remove old Apache Juneau releases; kept <version>`). It handles the top-level `<version>/` layout and the older `binaries/juneau-x/` + `source/juneau-x/` one, and removes a `binaries/` or `source/` left empty. Every candidate must exist on `archive.apache.org/dist/juneau/` first; one miss aborts with nothing removed. `--dry-run` only lists. `--revert` never undoes it (the archive keeps everything).
 - There is no confirmation before the release goes to Maven Central; the passed vote is the gate.
 - A dry run shows each mail and then goes on; it writes no mail file and no `run.json`, and a step that would pause is reported as skipped.
 

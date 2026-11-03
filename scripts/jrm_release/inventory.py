@@ -24,6 +24,8 @@ DIST_ROOT = "https://dist.apache.org/repos/dist"
 DOWNLOADS = "https://downloads.apache.org/juneau"
 DEV_LIST = "dev@juneau.apache.org"
 ANNOUNCE_LIST = "announce@apache.org"
+ARCHIVE = "https://archive.apache.org/dist/juneau"
+REPORTER_ADD = "https://reporter.apache.org/addrelease.html?juneau"
 JUNEAU_CHECKOUT = "~/git/apache/juneau"
 MVN_CHECKSUMS = "-Daether.checksums.algorithms=MD5,SHA-1,SHA-512"
 
@@ -53,8 +55,10 @@ STEPS = [
     Step(21, "promote", "final-tag", "Final tag", "Final tag", False),
     Step(22, "promote", "github-release", "GitHub release", "GitHub", False),
     Step(23, "promote", "compose-announce-email", "Announce email", "Announce email", False),
-    Step(24, "promote", "followup-checklist", "Follow-up checklist", "Manual", False),
-    Step(25, "promote", "finalize", "Finalize", "Done", False),
+    Step(24, "promote", "reporter-release", "Add release to Reporter", "Reporter", False),
+    Step(25, "promote", "dist-cleanup", "Remove old releases", "SVN", False),
+    Step(26, "promote", "followup-checklist", "Follow-up checklist", "Manual", False),
+    Step(27, "promote", "finalize", "Finalize", "Done", False),
 ]
 # Steps removed from the table, and the step an old run.json's "last" now means (the one before the removed step).
 RETIRED = {"test-workspace-verify": "javadoc-verify"}
@@ -63,13 +67,14 @@ ROW_NAMES = {1: "Prerequisites", 2: "Release checks", 3: "Proposal email", 4: "W
              6: "Javadoc", 7: "GPG unlock", 8: "Deploy snapshot", 9: "Release prepare", 10: "Diff review",
              11: "Release perform", 12: "Nexus close", 13: "Stage dist/dev", 14: "Verify dist/dev", 15: "Vote email",
              16: "Vote wait (72h)", 17: "Vote tally", 18: "Result email", 19: "Nexus release", 20: "Promote dist",
-             21: "Final tag", 22: "GitHub release", 23: "Announce email", 24: "Follow-up list", 25: "Finalize"}
+             21: "Final tag", 22: "GitHub release", 23: "Announce email", 24: "Add to Reporter",
+             25: "Dist cleanup", 26: "Follow-up list", 27: "Finalize"}
 
 # Steps where the run exits for the operator (spec 1.3) -> the divider's text.  17 (vote tally), the 23 mirror wait and a
 # failed vote at 18 pause conditionally and appear only when raised.
 PAUSE_DIVIDERS = {"compose-propose-email": "send proposal email", "compose-vote-email": "send vote email",
                   "vote-gate": "vote closes", "compose-result-email": "send result email",
-                  "compose-announce-email": "send announce email"}
+                  "compose-announce-email": "send announce email", "reporter-release": "add release to Reporter"}
 
 
 def row_label(step):

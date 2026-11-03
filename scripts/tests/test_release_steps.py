@@ -638,7 +638,7 @@ def test_registry_runs_both_check_groups_as_labelled_bars():
                                         lock=None), release.impl_map())
     assert reg._labels["prerequisites"] == "01 Prerequisites"
     assert reg._labels["prechecks"] == "02 Release checks"
-    assert len(reg.names) == 25
+    assert len(reg.names) == 27
     assert "test-workspace-verify" not in reg.names
 
 

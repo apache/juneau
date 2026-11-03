@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """Promote phase (spec 6.3 rows 19-25).  Irreversible from nexus-release on."""
-from . import emails, inventory
+from . import emails, inventory, runfile
 from .ctx import StepError
 from .rc import dev_dir, git_env, wanted_files
 
@@ -117,9 +117,83 @@ def compose_announce_email(ctx):
 
 
 @step
+def reporter_release(ctx):
+    """reporter.apache.org/addrelease.html sits behind ASF committer basic auth and has no documented API, so this is a
+    pausing step (like the email steps): open the page, show the values to enter, acknowledge on --resume."""
+    done = emails.acknowledge(ctx, "reporter")
+    if done and not ctx.dry_run:
+        return "release entered on reporter.apache.org"
+    date = ctx.now().date().isoformat() if ctx.now else "today"
+    text = f"Add release {ctx.version} (date {date}) at {inventory.REPORTER_ADD}"
+    if ctx.dry_run:
+        ctx.say(f"(dry run: nothing is opened) {text}")
+        return "skipped (dry run): Reporter pause not entered"
+    message = f"{text}, then run: {ctx.resume_hint}"
+    ctx.rf.update({"emailPending": "reporter", "pause": {"step": "reporter-release", "message": message,
+                                                         "at": runfile.stamp()}})
+    ctx.say(message)
+    try:
+        ctx.opener(inventory.REPORTER_ADD)
+    except Exception as e:   # noqa: BLE001 - opening is a convenience; it must never change the step
+        ctx.say(f"could not open {inventory.REPORTER_ADD}: {e}", "warn")
+    raise ctx.pause(message, done=False)
+
+
+def old_release_paths(ctx):
+    """(paths to remove, paths to verify on the archive).  Paths under dist/release/juneau to remove (relative, no trailing slash).  Keeps KEYS and the new version, in the
+    top-level <version>/ layout and in the older binaries/juneau-x/ + source/juneau-x/ one.  A binaries/ or source/
+    that would end up empty is removed itself."""
+    v, root = ctx.version, inventory.DIST_RELEASE
+    top = ctx.svn.ls(root + "/")
+    if top is None:
+        raise StepError(f"cannot list {root}")
+    paths, verify = [], []
+    for e in top:
+        name = e.rstrip("/")
+        if name in ("KEYS", v, "binaries", "source"):
+            continue
+        paths.append(name)
+        verify.append(name)
+    for sub in ("binaries", "source"):
+        if not any(e.rstrip("/") == sub for e in top):
+            continue
+        inner = ctx.svn.ls(f"{root}/{sub}/")
+        if inner is None:
+            raise StepError(f"cannot list {root}/{sub}")
+        names = [e.rstrip("/") for e in inner]
+        old = [f"{sub}/{n}" for n in names if n != f"juneau-{v}"]
+        verify += old
+        paths += old if len(old) < len(names) else [sub]
+    return paths, verify
+
+
+@step
+def dist_cleanup(ctx):
+    """Policy: only the current release stays on dist/release; archive.apache.org keeps the rest.  Nothing is removed
+    unless every candidate is on the archive.  Not undone by --revert."""
+    paths, verify = old_release_paths(ctx)
+    if not paths:
+        return f"nothing to remove; only {ctx.version} and KEYS are on dist/release"
+    # an emptied binaries/ or source/ has no archive copy of its own; its children are what get verified
+    missing = []
+    for p in verify:
+        if not ctx.http_ok(f"{inventory.ARCHIVE}/{p}/"):
+            missing.append(p)
+    if missing:
+        raise StepError("not on archive.apache.org, nothing removed: " + ", ".join(missing))
+    ctx.say("Old releases to remove from dist/release:\n- " + "\n- ".join(paths))
+    if ctx.dry_run:
+        return f"dry run: would remove {len(paths)} old entries (kept {ctx.version})"
+    ctx.svn.mucc(f"Remove old Apache Juneau releases; kept {ctx.version}",
+                 [("rm", f"{inventory.DIST_RELEASE}/{p}") for p in paths], title="Remove old releases")
+    return f"removed {len(paths)} old entries from dist/release; kept {ctx.version}"
+
+
+@step
 def followup_checklist(ctx):
-    items = ["Update the release notes / website (juneau-docs).", "Update the Docker/Maven badges if any.",
-             "Close the release milestone / issues.", "Remove old releases from dist/release if policy requires."]
+    items = ["Update the release notes / website (juneau-docs); the docs need a stage deploy, then a prod promote.",
+             f"Optional: in Jira (JUNEAU > Releases) mark {ctx.version} released with its date, and the previous "
+             "version too if it is still unreleased."]
     ctx.say("Follow-up checklist:\n- " + "\n- ".join(items))
     if ctx.dry_run:
         return "skipped (dry run): checklist not written"

@@ -32,7 +32,8 @@ def propose(d):
 
 TAGS = {"propose": "[PROPOSE]", "vote": "[VOTE]", "result": "[RESULT]", "announce": "[ANNOUNCE]"}
 STEP_KIND = {"compose-propose-email": "propose", "compose-vote-email": "vote", "compose-result-email": "result",
-             "compose-announce-email": "announce"}
+             "compose-announce-email": "announce",
+             "reporter-release": "reporter"}
 STEP_OF = {v: k for k, v in STEP_KIND.items()}
 
 
@@ -81,6 +82,10 @@ def send(ctx, kind, to, subject, body, cc=()):
         return done
     path = write(ctx, kind, to, subject, body, cc)
     message = f"Send the {TAGS.get(kind, kind)} email ({path.as_uri()}), then run: {ctx.resume_hint}"
+    if kind == "announce":
+        message = (f"Send the {TAGS[kind]} email ({path.as_uri()}) in PLAIN-TEXT mode (Gmail: ⋮ > Plain text mode): "
+                   "announce@apache.org rejects any text/html part.  If dev@ already got it, send announce@ as its own "
+                   f"mail.  Then run: {ctx.resume_hint}")
     # emailPending and pause are written together, before the toolkit sees the Pause: a kill between here and the
     # recorded pause (release.py _execute) still leaves a run.json the page can show as paused.
     ctx.rf.update({"emailPending": kind, "pause": {"step": STEP_OF[kind], "message": message, "at": runfile.stamp()}})

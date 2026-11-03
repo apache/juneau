@@ -8,7 +8,7 @@ The step implementations behind `scripts/release.py`: one module per concern, im
 
 | Module | Role |
 |---|---|
-| `inventory.py` | Constants (repository, Nexus and dist URLs, mailing lists), the table of 25 steps with their phase and whether they are skippable, and version helpers. |
+| `inventory.py` | Constants (repository, Nexus and dist URLs, mailing lists), the table of 27 steps with their phase and whether they are skippable, and version helpers. |
 | `ctx.py` | The `Ctx` object every step receives (arguments, home, runner, Nexus, SVN, run file, credentials) and `StepError`. |
 | `runfile.py` | The `run.json` checkpoint (atomic writes, in-memory under `--dry-run`, refusal to read a corrupt file) and attempt directories. |
 | `runner.py` | The one place a command runs; under `--dry-run` a mutating command is printed, never executed. Masks secrets. |
