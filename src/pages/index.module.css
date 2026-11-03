@@ -174,8 +174,7 @@
 }
 
 .formatSelect {
-  flex: 1;
-  min-width: 0;
+  min-width: 12rem;
   padding: 0.4rem 0.6rem;
   font: inherit;
   color: var(--ifm-font-color-base);
@@ -187,6 +186,16 @@
 .formatSelect:focus-visible {
   outline: 2px solid var(--ifm-color-primary);
   outline-offset: 1px;
+}
+
+/* A small caption above each sample block, lighter than a CodeBlock title bar. */
+.sampleLabel {
+  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  font-weight: var(--ifm-font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ifm-color-emphasis-700);
 }
 
 /* Long outputs (RDF, Parquet) scroll inside the block instead of growing the hero. */

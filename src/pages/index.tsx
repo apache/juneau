@@ -46,7 +46,6 @@ function FormatSample() {
   const sample = samples.find((s) => s.id === selected) ?? samples[0];
   return (
     <>
-      <CodeBlock language="java">{'record Person(String name, int age) {}'}</CodeBlock>
       <div className={styles.formatPicker}>
         <label htmlFor="hero-format">Format</label>
         <select id="hero-format" className={styles.formatSelect} value={selected}
@@ -60,11 +59,13 @@ function FormatSample() {
           ))}
         </select>
       </div>
+      <div className={styles.sampleLabel}>Input</div>
+      <CodeBlock language="java">{'record Person(String name, int age) {}'}</CodeBlock>
+      <div className={styles.sampleLabel}>Code</div>
       <CodeBlock language="java">{sample.call}</CodeBlock>
+      <div className={styles.sampleLabel}>{sample.binary ? 'Output (binary, shown as hex)' : 'Output'}</div>
       <div className={styles.output}>
-        <CodeBlock language={sample.language} title={sample.binary ? 'Output (binary, shown as hex)' : 'Output'}>
-          {sample.output}
-        </CodeBlock>
+        <CodeBlock language={sample.language}>{sample.output}</CodeBlock>
       </div>
     </>
   );
