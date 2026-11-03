@@ -143,7 +143,7 @@ def _local_only_commit(repo_dir: Path, filename: str = "local.txt", message: str
 def docs_remote_repo(tmp_path: Path) -> Path:
     """
     A SEPARATE bare repo standing in for the juneau-docs remote -- deliberately distinct from
-    remote_repo/repo (the juneau ones), since run_docs_only()/run_docs_followup() push to the
+    remote_repo/repo (the juneau ones), since juneau-docs pushes to the
     juneau-docs sibling's own remote, not juneau's. A test that only reused the juneau fixtures
     unchanged could pass by accident even if a fix wired the wrong repo_dir/remote together.
     """
@@ -182,15 +182,12 @@ def docs_repo(tmp_path: Path, docs_remote_repo: Path, push_module) -> Path:
 def juneau_root(tmp_path: Path, docs_repo: Path) -> Path:
     """
     A juneau_root whose PARENT holds docs_repo at `<parent>/juneau-docs` -- the sibling-checkout
-    layout run_docs_only()/run_docs_followup() expect. Does not need to exist itself: neither
+    layout push.py's juneau-docs hints and AI-artifacts check expect. Does not need to exist itself: neither
     function dereferences juneau_root directly, only juneau_root.parent.
     """
     return tmp_path / "juneau"
 
 
-def _docs_args(message: str = "docs message") -> argparse.Namespace:
-    """Just enough of push.py's parsed-args surface for run_docs_only()."""
-    return argparse.Namespace(message=message, dry_run=False, skip_tests=False)
 
 
 @pytest.fixture
@@ -710,230 +707,14 @@ class TestCommitAndPushBehindUpstream:
         assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
 
 
-class TestRunDocsOnlyFalseSuccessRegression:
-    """
-    The same defect, replayed against run_docs_only() specifically rather than assumed to carry
-    over from the main-path test: juneau-docs pushes to ITS OWN remote (docs_remote_repo, a
-    separate bare repo from the juneau one), so this exercises commit_and_push() wired to a
-    genuinely different repo_dir/remote pair, not just a second call with the same fixture.
-
-    Manually replayed against the OLD run_docs_only() logic (Step 3's `check_git_status()`-only
-    check) before writing this test -- see the shell replay in the task history -- and confirmed
-    the old code would report success (return 0) while docs_remote_repo's `master` never moved.
-    """
-
-    def test_clean_tree_with_unpushed_docs_commits_actually_pushes(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
-    ):
-        local_head = _local_only_commit(docs_repo)
-        git_spy.clear()  # discard the setup commit above
-
-        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
-
-        assert exit_code == 0
-        remote_head = _run(docs_remote_repo, "git", "rev-parse", "master")
-        assert remote_head == local_head, "the juneau-docs remote must actually have moved"
-        assert any(argv[:2] == ["git", "push"] for argv in git_spy), "git push must actually have run"
-
-    def test_clean_tree_with_unpushed_docs_commits_skips_the_smoke_check(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
-    ):
-        """
-        The stub build-docs.py in docs_repo always exits 0, so a passing smoke check alone
-        wouldn't prove it was skipped -- check for its own announcement text instead.
-        """
-        _local_only_commit(docs_repo)
-        capsys.readouterr()
-
-        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
-
-        assert exit_code == 0
-        assert "smoke check" not in capsys.readouterr().out.lower()
 
 
-class TestRunDocsOnlyGenuineNoOp:
-    def test_returns_zero_and_touches_nothing(self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy):
-        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
-
-        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
-
-        assert exit_code == 0
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
-        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
-        assert not any(argv[:2] == ["git", "add"] for argv in git_spy)
 
 
-class TestRunDocsOnlyUnreviewedChangesGuard:
-    def test_unstaged_docs_content_aborts_before_any_commit_or_push(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
-    ):
-        (docs_repo / "reviewed.md").write_text("reviewed and staged\n", encoding="utf-8")
-        _run(docs_repo, "git", "add", "reviewed.md")
-        (docs_repo / "mid-edit.md").write_text("still being worked on\n", encoding="utf-8")
-        head_before = _run(docs_repo, "git", "rev-parse", "HEAD")
-        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
-        git_spy.clear()
-
-        exit_code = push_module.run_docs_only(_docs_args(), juneau_root)
-
-        assert exit_code == 1
-        assert _run(docs_repo, "git", "rev-parse", "HEAD") == head_before
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
-        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
-        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
 
 
-class TestRunDocsOnlyDirtyTree:
-    """
-    The ordinary --docs-only path (a real, staged docs change, smoke check included) must keep
-    working.
-    """
-
-    def test_staged_changes_run_the_smoke_check_commit_and_push(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
-    ):
-        (docs_repo / "README.md").write_text("updated docs\n", encoding="utf-8")
-        _run(docs_repo, "git", "add", "README.md")
-
-        exit_code = push_module.run_docs_only(_docs_args("docs update"), juneau_root)
-
-        assert exit_code == 0
-        assert "smoke check" in capsys.readouterr().out.lower()
-        assert _run(docs_repo, "git", "log", "-1", "--format=%s") == "docs update"
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == _run(docs_repo, "git", "rev-parse", "HEAD")
 
 
-class TestRunDocsFollowup:
-    """main()'s Step 6, extracted as run_docs_followup() so it's testable without mvn."""
-
-    def test_no_docs_root_is_a_pure_skip(self, push_module, tmp_path):
-        lone_juneau_root = tmp_path / "juneau"
-        status, step_num = push_module.run_docs_followup(lone_juneau_root, "message", 6)
-        assert (status, step_num) == ("no_docs_root", 6)
-
-    def test_clean_tree_with_unpushed_docs_commits_actually_pushes(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
-    ):
-        """
-        Same false-success regression as TestRunDocsOnlyFalseSuccessRegression, replayed at the
-        OTHER call site (main()'s Step 6 -- previously gated on a clean-working-tree check,
-        which would have skipped this entire follow-up, never even attempting a push).
-        """
-        local_head = _local_only_commit(docs_repo)
-        git_spy.clear()
-
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
-
-        assert status == "ok"
-        remote_head = _run(docs_remote_repo, "git", "rev-parse", "master")
-        assert remote_head == local_head, "the juneau-docs remote must actually have moved"
-        assert any(argv[:2] == ["git", "push"] for argv in git_spy)
-
-    def test_the_docs_identity_is_a_precheck_for_an_ahead_only_push(
-        self, push_module, docs_repo, juneau_root
-    ):
-        """
-        With nothing to commit -- only something to push -- juneau-docs is still active, so the
-        Prechecks row checks its identity (which replaced the follow-up's own identity hook).
-        """
-        _local_only_commit(docs_repo)
-        _run(docs_repo, "git", "config", "--unset", "user.email")
-
-        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
-
-        assert push_module.toolkit("checks").evaluate(listed["docs identity"]).status == "fail"
-
-    def test_idle_at_prechecks_then_active_with_a_good_identity_proceeds(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root
-    ):
-        local_head = _local_only_commit(docs_repo)
-
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6, docs_prechecked=False)
-
-        assert status == "ok"
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == local_head
-
-    def test_idle_at_prechecks_then_active_with_a_bad_identity_refuses_before_the_commit(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
-    ):
-        (docs_repo / "README.md").write_text("became active during the build\n", encoding="utf-8")
-        _run(docs_repo, "git", "add", "README.md")
-        _run(docs_repo, "git", "config", "user.email", "someone@example.com")
-        head_before = _run(docs_repo, "git", "rev-parse", "HEAD")
-        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
-        git_spy.clear()
-
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6, docs_prechecked=False)
-
-        assert status == "error"
-        assert _run(docs_repo, "git", "rev-parse", "HEAD") == head_before
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
-        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
-        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
-
-    def test_active_at_prechecks_is_not_checked_again(self, push_module, docs_repo, juneau_root, monkeypatch):
-        _local_only_commit(docs_repo)
-        _run(docs_repo, "git", "config", "user.email", "someone@example.com")
-        checked = []
-        monkeypatch.setattr(push_module, "docs_active", lambda root: checked.append(root) or True)
-
-        push_module.run_docs_followup(juneau_root, "message", 6, docs_prechecked=True)
-
-        assert checked == []
-
-    def test_smoke_check_does_not_run_for_an_ahead_only_push(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
-    ):
-        _local_only_commit(docs_repo)
-        capsys.readouterr()
-
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
-
-        assert status == "ok"
-        assert "smoke check" not in capsys.readouterr().out.lower()
-
-    def test_genuine_no_op_returns_ok_and_touches_nothing(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
-    ):
-        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
-
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
-
-        assert status == "ok"
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
-        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
-
-    def test_unstaged_docs_content_aborts_before_any_commit_or_push(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
-    ):
-        (docs_repo / "reviewed.md").write_text("reviewed and staged\n", encoding="utf-8")
-        _run(docs_repo, "git", "add", "reviewed.md")
-        (docs_repo / "mid-edit.md").write_text("still being worked on\n", encoding="utf-8")
-        head_before = _run(docs_repo, "git", "rev-parse", "HEAD")
-        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
-        git_spy.clear()
-
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
-
-        assert status == "error"
-        assert _run(docs_repo, "git", "rev-parse", "HEAD") == head_before
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
-        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
-        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
-
-    def test_staged_changes_run_the_smoke_check_commit_and_push(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
-    ):
-        (docs_repo / "README.md").write_text("updated docs via step 6\n", encoding="utf-8")
-        _run(docs_repo, "git", "add", "README.md")
-
-        status, step_num = push_module.run_docs_followup(juneau_root, "step 6 message", 6)
-
-        assert status == "ok"
-        assert step_num == 8, "one step for the commit, one for the push"
-        assert "smoke check" in capsys.readouterr().out.lower()
-        assert _run(docs_repo, "git", "log", "-1", "--format=%s") == "step 6 message"
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") == _run(docs_repo, "git", "rev-parse", "HEAD")
 
 
 class TestResolveCommitMessage:
@@ -1168,10 +949,10 @@ def test_a_late_upstream_error_fails_closed_before_the_commit(push_module, toolk
     lines = _said(push_module, monkeypatch)
     git_spy.clear()
 
-    assert push_module.commit_and_push(repo, "message", 4, git_cmd=push_module.DOCS_GIT) == ("error", 4)
+    assert push_module.commit_and_push(repo, "message", 4, git_cmd="git -C ../elsewhere") == ("error", 4)
 
     assert "\n❌ ERROR: could not check upstream: x. Nothing was committed or pushed." in lines
-    assert f"   Re-run the push once `{push_module.DOCS_GIT} fetch` works." in lines
+    assert f"   Re-run the push once `git -C ../elsewhere fetch` works." in lines
     assert _run(repo, "git", "rev-parse", "HEAD") == head_before
     assert not any(argv[:2] in (["git", "commit"], ["git", "push"]) for argv in git_spy)
 
@@ -1411,47 +1192,6 @@ class TestPrechecks:
         assert status == "error"
 
 
-# ---------------------------------------------------------------------------------------
-# The juneau-docs Prechecks run only when juneau-docs has something to push.
-# ---------------------------------------------------------------------------------------
-DOCS_CHECKS = ["docs identity", "docs unreviewed", "docs upstream"]
-
-
-class TestDocsPrechecksWhenIdle:
-    @staticmethod
-    def _docs_checks(push_module, juneau_root):
-        return [c.name for c in push_module.prechecks(juneau_root) if c.name.startswith("docs ")]
-
-    def test_an_idle_docs_tree_is_not_checked_so_its_dirt_does_not_block(self, push_module, docs_repo,
-                                                                          juneau_root):
-        (docs_repo / "README.md").write_text("mid-edit\n", encoding="utf-8")
-        (docs_repo / "scratch.md").write_text("untracked\n", encoding="utf-8")
-        _run(docs_repo, "git", "config", "--unset", "user.email")
-
-        assert push_module.docs_active(docs_repo) is False
-        assert self._docs_checks(push_module, juneau_root) == []
-
-    def test_staged_docs_changes_are_checked_and_their_dirt_blocks(self, push_module, docs_repo, juneau_root):
-        (docs_repo / "reviewed.md").write_text("staged\n", encoding="utf-8")
-        _run(docs_repo, "git", "add", "reviewed.md")
-        (docs_repo / "scratch.md").write_text("untracked\n", encoding="utf-8")
-
-        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
-
-        assert self._docs_checks(push_module, juneau_root) == DOCS_CHECKS
-        verdict = push_module.toolkit("checks").evaluate(listed["docs unreviewed"])
-        assert verdict.status == "fail" and "scratch.md" in " ".join(verdict.hint)
-
-    def test_unpushed_docs_commits_are_checked(self, push_module, docs_repo, juneau_root):
-        _local_only_commit(docs_repo)
-        (docs_repo / "scratch.md").write_text("untracked\n", encoding="utf-8")
-
-        assert push_module.docs_active(docs_repo) is True
-        assert self._docs_checks(push_module, juneau_root) == DOCS_CHECKS
-
-    def test_docs_only_always_checks_the_docs(self, push_module, docs_repo):
-        assert push_module.docs_active(docs_repo) is False
-        assert [c.name for c in push_module.docs_prechecks(docs_repo)] == DOCS_CHECKS
 
 
 # ---------------------------------------------------------------------------------------
@@ -1486,15 +1226,14 @@ class TestConsoleDefault:
 
 
 def test_prechecks_opens_a_unit_and_a_child_step_per_check(
-    push_module, docs_repo, juneau_root, monkeypatch, capsys
+    push_module, repo, monkeypatch, capsys
 ):
     """
     The Prechecks row draws one line per check while it runs: on the bus each check is a script unit, and
     under TERMINAL_MARKERS=1 a prechecks/<check> child step.  A failed check leaves the row its reason text, not a unit name.
     """
-    _local_only_commit(docs_repo)
-    _run(docs_repo, "git", "config", "--unset", "user.email")
-    listed = push_module.prechecks(juneau_root)
+    _run(repo, "git", "config", "user.email", "someone@example.com")
+    listed = push_module.prechecks(repo)
 
     jr = sys.modules["juneau_terminal"]
     seen = []
@@ -1513,46 +1252,13 @@ def test_prechecks_opens_a_unit_and_a_child_step_per_check(
     children = [m["id"] for m in found if m["ev"] == "step" and m.get("parent") == "prechecks"]
     assert children == ["prechecks/" + push_module.toolkit("run")._slug(c.name) for c in listed]
     ends = {m["id"]: m["status"] for m in found if m["ev"] == "end"}
-    assert ends["prechecks/docs-identity"] == "fail"
+    assert ends["prechecks/identity"] == "fail"
     row = board.rows["prechecks"]
     text = jr.row_text(row, jr.PLAIN_GLYPHS, board.clock())[2]
     assert (row.status, row.failed_units, text) == ("fail", [], row.reason)     # the check's text, not a unit's name
     assert "user.email" in text
 
 
-class TestPushContinuesToDocsWhenJuneauIsIdle:
-    """A juneau with nothing to commit or push must not stop the run before juneau-docs is considered."""
-
-    def _run_main(self, push_module, monkeypatch, *, juneau_status, docs_status="ok"):
-        _stub_push_flow(push_module, monkeypatch, tests_pass=True)
-        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--skip-tests", "msg"])
-        monkeypatch.setattr(push_module, "prechecks", lambda *a, **k: [])
-        monkeypatch.setattr(push_module, "maybe_run_tracker_audit_gate", lambda *a, **k: None)
-        docs_calls = []
-        monkeypatch.setattr(push_module, "commit_and_push", lambda root, msg, step, **k: (juneau_status, step))
-
-        def fake_docs(root, msg, step, **k):
-            docs_calls.append(step)
-            return (docs_status, step)
-
-        monkeypatch.setattr(push_module, "run_docs_followup", fake_docs)
-        return push_module.main(), docs_calls
-
-    def test_docs_followup_runs_when_juneau_has_nothing_to_do(self, push_module, monkeypatch):
-        code, docs_calls = self._run_main(push_module, monkeypatch, juneau_status="nothing_to_do")
-        assert code == 0
-        assert len(docs_calls) == 1
-
-    def test_nothing_active_anywhere_still_exits_zero(self, push_module, monkeypatch):
-        code, docs_calls = self._run_main(push_module, monkeypatch, juneau_status="nothing_to_do",
-                                          docs_status="no_docs_root")
-        assert code == 0
-        assert len(docs_calls) == 1
-
-    def test_juneau_error_skips_docs(self, push_module, monkeypatch):
-        code, docs_calls = self._run_main(push_module, monkeypatch, juneau_status="error")
-        assert code == 1
-        assert docs_calls == []
 
 
 class TestPushPlanTestPyRows:
@@ -1707,7 +1413,7 @@ class TestWorkflowYamlGuard:
 
 
 # ---------------------------------------------------------------------------------------
-# AI-artifacts guard: stale juneau-docs static/ai refuses at the Prechecks row, not at the docs stage.
+# AI-artifacts guard: stale juneau-docs static/ai is a non-blocking warning on the Prechecks row.
 # ---------------------------------------------------------------------------------------
 def _write_ai_check(docs_repo: Path, exit_code: int, text: str = "") -> None:
     """Stub juneau-docs/scripts/check-ai-artifacts.py that records its argv, prints `text` and exits `exit_code`."""
@@ -1728,21 +1434,22 @@ class TestAiArtifactsCheck:
         assert verdict.status == "pass"
         assert (docs_repo / "scripts" / "ai-argv.txt").read_text() == f"--juneau-root {juneau_root}"
 
-    def test_stale_artifacts_fail_and_name_the_regenerate_command(self, push_module, docs_repo, juneau_root):
+    def test_stale_artifacts_warn_and_name_the_regenerate_command(self, push_module, docs_repo, juneau_root):
         _write_ai_check(docs_repo, 1, "- generate-ai-artifacts.py --check failed")
         listed = {c.name: c for c in push_module.prechecks(juneau_root)}
         checks = push_module.toolkit("checks")
 
         verdict = checks.evaluate(listed["ai artifacts"])
 
-        assert verdict.status == "fail"
+        assert verdict.status == "warn"      # never blocks the push
         hint = " ".join(verdict.hint)
         assert "python3 scripts/generate-ai-artifacts.py" in hint and "--check failed" in hint
+        assert "push juneau-docs" in hint
         assert checks.evaluate(listed["ai artifacts"], dry_run=True).status == "warn"
 
     def test_it_runs_even_when_juneau_docs_is_idle(self, push_module, docs_repo, juneau_root):
         _write_ai_check(docs_repo, 1)
-        assert push_module.docs_active(docs_repo) is False
+        assert push_module.docs_pending(docs_repo) is None
 
         names = [c.name for c in push_module.prechecks(juneau_root)]
 
@@ -1773,7 +1480,25 @@ class TestAiArtifactsCheck:
 
         assert verdict.status == "pass" and "skipped" in verdict.reason
 
-    def test_docs_only_prechecks_include_it(self, push_module, docs_repo, juneau_root):
-        names = [c.name for c in push_module.docs_only_prechecks(juneau_root, docs_repo)]
 
-        assert names == [*DOCS_CHECKS, "ai artifacts"]
+class TestDocsPendingHint:
+    def test_idle_docs_has_no_hint(self, push_module, docs_repo):
+        assert push_module.docs_pending(docs_repo) is None
+
+    def test_missing_sibling_has_no_hint(self, push_module, tmp_path):
+        assert push_module.docs_pending(tmp_path / "nope") is None
+
+    def test_staged_and_unpushed_are_both_named(self, push_module, docs_repo, juneau_root, monkeypatch):
+        _local_only_commit(docs_repo)
+        (docs_repo / "reviewed.md").write_text("staged\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "reviewed.md")
+        lines = _said(push_module, monkeypatch)
+
+        assert push_module.docs_pending(docs_repo) == "1 staged path and 1 unpushed commit"
+        push_module.say_docs_hint(juneau_root)
+
+        assert any("push juneau-docs" in line for line in lines)
+
+    def test_dirty_docs_alone_gives_no_hint(self, push_module, docs_repo):
+        (docs_repo / "README.md").write_text("mid-edit\n", encoding="utf-8")
+        assert push_module.docs_pending(docs_repo) is None

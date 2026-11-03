@@ -242,7 +242,7 @@ def gates(push_mod, monkeypatch):
     # The Prechecks row with no checks: test_push.TestPreflight covers them against real git.
     monkeypatch.setattr(push_mod, "prechecks", lambda *a, **k: rec.calls.append("identity") or [])
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: rec.calls.append("commit") or ("ok", 1))
-    monkeypatch.setattr(push_mod, "run_docs_followup", lambda *a, **k: rec.calls.append("docs") or ("ok", 1))
+    monkeypatch.setattr(push_mod, "say_docs_hint", lambda *a, **k: rec.calls.append("docs"))
     monkeypatch.setattr(push_mod, "_append_test_run_history", rec("history"))
     monkeypatch.setattr(push_mod, "current_branch", lambda root: "main")
     monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", "1")    # the session's bell and sound
@@ -278,7 +278,7 @@ def test_push_without_message_still_requires_one(push_mod, gates, monkeypatch):
     assert exc.value.code == 1
 
 
-@pytest.mark.parametrize("flag", ["--docs-only", "--tracker-audit", "--skip-tests"])
+@pytest.mark.parametrize("flag", ["--tracker-audit", "--skip-tests"])
 def test_push_test_only_rejects_flags_that_commit_or_gate(push_mod, gates, monkeypatch, flag):
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", flag])
     with pytest.raises(SystemExit) as exc:
@@ -770,41 +770,18 @@ def docs_tree(push_mod, monkeypatch, tmp_path):
     monkeypatch.setattr(push_mod, "__file__", str(tmp_path / "juneau" / "scripts" / "push.py"))
     # the scratch juneau-docs isn't a repo: Prechecks has nothing to check
     monkeypatch.setattr(push_mod, "prechecks", lambda *a, **k: [])
-    monkeypatch.setattr(push_mod, "docs_prechecks", lambda *a, **k: [])
     monkeypatch.setattr(push_mod, "current_branch", lambda root: "main")
     monkeypatch.setenv("JUNEAU_TERMINAL_SCRIPTS_QUIET", "1")
     return tmp_path
 
 
-def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_tree, monkeypatch):
+
+
+
+
+def test_a_dry_run_under_a_console_still_says_so(push_mod, docs_tree, monkeypatch, capsys):
     monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
-    events = push_mod._juneau.load()[0].subscribe(Events())
-    monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
-    monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
-    assert push_mod.main() == 0
-    [session] = events.of("session")
-    assert session["title"] == "Push"
-    assert session["header"] == ["Juneau Docs", "main"]
-    assert session["lines"] == ["Commit Message: Docs fix"]
-    assert [f["status"] for f in events.of("done")] == ["ok"]
-    assert [p["ids"] for p in events.of("plan")] == [["prechecks", "docs-smoke", "commit", "push"]]
-
-
-def test_docs_only_with_markers_on_emits_run_and_done_markers(push_mod, docs_tree, monkeypatch, capsys):
-    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
-    monkeypatch.setenv("TERMINAL_MARKERS", "1")
-    monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
-    monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
-    assert push_mod.main() == 0
-    events = markers(capsys.readouterr().out)
-    assert events[0]["ev"] == "run" and events[0]["mode"] == "push" and events[0]["project"] == "juneau-docs"
-    assert events[-1] == {"ev": "done", "status": "ok"}
-
-
-@pytest.mark.parametrize("flags", [[], ["--docs-only"]])
-def test_a_dry_run_under_a_console_still_says_so(push_mod, docs_tree, monkeypatch, capsys, flags):
-    monkeypatch.setenv("JUNEAU_TERMINAL_CONSOLE", "board")
-    monkeypatch.setattr(sys, "argv", ["push.py", "--dry-run", "a message", *flags])
+    monkeypatch.setattr(sys, "argv", ["push.py", "--dry-run", "a message"])
     assert push_mod.main() == 0
     assert "DRY RUN MODE" in capsys.readouterr().out
 
@@ -908,14 +885,6 @@ def test_a_failing_push_stops_commit_and_push_under_a_console(push_mod, console,
     assert sounds == []    # the session sounds the run's end
 
 
-def test_the_docs_followup_keeps_its_rows_apart_from_juneaus(push_mod, console, monkeypatch, tmp_path):
-    run, _ = console
-    (tmp_path / "juneau-docs").mkdir()
-    stub_push_flow(push_mod, monkeypatch)
-    calls = routed_calls(run, monkeypatch)
-    assert push_mod.run_docs_followup(tmp_path / "juneau", "msg", 5, docs_prechecked=True) == ("ok", 7)
-    assert [(c["step_id"], c["label"]) for c in calls] == [
-        ("docs-smoke", "Docs build"), ("docs-commit", "Docs"), ("docs-push", "Docs push")]
 
 
 def test_main_uses_the_timing_row_under_a_console_and_the_cli_otherwise(push_mod, gates, standalone, monkeypatch):
@@ -1083,9 +1052,8 @@ def test_push_session_plan_lists_the_steps_this_run_will_take(push_mod, gates, s
     monkeypatch.setattr(sys, "argv", ["push.py", *argv])
     assert push_mod.main() == 0
     root = Path(push_mod.__file__).resolve().parent.parent
-    docs = ["docs-smoke", "docs-commit", "docs-push"] if (root.parent / "juneau-docs").exists() else []
     [plan] = events.of("plan")
-    assert plan["ids"] == expected + (docs if "commit" in expected else [])
+    assert plan["ids"] == expected
     assert all(plan["labels"].get(step_id) for step_id in plan["ids"])    # every planned row has a label
 
 
@@ -1108,8 +1076,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
     (tmp_path / "juneau-docs").mkdir()
     args = argparse.Namespace(tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
     assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
-        "prechecks", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "traces", "install", "commit", "push",
-        "docs-smoke", "docs-commit", "docs-push"]  
+        "prechecks", "tracker", "bom", "build", "tests", "perf", "py-tests", "js-tests", "traces", "install", "commit", "push"]
 
 
 # The one loader push.py and test.py share (scripts/_juneau.py).

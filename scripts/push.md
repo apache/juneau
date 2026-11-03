@@ -1,19 +1,18 @@
 # push.py
 
-Builds, tests, commits and pushes Juneau (and, when present, the sibling juneau-docs repository) in one command.
+Builds, tests, commits and pushes Juneau in one command.
 
 ## When to use
 
 - You have staged your reviewed changes and want them verified and pushed to the tracked upstream.
 - You want only the build and test gates, with no commit or push: use `--test-only`.
-- You changed only juneau-docs: use `--docs-only`.
+- You changed only juneau-docs: use juneau-docs' own `scripts/push.py` (`push juneau-docs`).
 - To run just the tests, use `test.py` directly instead.
 
 ## Usage
 
 ```bash
 python3 scripts/push.py "Fixed bug in RestClient"
-python3 scripts/push.py "Updated topic page" --docs-only
 python3 scripts/push.py --test-only
 python3 scripts/push.py "Fix a test" --warn-traces
 python3 scripts/push.py "Quick fix" --skip-tests --dry-run
@@ -26,10 +25,9 @@ The commit message is optional on the command line. It is prompted for when omit
 | Option | Argument | Default | Meaning |
 |---|---|---|---|
 | `message` | text (optional positional) | prompted | Git commit message. An empty or missing message aborts with exit 1 (`resolve_commit_message`). |
-| `--test-only` | none | off | Run only the build and test gates. No identity check, commit, push or juneau-docs follow-up. Cannot be combined with `--docs-only`, `--tracker-audit` or `--skip-tests`. |
+| `--test-only` | none | off | Run only the build and test gates. No identity check, commit or push. Cannot be combined with `--tracker-audit` or `--skip-tests`. |
 | `--skip-tests` | none | off | Skip the test step. The build then runs `mvn clean package install -DskipTests`. |
 | `--dry-run` | none | off | Print the steps that would run and exit 0. |
-| `--docs-only` | none | off | Operate only on juneau-docs: skip all Juneau build, test, commit and push steps. The identity and docs-verification gates still run. `--skip-tests` is ignored with a note. |
 | `--tracker-audit`, `--todo-audit` | none | off | Opt-in gate for maintainers who keep an external work-tracker checkout: blocks the push if its audit flags a file. |
 | `--js-tests` | none | auto | Force the headless-browser JS harness. Fails if Node or npm is missing. Mutually exclusive with `--no-js-tests`. |
 | `--no-js-tests` | none | off | Never run the JS harness, even when JS, CSS or FTL files changed. |
@@ -40,11 +38,11 @@ The commit message is optional on the command line. It is prompted for when omit
 ## What it does
 
 1. Parses and validates the arguments. A bad combination exits 2 (`parse_args`).
-2. Prechecks, before any build work (`prechecks`): git `user.email` is the committer identity the script requires (`REQUIRED_GIT_EMAIL`), the tree has no unstaged or untracked-and-not-ignored changes, the branch is not behind its upstream, and every `.github/workflows/*.yml` / `*.yaml` parses as YAML (PyYAML; the refusal names `file:line:col`). The first three run for juneau-docs when it is present and has staged changes or unpushed commits. Also an `ai artifacts` check (`ai_artifacts_check`): when the sibling `juneau-docs` exists, it runs that checkout's `scripts/check-ai-artifacts.py --juneau-root <this checkout>` and refuses if the generated `static/llms.txt` / `static/ai/` are stale, printing `python3 scripts/generate-ai-artifacts.py` (run in juneau-docs). It never regenerates. It runs whether or not juneau-docs has anything to push, and also for `--docs-only` (the docs stage would fail on it); with no sibling it passes with a skip note. `--test-only` skips all prechecks, so it skips this too.
+2. Prechecks, before any build work (`prechecks`): git `user.email` is the committer identity the script requires (`REQUIRED_GIT_EMAIL`), the tree has no unstaged or untracked-and-not-ignored changes, the branch is not behind its upstream, and every `.github/workflows/*.yml` / `*.yaml` parses as YAML (PyYAML; the refusal names `file:line:col`). Also an `ai artifacts` check (`ai_artifacts_check`): when the sibling `juneau-docs` exists, it runs that checkout's `scripts/check-ai-artifacts.py --juneau-root <this checkout>` and, if the generated `static/llms.txt` / `static/ai/` are stale, shows a **warning** (it never blocks) naming `python3 scripts/generate-ai-artifacts.py` (run in juneau-docs). It never regenerates. With no sibling it passes with a skip note. `--test-only` skips all prechecks, so it skips this too.
 3. Optional gate, when asked: tracker audit (`run_tracker_audit_gate`).
 4. Unless `--skip-tests`: `check-container-tags.py`, `check-bom-completeness.py`, `check-javadoc-html.py` (doclint `html` and `accessibility` over every main source tree, with `--java-home` set from `$JAVA_HOME` or `~/jdk/default`; any remaining diagnostic fails the push), then `test.py --full` (which builds, installs and runs the Java, Python and, when needed, browser tests, then fails on any stack trace they printed that [`trace-allowlist.txt`](trace-allowlist.txt) does not allow), then `push-timings.py`.
 5. Commits whatever is already staged and pushes to the tracked upstream (`commit_and_push`). It stages nothing itself.
-6. Repeats the follow-up for juneau-docs when it exists (`run_docs_followup`), after its docs build check.
+6. Prints a hint (`say_docs_hint`) when the sibling `juneau-docs` has staged changes or unpushed commits: run `push juneau-docs`. This script never commits, pushes or builds juneau-docs; that is juneau-docs' own `scripts/push.py`.
 
 ## Output and exit codes
 
@@ -54,7 +52,7 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 
 | Code | Meaning |
 |---|---|
-| 0 | Pushed, nothing to push, `--dry-run`, `--test-only` passed, or `--docs-only` with no changes. |
+| 0 | Pushed, nothing to push, `--dry-run` or `--test-only` passed. |
 | 1 | A gate failed, the prechecks refused (including invalid workflow YAML or PyYAML missing), or no commit message was given. |
 | 2 | Invalid argument combination. |
 | 130 | Cancelled with Ctrl-C or, with run markers on, SIGTERM. |

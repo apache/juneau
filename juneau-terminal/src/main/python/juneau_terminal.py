@@ -6600,7 +6600,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         ms = int((time.monotonic() - t0) * 1000)
         emit("end", id=step_id, status="fail", ms=ms, exit=127)
         return Result(127, ms)
-    os.close(slave)
+    # The slave stays open here until the job has exited and the master is drained: on macOS the last close of the
+    # slave can discard output the master has not read yet, which lost a fast job's whole output under load.
     if prompts is not None:
         prompts.after_spawn()
     cancelled = []
@@ -6717,7 +6718,10 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
                     if not ready:
                         if proc.poll() is not None:
                             drain(master)   # the child may have written its last bytes after select() timed out
-                            break
+                            if slave is None:
+                                break
+                            os.close(slave)   # now the last close is safe; EIO follows once any grandchildren let go
+                            slave = None
                         continue
                     chunk = os.read(master, 65536)
                 except (InterruptedError, BlockingIOError):
@@ -6756,6 +6760,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         guard.close()
         for sig, handler in previous.items():
             signal.signal(sig, handler)
+        if slave is not None:
+            os.close(slave)
         os.close(master)
         sinks.close()
 

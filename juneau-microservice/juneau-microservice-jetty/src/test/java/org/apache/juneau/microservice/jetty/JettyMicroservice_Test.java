@@ -40,11 +40,11 @@ import org.junit.jupiter.api.parallel.*;
  * shutdown via {@link Microservice#stop()}.
  *
  * <p>
- * The test pre-grabs a free ephemeral port via {@code ServerSocket(0)} and publishes it as the
- * {@code availablePort} system property before {@link JettyMicroservice#run} is invoked.  The bundled
- * {@code jetty.xml} resolves {@code $S{availablePort,10000}} to that pre-set value, so Jetty binds there
- * deterministically &mdash; this avoids the bundled default port {@code 10000} colliding with whatever
- * else is bound on the developer's machine.
+ * The test publishes {@code 0} as the {@code availablePort} system property before {@link JettyMicroservice#run}
+ * is invoked.  The bundled {@code jetty.xml} resolves {@code $S{availablePort,10000}} to that pre-set value, so
+ * Jetty binds an OS-assigned port &mdash; this avoids the bundled default port {@code 10000} colliding with
+ * whatever else is bound on the developer's machine, and avoids the race of reserving a port and releasing it
+ * before Jetty binds.
  *
  * @since 10.0.0
  */
@@ -62,21 +62,15 @@ class JettyMicroservice_Test {
 		}
 	}
 
-	private static int reserveFreePort() throws Exception {
-		try (var ss = new ServerSocket(0)) {
-			return ss.getLocalPort();
-		}
-	}
-
 	@Test
 	@SuppressWarnings({
 		"resource" // ms is a server-lifetime resource stopped in the finally block; try-with-resources is not applicable.
 	})
 	void runStartsServerServesRequestAndStops() throws Exception {
-		// Pre-publish a free ephemeral port; JettyServerComponent's @Value("${availablePort}") sentinel
-		// honors a pre-set value, and the bundled jetty.xml binds the connector to $S{availablePort}.
-		var port = reserveFreePort();
-		System.setProperty("availablePort", String.valueOf(port));
+		// Pre-publish port 0; JettyServerComponent's @Value("${availablePort}") sentinel honors a pre-set value, and
+		// the bundled jetty.xml binds the connector to $S{availablePort}.  The OS picks the port at bind time, so
+		// nothing can take it between reserving and binding; the real port is read back from the connector.
+		System.setProperty("availablePort", "0");
 		var ms = JettyMicroservice.run(new String[0], new Root(), false);
 		try {
 			var jsc = ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow();
@@ -87,7 +81,7 @@ class JettyMicroservice_Test {
 					break;
 				}
 			}
-			assertEquals(port, localPort, "Jetty bound port did not match pre-reserved availablePort");
+			assertTrue(localPort > 0, "Jetty did not bind an OS-assigned port: " + localPort);
 
 			var url = URI.create("http://localhost:" + localPort + "/hello").toURL();
 			var conn = (HttpURLConnection)url.openConnection();

@@ -16,7 +16,7 @@
 # limitations under the License.
 
 """
-Builds, tests, commits and pushes Juneau (and, when present, the sibling juneau-docs repository) in one command.
+Builds, tests, commits and pushes Juneau in one command.
 
 Full docs: push.md
 """
@@ -245,16 +245,9 @@ def maybe_run_tracker_audit_gate(args, juneau_root, step_num):
     return run_tracker_audit_gate(juneau_root, step_num)
 
 
-# Identity guard for --docs-only pushes to the juneau-docs ASF repo. Mirrors the
-# same-named constant/function in juneau-docs/scripts/release-docs.py (and
-# release-docs-stage.py) so the two repos enforce this check identically.
+# Identity guard for pushes to the ASF repo.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
-DOCS_IDENTITY_CHECK = "docs identity"
-DOCS_BUILD_LABEL = "Docs build"
 PUSH_TIMINGS_SCRIPT = "push-timings.py"
-
-#: How the hints reach the juneau-docs sibling from the juneau checkout.
-DOCS_GIT = "git -C ../juneau-docs"
 
 
 def resolve_commit_message(cli_message):
@@ -409,8 +402,8 @@ AI_ARTIFACTS_REGEN = "python3 scripts/generate-ai-artifacts.py"
 def ai_artifacts_check(juneau_root, docs_root):
     """
     The Prechecks row's `ai artifacts` check: runs juneau-docs' scripts/check-ai-artifacts.py against this checkout
-    and fails when the generated static/llms.txt and static/ai/ are stale, naming the regenerate command.  It never
-    regenerates.  Without a juneau-docs sibling (or without that script in it) the check passes with a note.
+    and warns (never blocks) when the generated static/llms.txt and static/ai/ are stale, naming the regenerate
+    command.  It never regenerates.  Without a juneau-docs sibling (or without that script in it) the check passes with a note.
     """
     checks = toolkit("checks")
     script = docs_root / "scripts" / "check-ai-artifacts.py"
@@ -425,63 +418,53 @@ def ai_artifacts_check(juneau_root, docs_root):
         if result.returncode == 0:
             return checks.PASS
         lines = [line for line in (result.stdout + result.stderr).splitlines() if line.strip()]
-        return checks.Verdict("fail", "juneau-docs AI artifacts are stale", (
-            *lines, f"Regenerate them in juneau-docs ({AI_ARTIFACTS_REGEN}), stage the result, then push again."))
+        return checks.Verdict("warn", "juneau-docs AI artifacts are stale", (
+            *lines, f"Regenerate them in juneau-docs ({AI_ARTIFACTS_REGEN}), stage the result, then run push juneau-docs."))
     return checks.Check(AI_ARTIFACTS_CHECK, fn)
 
 
-def prechecks(juneau_root, *, dry_run=False, docs=True):
+def prechecks(juneau_root, *, dry_run=False):
     """
     The Prechecks row's checks, which refuse before any build or test gate a push that commit_and_push() would
     only refuse at the end: git's user.email isn't the ASF committer identity, the tree has unreviewed changes, the
-    branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed), a
-    .github/workflows file is not valid YAML (or PyYAML is missing), or the juneau-docs AI artifacts are stale
-    (ai_artifacts_check; skipped with a note without a juneau-docs sibling).
-    With docs and the juneau-docs sibling present and active -- something staged, or commits ahead of its upstream
-    (docs_active) -- the same three for juneau-docs follow (docs_prechecks); an idle juneau-docs is not checked, so
-    its dirt doesn't block a juneau push.  The late checks stay (upstream can move during the long build); these
-    only save the wait.
+    branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed), or a
+    .github/workflows file is not valid YAML (or PyYAML is missing).  The juneau-docs AI artifacts being stale
+    (ai_artifacts_check; skipped with a note without a juneau-docs sibling) is a warning, not a refusal: juneau-docs
+    has its own push.py.  The late checks stay (upstream can move during the long build); these only save the wait.
     """
     checks = toolkit("checks")
     outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
-    listed = [checks.identity(juneau_root, required=REQUIRED_GIT_EMAIL),
-              checks.unreviewed(juneau_root, outcome=outcome),
-              checks.upstream(juneau_root),
-              workflow_yaml_check(juneau_root, outcome)]
-    docs_root = juneau_root.parent / "juneau-docs"
-    if docs:
-        listed.append(ai_artifacts_check(juneau_root, docs_root))
-        if docs_root.exists() and docs_active(docs_root):
-            listed += docs_prechecks(docs_root, dry_run=dry_run)
-    return listed
+    return [checks.identity(juneau_root, required=REQUIRED_GIT_EMAIL),
+            checks.unreviewed(juneau_root, outcome=outcome),
+            checks.upstream(juneau_root),
+            workflow_yaml_check(juneau_root, outcome),
+            ai_artifacts_check(juneau_root, juneau_root.parent / "juneau-docs")]
 
 
-def docs_active(docs_root):
-    """Whether the juneau-docs follow-up has anything to push: something staged, or commits ahead of its upstream
-    (as of the last fetch).  A git error counts as active, so the docs Prechecks run and report it."""
+def docs_pending(docs_root):
+    """Why juneau-docs wants its own push (staged changes and/or unpushed commits), or None when it is idle, absent
+    or can't be read.  Informational only: a git error counts as idle."""
+    if not docs_root.exists():
+        return None
     git = toolkit("git")
     try:
-        if git.staged_paths(docs_root):
-            return True
-        ahead, _, err = git.ahead_behind(docs_root, fetch=False)
+        staged = len(git.staged_paths(docs_root))
+        ahead, _, _ = git.ahead_behind(docs_root, fetch=False)
     except git.GitError:
-        return True
-    return bool(ahead) or (err is not None and err != "no upstream")
+        return None
+    parts = []
+    if staged:
+        parts.append(f"{staged} staged path{'s' if staged != 1 else ''}")
+    if ahead:
+        parts.append(f"{ahead} unpushed commit{'s' if ahead != 1 else ''}")
+    return " and ".join(parts) or None
 
 
-def docs_prechecks(docs_root, *, dry_run=False):
-    """prechecks()' three checks for the juneau-docs sibling, named "docs identity", "docs unreviewed" and "docs
-    upstream", with hints that reach it from the juneau checkout."""
-    checks = toolkit("checks")
-    outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
-    return [checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label=DOCS_IDENTITY_CHECK),
-            checks.unreviewed(docs_root, git_cmd=DOCS_GIT, label="docs unreviewed", outcome=outcome),
-            checks.upstream(docs_root, git_cmd=DOCS_GIT, label="docs upstream")]
-
-
-def docs_only_prechecks(juneau_root, docs_root, *, dry_run=False):
-    """--docs-only's Prechecks: docs_prechecks() plus the AI-artifacts freshness check."""
-    return [*docs_prechecks(docs_root, dry_run=dry_run), ai_artifacts_check(juneau_root, docs_root)]
+def say_docs_hint(juneau_root):
+    """Print the hint to push juneau-docs when it has staged changes or unpushed commits."""
+    pending = docs_pending(juneau_root.parent / "juneau-docs")
+    if pending:
+        say(f"\nℹ juneau-docs has {pending}: run `push juneau-docs` to gate, push and stage it.")
 
 
 def current_branch(repo_dir):
@@ -768,12 +751,8 @@ def commit_and_push(
     recovery is discoverable at the moment of refusal rather than something the operator has to
     already know.
 
-    Shared by all three sites in this file that make this same commit-or-push decision (the
-    default juneau flow, the juneau-docs follow-up in main()'s Step 6, and --docs-only's
-    juneau-docs flow) -- this decision is exactly what the false-success bug duplicated three
-    times over, so the two hooks below exist to let each site's genuinely different surrounding
-    behavior (an identity gate, a pre-commit smoke check) plug into ONE copy of the decision
-    logic instead of re-implementing it.
+    The two hooks below let a caller's surrounding behavior (an identity gate, a pre-commit check)
+    plug into ONE copy of the decision logic instead of re-implementing it.
 
     Args:
         repo_dir: Repository root.
@@ -870,193 +849,6 @@ def commit_and_push(
     return ("ok", step_num)
 
 
-def run_docs_followup(juneau_root, message, step_num, *, docs_prechecked=False):
-    """
-    juneau-docs follow-up to a default-flow juneau push: smoke check + commit + push, via
-    commit_and_push() (shared with --docs-only's run_docs_only()).
-
-    Extracted out of main() -- like run_tracker_audit_gate()/commit_and_push() -- so it's
-    independently testable without running main()'s mvn build/test steps first.
-
-    Guarded only by the juneau-docs sibling existing, NOT by whether it has local changes: a
-    clean juneau-docs tree can still have unpushed commits left over from an earlier
-    interrupted run, and this follow-up has to run for that case too or it silently never
-    pushes them -- the same false-success shape commit_and_push() exists to fix, one level up.
-
-    The juneau-docs identity is checked by the Prechecks row (docs_prechecks) whenever juneau-docs has
-    something to push.  When it was idle then (docs_prechecked False) but has become active during the build, the
-    identity is checked here, just before anything is committed, and a mismatch refuses.  The Docusaurus smoke
-    check only has anything new to validate when there IS a commit about to be made, so it's commit_and_push()'s
-    pre_commit_hook.
-
-    Args:
-        juneau_root: The juneau repo root (used only to locate the juneau-docs sibling).
-        message: Commit message to use if a juneau-docs commit is made.
-        step_num: The current step number (for output formatting).
-        docs_prechecked: Whether the Prechecks row already ran docs_prechecks (juneau-docs was active then).
-
-    Returns:
-        tuple: (status, step_num)
-        - status: "ok" (juneau-docs was pushed, committed-then-pushed, or genuinely had nothing
-          to do -- caller should continue), "no_docs_root" (the juneau-docs sibling doesn't
-          exist -- a pure skip, not a failure, caller should continue), or "error" (caller
-          should exit 1 immediately).
-        - step_num: commit_and_push()'s returned step_num, unchanged for "no_docs_root".
-    """
-    docs_root = juneau_root.parent / "juneau-docs"
-    if not docs_root.exists():
-        return ("no_docs_root", step_num)
-
-    if not docs_prechecked and docs_active(docs_root):
-        checks = toolkit("checks")
-        verdict = checks.evaluate(checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label=DOCS_IDENTITY_CHECK))
-        if verdict.status != "pass":
-            aborted(f"\n❌ juneau-docs became active during the build and its identity check failed: "
-                    f"{verdict.reason}  Nothing was committed or pushed in juneau-docs.", *verdict.hint)
-            return ("error", step_num)
-
-    def _docs_smoke_check():
-        say("\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
-        docs_build_script = docs_root / "scripts" / "build-docs.py"
-        docs_smoke_start = time.time()
-        try:
-            returncode = run_gate(
-                [sys.executable, str(docs_build_script), "--skip-maven"],
-                docs_root, "docs-smoke", "Docs smoke check", DOCS_BUILD_LABEL
-            )
-            docs_smoke_elapsed = time.time() - docs_smoke_start
-            if returncode != 0:
-                aborted("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
-                return False
-            say(f"✅ Docs smoke check passed ({docs_smoke_elapsed:.1f}s)")
-            return True
-        except Exception as e:
-            say(f"\n❌ Docs smoke check failed: {e}", "error")
-            return False
-
-    docs_status, step_num = commit_and_push(
-        docs_root, message, step_num,
-        label=" (juneau-docs)",
-        git_cmd=DOCS_GIT,
-        pre_commit_hook=_docs_smoke_check,
-        step_prefix="docs-", row_labels=("Docs", "Docs push"),
-    )
-    if docs_status == "error":
-        return ("error", step_num)
-    return ("ok", step_num)
-
-
-def run_docs_only(args, juneau_root):
-    """
-    --docs-only mode: operate ONLY on the sibling juneau-docs repo.
-
-    Skips the entire juneau code path (no container-tags/BOM checks, no test run, no
-    mvn build/install, no juneau commit/push). Runs the
-    same Apache-identity gate and docs-verification gate (Docusaurus smoke build via
-    build-docs.py --skip-maven, which runs verify-docs.py internally) that the default
-    flow's Step 6 juneau-docs follow-up already runs, then commits and pushes
-    juneau-docs — as the ONLY step, rather than a follow-up to a juneau push.
-
-    Args:
-        args: Parsed CLI arguments (message, dry_run, etc).
-        juneau_root: The juneau repo root (used only to locate the juneau-docs sibling).
-
-    Returns:
-        Process exit code (0 success, 1 failure).
-    """
-    docs_root = juneau_root.parent / "juneau-docs"
-    run = _juneau.load()[0]
-    console = not run.Sinks().is_default
-
-    if not console or args.dry_run:
-        print("=" * 70)
-        print("🚀 Juneau Docs-Only Push Script")
-        print("=" * 70)
-        print(f"Docs directory: {docs_root}")
-        print(f"Commit message: '{args.message}'")
-        print("📚 DOCS-ONLY MODE (--docs-only) — skipping juneau Java build/test/push entirely.")
-        if args.skip_tests:
-            print("⚠ Note: --skip-tests only applies to the juneau code path, which "
-                  "--docs-only skips entirely; ignoring it.")
-        if args.dry_run:
-            print("🔍 DRY RUN MODE - No actual changes will be made")
-        print("=" * 70)
-
-    missing = (f"❌ ERROR: juneau-docs repo not found at {docs_root}",
-               "   Expected it as a sibling of the juneau checkout.")
-    if args.dry_run:
-        if not docs_root.exists():
-            print("\n" + "\n".join(missing))
-            return 1
-        print("\nSteps that would be executed:")
-        print(f"  1. Prechecks on juneau-docs: refuse unless git user.email is {REQUIRED_GIT_EMAIL}, the tree has no")
-        print("     unreviewed changes and the branch isn't behind upstream (git fetch + compare), before any gate runs;")
-        print("     the last two are checked again just before the commit")
-        print("  2. Check juneau-docs git status (exit 0 with a no-changes message if clean)")
-        print("  3. Run docs verification gate: python3 scripts/build-docs.py --skip-maven (runs verify-docs.py)")
-        print(f"  4. Commit whatever is already staged: git commit -m \"{args.message}\"  (in juneau-docs; "
-              "refuses if anything is unstaged/untracked-and-not-gitignored)")
-        print("  5. Push to the tracked upstream  (in juneau-docs)")
-        toolkit("run").checks("prechecks", "Prechecks", docs_only_prechecks(juneau_root, docs_root, dry_run=True),
-                              dry_run=True)
-        print("\nDry run complete. Use without --dry-run to execute.")
-        return 0
-
-    repo = docs_root if docs_root.exists() else juneau_root
-    return _in_session("Push", lambda s: _docs_only_steps(s, args, console, juneau_root, docs_root, missing),
-                       header=session_header("Juneau Docs", current_branch(repo)), lines=session_lines(args.message),
-                       mode="push", repo=repo,
-                       plan=[("prechecks", "Prechecks"), ("docs-smoke", DOCS_BUILD_LABEL), ("commit", "Commit"),
-                             ("push", "Push")])
-
-
-def _docs_only_steps(s, args, console, juneau_root, docs_root, missing):
-    """--docs-only's steps inside its session s.  Returns the exit code."""
-    if not docs_root.exists():
-        s.fail(missing[0], hint=missing[1:])
-    s.checks("prechecks", "Prechecks", docs_only_prechecks(juneau_root, docs_root))
-    # After Prechecks: upstream check, no-op detection, unreviewed-changes guard, docs smoke check,
-    # commit, and push -- all delegated to commit_and_push() (shared with main()'s Step 6
-    # follow-up) so the nothing-staged-vs-nothing-to-push fix and the unreviewed-changes guard
-    # live in one place. The Docusaurus smoke build only has anything new to validate when there
-    # IS a commit about to be made, so it's wired in as commit_and_push()'s pre_commit_hook
-    # rather than running unconditionally.
-    def _docs_smoke_check():
-        say("\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
-        docs_build_script = docs_root / "scripts" / "build-docs.py"
-        try:
-            returncode = run_gate(
-                [sys.executable, str(docs_build_script), "--skip-maven"],
-                docs_root, "docs-smoke", "Docs smoke check", DOCS_BUILD_LABEL
-            )
-            if returncode != 0:
-                aborted("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
-                return False
-            say("✅ Docs smoke check passed")
-            return True
-        except Exception as e:
-            say(f"\n❌ Docs smoke check failed: {e}", "error")
-            return False
-
-    status, _ = commit_and_push(
-        docs_root, args.message, 5,
-        label=" (juneau-docs)",
-        git_cmd=DOCS_GIT,
-        pre_commit_hook=_docs_smoke_check,
-    )
-    if status == "error":
-        return 1
-    if status == "nothing_to_do":
-        return 0
-
-    if not console:
-        print("\n" + "=" * 70)
-        print("🎉 Docs-only push completed successfully!")
-        print(f"📦 Commit message: '{args.message}'")
-        print("=" * 70)
-    return 0
-
-
 def main():
     """
     The push.  _main() parses the arguments and resolves the commit message, then opens the run session, which owns
@@ -1087,8 +879,7 @@ PLAN_LABELS = {
     "prechecks": "Prechecks", "tracker": "Tracker", "container-tags": "Tags",
     "bom": "BOM", "javadoc-html": "Javadoc HTML", "build": "Compile", "tests": "Java Tests", "perf": "Perf", "py-tests": "Python Tests",
     "js-tests": "Browser Tests", "traces": "Traces", "timing": "Timing",
-    "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": DOCS_BUILD_LABEL,
-    "docs-commit": "Docs", "docs-push": "Docs push",
+    "install": "Install", "commit": "Commit", "push": "Push",
 }
 
 #: test.py's rows that take a step number, in order.  Perf is a row without a number, so it is not here.
@@ -1116,8 +907,6 @@ def push_plan(args, script_dir, juneau_root, console):
     ids.append("install")
     if not args.test_only:
         ids += ["commit", "push"]
-        if (juneau_root.parent / "juneau-docs").exists():
-            ids += ["docs-smoke", "docs-commit", "docs-push"]
     return [(step_id, PLAN_LABELS[step_id]) for step_id in ids]
 
 
@@ -1154,7 +943,6 @@ Examples:
   python3 push.py "Updated documentation" --skip-tests
   python3 push.py "Quick fix" --skip-tests
   python3 push.py "Fixed bug in RestClient" --tracker-audit
-  python3 push.py "Updated topic page" --docs-only
   python3 push.py "Tweaked console JS" --js-tests
   python3 push.py "Tweaked console JS" --no-js-tests
   python3 push.py "Fixed bug in RestClient" --detail modules
@@ -1174,7 +962,7 @@ Examples:
         dest="test_only",
         help=(
             "Run only the build and test gates (container tags, BOM completeness, tests, build and install). "
-            "No identity check, commit, push or juneau-docs follow-up. Not the same flag as "
+            "No identity check, commit or push. Not the same flag as "
             "test.py's --test-only, which means 'tests without the build'."
         )
     )
@@ -1189,20 +977,6 @@ Examples:
         "--dry-run",
         action="store_true",
         help="Show what would be done without actually doing it"
-    )
-
-    parser.add_argument(
-        "--docs-only",
-        action="store_true",
-        help=(
-            "Operate ONLY on the sibling juneau-docs repo: skip the entire juneau code "
-            "path (no container-tags/BOM checks, no tests, no mvn build/install, "
-            "no juneau commit/push). Still enforces the "
-            "Apache identity gate and the docs verification gate (Docusaurus smoke "
-            "build via build-docs.py --skip-maven, which runs verify-docs.py) against "
-            "juneau-docs before committing/pushing it. Exits 0 with a no-op message if "
-            "juneau-docs has no changes."
-        )
     )
 
     parser.add_argument(
@@ -1260,8 +1034,8 @@ Examples:
     args = parser.parse_args(argv)
     if args.js_tests and args.no_js_tests:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
-    if args.test_only and (args.docs_only or args.tracker_audit or args.skip_tests):
-        parser.error("--test-only cannot be combined with --docs-only, --tracker-audit or --skip-tests")
+    if args.test_only and (args.tracker_audit or args.skip_tests):
+        parser.error("--test-only cannot be combined with --tracker-audit or --skip-tests")
     toolkit("run").export_console(args.console)    # precedence: flag > environment > board
     try:
         _juneau.load()[0].export_detail(args.detail)
@@ -1279,11 +1053,6 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
     # Get the Juneau root directory
     script_dir = Path(__file__).parent
     juneau_root = script_dir.parent
-
-    # --docs-only short-circuits into its own self-contained flow (juneau-docs only);
-    # everything below this is the unchanged default (full juneau build+push) flow.
-    if args.docs_only:
-        return run_docs_only(args, juneau_root)
 
     console = not run.Sinks().is_default
 
@@ -1315,8 +1084,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
         step_num = 1
         if not args.test_only:
             print(f"  {step_num}. Prechecks: refuse unless git user.email is {REQUIRED_GIT_EMAIL}, the tree has no unreviewed "
-                  "(unstaged/untracked) changes and the branch isn't behind upstream (git fetch + compare) -- juneau, and "
-                  "juneau-docs when present -- before any gate runs; the last two are checked again before the commit")
+                  "(unstaged/untracked) changes and the branch isn't behind upstream (git fetch + compare) before any gate "
+                  "runs; the last two are checked again before the commit")
             step_num += 1
         if args.tracker_audit:
             print(f"  {step_num}. Run tracker audit gate: python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau (blocks push if any plan file is flagged)")
@@ -1359,12 +1128,8 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     """The steps of the push inside its session s.  Returns the exit code."""
     step_num = 1
     # Prechecks refuse before any gate (the row says why); --test-only never commits or pushes, so it has none.
-    # Whether they covered juneau-docs (it was active then) decides whether the docs follow-up checks its identity late.
-    docs_prechecked = False
     if not args.test_only:
-        listed = prechecks(juneau_root)
-        docs_prechecked = any(c.name == DOCS_IDENTITY_CHECK for c in listed)
-        s.checks("prechecks", "Prechecks", listed)
+        s.checks("prechecks", "Prechecks", prechecks(juneau_root))
     if console and args.skip_tests:
         say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
 
@@ -1512,16 +1277,8 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     push_status, step_num = commit_and_push(juneau_root, args.message, step_num)
     if push_status == "error":
         return 1
-    # Nothing to do in juneau does not end the run: juneau-docs may still have something staged or
-    # unpushed, and run_docs_followup() decides that (and is a no-op when it is idle too).
-
-    # Step 6 (optional): juneau-docs follow-up — see run_docs_followup() for why the guard is
-    # "does juneau-docs exist" rather than "does it have local changes".
-    docs_status, step_num = run_docs_followup(juneau_root, args.message, step_num, docs_prechecked=docs_prechecked)
-    if docs_status == "error":
-        return 1
-    # "no_docs_root" or "ok" (including juneau-docs itself having had nothing to do) both fall
-    # through -- the juneau push above already succeeded either way.
+    # juneau-docs has its own push.py; point at it when it has something to push.
+    say_docs_hint(juneau_root)
 
     # Success!
     if not console:
