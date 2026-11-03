@@ -443,7 +443,7 @@ public @interface RestPost {
 	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(
-	 * 		maxInput=<js>"100M"</js>
+	 * 		maxInput=<js>"10M"</js>
 	 * 	)
 	 * </p>
 	 *
