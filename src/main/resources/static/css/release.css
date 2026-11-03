@@ -22,6 +22,7 @@
 .rl-dry { display: inline-flex; align-items: center; gap: 0.25rem; margin-left: 0.5rem; }
 .rl-terminal-title { font-weight: 600; margin-bottom: 0.5rem; }
 #rl-terminal { min-height: 24rem; }
+.rl-history-scroll { overflow-x: auto; } /* narrow viewports: scroll the table inside its card */
 .rl-history tr.selected { background: var(--jc-accent-wash); }
 .rl-dry-tag { margin-left: 0.25rem; }
 .rl-pause { border-left: 4px solid var(--jc-accent); }

@@ -265,7 +265,12 @@ class ReleaseRunRestTest {
 					assertTrue(text.contains("toolkit=\"terminal\""), text);
 					assertFalse(text.contains("rl-dialog"), text);
 					assertTrue(text.contains("id=\"rl-pause\""), text);
+					assertTrue(text.contains("<div class=\"rl-history-scroll\">"), "history table scrolls inside its card");
 				}
+				if (path.endsWith("release.js"))
+					assertTrue(text.contains("emptyMessage:"), "terminal mount supplies an emptyMessage for attempts without output");
+				if (path.endsWith("release.css"))
+					assertTrue(text.contains(".rl-history-scroll { overflow-x: auto;"), text);
 			}
 		}
 	}

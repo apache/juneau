@@ -130,7 +130,8 @@
     unmount = JuneauTerminal.mount($('rl-terminal'), {
       id: 'rl-term',
       bytesUrl: '/rest/runs/juneau-terminal/' + encodeURIComponent(attemptId) + '/bytes',
-      title: title
+      title: title,
+      emptyMessage: 'No terminal output was recorded for this attempt.'
     });
     $('rl-history').querySelectorAll('tbody tr').forEach((tr) => tr.classList.toggle('selected', tr.dataset.attempt === attemptId));
   }

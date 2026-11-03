@@ -41,10 +41,12 @@
 
     <div class="jc-card">
         <h2 class="rl-history-title">History</h2>
+        <div class="rl-history-scroll">
         <table class="jc-table rl-history" id="rl-history">
             <thead><tr><th>#</th><th>Command</th><th>Origin</th><th>Started</th><th>Outcome</th><th></th></tr></thead>
             <tbody></tbody>
         </table>
+        </div>
     </div>
 
 </@page>
