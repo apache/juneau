@@ -611,6 +611,7 @@ COLOR_ICONS = {**ICONS, "ok": "●", "warn": "●", "fail": "●"}   # with colo
 # Not a status, so none of the icons above.  Both draw as ▶; MORE_MARK is only the internal role token for the rows
 # under the title (so they neither wrap nor turn cyan) and is mapped to MORE_GLYPH when drawn.
 HEAD_MARK, MORE_MARK = "▶", "more"
+STOP_MARK = "■"     # a pause divider's stop: where this run ends
 MORE_GLYPH = "▶"
 _ICON_COLORS = {"running": "\x1b[36m", "ok": "\x1b[32m", "warn": "\x1b[33m", "skip": "\x1b[2m", "fail": "\x1b[31m",
                 "pending": "\x1b[2m", "paused": "\x1b[36m"}
@@ -2064,13 +2065,13 @@ def pending_line(label, color=False):
 
 
 def divider_lines(d, run_n, color=False, cols=60, rule="═"):
-    """A pause divider's lines: passed `✔ run ended: why` (green), this run's stop `▶ run N stops here: why` between
+    """A pause divider's lines: passed `✔ run ended: why` (green), this run's stop `■ run N stops here: why` between
     double rules (cyan), a later one dim `run M stops here: why` (numbered in plan order after this run's stop).  A passed
     one carries no run number (spec 2.2); run_n None drops the numbers."""
     if d.state == "passed":
         lines, code = [f"{ICONS['ok']} run ended: {d.text}"], "32"
     elif d.state == "stops":
-        head = f"{HEAD_MARK} run {run_n} stops here: {d.text}" if run_n else f"{HEAD_MARK} run stops here: {d.text}"
+        head = f"{STOP_MARK} run {run_n} stops here: {d.text}" if run_n else f"{STOP_MARK} run stops here: {d.text}"
         bar = rule * max(1, min(cols, 60))
         lines, code = [bar, head, bar], "36"
     else:

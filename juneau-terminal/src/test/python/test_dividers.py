@@ -61,7 +61,8 @@ class DividerStateTest(unittest.TestCase):
     def test_a_stops_divider_prints_with_the_run_number_and_rules(self):
         b = new_board(run=3, dividers=[("s1", "send the email", "stops")])
         text = plain(end(b, "s1", paused=True, note="send the email"), b)
-        self.assertIn("run 3 stops here: send the email", text)
+        self.assertIn("■ run 3 stops here: send the email", text)
+        self.assertNotIn("▶ run 3", text)
         self.assertIn("=" * 10, text)
 
     def test_a_passed_divider_has_no_run_number(self):
