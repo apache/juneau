@@ -53,6 +53,19 @@ def class_line_totals(text):
 
 
 class MavenParserTest(unittest.TestCase):
+    def test_concurrent_prefixed_module_runs_count_one_unit_per_module_build(self):
+        cmd = ("/bin/bash -c 'mkdir -p target && (mvn -o -f a/x/pom.xml test 2>&1 | sed -u s/^/[a\\/x]\\ / | tee t0) & "
+               "(mvn -o -f b/y/pom.xml test 2>&1 | sed -u s/^/[b\\/y]\\ / | tee t1) & wait'")
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["/bin/sh", "-c", cmd], None, "/nonexistent")
+        events = []
+        for line in ["[b/y] [INFO] Running Foo_BrowserTest", "[b/y] [INFO] BUILD SUCCESS", "[a/x] [INFO] BUILD FAILURE",
+                     "[a/x] [INFO] BUILD FAILURE"]:
+            events += parser.on_line(line)
+        self.assertEqual(kinds(events, "units"), [("units", "mvn", 2, "modules")])
+        self.assertEqual(kinds(events, "unit"), [("unit", "mvn", 1, "pass"), ("unit", "mvn", 2, "fail")])
+
     def test_serial_success_opens_and_closes_each_module_in_order(self):
         _, events = maven("maven-serial-success.log")
         flow = [(e[0], e[1]) for e in events if e[0] in ("sub_start", "sub_end")]

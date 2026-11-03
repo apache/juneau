@@ -1376,14 +1376,17 @@ class Board:
             if status == "fail" and self.failed_title is None:
                 self.failed_title = self.plan_labels.get(sid) or label
 
-    def step_counts(self):
+    def step_counts(self, ran_only=False):
         """(done, total) for the final row, or None with no plan: the counted steps (a parent's too) that finished ok
-        or warned, and all the steps Overall counts (skips are left out)."""
+        or warned, and all the steps Overall counts (skips are left out).  ran_only also leaves out the steps that never
+        started: on a run that ended ok they were not needed (a docs build with no docs change), as a skip is not."""
         if not self.plan:
             return None
         failed = {sid for sid, r in self.rows.items() if r.status == "fail"}
         failed |= {sid for sid, status in self.handed_back.items() if status == "fail"}
         steps = self._overall_steps(self.clock())
+        if ran_only:
+            steps = [t for t in steps if t[1] != "pending"]
         return sum(1 for sid, state, _, _ in steps if state == "done" and sid not in failed), len(steps)
 
     def _on_step_start(self, f):
@@ -1863,7 +1866,7 @@ class Board:
         if self.nested:
             return []
         return [("final", f["status"], int((self.clock() - self.t0) * 1000), self.failed_title, self.full_log,
-                 *(self.step_counts() or (None, None)))]
+                 *(self.step_counts(ran_only=f["status"] == "ok") or (None, None)))]
 
 
 def row_state(row):
@@ -4305,6 +4308,9 @@ class MavenParser(Parser):
         self.structure_seen = False
         self.after_header = False        # the previous line was a `< g:a >` header
         self.lone_building_seen = False  # a header's Building line had no [k/n]: Maven is building one project
+        self.concurrent = []             # module dirs of a command running one prefixed `mvn -f <dir>/pom.xml` per module
+        self.concurrent_sent = False
+        self.concurrent_done = []        # those whose BUILD line has arrived, in order
         self.lone_sized = False          # the reactor was re-sized to that one project at its Building line
         self.generic = GenericParser()
 
@@ -4322,6 +4328,8 @@ class MavenParser(Parser):
         self.packaging = {}
         self.dirs, self.names = read_pom_tree(root, self.packaging)
         self.parallel = any(re.search(r"(?:^|\s)(?:-T|--threads)", a) for a in cmd[at:])
+        files = list(dict.fromkeys(re.findall(r"(?:^|\s)-f\s+(\S+?)/pom\.xml", args)))
+        self.concurrent = files if len(files) > 1 else []
         self.tests_mode = not self.SKIP_TESTS.search(args) and not self._pre_test_goals(args)
         return cmd, env
 
@@ -4527,6 +4535,27 @@ class MavenParser(Parser):
     PERFORM_PHASE = re.compile(r"^\[INFO\] (\d+/\d+) perform:(\S+)\s*$")
 
     def handle(self, line):
+        return self._concurrent_events(line) + self._handle(line)
+
+    CONCURRENT_BUILD = re.compile(r"^\[([^\]\s]+)\] (?:\[INFO\] )?BUILD (SUCCESS|FAILURE)\b")
+
+    def _concurrent_events(self, line):
+        """A command that runs one `mvn -f <module>/pom.xml` per module at once, each line prefixed `[<module>] `
+        (scripts/test.py's Browser Tests): the prefix hides the reactor lines, so the row's unit is the module, counted
+        when that module's BUILD line arrives."""
+        if not self.concurrent:
+            return []
+        events = []
+        if not self.concurrent_sent:
+            self.concurrent_sent = True
+            events.append(("units", self.step_id, len(self.concurrent), "modules"))
+        m = self.CONCURRENT_BUILD.match(line)
+        if m and m.group(1) in self.concurrent and m.group(1) not in self.concurrent_done:
+            self.concurrent_done.append(m.group(1))
+            events.append(("unit", self.step_id, len(self.concurrent_done), "pass" if m.group(2) == "SUCCESS" else "fail"))
+        return events
+
+    def _handle(self, line):
         self.generic.handle(line)
         # release:perform runs a nested Maven whose lines the outer build logs again behind a second level tag
         # ("[INFO] [INFO] Building ..."): read them as the plain lines they carry.

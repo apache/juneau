@@ -230,6 +230,21 @@ class BoardPlanTest(unittest.TestCase):
         self.assertIsNone(self.board(plan=()).step_counts())
         self.assertIsNone(self.board(plan=None).step_counts())
 
+    def test_an_ok_run_leaves_out_planned_steps_that_never_ran(self):
+        b = self.board(plan=("a", "b", "c", "d"))
+        b.apply(*start("a")); b.apply(*end("a"))
+        b.apply(*start("b")); b.apply("step_end", dict(id="b", status="skip", ms=0, exit=None, summary=None, totals=None))
+        self.assertEqual(b.step_counts(), (1, 3))
+        final = b.apply("done", dict(status="ok", commit=None))[0]
+        self.assertEqual(final[0:2] + final[5:], ("final", "ok", 1, 1))
+
+    def test_a_failed_run_still_counts_the_steps_it_never_reached(self):
+        b = self.board(plan=("a", "b", "c"))
+        b.apply(*start("a")); b.apply(*end("a"))
+        b.apply(*start("b")); b.apply("step_end", dict(id="b", status="fail", ms=0, exit=1, summary=None, totals=None))
+        final = b.apply("done", dict(status="fail", commit=None))[0]
+        self.assertEqual(final[5:], (1, 3))
+
     def test_the_final_block_carries_the_counts(self):
         b = self.board(plan=("a",))
         b.apply(*start("a")); b.apply(*end("a"))
