@@ -25,8 +25,8 @@
  *
  *   Usage:  node view-settings-reload-browser.cjs <baseUrl>
  *
- * Visits <baseUrl>/server and <baseUrl>/client.  For each: records the header titles, opens the gear, unchecks the
- * "Status" column's visibility checkbox, clicks Apply, records headers again, reloads, records headers and the first
+ * Visits <baseUrl>/server and <baseUrl>/client.  For each: records the header titles, opens the gear, removes the
+ * "Status" column from the shown grid, clicks Apply, records headers again, reloads, records headers and the first
  * row's cells.  Prints ONE JSON object to stdout; every assertion lives in the Java test.
  */
 'use strict';
@@ -71,8 +71,8 @@ async function settled(page) {
 			const rowBefore = await page.evaluate(FIRST_ROW);
 
 			await page.click('.juneau-config-chooser-btn');
-			await page.waitForSelector('.juneau-config-col-row[data-col="status"] .juneau-config-col-vis', { timeout: 5000 });
-			await page.uncheck('.juneau-config-col-row[data-col="status"] .juneau-config-col-vis');
+			await page.waitForSelector('.juneau-config-col-row[data-col="status"] .juneau-config-col-remove', { timeout: 5000 });
+			await page.click('.juneau-config-col-row[data-col="status"] .juneau-config-col-remove');
 			await page.click('.juneau-config-apply');
 			await page.waitForFunction(() => {
 				const ths = Array.from(document.querySelectorAll('table[data-juneau-view="t1"] thead tr:first-child th'));
@@ -86,14 +86,17 @@ async function settled(page) {
 			const afterReload = await page.evaluate(HEADERS);
 			const rowAfterReload = await page.evaluate(FIRST_ROW);
 
-			// Finding 1: after the reload the dialog opens on the STORED settings (Status unchecked), not catalog defaults.
-			const STATUS_VIS = '.juneau-config-col-row[data-col="status"] .juneau-config-col-vis';
+			// Finding 1: after the reload the dialog opens on the STORED settings (Status not shown, offered under
+			// Available columns), not catalog defaults.
+			const STATUS_ROW = '.juneau-config-col-row[data-col="status"]';
+			const STATUS_AVAIL = '.juneau-config-avail[data-col="status"]';
+			const DIALOG_READY = '.juneau-config-col-row[data-col="name"]';
 			await page.click('.juneau-config-chooser-btn');
-			await page.waitForSelector(STATUS_VIS, { timeout: 5000 });
-			const reopen = await page.evaluate((sel) => {
-				const cb = document.querySelector(sel);
-				return { checked: cb.checked, aria: cb.getAttribute('aria-label') };
-			}, STATUS_VIS);
+			await page.waitForSelector(DIALOG_READY, { timeout: 5000 });
+			const reopen = await page.evaluate(([row, avail]) => {
+				const a = document.querySelector(avail);
+				return { shown: document.querySelector(row) != null, available: a ? a.textContent.trim() : null };
+			}, [STATUS_ROW, STATUS_AVAIL]);
 			// Finding 2: Apply with the Sort tab visible and nothing touched must not persist "every column" as the sort.
 			const storedSort = await page.evaluate(() => {
 				for (let i = 0; i < localStorage.length; i++) {
@@ -114,11 +117,11 @@ async function settled(page) {
 			await page.reload();
 			await settled(page);
 			await page.click('.juneau-config-chooser-btn');
-			await page.waitForSelector(STATUS_VIS, { timeout: 5000 });
-			const stale = await page.evaluate((sel) => {
+			await page.waitForSelector(DIALOG_READY, { timeout: 5000 });
+			const stale = await page.evaluate((row) => {
 				const st = document.querySelector('.juneau-config-status');
-				return { notice: st ? st.textContent.trim() : null, statusChecked: document.querySelector(sel).checked };
-			}, STATUS_VIS);
+				return { notice: st ? st.textContent.trim() : null, statusShown: document.querySelector(row) != null };
+			}, STATUS_ROW);
 			report[mode] = { before, rowBefore, afterApply, afterReload, rowAfterReload, reopen, storedSort, stale };
 			await context.close();
 		}

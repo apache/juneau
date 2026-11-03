@@ -62,6 +62,11 @@ class ViewsJs_Terminal_Test extends TestBase {
 	@Test void c02_fiveHundredRetriesAndFourHundredStops() { ok("r02_fiveHundredRetriesAndFourHundredStops"); }
 	@Test void c03_416ResetsAndReplays() { ok("r03_416ResetsAndReplays"); }
 	@Test void c04_notFoundAndGone() { ok("r04_notFoundAndGone"); }
+	@Test void c08_emptyKeepsPollingAtTheIdleCadenceCapped() { ok("r08_emptyKeepsPollingAtTheIdleCadenceCapped"); }
+	@Test void c09_a200AfterEmptyLeavesEmpty() { ok("r09_a200AfterEmptyLeavesEmpty"); }
+	@Test void c10_a404AfterLiveReEntersEmptyAndKeepsContent() { ok("r10_a404AfterLiveReEntersEmptyAndKeepsContent"); }
+	@Test void c11_nonNotFoundErrorWhileEmptyFollowsTheNormalPath() { ok("r11_nonNotFoundErrorWhileEmptyFollowsTheNormalPath"); }
+	@Test void c12_aNudgeWhileEmptyDoesNotSkipTheBackoff() { ok("r12_aNudgeWhileEmptyDoesNotSkipTheBackoff"); }
 	@Test void c05_events410RefetchesFromTheStart() { ok("r05_events410RefetchesFromTheStart"); }
 	@Test void c06_eventsUnavailableTurnsStepsOff() { ok("r06_eventsUnavailableTurnsStepsOff"); }
 	@Test void c07_malformedEventsPageTurnsStepsOff() { ok("r07_malformedEventsPageTurnsStepsOff"); }
@@ -136,7 +141,7 @@ class ViewsJs_Terminal_Test extends TestBase {
 
 	@Test void z01_everyCasePasses() {
 		var r = r();
-		assertSize(() -> "case count changed; add a method per new case: " + r.keySet(), 88, r);
+		assertSize(() -> "case count changed; add a method per new case: " + r.keySet(), 93, r);
 		for (var e : r.entrySet())
 			assertEquals(true, e.getValue(), () -> e.getKey() + " -> " + e.getValue());
 	}

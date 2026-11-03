@@ -279,7 +279,10 @@ class DarkScheme_BrowserTest extends TestBase {
 		{"configTitle", "text", ".juneau-config-title"},
 		{"configTab", "text", ".juneau-config-tab"},
 		{"configColName", "text", ".juneau-config-col-name"},
-		{"configButton", "text", ".juneau-config-apply, .juneau-config-reset"},
+		// Cancel is the standard secondary kind; Apply is primary and held by the dialog-frame probes.
+		{"configButton", "text", ".juneau-config-cancel"},
+		{"configReset", "text", ".juneau-config-reset"},
+		{"configColHead", "text", ".juneau-config-col-head-name"},
 		{"configSelect", "text", ".juneau-config-view-select"},
 		{"configInput", "text", ".juneau-config-col-label"},
 		{"errorToast", "text", ".jc-toast.is-error"},
@@ -299,7 +302,8 @@ class DarkScheme_BrowserTest extends TestBase {
 		{"filterPlaceholder", "placeholder", "#tbl-body .dt-search input"},
 		{"configInputBorder", "border", ".juneau-config-col-label"},
 		{"configSelectBorder", "border", ".juneau-config-view-select"},
-		{"configButtonBorder", "border", ".juneau-config-apply, .juneau-config-reset"},
+		{"configButtonBorder", "border", ".juneau-config-cancel"},
+		{"configFindBorder", "border", ".juneau-config-find"},
 		{"ribbonIcon", "text", ".juneau-view-ribbon-btn"},
 		{"pagingMenuIcon", "text", ".juneau-view-pagingpill-menubtn"},
 		{"pagingButtonIcon", "text", ".juneau-view-pagingpill-btn:not([disabled])"},
@@ -326,7 +330,7 @@ class DarkScheme_BrowserTest extends TestBase {
 	/** Disabled controls: exempt, measured and reported only. */
 	private static final String[][] DISABLED_SURFACES = {
 		{"pagingButtonDisabled", "text", ".juneau-view-pagingpill-btn[disabled]"},
-		{"configMoveDisabled", "text", ".juneau-config-col-move[disabled]"},
+		{"configRenameDisabled", "text", ".juneau-config-rename[disabled]"},
 	};
 
 	/**
@@ -651,6 +655,7 @@ class DarkScheme_BrowserTest extends TestBase {
 			var t = e.getValue();
 			for (var name : List.of("configButton", "configSelect", "configInput"))
 				paints(bad, scheme, name, t[0], t[1]);
+			// The secondary buttons carry --jc-control-border too, so their edge holds 3:1 like the form controls.
 			for (var name : List.of("configButtonBorder", "configSelectBorder", "configInputBorder"))
 				paints(bad, scheme, name, t[2], t[1]);
 		}

@@ -29,7 +29,7 @@ html:root {
 	--jc-font: 'Inter', 'Source Sans 3', system-ui, sans-serif;
 	--jc-page-bg: linear-gradient(180deg, #f4f5f7 0%, #fafbfc 55%, #ffffff 100%);
 	--jc-header-icon-color: #747474;
-	--jc-accent: #FF5630;
+	--jc-accent: #ff481f;
 	--jc-accent-wash: rgba(255,86,48,0.1);
 	--jc-link: #BF2600;
 	--jc-text: #172B4D;
@@ -100,6 +100,7 @@ html:root {
 	--jc-page-nav-child-padding-inline: 10px;
 	--jc-card-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
 	--jc-danger-wash: #fdeceb;
+	--jc-danger-strong: #a12f2b;
 	--jc-success-wash: #eaf6ee;
 	--jc-space-1: 4px;
 	--jc-space-2: 8px;
@@ -109,7 +110,7 @@ html:root {
 	--jc-space-6: 32px;
 	--jc-focus: #ff481f;
 	--jc-accent-selected: #FF5630;
-	--jc-table-stripe-bg: #fafaf9;
+	--jc-table-stripe-bg: #f3f3f3;
 	--jc-main-bg: #f5f6f9;
 	--jc-card-padding: 16px 16px 8px;
 	--jc-chrome-icon: #666666;

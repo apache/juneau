@@ -78,7 +78,39 @@ const out = {
 };
 
 if (!out.hasConfig || !out.hasInit) {
-	process.stdout.write(JSON.stringify(out));
+	// resetToDefaultsAndApply - the toolbar Reset: seeds the built-in Default view and applies it at once, with NO
+// chooser open (no dialog DOM exists on this ctx), clears the active saved-view name, and leaves the draft clean.
+out.hasResetToDefaultsAndApply = typeof C.resetToDefaultsAndApply === 'function';
+if (out.hasResetToDefaultsAndApply) {
+	let resetCaptured = null;
+	const activeCalls = [];
+	const realSetActive = NS.persistence?.setActive;
+	if (NS.persistence) NS.persistence.setActive = function (t, name) { activeCalls.push(name); return Promise.resolve(); };
+	I.buildTable = function (table, viewDef, effective) { resetCaptured = { viewDef: viewDef, effective: effective }; return { ok: true }; };
+	const resetTable = {};
+	const resetCtx = {
+		table: resetTable,
+		viewDef: { columns: [{ data: 'A' }, { data: 'B', defaultVisible: false }, { data: 'C' }], defaultOrder: [{ data: 'C', dir: 'desc' }] },
+		_configDraft: { visible: ['B'], order: ['C', 'B', 'A'], labels: { A: 'x' }, formats: {}, search: [], sort: [], options: {} },
+		_configActiveName: 'mine',
+		_configDirty: true
+	};
+	resetTable.__juneauCtx = resetCtx;
+	const resetResult = C.resetToDefaultsAndApply(resetTable, resetCtx);
+	I.buildTable = realBuildTable;
+	if (NS.persistence) NS.persistence.setActive = realSetActive;
+	out.reset_ok = resetResult?.ok === true;
+	out.reset_appliedVisible = resetCaptured?.effective?.filter(function (c) { return c.visible !== false; }).map(function (c) { return c.data; }).join(',');
+	out.reset_appliedOrder = resetCaptured?.effective?.map(function (c) { return c.data; }).join(',');
+	out.reset_appliedDefaultOrder = resetCaptured?.viewDef?.defaultOrder;
+	out.reset_draftLabelsCleared = Object.keys(resetCtx._configDraft.labels).length === 0;
+	out.reset_activeNameCleared = resetCtx._configActiveName === null;
+	out.reset_activeCleared = activeCalls.length === 1 && activeCalls[0] === null;
+	out.reset_clean = resetCtx._configDirty === false;
+	out.reset_noChooserOpened = resetCtx._configBackdrop == null;
+}
+
+process.stdout.write(JSON.stringify(out));
 	process.exit(0);
 }
 
@@ -180,5 +212,37 @@ out.applyViewOverridesSearchableB = captured?.effective?.find(function (c) { ret
 out.defaultOptionsAutoRefreshOff = C.defaultOptions().autoRefreshMs;
 out.normalizeOptionsDropsBadAutoRefresh = C.normalizeOptions({ autoRefreshMs: 12345 }).autoRefreshMs;
 out.normalizeOptionsKeepsGoodAutoRefresh = C.normalizeOptions({ autoRefreshMs: 60000 }).autoRefreshMs;
+
+// resetToDefaultsAndApply - the toolbar Reset: seeds the built-in Default view and applies it at once, with NO
+// chooser open (no dialog DOM exists on this ctx), clears the active saved-view name, and leaves the draft clean.
+out.hasResetToDefaultsAndApply = typeof C.resetToDefaultsAndApply === 'function';
+if (out.hasResetToDefaultsAndApply) {
+	let resetCaptured = null;
+	const activeCalls = [];
+	const realSetActive = NS.persistence?.setActive;
+	if (NS.persistence) NS.persistence.setActive = function (t, name) { activeCalls.push(name); return Promise.resolve(); };
+	I.buildTable = function (table, viewDef, effective) { resetCaptured = { viewDef: viewDef, effective: effective }; return { ok: true }; };
+	const resetTable = {};
+	const resetCtx = {
+		table: resetTable,
+		viewDef: { columns: [{ data: 'A' }, { data: 'B', defaultVisible: false }, { data: 'C' }], defaultOrder: [{ data: 'C', dir: 'desc' }] },
+		_configDraft: { visible: ['B'], order: ['C', 'B', 'A'], labels: { A: 'x' }, formats: {}, search: [], sort: [], options: {} },
+		_configActiveName: 'mine',
+		_configDirty: true
+	};
+	resetTable.__juneauCtx = resetCtx;
+	const resetResult = C.resetToDefaultsAndApply(resetTable, resetCtx);
+	I.buildTable = realBuildTable;
+	if (NS.persistence) NS.persistence.setActive = realSetActive;
+	out.reset_ok = resetResult?.ok === true;
+	out.reset_appliedVisible = resetCaptured?.effective?.filter(function (c) { return c.visible !== false; }).map(function (c) { return c.data; }).join(',');
+	out.reset_appliedOrder = resetCaptured?.effective?.map(function (c) { return c.data; }).join(',');
+	out.reset_appliedDefaultOrder = resetCaptured?.viewDef?.defaultOrder;
+	out.reset_draftLabelsCleared = Object.keys(resetCtx._configDraft.labels).length === 0;
+	out.reset_activeNameCleared = resetCtx._configActiveName === null;
+	out.reset_activeCleared = activeCalls.length === 1 && activeCalls[0] === null;
+	out.reset_clean = resetCtx._configDirty === false;
+	out.reset_noChooserOpened = resetCtx._configBackdrop == null;
+}
 
 process.stdout.write(JSON.stringify(out));

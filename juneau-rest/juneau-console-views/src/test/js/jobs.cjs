@@ -518,7 +518,7 @@ function recorder() {
 		release(jsonResponse(STARTED, { status: 202 }));
 		await flush();
 		out.j18_runningHolds = s.I.isPollSuspended(s.table, ctx, viewDef) === true;
-		out.j18_runningLabel = indicator.textContent;
+		out.j18_runningLabel = indicator.dataset.jcTip;
 		out.j18_runningTimerDrawCancelled = land(true) === false;
 		out.j18_userReloadNotHeld = land(false) === true;
 		// A second, job-less expanded row does not lift the hold; collapsing the running row's panel does.

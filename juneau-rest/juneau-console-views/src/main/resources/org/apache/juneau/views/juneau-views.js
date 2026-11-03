@@ -1625,9 +1625,9 @@
 				cycleColumnOrder(dt, col.index());
 			});
 		}
-		// Design 7.1: the sort glyph is the leftmost header control, so pull DT2's order span (which it appends
-		// after the title) to the front of the flex row.
-		if (flex.firstChild !== orderSpan) flex.insertBefore(orderSpan, flex.firstChild);
+		// Header order is label, search icon, sort control: the sort control is last (right-aligned), so keep
+		// DT2's order span (which it appends after the title) at the end of the flex row.
+		if (flex.lastChild !== orderSpan) flex.appendChild(orderSpan);
 		orderSpan.classList.add("juneau-view-col-sort-icon");
 		if (!orderSpan.querySelector("svg")) {
 			const markup = window.JuneauViews?.icons?.resolveIcon?.("sort");
@@ -1672,10 +1672,10 @@
 		icon.dataset.testid = "col-search-icon";
 		const markup = window.JuneauViews?.icons?.resolveIcon?.("search");
 		if (markup) icon.innerHTML = markup;
-		// Design 7.1: the magnifying glass sits immediately beside (just right of) the sort glyph, ahead of the
-		// title.  With no sort control on the column it becomes the leftmost control instead.
+		// The magnifying glass sits just left of the sort control, after the title.  With no sort control on the
+		// column it becomes the last control instead.
 		const orderSpan = flex.querySelector("span.dt-column-order");
-		if (orderSpan) flex.insertBefore(icon, orderSpan.nextSibling); else flex.insertBefore(icon, flex.firstChild);
+		if (orderSpan) flex.insertBefore(icon, orderSpan); else flex.appendChild(icon);
 		// Reflect an already-applied filter (e.g. one restored from saved state or the URL) with the active class.
 		const current = getColumnExpr(ctx, col);
 		if (current) icon.classList.add("is-active");
@@ -2182,12 +2182,35 @@
 	}
 
 	/**
+	 * Puts the search box at the canonical {@code search} slot inside the ribbon bar: ahead of the first group
+	 * tagged {@code viewing}/{@code page}/{@code status}, else right after the last group tagged
+	 * {@code entity}/{@code filter}.  Returns false (search not placed) when the bar has no canonically tagged group.
+	 */
+	function placeSearchInRibbon(bar, filterEl) {
+		const order = NS.ribbon?.CANONICAL_GROUPS;
+		if (!bar || !order) return false;
+		const searchRank = order.indexOf("search");
+		const tagged = Array.from(bar.childNodes).filter(function (c) { return c.getAttribute?.("data-juneau-group"); });
+		const rank = function (c) { return order.indexOf(c.getAttribute("data-juneau-group")); };
+		const after = tagged.find(function (c) { return rank(c) > searchRank; });
+		if (after) {
+			bar.insertBefore(filterEl, after);
+			return true;
+		}
+		const before = tagged.findLast(function (c) { return rank(c) < searchRank; });
+		if (!before) return false;
+		bar.insertBefore(filterEl, before.nextSibling);
+		return true;
+	}
+
+	/**
 	 * Assembles ONE unified toolbar row and inserts it as the FIRST child of `wrapper`, i.e. ABOVE the table.
 	 * Per the control-row layout spec: a LEFT cluster (`.juneau-view-toolbar-left`) holding
 	 * just the unified paging ribbon (nav + page-size, left-aligned - the only place paging exists), and a RIGHT
-	 * cluster (`.juneau-view-toolbar-right`, right-aligned via the row's `space-between`) holding, in order: the
-	 * native DataTables search box, then the ribbon bar (already internally grouped into filter-ribbon/copy-
-	 * download-ribbon clusters per juneau-ribbon.js).  `pill`/`bar` are each optional (a view with no ribbon
+	 * cluster (`.juneau-view-toolbar-right`, right-aligned via the row's `space-between`) holding the native
+	 * DataTables search box and the ribbon bar (already internally grouped and put in canonical toolbar order by
+	 * juneau-ribbon.js).  The search box takes the canonical `search` slot (see {@link #placeSearchInRibbon}); with
+	 * no canonically tagged groups it sits ahead of the ribbon as before.  `pill`/`bar` are each optional (a view with no ribbon
 	 * actions still gets its pill-only row; a pill is always built by initTable(...) so it is realistically
 	 * always present).  Moves DataTables' native ".dataTables_filter"/".dt-search" search box into the right
 	 * cluster rather than leaving it in its own DataTables-generated wrapper; degrades gracefully (right cluster
@@ -2209,7 +2232,7 @@
 		if (filterEl) {
 			const filterInput = filterEl.querySelector("input");
 			if (filterInput) filterInput.setAttribute("aria-label", "Search table");
-			right.appendChild(filterEl);
+			if (!placeSearchInRibbon(bar, filterEl)) right.appendChild(filterEl);
 		}
 		if (bar) right.appendChild(bar);
 
@@ -2289,6 +2312,21 @@
 	}
 
 	/**
+	 * Repaints the status dot right now, because something that {@link #isPollSuspended} reads just changed.
+	 *
+	 * <p>The 1s render tick would repaint anyway, which is why this is only a nicety - but it is the same nicety
+	 * the manual toggle already gets, and the gap it closes is the wrong way round to leave open: for up to a
+	 * second after a row is expanded the dot still reads "Updated 3s ago" in the `idle` state while ticks are
+	 * already being skipped, i.e. a held view briefly claiming to be a live one.  (After a collapse it is the
+	 * harmless direction - "Paused" lingering a beat after polling resumed.)
+	 *
+	 * <p>No-op for every view that never opted in: {@link #initPolling} is what installs the hook.
+	 */
+	function notifyPollPausedChange(ctx) {
+		if (typeof ctx?._onPollPausedChange === "function") ctx._onPollPausedChange();
+	}
+
+	/**
 	 * Whether this view's poll tick is currently suspended - the THIRD skip condition in {@link #initPolling}'s
 	 * `poll()`, alongside `document.hidden` and {@link #hasInFlightRow}.  Two independent sources:
 	 *
@@ -2315,21 +2353,6 @@
 	 * view with no {@code pollIntervalMs}.  Reading the flag unconditionally also keeps the programmatic door
 	 * open for a consumer that wants to hold a poll from its own chrome instead of the stock button.
 	 */
-	/**
-	 * Repaints the staleness pill right now, because something that {@link #isPollSuspended} reads just changed.
-	 *
-	 * <p>The 1s render tick would repaint anyway, which is why this is only a nicety - but it is the same nicety
-	 * the manual toggle already gets, and the gap it closes is the wrong way round to leave open: for up to a
-	 * second after a row is expanded the pill still reads "Updated 3s ago" in the `fresh` state while ticks are
-	 * already being skipped, i.e. a held view briefly claiming to be a live one.  (After a collapse it is the
-	 * harmless direction - "Paused" lingering a beat after polling resumed.)
-	 *
-	 * <p>No-op for every view that never opted in: {@link #initPolling} is what installs the hook.
-	 */
-	function notifyPollPausedChange(ctx) {
-		if (typeof ctx?._onPollPausedChange === "function") ctx._onPollPausedChange();
-	}
-
 	function isPollSuspended(table, ctx, viewDef) {
 		if (ctx?._pollPaused) return true;
 		// Not opt-in: a redraw would destroy an expanded panel whose job is still streaming into it.
@@ -2368,14 +2391,16 @@
 	}
 
 	/**
-	 * Builds the per-table staleness-indicator chip (per-table, never a single page-level chip).  Starts in the
-	 * neutral "fresh" state; {@link #initPolling} drives every subsequent update.
+	 * Builds the per-table status dot (per-table, never a single page-level indicator).  Starts in the neutral
+	 * "idle" state (`idle|refreshing|error|paused`); {@link #initPolling} drives every subsequent update and keeps
+	 * the tooltip / accessible description current.  The dot has no visible text.
 	 */
 	function buildStalenessIndicator() {
 		const el = document.createElement("span");
 		el.className = "juneau-view-staleness";
 		el.dataset.testid = "staleness";
-		el.dataset.state = "fresh";
+		el.dataset.state = "idle";
+		el.setAttribute("role", "img");
 		return el;
 	}
 
@@ -4941,7 +4966,7 @@
 	 * (Page Visibility API - no fetch, no cost, while backgrounded), (b) skips entirely while
 	 * {@link #hasInFlightRow} is true, and (c) skips entirely while {@link #isPollSuspended} is true (the manual
 	 * {@code pausePolling} ribbon toggle, or an open editing surface on a view that opted in). A failed round trip
-	 * (`error.dt`) flips the indicator to a distinct "error" state without touching the last-success timestamp, so
+	 * (a failed `xhr.dt`, `dt-error.dt` or `error.dt`) flips the indicator to a distinct "error" state without touching the last-success timestamp, so
 	 * a frozen clock and a broken poll never look identical to a healthy one (the whole point of this function).
 	 *
 	 * <p>Suspension deliberately stops the FETCH only, never the 1s render tick: the age label has to keep
@@ -4953,23 +4978,42 @@
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 	function initPolling(table, dt, viewDef, indicator, ctx) {
 		const intervalMs = clampPollInterval(viewDef.pollIntervalMs);
-		const state = { lastSuccessAt: Date.now(), failed: false };
+		const state = { lastSuccessAt: Date.now(), failed: false, busy: false };
 
+		// Precedence: error > paused > refreshing > idle.
 		function render() {
 			const age = formatStalenessAge(Date.now() - state.lastSuccessAt);
-			const paused = ! state.failed && isPollSuspended(table, ctx, viewDef);
-			let stateName = "fresh";
-			if (state.failed) stateName = "error";
-			else if (paused) stateName = "paused";
+			const paused = isPollSuspended(table, ctx, viewDef);
+			let stateName = "idle";
+			let text = "Updated " + age + " \u00b7 refreshes every " + Math.round(intervalMs / 1000) + "s";
+			if (state.failed) {
+				stateName = "error";
+				text = "Refresh failed - last updated " + age;
+			} else if (paused) {
+				stateName = "paused";
+				text = "Paused \u2014 updated " + age;
+			} else if (state.busy) {
+				stateName = "refreshing";
+				text = "Refreshing\u2026";
+			}
 			indicator.dataset.state = stateName;
-			if (state.failed) indicator.textContent = "Refresh failed - last updated " + age;
-			else indicator.textContent = (paused ? "Paused \u2014 updated " : "Updated ") + age;
+			indicator.dataset.jcTip = text;
+			indicator.setAttribute("aria-label", text);
 		}
 
-		// Guard against a nested table's draw.dt/error.dt bubbling up to this parent-table poll indicator: a nested
-		// table's own round trips must not reset (or fail) the parent's staleness clock.
-		dt.on("draw.dt", function (e) { if (e && e.target !== table) { return; } ctx._pollDrawPending = false; state.lastSuccessAt = Date.now(); state.failed = false; render(); });
-		dt.on("error.dt", function (e) { if (e && e.target !== table) { return; } ctx._pollDrawPending = false; state.failed = true; render(); });
+		// Guard against a nested table's events bubbling up to this parent-table indicator: a nested table's own
+		// round trips must not reset (or fail) the parent's staleness clock.
+		dt.on("preXhr.dt", function (e) { if (e && e.target !== table) { return; } state.busy = true; render(); });
+		dt.on("draw.dt", function (e) { if (e && e.target !== table) { return; } ctx._pollDrawPending = false; state.busy = false; state.lastSuccessAt = Date.now(); state.failed = false; render(); });
+		// A failed round trip reaches us three ways, and no single event covers them all (DataTables 2 renamed
+		// `error.dt` to `dt-error.dt` and raises it only for a request that completed; a dropped connection raises
+		// neither): `xhr.dt` with no JSON is the one signal every failure shares (HTTP error, unparseable body,
+		// aborted or refused connection), `dt-error.dt` is DataTables' own report, and `error.dt` is what
+		// JuneauDataTables raises for a BeanQuery 400 (and what DataTables 1.x raised).  All three are idempotent.
+		function onFailed(e) { if (e && e.target !== table) { return; } ctx._pollDrawPending = false; state.busy = false; state.failed = true; render(); }
+		dt.on("error.dt", onFailed);
+		dt.on("dt-error.dt", onFailed);
+		dt.on("xhr.dt", function (e, settings, json) { if (json == null) onFailed(e); });
 
 		/**
 		 * Whether a draw that is ALREADY on its way back must be thrown away instead of painted.
@@ -5007,6 +5051,7 @@
 			if (e && e.target !== table) return;
 			if (! ctx._shouldCancelPollDraw()) return;
 			ctx._pollDrawPending = false;
+			state.busy = false;
 			return false;
 		});
 
@@ -7002,6 +7047,7 @@
 		dialog.className = "juneau-view-dialog";
 		dialog.setAttribute("role", "dialog");
 		dialog.setAttribute("aria-modal", "true");
+		dialog.dataset.nav = dialogNavStyle(modal);
 
 		const header = document.createElement("div");
 		header.className = "juneau-view-dialog-header";
@@ -7043,9 +7089,15 @@
 		// `type=action` input inside this dialog's form can resolve a STACKED step that is not a row action.
 		const childCatalog = modal?.childActions ?? null;
 		appendDialogForm(dialog, modal?.form, table, tr, ctx, seq, childCatalog);
+		// A client-built body (a caller-owned DOM node, never markup) sits where a form would.
+		if (modal?.body) dialog.appendChild(modal.body);
 
 		const actions = document.createElement("div");
 		actions.className = "juneau-view-dialog-actions";
+		// Caller-built lead buttons sit before Cancel; the first one pushes the rest to the end.
+		if (Array.isArray(modal?.leadActions)) {
+			modal.leadActions.forEach(function (n) { if (n) actions.appendChild(n); });
+		}
 		const cancelBtn = document.createElement("button");
 		cancelBtn.type = "button";
 		cancelBtn.className = "juneau-view-dialog-cancel";
@@ -7065,6 +7117,21 @@
 		backdrop.appendChild(dialog);
 		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, cancelBtn: cancelBtn,
 			dismissBtn: dismissBtn };
+	}
+
+	/**
+	 * The dialog's inner-navigation style, stamped as `data-nav` on `.juneau-view-dialog`: "wizard" when the modal
+	 * declares steps (steps are the switch; there is no nav value for it), else "folder" for `nav:"folder"`, else
+	 * "pill".  An unknown nav value falls back to "pill" silently, so a typo in a fixture logs nothing.
+	 */
+	function dialogNavStyle(modal) {
+		if (dialogSteps(modal).length) return "wizard";
+		return modal?.nav === "folder" ? "folder" : "pill";
+	}
+
+	/** The modal's usable wizard steps (an entry without an id is dropped). */
+	function dialogSteps(modal) {
+		return Array.isArray(modal?.steps) ? modal.steps.filter(function (st) { return st?.id != null; }) : [];
 	}
 
 	/** Icon name for the optional circular leading glyph on a dialog header; null when none should paint. */
@@ -7496,10 +7563,15 @@
 	}
 
 	/**
-	 * Reveals the section that owns `el` when it is currently hidden, so a confirm-time focus lands on something the
-	 * user can see.  A no-op for a flat form, and for a control whose section is already showing.
+	 * Reveals the section (or wizard step) that owns `el` when it is currently hidden, so a confirm-time focus lands
+	 * on something the user can see.  A no-op for a flat form, and for a control whose section is already showing.
 	 */
 	function revealDialogSectionFor(el) {
+		const stepPane = (typeof el?.closest === "function") ? el.closest("[data-juneau-dialog-step]") : null;
+		if (stepPane?.hidden) {
+			const dialog = stepPane.closest(".juneau-view-dialog");
+			if (typeof dialog?._juneauActivateStep === "function") dialog._juneauActivateStep(stepPane.dataset.juneauDialogStep);
+		}
 		const pane = (typeof el?.closest === "function") ? el.closest("[data-juneau-form-section]") : null;
 		if (! pane?.hidden) return;
 		const wrap = (typeof pane.closest === "function") ? pane.closest(".juneau-view-dialog-form") : null;
@@ -7647,11 +7719,12 @@
 		catch (e) { console.error("[juneau-views] " + fmt("dialog chrome '%s' threw: %s", modal.chrome, e?.message ?? e)); } // NOSONAR javascript:S2486 -- a throwing chrome must not stop the dialog opening
 	}
 
-	/** Paints one wizard step's display fields into `host` (textContent only). */
+	/** Paints one wizard step's display fields into `host` (textContent only); nothing when the step declares none. */
 	function paintStepFields(host, step) {
+		if (! step.fields?.length) return;
 		const dl = document.createElement("dl");
 		dl.className = "juneau-view-dialog-fields";
-		(step.fields || []).forEach(function (f) {
+		step.fields.forEach(function (f) {
 			const dt = document.createElement("dt");
 			dt.textContent = (f?.label != null) ? String(f.label) : "";
 			const dd = document.createElement("dd");
@@ -7663,32 +7736,98 @@
 	}
 
 	/**
+	 * Builds the wizard step indicator that replaces the section strip: one numbered mark plus label per step,
+	 * joined by bars (CSS).  Not clickable; `paint(index)` marks earlier steps done (a check mark), the current one
+	 * active (`aria-current="step"`) and later ones to-do.
+	 */
+	function buildDialogStepRail(steps) {
+		const rail = document.createElement("ol");
+		rail.className = "juneau-view-dialog-steps";
+		rail.setAttribute("aria-label", "Steps");
+		const items = steps.map(function (st) {
+			const li = document.createElement("li");
+			li.className = "juneau-view-dialog-step";
+			const mark = document.createElement("span");
+			mark.className = "juneau-view-dialog-step-mark";
+			mark.setAttribute("aria-hidden", "true");
+			const label = document.createElement("span");
+			label.className = "juneau-view-dialog-step-label";
+			label.textContent = st.title == null ? String(st.id) : String(st.title);
+			li.appendChild(mark);
+			li.appendChild(label);
+			rail.appendChild(li);
+			return { li: li, mark: mark };
+		});
+		function paint(index) {
+			items.forEach(function (it, i) {
+				let state = "todo";
+				if (i < index) state = "done";
+				else if (i === index) state = "active";
+				it.li.dataset.state = state;
+				if (i === index) it.li.setAttribute("aria-current", "step");
+				else it.li.removeAttribute("aria-current");
+				it.mark.textContent = i < index ? "\u2713" : String(i + 1);
+			});
+		}
+		return { rail: rail, paint: paint };
+	}
+
+	/**
 	 * Turns the dialog `ui` into the scripting handle (`dialogs.open`'s return value) and returns the private state the
-	 * confirm wiring needs.  Steps (`modal.steps`) render one at a time with Back and Next; the last step's button is
-	 * the dialog's own confirm.  A script drives dynamic flows through `setStep` / `setConfirmLabel` / `onConfirm`.
+	 * confirm wiring needs.  Steps (`modal.steps`) render one at a time with Back and Next under a step rail; the last
+	 * step's button is the dialog's own confirm.  Each step owns a pane in the body (`body()` is the current step's
+	 * pane), so a control a script puts on one step keeps its value while another is showing and is validated with its
+	 * own step.  A script drives dynamic flows through `setStep` / `setConfirmLabel` / `onConfirm`.
 	 */
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 	function wireDialogHandle(ui, modal, action, table, tr, ctx) { // NOSONAR javascript:S107 -- dialog-build context threaded through unchanged
-		const steps = Array.isArray(modal?.steps) ? modal.steps.filter(function (st) { return st?.id != null; }) : [];
-		const finalLabel = ui.confirmBtn.textContent;
+		const steps = dialogSteps(modal);
+		// The last step's label: the dialog's own confirm label when the modal or action names one, else "Finish".
+		const finalLabel = (modal?.confirmLabel || action?.confirmLabel || action?.label) ? ui.confirmBtn.textContent : "Finish";
 		const state = { confirmHandler: null, cancelHandler: null, submitted: false, proceed: null };
 		let stepIndex = steps.length ? 0 : -1;
 		let freeStep = null;
 		let closedResolve = null;
 		const closed = new Promise(function (resolve) { closedResolve = resolve; });
 		let backBtn = null;
+		let rail = null;
+		let bodyEl = null;
+		const panes = [];
 		if (steps.length) {
+			const actions = ui.cancelBtn.parentNode;
+			// Wizard footer: Cancel on the left, a spacer, then Back and Next / Finish on the right.
+			const spacer = document.createElement("span");
+			spacer.className = "juneau-view-dialog-actions-spacer";
+			spacer.setAttribute("aria-hidden", "true");
+			actions.insertBefore(spacer, ui.confirmBtn);
 			backBtn = document.createElement("button");
 			backBtn.type = "button";
 			backBtn.className = "juneau-view-dialog-back";
 			backBtn.textContent = "Back";
 			backBtn.hidden = true;
-			ui.cancelBtn.parentNode.insertBefore(backBtn, ui.confirmBtn);
+			actions.insertBefore(backBtn, ui.confirmBtn);
 			backBtn.addEventListener("click", function () { if (stepIndex > 0) { stepIndex--; renderStep(); } });
+			rail = buildDialogStepRail(steps);
+			const header = ui.dialog.querySelector(".juneau-view-dialog-header");
+			ui.dialog.insertBefore(rail.rail, header ? header.nextSibling : ui.dialog.firstChild);
+			for (const st of steps) {
+				const pane = document.createElement("div");
+				pane.className = "juneau-view-dialog-step-pane";
+				pane.dataset.juneauDialogStep = String(st.id);
+				pane.hidden = true;
+				paintStepFields(pane, st);
+				bodyHost().appendChild(pane);
+				panes.push(pane);
+			}
+			// Finish-time validation reveals the step that owns the first invalid control (see revealDialogSectionFor).
+			ui.dialog._juneauActivateStep = function (id) {
+				const i = steps.findIndex(function (st) { return String(st.id) === String(id); });
+				if (i >= 0 && i !== stepIndex) { stepIndex = i; renderStep(); }
+			};
 		}
-		let bodyEl = null;
 
-		function body() {
+		// The body element itself; a wizard's step panes live inside it.
+		function bodyHost() {
 			if (!bodyEl) {
 				bodyEl = document.createElement("div");
 				bodyEl.className = "juneau-view-dialog-body";
@@ -7697,11 +7836,15 @@
 			return bodyEl;
 		}
 
+		// What a script paints into: the current step's pane in a wizard, else the body.
+		function body() {
+			return (stepIndex >= 0 && panes.length) ? panes[stepIndex] : bodyHost();
+		}
+
 		function renderStep() {
 			const st = steps[stepIndex];
-			const host = body();
-			while (host.firstChild) host.firstChild.remove();
-			paintStepFields(host, st);
+			panes.forEach(function (p, i) { p.hidden = i !== stepIndex; });
+			rail.paint(stepIndex);
 			const titleEl = ui.dialog.querySelector(".juneau-view-dialog-title");
 			if (titleEl && st.title != null) titleEl.textContent = String(st.title);
 			const last = stepIndex === steps.length - 1;
@@ -7713,6 +7856,12 @@
 
 		if (steps.length) renderStep();
 
+		// Next validates only the current step's pane; the last step's confirm (Finish) validates the whole dialog,
+		// every step included, and a hidden step owning the first invalid control is revealed before the focus.
+		state.validationScope = function () {
+			if (stepIndex >= 0 && stepIndex < steps.length - 1) return panes[stepIndex];
+			return ui.dialog;
+		};
 		state.nextStep = function () {
 			if (stepIndex < 0 || stepIndex >= steps.length - 1) return null;
 			return function () { stepIndex++; renderStep(); };
@@ -7793,7 +7942,7 @@
 			finally { release(); }
 		}
 		ui.confirmBtn.addEventListener("click", function () {
-			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
+			if (! validateDialogForm(state.validationScope(), true)) return;   // fail-loud client validation before the submit (or a wizard Next)
 			const fields = collectDialogFormFields(ui.dialog);
 			const advance = state.nextStep();   // null when there is nothing to advance to (no steps, or on the last)
 			function go() { if (advance) advance(); else proceed(fields); }
@@ -8872,9 +9021,19 @@
 		if (!viewDef.pollIntervalMs || !toolbarRow) return;
 		const staleness = buildStalenessIndicator();
 		const rightCluster = toolbarRow.querySelector(".juneau-view-toolbar-right");
-		// Appended against the CLUSTER, never against a specific sibling (e.g. a trailing refresh group) - a
-		// view may declare a poll interval with no ribbon at all, so there may be no sibling to anchor to.
-		if (rightCluster) rightCluster.appendChild(staleness);
+		// The dot lives in the `status` group, ahead of the pause/play button when the ribbon rendered one (a
+		// declared pausePolling item).  A view may poll with no ribbon at all, so the group is created against the
+		// CLUSTER when the ribbon did not.
+		if (rightCluster) {
+			let group = rightCluster.querySelector('[data-juneau-group="status"]');
+			if (! group) {
+				group = document.createElement("span");
+				group.className = "juneau-view-ribbon-group";
+				group.setAttribute("data-juneau-group", "status");
+				rightCluster.appendChild(group);
+			}
+			group.insertBefore(staleness, group.firstChild);
+		}
 		initPolling(table, ctx.dataTable, viewDef, staleness, ctx);
 	}
 

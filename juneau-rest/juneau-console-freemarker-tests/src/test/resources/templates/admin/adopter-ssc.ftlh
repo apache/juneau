@@ -31,7 +31,7 @@
 <@token name="--jc-card-bg" value="#ffffff"/>
 <@token name="--jc-chrome-bg" value="#f3f3f3"/>
 <@token name="--jc-table-header-bg" value="#ffffff"/>
-<@token name="--jc-table-stripe-bg" value="#fafaf9"/>
+<@token name="--jc-table-stripe-bg" value="#f3f3f3"/>
 <@token name="--jc-white" value="#ffffff"/>
 <@token name="--jc-btn-primary" value="#3071c2"/>
 <@token name="--jc-btn-primary-hover" value="#005fb2"/>

@@ -460,7 +460,7 @@ test('r03_416ResetsAndReplays', async function (t) {
 test('r04_notFoundAndGone', async function (t) {
 	const nf = start(t, {}, function () { return statusRes(404); });
 	await settle();
-	expect(nf.status().badge === 'Terminal not found' && nf.status().stopped && nf.term === null, 'not found: ' + nf.status().badge);
+	expect(nf.status().empty === true && nf.status().kind !== 'error' && !nf.status().stopped && nf.term === null, 'not found is empty, not failed: ' + JSON.stringify(nf.status()));
 	const srv = logServer('kept\n');
 	let gone = false;
 	// The server's Term-Next on gone is from (5); this one sends 0 to show the client does not rewind on it.
@@ -478,6 +478,81 @@ test('r04_notFoundAndGone', async function (t) {
 	g.clock.advance(60000);
 	await settle();
 	expect(g.urls.length === polls, 'no poll after gone: ' + g.urls.slice(polls).join(' '));
+});
+
+test('r08_emptyKeepsPollingAtTheIdleCadenceCapped', async function (t) {
+	const c = start(t, {}, function () { return statusRes(404); });
+	await settle();
+	for (let i = 0; i < 6; i++) {
+		expect(c.clock.pending().length === 1 && c.clock.pending()[0] === 5000, 'idle cadence, no growth: ' + JSON.stringify(c.clock.pending()));
+		c.clock.advance(5000);
+		await settle();
+	}
+	expect(c.status().empty === true && c.urls.length === 7, 'still empty after 7 attempts: ' + c.urls.length);
+	const slow = start(t, { refreshMs: 120000 }, function () { return statusRes(404); });
+	await settle();
+	expect(slow.clock.pending()[0] === 30000, 'capped at 30s: ' + slow.clock.pending());
+});
+
+test('r09_a200AfterEmptyLeavesEmpty', async function (t) {
+	const srv = logServer('hello\n');
+	let missing = true;
+	const c = start(t, {}, function (url) { return missing ? statusRes(404) : srv.route(url); });
+	await settle();
+	expect(c.status().empty === true && c.term === null, 'empty first');
+	missing = false;
+	c.clock.advance(5000);
+	await settle();
+	expect(c.status().empty === false && c.status().kind === 'running', 'back to running: ' + JSON.stringify(c.status()));
+	expectSame(c.term.texts(), ['hello\n'], 'content rendered');
+	expect(c.statuses.some(function (s) { return s.empty; }) && c.statuses.at(-1).empty === false, 'status emitted both ways');
+});
+
+test('r10_a404AfterLiveReEntersEmptyAndKeepsContent', async function (t) {
+	const srv = logServer('live\n');
+	let missing = false;
+	const c = start(t, {}, function (url) { return missing ? statusRes(404) : srv.route(url); });
+	await settle();
+	missing = true;
+	c.clock.advance(1000);
+	await settle();
+	expect(c.status().empty === true && !c.status().stopped, 'empty again');
+	expect(c.term.resets === 0 && c.term.texts().join('') === 'live\n', 'rendered content kept');
+	missing = false;
+	srv.log += 'more\n';
+	c.clock.advance(5000);
+	await settle();
+	expect(c.status().empty === false, 'left empty');
+	expectSame(c.term.texts(), ['live\n', 'more\n'], 'continues from where it was');
+});
+
+test('r11_nonNotFoundErrorWhileEmptyFollowsTheNormalPath', async function (t) {
+	let code = 404;
+	const c = start(t, {}, function () { return statusRes(code); });
+	await settle();
+	expect(c.status().empty === true, 'empty');
+	code = 503;
+	c.clock.advance(5000);
+	await settle();
+	expect(c.status().empty === false && c.status().reconnecting && c.clock.pending()[0] === 1000, '5xx retries on the ladder: ' + JSON.stringify(c.status()));
+	code = 403;
+	c.clock.advance(1000);
+	await settle();
+	expect(c.status().badge === 'HTTP 403' && c.status().kind === 'error' && c.status().stopped && c.status().empty === false, 'other 4xx is the red failed badge');
+});
+
+test('r12_aNudgeWhileEmptyDoesNotSkipTheBackoff', async function (t) {
+	const srv = logServer('x\n');
+	let missing = false;
+	const c = start(t, {}, function (url) { return missing ? statusRes(404) : srv.route(url); });
+	await settle();
+	missing = true;
+	c.clock.advance(1000);
+	await settle();
+	const n = c.urls.length;
+	c.engine.nudge({ end: 999 });
+	await settle();
+	expect(c.urls.length === n, 'no extra request while empty: ' + c.urls.slice(n));
 });
 
 test('r05_events410RefetchesFromTheStart', async function (t) {

@@ -348,6 +348,19 @@ const OVR_SVG =
 		};
 	}
 
+	// Scenario 8b - the IRS-sourced glyph names resolve to their stems, `columns` maps to `tune`, and an unknown
+	// name warns (dev mode) with the name in the message.
+	{
+		const s = await runScenario({ dev: true });
+		const icons = s.NS.icons;
+		const n2s = icons.nameToStem();
+		out.s_newGlyphs = {
+			plus: n2s.plus, play: n2s.play, restore: n2s.restore, tune: n2s.tune, columns: n2s.columns, settings: n2s.settings,
+			unknownNull: icons.resolveIcon('no-such-glyph-j1080') === null,
+			unknownWarned: s.warns.some(function (w) { return w.indexOf('no-such-glyph-j1080') !== -1; })
+		};
+	}
+
 	// Scenario 9 - an unknown name draws nothing (null) and a non-dev page stays silent.
 	{
 		const s = await runScenario({});

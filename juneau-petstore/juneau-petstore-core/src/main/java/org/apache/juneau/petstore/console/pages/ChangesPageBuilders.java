@@ -55,7 +55,8 @@ public final class ChangesPageBuilders {
 					Column.create("state").label("State").render("pill"),
 					Column.create("message").label("Message").defaultVisible(false))
 				.ribbon(
-					RibbonItem.option("pending-only").title("Pending only").column("state").value("$eq(PENDING)").defaultOn(),
+					RibbonItem.option("pending-only").title("Pending only").column("state").value("$eq(PENDING)").defaultOn().group("filter"),
+					RibbonItem.resetDefaults().group("page"),
 					RibbonItem.refresh())
 				.rowActions(
 					RowAction.create("retry").label("Retry").endpoint("/console/pets/changes/{id}/retry").method(Method.POST).onSuccess(OnSuccess.REDRAW)

@@ -97,6 +97,20 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(firstIdx >= 0 && prevIdx > firstIdx && menuIdx > prevIdx && nextIdx > menuIdx && lastIdx > nextIdx, fnBody);
 	}
 
+	/**
+	 * The four nav buttons reference the standard sprite names (spec section 4): single chevrons for previous/next,
+	 * the doubled-chevron {@code first_page}/{@code last_page} art for the ends.  No glyph text is asserted (none
+	 * exists in source; the art is the sprite's).
+	 */
+	@Test void b06_buildPagingPill_navButtonsReferenceTheFourPagingSymbols() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
+		var fnBody = functionBody(body, "function buildPagingPill(");
+		assertTrue(fnBody.contains("pagingPillButton(\"First page\", \"first_page\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"Previous page\", \"chevron_left\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"Next page\", \"chevron_right\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"Last page\", \"last_page\","), fnBody);
+	}
+
 	@Test void b03_buildPagingPill_carriesPagingDataTestId() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function buildPagingPill(");
@@ -328,12 +342,13 @@ class PagingPill_Wiring_Test extends TestBase {
 	 * Regression (item 5's visual-feedback fix): a persisted `option`/`optionGroup` toggle (e.g. the release-manager
 	 * "dropped-only" filter, `persist(true)`) can be active with NO visible affordance on the button - so a
 	 * still-active filter left over from a prior session silently keeps filtering out every row, and looks
-	 * identical to a bug. Asserts the neutral `aria-pressed="true"` shape rule exists here (console-ui's chrome.css
-	 * layers the themed accent color on the SAME selector).
+	 * identical to a bug.  The affordance is chrome.css's accent edge + wash on the `aria-pressed="true"` selector
+	 * (selected = hover, spec section 4); the old neutral 2px border here made a pressed button wider than its
+	 * hovered twin and is gone.
 	 */
-	@Test void c05_viewsCss_hasNeutralAriaPressedShapeForActiveToggle() throws Exception {
+	@Test void c05_viewsCss_hasNoAriaPressedBorderWidthRule() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains(".juneau-view-ribbon-btn[aria-pressed=\"true\"] {"), body);
+		assertFalse(body.contains(".juneau-view-ribbon-btn[aria-pressed=\"true\"] {"), body);
 	}
 
 	/**

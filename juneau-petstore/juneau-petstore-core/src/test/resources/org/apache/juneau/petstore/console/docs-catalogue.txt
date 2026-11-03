@@ -41,6 +41,7 @@ page|about|/console/about|19.15.PetstoreAbout.md
 # Builder-only pages (PetstorePages_ContractTest.BUILDER_ONLY).
 page|charts|/console/dev/charts|19.16.PetstoreDeveloperPages.md
 page|data|/console/dev/data|19.16.PetstoreDeveloperPages.md
+page|dialogs|/console/dev/dialogs|19.16.PetstoreDeveloperPages.md
 page|dashboard|/console/dev/dashboard|19.16.PetstoreDeveloperPages.md
 #
 # FailLoud rows.  Most assert message text, so the code column is "-"; a code is listed only where an assertion pins one.

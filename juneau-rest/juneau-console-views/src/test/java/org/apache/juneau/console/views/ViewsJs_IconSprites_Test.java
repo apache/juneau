@@ -108,7 +108,8 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		for (var stem : new String[]{
 			"copy", "csv", "spreadsheet", "pdf", "print", "refresh", "toggle_column_search", "collapse_all",
 			"settings", "columns", "chevronright", "chevronleft", "chevronup", "chevrondown",
-			"first_page", "last_page", "more", "sort", "filter", "search", "close", "download", "edit"
+			"first_page", "last_page", "more", "sort", "filter", "search", "close", "download", "edit",
+			"plus", "play", "restore", "tune"
 		})
 			assertTrue(svg.contains("id=\"juneau-sym-" + stem + "\""),
 				() -> "shipped sprite is missing symbol juneau-sym-" + stem);
@@ -229,7 +230,7 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		var n2s = (Map<?,?>) s.get("nameToStem");
 		assertBean(n2s, "content_copy,table,picture_as_pdf,manage_search", "copy,spreadsheet,pdf,toggle_column_search");
 		// stems() returns the shipped stem catalog after load; it matches the injected sprite's symbol count.
-		assertBean(s, "stemsCount,namesCount", "33,33");
+		assertBean(s, "stemsCount,namesCount", "37,37");
 	}
 
 	@Test void b04_partialReplacement_replacedNamesWinAndTheRestFallThrough() {
@@ -308,12 +309,18 @@ class ViewsJs_IconSprites_Test extends TestBase {
 	@Test void c05_packDuringAnInFlightLoadDropsTheStaleLoadAndKeepsTheGateClosed() {
 		assertBean(scenario("s_pack"),
 			"freshInjectedOnce,staleNotInjected,staleResolvesToCurrent,stemsStillShipped,spriteSymbols,gateStaysClosed",
-			"true,true,true,33,33,true");
+			"true,true,true,37,37,true");
 	}
 
 	@Test void c06_materialPackLayersOverTheShippedSpriteSoMissingStemsFallBack() {
 		assertBean(scenario("s_materialOverShipped"),
 			"replacementLayer,searchWinner,copyWinner,spriteHasSearch,noWarn",
 			"loaded,shipped,replacement,true,true");
+	}
+
+	@Test void c07_newGlyphNamesResolveToTheirStemsAndColumnsMapsToTune() {
+		assertBean(scenario("s_newGlyphs"),
+			"plus,play,restore,tune,columns,settings,unknownNull,unknownWarned",
+			"plus,play,restore,tune,tune,settings,true,true");
 	}
 }

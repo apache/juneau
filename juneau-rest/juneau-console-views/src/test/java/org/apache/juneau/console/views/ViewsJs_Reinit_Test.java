@@ -17,6 +17,7 @@
 package org.apache.juneau.console.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.bct.BctAssertions.assertBean;
 import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
@@ -393,5 +394,15 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertEquals(0, ((Number)r.get("defaultOptionsAutoRefreshOff")).intValue());
 		assertEquals(0, ((Number)r.get("normalizeOptionsDropsBadAutoRefresh")).intValue());
 		assertEquals(60000, ((Number)r.get("normalizeOptionsKeepsGoodAutoRefresh")).intValue());
+	}
+	@Test void d11_resetToDefaultsAndApply_appliesTheDefaultViewWithNoDialog() {
+		var r = report();
+		assertBean(r, "hasResetToDefaultsAndApply,reset_ok,reset_appliedVisible,reset_draftLabelsCleared,reset_activeNameCleared,"
+			+ "reset_activeCleared,reset_clean,reset_noChooserOpened", "true,true,A,C,true,true,true,true,true");
+		assertEquals("A,B,C", r.get("reset_appliedOrder"));
+		var order = (List<?>)r.get("reset_appliedDefaultOrder");
+		assertSize(1, order);
+		assertEquals("C", ((Map<?,?>)order.get(0)).get("data"));
+		assertEquals("desc", ((Map<?,?>)order.get(0)).get("dir"));
 	}
 }

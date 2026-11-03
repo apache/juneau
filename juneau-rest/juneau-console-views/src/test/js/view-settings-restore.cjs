@@ -156,13 +156,13 @@ const STAGE_HIDDEN = {
 	const sctx = seeded.table.__juneauCtx;
 	out.seed_draftVisible = sctx._configDraft ? sctx._configDraft.visible : null;
 	seeded.NS.config.openChooser(seeded.table, sctx);
-	out.seed_dialogStageChecked = (function () {
-		const cb = (function () { const r = seeded.env.document.querySelector('.juneau-config-col-row[data-col="stage"]'); return r ? r.querySelector('.juneau-config-col-vis') : null; })();
-		return cb ? !!cb.checked : null;
-	})();
+	// A hidden column is absent from the shown-columns grid and listed under Available columns instead.
+	out.seed_dialogStageShown = seeded.env.document.querySelector('.juneau-config-col-row[data-col="stage"]') != null;
+	out.seed_dialogStageAvailable = seeded.env.document.querySelector('.juneau-config-avail[data-col="stage"]') != null;
 	out.seed_ariaLabels = (function () {
-		const cb = (function () { const r = seeded.env.document.querySelector('.juneau-config-col-row[data-col="stage"]'); return r ? r.querySelector('.juneau-config-col-vis') : null; })();
-		return cb ? cb.getAttribute('aria-label') : null;
+		const r = seeded.env.document.querySelector('.juneau-config-col-row[data-col="status"]');
+		const b = r ? r.querySelector('.juneau-config-col-remove') : null;
+		return b ? b.getAttribute('aria-label') : null;
 	})();
 	// Stale schemaVersion: the reset notice reaches the dialog exactly once.
 	const st = await reload('server', { ...STAGE_HIDDEN, schemaVersion: 1 });

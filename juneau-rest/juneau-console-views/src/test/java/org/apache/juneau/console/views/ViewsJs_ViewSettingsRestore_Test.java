@@ -188,7 +188,8 @@ class ViewsJs_ViewSettingsRestore_Test extends TestBase {
 
 	@Test void e01_dialogSeedsFromRestoredSettings_notCatalogDefaults() {
 		assertEquals(List.of("name", "status"), report().get("seed_draftVisible"));
-		assertEquals(false, report().get("seed_dialogStageChecked"));
+		assertEquals(false, report().get("seed_dialogStageShown"));
+		assertEquals(true, report().get("seed_dialogStageAvailable"));
 	}
 
 	@Test void e02_staleBlob_resetNoticeReachesTheDialogOnce() {
@@ -214,6 +215,6 @@ class ViewsJs_ViewSettingsRestore_Test extends TestBase {
 	}
 
 	@Test void e06_rowControlAriaLabels_includeTheColumnLabel() {
-		assertEquals("Show column Stage", report().get("seed_ariaLabels"));
+		assertEquals("Remove column Status", report().get("seed_ariaLabels"));
 	}
 }

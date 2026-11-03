@@ -102,9 +102,13 @@ class Terminal_BrowserTest extends TestBase {
 	@Test void a22_absentTerminalKeepsTheDefaultXtermOptions() { ok("b22_absentTerminalKeepsTheDefaultXtermOptions"); }
 
 	@Test void a15d_toneBackgroundsLegibleUnderDark() { ok("b15d_toneBackgroundsLegibleUnderDark"); }
+	@Test void a24_toolbarControlsUseTheStandardButtonKinds() { ok("b24_toolbarControlsUseTheStandardButtonKinds"); }
+
+	@Test void a25_notFoundShowsTheEmptyPanel() { ok("b25_notFoundShowsTheEmptyPanel"); }
+	@Test void a26_defaultEmptyMessage() { ok("b26_defaultEmptyMessage"); }
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 24, cases);
+		assertSize(() -> "case count changed; add a method per new case: " + cases.keySet(), 27, cases);
 	}
 }

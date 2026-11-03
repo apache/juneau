@@ -99,14 +99,15 @@ public final class PetsPageBuilders {
 				RibbonItem.optionGroup("status",
 					RibbonItem.option("available").title("Available").column("status").value("$eq(AVAILABLE)"),
 					RibbonItem.option("pending").title("Pending").column("status").value("$eq(PENDING)"))
-					.title("Pet status").deselectable(true).defaultOption("available"),
+					.title("Pet status").deselectable(true).defaultOption("available").group("filter"),
 				RibbonItem.optionGroup("species",
 					RibbonItem.option("mammals").title("Mammals").column("species").value("$in(DOG,CAT,MOUSE,RABBIT)"),
 					RibbonItem.option("others").title("Others").column("species").value("$in(BIRD,FISH,SNAKE)"))
-					.title("Species").deselectable(true).defaultOption("mammals"),
+					.title("Species").deselectable(true).defaultOption("mammals").group("filter"),
 				RibbonItem.dialog("add-pet").title("+ Add pet").symbol("plus")
-					.form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW),
-				RibbonItem.export("copy", "csv").optional("excel", "pdf"),
+					.form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),
+				RibbonItem.export("copy", "csv").optional("excel", "pdf").group("viewing"),
+				RibbonItem.resetDefaults().group("page"),
 				RibbonItem.refresh())
 			.rowActions(
 				editPetAction(OnSuccess.MERGE_ROW),
@@ -135,7 +136,8 @@ public final class PetsPageBuilders {
 					RibbonItem.optionGroup("species",
 						RibbonItem.option("dogs").title("Dogs").column("species").value("$eq(DOG)"),
 						RibbonItem.option("cats").title("Cats").column("species").value("$eq(CAT)"))
-						.title("Species"),
+						.title("Species").group("filter"),
+					RibbonItem.resetDefaults().group("page"),
 					RibbonItem.refresh()), "Sold pets");
 	}
 

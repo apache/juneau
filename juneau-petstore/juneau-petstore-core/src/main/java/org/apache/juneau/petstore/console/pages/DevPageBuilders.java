@@ -34,7 +34,7 @@ import org.apache.juneau.console.views.TableSpec.*;
 /**
  * Builder twins of the Developer pages: Custom cards ({@code cards.ftlh}), Rendering flavors ({@code flavors.ftlh},
  * {@code flavors-react.ftlh}), Secure ({@code secure.ftlh}), Themes ({@code themes.ftlh}), Charts (builder only),
- * Data sources (builder only) and Dashboard (builder only).
+ * Data sources (builder only), Dialogs (builder only) and Dashboard (builder only).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -196,6 +196,23 @@ public final class DevPageBuilders {
 				.ribbon(RibbonItem.publish("Highlight Monday", "cmd:trend",
 					Map.of("schemaVersion", 1, "op", "highlight", "options", Map.of("seriesId", "placed", "dataIndex", 0)))),
 				"Days");
+	}
+
+	/**
+	 * Dialogs (builder only): a table whose ribbon opens a {@code ModalDef.steps} wizard and a {@code nav:"folder"} dialog.
+	 *
+	 * @return The page spec.
+	 */
+	public static PageSpec dialogs() {
+		var base = "/console/dev/dialogs";
+		return PageSpec.create().tab("dev").toolkit("views")
+			.table(TableSpec.create("dialogs").dataMode(DataMode.CLIENT).dataUrl(base + "/rows")
+				.columns(Column.create("style").label("Style"), Column.create("steps").label("Parts"))
+				.ribbon(
+					RibbonItem.dialog("wizard").title("Wizard").form(base + "/wizard-form").endpoint(base + "/submit").method(org.apache.juneau.console.views.RowAction.Method.POST).group("entity"),
+					RibbonItem.dialog("folder").title("Folder tabs").form(base + "/folder-form").endpoint(base + "/submit").method(org.apache.juneau.console.views.RowAction.Method.POST).group("entity"),
+					RibbonItem.refresh()),
+				"Dialogs");
 	}
 
 	/**

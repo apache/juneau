@@ -44,6 +44,13 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 		}
 	}
 
+	private static String configJs() throws IOException {
+		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.CONFIG_JS_RESOURCE)) {
+			assertNotNull(in);
+			return new String(in.readAllBytes(), UTF_8);
+		}
+	}
+
 	private static String rendersJs() throws IOException {
 		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.RENDERS_JS_RESOURCE)) {
 			assertNotNull(in);
@@ -99,13 +106,16 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 			return;
 		var viewsFile = Files.createTempFile("juneau-views-", ".js");
 		var rendersFile = Files.createTempFile("juneau-renders-", ".js");
+		var configFile = Files.createTempFile("juneau-config-", ".js");
 		try {
 			Files.writeString(viewsFile, viewsJs(), UTF_8);
 			Files.writeString(rendersFile, rendersJs(), UTF_8);
-			report = Json.to(runNode(harness, rendersFile, viewsFile), Map.class);
+			Files.writeString(configFile, configJs(), UTF_8);
+			report = Json.to(runNode(harness, rendersFile, viewsFile, configFile), Map.class);
 		} finally {
 			Files.deleteIfExists(viewsFile);
 			Files.deleteIfExists(rendersFile);
+			Files.deleteIfExists(configFile);
 		}
 	}
 
@@ -138,11 +148,11 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 		return null;
 	}
 
-	private static String runNode(Path harness, Path rendersJs, Path viewsJs) throws Exception {
+	private static String runNode(Path harness, Path rendersJs, Path viewsJs, Path configJs) throws Exception {
 		var stdout = Files.createTempFile("popup-layer-stdout-", ".json");
 		var stderr = Files.createTempFile("popup-layer-stderr-", ".txt");
 		try {
-			var pb = new ProcessBuilder(List.of("node", harness.toString(), rendersJs.toString(), viewsJs.toString()))
+			var pb = new ProcessBuilder(List.of("node", harness.toString(), rendersJs.toString(), viewsJs.toString(), configJs.toString()))
 				.redirectOutput(stdout.toFile())
 				.redirectError(stderr.toFile());
 			var p = pb.start();
@@ -242,5 +252,19 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 
 	private static double toD(Object o) {
 		return ((Number)o).doubleValue();
+	}
+
+	@Test void b09_viewSettingsChooserIsADialogLayer_survivesActionSweep_refusedAtCap() {
+		// The chooser sits on the page layer stack (one dialog slot), not the table's action-dialog stack, so the
+		// teardown an Apply rebuild runs does not close it; Escape and Cancel pop it; it is refused at the cap.
+		var r = report();
+		assertEquals(true, r.get("chooser_opened"), () -> "chooser did not open: " + r);
+		assertEquals(true, r.get("chooser_isDialogLayer"), () -> "chooser is not the top dialog layer: " + r);
+		assertEquals(1.0, toD(r.get("chooser_dialogCount")));
+		assertEquals(true, r.get("chooser_notOnTableStack"));
+		assertEquals(true, r.get("chooser_survivesActionSweep"), () -> "closeActionDialog closed the chooser: " + r);
+		assertEquals(true, r.get("chooser_closeEmptiesStack"));
+		assertEquals(true, r.get("chooser_escapeCloses"));
+		assertEquals(true, r.get("chooser_refusedAtCap"));
 	}
 }

@@ -154,11 +154,43 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 	/** ...and its pill still reads exactly what it always read, in the state it always read. */
 	@Test void a02_aViewThatOptedIntoNothingKeepsItsExactPillText() {
 		var r = report();
-		assertEquals("Updated just now", r.get("default_initialLabel"));
-		assertEquals("fresh", r.get("default_initialState"));
-		assertEquals("Updated 7s ago", r.get("default_labelAfter7s"));
-		assertEquals("fresh", r.get("default_stateAfter7s"));
+		assertEquals("Updated just now \u00b7 refreshes every 5s", r.get("default_initialLabel"));
+		assertEquals("idle", r.get("default_initialState"));
+		assertEquals("Updated 7s ago \u00b7 refreshes every 5s", r.get("default_labelAfter7s"));
+		assertEquals("idle", r.get("default_stateAfter7s"));
 		assertEquals(true, r.get("default_neverSaysPaused"));
+		assertEquals(true, r.get("default_noVisibleText"));
+	}
+
+	/** The four dot states and their precedence: error over paused over refreshing over idle. */
+	@Test void a03_statusDotStatesAndPrecedence() {
+		var r = report();
+		assertEquals("idle", r.get("dot_initial"));
+		assertEquals("Updated just now \u00b7 refreshes every 5s", r.get("dot_initialTip"));
+		assertEquals("refreshing", r.get("dot_refreshing"));
+		assertEquals("Refreshing\u2026", r.get("dot_refreshingTip"));
+		assertEquals("idle", r.get("dot_backToIdle"));
+		assertEquals("error", r.get("dot_error"));
+		assertEquals("error", r.get("dot_errorBeatsPaused"));
+		assertEquals("paused", r.get("dot_paused"));
+		assertEquals("paused", r.get("dot_pausedBeatsRefreshing"));
+		assertEquals("refreshing", r.get("dot_refreshingAfterResume"));
+		assertEquals("idle", r.get("dot_idleAfterResume"));
+		assertEquals("idle", r.get("dot_nestedXhrIgnored"));
+	}
+
+	/**
+	 * A real failed request reaches the dot. DataTables 2 raises {@code dt-error.dt} (not {@code error.dt}) and only
+	 * for a completed request; a dropped connection raises neither, only {@code xhr.dt} with no JSON. The real-browser
+	 * counterpart is {@code PollingError_BrowserTest}.
+	 */
+	@Test void a04_aFailedRequestFlipsTheDotToError_throughXhrAndDtErrorToo() {
+		var r = report();
+		assertEquals("refreshing", r.get("h_goodXhr_state"));
+		assertEquals("error", r.get("h_failedXhr_state"));
+		assertEquals("idle", r.get("h_recovered_state"));
+		assertEquals("error", r.get("h_dtError_state"));
+		assertEquals("idle", r.get("h_nestedXhrIgnored_state"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -198,8 +230,8 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 
 	@Test void b04_resumingReturnsToTheOrdinaryFreshPill() {
 		var r = report();
-		assertEquals("fresh", r.get("resumed_stateAfterDraw"));
-		assertEquals("Updated just now", r.get("resumed_labelAfterDraw"));
+		assertEquals("idle", r.get("resumed_stateAfterDraw"));
+		assertEquals("Updated just now \u00b7 refreshes every 5s", r.get("resumed_labelAfterDraw"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -244,8 +276,8 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 		assertEquals(true, r.get("manual_repaintHookInstalled"));
 		assertEquals("Paused \u2014 updated just now", r.get("manual_labelAfterPress"));
 		assertEquals("paused", r.get("manual_stateAfterPress"));
-		assertEquals("fresh", r.get("manual_stateAfterResume"));
-		assertEquals("Updated just now", r.get("manual_labelAfterResume"));
+		assertEquals("idle", r.get("manual_stateAfterResume"));
+		assertEquals("Updated just now \u00b7 refreshes every 5s", r.get("manual_labelAfterResume"));
 	}
 
 	/**
@@ -305,7 +337,7 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 		assertEquals("paused", r.get("inflight_stateAfterCancel"));
 		assertEquals("Paused \u2014 updated 2s ago", r.get("inflight_labelAfterCancel"));
 		assertEquals(true, r.get("inflight_drawLandsOnceEditorClosed"));
-		assertEquals("fresh", r.get("inflight_stateAfterResume"));
+		assertEquals("idle", r.get("inflight_stateAfterResume"));
 	}
 
 	/**

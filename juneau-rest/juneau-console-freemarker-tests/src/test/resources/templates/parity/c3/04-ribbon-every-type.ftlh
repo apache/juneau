@@ -42,6 +42,9 @@
       "type": "pausePolling"
     },
     {
+      "type": "resetDefaults"
+    },
+    {
       "type": "dialog",
       "id": "add",
       "title": "Add repo",

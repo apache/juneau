@@ -37,8 +37,8 @@ class Theme_LightBrown_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.LIGHT_BROWN.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is105_mirroringOpensPin() {
-		assertSize(105, Theme.LIGHT_BROWN.getTokens());
+	@Test void a02_tokenCount_is106_mirroringOpensPin() {
+		assertSize(106, Theme.LIGHT_BROWN.getTokens());
 	}
 
 	@Test void a03_name_isLightBrown() {

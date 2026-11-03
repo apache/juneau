@@ -643,6 +643,25 @@ class UnitGoalTest(unittest.TestCase):
         self.assertEqual(subs, ["charlie"])
 
 
+    def test_tested_module_drops_off_while_another_still_runs_tests(self):
+        # push-20261102 replay: a slow module (Integration Tests) started first, a later module finished its tests and
+        # is in jacoco:report; only the module still running tests may show
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
+        b.apply("unit_start", dict(step="mvn", id="mvn/slow", title="Integration Tests"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/slow", outcome="pass", src="sub"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/quick", title="Terminal Region"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/quick", outcome="pass", src="sub"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/quick"))
+        b.apply("unit_goal", dict(step="mvn", id="mvn/quick", goal="jacoco:report"))
+        lines = live_region_lines(b)
+        self.assertFalse(any("jacoco:report" in l for l in lines), lines)
+        self.assertTrue(any("Integration Tests" in l for l in lines), lines)
+
+
 class StepSummaryAfterCommandTest(unittest.TestCase):
     def test_step_summary_follows_the_command_totals_in_one_row(self):
         reset_run_state()

@@ -294,6 +294,7 @@ class PageSpec_Parity_Test extends TestBase {
 					RibbonItem.export("copy", "csv", "print"),
 					RibbonItem.collapseAll(),
 					RibbonItem.pausePolling(),
+					RibbonItem.resetDefaults(),
 					RibbonItem.dialog("add").title("Add repo").form("/rest/t/add-modal")
 						.endpoint("/rest/t/new").method(RowAction.Method.POST).onSuccess(RowAction.OnSuccess.REDRAW));
 			return PageSpec.create().toolkit("views").table(t).view(req);

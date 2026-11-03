@@ -280,6 +280,7 @@ public final class Theme {
 		.token("--jc-page-nav-child-padding-inline", "10px") // Page Subtab horizontal padding
 		.token("--jc-card-shadow", "0 2px 2px rgba(0, 0, 0, 0.05)")  // (c) content-card / title-card elevation; table-chrome clears it
 		.token("--jc-danger-wash", "#fdeceb")              // (d) themeable .jc-btn-danger:hover fill (was a hardcoded hex)
+		.token("--jc-danger-strong", "#a12f2b")            // .jc-btn-destructive:hover fill: darker than --jc-danger (7.1:1 under white ink); invariant in dark like --jc-danger
 		.token("--jc-success-wash", "#eaf6ee")             // (d) themeable .jc-btn-success:hover fill (was a hardcoded hex)
 		.token("--jc-space-1", "4px")                      // (e) spacing scale seam (consumed by the .jc-prose rhythm)
 		.token("--jc-space-2", "8px")
@@ -299,7 +300,7 @@ public final class Theme {
 		// the mechanism, wash to opaque) - but tracked separately: a consumer overriding --jc-accent will NOT move
 		// this token; it must be overridden on its own.  A permanent widening of the theming surface.
 		.token("--jc-accent-selected", "#1589EE")
-		.token("--jc-table-stripe-bg", "#fafaf9")
+		.token("--jc-table-stripe-bg", "#f3f3f3")
 		.token("--jc-main-bg", "#f5f6f9")  // inner-main well; not a retarget of old card tints
 		.token("--jc-card-padding", "16px 16px 8px")  // content-card / title-card inset; --jc-space-4 / --jc-space-4 / --jc-space-2
 		.token("--jc-chrome-icon", "#666666")  // idle ribbon / paging glyph; not --jc-text-soft (body ink)
@@ -363,8 +364,9 @@ public final class Theme {
 		.token("--jc-avatar-bg", "linear-gradient(135deg, #a9772f, #8a6d3b)")
 		.token("--jc-focus", "#926729")
 		.token("--jc-accent-selected", "#a9772f")
-		// Dark accents: a lighter link and the lighter focus ring; the accent itself is already legible as a non-text colour on dark.
+		// Dark accents: a lighter link, a lighter accent (so the selected/hover edge clears 3:1 on its wash) and the lighter focus ring.
 		.dark("--jc-link", "#d9a65c")
+		.dark("--jc-accent", "#b17d31")
 		.dark("--jc-focus", "#a9772f")
 		.dark("--jc-accent-wash", "rgba(169,119,47,0.25)")
 		.build();
@@ -410,7 +412,7 @@ public final class Theme {
 		.token("--jc-focus", "#B42348")
 		.token("--jc-accent-selected", "#B42348")
 		// Dark accents: lighter rose so the link and accent stay legible on a dark surface.
-		.dark("--jc-link", "#f27a9a")
+		.dark("--jc-link", "#f78fab")
 		.dark("--jc-accent", "#e0557a")
 		.dark("--jc-focus", "#e0557a")
 		.dark("--jc-accent-selected", "#e0557a")
@@ -439,7 +441,7 @@ public final class Theme {
 	 */
 	public static final Theme RED = deriveFrom("red", OPEN).resetDark()
 		.token("--jc-page-bg", "linear-gradient(180deg, #f4f5f7 0%, #fafbfc 55%, #ffffff 100%)")
-		.token("--jc-accent", "#FF5630")
+		.token("--jc-accent", "#ff481f")                   // darker than the brand #FF5630 so the selected/hover edge clears 3:1 on its wash
 		.token("--jc-accent-wash", "rgba(255,86,48,0.1)")
 		.token("--jc-link", "#BF2600")
 		.token("--jc-text", "#172B4D")

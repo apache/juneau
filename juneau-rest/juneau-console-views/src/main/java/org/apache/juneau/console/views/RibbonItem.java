@@ -73,10 +73,11 @@ public final class RibbonItem {
 		"refresh", union(COMMON, "target"),
 		"collapseAll", union(COMMON, "target"),
 		"pausePolling", union(COMMON, "target"),
+		"resetDefaults", COMMON,
 		"dialog", union(COMMON, "form", "endpoint", "method", "onSuccess"),
 		"export", Set.of("type", "group", "appearance", "buttons", "optional", "visibleWhen"),
 		"option", union(COMMON, "column", "param", "value", "persist", "default", "target"),
-		"optionGroup", Set.of("type", "id", "title", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),
+		"optionGroup", Set.of("type", "id", "title", "group", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),
 		"publish", union(COMMON, "topic", "payload"),
 		"divider", Set.of("type", "visibleWhen")
 	);
@@ -145,6 +146,19 @@ public final class RibbonItem {
 	 */
 	public static RibbonItem pausePolling() {
 		return new RibbonItem("pausePolling");
+	}
+
+	/**
+	 * The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,
+	 * search and options) and applies it at once, with no dialog.
+	 *
+	 * <p>
+	 * Consumers declare it in the {@code page} group.  It acts on its own table only, so it takes no {@code target}.
+	 *
+	 * @return A new {@link RibbonItem}.
+	 */
+	public static RibbonItem resetDefaults() {
+		return new RibbonItem("resetDefaults");
 	}
 
 	/**
@@ -319,6 +333,12 @@ public final class RibbonItem {
 
 	/**
 	 * Clusters this item with adjacent items sharing the same group name.
+	 *
+	 * <p>
+	 * The toolbar's canonical group ids are {@code entity}, {@code filter}, {@code search}, {@code viewing},
+	 * {@code page} and {@code status}.  Groups using them are sorted into that order among the slots they already
+	 * occupy; groups with any other name keep their declared position.  An ungrouped {@code refresh} joins the
+	 * {@code page} group, last, when one exists.
 	 *
 	 * @param v The group name.  Can be <jk>null</jk> to unset.
 	 * @return This object.

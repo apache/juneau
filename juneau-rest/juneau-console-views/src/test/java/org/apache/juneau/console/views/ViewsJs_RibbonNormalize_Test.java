@@ -344,4 +344,69 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 	@Test void g04_ribbonToQueryParamsWrapperRemoved() {
 		assertEquals(Boolean.TRUE, report().get("split_wrapperRemoved"), () -> report().toString());
 	}
+	//------------------------------------------------------------------------------------------------------------------
+	// Canonical toolbar group order and resetDefaults
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_shuffledTaggedGroupsSortIntoCanonicalOrder() {
+		assertEquals("entity:e1 filter:f1 filter:f2 viewing:v1 page:p1 status:s1", report().get("order_shuffled"));
+	}
+
+	@Test void h02_otherIdGroupsKeepTheirSlot() {
+		// The two canonical groups swap between themselves; the "custom" group stays in the middle slot.
+		assertEquals("filter:f1 custom:c1 viewing:v1", report().get("order_mixed"));
+	}
+
+	@Test void h03_untaggedRibbonIsUnchanged() {
+		assertEquals(true, report().get("order_untagged_isSameReference"));
+	}
+
+	@Test void h04_ungroupedRefreshJoinsPageAsItsLastMember() {
+		assertEquals("filter:f1 page:r1 page:refresh", report().get("order_refreshJoinsPage"));
+	}
+
+	@Test void h05_taggedOptionGroupSortsLikeAnyTaggedItem() {
+		assertEquals("filter:og page:p1", report().get("order_optionGroupTagged"));
+	}
+
+	@Test void h06_taggedOptionGroupKeepsItsOwnNamedWrapper() {
+		var r = report();
+		assertBean(r, "dom_optionGroupTagged_groupCount,dom_optionGroupTagged_titles,dom_optionGroupTagged_ownGroupName",
+			"2,Mine|A+B,Phase");
+	}
+
+	@Test void h07_resetDefaultsRendersNamedRestoreButtonThatResetsAndApplies() {
+		var r = report();
+		assertBean(r, "pure_resetDefaults_icon,dom_resetDefaults_title,dom_resetDefaults_calledWithTableAndCtx,"
+			+ "dom_resetDefaults_noConfig_clickDidNotThrow", "restore,Reset to defaults,true,true");
+	}
+
+	@Test void i01_declaredPausePollingRendersOneButtonInTheStatusGroup() {
+		var r = report();
+		assertEquals(1.0, ((Number)r.get("pp_groupCount")).doubleValue());
+		assertEquals("status", r.get("pp_groupId"));
+		assertEquals(1.0, ((Number)r.get("pp_buttonCount")).doubleValue());
+	}
+
+	@Test void i02_pauseAndPlayIconsSwapWithAriaPressed_andTargetIsHonoured() {
+		var r = report();
+		assertEquals("pause", r.get("pp_idleIcon"));
+		assertEquals("false", r.get("pp_idlePressed"));
+		assertEquals("play", r.get("pp_pausedIcon"));
+		assertEquals("true", r.get("pp_pausedPressed"));
+		assertEquals("pause", r.get("pp_resumedIcon"));
+		assertEquals("false", r.get("pp_resumedPressed"));
+		assertEquals("cmd:b:pause-polling,cmd:b:resume-polling", r.get("pp_published"));
+	}
+
+	@Test void i03_nonPollingViewRendersNoPauseButton() {
+		assertEquals(true, report().get("pp_nonPollingRendersNothing"));
+	}
+
+	@Test void i04_normalizeForcesStatusGroupWithoutMutating_andKeepsItThere() {
+		var r = report();
+		assertEquals("status", r.get("pp_normalizedGroup"));
+		assertEquals(true, r.get("pp_declaredUntouched"));
+		assertEquals(true, r.get("pp_alreadyStatusStays"));
+	}
 }

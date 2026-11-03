@@ -27,12 +27,13 @@
     { key: 'userStatus', label: 'Status', render: { id: 'pill' } }
   ],
   ribbon: [
-    { type: 'optionGroup', id: 'userStatus', title: 'User status', deselectable: true, options: [
+    { type: 'optionGroup', id: 'userStatus', title: 'User status', group: 'filter', deselectable: true, options: [
       { id: 'active', title: 'Active', column: 'userStatus', value: '$eq(ACTIVE)' },
       { id: 'inactive', title: 'Inactive', column: 'userStatus', value: '$eq(INACTIVE)' }
     ] },
-    { type: 'dialog', id: 'add-user', title: '+ Add user', symbol: 'plus',
+    { type: 'dialog', id: 'add-user', title: '+ Add user', symbol: 'plus', group: 'entity',
       form: '/console/users/form', endpoint: '/console/users', method: 'POST', onSuccess: 'redraw' },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh' }
   ],
   rowActions: [

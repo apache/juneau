@@ -101,7 +101,7 @@ public class PetstorePages_ContractTest extends TestBase {
 	 * Builder-only developer pages: no FTL twin and no nav node of their own, so they are not in {@link #PAGES}.
 	 * Their own tests ({@code ChartsRest_Test}, {@code DataRest_Test}, {@code DashboardRest_Test}) assert the contract.
 	 */
-	public static final List<String> BUILDER_ONLY = List.of("/console/dev/charts", "/console/dev/data", "/console/dev/dashboard");
+	public static final List<String> BUILDER_ONLY = List.of("/console/dev/charts", "/console/dev/data", "/console/dev/dialogs", "/console/dev/dashboard");
 
 	/** Page paths for the vocabulary, asset-order and twin gates (the browser twin test reads it too). */
 	public static final List<String> PAGE_PATHS = PAGES.stream().map(Page::path).toList();

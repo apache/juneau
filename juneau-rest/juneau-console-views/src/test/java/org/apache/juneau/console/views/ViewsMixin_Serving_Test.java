@@ -472,7 +472,13 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// this toolkit ships (ribbon buttons here, the paging pill, the toolbar search input).
 		assertTrue(body.contains("--jc-chrome-control-height: 31px"), body);
 		assertTrue(body.contains("display: flex"), body);
-		assertTrue(body.contains("border: 1px solid"), body);
+		// Geometry only (cascade Rule 1): longhand width/style, never the colour-resetting shorthand, and no face fill.
+		var btnStart = body.indexOf(".juneau-view-ribbon-btn {");
+		var btn = body.substring(btnStart, body.indexOf("}", btnStart));
+		assertTrue(btn.contains("border-width: 1px"), btn);
+		assertTrue(btn.contains("border-style: solid"), btn);
+		assertFalse(btn.contains("border: "), btn);
+		assertFalse(btn.contains("background"), btn);
 		assertTrue(body.contains(".juneau-view-ribbon-btn svg {"), body);
 		assertTrue(body.contains("fill: currentColor"), body);
 	}
@@ -780,6 +786,35 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
+	 * Standard table toolbar (spec section 4): the right cluster hugs the right edge even once it wraps onto its own
+	 * line, its ribbon wraps between groups, and a toolbar group never splits.  The ribbon member buttons get no
+	 * border colour from this file (cascade Rule 1): a views-side colour rule tied chrome's pressed-toggle accent
+	 * on specificity and won on source order.
+	 */
+	@Test void o12_viewsCss_toolbarGroupsWrapWholeAndRibbonButtonsCarryNoColour() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var right = rule(body, ".juneau-view-toolbar-row > .juneau-view-toolbar-right {");
+		assertTrue(right.contains("margin-left: auto"), right);
+		assertTrue(right.contains("justify-content: flex-end"), right);
+		assertTrue(right.contains("flex: 0 1 auto"), right);
+		var bar = rule(body, ".juneau-view-toolbar-right > .juneau-view-ribbon {");
+		assertTrue(bar.contains("flex-wrap: wrap"), bar);
+		var group = rule(body, ".juneau-view-toolbar-right .juneau-view-ribbon-group {");
+		assertTrue(group.contains("flex: none"), group);
+		assertTrue(group.contains("white-space: nowrap"), group);
+		var search = rule(body, ".juneau-view-toolbar-right .dt-search {");
+		assertTrue(search.contains("min-width:"), search);
+		assertFalse(body.contains("div.dt-container .juneau-view-ribbon-btn,"), body);
+	}
+
+	/** The body of the first rule whose selector text ends with {@code open}. */
+	private static String rule(String css, String open) {
+		var start = css.indexOf(open);
+		assertTrue(start >= 0, () -> "missing rule " + open);
+		return css.substring(start, css.indexOf("}", start));
+	}
+
+	/**
 	 * Control-row layout item 2/5 (single segmented ribbon): the group is one OUTER chrome - member buttons
 	 * drop their inner vertical borders (left/right none; first restores left, last restores right) with
 	 * rounding only on the outer ends.  A gap or a per-button box border would draw inner outlines.
@@ -1025,7 +1060,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var theadAt = body.indexOf(theadSel);
 		assertTrue(theadAt >= 0, body);
 		var theadRule = body.substring(theadAt, body.indexOf("}", theadAt));
-		assertTrue(theadRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"), theadRule);
+		// Header cells: no side borders, a light 2px top edge and a dark 1px bottom edge (token-driven).
+		assertTrue(theadRule.contains("border-width: 2px 0 1px 0"), theadRule);
+		assertTrue(theadRule.contains("var(--jc-table-head-border-top, #e5e5e5) transparent var(--jc-table-head-border-bottom, #6b6b6b) transparent"), theadRule);
 		assertFalse(theadRule.contains("border: none"), theadRule);
 
 		var tbodySel = "table[data-juneau-view] > tbody > tr > th,\n"
@@ -1086,21 +1123,21 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Summary-view zebra: first data row is {@code #FAFAF9} (CSS odd / stripe token) so it does not blend
+	 * Summary-view zebra: first data row is {@code #f3f3f3} (CSS odd / stripe token) so it does not blend
 	 * into the white header; even rows stay {@code #FFFFFF}. DataTables may stamp the first row {@code even};
 	 * inverted {@code tr.even}/{@code tr.odd} plus {@code nth-child} (and {@code nth-child(odd of :not(.child))})
 	 * keep visual odd starting at row 1. {@code :not(.child)} keeps the expander row white.
 	 */
-	@Test void o04e_viewsCss_stripesFirstBodyRowFafaf9ExcludingChild() throws Exception {
+	@Test void o04e_viewsCss_stripesFirstBodyRowf3f3f3ExcludingChild() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("--jc-table-row-bg: #ffffff;"), body);
-		assertTrue(body.contains("--jc-table-stripe-bg: #fafaf9;"), body);
+		assertTrue(body.contains("--jc-table-stripe-bg: #f3f3f3;"), body);
 		var oddSel = "table[data-juneau-view] > tbody > tr:nth-child(odd):not(.child),\n"
 			+ "table.dataTable > tbody > tr:nth-child(odd):not(.child) {";
 		var oddAt = body.indexOf(oddSel);
 		assertTrue(oddAt >= 0, body);
 		var oddRule = body.substring(oddAt, body.indexOf("}", oddAt));
-		assertTrue(oddRule.contains("background-color: var(--jc-table-stripe-bg, #fafaf9)"), oddRule);
+		assertTrue(oddRule.contains("background-color: var(--jc-table-stripe-bg, #f3f3f3)"), oddRule);
 		assertFalse(oddRule.contains("rgba(0, 0, 0, 0.05)"), oddRule);
 		var evenSel = "table[data-juneau-view] > tbody > tr:nth-child(even):not(.child),\n"
 			+ "table.dataTable > tbody > tr:nth-child(even):not(.child) {";
@@ -1181,7 +1218,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var start = body.indexOf("div.dt-container div.dt-search input,");
 		var end = body.indexOf("}", start);
 		var region = body.substring(start, end);
-		assertTrue(region.contains("border: 1px solid var(--jc-chrome-control-border)"), region);
+		// Cascade Rule 1: chrome.css owns the field's border colour and fill; the ink is this file's ladder token.
+		assertTrue(region.contains("border-width: 1px"), region);
+		assertTrue(region.contains("border-style: solid"), region);
+		assertFalse(region.contains("border: "), region);
+		assertFalse(region.contains("border-color"), region);
+		assertFalse(region.contains("background"), region);
 		assertTrue(region.contains("color: var(--jc-chrome-control-text)"), region);
 		assertTrue(region.contains("border-radius: var(--jc-chrome-control-radius)"), region);
 		assertTrue(region.contains("appearance: none"), region);
@@ -1199,7 +1241,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(focusRegion.contains("outline: none"), focusRegion);
 		assertTrue(focusRegion.contains("box-shadow: none"), focusRegion);
 		assertTrue(body.contains("--jc-chrome-control-focus-border: var(--jc-accent);"), body);
-		assertTrue(focusRegion.contains("border-color: var(--jc-chrome-control-focus-border)"), focusRegion);
+		assertFalse(focusRegion.contains("border-color"), focusRegion);
 		assertFalse(focusRegion.contains("outline-offset"), focusRegion);
 		assertFalse(focusRegion.contains("2px"), focusRegion);
 	}

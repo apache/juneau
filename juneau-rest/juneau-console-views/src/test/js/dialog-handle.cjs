@@ -90,6 +90,24 @@ const WIZARD = {
 		out.wizard = w;
 	}
 
+	// The last step's label: Step.confirmLabel, else the dialog's own confirm label, else "Finish".
+	{
+		const twoSteps = [{ id: 'a' }, { id: 'b' }];
+		const label = function (modal, opts) {
+			const h = NS.dialogs.open(modal, rc, opts);
+			h.setStep('b');
+			const t = within(h, '.juneau-view-dialog-confirm').textContent;
+			h.close();
+			return t;
+		};
+		out.lastLabel = {
+			none: label({ title: 'x', steps: twoSteps }),
+			modal: label({ title: 'x', confirmLabel: 'Save', steps: twoSteps }),
+			action: label({ title: 'x', steps: twoSteps }, { action: { id: 'go', label: 'Go', endpoint: '/x/go', method: 'POST' } }),
+			step: label({ title: 'x', confirmLabel: 'Save', steps: [{ id: 'a' }, { id: 'b', confirmLabel: 'Apply' }] })
+		};
+	}
+
 	// Relabeling and onConfirm gating.
 	{
 		const h = NS.dialogs.open({ title: 'Gate' }, rc);

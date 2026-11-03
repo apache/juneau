@@ -20,7 +20,7 @@
  * `?state=tab(a%5C)` tab id alongside a real `filter(status=$eq(OK))`
  * clause: no console/page error, the real location.search decoder handles both, exactly one tab is clicked by
  * dataset string-equality, and the filter expression reaches the (fake) DataTables column; (2) the View Settings
- * dialog driven keyboard-only - focus the gear, Enter opens it, Tab lands on the roving-tabindex View tab, then
+ * dialog driven keyboard-only - focus the gear, Enter opens it with focus on the roving-tabindex View tab, then
  * Right x3 / End / Home move both focus and the visible panel; (3) a column-search popover typed into then
  * dismissed with Escape, proving the per-table announcer text and that focus returns to the search icon; (4) a
  * version-mismatched (CURRENT_SCHEMA_VERSION + 1) View Settings blob surviving a REAL page reload, showing the reset notice exactly once
@@ -189,7 +189,9 @@ const DIALOG_STATE = () => {
 		});
 		await page.focus(GEAR);
 		await page.keyboard.press('Enter');
-		await page.keyboard.press('Tab');
+		// The dialog opens with focus on its active tab (the saved-views bar sits above the tab strip, so a Tab from
+		// the frame's first control would land in the bar instead).
+		await page.waitForSelector('.juneau-config-tab[aria-selected="true"]', { timeout: 5000 });
 		const afterTab = await page.evaluate(DIALOG_STATE);
 		await page.keyboard.press('ArrowRight');
 		const afterRight1 = await page.evaluate(DIALOG_STATE);

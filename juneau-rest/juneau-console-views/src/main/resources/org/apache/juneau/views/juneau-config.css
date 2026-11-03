@@ -16,147 +16,279 @@
  */
 
 /*
- * juneau-config.css - View-tab column chooser (opt-in; loaded after juneau-views.css).
- * Neutral shape/layout only, no palette color; a host's chrome.css MAY theme these same classes.
+ * juneau-config.css - the View Settings dialog (opt-in; loaded after juneau-views.css).  The dialog is the shared
+ * frame (.juneau-view-dialog, folder tabs); this file adds only its shape and layout.  No colours: chrome.css owns
+ * them.  Every rule here carries .juneau-config-dialog, so it out-specifies the shared frame in either link order.
  */
 
-.juneau-config-dialog-backdrop {
-	position: fixed;
-	inset: 0;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	background: rgba(0, 0, 0, 0.35);
-	z-index: 1100;
+.juneau-view-dialog.juneau-config-dialog {
+	width: min(56rem, 96vw);
+	min-width: min(20em, calc(100% - 1em));
+	max-width: min(96vw, calc(100% - 1em));
 }
 
-.juneau-config-dialog {
-	min-width: 32em;
-	max-width: 90vw;
-	max-height: 90vh;
+.juneau-config-dialog .juneau-config-body-host {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-2);
+	flex: 1 1 auto;
+	min-height: 0;
 	overflow: auto;
-	padding: 1em 1.25em;
-	border: 1px solid;
-	border-radius: 6px;
-	background: var(--jc-surface, #fff);
+	padding: var(--jc-space-3) var(--jc-space-4) var(--jc-space-2);
+	container-type: inline-size;
 }
 
-.juneau-config-title {
-	margin: 0 0 0.5em;
-	font-size: 1.1em;
-}
-
-.juneau-config-tabs {
-	display: flex;
-	gap: 0.25em;
-	margin-bottom: 0.75em;
-	border-bottom: 1px solid;
-}
-
-.juneau-config-tab {
-	border: 1px solid;
-	border-bottom: none;
-	border-radius: 4px 4px 0 0;
-	padding: 0.25em 0.75em;
-	background: transparent;
-	cursor: default;
-}
-
-.juneau-config-tab-active {
-	font-weight: 600;
-}
-
-.juneau-config-saved-bar {
+/* Saved-views bar: picker, Save as..., Rename, Delete, then the inline name field on its own line when open. */
+.juneau-config-dialog .juneau-config-saved-bar {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.4em;
-	margin-bottom: 0.5em;
+	gap: var(--jc-space-2);
 }
 
-.juneau-config-view-select {
+.juneau-config-dialog .juneau-config-view-select {
 	min-width: 10em;
 }
 
-.juneau-config-dirty {
-	font-size: 0.85em;
+.juneau-config-dialog .juneau-config-name-field {
+	display: flex;
+	align-items: center;
+	gap: var(--jc-space-2);
+	flex: 1 0 100%;
 }
 
-.juneau-config-status {
-	margin: 0 0 0.5em;
-	font-size: 0.9em;
+.juneau-config-dialog .juneau-config-name-field[hidden] {
+	display: none;
 }
 
-.juneau-config-status-error {
+.juneau-config-dialog .juneau-config-name-input {
+	flex: 1 1 12em;
+	min-width: 0;
+}
+
+.juneau-config-dialog .juneau-config-dirty {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.juneau-config-dialog .juneau-config-tabs {
+	flex: 0 0 auto;
+}
+
+.juneau-config-dialog .juneau-config-status {
+	margin: 0;
+	font-size: var(--jc-chrome-font-size-2);
+}
+
+.juneau-config-dialog .juneau-config-status-error {
 	font-weight: 600;
 }
 
-.juneau-config-col-list {
+/* View tab: Available (left, narrower) beside the selected-columns grid. */
+.juneau-config-dialog .juneau-config-view-panes {
+	display: flex;
+	align-items: stretch;
+	gap: var(--jc-space-3);
+}
+
+.juneau-config-dialog .juneau-config-avail-pane {
+	flex: 0.7 1 0;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 0.35em;
-	margin: 0.5em 0 0.75em;
+	gap: var(--jc-space-2);
+}
+
+.juneau-config-dialog .juneau-config-sel-pane {
+	flex: 1.6 1 0;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.juneau-config-dialog .juneau-config-pane-title {
+	font-weight: 600;
+}
+
+.juneau-config-dialog .juneau-config-avail-list {
+	display: flex;
+	flex-direction: column;
+	min-height: 8em;
+	max-height: 50vh;
+	overflow: auto;
+	border-width: 1px;
+	border-style: solid;
+	border-radius: var(--jc-radius);
+}
+
+.juneau-config-dialog .juneau-config-avail {
+	padding: var(--jc-space-1) var(--jc-space-2);
+	cursor: default;
+	user-select: none;
+}
+
+.juneau-config-dialog .juneau-config-empty-note {
+	padding: var(--jc-space-2);
+}
+
+.juneau-config-dialog .juneau-config-col-head,
+.juneau-config-dialog .juneau-config-col-row {
+	display: grid;
+	grid-template-columns: 20px 130px minmax(0, 150px) 112px 1fr 24px;
+	align-items: center;
+	gap: var(--jc-space-2);
+}
+
+.juneau-config-dialog .juneau-config-col-head {
+	padding: var(--jc-space-1) 0;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	font-size: 0.78em;
+	font-weight: 600;
+	text-transform: uppercase;
+}
+
+.juneau-config-dialog .juneau-config-col-list {
+	display: flex;
+	flex-direction: column;
 	max-height: 50vh;
 	overflow: auto;
 }
 
-.juneau-config-col-row {
+.juneau-config-dialog .juneau-config-col-row {
+	padding: var(--jc-space-1) 0;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	cursor: grab;
+}
+
+.juneau-config-dialog .juneau-config-col-dragging {
+	opacity: 0.5;
+}
+
+.juneau-config-dialog .juneau-config-col-name {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.juneau-config-dialog .juneau-config-col-pinned {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.juneau-config-dialog .juneau-config-col-label,
+.juneau-config-dialog .juneau-config-col-format {
+	min-width: 0;
+	width: 100%;
+}
+
+.juneau-config-dialog .juneau-config-col-handle,
+.juneau-config-dialog .juneau-config-col-remove {
+	width: 20px;
+	padding: 0;
+	border-width: 0;
+	line-height: 1;
+	cursor: grab;
+}
+
+.juneau-config-dialog .juneau-config-col-remove {
+	width: 24px;
+	font-size: 1.1rem;
+	cursor: pointer;
+}
+
+.juneau-config-dialog .juneau-config-col-remove:disabled {
+	cursor: default;
+	opacity: 0.4;
+}
+
+/* Narrow dialog: the panes stack (Available above) and LABEL/FORMAT wrap under NAME. */
+@container (max-width: 559px) {
+	.juneau-config-dialog .juneau-config-view-panes {
+		flex-direction: column;
+	}
+	.juneau-config-dialog .juneau-config-avail-pane,
+	.juneau-config-dialog .juneau-config-sel-pane {
+		flex: 0 0 auto;
+	}
+	.juneau-config-dialog .juneau-config-avail-list {
+		max-height: 30vh;
+	}
+	.juneau-config-dialog .juneau-config-col-head,
+	.juneau-config-dialog .juneau-config-col-row {
+		grid-template-columns: 20px minmax(0, 1fr) 24px;
+	}
+	.juneau-config-dialog .juneau-config-col-head > .juneau-config-col-head-label,
+	.juneau-config-dialog .juneau-config-col-head > .juneau-config-col-head-format,
+	.juneau-config-dialog .juneau-config-col-head > .juneau-config-col-head-spacer,
+	.juneau-config-dialog .juneau-config-col-spacer,
+	.juneau-config-dialog .juneau-config-col-format-none {
+		display: none;
+	}
+	.juneau-config-dialog .juneau-config-col-handle { grid-column: 1; grid-row: 1; }
+	.juneau-config-dialog .juneau-config-col-name { grid-column: 2; grid-row: 1; }
+	.juneau-config-dialog .juneau-config-col-remove { grid-column: 3; grid-row: 1; }
+	.juneau-config-dialog .juneau-config-col-label,
+	.juneau-config-dialog .juneau-config-col-format { grid-column: 2; }
+}
+
+/* Search and Sort lists, Options rows. */
+.juneau-config-dialog .juneau-config-member-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-1);
+	max-height: 50vh;
+	overflow: auto;
+}
+
+.juneau-config-dialog .juneau-config-member-row,
+.juneau-config-dialog .juneau-config-sort-row,
+.juneau-config-dialog .juneau-config-opt {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 0.4em;
+	gap: var(--jc-space-2);
 }
 
-.juneau-config-col-name {
-	min-width: 7em;
-	flex: 1 1 7em;
-}
-
-.juneau-config-col-pinned {
-	font-size: 0.8em;
-	opacity: 0.75;
-}
-
-.juneau-config-col-move {
-	padding: 0.15em 0.45em;
-}
-
-.juneau-config-col-label {
-	min-width: 8em;
-	flex: 1 1 8em;
-}
-
-.juneau-config-col-format {
-	min-width: 7em;
-}
-
-.juneau-config-actions {
-	display: flex;
-	justify-content: flex-end;
-	gap: 0.5em;
-	margin-top: 0.5em;
-}
-
-.juneau-config-sort-row {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: 0.4em;
-}
-
-.juneau-config-sort-row-unsorted {
+.juneau-config-dialog .juneau-config-sort-row-unsorted {
 	opacity: 0.65;
 }
 
-.juneau-config-sort-name {
+.juneau-config-dialog .juneau-config-sort-name {
 	min-width: 7em;
 	flex: 1 1 7em;
 }
 
-.juneau-config-sort-dir {
+.juneau-config-dialog .juneau-config-sort-dir {
 	min-width: 7em;
 }
 
-.juneau-config-sort-move {
-	padding: 0.15em 0.45em;
+.juneau-config-dialog .juneau-config-sort-move {
+	padding: var(--jc-space-1) var(--jc-space-2);
+}
+
+.juneau-config-dialog .juneau-config-options {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-2);
+}
+
+.juneau-config-dialog .juneau-config-opt > span:first-child {
+	min-width: 8em;
+}
+
+/* Footer: Reset sits at the left, Cancel and Apply at the right. */
+.juneau-config-dialog .juneau-config-reset {
+	margin-right: auto;
+	padding-left: 0;
+}
+
+/* The shared form controls in the dialog body share one shape. */
+.juneau-config-dialog .juneau-config-body-host select,
+.juneau-config-dialog .juneau-config-body-host input:not([type="checkbox"]):not([type="radio"]) {
+	border-width: 1px;
+	border-style: solid;
+	border-radius: var(--jc-radius);
+	padding: var(--jc-space-1) var(--jc-space-2);
+	font: inherit;
 }

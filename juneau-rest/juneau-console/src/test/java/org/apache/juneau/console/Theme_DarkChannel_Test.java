@@ -72,10 +72,11 @@ class Theme_DarkChannel_Test extends TestBase {
 		assertEquals(open, Theme.GRAY.getDarkTokens());
 		assertEquals(map(
 			"--jc-link", "#d9a65c",
+			"--jc-accent", "#b17d31",
 			"--jc-focus", "#a9772f",
 			"--jc-accent-wash", "rgba(169,119,47,0.25)"), Theme.LIGHT_BROWN.getDarkTokens());
 		assertEquals(map(
-			"--jc-link", "#f27a9a",
+			"--jc-link", "#f78fab",
 			"--jc-accent", "#e0557a",
 			"--jc-focus", "#e0557a",
 			"--jc-accent-selected", "#e0557a",

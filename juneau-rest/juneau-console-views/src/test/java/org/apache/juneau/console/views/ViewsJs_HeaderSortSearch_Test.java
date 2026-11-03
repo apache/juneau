@@ -82,15 +82,14 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		DualHatGuard.assertClean(body);
 	}
 
-	// Design 7.1 order: the magnifying glass is inserted immediately after the sort glyph (its nextSibling slot),
-	// ahead of the title; on a non-sortable column it becomes the leftmost control instead.  The old
-	// "before the order span" placement (which put search left of sort) must be gone.
-	@Test void a04b_searchIcon_insertedAfterSortGlyphAheadOfTitle() throws Exception {
+	// Header order: title, then the magnifying glass inserted just before the sort glyph; on a non-sortable column it
+	// is appended last.
+	@Test void a04b_searchIcon_insertedBeforeSortGlyphAfterTitle() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function renderHeaderSearchIcon(");
-		assertTrue(fn.contains("insertBefore(icon, orderSpan.nextSibling)"), fn);
-		assertTrue(fn.contains("insertBefore(icon, flex.firstChild)"), fn);
-		assertFalse(fn.contains("orderSpan.before(icon)"), fn);
+		assertTrue(fn.contains("insertBefore(icon, orderSpan)"), fn);
+		assertTrue(fn.contains("flex.appendChild(icon)"), fn);
+		assertFalse(fn.contains("orderSpan.nextSibling"), fn);
 	}
 
 	// Design 7.1 active state: a column that already carries a search value (restored from saved state or the URL)
@@ -170,8 +169,9 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("querySelector(\"svg\")"), fn);
 		assertTrue(fn.contains("resolveIcon?.(\"sort\")"), fn);
 		assertTrue(fn.indexOf("classList.add") > fn.indexOf("if (!orderSpan)"), fn);
-		// Design 7.1: the DT2 order span (appended after the title) is pulled to the front so the sort glyph leads.
-		assertTrue(fn.contains("insertBefore(orderSpan, flex.firstChild)"), fn);
+		// Header order is title, search icon, sort control: the sort control stays last.
+		assertTrue(fn.contains("flex.appendChild(orderSpan)"), fn);
+		assertFalse(fn.contains("insertBefore(orderSpan, flex.firstChild)"), fn);
 	}
 
 	@Test void b01_viewsCss_idleSortChevronsAreVisible() throws Exception {
@@ -206,5 +206,18 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 
 	private static boolean hasContentValue(String css, String glyph) {
 		return css.contains("content: \"" + glyph + "\"") || css.contains("content: '" + glyph + "'");
+	}
+
+	@Test void b03_viewsCss_headerBordersAndTokens() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("--jc-table-head-border-top: #e5e5e5;"), body);
+		assertTrue(body.contains("--jc-table-head-border-bottom: #6b6b6b;"), body);
+		assertTrue(body.contains("border-width: 2px 0 1px 0;"), body);
+		assertTrue(body.contains("border-color: var(--jc-table-head-border-top, #e5e5e5) transparent var(--jc-table-head-border-bottom, #6b6b6b) transparent;"), body);
+		assertTrue(body.contains("--jc-detail-control-color: #818181;"), body);
+		assertTrue(body.contains("color: var(--jc-detail-control-color, #818181);"), body);
+		assertTrue(body.contains("color: var(--jc-detail-control-hover, #0d6efd);"), body);
+		// Body cells keep their left/right grid lines.
+		assertTrue(body.contains("border-left-width: 1px;"), body);
 	}
 }

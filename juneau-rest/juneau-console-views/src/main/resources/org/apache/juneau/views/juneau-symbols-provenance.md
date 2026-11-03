@@ -99,9 +99,12 @@ live `<use>` composition):
 | `openPr` | `juneau-original` | `2ab421c35b2e22ce4e50100ead41f183f310fd129b021928b230fa4257683470` |
 | `pause` | `original-artwork` | `3d7a1bac4ecf957e146d0e5993aec052413fbf20f27e1ff53a719f1981215552` |
 | `pdf` | `original-artwork` | `63a334fc35f36a1a0b0077f308981a2bdca8f675bd33f2ee46a241d85437cb1f` |
+| `play` | `original-artwork` | `5d9327120d215d9a55799898a75bc290a5744a35bf2825673d2645ca303e3ba2` |
+| `plus` | `original-artwork` | `88e9bed908cffdc3481c0b57607198aea72eaf9d5a75f21dddd5093be9875362` |
 | `print` | `juneau-original` | `236eb8a210324db18c969faaf9623765586b84464850f026d2e5918d3650dc9e` |
 | `push` | `juneau-original` | `11500ea634ea1ad14cca0b1d0a08973c5d2f0973b7245bea3872114767be0d59` |
 | `refresh` | `original-artwork` | `626b5da36e11e99dbb55b62624542d2b874b838a8790aa902b8e693d3c81a81e` |
+| `restore` | `original-artwork` | `63d7b790ec9c937bc45c34ab4c40c3a5b9f7f0db18fc982fa4e7a30b00a6c983` |
 | `search` | `original-artwork` | `3d095317f5d549458dfe434dfaf7cee17b45712de16ae55048ad57eebe7361e1` |
 | `settings` | `original-artwork` | `8a5c58d5e4427c10f45aaedb20898c5e48a3d0b8344e31f1964a3d02b2a23340` |
 | `sort` | `juneau-original` | `a64e04a902869a580141b4ed76a3b5360b672bd6645c7bd43004bb2f4d85ac00` |
@@ -109,6 +112,13 @@ live `<use>` composition):
 | `stop` | `juneau-original` | `dea9a934b0ff9bf814d422fa6288d82486b1fbb6d2c5959585388975067a2605` |
 | `toggle-deleted` | `original-artwork` | `1ccd56b9117c71b67e950eafcd42f34c56fe167c63b51b420ea020fcbea8dc0c` |
 | `toggle_column_search` | `original-artwork` | `875b83672d60c7cdae200f197850bfbd05e1ded31f0968ed21a918b861fdbbd8` |
+| `tune` | `juneau-original` | `132621d5be499ebabc56d19946f83b32bce190f8960e4c86b3a8ffae673c4ec6` |
+**Added glyphs (2026-11-02).** `plus`, `play` and `restore` are `original-artwork`: path data copied from
+the source console symbol sprite under the operator clearance of 2026-11-02, path data only (no ids, classes or
+headers). `tune` is `juneau-original`: three horizontal sliders with round knobs at different positions, authored here
+(no external artwork). The registry maps `tune` and `columns` (View Settings) to it and keeps the `settings` gear for
+application settings.
+
 ## Composition notes
 
 **A `<use>` of a reference symbol — including one reused with rotate / flip / scale, and multi-`<use>`
@@ -135,6 +145,11 @@ These three replaced the previous Juneau-original single/doubled triangle glyphs
 where the source console sprite draws the role, its artwork replaces the Juneau glyph). The earlier pass skipped
 them only because it searched for a same-named `first_page` / `chevronleft` symbol in the source console sprite and
 ignored the live `<use>` compositions of its `chevronright` symbol.
+
+**Row-expand use (2026-11-02).** `chevronright` / `chevrondown` are also the row-expander glyphs
+(`.juneau-view-detail-toggle`). Their path data is byte-identical to the reference sprite's expander chevrons (operator
+OK, 2026-11-02), so no artwork changed; only the idle colour and hover come from the `--jc-detail-control-color` /
+`--jc-detail-control-hover` tokens.
 
 Roles kept as Juneau artwork, and why, are listed above under *Glyphs*. `chevronup` and `sort` were checked for a
 live reference `<use>` composition (not just a same-named symbol) and have none; the rest are Foundry-absent or

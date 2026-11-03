@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Pins the wire shape and validation of {@link ModalDef#chrome} and {@link ModalDef#steps}.
+ * Pins the wire shape and validation of {@link ModalDef#chrome}, {@link ModalDef#steps} and {@link ModalDef#nav}.
  */
 class ModalDef_ChromeSteps_Test extends TestBase {
 
@@ -56,6 +56,33 @@ class ModalDef_ChromeSteps_Test extends TestBase {
 		var modal = ModalDef.create("t").chrome("c").step(ModalDef.Step.of("s")).keepOpenOnSubmit(true);
 		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
 		assertEquals(List.of("contractVersion", "title", "keepOpenOnSubmit", "chrome", "steps"), new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void a05_keyOrder_navAfterSteps() {
+		var modal = ModalDef.create("t").chrome("c").step(ModalDef.Step.of("s")).nav(ModalDef.NAV_FOLDER);
+		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
+		assertEquals(List.of("contractVersion", "title", "chrome", "steps", "nav"), new ArrayList<>(actual.keySet()));
+	}
+
+	@Test void a06_nav_unsetByDefault_omittedFromWire() {
+		var modal = ModalDef.create("t");
+		assertNull(modal.nav);
+		assertFalse(Json.to(Json.of(modal), Map.class).containsKey("nav"));
+	}
+
+	@Test void a07_nav_eachValueRoundTrips() {
+		for (var v : List.of(ModalDef.NAV_PILL, ModalDef.NAV_FOLDER, "bogus")) {
+			var modal = Json.to(Json.of(ModalDef.create("t").nav(v)), ModalDef.class);
+			assertEquals(v, modal.nav);
+		}
+		assertEquals("pill", ModalDef.NAV_PILL);
+		assertEquals("folder", ModalDef.NAV_FOLDER);
+	}
+
+	@Test void a08_nav_contractVersionUnchanged() {
+		Map<?,?> actual = Json.to(Json.of(ModalDef.create("t").nav(ModalDef.NAV_FOLDER)), Map.class);
+		assertEquals("2", actual.get("contractVersion"));
+		assertEquals("2", ModalDef.CONTRACT_VERSION);
 	}
 
 	@Test void b01_validate_blankChromeRejected() {
@@ -89,5 +116,20 @@ class ModalDef_ChromeSteps_Test extends TestBase {
 
 	@Test void b06_validate_wellFormedPasses() {
 		assertDoesNotThrow(() -> ModalDef.create("t").chrome("compact").step(ModalDef.Step.of("a").field("L", "v")).validate());
+	}
+
+	@Test void b07_validate_unknownNavRejected() {
+		for (var bad : List.of("bogus", "", " ", "Folder", "wizard")) {
+			var m = ModalDef.create("t").nav(bad);
+			var e = assertThrows(IllegalArgumentException.class, m::validate, () -> "nav '" + bad + "'");
+			assertTrue(e.getMessage().contains("nav"), e::getMessage);
+		}
+	}
+
+	@Test void b08_validate_knownOrUnsetNavPasses() {
+		assertDoesNotThrow(() -> ModalDef.create("t").validate());
+		assertDoesNotThrow(() -> ModalDef.create("t").nav(ModalDef.NAV_PILL).validate());
+		assertDoesNotThrow(() -> ModalDef.create("t").nav(ModalDef.NAV_FOLDER).validate());
+		assertDoesNotThrow(() -> ModalDef.create("t").nav(null).validate());
 	}
 }

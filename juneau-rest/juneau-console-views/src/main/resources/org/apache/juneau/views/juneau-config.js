@@ -1022,7 +1022,10 @@
 	// token-theft → arbitrary-write chain is in scope.  Paint every user-controlled string with textContent /
 	// input.value ONLY — never innerHTML / jQuery html(), including the DataTables column title path.
 
-	const CHOOSER_BACKDROP_CLASS = "juneau-config-dialog-backdrop";
+	// The dialog is the shared frame, so its backdrop carries the shared class (the stack, not the class, keeps the
+	// action-dialog sweep away from it); the marker class lets a host or a test find this dialog's backdrop.
+	const CHOOSER_BACKDROP_CLASS = "juneau-view-dialog-backdrop";
+	const CHOOSER_BACKDROP_CLASS_MARKER = "juneau-config-dialog-backdrop";
 	const DEFAULT_VIEW_LABEL = "Default";
 
 	/** Sets el.textContent; the ONLY sanctioned paint path for user-controlled strings. */
@@ -1452,21 +1455,43 @@
 		if (el.classList) el.classList.toggle("juneau-config-status-error", !!isError);
 	}
 
+	function clearChooserRefs(ctx) {
+		ctx._configBackdrop = null;
+		ctx._configDirtyEl = null;
+		ctx._configStatusEl = null;
+		ctx._configListEl = null;
+		ctx._configAvailListEl = null;
+		ctx._configFindEl = null;
+		ctx._configAvailSelected = null;
+		ctx._configSelectEl = null;
+		ctx._configViewNames = null;
+		ctx._configSaveAsBtn = null;
+		ctx._configRenameBtn = null;
+		ctx._configDeleteBtn = null;
+		ctx._configNameField = null;
+		ctx._configNameInput = null;
+		ctx._configNameOk = null;
+		ctx._configNameMode = null;
+		ctx._configSearchListEl = null;
+		ctx._configSortListEl = null;
+		ctx._configTabButtons = null;
+		ctx._configTabBodies = null;
+		ctx._configVisibleTabs = null;
+		ctx._configResetBtn = null;
+		ctx._configDragKey = null;
+	}
+
+	/**
+	 * Closes the View Settings dialog.  It is a layer on the shared dialog stack, so it pops through that stack (whose
+	 * dismiss hook clears the refs); a backdrop that never made it onto the stack is detached directly.
+	 */
 	function closeChooserDialog(ctx) {
 		const backdrop = ctx?._configBackdrop;
-		backdrop?.remove();
-		if (ctx) {
-			ctx._configBackdrop = null;
-			ctx._configDirtyEl = null;
-			ctx._configStatusEl = null;
-			ctx._configListEl = null;
-			ctx._configSelectEl = null;
-			ctx._configSearchListEl = null;
-			ctx._configSortListEl = null;
-			ctx._configTabButtons = null;
-			ctx._configTabBodies = null;
-			ctx._configVisibleTabs = null;
-			ctx._configResetBtn = null;
+		if (!backdrop) return;
+		if (typeof NS.init?.popLayer === "function") NS.init.popLayer(backdrop);
+		if (ctx._configBackdrop === backdrop) {
+			backdrop.remove();
+			clearChooserRefs(ctx);
 		}
 	}
 
@@ -1474,49 +1499,131 @@
 		return ctx?.viewDef?.columns ? ctx.viewDef.columns : [];
 	}
 
+	/** The draft's shown columns, in display order. */
+	function selectedColumnKeys(draft) {
+		const visible = draft?.visible || [];
+		return (draft?.order || []).filter(function (k) { return visible.indexOf(k) >= 0; });
+	}
+
+	/**
+	 * Moves the shown column {@code fromKey} before (or, with {@code after}, after) the shown column {@code toKey}.
+	 * Hidden columns keep their relative order behind the shown ones.
+	 *
+	 * @return false when either key is not shown or they are the same column.
+	 */
+	function reorderSelectedColumn(draft, fromKey, toKey, after) {
+		const seq = selectedColumnKeys(draft);
+		const from = seq.indexOf(fromKey);
+		if (from < 0 || fromKey === toKey || seq.indexOf(toKey) < 0) return false;
+		seq.splice(from, 1);
+		seq.splice(seq.indexOf(toKey) + (after ? 1 : 0), 0, fromKey);
+		const hidden = draft.order.filter(function (k) { return seq.indexOf(k) < 0; });
+		draft.order = seq.concat(hidden);
+		return true;
+	}
+
+	/** Shows {@code dataKey} as the last selected column.  @return false when it is already shown or unknown. */
+	function addColumnToView(draft, dataKey) {
+		if (!draft || !Array.isArray(draft.order) || !Array.isArray(draft.visible)) return false;
+		if (draft.visible.indexOf(dataKey) >= 0 || draft.order.indexOf(dataKey) < 0) return false;
+		const seq = selectedColumnKeys(draft);
+		const rest = draft.order.filter(function (k) { return k !== dataKey && seq.indexOf(k) < 0; });
+		draft.order = seq.concat([dataKey], rest);
+		draft.visible.push(dataKey);
+		return true;
+	}
+
+	/** Repaints both View-tab panes from the draft. */
 	function renderChooserColumnList(ctx) {
+		renderSelectedColumns(ctx);
+		renderAvailableColumns(ctx);
+	}
+
+	function renderSelectedColumns(ctx) {
 		const list = ctx._configListEl;
 		if (!list) return;
 		while (list.firstChild) list.firstChild.remove();
-		const catalog = currentCatalog(ctx);
-		const byData = catalogByDataLocal(catalog);
+		const byData = catalogByDataLocal(currentCatalog(ctx));
 		const draft = ctx._configDraft;
-		(draft.order || []).forEach(function (dataKey) {
+		selectedColumnKeys(draft).forEach(function (dataKey) {
 			const col = byData[dataKey];
-			if (!col) return;
-			list.appendChild(buildChooserRow(ctx, col, draft));
+			if (col) list.appendChild(buildChooserRow(ctx, col, draft));
 		});
 	}
 
+	function columnName(col) {
+		return col.title || col.data;
+	}
+
+	/** Moves the shown column one place up or down (the keyboard alternative to dragging). */
+	function nudgeSelectedColumn(ctx, dataKey, delta) {
+		const seq = selectedColumnKeys(ctx._configDraft);
+		const target = seq[seq.indexOf(dataKey) + delta];
+		if (target == null || !reorderSelectedColumn(ctx._configDraft, dataKey, target, delta > 0)) return;
+		markDirty(ctx);
+		renderSelectedColumns(ctx);
+		ctx._configListEl?.querySelector?.(".juneau-config-col-row[data-col=\"" + dataKey + "\"] .juneau-config-col-handle")?.focus?.();
+	}
+
+	function wireRowDrag(ctx, row, col) {
+		row.setAttribute("draggable", "true");
+		row.addEventListener("dragstart", function (e) {
+			ctx._configDragKey = col.data;
+			if (e?.dataTransfer) {
+				e.dataTransfer.effectAllowed = "move";
+				e.dataTransfer.setData("text/plain", String(col.data));
+			}
+			row.classList.add("juneau-config-col-dragging");
+		});
+		row.addEventListener("dragend", function () {
+			ctx._configDragKey = null;
+			row.classList.remove("juneau-config-col-dragging");
+		});
+		row.addEventListener("dragover", function (e) {
+			if (ctx._configDragKey == null) return;
+			e.preventDefault?.();
+			if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+		});
+		row.addEventListener("drop", function (e) {
+			const from = ctx._configDragKey;
+			if (from == null) return;
+			e.preventDefault?.();
+			ctx._configDragKey = null;
+			const rect = typeof row.getBoundingClientRect === "function" ? row.getBoundingClientRect() : null;
+			const after = !!rect && typeof e.clientY === "number" && e.clientY > rect.top + rect.height / 2;
+			if (reorderSelectedColumn(ctx._configDraft, from, col.data, after)) {
+				markDirty(ctx);
+				renderSelectedColumns(ctx);
+			}
+		});
+	}
+
+	/**
+	 * One selected-column grid row: drag handle, name, label override, format, spacer, remove.  Every user-controlled
+	 * string goes through {@code paintUserText} / {@code paintUserInput}.
+	 */
 	function buildChooserRow(ctx, col, draft) {
 		const row = document.createElement("div");
 		row.className = "juneau-config-col-row";
 		row.dataset.col = col.data;
+		wireRowDrag(ctx, row, col);
 
-		const vis = document.createElement("input");
-		vis.type = "checkbox";
-		vis.className = "juneau-config-col-vis";
-		vis.checked = draft.visible.indexOf(col.data) >= 0;
-		vis.disabled = !!col.pinned || (!canHideColumn(draft, currentCatalog(ctx), col.data) && vis.checked);
-		vis.setAttribute("aria-label", "Show column " + (col.title || col.data));
-		vis.addEventListener("change", function () {
-			if (vis.checked) {
-				if (draft.visible.indexOf(col.data) < 0) draft.visible.push(col.data);
-			} else {
-				if (!canHideColumn(draft, currentCatalog(ctx), col.data)) {
-					vis.checked = true;
-					return;
-				}
-				draft.visible = draft.visible.filter(function (id) { return id !== col.data; });
-			}
-			markDirty(ctx);
-			renderChooserColumnList(ctx);
+		const handle = document.createElement("button");
+		handle.type = "button";
+		handle.className = "juneau-config-col-handle";
+		handle.setAttribute("aria-label", "Move column " + columnName(col) + " (arrow keys)");
+		paintUserText(handle, "⋮⋮");
+		handle.addEventListener("keydown", function (e) {
+			const delta = { ArrowUp: -1, ArrowDown: 1 }[e?.key];
+			if (!delta) return;
+			e.preventDefault?.();
+			nudgeSelectedColumn(ctx, col.data, delta);
 		});
-		row.appendChild(vis);
+		row.appendChild(handle);
 
 		const name = document.createElement("span");
 		name.className = "juneau-config-col-name";
-		paintUserText(name, col.title || col.data);
+		paintUserText(name, columnName(col));
 		if (col.pinned) {
 			const pin = document.createElement("span");
 			pin.className = "juneau-config-col-pinned";
@@ -1525,40 +1632,12 @@
 		}
 		row.appendChild(name);
 
-		const up = document.createElement("button");
-		up.type = "button";
-		up.className = "juneau-config-col-move";
-		paintUserText(up, "Up");
-		up.setAttribute("aria-label", "Move column up " + (col.title || col.data));
-		up.disabled = draft.order.indexOf(col.data) === 0;
-		up.addEventListener("click", function () {
-			if (moveColumn(draft, col.data, -1)) {
-				markDirty(ctx);
-				renderChooserColumnList(ctx);
-			}
-		});
-		row.appendChild(up);
-
-		const down = document.createElement("button");
-		down.type = "button";
-		down.className = "juneau-config-col-move";
-		paintUserText(down, "Down");
-		down.setAttribute("aria-label", "Move column down " + (col.title || col.data));
-		down.disabled = draft.order.indexOf(col.data) === draft.order.length - 1;
-		down.addEventListener("click", function () {
-			if (moveColumn(draft, col.data, 1)) {
-				markDirty(ctx);
-				renderChooserColumnList(ctx);
-			}
-		});
-		row.appendChild(down);
-
 		const label = document.createElement("input");
 		label.type = "text";
 		label.className = "juneau-config-col-label";
-		label.setAttribute("aria-label", "Column label for " + (col.title || col.data));
+		label.setAttribute("aria-label", "Column label for " + columnName(col));
 		paintUserInput(label, draft.labels[col.data] || "");
-		label.placeholder = col.title || col.data;
+		label.placeholder = columnName(col);
 		label.addEventListener("input", function () {
 			const v = label.value;
 			if (v == null || String(v).trim() === "") delete draft.labels[col.data];
@@ -1570,7 +1649,7 @@
 		if (Array.isArray(col.formats) && col.formats.length) {
 			const sel = document.createElement("select");
 			sel.className = "juneau-config-col-format";
-			sel.setAttribute("aria-label", "Column format for " + (col.title || col.data));
+			sel.setAttribute("aria-label", "Column format for " + columnName(col));
 			const empty = document.createElement("option");
 			empty.value = "";
 			paintUserText(empty, "(default)");
@@ -1588,9 +1667,145 @@
 				markDirty(ctx);
 			});
 			row.appendChild(sel);
+		} else {
+			const none = document.createElement("span");
+			none.className = "juneau-config-col-format-none";
+			row.appendChild(none);
 		}
 
+		const spacer = document.createElement("span");
+		spacer.className = "juneau-config-col-spacer";
+		row.appendChild(spacer);
+
+		const remove = document.createElement("button");
+		remove.type = "button";
+		remove.className = "juneau-config-col-remove";
+		remove.setAttribute("aria-label", "Remove column " + columnName(col));
+		paintUserText(remove, "×");
+		remove.disabled = !canHideColumn(draft, currentCatalog(ctx), col.data);
+		remove.addEventListener("click", function () {
+			if (!canHideColumn(draft, currentCatalog(ctx), col.data)) return;
+			draft.visible = draft.visible.filter(function (id) { return id !== col.data; });
+			markDirty(ctx);
+			renderChooserColumnList(ctx);
+		});
+		row.appendChild(remove);
+
 		return row;
+	}
+
+	/** Fills the Available pane: catalog columns not shown, filtered by the Find text. */
+	function renderAvailableColumns(ctx) {
+		const list = ctx._configAvailListEl;
+		if (!list) return;
+		while (list.firstChild) list.firstChild.remove();
+		const draft = ctx._configDraft;
+		const q = String(ctx._configFindEl?.value || "").trim().toLowerCase();
+		const avail = currentCatalog(ctx).filter(function (c) { return c?.data != null && draft.visible.indexOf(c.data) < 0; });
+		const shown = avail.filter(function (c) { return !q || String(columnName(c)).toLowerCase().indexOf(q) >= 0; });
+		if (!shown.length) {
+			const note = document.createElement("div");
+			note.className = "juneau-config-empty-note";
+			paintUserText(note, avail.length ? "No matching columns." : "All columns are shown.");
+			list.appendChild(note);
+			return;
+		}
+		if (!shown.some(function (c) { return c.data === ctx._configAvailSelected; })) ctx._configAvailSelected = null;
+		shown.forEach(function (c, i) {
+			list.appendChild(buildAvailableRow(ctx, c, ctx._configAvailSelected == null ? i === 0 : c.data === ctx._configAvailSelected));
+		});
+	}
+
+	function selectAvailableRow(ctx, row) {
+		const list = ctx._configAvailListEl;
+		if (!list || !row) return;
+		ctx._configAvailSelected = row.dataset.col;
+		Array.prototype.forEach.call(list.querySelectorAll(".juneau-config-avail"), function (r) {
+			const on = r === row;
+			r.setAttribute("aria-selected", on ? "true" : "false");
+			r.tabIndex = on ? 0 : -1;
+		});
+		row.focus?.();
+	}
+
+	function addAvailableColumn(ctx, dataKey) {
+		if (!addColumnToView(ctx._configDraft, dataKey)) return;
+		ctx._configAvailSelected = null;
+		markDirty(ctx);
+		renderChooserColumnList(ctx);
+		const next = ctx._configAvailListEl?.querySelector?.(".juneau-config-avail");
+		if (next) selectAvailableRow(ctx, next);
+	}
+
+	/** One Available row: a single click selects it; a double click or Enter adds it to the view. */
+	function buildAvailableRow(ctx, col, tabStop) {
+		const row = document.createElement("div");
+		row.className = "juneau-config-avail";
+		row.dataset.col = col.data;
+		row.setAttribute("role", "option");
+		row.setAttribute("aria-selected", col.data === ctx._configAvailSelected ? "true" : "false");
+		row.tabIndex = tabStop ? 0 : -1;
+		paintUserText(row, columnName(col));
+		row.addEventListener("click", function () { selectAvailableRow(ctx, row); });
+		row.addEventListener("dblclick", function () { addAvailableColumn(ctx, col.data); });
+		row.addEventListener("keydown", function (e) {
+			if (e?.key === "Enter") { e.preventDefault?.(); addAvailableColumn(ctx, col.data); return; }
+			const delta = { ArrowUp: -1, ArrowDown: 1 }[e?.key];
+			if (!delta) return;
+			e.preventDefault?.();
+			const rows = Array.prototype.slice.call(ctx._configAvailListEl.querySelectorAll(".juneau-config-avail"));
+			const target = rows[rows.indexOf(row) + delta];
+			if (target) selectAvailableRow(ctx, target);
+		});
+		return row;
+	}
+
+	/** The View tab: Available columns (left) and the selected-columns grid (right). */
+	function buildViewTabPanes(ctx, seq) {
+		const panes = document.createElement("div");
+		panes.className = "juneau-config-view-panes";
+
+		const availPane = document.createElement("div");
+		availPane.className = "juneau-config-avail-pane";
+		const availTitle = document.createElement("div");
+		availTitle.className = "juneau-config-pane-title";
+		availTitle.id = "juneau-config-" + seq + "-avail-title";
+		paintUserText(availTitle, "Available columns");
+		availPane.appendChild(availTitle);
+		const find = document.createElement("input");
+		find.type = "search";
+		find.className = "juneau-config-find";
+		find.placeholder = "Find";
+		find.setAttribute("aria-label", "Find columns");
+		find.addEventListener("input", function () { renderAvailableColumns(ctx); });
+		ctx._configFindEl = find;
+		availPane.appendChild(find);
+		const availList = document.createElement("div");
+		availList.className = "juneau-config-avail-list";
+		availList.setAttribute("role", "listbox");
+		availList.setAttribute("aria-labelledby", availTitle.id);
+		ctx._configAvailListEl = availList;
+		availPane.appendChild(availList);
+		panes.appendChild(availPane);
+
+		const selPane = document.createElement("div");
+		selPane.className = "juneau-config-sel-pane";
+		const head = document.createElement("div");
+		head.className = "juneau-config-col-head";
+		head.setAttribute("aria-hidden", "true");
+		[["handle", ""], ["name", "Name"], ["label", "Label"], ["format", "Format"], ["spacer", ""], ["remove", ""]].forEach(function (h) {
+			const cell = document.createElement("span");
+			cell.className = "juneau-config-col-head-" + h[0];
+			paintUserText(cell, h[1]);
+			head.appendChild(cell);
+		});
+		selPane.appendChild(head);
+		const list = document.createElement("div");
+		list.className = "juneau-config-col-list";
+		ctx._configListEl = list;
+		selPane.appendChild(list);
+		panes.appendChild(selPane);
+		return panes;
 	}
 
 	function fillViewSelect(ctx, listing) {
@@ -1602,8 +1817,10 @@
 		paintUserText(defOpt, DEFAULT_VIEW_LABEL);
 		sel.appendChild(defOpt);
 		const views = listing?.views ? listing.views : [];
+		ctx._configViewNames = [];
 		views.forEach(function (v) {
 			const n = (v?.name != null) ? String(v.name) : String(v);
+			ctx._configViewNames.push(n);
 			const opt = document.createElement("option");
 			opt.value = n;
 			paintUserText(opt, n);
@@ -1611,14 +1828,66 @@
 		});
 		const active = ctx._configActiveName;
 		sel.value = active == null ? "" : active;
+		refreshSavedBarState(ctx);
 	}
 
-	function askSaveAsName() {
-		if (typeof NS.config.askSaveAsName === "function")
-			return NS.config.askSaveAsName();
-		if (typeof window.prompt === "function")
-			return window.prompt("Save view as:");
-		return null;
+	/** Rename and Delete act on a saved view; the reserved Default view has neither. */
+	function refreshSavedBarState(ctx) {
+		const isDefault = ctx._configActiveName == null;
+		if (ctx._configRenameBtn) ctx._configRenameBtn.disabled = isDefault;
+		if (ctx._configDeleteBtn) ctx._configDeleteBtn.disabled = isDefault;
+	}
+
+	/** Opens the saved-views bar's inline name field for "saveas" or "rename". */
+	function openNameField(ctx, mode) {
+		const field = ctx._configNameField;
+		const input = ctx._configNameInput;
+		if (!field || !input) return;
+		ctx._configNameMode = mode;
+		paintUserInput(input, mode === "rename" ? (ctx._configActiveName || "") : "");
+		paintUserText(ctx._configNameOk, mode === "rename" ? "Rename" : "Save");
+		field.hidden = false;
+		input.focus?.();
+	}
+
+	function closeNameField(ctx) {
+		if (ctx._configNameField) ctx._configNameField.hidden = true;
+		ctx._configNameMode = null;
+	}
+
+	/**
+	 * Renames the saved view {@code oldName} to {@code newName} through the existing persistence calls: save a copy under
+	 * the new name, then delete the old one.  When the delete fails the copy is removed again and the old view stays the
+	 * active one, so a failed rename leaves storage as it was.
+	 *
+	 * @return A promise of true when the rename went through.
+	 */
+	function renameSavedView(table, ctx, oldName, newName) {
+		let ok = false;
+		return NS.persistence.load(table, oldName).then(function (blob) {
+			return NS.persistence.saveAndActivate(table, newName, blob);
+		}).then(function () {
+			return NS.persistence["delete"](table, oldName).then(function () {
+				ok = true;
+				ctx._configActiveName = newName;
+				showChooserStatus(ctx, "Renamed.", false);
+			}, function (e) {
+				const why = toTypedError(e).message || "the old view could not be deleted";
+				return Promise.resolve()
+					.then(function () { return NS.persistence["delete"](table, newName); })
+					.then(function () { return NS.persistence.setActive(table, oldName); })
+					.catch(function () { /* the error below already reports the failed rename */ })
+					.then(function () {
+						ctx._configActiveName = oldName;
+						showChooserStatus(ctx, "Rename failed: " + why, true);
+					});
+			});
+		}, function (e) {
+			showChooserStatus(ctx, toTypedError(e).message || "Rename failed.", true);
+		}).then(function () {
+			return NS.persistence.list(table).then(function (listing) { fillViewSelect(ctx, listing); },
+				function () { refreshSavedBarState(ctx); });
+		}).then(function () { return ok; });
 	}
 
 	function confirmDiscard(ctx) {
@@ -1738,8 +2007,7 @@
 	/**
 	 * Shows one tab body and hides the rest, moves the active class onto its button, updates each tab button's
 	 * {@code aria-selected} and roving {@code tabindex} (only the active tab is {@code tabindex="0"}; the
-	 * rest are {@code tabindex="-1"}, per the WAI-ARIA APG tabs pattern), and reveals the View-tab-only Reset
-	 * control.
+	 * rest are {@code tabindex="-1"}, per the WAI-ARIA APG tabs pattern).
 	 */
 	function selectConfigTab(ctx, name) {
 		ctx._configActiveTab = name;
@@ -1755,7 +2023,6 @@
 			const body = bodies[t];
 			if (body) body.hidden = t !== name;
 		});
-		if (ctx._configResetBtn) ctx._configResetBtn.hidden = name !== "view";
 	}
 
 	/**
@@ -1810,7 +2077,7 @@
 	/**
 	 * One ordered Sort-tab row: a checkbox toggling membership (unchecking removes it from `draft.sort`
 	 * entirely - {@link #buildUnsortedRow} re-adds it at the tail when re-checked), an Up/Down reorder pair, and
-	 * an Asc/Desc select - all draft-mutating, mirroring {@link #buildChooserRow}'s reorder convention.
+	 * an Asc/Desc select - all draft-mutating.
 	 */
 	function buildSortRow(ctx, col, draft, index, count) {
 		const row = document.createElement("div");
@@ -1853,7 +2120,7 @@
 
 		const up = document.createElement("button");
 		up.type = "button";
-		up.className = "juneau-config-sort-move";
+		up.className = "jc-btn juneau-config-sort-move";
 		paintUserText(up, "Up");
 		up.setAttribute("aria-label", "Move sort priority up " + (col.title || col.data));
 		up.disabled = index === 0;
@@ -1864,7 +2131,7 @@
 
 		const down = document.createElement("button");
 		down.type = "button";
-		down.className = "juneau-config-sort-move";
+		down.className = "jc-btn juneau-config-sort-move";
 		paintUserText(down, "Down");
 		down.setAttribute("aria-label", "Move sort priority down " + (col.title || col.data));
 		down.disabled = index === count - 1;
@@ -2039,9 +2306,31 @@
 		markDirty(ctx);
 	}
 
+	/**
+	 * The toolbar's Reset: puts {@code table} back on its built-in Default view (columns, sort, search and options)
+	 * and applies it at once, with no dialog.  Clears the active saved-view name (best-effort, like the chooser's
+	 * own select) and never touches chooser DOM, so it works whether or not the View Settings dialog was ever opened.
+	 *
+	 * @return The {@link #applyDraft} result.
+	 */
+	function resetToDefaultsAndApply(table, ctx) {
+		ctx._configDraft = defaultDraftForCtx(ctx);
+		ctx._configActiveName = null;
+		if (typeof NS.persistence?.setActive === "function") {
+			Promise.resolve(NS.persistence.setActive(table, null)).catch(function () { /* quota / private mode -
+				the reset itself already applied; remembering it across reloads is best-effort */ });
+		}
+		return applyDraft(table, ctx);
+	}
+
 	function openChooser(table, ctx) {
 		if (ctx._configBackdrop) {
 			closeChooserDialog(ctx);
+			return;
+		}
+		// One slot on the shared dialog stack: refused, like any dialog, once the page is at its cap.
+		if (typeof NS.init?.dialogLayerCount === "function" && NS.init.dialogLayerCount() >= NS.init.MAX_DIALOG_DEPTH) {
+			NS.init.renderDialogDepthRefusal?.(ctx);
 			return;
 		}
 		if (!ctx._configDraft) {
@@ -2061,37 +2350,51 @@
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
 		ctx._configVisibleTabs = visibleConfigTabs(ctx.viewDef);
 
-		const backdrop = document.createElement("div");
-		backdrop.className = CHOOSER_BACKDROP_CLASS;
-		backdrop.setAttribute("role", "presentation");
-
-		const dialog = document.createElement("div");
-		dialog.className = "juneau-config-dialog";
-		dialog.setAttribute("role", "dialog");
-		dialog.setAttribute("aria-labelledby", "juneau-config-title");
-
-		const title = document.createElement("h2");
-		title.id = "juneau-config-title";
-		title.className = "juneau-config-title";
-		paintUserText(title, "View Settings");
-		dialog.appendChild(title);
-
-		const dialogIdPrefix = "juneau-config-" + (++configDialogSeq) + "-";
+		const seq = ++configDialogSeq;
+		const dialogIdPrefix = "juneau-config-" + seq + "-";
 		const tabIds = {};
 		ctx._configVisibleTabs.forEach(function (t) {
 			tabIds[t] = { tab: dialogIdPrefix + "tab-" + t, panel: dialogIdPrefix + "panel-" + t };
 		});
 
+		const body = document.createElement("div");
+		body.className = "juneau-config-body-host";
+
+		const resetBtn = document.createElement("button");
+		resetBtn.type = "button";
+		resetBtn.className = "jc-btn jc-btn-link juneau-config-reset";
+		paintUserText(resetBtn, "Reset to defaults");
+		resetBtn.addEventListener("click", function () { resetDraftToDefaults(ctx); });
+
+		const ui = NS.init.buildDialogOverlay({
+			title: "View Settings", nav: "folder", confirmLabel: "Apply", body: body, leadActions: [resetBtn]
+		}, null, table, null, ctx, "config-" + seq);
+		const backdrop = ui.backdrop;
+		const dialog = ui.dialog;
+		backdrop.classList.add(CHOOSER_BACKDROP_CLASS_MARKER);
+		dialog.classList.add("juneau-config-dialog");
+		const title = dialog.querySelector(".juneau-view-dialog-title");
+		title.id = dialogIdPrefix + "title";
+		title.classList.add("juneau-config-title");
+		dialog.setAttribute("aria-labelledby", title.id);
+		ui.confirmBtn.classList.add("juneau-config-apply");
+		ui.cancelBtn.classList.add("juneau-config-cancel");
+		ctx._configResetBtn = resetBtn;
+
+		body.appendChild(buildSavedViewsBar(table, ctx, dialogIdPrefix));
+
 		const tabs = document.createElement("div");
-		tabs.className = "juneau-config-tabs";
+		tabs.className = "juneau-view-ribbon-group juneau-view-dialog-sections juneau-config-tabs";
+		tabs.dataset.juneauStripMode = "tab";
 		tabs.setAttribute("role", "tablist");
+		tabs.setAttribute("aria-label", "View Settings sections");
 		ctx._configTabButtons = {};
 		ctx._configTabBodies = {};
 		ctx._configVisibleTabs.forEach(function (t) {
 			const btn = document.createElement("button");
 			btn.type = "button";
 			btn.id = tabIds[t].tab;
-			btn.className = "juneau-config-tab";
+			btn.className = "juneau-view-ribbon-btn juneau-config-tab";
 			btn.setAttribute("role", "tab");
 			btn.setAttribute("aria-controls", tabIds[t].panel);
 			btn.setAttribute("aria-selected", "false");
@@ -2116,154 +2419,42 @@
 			selectConfigTab(ctx, name);
 			ctx._configTabButtons[name]?.focus();
 		});
-		dialog.appendChild(tabs);
+		body.appendChild(tabs);
 
 		const bodies = document.createElement("div");
 		bodies.className = "juneau-config-bodies";
-		dialog.appendChild(bodies);
+		body.appendChild(bodies);
 
+		const panel = function (t) {
+			const el = document.createElement("div");
+			el.className = "juneau-config-body juneau-config-body-" + t;
+			el.id = tabIds[t].panel;
+			el.setAttribute("role", "tabpanel");
+			el.setAttribute("aria-labelledby", tabIds[t].tab);
+			el.hidden = true;
+			ctx._configTabBodies[t] = el;
+			bodies.appendChild(el);
+			return el;
+		};
 		const visibleTabs = ctx._configVisibleTabs;
-		if (visibleTabs.indexOf("view") >= 0) {
-			const viewBody = document.createElement("div");
-			viewBody.className = "juneau-config-body juneau-config-body-view";
-			viewBody.id = tabIds.view.panel;
-			viewBody.setAttribute("role", "tabpanel");
-			viewBody.setAttribute("aria-labelledby", tabIds.view.tab);
-			ctx._configTabBodies.view = viewBody;
-			bodies.appendChild(viewBody);
-
-			const toolbar = document.createElement("div");
-			toolbar.className = "juneau-config-saved-bar";
-
-			const sel = document.createElement("select");
-			sel.className = "juneau-config-view-select";
-			sel.setAttribute("aria-label", "Saved view");
-			ctx._configSelectEl = sel;
-			sel.addEventListener("change", function () {
-				if (!confirmDiscard(ctx)) {
-					sel.value = ctx._configActiveName == null ? "" : ctx._configActiveName;
-					return;
-				}
-				const name = sel.value === "" ? null : sel.value;
-				loadNamedView(table, ctx, name).then(function () {
-					NS.persistence.setActive(table, name).catch(function () { /* quota / private mode — the
-						chooser selection itself already applied; persisting it across reloads is best-effort */ });
-				});
-			});
-			toolbar.appendChild(sel);
-
-			const saveBtn = document.createElement("button");
-			saveBtn.type = "button";
-			paintUserText(saveBtn, "Save");
-			saveBtn.addEventListener("click", function () {
-				if (ctx._configActiveName == null) {
-					showChooserStatus(ctx, "Use Save as… to name a new view.", true);
-					return;
-				}
-				persistDraft(table, ctx, ctx._configActiveName, true);
-			});
-			toolbar.appendChild(saveBtn);
-
-			const saveAsBtn = document.createElement("button");
-			saveAsBtn.type = "button";
-			paintUserText(saveAsBtn, "Save as…");
-			saveAsBtn.addEventListener("click", function () {
-				const name = askSaveAsName();
-				if (name == null || String(name).trim() === "") return;
-				const basic = validateNameBasic(name);
-				if (!basic.ok) {
-					showChooserStatus(ctx, basic.message, true);
-					return;
-				}
-				persistDraft(table, ctx, String(name).trim(), true);
-			});
-			toolbar.appendChild(saveAsBtn);
-
-			const delBtn = document.createElement("button");
-			delBtn.type = "button";
-			paintUserText(delBtn, "Delete");
-			delBtn.addEventListener("click", function () {
-				if (ctx._configActiveName == null) {
-					showChooserStatus(ctx, "The Default view cannot be deleted.", true);
-					return;
-				}
-				const name = ctx._configActiveName;
-				NS.persistence["delete"](table, name).then(function () {
-					return NS.persistence.setActive(table, null);
-				}).then(function () {
-					ctx._configActiveName = null;
-					ctx._configDraft = defaultDraftForCtx(ctx);
-					ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
-					ctx._configDirty = false;
-					renderChooserColumnList(ctx);
-					refreshChooserDirty(ctx);
-					return NS.persistence.list(table);
-				}).then(function (listing) {
-					fillViewSelect(ctx, listing);
-					showChooserStatus(ctx, "Deleted.", false);
-				}, function (e) {
-					showChooserStatus(ctx, (toTypedError(e).message) || "Delete failed.", true);
-				});
-			});
-			toolbar.appendChild(delBtn);
-
-			const dirty = document.createElement("span");
-			dirty.className = "juneau-config-dirty";
-			dirty.hidden = true;
-			ctx._configDirtyEl = dirty;
-			toolbar.appendChild(dirty);
-
-			viewBody.appendChild(toolbar);
-
-			const list = document.createElement("div");
-			list.className = "juneau-config-col-list";
-			ctx._configListEl = list;
-			viewBody.appendChild(list);
-		}
-
+		if (visibleTabs.indexOf("view") >= 0)
+			panel("view").appendChild(buildViewTabPanes(ctx, seq));
 		if (visibleTabs.indexOf("search") >= 0) {
 			// Search tab — membership only; operator editing lives in the header popup.
-			const searchBody = document.createElement("div");
-			searchBody.className = "juneau-config-body juneau-config-body-search";
-			searchBody.id = tabIds.search.panel;
-			searchBody.setAttribute("role", "tabpanel");
-			searchBody.setAttribute("aria-labelledby", tabIds.search.tab);
-			searchBody.hidden = true;
 			const searchList = document.createElement("div");
 			searchList.className = "juneau-config-member-list juneau-config-search-list";
 			ctx._configSearchListEl = searchList;
-			searchBody.appendChild(searchList);
-			ctx._configTabBodies.search = searchBody;
-			bodies.appendChild(searchBody);
+			panel("search").appendChild(searchList);
 		}
-
 		if (visibleTabs.indexOf("sort") >= 0) {
 			// Sort tab — an ordered, directional priority list.
-			const sortBody = document.createElement("div");
-			sortBody.className = "juneau-config-body juneau-config-body-sort";
-			sortBody.id = tabIds.sort.panel;
-			sortBody.setAttribute("role", "tabpanel");
-			sortBody.setAttribute("aria-labelledby", tabIds.sort.tab);
-			sortBody.hidden = true;
 			const sortList = document.createElement("div");
 			sortList.className = "juneau-config-member-list juneau-config-sort-list";
 			ctx._configSortListEl = sortList;
-			sortBody.appendChild(sortList);
-			ctx._configTabBodies.sort = sortBody;
-			bodies.appendChild(sortBody);
+			panel("sort").appendChild(sortList);
 		}
-
-		if (visibleTabs.indexOf("options") >= 0) {
-			// Options tab — page size / wrap / density only.
-			const optionsBody = document.createElement("div");
-			optionsBody.className = "juneau-config-body juneau-config-body-options";
-			optionsBody.id = tabIds.options.panel;
-			optionsBody.setAttribute("role", "tabpanel");
-			optionsBody.setAttribute("aria-labelledby", tabIds.options.tab);
-			optionsBody.hidden = true;
-			ctx._configTabBodies.options = optionsBody;
-			bodies.appendChild(optionsBody);
-		}
+		if (visibleTabs.indexOf("options") >= 0)
+			panel("options");
 
 		const status = document.createElement("div");
 		status.className = "juneau-config-status";
@@ -2271,53 +2462,41 @@
 		status.setAttribute("aria-live", "polite");
 		status.hidden = true;
 		ctx._configStatusEl = status;
-		dialog.appendChild(status);
+		body.appendChild(status);
 
-		const actions = document.createElement("div");
-		actions.className = "juneau-config-actions";
-
-		const applyBtn = document.createElement("button");
-		applyBtn.type = "button";
-		applyBtn.className = "juneau-config-apply";
-		paintUserText(applyBtn, "Apply");
-		applyBtn.addEventListener("click", function () { applyDraft(table, ctx); });
-		actions.appendChild(applyBtn);
-
-		const resetBtn = document.createElement("button");
-		resetBtn.type = "button";
-		resetBtn.className = "juneau-config-reset";
-		paintUserText(resetBtn, "Reset to defaults");
-		resetBtn.addEventListener("click", function () { resetDraftToDefaults(ctx); });
-		ctx._configResetBtn = resetBtn;
-		actions.appendChild(resetBtn);
-
-		const closeBtn = document.createElement("button");
-		closeBtn.type = "button";
-		paintUserText(closeBtn, "Cancel");
-		closeBtn.addEventListener("click", function () {
+		ui.confirmBtn.addEventListener("click", function () { applyDraft(table, ctx); });
+		const dismiss = function () {
 			if (!confirmDiscard(ctx)) return;
 			closeChooserDialog(ctx);
-		});
-		actions.appendChild(closeBtn);
-
-		dialog.appendChild(actions);
-		backdrop.appendChild(dialog);
+		};
+		ui.cancelBtn.addEventListener("click", dismiss);
+		ui.dismissBtn.addEventListener("click", dismiss);
 		backdrop.addEventListener("click", function (e) {
-			if (e.target === backdrop) {
-				if (!confirmDiscard(ctx)) return;
-				closeChooserDialog(ctx);
-			}
+			if (e.target === backdrop) dismiss();
 		});
-		document.body.appendChild(backdrop);
-		ctx._configBackdrop = backdrop;
 
+		ctx._configBackdrop = backdrop;
 		renderConfigTabBodies(ctx);
 		selectConfigTab(ctx, ctx._configVisibleTabs[0]);
 		refreshChooserDirty(ctx);
+		refreshSavedBarState(ctx);
 		if (ctx._configResetNotice) {
 			showChooserStatus(ctx, "Saved view settings were reset because the table changed.", false);
 			ctx._configResetNotice = false;
 		}
+		// A page-level dialog layer (not the table's own action-dialog stack, which a rebuild on Apply tears down):
+		// Escape pops it like any top layer, and focus returns to the opener.
+		const opener = typeof document !== "undefined" ? document.activeElement : null;
+		document.body.appendChild(backdrop);
+		NS.init.pushLayer(backdrop, {
+			kind: "dialog", trapFocus: true, lightDismiss: false, detachOnPop: true, returnFocusTo: opener,
+			onDismiss: function () {
+				if (ctx._configBackdrop !== backdrop) return;
+				clearChooserRefs(ctx);
+				notifyChooserClosed(ctx);
+			}
+		});
+		ctx._configTabButtons[ctx._configActiveTab]?.focus?.();
 		NS.persistence.list(table).then(function (listing) {
 			if (ctx._configActiveName === undefined)
 				ctx._configActiveName = listing.active;
@@ -2325,6 +2504,145 @@
 		}, function () {
 			fillViewSelect(ctx, { views: [] });
 		});
+	}
+
+	/** Polling holds while the dialog is open; tell the status control it may resume. */
+	function notifyChooserClosed(ctx) {
+		if (typeof ctx._onPollPausedChange === "function") ctx._onPollPausedChange();
+	}
+
+	/**
+	 * The saved-views bar under the header: picker, Save as..., Rename, Delete, and the inline name field Save as and
+	 * Rename share (a field in the bar, never a second dialog layer).
+	 */
+	function buildSavedViewsBar(table, ctx, idPrefix) {
+		const bar = document.createElement("div");
+		bar.className = "juneau-config-saved-bar";
+
+		const sel = document.createElement("select");
+		sel.className = "juneau-config-view-select";
+		sel.setAttribute("aria-label", "Saved view");
+		ctx._configSelectEl = sel;
+		sel.addEventListener("change", function () {
+			if (!confirmDiscard(ctx)) {
+				sel.value = ctx._configActiveName == null ? "" : ctx._configActiveName;
+				return;
+			}
+			const name = sel.value === "" ? null : sel.value;
+			closeNameField(ctx);
+			loadNamedView(table, ctx, name).then(function () {
+				refreshSavedBarState(ctx);
+				NS.persistence.setActive(table, name).catch(function () { /* quota / private mode — the
+					chooser selection itself already applied; persisting it across reloads is best-effort */ });
+			});
+		});
+		bar.appendChild(sel);
+
+		const saveAsBtn = document.createElement("button");
+		saveAsBtn.type = "button";
+		saveAsBtn.className = "jc-btn juneau-config-saveas";
+		paintUserText(saveAsBtn, "Save as…");
+		saveAsBtn.addEventListener("click", function () { openNameField(ctx, "saveas"); });
+		ctx._configSaveAsBtn = saveAsBtn;
+		bar.appendChild(saveAsBtn);
+
+		const renameBtn = document.createElement("button");
+		renameBtn.type = "button";
+		renameBtn.className = "jc-btn juneau-config-rename";
+		paintUserText(renameBtn, "Rename");
+		renameBtn.addEventListener("click", function () {
+			if (ctx._configActiveName != null) openNameField(ctx, "rename");
+		});
+		ctx._configRenameBtn = renameBtn;
+		bar.appendChild(renameBtn);
+
+		const delBtn = document.createElement("button");
+		delBtn.type = "button";
+		delBtn.className = "jc-btn jc-btn-danger juneau-config-delete";
+		paintUserText(delBtn, "Delete");
+		delBtn.addEventListener("click", function () {
+			if (ctx._configActiveName == null) {
+				showChooserStatus(ctx, "The Default view cannot be deleted.", true);
+				return;
+			}
+			closeNameField(ctx);
+			const name = ctx._configActiveName;
+			NS.persistence["delete"](table, name).then(function () {
+				return NS.persistence.setActive(table, null);
+			}).then(function () {
+				ctx._configActiveName = null;
+				ctx._configDraft = defaultDraftForCtx(ctx);
+				ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
+				ctx._configDirty = false;
+				renderChooserColumnList(ctx);
+				refreshChooserDirty(ctx);
+				return NS.persistence.list(table);
+			}).then(function (listing) {
+				fillViewSelect(ctx, listing);
+				showChooserStatus(ctx, "Deleted.", false);
+			}, function (e) {
+				showChooserStatus(ctx, (toTypedError(e).message) || "Delete failed.", true);
+			});
+		});
+		ctx._configDeleteBtn = delBtn;
+		bar.appendChild(delBtn);
+
+		const dirty = document.createElement("span");
+		dirty.className = "juneau-config-dirty";
+		dirty.hidden = true;
+		ctx._configDirtyEl = dirty;
+		bar.appendChild(dirty);
+
+		const field = document.createElement("div");
+		field.className = "juneau-config-name-field";
+		field.hidden = true;
+		const input = document.createElement("input");
+		input.type = "text";
+		input.className = "juneau-config-name-input";
+		input.id = idPrefix + "name";
+		input.maxLength = MAX_NAME_LEN;
+		input.setAttribute("aria-label", "View name");
+		const ok = document.createElement("button");
+		ok.type = "button";
+		ok.className = "jc-btn jc-btn-primary juneau-config-name-ok";
+		paintUserText(ok, "Save");
+		const cancel = document.createElement("button");
+		cancel.type = "button";
+		cancel.className = "jc-btn juneau-config-name-cancel";
+		paintUserText(cancel, "Cancel");
+		const submit = function () {
+			const name = String(input.value || "").trim();
+			const basic = validateNameBasic(name);
+			if (!basic.ok) {
+				showChooserStatus(ctx, basic.message, true);
+				return;
+			}
+			const mode = ctx._configNameMode;
+			if (mode === "rename") {
+				const oldName = ctx._configActiveName;
+				if (oldName == null || name === oldName) { closeNameField(ctx); return; }
+				renameSavedView(table, ctx, oldName, name).then(function (renamed) { if (renamed) closeNameField(ctx); });
+				return;
+			}
+			// "Save as" names a new view from the draft and makes it the active one.
+			persistDraft(table, ctx, name, true).then(function () { closeNameField(ctx); }, function () {
+				/* persistDraft already showed the error; the field stays open so the name can be fixed */
+			});
+		};
+		ok.addEventListener("click", submit);
+		cancel.addEventListener("click", function () { closeNameField(ctx); });
+		input.addEventListener("keydown", function (e) {
+			if (e?.key === "Enter") { e.preventDefault?.(); submit(); }
+			else if (e?.key === "Escape") { e.preventDefault?.(); e.stopPropagation?.(); closeNameField(ctx); }
+		});
+		field.appendChild(input);
+		field.appendChild(ok);
+		field.appendChild(cancel);
+		ctx._configNameField = field;
+		ctx._configNameInput = input;
+		ctx._configNameOk = ok;
+		bar.appendChild(field);
+		return bar;
 	}
 
 	/** Resolves the toolbar host the chooser button mounts into, or `null` when there is nowhere to mount it. */
@@ -2401,6 +2719,10 @@
 	NS.config.paintUserInput = paintUserInput;
 	NS.config.canHideColumn = canHideColumn;
 	NS.config.moveColumn = moveColumn;
+	NS.config.selectedColumnKeys = selectedColumnKeys;
+	NS.config.reorderSelectedColumn = reorderSelectedColumn;
+	NS.config.addColumnToView = addColumnToView;
+	NS.config.renameSavedView = renameSavedView;
 	NS.config.defaultDraftFromCatalog = defaultDraftFromCatalog;
 	NS.config.draftFromSavedView = draftFromSavedView;
 	NS.config.mountChooser = mountChooser;
@@ -2431,6 +2753,7 @@
 	NS.config.copyShareLink = copyShareLink;
 	NS.config.selectConfigTab = selectConfigTab;
 	NS.config.resetDraftToDefaults = resetDraftToDefaults;
+	NS.config.resetToDefaultsAndApply = resetToDefaultsAndApply;
 	// Tables built before this file registered (a shell-first page) are rebuilt now that the chooser exists.
 	if (typeof NS.init?.flushLateConfigRebuilds === "function") NS.init.flushLateConfigRebuilds();
 })();

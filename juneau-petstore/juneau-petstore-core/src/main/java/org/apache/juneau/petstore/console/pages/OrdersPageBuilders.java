@@ -58,10 +58,11 @@ public final class OrdersPageBuilders {
 						RibbonItem.option("placed").title("Placed").column("status").value("$eq(PLACED)"),
 						RibbonItem.option("approved").title("Approved").column("status").value("$eq(APPROVED)"),
 						RibbonItem.option("delivered").title("Delivered").column("status").value("$eq(DELIVERED)"))
-						.title("Order status").deselectable(true),
+						.title("Order status").deselectable(true).group("filter"),
 					RibbonItem.dialog("new-order").title("+ New order").symbol("plus")
-						.form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW),
-					RibbonItem.export("copy", "csv").optional("excel", "pdf"),
+						.form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),
+					RibbonItem.export("copy", "csv").optional("excel", "pdf").group("viewing"),
+					RibbonItem.resetDefaults().group("page"),
 					RibbonItem.refresh())
 				.rowActions(
 					RowAction.create("approve").label("Approve").endpoint("/console/orders/{id}/approve").method(Method.POST).onSuccess(OnSuccess.REDRAW)

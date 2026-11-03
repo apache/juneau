@@ -192,6 +192,11 @@ final class ConsoleBrowserFixture {
 		return step("eval", script);
 	}
 
+	/** Step: moves the real pointer over {@code selector}, so its {@code :hover} rules match. */
+	ConsoleBrowserFixture hover(String selector) {
+		return step("hover", selector);
+	}
+
 	/**
 	 * Makes the most recently added case record, in the first animation frame (before the first paint), the root
 	 * {@code data-jc-scheme} attribute and the body's computed background color.  The report's {@code firstFrame}

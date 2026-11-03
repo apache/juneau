@@ -35,6 +35,8 @@
  *   watchRequests: true   logs every request as {path, phase} into the report's requestLog entry: phase is "load"
  *                      until the page has loaded, any wait has matched and the network is quiet, then "steps"; after
  *                      the steps the run waits for the network to go quiet again, so an in-flight request is logged.
+ * Step kinds (in order, after any clicks): press (a key), emulate (prefers-color-scheme), forcedColors, eval (a script),
+ * hover (moves the real pointer over a selector, so :hover matches).
  * Prints one report object per case name.
  */
 'use strict';
@@ -331,6 +333,7 @@ const CONTRAST = function (entries) { // NOSONAR javascript:S3776 - branching mi
 					await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
 				}
 				else if (st.kind === 'eval') await page.evaluate(st.value);
+				else if (st.kind === 'hover') await page.hover(st.value, { timeout: 10000 });
 			}
 			await page.evaluate(() => new Promise(requestAnimationFrame));
 			if (c.watchRequests) await quiet();

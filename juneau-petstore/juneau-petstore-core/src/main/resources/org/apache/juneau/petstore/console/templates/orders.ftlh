@@ -29,14 +29,15 @@
     { key: 'status', label: 'Status', render: { id: 'pill' } }
   ],
   ribbon: [
-    { type: 'optionGroup', id: 'status', title: 'Order status', deselectable: true, options: [
+    { type: 'optionGroup', id: 'status', title: 'Order status', group: 'filter', deselectable: true, options: [
       { id: 'placed', title: 'Placed', column: 'status', value: '$eq(PLACED)' },
       { id: 'approved', title: 'Approved', column: 'status', value: '$eq(APPROVED)' },
       { id: 'delivered', title: 'Delivered', column: 'status', value: '$eq(DELIVERED)' }
     ] },
-    { type: 'dialog', id: 'new-order', title: '+ New order', symbol: 'plus',
+    { type: 'dialog', id: 'new-order', title: '+ New order', symbol: 'plus', group: 'entity',
       form: '/console/orders/new-form', endpoint: '/console/orders', method: 'POST', onSuccess: 'redraw' },
-    { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'export', group: 'viewing', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh' }
   ],
   rowActions: [

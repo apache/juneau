@@ -36,6 +36,21 @@
 	font-size: var(--jc-chrome-font-size-1, 12px);
 }
 
+.juneau-term-bar[hidden],
+.juneau-term-screen[hidden],
+.juneau-term-empty[hidden] {
+	display: none;
+}
+
+/* Empty (the bytes endpoint answers 404): one muted line, no red badge; the bar and screen are hidden. */
+.juneau-term-empty {
+	padding: var(--jc-space-1, 4px) var(--jc-space-2, 8px);
+	border-radius: var(--jc-chrome-control-radius, 4px);
+	background: var(--jc-hover-bg, transparent);
+	color: var(--jc-text-muted, inherit);
+	font-size: var(--jc-chrome-font-size-1, 12px);
+}
+
 .juneau-term-search {
 	min-width: 12em;
 }
@@ -71,7 +86,49 @@
 	color: var(--jc-tag-amber-text, #7a531a);
 }
 
-/* The input toggle: a plain button like Copy, with aria-pressed; pressed while input is live. */
+/*
+ * Copy, Load all and the input toggle are standard secondary buttons (.jc-btn, chrome.css).  This zero-specificity
+ * fallback gives them an edge on a host that does not load chrome.css; .jc-btn wins wherever it is defined.
+ */
+:where(.juneau-term-copy, .juneau-term-load-all, .juneau-term-input) {
+	padding: 2px var(--jc-space-2, 8px);
+	border: 1px solid var(--jc-border, currentColor);
+	border-radius: var(--jc-chrome-control-radius, 4px);
+	background: var(--jc-control-bg, transparent);
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+
+/* Follow is a labelled checkbox drawn as a toggle: secondary edge when off, the selected (= hover) accent when on. */
+.juneau-term-follow {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jc-space-1, 4px);
+	padding: 2px var(--jc-space-2, 8px);
+	border: 1px solid var(--jc-border, currentColor);
+	border-radius: var(--jc-chrome-control-radius, 4px);
+	background: var(--jc-control-bg, transparent);
+	cursor: pointer;
+	user-select: none;
+}
+
+.juneau-term-follow:hover {
+	background: var(--jc-hover-bg, transparent);
+	border-color: var(--jc-accent, currentColor);
+}
+
+.juneau-term-follow:has(input:checked) {
+	background: var(--jc-accent-wash, transparent);
+	border-color: var(--jc-accent, currentColor);
+	color: var(--jc-accent, inherit);
+}
+
+.juneau-term-follow input {
+	margin: 0;
+}
+
+/* The input toggle: a secondary button like Copy, with aria-pressed; pressed while input is live. */
 .juneau-term-input {
 	white-space: nowrap;
 }

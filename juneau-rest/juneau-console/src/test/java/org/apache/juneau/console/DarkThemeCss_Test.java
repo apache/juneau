@@ -53,7 +53,7 @@ class DarkThemeCss_Test extends TestBase {
 	 */
 	private static final Set<String> ACCENT_OR_INVARIANT = Set.of(
 		"--jc-accent", "--jc-accent-wash", "--jc-link", "--jc-focus", "--jc-accent-selected",
-		"--jc-btn-primary", "--jc-btn-primary-hover", "--jc-avatar-bg", "--jc-danger", "--jc-success", "--jc-white",
+		"--jc-btn-primary", "--jc-btn-primary-hover", "--jc-avatar-bg", "--jc-danger", "--jc-danger-strong", "--jc-success", "--jc-white",
 		"--jc-on-accent", "--jc-on-btn-primary",
 		// Derived aliases that stay live.
 		"--jc-btn-primary-bg", "--jc-btn-primary-bg-hover", "--jc-page-nav-accent", "--jc-nav-bg",
@@ -225,5 +225,12 @@ class DarkThemeCss_Test extends TestBase {
 			.add("--jc-on-tone", "#16181d")
 			.build();
 		expected.forEach((k, v) -> assertEquals(v, d.get(k), k));
+	}
+
+	@Test void a09_dangerStrongInvariant() throws Exception {
+		// Like --jc-danger (its rest fill), the filled-destructive hover fill does not change in dark.
+		assertTrue(Theme.OPEN.getTokens().containsKey("--jc-danger-strong"));
+		assertTrue(ACCENT_OR_INVARIANT.contains("--jc-danger-strong"));
+		assertFalse(darkDecls().containsKey("--jc-danger-strong"));
 	}
 }

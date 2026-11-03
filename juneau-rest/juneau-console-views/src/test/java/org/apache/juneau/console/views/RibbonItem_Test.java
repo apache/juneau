@@ -245,12 +245,11 @@ class RibbonItem_Test extends TestBase {
 		assertTrue(ex.getMessage().endsWith("does not accept '" + key + "'."), ex.getMessage());
 	}
 
-	@Test void a33_optionGroup_ownIgnoredKeys_rejected() {
-		for (var k : List.of("symbol", "group")) {
-			var g = RibbonItem.optionGroup("phase", RibbonItem.option("a"));
-			g = "symbol".equals(k) ? g.symbol("s") : g.group("x");
-			assertIgnored("optionGroup", g, k);
-		}
+	@Test void a33_optionGroup_symbolRejected_groupAccepted() {
+		assertIgnored("optionGroup", RibbonItem.optionGroup("phase", RibbonItem.option("a")).symbol("s"), "symbol");
+		// A group may be tagged with a toolbar group id (e.g. "filter") so the canonical toolbar order can place it.
+		assertEquals("filter", RibbonItem.optionGroup("phase", RibbonItem.option("a")).group("filter").toMap().get("group"));
+		RibbonItem.validate(Map.of("type", "optionGroup", "id", "g", "group", "filter", "options", List.of(Map.of("id", "a"))));
 	}
 
 	@Test void a33b_optionGroup_title_emitted() {
@@ -344,5 +343,18 @@ class RibbonItem_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> target3.id(null));
 		var target4 = RibbonItem.refresh();
 		assertThrows(IllegalArgumentException.class, () -> target4.id(" "));
+	}
+
+	@Test void a42_resetDefaults_toMap() {
+		assertEquals("resetDefaults", RibbonItem.resetDefaults().toMap().get("type"));
+		var m = RibbonItem.resetDefaults().title("Reset").group("page").toMap();
+		assertEquals("Reset", m.get("title"));
+		assertEquals("page", m.get("group"));
+		RibbonItem.validate(Map.of("type", "resetDefaults", "group", "page"));
+	}
+
+	@Test void a43_resetDefaults_target_rejected() {
+		// The reset acts on its own table only; it is not a bus command, so a target is rejected.
+		assertIgnored("resetDefaults", RibbonItem.resetDefaults().target("orders"), "target");
 	}
 }

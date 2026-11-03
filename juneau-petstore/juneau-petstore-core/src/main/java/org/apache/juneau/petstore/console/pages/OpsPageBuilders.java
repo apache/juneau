@@ -66,7 +66,8 @@ public final class OpsPageBuilders {
 					Column.create("state").label("State").render("pill"),
 					Column.create("result.message").label("Result"))
 				.ribbon(
-					RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form"),
+					RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form").group("entity"),
+					RibbonItem.resetDefaults().group("page"),
 					RibbonItem.refresh().id("refresh")))
 			.table(TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")
 				.pollIntervalMs(2000)
@@ -92,7 +93,9 @@ public final class OpsPageBuilders {
 				.detail(RowDetail.create("/console/ops/jobs/groom-runs/{id}")
 					.region(RegionDef.create("regroom").type(RegionDef.TYPE_ROW_DETAIL).populate("petstore-regroom").allowPopulators("petstore-regroom")))
 				.ribbon(
-					RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form"),
+					RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form").group("entity"),
+					RibbonItem.collapseAll().group("viewing"),
+					RibbonItem.resetDefaults().group("page"),
 					RibbonItem.refresh().id("groom-refresh")));
 	}
 
@@ -113,6 +116,6 @@ public final class OpsPageBuilders {
 					Column.create("entity").label("Entity").searchType(SearchType.TEXT),
 					Column.create("entityId").label("Id").searchType(SearchType.TEXT),
 					Column.create("detail").label("Detail").searchType(SearchType.TEXT))
-				.ribbon(RibbonItem.export("copy", "csv"), RibbonItem.refresh().id("refresh")));
+				.ribbon(RibbonItem.export("copy", "csv").group("viewing"), RibbonItem.resetDefaults().group("page"), RibbonItem.refresh().id("refresh")));
 	}
 }

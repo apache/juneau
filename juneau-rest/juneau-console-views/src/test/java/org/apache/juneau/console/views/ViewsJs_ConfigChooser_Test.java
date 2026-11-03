@@ -127,7 +127,8 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 	}
 
 	@Test void a07_saveAsDefault_goesThroughValidateNameBasic() throws Exception {
-		var fn = functionBody(configJs(), "function openChooser(");
+		// The saved-views bar (Save as... / Rename / Delete) is built above the tabs by its own helper.
+		var fn = functionBody(configJs(), "function buildSavedViewsBar(");
 		assertTrue(fn.contains("validateNameBasic(name)"), fn);
 		assertTrue(fn.contains("Save as"), fn);
 		assertTrue(fn.contains("paintUserText"), fn);
@@ -147,10 +148,19 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 		assertTrue(fn.contains("in-flight"), fn);
 	}
 
-	@Test void a10_chooserBackdrop_distinctFromActionDialogTeardownClass() throws Exception {
+	@Test void a10_chooserBackdrop_isSharedDialogFrameOnTheLayerStack() throws Exception {
+		// The chooser is the shared dialog frame, so it carries the shared backdrop class; it survives the
+		// action-dialog sweep because it sits on the page layer stack rather than the table's dialog stack.
 		var body = configJs();
-		assertTrue(body.contains("CHOOSER_BACKDROP_CLASS = \"juneau-config-dialog-backdrop\""), body);
-		assertFalse(body.contains("CHOOSER_BACKDROP_CLASS = \"juneau-view-dialog-backdrop\""), body);
+		assertTrue(body.contains("CHOOSER_BACKDROP_CLASS = \"juneau-view-dialog-backdrop\""), body);
+		assertTrue(body.contains("CHOOSER_BACKDROP_CLASS_MARKER = \"juneau-config-dialog-backdrop\""), body);
+		var open = functionBody(body, "function openChooser(");
+		assertTrue(open.contains("NS.init.buildDialogOverlay("), open);
+		assertTrue(open.contains("NS.init.pushLayer("), open);
+		assertTrue(open.contains("nav: \"folder\""), open);
+		assertFalse(open.contains("_dialogStack"), open);
+		var close = functionBody(body, "function closeChooserDialog(");
+		assertTrue(close.contains("popLayer"), close);
 	}
 
 	@Test void a11_mountChooser_stampsChromeTipNotNativeTitle() throws Exception {

@@ -79,6 +79,8 @@ function server(fx) {
 		const asset = ASSETS[u.pathname];
 		if (asset)
 			return route.fulfill({ status: 200, contentType: asset[0], body: asset[1] });
+		if (u.pathname === '/t/bytes' && f.missing)
+			return route.fulfill({ status: 404, body: 'not found' });
 		if (u.pathname === '/t/bytes') {
 			const from = Number(u.searchParams.get('from') || '0');
 			const max = u.searchParams.has('max') ? Number(u.searchParams.get('max')) : 1 << 18;
@@ -235,6 +237,56 @@ const CASES = [
 		expect(r.queued, 'the terminal card handler is queued');
 		expect(r.region === 1, 'one xterm inside the region: ' + r.region);
 		expect((await rows(page))[0] === 'hello', 'first row');
+	}],
+	// Copy, Load all and the input toggle are standard .jc-btn buttons; Search stays an input; Follow is a toggle label.
+	// This page has no chrome.css, so the :where() fallback in juneau-terminal.css draws their edge.
+	['b24_toolbarControlsUseTheStandardButtonKinds', async function (page) {
+		await open(page, { log: Buffer.from('hello\r\n') });
+		const r = await page.evaluate(function () {
+			const q = function (s) { return document.querySelector(s); };
+			const cs = function (s) { return getComputedStyle(q(s)); };
+			return {
+				copy: q('button.juneau-term-copy').classList.contains('jc-btn'),
+				loadAll: q('button.juneau-term-load-all').classList.contains('jc-btn'),
+				search: q('input.juneau-term-search').classList.contains('jc-btn'),
+				followTag: q('.juneau-term-follow').tagName,
+				copyEdge: cs('.juneau-term-copy').borderTopStyle + ' ' + cs('.juneau-term-copy').borderTopWidth,
+				followDisplay: cs('.juneau-term-follow').display,
+				followEdge: cs('.juneau-term-follow').borderTopStyle + ' ' + cs('.juneau-term-follow').borderTopWidth
+			};
+		});
+		expect(r.copy && r.loadAll, 'Copy and Load all carry jc-btn: ' + JSON.stringify(r));
+		expect(!r.search, 'the Search input does not carry jc-btn');
+		expect(r.followTag === 'LABEL' && /flex$/.test(r.followDisplay) && r.followEdge === 'solid 1px', 'Follow is a toggle-styled label: ' + JSON.stringify(r));
+		expect(r.copyEdge === 'solid 1px', 'the fallback edge without chrome.css: ' + r.copyEdge);
+	}],
+	// The bytes endpoint answers 404: a one-line muted panel, no red badge, no toolbar, no screen.
+	['b25_notFoundShowsTheEmptyPanel', async function (page) {
+		await open(page, { log: Buffer.alloc(0), missing: true }, { emptyMessage: 'Nothing to show yet.' });
+		await page.waitForSelector('.juneau-term-empty:not([hidden])');
+		const r = await page.evaluate(function () {
+			const q = function (s) { return document.querySelector(s); };
+			const box = q('.juneau-term').getBoundingClientRect();
+			const e = q('.juneau-term-empty');
+			const cs = getComputedStyle(e);
+			return {
+				height: box.height, text: e.textContent, fail: !!q('.juneau-term-fail, .juneau-term-error'),
+				barDisplay: getComputedStyle(q('.juneau-term-bar')).display, screenDisplay: getComputedStyle(q('.juneau-term-screen')).display,
+				color: cs.color, bg: cs.backgroundColor, muted: getComputedStyle(document.documentElement).getPropertyValue('--jc-text-muted')
+			};
+		});
+		expect(r.height <= 40 && r.height > 0, 'the empty region is at most 40px high: ' + r.height);
+		expect(r.text === 'Nothing to show yet.', 'emptyMessage: ' + r.text);
+		expect(!r.fail, 'no red failed badge');
+		expect(r.barDisplay === 'none' && r.screenDisplay === 'none', 'toolbar and screen hidden: ' + JSON.stringify(r));
+		expect(await page.locator('.juneau-term-bar').count() === 1 && await page.locator('.juneau-term-bar button').first().isVisible() === false, 'toolbar controls not visible');
+		const tree = await page.locator('.juneau-term').ariaSnapshot();
+		expect(!/button|checkbox|searchbox/.test(tree) && /Nothing to show yet\./.test(tree), 'toolbar not in the accessibility tree: ' + tree);
+	}],
+	['b26_defaultEmptyMessage', async function (page) {
+		await open(page, { log: Buffer.alloc(0), missing: true });
+		await page.waitForSelector('.juneau-term-empty:not([hidden])');
+		expect(await page.locator('.juneau-term-empty').textContent() === 'No terminal output.', 'default text');
 	}],
 	['b02_sgrColoursReachTheCellsAndTheBadgeSaysDone', async function (page) {
 		await open(page, { log: Buffer.from('\u001b[31mred\u001b[0m plain \u001b[1;32mbold green\u001b[0m\r\n') });
@@ -449,13 +501,13 @@ const CASES = [
 			const chip = bar.querySelector('.juneau-term-chip--input');
 			return {
 				order: [at('.juneau-term-input'), at('.juneau-term-chip--input'), at('.juneau-term-badge')],
-				tag: toggle?.tagName, type: toggle?.type, label: toggle?.textContent,
+				tag: toggle?.tagName, type: toggle?.type, label: toggle?.textContent, jcBtn: !!toggle?.classList.contains('jc-btn'),
 				pressed: toggle?.getAttribute('aria-pressed'), chipRole: chip?.getAttribute('role'), chipHidden: chip?.hidden,
 				stdin: window.__terms[0].options.disableStdin
 			};
 		});
 		expect(before.order[0] >= 0 && before.order[0] < before.order[1] && before.order[1] < before.order[2], 'toggle, chip, then badge: ' + JSON.stringify(before.order));
-		expect(before.tag === 'BUTTON' && before.type === 'button' && before.label === 'Enable input' && before.pressed === 'false', 'a real toggle button: ' + JSON.stringify(before));
+		expect(before.tag === 'BUTTON' && before.type === 'button' && before.jcBtn && before.label === 'Enable input' && before.pressed === 'false', 'a real toggle button: ' + JSON.stringify(before));
 		expect(before.chipRole === 'status' && before.chipHidden === true, 'its own status chip, hidden while idle: ' + JSON.stringify(before));
 		expect(before.stdin === true, 'stdin disabled before arming');
 		await page.click('#host .juneau-term-input');
@@ -686,7 +738,11 @@ const CASES = [
 			const page = await ctx.newPage();
 			const pageErrors = [], consoleErrors = [];
 			page.on('pageerror', function (e) { pageErrors.push(String(e?.stack || e)); });
-			page.on('console', function (m) { if (m.type() === 'error') consoleErrors.push(m.text()); });
+			// Chromium logs every 404 fetch itself; the empty cases poll a deliberate 404, so only that one line is expected there.
+			const expected404 = name.startsWith('b25_') || name.startsWith('b26_');
+			page.on('console', function (m) {
+				if (m.type() === 'error' && !(expected404 && /Failed to load resource.*404/.test(m.text()))) consoleErrors.push(m.text());
+			});
 			try {
 				await fn(page);
 				report.cases[name] = true;

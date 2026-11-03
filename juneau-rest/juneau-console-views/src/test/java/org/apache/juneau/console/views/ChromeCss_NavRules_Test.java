@@ -94,4 +94,9 @@ class ChromeCss_NavRules_Test extends TestBase {
 				".jc-user-menu", ".jc-user-menu > .jc-menu"))
 			assertTrue(Pattern.compile("(^|[},])\\s*+" + Pattern.quote(sel) + "\\s*+\\{").matcher(css).find(), () -> "missing rule " + sel);
 	}
+
+	@Test void a03_headerlessNavDoesNotOffsetSticky() throws Exception {
+		var css = stripComments(read(ConsoleChromeMixin.class, "/org/apache/juneau/console/chrome.css")).replaceAll("\\s++", " ");
+		assertTrue(css.contains("body:not(:has(> .jc-header, > .jc-chrome)) .juneau-page-nav { top: 0; }"), "missing header-less nav reset");
+	}
 }

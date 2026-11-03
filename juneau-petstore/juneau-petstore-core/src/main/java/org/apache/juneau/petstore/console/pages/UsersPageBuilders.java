@@ -54,9 +54,10 @@ public final class UsersPageBuilders {
 					RibbonItem.optionGroup("userStatus",
 						RibbonItem.option("active").title("Active").column("userStatus").value("$eq(ACTIVE)"),
 						RibbonItem.option("inactive").title("Inactive").column("userStatus").value("$eq(INACTIVE)"))
-						.title("User status").deselectable(true),
+						.title("User status").deselectable(true).group("filter"),
 					RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")
-						.form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW),
+						.form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),
+					RibbonItem.resetDefaults().group("page"),
 					RibbonItem.refresh())
 				.rowActions(
 					RowAction.create("edit").label("Edit").form("/console/users/form?username={username}").present(Present.DIALOG)

@@ -156,6 +156,15 @@ a:hover { text-decoration: underline; }
   text-overflow: ellipsis;
 }
 
+/* A text-only brand (no .jc-logo before the title) gets the logo's 16px left inset, so it does not sit flush
+   against the viewport edge. The title's overflow:hidden (needed for the ellipsis) would also clip a mark an app
+   draws with a leading ::before (Foundry's rotated leaf pokes out past its own box), so the title keeps a small
+   inner start padding for that mark to paint into. */
+.jc-brand > .jc-brand-title:first-child {
+  margin-inline-start: var(--jc-space-4);
+  padding-inline-start: var(--jc-space-1);
+}
+
 .jc-brand-title .jc-brand-sep {
   margin: 0 6px;
   color: var(--jc-text-muted);
@@ -459,7 +468,7 @@ a:hover { text-decoration: underline; }
 .jc-tab:hover,
 .jc-subtab:hover {
   background-color: var(--jc-accent-wash);
-  color: var(--jc-accent);
+  color: var(--jc-link);
   text-decoration: none;
 }
 
@@ -499,6 +508,9 @@ a:hover { text-decoration: underline; }
   top: var(--jc-header-height);
   z-index: 19;
 }
+
+/* No header above the nav: nothing to stick under, so do not leave a header-height gap. */
+body:not(:has(> .jc-header, > .jc-chrome)) .juneau-page-nav { top: 0; }
 
 .juneau-page-nav-sections, .juneau-page-nav-children {
   display: flex;
@@ -551,7 +563,7 @@ a:hover { text-decoration: underline; }
 
 .juneau-page-nav-section:hover {
   background-color: var(--jc-accent-wash);
-  color: var(--jc-accent);
+  color: var(--jc-link);
   text-decoration: none;
 }
 
@@ -761,6 +773,17 @@ a:hover { text-decoration: underline; }
    Buttons
    ========================================================================== */
 
+/* Standard button kinds.  Colours only come from --jc-* tokens; geometry for the dialog buttons stays in
+   juneau-views.css (it sets no colour on them, so there is no cascade overlap).
+     - Secondary (the default face): plain .jc-btn / .jc-btn-secondary, and the dialog Cancel / Close / Back and
+       in-form child-action buttons.
+     - Primary: .jc-btn-primary and the dialog Confirm.  Destructive (filled): .jc-btn-destructive and the danger
+       Confirm.  .jc-btn-outline / -danger (outline-tinted wash) / -success are unchanged.
+     - Link: .jc-btn-link.  Toggle group: .jc-btn-group.  Table icon button: .jc-tbl-icon-btn (.jc-icon-btn stays
+       the header's circular ghost).
+   The secondary hover is zero-specificity past :hover, so every kind's own rest rule (and an app's own kind,
+   e.g. JRM's .jc-btn-warning) wins over it.  Disabled dims without pointer-events:none, so a title tooltip on a
+   disabled button still shows; every hover is gated off disabled buttons. */
 .jc-btn {
   display: inline-flex;
   align-items: center;
@@ -770,37 +793,150 @@ a:hover { text-decoration: underline; }
   font-weight: 600;
   padding: 7px 14px;
   border-radius: var(--jc-radius);
-  border: 1px solid transparent;
   cursor: pointer;
   line-height: 1.2;
 }
 
-.jc-btn-primary {
+.jc-btn,
+.jc-btn-secondary,
+.juneau-view-dialog-cancel,
+.juneau-view-dialog-close,
+.juneau-view-dialog-back,
+.juneau-view-dialog-form-action {
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-control-border);
+}
+:where(.jc-btn, .jc-btn-secondary, .juneau-view-dialog-cancel, .juneau-view-dialog-close, .juneau-view-dialog-back, .juneau-view-dialog-form-action):hover:where(:not(:disabled):not([aria-disabled="true"])) {
+  background-color: var(--jc-hover-bg);
+  border-color: var(--jc-accent);
+}
+
+.jc-btn-primary,
+.juneau-view-dialog-confirm {
   background-color: var(--jc-btn-primary-bg);
   color: var(--jc-on-btn-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-color: transparent;
 }
-.jc-btn-primary:hover { background-color: var(--jc-btn-primary-bg-hover); }
+.jc-btn-primary:hover:not(:disabled):not([aria-disabled="true"]),
+.juneau-view-dialog-confirm:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--jc-btn-primary-bg-hover);
+}
+
+.jc-btn-destructive,
+.juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger {
+  background-color: var(--jc-danger);
+  color: var(--jc-on-btn-primary);
+  border-color: transparent;
+}
+.jc-btn-destructive:hover:not(:disabled):not([aria-disabled="true"]),
+.juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger:hover:not(:disabled):not([aria-disabled="true"]) {
+  background-color: var(--jc-danger-strong);
+}
 
 .jc-btn-outline {
   background-color: var(--jc-control-bg);
   color: var(--jc-text-soft);
   border-color: var(--jc-control-border);
 }
-.jc-btn-outline:hover { background-color: var(--jc-hover-bg); }
+.jc-btn-outline:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--jc-hover-bg); }
 
 .jc-btn-danger {
   background-color: var(--jc-control-bg);
   color: var(--jc-danger-text);
   border-color: var(--jc-control-border);
 }
-.jc-btn-danger:hover { background-color: var(--jc-danger-wash); }
+.jc-btn-danger:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--jc-danger-wash); }
 
 .jc-btn-success {
   background-color: var(--jc-control-bg);
   color: var(--jc-success-text);
   border-color: var(--jc-control-border);
 }
-.jc-btn-success:hover { background-color: var(--jc-success-wash); }
+.jc-btn-success:hover:not(:disabled):not([aria-disabled="true"]) { background-color: var(--jc-success-wash); }
+
+.jc-btn-link {
+  background-color: transparent;
+  color: var(--jc-link);
+  border-color: transparent;
+}
+.jc-btn-link:hover:not(:disabled):not([aria-disabled="true"]) { text-decoration: underline; }
+
+/* Toggle group: members join on a shared 1px edge; the selected member looks like hover and sits on top so its
+   accent edge is not covered by its neighbour's. */
+.jc-btn-group { display: inline-flex; align-items: stretch; }
+.jc-btn-group > .jc-btn + .jc-btn { margin-left: -1px; }
+.jc-btn-group > .jc-btn:not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.jc-btn-group > .jc-btn:not(:last-child) { border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.jc-btn-group > .jc-btn:hover { z-index: 1; }
+.jc-btn-group > .jc-btn[aria-pressed="true"] {
+  z-index: 1;
+  background-color: var(--jc-hover-bg);
+  border-color: var(--jc-accent);
+}
+
+/* Table icon button: a 30px square with the secondary face; pressed looks like hover. */
+.jc-tbl-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+  border-color: var(--jc-control-border);
+  cursor: pointer;
+}
+.jc-tbl-icon-btn svg { width: 16px; height: 16px; fill: currentColor; }
+.jc-tbl-icon-btn:hover:not(:disabled):not([aria-disabled="true"]),
+.jc-tbl-icon-btn[aria-pressed="true"] {
+  background-color: var(--jc-hover-bg);
+  border-color: var(--jc-accent);
+}
+
+.jc-btn:disabled,
+.jc-btn[aria-disabled="true"],
+.jc-tbl-icon-btn:disabled,
+.jc-tbl-icon-btn[aria-disabled="true"],
+.juneau-view-dialog-cancel:disabled,
+.juneau-view-dialog-confirm:disabled,
+.juneau-view-dialog-close:disabled,
+.juneau-view-dialog-back:disabled,
+.juneau-view-dialog-form-action:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* Bare-button default: a <button> with no class attribute inside the console roots gets the secondary face.
+   Zero class specificity throughout (:where), so any app rule for that button wins. */
+:where(.jc-main, .jc-card, .juneau-term) button:where(:not([class])) {
+  font-family: var(--jc-font);
+  font-size: 0.8125rem;
+  padding: 5px 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+  border-color: var(--jc-control-border);
+  cursor: pointer;
+}
+:where(.jc-main, .jc-card, .juneau-term) button:where(:not([class]):hover:not(:disabled)) {
+  background-color: var(--jc-hover-bg);
+  border-color: var(--jc-accent);
+}
+:where(.jc-main, .jc-card, .juneau-term) button:where(:not([class]):disabled) {
+  opacity: 0.5;
+  cursor: default;
+}
 
 /* ==========================================================================
    Tag / pill system
@@ -965,7 +1101,7 @@ table.dataTable > tbody > tr:first-child:not(.child) > td {
   border-top-color: var(--jc-table-rule, #bbbbbb);
 }
 
-/* Zebra: first data row is the stripe (#FAFAF9) so it does not blend into the white
+/* Zebra: first data row is the stripe (#f3f3f3) so it does not blend into the white
    header.  CSS :nth-child is 1-based (odd = stripe).  DataTables often stamps the first
    row `even` (0-based) — invert those classes, then `nth-child` / `nth-child(odd of
    :not(.child))` so visual position wins and an inserted expander row does not shift
@@ -1020,14 +1156,14 @@ table.dataTable.display > tbody > tr:hover {
    compliant (color/background-color only - see the file header comment).
    ========================================================================== */
 
-/* Base thin-neutral-border shape - -views ships only a currentColor-fallback border, which
-   inherits the body's near-black text color instead of a subtle gray; themed here with
+/* Base thin-neutral-border colour - -views ships only the border width/style (no colour, no fill), so
+   this file is the one owner of the button's colours in either link order; themed here with
    --jc-control-border (same leaf as toolbar Search / --jc-border-2) for ribbon/pager enabled
    AND disabled.  White face so a button reads as a distinct control against the card's
    tinted background. */
 .juneau-view-ribbon-btn { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); color: var(--jc-chrome-icon); }
 .juneau-view-ribbon-btn:disabled { border-color: var(--jc-control-border); }
-.juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }
+.juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }
 .juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 
 /* Icon/ghost appearance: hover recolors the glyph only. Restates idle fill + border so this wins over
@@ -1042,12 +1178,11 @@ table.dataTable.display > tbody > tr:hover {
 	color: var(--jc-accent);
 }
 
-/* Themed accent for an ACTIVE toggle (option/optionGroup member button's aria-pressed="true" - see -views'
-   neutral border-width rule for this same attribute selector). Without this, a persisted, still-active filter
-   (e.g. a column-scoped "option" toggle whose state survived a browser refresh) is visually indistinguishable
-   from an unpressed button - clicking it once and never again can silently keep filtering out every row.  Also
-   matches the blue "active" export button in the ribbon. */
-.juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); border-color: var(--jc-accent); }
+/* ACTIVE toggle (option/optionGroup member button's aria-pressed="true"): selected looks like hover - accent edge, accent wash, accent ink.  Without
+   it, a persisted, still-active filter (e.g. a column-scoped "option" toggle whose state survived a browser
+   refresh) is indistinguishable from an unpressed button.  The accent edge carries the WCAG 1.4.11 3:1 against
+   both the card and the wash (Theme_ContrastGate_Test); :active above stays the solid, momentary fill. */
+.juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }
 
 /* Shared strip widget - TAB-MODE (row-detail multi-section pane switcher).  -views ships the neutral folder-tab
    SHAPE (floor line + squared bottom caps + overlap, all via currentColor); this themes the floor line with
@@ -1057,11 +1192,13 @@ table.dataTable.display > tbody > tr:hover {
    comment's own prior "NOT the solid aria-pressed fill" framing).  Each var(--jc-*) is the entire value of a
    color/background-color/border-color property (sink-property discipline - see file header). */
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
-.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"]:not(.juneau-view-dialog-sections) .juneau-view-ribbon-btn[aria-selected="true"] {
 	background-color: var(--jc-accent-selected);
 	color: var(--jc-on-accent);
 	border-bottom-color: var(--jc-accent-selected);
 }
+/* In-dialog section tabs are carved out above: their selected tab looks like the ribbon hover instead. */
+.juneau-view-dialog-sections .juneau-view-ribbon-btn[aria-selected="true"] { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }
 
 /* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
    track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
@@ -1134,8 +1271,8 @@ table.dataTable.display > tbody > tr:hover {
 
 /* Dedicated expander column (.juneau-view-detail-control): muted glyph, accent on hover. */
 .juneau-view-detail-th,
-.juneau-view-detail-control { color: var(--jc-text-muted); }
-.juneau-view-detail-control:hover { color: var(--jc-accent); }
+.juneau-view-detail-control { color: var(--jc-detail-control-color, var(--jc-text-muted)); }
+.juneau-view-detail-control:hover { color: var(--jc-detail-control-hover, var(--jc-accent)); }
 
 /* Unified paging ribbon (nav + page-size menu) - same --jc-control-border/white-face treatment as the
    icon ribbon and toolbar search.  Segment borders ARE the pill (views.css: no container stroke).
@@ -1145,26 +1282,28 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-pagingpill { background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-chrome-icon); }
 .juneau-view-pagingpill-btn:disabled { border-color: var(--jc-control-border); }
-.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
+.juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-link); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }
 .juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }
 .juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
 .juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
 .juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
-.juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
+.juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-link); }
 .juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 .juneau-view-pagingpill-menu { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }
 .juneau-view-pagingpill-menu-option:hover,
-.juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-accent); }
-.juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-accent); }
+.juneau-view-pagingpill-menu-option:focus { background-color: var(--jc-accent-wash); color: var(--jc-link); }
+.juneau-view-pagingpill-menu-option[aria-selected="true"] { color: var(--jc-link); }
 
 /* Toolbar Search - same --jc-control-border as ribbon/paging so a theme that splits --jc-border from
-   --jc-border-2 cannot leave Search on a different leaf than the adjacent icon ribbon.
-   appearance:none / background / box-shadow resets live in juneau-views.css (structural).
+   --jc-border-2 cannot leave Search on a different leaf than the adjacent icon ribbon.  This file owns the
+   field's border colour and fill; juneau-views.css keeps its shape (appearance:none, box-shadow reset,
+   border width/style) plus the ink, which spends its own --jc-chrome-control-text ladder step.
    Selectors beat DataTables `div.dt-container .dt-search input` (0,2,2 / #aaa) at (0,2,3). */
 div.dt-container div.dt-search input,
 div.dataTables_wrapper div.dataTables_filter input {
   border-color: var(--jc-control-border);
+  background-color: var(--jc-control-bg);
 }
 
 /* Toolbar Search focus: field border takes --jc-chrome-control-focus-border (the accent in light,
@@ -1341,14 +1480,14 @@ body::after {
 /* ==========================================================================
    Dialog chrome (ModalDef / .juneau-view-dialog)
    Palette only — shape lives in juneau-views.css. Light gray header/footer bars,
-   green toggle-on, Cancel outline / Confirm primary. Original tokens.
+   green toggle-on.  The Cancel / Close / Confirm faces are the standard button kinds (see Buttons).
    ========================================================================== */
 
 .juneau-view-dialog-header,
 .juneau-view-dialog-actions {
   background-color: var(--jc-chrome-bg);
-  border-bottom-color: var(--jc-text-muted);
-  border-top-color: var(--jc-text-muted);
+  border-bottom-color: var(--jc-border);
+  border-top-color: var(--jc-border);
 }
 
 .juneau-view-dialog-figure {
@@ -1365,39 +1504,6 @@ body::after {
 }
 .juneau-view-dialog-dismiss:hover {
   color: var(--jc-danger-text);
-}
-
-.juneau-view-dialog-cancel,
-.juneau-view-dialog-close {
-  background-color: var(--jc-surface);
-  color: var(--jc-btn-primary-ink, var(--jc-btn-primary-bg));
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--jc-border);
-}
-.juneau-view-dialog-cancel:hover,
-.juneau-view-dialog-close:hover {
-  background-color: var(--jc-hover-bg);
-}
-
-.juneau-view-dialog-confirm {
-  background-color: var(--jc-btn-primary-bg);
-  color: var(--jc-on-btn-primary);
-  border-width: 1px;
-  border-style: solid;
-  border-color: var(--jc-border);
-}
-.juneau-view-dialog-confirm:hover {
-  background-color: var(--jc-btn-primary-bg-hover);
-}
-
-.juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger {
-  background-color: var(--jc-danger);
-  color: var(--jc-on-btn-primary);
-  border-color: var(--jc-danger);
-}
-.juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger:hover {
-  filter: brightness(0.92);
 }
 
 .juneau-view-dialog-form-row input:not([type="checkbox"]):not([type="hidden"]),
@@ -1417,26 +1523,84 @@ body::after {
   border-color: var(--jc-danger);
 }
 
-/* View Settings dialog controls (juneau-config.css is shape-only): console control tokens, not UA defaults,
-   in both schemes.  Tabs keep their transparent face and open bottom edge from juneau-config.css. */
-.juneau-config-dialog button,
-.juneau-config-dialog select,
-.juneau-config-dialog input:not([type="checkbox"]):not([type="radio"]),
-.juneau-config-dialog textarea {
+/* Folder section tabs (data-nav="folder"): a --jc-border edge at rest; hover and selected keep the shared accent
+   edge + wash above (the :not()s leave those states to it). */
+.juneau-view-dialog[data-nav="folder"] .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
+  border-bottom-color: var(--jc-border);
+}
+.juneau-view-dialog[data-nav="folder"] .juneau-view-dialog-sections .juneau-view-ribbon-btn:not(:hover):not([aria-selected="true"]) {
+  border-color: var(--jc-border);
+}
+
+/* Wizard step rail: to-do marks are neutral, the active mark is the primary fill, done marks and the bars after them
+   take the accent. */
+.juneau-view-dialog-step::after {
+  border-top-color: var(--jc-border);
+}
+.juneau-view-dialog-step[data-state="done"]::after {
+  border-top-color: var(--jc-accent);
+}
+.juneau-view-dialog-step-mark {
+  background-color: var(--jc-control-bg);
+  border-color: var(--jc-border);
+  color: var(--jc-text-muted);
+}
+.juneau-view-dialog-step[data-state="active"] .juneau-view-dialog-step-mark {
+  background-color: var(--jc-btn-primary-bg);
+  border-color: var(--jc-btn-primary-bg);
+  color: var(--jc-on-btn-primary);
+}
+.juneau-view-dialog-step[data-state="done"] .juneau-view-dialog-step-mark {
+  border-color: var(--jc-accent);
+  color: var(--jc-accent);
+}
+.juneau-view-dialog-step-label {
+  color: var(--jc-text-muted);
+}
+.juneau-view-dialog-step[data-state="active"] .juneau-view-dialog-step-label {
+  color: var(--jc-text);
+}
+
+/* View Settings dialog (juneau-config.css is shape-only).  Buttons are the standard kinds (.jc-btn*, the dialog's own
+   Cancel / Apply); only the form controls, the panes and the column-grid glyphs are coloured here. */
+.juneau-config-dialog .juneau-config-body-host select,
+.juneau-config-dialog .juneau-config-body-host input:not([type="checkbox"]):not([type="radio"]) {
+  background-color: var(--jc-control-bg);
   color: var(--jc-text);
   border-color: var(--jc-control-border);
 }
-.juneau-config-dialog button:not(.juneau-config-tab),
-.juneau-config-dialog select,
-.juneau-config-dialog input:not([type="checkbox"]):not([type="radio"]),
-.juneau-config-dialog textarea {
-  background-color: var(--jc-control-bg);
-  border-style: solid;
-  border-width: 1px;
-  border-radius: var(--jc-radius);
+.juneau-config-dialog .juneau-config-avail-list {
+  border-color: var(--jc-border);
 }
-.juneau-config-dialog button:disabled {
+.juneau-config-dialog .juneau-config-avail:hover {
+  background-color: var(--jc-hover-bg);
+}
+.juneau-config-dialog .juneau-config-avail[aria-selected="true"] {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-link);
+}
+.juneau-config-dialog .juneau-config-col-head {
   color: var(--jc-text-muted);
+  border-bottom-color: var(--jc-border);
+}
+.juneau-config-dialog .juneau-config-col-row {
+  border-bottom-color: var(--jc-border);
+}
+.juneau-config-dialog .juneau-config-col-handle,
+.juneau-config-dialog .juneau-config-col-remove {
+  background-color: transparent;
+  color: var(--jc-text-muted);
+}
+.juneau-config-dialog .juneau-config-col-remove:hover:not(:disabled) {
+  color: var(--jc-danger-text);
+}
+.juneau-config-dialog .juneau-config-col-pinned,
+.juneau-config-dialog .juneau-config-dirty,
+.juneau-config-dialog .juneau-config-empty-note {
+  color: var(--jc-text-muted);
+}
+.juneau-config-dialog .juneau-config-status-error {
+  color: var(--jc-danger-text);
 }
 
 .juneau-view-toggle {
@@ -1753,3 +1917,8 @@ textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
     .jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 0; }
   }
 }
+
+/* Status dot colours (shape lives in juneau-views.css): grey idle, green in-flight, red failed, muted when paused. */
+.juneau-view-staleness { color: var(--jc-text-muted); }
+.juneau-view-staleness[data-state="refreshing"] { color: var(--jc-success); }
+.juneau-view-staleness[data-state="error"] { color: var(--jc-danger-text); }

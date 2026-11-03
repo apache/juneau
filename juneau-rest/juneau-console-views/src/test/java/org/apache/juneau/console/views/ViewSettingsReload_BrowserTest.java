@@ -250,10 +250,10 @@ class ViewSettingsReload_BrowserTest extends TestBase {
 			"{[1,Row 01,OK],[1,Row 01]},{[1,Row 01,OK],[1,Row 01]}");
 	}
 
-	@Test void a04_reopenedDialogShowsStoredColumnUnchecked_withColumnScopedAriaLabel() throws Exception {
+	@Test void a04_reopenedDialogShowsStoredColumnUnderAvailable_notInTheShownGrid() throws Exception {
 		var report = runHarness();
-		assertBean(report::toString, report, "server{reopen{checked,aria}},client{reopen{checked,aria}}",
-			"{{false,Show column Status}},{{false,Show column Status}}");
+		assertBean(report::toString, report, "server{reopen{shown,available}},client{reopen{shown,available}}",
+			"{{false,Status}},{{false,Status}}");
 	}
 
 	@Test void a05_untouchedApply_doesNotPersistEveryColumnAsTheSort() throws Exception {
@@ -263,7 +263,7 @@ class ViewSettingsReload_BrowserTest extends TestBase {
 
 	@Test void a06_staleBlob_showsResetNoticeEndToEnd_andDialogOpensOnDefaults() throws Exception {
 		var report = runHarness();
-		assertBean(report::toString, report, "server{stale{notice,statusChecked}},client{stale{notice,statusChecked}}",
+		assertBean(report::toString, report, "server{stale{notice,statusShown}},client{stale{notice,statusShown}}",
 			"{{Saved view settings were reset because the table changed.,true}},{{Saved view settings were reset because the table changed.,true}}");
 	}
 }

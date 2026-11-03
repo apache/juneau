@@ -78,8 +78,10 @@ class RibbonItem_Parity_Test extends TestBase {
 			RibbonItem.option("compact").param("opt").value("density=compact")));
 		BUILDERS.put("param-option", () -> List.of(RibbonItem.option("mine").param("owner").value("me")));
 		BUILDERS.put("jrm-dropped-only", () -> List.of(
-			dropped().title("Dropped only").group("filters").persist(true).symbol("filter_alt"),
-			RibbonItem.export("copy", "csv").optional("excel", "pdf"),
+			dropped().title("Dropped only").group("filter").persist(true).symbol("filter_alt"),
+			RibbonItem.collapseAll().group("viewing"),
+			RibbonItem.export("copy", "csv").optional("excel", "pdf").group("viewing"),
+			RibbonItem.resetDefaults().group("page"),
 			RibbonItem.refresh()));
 		BUILDERS.put("foundry-daemon-stream", () -> List.of(RibbonItem.optionGroup("stream",
 			all(),

@@ -80,6 +80,14 @@ class ViewsJs_DialogHandle_Test extends TestBase {
 		assertEquals(0, ((Number)w.get("openAfterSubmit")).intValue());
 	}
 
+	@Test void b07_lastStepLabelFallsBackToDialogLabelThenFinish() {
+		var l = (Map<?,?>)report().get("lastLabel");
+		assertEquals("Finish", l.get("none"));
+		assertEquals("Save", l.get("modal"));
+		assertEquals("Go", l.get("action"));
+		assertEquals("Apply", l.get("step"));
+	}
+
 	@Test void b03_relabelingAndOnConfirmGating() {
 		var g = (Map<?,?>)report().get("gate");
 		assertEquals("Review changes", g.get("confirmLabel"));

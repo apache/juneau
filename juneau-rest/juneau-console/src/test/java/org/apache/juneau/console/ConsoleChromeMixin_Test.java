@@ -413,13 +413,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
+		// 106 = 105 plus --jc-danger-strong (the filled-destructive hover fill); 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
 		// RETAINED as var(--jc-pill-*) aliases for badges/avatars/frozen calendar) plus the 12 --jc-probe-* status
 		// probe tokens (4 statuses x bg/text/dot); the selected-probe ring reuses the existing --jc-accent-selected
 		// token, so the probe family adds exactly 12, not a ring token, plus the 18 --jc-chart-* tokens (8 series slots and 10 chart roles) read by juneau-charts.js.
 		assertBean(Theme.OPEN.getTokens(),
 			"size,--jc-main-bg,--jc-card-bg,--jc-card-padding,--jc-chrome-icon,--jc-text,--jc-text-soft,--jc-card-shadow,--jc-page-nav-hairline,--jc-page-nav-section-font-size,--jc-page-nav-child-font-size",
-			"105,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
+			"106,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-card-surface"));
@@ -469,7 +469,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		// with no var() fallback. Page Tabs (.jc-nav-tab.active) use wash + top accent instead of this fill.
 		var css = readChromeCss();
 		assertContainsAll(css, ".jc-tab.jc-tab-active,\n.jc-subtab.jc-subtab-active {",
-			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {");
+			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"]:not(.juneau-view-dialog-sections) .juneau-view-ribbon-btn[aria-selected=\"true\"] {");
 		assertEquals(2, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
 			() -> "expected exactly the two ribbon-format selected-state selectors (Page Tabs are wash + top accent), css:\n" + css);
 	}
@@ -732,7 +732,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	 */
 	@Test void k05_chromeCss_ribbonAndPagingHoverPaintAccentBorder() throws Exception {
 		var css = readChromeCss();
-		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }"),
 			() -> "missing ribbon-btn hover accent border, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill { background-color: var(--jc-control-bg); }"),
 			() -> "pagingpill container must not stroke; fill only, css:\n" + css);
@@ -742,9 +742,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "idle ribbon glyph spends --jc-chrome-icon, not --jc-text-soft, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-btn { border-color: var(--jc-control-border); color: var(--jc-chrome-icon); }"),
 			() -> "idle pagingpill-btn edges are the pill outline, css:\n" + css);
-		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
+		assertTrue(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-link); border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "pagingpill-btn hover must recolor top/bottom only, css:\n" + css);
-		assertFalse(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+		assertFalse(css.contains(".juneau-view-pagingpill-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }"),
 			() -> "shorthand border-color on hover invents chevron L/R, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill > *:first-child:hover:not(:disabled) { border-left-color: var(--jc-accent); }"),
 			() -> "missing first-child hover end-cap, css:\n" + css);
@@ -754,6 +754,40 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "idle paging menuwrap edges are the pill outline, css:\n" + css);
 		assertTrue(css.contains(".juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }"),
 			() -> "menuwrap hover must recolor top/bottom only, css:\n" + css);
+	}
+
+	/**
+	 * Selected = hover (spec section 0): a pressed ribbon toggle and the selected in-dialog section tab paint the
+	 * ribbon hover's accent edge + wash + link ink (text-safe on the wash), not the old solid accent fill; {@code :active} stays solid.
+	 */
+	@Test void k05b_chromeCss_pressedAndDialogSectionSelectedLookLikeHover() throws Exception {
+		var css = readChromeCss();
+		var hover = "{ background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }";
+		assertContainsAll(css,
+			".juneau-view-ribbon-btn[aria-pressed=\"true\"] " + hover,
+			".juneau-view-dialog-sections .juneau-view-ribbon-btn[aria-selected=\"true\"] " + hover,
+			".juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }");
+		assertFalse(css.contains(".juneau-view-ribbon-btn[aria-pressed=\"true\"] { background-color: var(--jc-accent); color: var(--jc-on-accent);"),
+			() -> "pressed toggle must not keep the solid accent fill, css:\n" + css);
+	}
+
+	/**
+	 * The standard button kinds (spec section 2) spend tokens only: no hex or rgb() literal in their rules, and the
+	 * dialog danger confirm no longer darkens with a filter.
+	 */
+	@Test void k05c_chromeCss_buttonKindsHaveNoHardCodedColours() throws Exception {
+		var css = readChromeCss().replaceAll("(?s)/\\*.*?\\*/", "");
+		var start = css.indexOf(".jc-btn {");
+		var end = css.indexOf(".tag {", start);
+		assertTrue(start >= 0 && end > start, "button section not found");
+		var buttons = css.substring(start, end);
+		assertContainsAll(buttons, ".jc-btn-destructive", ".jc-btn-link", ".jc-btn-group", ".jc-tbl-icon-btn",
+			":where(.jc-main, .jc-card, .juneau-term) button:where(:not([class])) {", "var(--jc-danger-strong)");
+		var literal = Pattern.compile("#[0-9a-fA-F]{3,8}\\b|\\brgba?\\(|\\bhsla?\\(");
+		var m = literal.matcher(buttons);
+		assertFalse(m.find(), () -> "hard-coded colour in the button rules: " + m.group());
+		assertFalse(buttons.contains("pointer-events"), "disabled buttons must keep pointer events (title tooltips)");
+		assertFalse(css.contains("filter: brightness(0.92)"), "danger confirm hover is --jc-danger-strong, not a filter");
 	}
 
 	/**
@@ -777,6 +811,18 @@ class ConsoleChromeMixin_Test extends TestBase {
 			() -> "search focus must recolor the field border with the focus-border token, region:\n" + region);
 		assertFalse(region.contains("outline: 2px"), () -> "must not restyle as a 2px ring, region:\n" + region);
 		assertFalse(region.contains("outline-offset"), () -> "must not add outline-offset, region:\n" + region);
+	}
+
+	/**
+	 * Toolbar Search border colour and fill live here alone (cascade Rule 1), on the (0,2,3) selectors that beat
+	 * DataTables; juneau-views.css keeps the field's shape and its ladder-token ink.
+	 */
+	@Test void k08c_chromeCss_toolbarSearchOwnsBorderAndFill() throws Exception {
+		var css = readChromeCss();
+		var start = css.indexOf("div.dt-container div.dt-search input,\ndiv.dataTables_wrapper div.dataTables_filter input {");
+		assertTrue(start >= 0, () -> "missing search rule, css:\n" + css);
+		var region = css.substring(start, css.indexOf("}", start));
+		assertContainsAll(region, "border-color: var(--jc-control-border);", "background-color: var(--jc-control-bg);");
 	}
 
 	/** The column-search popover input's focus border uses the same focus-border token as the toolbar search. */
@@ -803,7 +849,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	 */
 	@Test void k06_chromeCss_iconAppearanceHoverRecolorsGlyphOnly() throws Exception {
 		var css = readChromeCss();
-		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-accent); border-color: var(--jc-accent); }"),
+		assertTrue(css.contains(".juneau-view-ribbon-btn:hover:not(:disabled) { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }"),
 			() -> "default ribbon hover must keep chrome wash (icon-only is opt-in --icon), css:\n" + css);
 		var iconStart = css.indexOf(".juneau-view-ribbon-btn.juneau-view-ribbon-btn--icon:hover:not(:disabled)");
 		assertTrue(iconStart >= 0, () -> "missing ribbon-btn--icon hover rule, css:\n" + css);

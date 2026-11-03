@@ -52,6 +52,9 @@
 	const IDLE_AFTER_EMPTY = 3;
 	const EVENTS_GIVE_UP = 5;
 	const RETRY_MS = [1000, 2000, 5000, 10000];
+	/** Longest wait between attempts while the bytes endpoint answers 404 (empty); the wait never grows past it. */
+	const EMPTY_RETRY_CAP_MS = 30000;
+	const DEFAULT_EMPTY_MESSAGE = "No terminal output.";
 	const DEFAULT_TAIL_BYTES = 2 * 1024 * 1024;
 	const SLOW_LOAD_BYTES = 20 * 1024 * 1024;
 	const BASE_FONT = 14;
@@ -90,9 +93,16 @@
 		return e;
 	}
 
+	/** An Error for HTTP 404 on the bytes endpoint: there is no terminal output (yet), which onFailure shows as empty, not failed. */
+	function notFoundError() {
+		const e = new Error("HTTP 404");
+		e.notFound = true;
+		return e;
+	}
+
 	function checkStatus(res) {
 		if (res.status === 404)
-			throw fatalError("Terminal not found");
+			throw notFoundError();
 		if (!res.ok)
 			throw statusError(res.status);
 	}
@@ -207,12 +217,12 @@
 			emptyPolls: 0, eventsEmpty: 0, failures: 0, steps: [], lines: new Map(), checkpoints: [], pendingScroll: null,
 			follow: true, timer: null, ctl: null, offVisible: null, stopped: false, destroyed: false, started: false,
 			exit: null, signal: null, doneStatus: null, badge: "Connecting", kind: "running", reconnecting: false,
-			banner: null, nudged: false, linked: false, ticking: false, nudgePending: false, nudgeEnd: 0, nudgeDone: false
+			banner: null, empty: false, nudged: false, linked: false, ticking: false, nudgePending: false, nudgeEnd: 0, nudgeDone: false
 		};
 
 		function status() {
 			return {
-				badge: s.badge, kind: s.kind, reconnecting: s.reconnecting, banner: s.banner, follow: s.follow,
+				badge: s.badge, kind: s.kind, empty: s.empty, reconnecting: s.reconnecting, banner: s.banner, follow: s.follow,
 				next: s.next, writtenTo: s.writtenTo, trimmedFrom: s.trimmedFrom, stopped: s.stopped, nudged: s.nudged
 			};
 		}
@@ -549,6 +559,7 @@
 					s.failures = 0;
 					s.reconnecting = false;
 				}
+				s.empty = false;
 				if (s.bytesDone && (s.eventsDone || s.eventsEmpty >= EVENTS_GIVE_UP)) {
 					finalBadge();
 					halt();
@@ -595,7 +606,7 @@
 			if (s.linked)
 				s.nudged = true;
 			// A retry is waiting out its back-off: a nudge must not skip it.
-			if (s.failures > 0)
+			if (s.failures > 0 || s.empty)
 				return;
 			if (!(p.end > s.next || (p.done === true && !s.bytesDone))) // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
 				return;
@@ -622,6 +633,16 @@
 		}
 
 		function onFailure(e) {
+			if (e?.notFound === true) {
+				// No terminal output: not a failure.  Keep polling at the idle cadence, never slower than the cap.
+				s.empty = true;
+				s.failures = 0;
+				s.reconnecting = false;
+				setBadge("Empty", "none");
+				schedule(Math.min(EMPTY_RETRY_CAP_MS, Math.max(IDLE_REFRESH_MS, refreshMs)));
+				return;
+			}
+			s.empty = false;
 			if (e && isStr(e.fatal)) {
 				setBadge(e.fatal, "error");
 				halt();
@@ -1039,7 +1060,7 @@
 
 	/**
 	 * Mounts a terminal region in {@code host}.  {@code opts} is the card's terminal object plus its {@code id}:
-	 * {bytesUrl, eventsUrl?, refreshMs?, title?, tailBytes?, id?, input?, inputId?, terminal?}.  {@code terminal}, optional,
+	 * {bytesUrl, eventsUrl?, refreshMs?, title?, tailBytes?, id?, input?, inputId?, emptyMessage?, terminal?}.  {@code emptyMessage}, optional, is the text shown while the bytes endpoint answers 404 (default "No terminal output.").  {@code terminal}, optional,
 	 * is an object of xterm options: {convertEol? (boolean), scrollback? (integer 0 to 1,000,000), fontFamily? (non-empty string)}.  Other keys
 	 * and wrong-typed values are ignored; the size, input, link and font-size options stay Juneau's.  {@code link}, optional, is the
 	 * input path: {publish(payload), onConnected(fn) -> off?}.  The input toggle appears only with input, inputId and a
@@ -1067,7 +1088,7 @@
 		search.type = "search";
 		search.placeholder = "Search";
 		search.setAttribute("aria-label", "Search the terminal output");
-		const copy = el(doc, "button", "juneau-term-copy", "Copy");
+		const copy = el(doc, "button", "jc-btn juneau-term-copy", "Copy");
 		copy.type = "button";
 		const followLabel = el(doc, "label", "juneau-term-follow");
 		const follow = el(doc, "input");
@@ -1082,7 +1103,7 @@
 		const hasInput = opts.input === true && isStr(opts.inputId) && !!opts.inputId && !!link && typeof link.publish === "function";
 		let toggle = null, inputChip = null;
 		if (hasInput) {
-			toggle = el(doc, "button", "juneau-term-input");
+			toggle = el(doc, "button", "jc-btn juneau-term-input");
 			toggle.type = "button";
 			inputChip = el(doc, "span", "juneau-term-chip juneau-term-chip--input");
 			inputChip.setAttribute("role", "status");
@@ -1106,12 +1127,15 @@
 		const banner = el(doc, "div", "juneau-term-banner");
 		banner.hidden = true;
 		const bannerText = el(doc, "span", "juneau-term-banner-text");
-		const loadAll = el(doc, "button", "juneau-term-load-all", "Load all");
+		const loadAll = el(doc, "button", "jc-btn juneau-term-load-all", "Load all");
 		loadAll.type = "button";
 		const bannerSlow = el(doc, "span", "juneau-term-banner-slow");
 		banner.append(bannerText, doc.createTextNode(" · "), loadAll, bannerSlow);
 		const screen = el(doc, "div", "juneau-term-screen");
-		root.append(bar, banner, screen);
+		const emptyPanel = el(doc, "div", "juneau-term-empty", isStr(opts.emptyMessage) && opts.emptyMessage ? opts.emptyMessage : DEFAULT_EMPTY_MESSAGE);
+		emptyPanel.setAttribute("role", "status");
+		emptyPanel.hidden = true;
+		root.append(bar, banner, screen, emptyPanel);
 		host.appendChild(root);
 
 		let term = null;
@@ -1137,7 +1161,10 @@
 			badge.className = "juneau-term-badge juneau-term-" + st.kind;
 			reconnecting.hidden = !st.reconnecting;
 			follow.checked = st.follow;
-			banner.hidden = !st.banner;
+			banner.hidden = st.empty || !st.banner;
+			bar.hidden = st.empty;
+			screen.hidden = st.empty;
+			emptyPanel.hidden = !st.empty;
 			bannerText.textContent = st.banner ? st.banner.text : "";
 			bannerSlow.textContent = st.banner?.slow ? " " + st.banner.slow : "";
 			if (input && (st.kind === "ok" || st.kind === "fail"))

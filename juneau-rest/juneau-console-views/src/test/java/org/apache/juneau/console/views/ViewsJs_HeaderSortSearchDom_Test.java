@@ -134,16 +134,16 @@ class ViewsJs_HeaderSortSearchDom_Test extends TestBase {
 		return report;
 	}
 
-	@Test void a01_orderableColumn_sortThenSearchThenTitle() {
+	@Test void a01_orderableColumn_titleThenSearchThenSort() {
 		var r = report();
-		// Design 7.1: sort glyph, then the magnifying glass immediately beside it, then the column title.
-		assertBean(r, "hasWireHeaderSortSearch,orderableColumnGlyphOrder", "true,[sort,search,title]");
+		// Column title, then the magnifying glass, then the sort glyph last (right-aligned).
+		assertBean(r, "hasWireHeaderSortSearch,orderableColumnGlyphOrder", "true,[title,search,sort]");
 	}
 
-	@Test void a02_nonOrderableColumn_searchLeadsTitle() {
+	@Test void a02_nonOrderableColumn_searchFollowsTitle() {
 		var r = report();
-		// No sort glyph on a non-orderable column, so the magnifying glass is the leftmost control.
-		assertEquals(List.of("search", "title"), r.get("nonOrderableColumnGlyphOrder"), r::toString);
+		// No sort glyph on a non-orderable column, so the magnifying glass is the last control.
+		assertEquals(List.of("title", "search"), r.get("nonOrderableColumnGlyphOrder"), r::toString);
 	}
 
 	@Test void a03_activeStateReflectsAnAlreadyAppliedFilter() {

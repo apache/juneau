@@ -100,6 +100,7 @@ html:root {
 	--jc-page-nav-child-padding-inline: 10px;
 	--jc-card-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
 	--jc-danger-wash: #fdeceb;
+	--jc-danger-strong: #a12f2b;
 	--jc-success-wash: #eaf6ee;
 	--jc-space-1: 4px;
 	--jc-space-2: 8px;
@@ -109,7 +110,7 @@ html:root {
 	--jc-space-6: 32px;
 	--jc-focus: #B42348;
 	--jc-accent-selected: #B42348;
-	--jc-table-stripe-bg: #fafaf9;
+	--jc-table-stripe-bg: #f3f3f3;
 	--jc-main-bg: #f5f6f9;
 	--jc-card-padding: 16px 16px 8px;
 	--jc-chrome-icon: #666666;
@@ -135,7 +136,7 @@ html:root {
 
 @media not print {
 	html:root[data-jc-scheme="dark"] {
-		--jc-link: #f27a9a;
+		--jc-link: #f78fab;
 		--jc-accent: #e0557a;
 		--jc-focus: #e0557a;
 		--jc-accent-selected: #e0557a;

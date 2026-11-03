@@ -28,7 +28,8 @@
     { key: 'message', label: 'Message', defaultVisible: false }
   ],
   ribbon: [
-    { type: 'option', id: 'pending-only', title: 'Pending only', column: 'state', value: '$eq(PENDING)', default: true },
+    { type: 'option', id: 'pending-only', title: 'Pending only', column: 'state', value: '$eq(PENDING)', default: true, group: 'filter' },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh' }
   ],
   rowActions: [

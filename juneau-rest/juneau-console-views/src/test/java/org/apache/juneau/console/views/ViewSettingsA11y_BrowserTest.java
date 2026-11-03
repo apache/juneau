@@ -175,7 +175,7 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 	// Scenario 2: keyboard-only dialog nav - gear, Enter, Tab, Right x3, End, Home
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f2_01_enterOnTheFocusedGearOpensTheDialogAndTabLandsOnTheViewTab() {
+	@Test void f2_01_enterOnTheFocusedGearOpensTheDialogFocusedOnTheViewTab() {
 		assertBean(report::toString, sub(obj("f2"), "afterTab"), "activeTab,visiblePanel", "view,view");
 	}
 

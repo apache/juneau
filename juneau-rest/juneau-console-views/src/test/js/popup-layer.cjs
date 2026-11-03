@@ -21,21 +21,32 @@
  * per-depth inline z-index, the dialog-kind depth cap (2), and the registry-regression case (dialog + popover =
  * two entries, one dialog).
  *
- *   Usage:  node popup-layer.cjs <juneau-renders.js> <juneau-views.js>
+ * With the optional third argument, juneau-config.js is loaded into the same sandbox and the View Settings chooser
+ * is checked as a dialog layer: it takes one depth slot, survives the table's action-dialog sweep, and is refused at
+ * the cap.
+ *
+ *   Usage:  node popup-layer.cjs <juneau-renders.js> <juneau-views.js> [<juneau-config.js>]
  */
 'use strict';
 
 const path = require('node:path');
+const fs = require('node:fs');
+const vm = require('node:vm');
 const { loadViews } = require(path.join(__dirname, 'views-dom-shim.cjs'));
 
 const rendersJsPath = process.argv[2];
 const viewsJsPath = process.argv[3];
+const configJsPath = process.argv[4];
 if (!rendersJsPath || !viewsJsPath) {
 	console.error('usage: node popup-layer.cjs <juneau-renders.js> <juneau-views.js>');
 	process.exit(2);
 }
 
-const { env, I } = loadViews(rendersJsPath, viewsJsPath);
+const { env, NS, I } = loadViews(rendersJsPath, viewsJsPath);
+if (configJsPath) {
+	// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as views-dom-shim.cjs, for juneau-config.js.
+	vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), { window: env.window, document: env.document, console: console, setTimeout: function (fn) { if (typeof fn === 'function') fn(); return 0; }, clearTimeout: function () { /* no-op */ }, Promise: Promise }, { filename: 'juneau-config.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
+}
 const out = { hasInit: typeof I?.pushLayer === 'function' && typeof I?.showActionDialog === 'function' };
 if (!out.hasInit) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
@@ -172,6 +183,37 @@ const tr = env.el('tr');
 	const outside = env.el('div'); env.body.appendChild(outside);
 	env.dispatchDocument('pointerdown', { target: outside });
 	out.rowmenu_closedViaStack = env.body.querySelector('.juneau-view-action-menu') === null && I.topLayer() === null;
+	drain();
+})();
+
+// --- the View Settings chooser is a dialog layer: one slot, survives the action-dialog sweep, refused at the cap -
+(function () {
+	if (!NS?.config?.openChooser) return;
+	NS.persistence = { list: function () { return Promise.resolve({ views: [] }); } };
+	const ctx = { viewDef: { columns: [{ data: 'name', title: 'Name' }, { data: 'status', title: 'Status' }] } };
+	const t = env.el('table');
+	env.body.appendChild(t);
+	NS.config.openChooser(t, ctx);
+	const backdrop = ctx._configBackdrop;
+	out.chooser_opened = backdrop != null && backdrop.parentNode === env.body;
+	out.chooser_isDialogLayer = I.topLayer()?.el === backdrop && I.topLayer()?.kind === 'dialog';
+	out.chooser_dialogCount = I.dialogLayerCount();
+	out.chooser_notOnTableStack = !(ctx._dialogStack || []).includes(backdrop);
+	// An Apply rebuild tears the table down, which sweeps its action dialogs: the chooser must survive it.
+	I.closeActionDialog(ctx);
+	out.chooser_survivesActionSweep = backdrop.parentNode === env.body && I.dialogLayerCount() === 1;
+	NS.config.closeChooserDialog(ctx);
+	out.chooser_closeEmptiesStack = I.topLayer() === null && backdrop.parentNode == null && ctx._configBackdrop == null;
+	// Escape pops it like any top layer and clears the ctx refs through onDismiss.
+	NS.config.openChooser(t, ctx);
+	env.dispatchDocument('keydown', { key: 'Escape' });
+	out.chooser_escapeCloses = I.topLayer() === null && ctx._configBackdrop == null;
+	// At the cap (two dialogs open elsewhere on the page) it is refused and nothing is pushed.
+	const other = {};
+	I.showActionDialog({ title: 'One' }, { id: 'a' }, table, tr, other);
+	I.showActionDialog({ title: 'Two' }, { id: 'b' }, table, tr, other);
+	NS.config.openChooser(t, ctx);
+	out.chooser_refusedAtCap = ctx._configBackdrop == null && I.dialogLayerCount() === 2;
 	drain();
 })();
 

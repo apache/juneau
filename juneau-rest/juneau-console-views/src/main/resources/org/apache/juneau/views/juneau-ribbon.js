@@ -321,16 +321,11 @@
 	 * now wired, to the `collapseAll` action type below (added alongside `print` for the same toolbar
 	 * follow-up) - it no longer ships purely for forward-compatibility.
 	 *
-	 * <p>{@code pausePolling} maps to {@code cancel} - "stop the auto-refresh" - and NOT to the neutral "tune"
+	 * <p>{@code pausePolling} maps to {@code pause} (swapped for {@code play} while paused) and NOT to the neutral "tune"
 	 * fallback, which would be an outright bug rather than a cosmetic compromise: "tune" resolves to the settings
 	 * gear, which is the very glyph the column chooser already paints (juneau-config.js's mountChooser).  A view
 	 * declaring both {@code pausePolling} and {@code columnConfig} would show two identical gears in an icon-only
 	 * ribbon, one pausing the poll and one opening the column list.
-	 *
-	 * <p>{@code cancel} is a reused existing stem, not new artwork: juneau-symbols.svg carries no dedicated pause
-	 * glyph, and that sprite is provenance-guarded (juneau-symbols-provenance.md + SymbolSprite_Provenance_Test),
-	 * so adding one is its own reviewed act rather than a detail of this feature.  A consumer wanting a true pause
-	 * glyph registers one and passes {@code .symbol("...")}.
 	 *
 	 * <p>{@code dialog} maps to {@code new} for the same two reasons, and NAMING it is load-bearing rather than
 	 * cosmetic: an unlisted key does not fall through to a text label, it falls through resolveButtonIcon's
@@ -342,7 +337,7 @@
 	const DEFAULT_ICONS = {
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf", print: "print",
 		refresh: "refresh", collapse: "unfold_less",
-		pausePolling: "cancel", dialog: "new"
+		pausePolling: "pause", dialog: "new", resetDefaults: "restore"
 	};
 
 	/**
@@ -360,34 +355,77 @@
 	}
 
 	/**
-	 * Moves every ungrouped {@code refresh} action to the end of the list, in one trailing cluster keyed by the
-	 * reserved synthetic group {@code __refresh} (mirroring this file's {@code __ungrouped} convention), so a
-	 * refresh control reads as a self-contained control at the far right of the toolbar regardless of where a
-	 * view declared it.  Pure and DOM-free; {@link #buildRibbon} is the only caller.
+	 * The canonical toolbar group ids, in toolbar order.  Only groups tagged with one of these ids are reordered.
+	 */
+	const CANONICAL_GROUPS = ["entity", "filter", "search", "viewing", "page", "status"];
+
+	/**
+	 * Sorts the groups tagged with a {@link #CANONICAL_GROUPS} id into canonical order, filling the slots those
+	 * groups already occupy.  A slot is a run of adjacent actions sharing one group id; every other run (another id,
+	 * or ungrouped) keeps its position.  All members of one canonical id end up together, in declared order, in the
+	 * slot its rank picks; a canonical slot left over (an id declared in two runs) is dropped.  Pure; returns
+	 * {@code actions} itself when nothing is tagged.
+	 */
+	function sortCanonicalGroups(actions) {
+		if (!actions.some(function (a) { return CANONICAL_GROUPS.includes(a.group); })) return actions;
+		const runs = [];
+		actions.forEach(function (a) {
+			const last = runs.at(-1);
+			if (last && a.group != null && last.id === a.group) last.items.push(a);
+			else runs.push({ id: a.group, items: [a] });
+		});
+		const members = {};
+		runs.forEach(function (r) {
+			if (CANONICAL_GROUPS.includes(r.id)) members[r.id] = (members[r.id] || []).concat(r.items);
+		});
+		const sorted = CANONICAL_GROUPS.filter(function (id) { return members[id]; });
+		let next = 0;
+		return runs.flatMap(function (r) {
+			if (!CANONICAL_GROUPS.includes(r.id)) return r.items;
+			return next < sorted.length ? members[sorted[next++]] : [];
+		});
+	}
+
+	/**
+	 * Puts the ribbon in toolbar order before {@link #buildRibbon} renders it.  Pure and DOM-free;
+	 * {@link #buildRibbon} is the only caller.
 	 *
 	 * <ul>
-	 * 	<li>No {@code refresh} action - returns {@code actions} unchanged (identity no-op).
-	 * 	<li>One or more ungrouped {@code refresh} actions - all of them are removed from their declared position(s)
-	 * 		and re-appended at the end, in their original relative order, sharing the {@code __refresh} group id
-	 * 		(so {@link #buildRibbon}'s adjacent-group clustering renders them as ONE cluster, not several).
-	 * 	<li>A {@code refresh} action that already carries an explicit {@code group} opts OUT completely - it is
-	 * 		left exactly where its neighbours put it, ungrouped by this function.  This is a consumer's escape
-	 * 		hatch: a deliberate {@code .group(...)} on refresh means "I clustered this on purpose".
+	 * 	<li>Groups tagged with a canonical id ({@code entity|filter|search|viewing|page|status}) sort among themselves
+	 * 		into the slots they occupy (see {@link #sortCanonicalGroups}); other groups keep their position.
+	 * 	<li>An ungrouped {@code refresh} joins the {@code page} group as its last member when the ribbon has one.
+	 * 		Otherwise every ungrouped {@code refresh} is moved to the end, in one trailing cluster keyed by the
+	 * 		reserved synthetic group {@code __refresh} (mirroring this file's {@code __ungrouped} convention), in its
+	 * 		original relative order, so it reads as a self-contained control at the far right of the toolbar.
+	 * 	<li>A {@code refresh} action that already carries an explicit {@code group} opts OUT of the move - it is
+	 * 		left exactly where its neighbours put it.  This is a consumer's escape hatch: a deliberate
+	 * 		{@code .group(...)} on refresh means "I clustered this on purpose".
 	 * 	<li>A {@code divider} left dangling in trailing position by the move (nothing left to divide once refresh
 	 * 		is gone) is dropped rather than rendered as an empty seam.
+	 * 	<li>An untagged ribbon with no ungrouped {@code refresh} is returned unchanged (identity no-op).
 	 * </ul>
 	 *
 	 * <p>As with {@code __ungrouped}, a consumer literally naming a group {@code "__refresh"} collides with this
 	 * reserved key; that risk is tolerated here for the same reason it already is for {@code __ungrouped}.
 	 */
 	function normalizeRibbon(actions) {
+		// A declared pausePolling item does not render as its own ribbon button: it asks for the pause/play button
+		// in the status cluster, next to the status dot.
 		actions = actions || [];
-		const moving = actions.filter(function (a) { return a.type === "refresh" && a.group == null; });
-		if (!moving.length) return actions;
-		const kept = actions.filter(function (a) { return !(a.type === "refresh" && a.group == null); });
+		if (actions.some(function (a) { return a.type === "pausePolling" && a.group !== "status"; }))
+			actions = actions.map(function (a) { return a.type === "pausePolling" ? { ...a, group: "status" } : a; });
+		const isMoving = function (a) { return a.type === "refresh" && a.group == null; };
+		const moving = actions.filter(isMoving);
+		if (!moving.length) return sortCanonicalGroups(actions);
+		const kept = actions.filter(function (a) { return !isMoving(a); });
 		while (kept.length && kept.at(-1).type === "divider") kept.pop();
+		const pageAt = kept.findLastIndex(function (a) { return a.group === "page"; });
+		if (pageAt >= 0) {
+			const joined = moving.map(function (a) { return { ...a, group: "page" }; });
+			return sortCanonicalGroups(kept.slice(0, pageAt + 1).concat(joined, kept.slice(pageAt + 1)));
+		}
 		const moved = moving.map(function (a) { return { ...a, group: "__refresh" }; });
-		return kept.concat(moved);
+		return sortCanonicalGroups(kept).concat(moved);
 	}
 
 	// ==================================================================================================================
@@ -548,10 +586,11 @@
 	 * ribbon rather than orphan glyphs.  A {@code divider} always closes any open cluster; an explicit
 	 * {@code group} id still splits clusters the way the caller declared.
 	 *
-	 * <p>Before any of that, {@link #normalizeRibbon} moves every ungrouped {@code refresh} action into its own
-	 * trailing {@code __refresh} cluster at the far right, regardless of where the view declared it - a refresh
-	 * control reads as self-contained rather than welded to whatever ungrouped buttons happen to sit beside it.
-	 * A {@code refresh} with an explicit {@code group} opts out of that move entirely.
+	 * <p>Before any of that, {@link #normalizeRibbon} sorts the canonically tagged groups into toolbar order and
+	 * moves every ungrouped {@code refresh} action into the {@code page} group, or else into its own trailing
+	 * {@code __refresh} cluster at the far right - a refresh control reads as self-contained rather than welded to
+	 * whatever ungrouped buttons happen to sit beside it.  A {@code refresh} with an explicit {@code group} opts out
+	 * of that move entirely.  An {@code optionGroup} always renders its own wrapper; its {@code group} drives ordering.
 	 */
 	// NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type; each branch is a
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
@@ -592,6 +631,7 @@
 			if (openGroup?.id !== groupId) {
 				const wrap = document.createElement("span");
 				wrap.className = "juneau-view-ribbon-group";
+				stampCanonicalGroup(wrap, groupId);
 				bar.appendChild(wrap);
 				openGroup = { id: groupId, el: wrap };
 			}
@@ -687,6 +727,14 @@
 				}, a.appearance), a.group || "__ungrouped");
 				return;
 			}
+			if (a.type === "resetDefaults") {
+				// Puts this table back on its built-in Default view and applies it at once, with no dialog.  The reset
+				// lives in juneau-config.js; a page that loaded the ribbon runtime without it renders an inert button.
+				place(button(a.title || "Reset to defaults", resolveButtonIcon(a, "resetDefaults"), function () {
+					if (typeof NS.config?.resetToDefaultsAndApply === "function") NS.config.resetToDefaultsAndApply(ctx.table, ctx);
+				}, a.appearance), a.group || "__ungrouped");
+				return;
+			}
 			if (a.type === "pausePolling") {
 				// A pause control on a view that never polls is a lie - wireTablePolling only calls initPolling when
 				// viewDef.pollIntervalMs is set, so there would be no timer for the button to hold.  Skip it.  A
@@ -703,12 +751,16 @@
 					// table's staleness pill; this ribbon only needs its own pressed state.
 					const pause = ppBtn.getAttribute("aria-pressed") !== "true";
 					rb.send(rb.target(a), pause ? "pause-polling" : "resume-polling");
-					ppBtn.setAttribute("aria-pressed", pause ? "true" : "false");
+					paintPause(pause);
 				}, a.appearance);
+				function paintPause(paused) {
+					ppBtn.setAttribute("aria-pressed", paused ? "true" : "false");
+					paintIcon(ppBtn, paused ? "play" : resolveButtonIcon(a, "pausePolling"));
+				}
 				// Read the flag back rather than assume false: ctx survives a column-config Apply, so a view paused
 				// before the rebuild stays paused - and its button has to come back already pressed to say so.
-				ppBtn.setAttribute("aria-pressed", ctx._pollPaused ? "true" : "false");
-				place(ppBtn, a.group || "__ungrouped");
+				paintPause(!! ctx._pollPaused);
+				place(ppBtn, "status");
 				return;
 			}
 			if (a.type === "option") {
@@ -722,6 +774,14 @@
 		});
 		rb.listen();
 		return bar;
+	}
+
+	/**
+	 * Marks a group wrapper with its canonical toolbar group id ({@code data-juneau-group}), so the toolbar row can
+	 * find the {@code search} slot among the rendered groups.  Other ids are left unmarked.
+	 */
+	function stampCanonicalGroup(wrap, groupId) {
+		if (CANONICAL_GROUPS.includes(groupId)) wrap.setAttribute("data-juneau-group", groupId);
 	}
 
 	function stampChromeTip(el, text) {
@@ -747,13 +807,18 @@
 	 * this is not an HTML-injection sink.  An icon name found in none of the sprite layers
 	 * draws nothing (U11); the label remains the accessible name and tooltip.
 	 */
+	/** Paints a registry icon into a ribbon button; unknown in every layer: draw nothing (label stays in aria-label / tooltip). */
+	function paintIcon(b, iconName) {
+		const markup = NS.icons?.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
+		if (markup != null) b.innerHTML = markup;
+	}
+
 	function button(label, iconName, onClick, appearance) {
 		const b = document.createElement("button");
 		b.type = "button";
 		b.className = "juneau-view-ribbon-btn";
 		stampChromeTip(b, label);
-		const markup = NS.icons?.resolveIcon ? NS.icons.resolveIcon(iconName) : null;
-		if (markup != null) b.innerHTML = markup;   // unknown in every layer: draw nothing (label stays in aria-label / tooltip)
+		paintIcon(b, iconName);
 		if (appearance === "icon") b.classList.add("juneau-view-ribbon-btn--icon");
 		b.addEventListener("click", onClick);
 		return b;
@@ -774,6 +839,7 @@
 		const target = rb.target(group);
 		const wrap = document.createElement("span");
 		wrap.className = "juneau-view-ribbon-group";
+		stampCanonicalGroup(wrap, group.group);
 		if (group.title) {
 			// The title names the group for assistive tech only; no visible caption is drawn.
 			wrap.setAttribute("role", "group");
@@ -809,6 +875,7 @@
 		ribbonStorageKey: ribbonStorageKey,
 		resolveButtonIcon: resolveButtonIcon,
 		normalizeRibbon: normalizeRibbon,
+		CANONICAL_GROUPS: CANONICAL_GROUPS,
 		// binding
 		loadPersistedState: loadPersistedState,
 		persist: persist,

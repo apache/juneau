@@ -106,6 +106,14 @@ import org.apache.juneau.commons.bean.*;
  * buttons, and the last step's button is the dialog's own confirm.  Both are additive-only and omitted from the wire
  * when unset, so neither bumps {@link #CONTRACT_VERSION}.
  *
+ * <h5 class='section'>{@link #nav} &mdash; the inner-navigation style</h5>
+ * <p>
+ * {@link #nav} picks how the runtime draws the section strip of a {@link FormDef#sections sectioned} form:
+ * {@link #NAV_PILL} (the default) or {@link #NAV_FOLDER} (square-topped folder tabs).  A wizard needs no value here:
+ * {@link #steps} alone makes the dialog a wizard, and the runtime then draws a numbered step indicator instead of a
+ * strip.  {@link #validate()} rejects any other value; the runtime still treats an unknown one as {@link #NAV_PILL}.
+ * Additive-only and omitted from the wire when unset, so it does not bump {@link #CONTRACT_VERSION}.
+ *
  * <h5 class='section'>Not a new row-action wire field</h5>
  * <p>
  * This is the response a row action's form-source URL returns, <b>not</b> a new field on the frozen row-action wire
@@ -146,7 +154,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions,chrome,steps")
+@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions,chrome,steps,nav")
 @SuppressWarnings({
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	"java:S3776" // Branching is inherent to validate() and validateChildActions(), which check many field/child-action combinations.
@@ -168,6 +176,12 @@ public class ModalDef implements Widget {
 
 	/** The {@link Field#kind} token for a monospaced, copyable value (an id, a URL, a generated token). */
 	public static final String FIELD_KIND_CODE = "code";
+
+	/** The {@link #nav} token for the default rounded section strip. */
+	public static final String NAV_PILL = "pill";
+
+	/** The {@link #nav} token for square-topped folder tabs over a bottom rule. */
+	public static final String NAV_FOLDER = "folder";
 
 	/**
 	 * A single typed confirmation field: a label and a value, painted client-side with {@code textContent} (never
@@ -252,7 +266,7 @@ public class ModalDef implements Widget {
 		/** The dialog title shown while this step is current; omitted from the wire when unset (the modal title stays). */
 		public String title;
 
-		/** The confirm-button label for this step; omitted when unset (the runtime shows Next, or the final label on the last step). */
+		/** The confirm-button label for this step; omitted when unset (the runtime shows Next; on the last step it shows the dialog's confirm label, else Finish). */
 		public String confirmLabel;
 
 		/** The typed display fields painted for this step, in display order; omitted from the wire when none are declared. */
@@ -539,6 +553,15 @@ public class ModalDef implements Widget {
 	public List<Step> steps;
 
 	/**
+	 * The inner-navigation style of a sectioned form's strip, {@link #NAV_PILL} or {@link #NAV_FOLDER} (see the class
+	 * Javadoc); omitted from the wire when unset (the runtime draws {@link #NAV_PILL}).
+	 *
+	 * <p>
+	 * Additive-only: like {@link #barSlot}, its presence does not bump {@link #CONTRACT_VERSION}.
+	 */
+	public String nav;
+
+	/**
 	 * Starts a new {@link ModalDef} with the specified title / confirmation prompt.
 	 *
 	 * @param title The modal title / confirmation prompt.  Must not be <jk>null</jk> or blank.
@@ -605,6 +628,17 @@ public class ModalDef implements Widget {
 	 */
 	public ModalDef chrome(String value) {
 		chrome = value;
+		return this;
+	}
+
+	/**
+	 * Selects the inner-navigation style of a sectioned form's strip.
+	 *
+	 * @param value {@link #NAV_PILL} or {@link #NAV_FOLDER}.  Can be <jk>null</jk> to unset (the default pill strip).
+	 * @return This object.
+	 */
+	public ModalDef nav(String value) {
+		nav = value;
 		return this;
 	}
 
@@ -709,7 +743,8 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * Also rejects, fail-closed at serve time rather than silently on the wire: a {@link Field#kind} outside the
-	 * {@link #FIELD_KIND_TEXT text}/{@link #FIELD_KIND_CODE code} allowlist; a blank, duplicate or unlabelled
+	 * {@link #FIELD_KIND_TEXT text}/{@link #FIELD_KIND_CODE code} allowlist; a {@link #nav} other than
+	 * {@link #NAV_PILL}/{@link #NAV_FOLDER}; a blank, duplicate or unlabelled
 	 * {@link ChildAction} id; {@link ChildAction#carryDrafts} on a modal that declares no {@link #form} (nothing to
 	 * collect <i>from</i>); and {@link ChildAction#carryDrafts} on a child that declares no
 	 * {@link ChildAction#form} (nowhere to put them &mdash; the runtime would take its confirm-only branch, issue
@@ -735,6 +770,8 @@ public class ModalDef implements Widget {
 		validateSteps();
 		if (chrome != null && chrome.isBlank())
 			throw iaex("ModalDef chrome must not be blank.");
+		if (nav != null && ! (eqa(nav, NAV_PILL, NAV_FOLDER)))
+			throw iaex("ModalDef nav must be '" + NAV_PILL + "' or '" + NAV_FOLDER + "', not '" + nav + "'.");
 		if (form != null)
 			form.validate();
 		if (barSlot != null)

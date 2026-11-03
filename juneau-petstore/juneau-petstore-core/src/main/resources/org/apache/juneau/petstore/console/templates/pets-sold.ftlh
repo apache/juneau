@@ -26,10 +26,11 @@
     { key: 'price', label: 'Price (USD)', render: { id: 'decimal', meta: { places: 2 } } }
   ],
   ribbon: [
-    { type: 'optionGroup', id: 'species', title: 'Species', options: [
+    { type: 'optionGroup', id: 'species', title: 'Species', group: 'filter', options: [
       { id: 'dogs', title: 'Dogs', column: 'species', value: '$eq(DOG)' },
       { id: 'cats', title: 'Cats', column: 'species', value: '$eq(CAT)' }
     ] },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh' }
   ]
 }

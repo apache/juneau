@@ -2552,8 +2552,9 @@ class LiveRenderer:
             if r.id in current:
                 out.append(current[r.id])
             mine = [m for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
-            if r.lingering is not None and r.lingering not in mine and r.lingering.box != "fail":
-                mine.append(r.lingering)     # the newest module, past its tests or its end, until the next starts
+            if not mine and r.lingering is not None and r.lingering.box != "fail":
+                mine.append(r.lingering)     # the newest module, past its tests or its end, until the next starts; only
+                                             # when no module is still running tests (its trailing goal is no live work)
             width = max((_vlen(m.title) for m in mine), default=1)        # _sub_lines caps it
             for m in mine:
                 out += self._sub_lines(m, cols, width, now)

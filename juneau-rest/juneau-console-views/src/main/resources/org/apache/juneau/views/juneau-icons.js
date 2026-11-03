@@ -432,9 +432,15 @@
 	reg("toggle_column_search", "toggle_column_search");
 	reg("unfold_less", "collapse_all");
 	reg("collapse_all", "collapse_all");
-	reg("tune", "settings");
+	reg("tune", "tune");
 	reg("settings", "settings");
-	reg("columns", "columns");
+	reg("columns", "tune");
+	// The original columns gear stem stays shipped (byte-identical artwork to tune) so a host override keyed on it still
+	// has a target; no chrome uses it by default.
+	reg("columns_gear", "columns");
+	reg("plus", "plus");
+	reg("play", "play");
+	reg("restore", "restore");
 	reg("chevron_right", "chevronright");
 	reg("chevronright", "chevronright");
 	reg("chevron_left", "chevronleft");

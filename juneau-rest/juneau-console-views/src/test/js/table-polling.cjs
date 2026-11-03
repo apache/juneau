@@ -135,7 +135,8 @@ function makeTable() {
 		ajax: { reload: function () { dt.reloads++; } }
 	};
 	dt.fire = function (ev, target) {
-		(handlers[ev] || []).forEach(function (fn) { fn({ target: target === undefined ? table : target }); });
+		const extra = Array.prototype.slice.call(arguments, 2);
+		(handlers[ev] || []).forEach(function (fn) { fn.apply(null, [{ target: target === undefined ? table : target }].concat(extra)); });
 	};
 	/**
 	 * Lands a response the way DataTables does: preDraw.dt first, and if ANY handler returns false the draw is
@@ -181,6 +182,42 @@ function startPolling(f, viewDef, ctx) {
 const out = {};
 
 // ----------------------------------------------------------------------------------------------------------------
+// S. Status dot states: idle -> refreshing -> idle, failure -> error, suspend -> paused, error beats paused.
+// ----------------------------------------------------------------------------------------------------------------
+{
+	const f = makeTable();
+	const viewDef = { pollIntervalMs: 5000 };
+	const ctx = { dataTable: f.dt };
+	const ind = startPolling(f, viewDef, ctx);
+	out.dot_initial = ind.dataset.state;
+	out.dot_initialTip = ind.dataset.jcTip;
+	f.dt.fire('preXhr.dt');
+	out.dot_refreshing = ind.dataset.state;
+	out.dot_refreshingTip = ind.dataset.jcTip;
+	f.dt.fire('draw.dt');
+	out.dot_backToIdle = ind.dataset.state;
+	f.dt.fire('preXhr.dt');
+	f.dt.fire('error.dt');
+	out.dot_error = ind.dataset.state;
+	ctx._pollPaused = true;
+	ctx._onPollPausedChange();
+	out.dot_errorBeatsPaused = ind.dataset.state;
+	f.dt.fire('draw.dt');
+	out.dot_paused = ind.dataset.state;
+	f.dt.fire('preXhr.dt');
+	out.dot_pausedBeatsRefreshing = ind.dataset.state;
+	ctx._pollPaused = false;
+	ctx._onPollPausedChange();
+	out.dot_refreshingAfterResume = ind.dataset.state;
+	f.dt.fire('draw.dt');
+	out.dot_idleAfterResume = ind.dataset.state;
+	out.dot_nestedXhrIgnored = (function () {
+		f.dt.fire('preXhr.dt', env.el('table'));
+		return ind.dataset.state;
+	})();
+}
+
+// ----------------------------------------------------------------------------------------------------------------
 // A. The non-opted-in consumer (every existing Juneau views user).
 //
 // The whole multi-consumer safety claim in one section: with NEITHER affordance declared, nothing suspends -
@@ -193,7 +230,7 @@ const out = {};
 	const ctx = { dataTable: f.dt };                      // no _pollPaused
 	const indicator = startPolling(f, viewDef, ctx);
 
-	out.default_initialLabel = indicator.textContent;
+	out.default_initialLabel = indicator.dataset.jcTip;
 	out.default_initialState = indicator.dataset.state;
 
 	const open = openDetailPanel(f);
@@ -208,9 +245,10 @@ const out = {};
 	out.default_pollStillFetchesWithEditorsOpen = f.dt.reloads === before + 1;
 
 	tick(7000);
-	out.default_labelAfter7s = indicator.textContent;
+	out.default_labelAfter7s = indicator.dataset.jcTip;
 	out.default_stateAfter7s = indicator.dataset.state;
-	out.default_neverSaysPaused = indicator.textContent.indexOf('Paused') < 0;
+	out.default_neverSaysPaused = indicator.dataset.jcTip.indexOf('Paused') < 0;
+	out.default_noVisibleText = indicator.textContent === '' || indicator.textContent === undefined;
 
 	redrawDiscardsChildRow(open);
 	ctx._dialogStack = [];
@@ -238,12 +276,12 @@ const out = {};
 
 	// The pill, 42s into a hold: "Paused", a distinct state, and an age that has ADVANCED rather than frozen.
 	tick(42000);
-	out.paused_label = indicator.textContent;
+	out.paused_label = indicator.dataset.jcTip;
 	out.paused_state = indicator.dataset.state;
-	const firstPausedLabel = indicator.textContent;
+	const firstPausedLabel = indicator.dataset.jcTip;
 	tick(10000);
-	out.paused_ageAdvancesWhileHeld = indicator.textContent !== firstPausedLabel;
-	out.paused_labelLater = indicator.textContent;
+	out.paused_ageAdvancesWhileHeld = indicator.dataset.jcTip !== firstPausedLabel;
+	out.paused_labelLater = indicator.dataset.jcTip;
 
 	// Closing the editor resumes on the next tick, with no manual refresh.
 	redrawDiscardsChildRow(open);
@@ -254,7 +292,7 @@ const out = {};
 
 	f.dt.fire('draw.dt');
 	out.resumed_stateAfterDraw = indicator.dataset.state;
-	out.resumed_labelAfterDraw = indicator.textContent;
+	out.resumed_labelAfterDraw = indicator.dataset.jcTip;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -281,7 +319,7 @@ const out = {};
 	fireIntervalsWithPeriod(5000);
 	out.stale_pollStillRunsAfterOrphanedMarker = f.dt.reloads === before + 1;
 	tick(3000);
-	out.stale_pillIsNotStuckOnPaused = indicator.textContent.indexOf('Paused') < 0;
+	out.stale_pillIsNotStuckOnPaused = indicator.dataset.jcTip.indexOf('Paused') < 0;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -328,19 +366,19 @@ const out = {};
 	// The late-bound repaint hook is what makes the pill flip on the click rather than up to a second later.
 	out.manual_repaintHookInstalled = typeof ctx._onPollPausedChange === 'function';
 	ctx._onPollPausedChange();
-	out.manual_labelAfterPress = indicator.textContent;
+	out.manual_labelAfterPress = indicator.dataset.jcTip;
 	out.manual_stateAfterPress = indicator.dataset.state;
 
 	// An explicit user refresh still works while paused (ctx.redraw / paging / sorting are not gated) and the
 	// pill must stay honest about BOTH facts: freshly drawn, still held.
 	f.dt.fire('draw.dt');
-	out.manual_labelAfterExplicitRedraw = indicator.textContent;
+	out.manual_labelAfterExplicitRedraw = indicator.dataset.jcTip;
 	out.manual_stateAfterExplicitRedraw = indicator.dataset.state;
 
 	ctx._pollPaused = false;
 	ctx._onPollPausedChange();
 	out.manual_stateAfterResume = indicator.dataset.state;
-	out.manual_labelAfterResume = indicator.textContent;
+	out.manual_labelAfterResume = indicator.dataset.jcTip;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -354,17 +392,46 @@ const out = {};
 
 	f.dt.fire('error.dt');
 	out.error_stateBeforePause = indicator.dataset.state;
-	out.error_labelBeforePause = indicator.textContent;
+	out.error_labelBeforePause = indicator.dataset.jcTip;
 
 	ctx._pollPaused = true;
 	tick(5000);
 	out.errorAndPaused_state = indicator.dataset.state;
-	out.errorAndPaused_label = indicator.textContent;
+	out.errorAndPaused_label = indicator.dataset.jcTip;
 
 	// ...and the error state is still reachable/recoverable from a hold: a successful draw clears it.
 	f.dt.fire('draw.dt');
 	out.errorThenDraw_state = indicator.dataset.state;
-	out.errorThenDraw_label = indicator.textContent;
+	out.errorThenDraw_label = indicator.dataset.jcTip;
+}
+
+// ----------------------------------------------------------------------------------------------------------------
+// H. A real failed request reaches the dot.  DataTables 2 raises `dt-error.dt` (not `error.dt`) and only for a request
+// that completed; a dropped connection raises neither, only `xhr.dt` with no JSON.  A good `xhr.dt` (JSON present) is
+// not a failure.
+// ----------------------------------------------------------------------------------------------------------------
+{
+	const f = makeTable();
+	const ctx = { dataTable: f.dt };
+	const indicator = startPolling(f, { pollIntervalMs: 5000 }, ctx);
+
+	f.dt.fire('preXhr.dt');
+	f.dt.fire('xhr.dt', undefined, {}, { data: [] });
+	out.h_goodXhr_state = indicator.dataset.state;
+	f.dt.fire('draw.dt');
+
+	f.dt.fire('preXhr.dt');
+	f.dt.fire('xhr.dt', undefined, {}, null);
+	out.h_failedXhr_state = indicator.dataset.state;
+	f.dt.fire('draw.dt');
+	out.h_recovered_state = indicator.dataset.state;
+
+	f.dt.fire('preXhr.dt');
+	f.dt.fire('dt-error.dt');
+	out.h_dtError_state = indicator.dataset.state;
+	f.dt.fire('draw.dt');
+	f.dt.fire('xhr.dt', env.el('table'), {}, null);
+	out.h_nestedXhrIgnored_state = indicator.dataset.state;
 }
 
 // ----------------------------------------------------------------------------------------------------------------
@@ -379,7 +446,7 @@ const out = {};
 	const seen = [];
 	for (let i = 0; i < 4; i++) {
 		tick(1000);
-		seen.push(indicator.textContent);
+		seen.push(indicator.dataset.jcTip);
 	}
 	out.render_tickKeepsRunningWhilePaused = new Set(seen).size === seen.length;
 	out.render_labelsWhilePaused = seen;
@@ -409,7 +476,7 @@ const out = {};
 	// A cancelled draw fires neither draw.dt nor error.dt, so the clock must keep climbing and the pill must NOT
 	// claim a refresh failed - nothing failed, it was thrown away on purpose.
 	out.inflight_stateAfterCancel = indicator.dataset.state;
-	out.inflight_labelAfterCancel = indicator.textContent;
+	out.inflight_labelAfterCancel = indicator.dataset.jcTip;
 
 	// Closing the editor lets the next tick through normally.
 	redrawDiscardsChildRow(open);

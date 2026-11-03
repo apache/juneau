@@ -156,13 +156,13 @@ class ViewsJs_RowJobs_Test {
 	}
 
 	@Test void j18_anExpandedPanelsJobHoldsTheTimersDraw_andThePillSaysPaused_withoutTheOptIn() {
-		assertEquals("fresh", s("j18_idleState"));
+		assertEquals("idle", s("j18_idleState"));
 		yes("j18_unexpandedRowNoHold", "j18_pendingHolds", "j18_pendingTimerDrawCancelled", "j18_runningHolds",
 			"j18_runningTimerDrawCancelled", "j18_userReloadNotHeld", "j18_otherPanelStillHeld", "j18_collapsedReleases",
 			"j18_reexpandHolds", "j18_endReleases", "j18_endDraws");
 		assertEquals("paused", s("j18_pendingState"));
 		assertTrue(s("j18_runningLabel").startsWith("Paused"), s("j18_runningLabel"));
-		assertEquals("fresh", s("j18_endState"));
+		assertEquals("idle", s("j18_endState"));
 	}
 
 	@Test void j19_aRowActionsStreamNeverAdoptsAPendingRunsEntry() {

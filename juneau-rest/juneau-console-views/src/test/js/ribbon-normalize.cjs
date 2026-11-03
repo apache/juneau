@@ -309,6 +309,127 @@ function buildBar(NS, ribbon) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------
+// Canonical toolbar group order (entity|filter|search|viewing|page|status): tagged groups sort among themselves into
+// the slots they occupy; other ids keep position; untagged ribbons are unchanged; an ungrouped refresh joins `page`.
+// ------------------------------------------------------------------------------------------------------------------
+if (out.hasNormalizeRibbon) {
+	const normalizeRibbon = first.NS.ribbon.normalizeRibbon;
+	const keyOf = function (x) { return (x.group ?? '-') + ':' + (x.title || x.type); };
+
+	// Shuffled tagged declaration - sorted into canonical order, members of a group keep their relative order.
+	const shuffled = [
+		action('collapseAll', { group: 'page', title: 'p1' }), action('option', { id: 's', group: 'status', title: 's1' }),
+		action('option', { id: 'f', group: 'filter', title: 'f1' }), action('option', { id: 'v', group: 'viewing', title: 'v1' }),
+		action('option', { id: 'e', group: 'entity', title: 'e1' }), action('option', { id: 'f2', group: 'filter', title: 'f2' })
+	];
+	out.order_shuffled = normalizeRibbon(shuffled).map(keyOf).join(' ');
+
+	// A group with another id keeps its declared slot; the canonical groups sort around it.
+	const mixed = [
+		action('option', { id: 'v', group: 'viewing', title: 'v1' }), action('publish', { topic: 't', group: 'custom', title: 'c1' }),
+		action('option', { id: 'f', group: 'filter', title: 'f1' })
+	];
+	out.order_mixed = normalizeRibbon(mixed).map(keyOf).join(' ');
+
+	// Untagged ribbon (no canonical ids, no ungrouped refresh) - identity no-op.
+	const untagged = [action('option', { id: 'a', group: 'zeta' }), action('option', { id: 'b', group: 'alpha' })];
+	out.order_untagged_isSameReference = normalizeRibbon(untagged) === untagged;
+
+	// Ungrouped refresh joins a `page` group as its LAST member (not the trailing __refresh cluster).
+	const withPage = [
+		action('refresh'), action('resetDefaults', { group: 'page', title: 'r1' }),
+		action('option', { id: 'f', group: 'filter', title: 'f1' })
+	];
+	out.order_refreshJoinsPage = normalizeRibbon(withPage).map(keyOf).join(' ');
+
+	// An optionGroup carrying a canonical id sorts like any other tagged item.
+	const og = [
+		action('collapseAll', { group: 'page', title: 'p1' }),
+		action('optionGroup', { id: 'phase', group: 'filter', title: 'og', options: [{ id: 'a' }] })
+	];
+	out.order_optionGroupTagged = normalizeRibbon(og).map(keyOf).join(' ');
+
+	out.pure_resetDefaults_icon = first.NS.ribbon.resolveButtonIcon(action('resetDefaults'), 'resetDefaults');
+}
+
+// DOM: a tagged optionGroup keeps its own named role=group wrapper (its tag drives ordering only), sitting right
+// after the same-id cluster declared before it.
+{
+	const { NS } = loadRibbon(true);
+	const bar = buildBar(NS, [
+		action('option', { id: 'mine', group: 'filter', title: 'Mine' }),
+		action('optionGroup', { id: 'phase', group: 'filter', title: 'Phase', options: [{ id: 'a', title: 'A' }, { id: 'b', title: 'B' }] })
+	]);
+	const groups = groupsOf(bar);
+	out.dom_optionGroupTagged_groupCount = groups.length;
+	out.dom_optionGroupTagged_titles = groups.map(function (g) { return g.childNodes.map(function (b) { return chromeTip(b); }).join('+'); }).join('|');
+	out.dom_optionGroupTagged_ownGroupName = groups.length === 2 ? groups[1].getAttribute('aria-label') : null;
+}
+
+// DOM: resetDefaults renders "Reset to defaults" with the restore icon and calls NS.config.resetToDefaultsAndApply.
+{
+	const { env, NS } = loadRibbon(true);
+	const calls = [];
+	NS.config = { resetToDefaultsAndApply: function (table, ctx) { calls.push({ table: table, ctx: ctx }); } };
+	const table = env.el('table');
+	const ctx = { table: table, dataTable: {}, redraw: function () { /* no-op */ } };
+	const bar = NS.ribbon.build({ ribbon: [action('resetDefaults', { group: 'page' })] }, ctx);
+	const groups = groupsOf(bar);
+	const btn = groups.length ? groups[0].childNodes[0] : null;
+	out.dom_resetDefaults_title = btn ? chromeTip(btn) : null;
+	if (btn) btn.dispatch('click');
+	out.dom_resetDefaults_calledWithTableAndCtx = calls.length === 1 && calls[0].table === table && calls[0].ctx === ctx;
+}
+
+// DOM: resetDefaults with no config runtime loaded is inert on click rather than throwing.
+{
+	const { NS } = loadRibbon(true);
+	const bar = buildBar(NS, [action('resetDefaults')]);
+	const groups = groupsOf(bar);
+	const btn = groups.length ? groups[0].childNodes[0] : null;
+	let threw = false;
+	try { if (btn) btn.dispatch('click'); } catch (error) { threw = true; } // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
+	out.dom_resetDefaults_noConfig_clickDidNotThrow = btn != null && !threw;
+}
+
+// DOM: a declared pausePolling renders ONE pause/play button inside the `status` group (never its own ungrouped
+// button), honours `target:`, swaps pause <-> play with aria-pressed, and a view that never polls renders none.
+{
+	const { NS } = loadRibbon(true);
+	NS.icons = { resolveIcon: function (name) { return '<svg data-icon="' + name + '"></svg>'; } };
+	const published = [];
+	const ctx = { dataTable: {}, redraw: function () { /* no-op */ }, bus: { cardId: 'a', publish: function (t, c) { published.push({ topic: t, op: c.op }); }, subscribe: function () { return function () { /* no-op */ }; } } };
+	const bar = NS.ribbon.build({ id: 'a', pollIntervalMs: 5000, ribbon: [action('pausePolling', { target: 'b', group: 'page' })] }, ctx);
+	const groups = groupsOf(bar);
+	out.pp_groupCount = groups.length;
+	out.pp_groupId = groups.length ? groups[0].getAttribute('data-juneau-group') : null;
+	const btn = groups.length ? groups[0].childNodes[0] : null;
+	out.pp_buttonCount = groups.length ? groups[0].childNodes.length : -1;
+	out.pp_idleIcon = btn ? /data-icon="([^"]+)"/.exec(btn.innerHTML)?.[1] : null;
+	out.pp_idlePressed = btn ? btn.getAttribute('aria-pressed') : null;
+	if (btn) btn.dispatch('click');
+	out.pp_pausedIcon = btn ? /data-icon="([^"]+)"/.exec(btn.innerHTML)?.[1] : null;
+	out.pp_pausedPressed = btn ? btn.getAttribute('aria-pressed') : null;
+	if (btn) btn.dispatch('click');
+	out.pp_resumedIcon = btn ? /data-icon="([^"]+)"/.exec(btn.innerHTML)?.[1] : null;
+	out.pp_resumedPressed = btn ? btn.getAttribute('aria-pressed') : null;
+	out.pp_published = published.map(function (x) { return x.topic + ':' + x.op; }).join(',');
+
+	// Own-table pause on a view with no poll interval renders nothing.
+	const quiet = NS.ribbon.build({ id: 'a', ribbon: [action('pausePolling')] }, { dataTable: {}, redraw: function () { /* no-op */ } });
+	out.pp_nonPollingRendersNothing = quiet == null || groupsOf(quiet).length === 0;
+
+	// normalizeRibbon: forces pausePolling into `status` without mutating the declared item, and keeps it there
+	// when it is already declared there.
+	const declared = [action('pausePolling', { group: 'page' })];
+	const normalized = NS.ribbon.normalizeRibbon(declared);
+	out.pp_normalizedGroup = normalized[0].group;
+	out.pp_declaredUntouched = declared[0].group === 'page';
+	const already = [action('pausePolling', { group: 'status' })];
+	out.pp_alreadyStatusStays = NS.ribbon.normalizeRibbon(already)[0].group === 'status';
+}
+
+// ------------------------------------------------------------------------------------------------------------------
 // Pure functions: ribbonQueryParams + ribbonColumnSearches - the browser JOINS multiple active toggles that target
 // the SAME single-string parameter (`search`) into ONE comma-separated clause string (the wire
 // carries ONE `search`, never repeated params).  A column-scoped option stays a native

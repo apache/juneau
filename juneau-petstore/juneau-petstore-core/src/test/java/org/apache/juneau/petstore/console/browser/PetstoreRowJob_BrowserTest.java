@@ -101,7 +101,7 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 					Map.of("evaluate", "window.__during = {marker: " + DOG_ROW + ".hasAttribute('data-juneau-job'), pill: document.querySelector('" + PILL + "').dataset.state}"),
 					phase("done", 15000),
 					Map.of("evaluate", "window.__ms = Date.now() - window.__t0"),
-					wait("document.querySelector('" + PILL + "[data-state=fresh]')", 8000),
+					wait("document.querySelector('" + PILL + "[data-state=idle]')", 8000),
 					Map.of("evaluate", RETARGET + ".then(v => { window.__retarget = v; })"), wait("window.__retarget && window.__retarget.status", 8000)),
 				"queries", Map.of(
 					"before", "window.__before",

@@ -34,17 +34,18 @@
   ],
   rowClassRules: [ { field: 'status', op: 'eq', value: 'SOLD', class: 'is-muted' } ],
   ribbon: [
-    { type: 'optionGroup', id: 'status', title: 'Pet status', deselectable: true, default: 'available', options: [
+    { type: 'optionGroup', id: 'status', title: 'Pet status', group: 'filter', deselectable: true, default: 'available', options: [
       { id: 'available', title: 'Available', column: 'status', value: '$eq(AVAILABLE)' },
       { id: 'pending', title: 'Pending', column: 'status', value: '$eq(PENDING)' }
     ] },
-    { type: 'optionGroup', id: 'species', title: 'Species', deselectable: true, default: 'mammals', options: [
+    { type: 'optionGroup', id: 'species', title: 'Species', group: 'filter', deselectable: true, default: 'mammals', options: [
       { id: 'mammals', title: 'Mammals', column: 'species', value: '$in(DOG,CAT,MOUSE,RABBIT)' },
       { id: 'others', title: 'Others', column: 'species', value: '$in(BIRD,FISH,SNAKE)' }
     ] },
-    { type: 'dialog', id: 'add-pet', title: '+ Add pet', symbol: 'plus',
+    { type: 'dialog', id: 'add-pet', title: '+ Add pet', symbol: 'plus', group: 'entity',
       form: '/console/pets/form', endpoint: '/console/pets', method: 'POST', onSuccess: 'redraw' },
-    { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'export', group: 'viewing', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh' }
   ],
   rowActions: [

@@ -131,4 +131,16 @@ class StockThemeCss_Test extends TestBase {
 			assertFalse(read(name).toLowerCase().contains("generated"),
 				() -> "juneau-theme-" + name + ".css is hand-maintained and must not claim to be generated");
 	}
+
+	@Test void a09_stockThemes_declareDangerStrong_afterDangerWash() throws Exception {
+		// Filled destructive (.jc-btn-destructive) hover fill: darker than the invariant --jc-danger, so the white ink
+		// stays above 4.5:1 on hover too.  Inherited from OPEN by every derived palette.
+		for (var name : ConsoleChromeMixin.BUILTIN_THEME_NAMES) {
+			var light = parse(read(name)).get(0);
+			assertEquals("#a12f2b", light.get("--jc-danger-strong"), () -> "juneau-theme-" + name + ".css");
+			var keys = new ArrayList<>(light.keySet());
+			assertEquals(keys.indexOf("--jc-danger-wash") + 1, keys.indexOf("--jc-danger-strong"),
+				() -> "--jc-danger-strong must follow --jc-danger-wash in juneau-theme-" + name + ".css");
+		}
+	}
 }

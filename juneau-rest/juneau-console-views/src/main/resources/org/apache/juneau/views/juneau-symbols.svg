@@ -109,6 +109,14 @@
 <path d="M13.5 3.5H14V3.29289L13.8536 3.14645L13.5 3.5ZM10.5 0.5L10.8536 0.146447L10.7071 0H10.5V0.5ZM2 5V1.5H1V5H2ZM13 3.5V5H14V3.5H13ZM2.5 1H10.5V0H2.5V1ZM10.1464 0.853553L13.1464 3.85355L13.8536 3.14645L10.8536 0.146447L10.1464 0.853553ZM2 1.5C2 1.22386 2.22386 1 2.5 1V0C1.67157 0 1 0.671573 1 1.5H2ZM1 12V13.5H2V12H1ZM2.5 15H12.5V14H2.5V15ZM14 13.5V12H13V13.5H14ZM12.5 15C13.3284 15 14 14.3284 14 13.5H13C13 13.7761 12.7761 14 12.5 14V15ZM1 13.5C1 14.3284 1.67157 15 2.5 15V14C2.22386 14 2 13.7761 2 13.5H1ZM2.5 6.5V6H2V6.5H2.5ZM2.5 10.5H2V11H2.5V10.5ZM2 6.5V11H3V6.5H2ZM5 6H2.5V7H5V6ZM4 6.5V8.5H5V6.5H4ZM2.5 9H4.5V8H2.5V9ZM6.5 6.5V6H6V6.5H6.5ZM8.5 6.5H9V6H8.5V6.5ZM6.5 10.5H6V11H6.5V10.5ZM8.5 10.5V11H9V10.5H8.5ZM9 6H6.5V7H9V6ZM6 6.5V10.5H7V6.5H6ZM6.5 11H9V10H6.5V11ZM8 6.5V10.5H9V6.5H8ZM10.5 6.5V6H10V6.5H10.5ZM10.5 10.5H10V11H10.5V10.5ZM10 6.5V11H11V6.5H10ZM13 6H10.5V7H13V6ZM12.5 8H10.5V9H12.5V8Z"/>
 </g>
 </symbol>
+<symbol id="juneau-sym-play" viewBox="0 0 24 24" fill="currentColor">
+<path d="M3.7 20.2V3.8c0-.4.6-.8 1-.4l15.3 8c.4.3.4.9 0 1.2l-15.3 8c-.4.4-1 .1-1-.4z"/>
+</symbol>
+<symbol id="juneau-sym-plus" viewBox="0 0 24 24" fill="none">
+<g>
+<path fill="none" d="M8 12H12M12 12H16M12 12V16M12 12V8M12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</symbol>
 <symbol id="juneau-sym-print" viewBox="0 0 24 24" fill="none">
 	<path fill="none" d="M8.25 9.75V3.75H15.75V9.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter"/>
 	<rect x="3.75" y="9.75" width="16.5" height="6" fill="none" stroke="currentColor" stroke-width="1.5"/>
@@ -121,6 +129,9 @@
 <g>
 <path fill="none" d="M3 12C3 7.02944 7.02944 3 12 3C15.7252 3 18.911 5.2627 20.2761 8.5M21 4V8.5H16.5M21 12C21 16.9706 16.9706 21 12 21C8.27478 21 5.08901 18.7373 3.72392 15.5M3 20V15.5H7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
+</symbol>
+<symbol id="juneau-sym-restore" viewBox="0 0 24 24" fill="none">
+<path fill="none" d="M9 15L3 9l6-6M3 9h12a6 6 0 0 1 0 12h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </symbol>
 <symbol id="juneau-sym-search" viewBox="0 0 24 24" fill="currentColor">
 <path d="M22.9 20.9l-6.2-6.1c1.3-1.8 1.9-4 1.6-6.4-.6-3.9-3.8-7.1-7.8-7.4C5 .4.4 5 1 10.5c.3 4 3.5 7.3 7.4 7.8 2.4.3 4.6-.3 6.4-1.5l6.1 6.1c.3.3.7.3 1 0l.9-1c.3-.3.3-.7.1-1zM3.7 9.6c0-3.2 2.7-5.9 5.9-5.9 3.3 0 6 2.7 6 5.9 0 3.3-2.7 6-6 6-3.2 0-5.9-2.6-5.9-6z"/>
@@ -151,5 +162,11 @@
 <g>
 <path fill="none" d="M14.5 14.5L20 20M16 10C16 13.3137 13.3137 16 10 16C6.68629 16 4 13.3137 4 10C4 6.68629 6.68629 4 10 4C13.3137 4 16 6.68629 16 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
+</symbol>
+<symbol id="juneau-sym-tune" viewBox="0 0 24 24" fill="none">
+<path d="M3 6H21M3 12H21M3 18H21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<circle cx="8" cy="6" r="2.5" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<circle cx="16" cy="12" r="2.5" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+<circle cx="11" cy="18" r="2.5" fill="currentColor" stroke="currentColor" stroke-width="2"/>
 </symbol>
 </svg>

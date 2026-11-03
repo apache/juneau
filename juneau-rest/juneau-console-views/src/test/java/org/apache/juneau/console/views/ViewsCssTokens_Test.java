@@ -139,8 +139,11 @@ class ViewsCssTokens_Test extends TestBase {
 	@Test void a02_noBareLightLiterals() throws Exception {
 		var v = views();
 		assertTokenSpent(v, "table.dataTable > thead > tr > td", "background-color");
-		assertTokenSpent(v, "div.dt-container div.dt-search input", "background");
-		assertTokenSpent(v, "div.dataTables_wrapper div.dataTables_filter input", "background");
+		// The toolbar Search fill is chrome.css's (cascade Rule 1); views.css keeps only its shape.
+		assertEquals(List.of(), decls(v, "div.dt-container div.dt-search input", "background"));
+		assertEquals(List.of(), decls(v, "div.dataTables_wrapper div.dataTables_filter input", "background"));
+		assertTokenSpent(chrome(), "div.dt-container div.dt-search input", "background-color");
+		assertTokenSpent(chrome(), "div.dataTables_wrapper div.dataTables_filter input", "background-color");
 		for (var sel : List.of(
 				".juneau-view-toolbar-right .dataTables_filter input::placeholder",
 				".juneau-view-toolbar-right .dataTables_filter input::-webkit-input-placeholder",
@@ -159,7 +162,19 @@ class ViewsCssTokens_Test extends TestBase {
 		assertTokenSpent(v, ".jc-cell-popover-label", "color");
 		assertTokenSpent(v, ".juneau-view-card-status", "color");
 		assertTokenSpent(v, ".juneau-view-card-field dt", "color");
-		assertTokenSpent(config(), ".juneau-config-dialog", "background");
+	}
+
+	@Test void a05_viewSettingsCss_shapeOnly_coloursInChrome() throws Exception {
+		// The View Settings dialog is the shared frame (its surface is .juneau-view-dialog's, probed above); its own
+		// stylesheet carries no colour at all, and chrome.css colours its pieces with tokens.
+		var cfg = COMMENT.matcher(config()).replaceAll("");
+		for (var prop : List.of("color:", "background:", "background-color:", "border-color:", "#", "rgb"))
+			assertFalse(cfg.contains(prop), () -> "juneau-config.css carries a colour (" + prop + ")");
+		var c = chrome();
+		assertEquals(List.of("var(--jc-danger-text)"), decls(c, ".juneau-config-dialog .juneau-config-col-remove:hover:not(:disabled)", "color"));
+		assertEquals(List.of("var(--jc-text-muted)"), decls(c, ".juneau-config-dialog .juneau-config-col-head", "color"));
+		assertEquals(List.of("var(--jc-accent-wash)"), decls(c, ".juneau-config-dialog .juneau-config-avail[aria-selected=\"true\"]", "background-color"));
+		assertFalse(c.contains(".juneau-config-dialog button"), "chrome.css must not restyle every button in the dialog (it out-specifies .jc-btn-link)");
 	}
 
 	@Test void a03_textRolesUsed() throws Exception {
@@ -172,9 +187,11 @@ class ViewsCssTokens_Test extends TestBase {
 		assertEquals(List.of("var(--jc-danger-text)"), decls(c, ".juneau-view-dialog-dismiss:hover", "color"));
 		assertEquals(List.of("var(--jc-danger-text)"), decls(c, ".jc-dash-error", "color"));
 		assertEquals(List.of("var(--jc-danger)"), decls(c, ".juneau-view-dialog-confirm.juneau-view-dialog-confirm-danger", "background-color"));
+		assertEquals(List.of("var(--jc-danger-strong)"), decls(c, ".jc-btn-destructive:hover:not(:disabled):not([aria-disabled=\"true\"])", "background-color"));
 		assertEquals(List.of("var(--jc-success)"), decls(c, ".juneau-view-toggle:checked", "background-color"));
-		assertEquals(List.of("var(--jc-surface)"), decls(c, ".juneau-view-dialog-cancel", "background-color"));
-		assertEquals(List.of("var(--jc-surface)"), decls(c, ".juneau-view-dialog-close", "background-color"));
+		// Rest face (first match; the zero-specificity :where() hover list also names it).
+		assertEquals("var(--jc-control-bg)", decls(c, ".juneau-view-dialog-cancel", "background-color").get(0));
+		assertEquals("var(--jc-control-bg)", decls(c, ".juneau-view-dialog-close", "background-color").get(0));
 	}
 
 	@Test void a04_commentUpdated() throws Exception {

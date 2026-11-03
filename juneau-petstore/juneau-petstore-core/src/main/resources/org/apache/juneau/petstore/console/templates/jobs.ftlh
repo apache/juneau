@@ -41,7 +41,8 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
     { key: 'result.message', label: 'Result' }
   ],
   ribbon: [
-    { type: 'dialog', id: 'restock', title: 'Restock', endpoint: '/console/ops/jobs/restock', method: 'POST', form: '/console/ops/jobs/restock-form' },
+    { type: 'dialog', id: 'restock', title: 'Restock', endpoint: '/console/ops/jobs/restock', method: 'POST', form: '/console/ops/jobs/restock-form', group: 'entity' },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh', id: 'refresh' }
   ]
 }</@card>
@@ -108,7 +109,9 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
     region: { id: 'regroom', populate: 'petstore-regroom' }
   },
   ribbon: [
-    { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form' },
+    { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form', group: 'entity' },
+    { type: 'collapseAll', group: 'viewing' },
+    { type: 'resetDefaults', group: 'page' },
     { type: 'refresh', id: 'groom-refresh' }
   ]
 }</@card>
