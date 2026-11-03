@@ -161,3 +161,36 @@
     font-size: 2.25rem;
   }
 }
+
+.formatPicker {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: var(--ifm-leading);
+}
+
+.formatPicker label {
+  font-weight: var(--ifm-font-weight-bold);
+}
+
+.formatSelect {
+  flex: 1;
+  min-width: 0;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  color: var(--ifm-font-color-base);
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-400);
+  border-radius: var(--ifm-global-radius);
+}
+
+.formatSelect:focus-visible {
+  outline: 2px solid var(--ifm-color-primary);
+  outline-offset: 1px;
+}
+
+/* Long outputs (RDF, Parquet) scroll inside the block instead of growing the hero. */
+.output pre {
+  max-height: 11rem;
+  overflow: auto;
+}

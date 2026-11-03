@@ -198,8 +198,8 @@ const config: Config = {
   organizationName: 'apache', // Usually your GitHub org/user name.
   projectName: 'juneau', // Usually your repo name.
 
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
 
   // Exposed to client-side components (e.g. <DependencyInfo>) via useDocusaurusContext().
   customFields: {

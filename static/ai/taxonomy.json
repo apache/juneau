@@ -85,13 +85,13 @@
     "juneau-rest-server": 1,
     "juneau-rest-server-mcp": 1,
     "juneau-terminal": 1,
-    "release-notes": 14
+    "release-notes": 15
   },
   "schema_version": "1.0.0",
   "source_types": {
     "about": 11,
     "api-metadata": 16,
-    "release-note": 14,
+    "release-note": 15,
     "topic": 442
   }
 }

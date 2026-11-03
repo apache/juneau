@@ -1658,750 +1658,752 @@
 <span class="source-line-no">1645</span><span id="line-1645">    *</span>
 <span class="source-line-no">1646</span><span id="line-1646">    * @param &lt;E&gt; The element type.</span>
 <span class="source-line-no">1647</span><span id="line-1647">    * @param comparator The comparator to use to sort the list.  Can be &lt;jk&gt;null&lt;/jk&gt; (natural ordering is used).</span>
-<span class="source-line-no">1648</span><span id="line-1648">    * @param values The values to initialize the list with.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1648</span><span id="line-1648">    * @param values The values to initialize the list with.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link IllegalArgumentException}).</span>
 <span class="source-line-no">1649</span><span id="line-1649">    * @return A new modifiable list.</span>
 <span class="source-line-no">1650</span><span id="line-1650">    */</span>
 <span class="source-line-no">1651</span><span id="line-1651">   public static &lt;E&gt; List&lt;E&gt; sortedList(Comparator&lt;E&gt; comparator, E[] values) {</span>
-<span class="source-line-no">1652</span><span id="line-1652">      List&lt;E&gt; l = list(values);</span>
-<span class="source-line-no">1653</span><span id="line-1653">      l.sort(comparator);</span>
-<span class="source-line-no">1654</span><span id="line-1654">      return l;</span>
-<span class="source-line-no">1655</span><span id="line-1655">   }</span>
-<span class="source-line-no">1656</span><span id="line-1656"></span>
-<span class="source-line-no">1657</span><span id="line-1657">   /**</span>
-<span class="source-line-no">1658</span><span id="line-1658">    * Convenience method for creating an {@link ArrayList} and sorting it.</span>
-<span class="source-line-no">1659</span><span id="line-1659">    *</span>
-<span class="source-line-no">1660</span><span id="line-1660">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1661</span><span id="line-1661">    * @param values The values to initialize the list with.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1662</span><span id="line-1662">    * @return A new modifiable list.</span>
-<span class="source-line-no">1663</span><span id="line-1663">    */</span>
-<span class="source-line-no">1664</span><span id="line-1664">   @SafeVarargs</span>
-<span class="source-line-no">1665</span><span id="line-1665">   public static &lt;E&gt; List&lt;E&gt; sortedList(E...values) {</span>
-<span class="source-line-no">1666</span><span id="line-1666">      List&lt;E&gt; l = list(values);</span>
-<span class="source-line-no">1667</span><span id="line-1667">      ((List&lt;Comparable&gt;)l).sort(null);</span>
-<span class="source-line-no">1668</span><span id="line-1668">      return l;</span>
-<span class="source-line-no">1669</span><span id="line-1669">   }</span>
-<span class="source-line-no">1670</span><span id="line-1670"></span>
-<span class="source-line-no">1671</span><span id="line-1671">   /**</span>
-<span class="source-line-no">1672</span><span id="line-1672">    * Convenience method for creating a {@link TreeMap}.</span>
-<span class="source-line-no">1673</span><span id="line-1673">    *</span>
-<span class="source-line-no">1674</span><span id="line-1674">    * @param &lt;K&gt; The key type.</span>
-<span class="source-line-no">1675</span><span id="line-1675">    * @param &lt;V&gt; The value type.</span>
-<span class="source-line-no">1676</span><span id="line-1676">    * @return A new modifiable set.</span>
-<span class="source-line-no">1677</span><span id="line-1677">    */</span>
-<span class="source-line-no">1678</span><span id="line-1678">   public static &lt;K,V&gt; SortedMap&lt;K,V&gt; sortedMap() {</span>
-<span class="source-line-no">1679</span><span id="line-1679">      return new TreeMap&lt;&gt;();</span>
-<span class="source-line-no">1680</span><span id="line-1680">   }</span>
-<span class="source-line-no">1681</span><span id="line-1681"></span>
-<span class="source-line-no">1682</span><span id="line-1682">   /**</span>
-<span class="source-line-no">1683</span><span id="line-1683">    * Convenience method for creating a {@link TreeSet}.</span>
-<span class="source-line-no">1684</span><span id="line-1684">    *</span>
-<span class="source-line-no">1685</span><span id="line-1685">    * &lt;p&gt;</span>
-<span class="source-line-no">1686</span><span id="line-1686">    * Note: &lt;jk&gt;null&lt;/jk&gt; values in the varargs array are automatically filtered out</span>
-<span class="source-line-no">1687</span><span id="line-1687">    * because {@link TreeSet} does not support &lt;jk&gt;null&lt;/jk&gt; elements.</span>
-<span class="source-line-no">1688</span><span id="line-1688">    *</span>
-<span class="source-line-no">1689</span><span id="line-1689">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1690</span><span id="line-1690">    * @param values The values to initialize the set with.</span>
-<span class="source-line-no">1691</span><span id="line-1691">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link IllegalArgumentException}).</span>
-<span class="source-line-no">1692</span><span id="line-1692">    *    &lt;br&gt;Can contain &lt;jk&gt;null&lt;/jk&gt; values (they will be filtered out).</span>
-<span class="source-line-no">1693</span><span id="line-1693">    * @return A new modifiable set.</span>
-<span class="source-line-no">1694</span><span id="line-1694">    */</span>
-<span class="source-line-no">1695</span><span id="line-1695">   @SafeVarargs</span>
-<span class="source-line-no">1696</span><span id="line-1696">   public static &lt;E&gt; SortedSet&lt;E&gt; sortedSet(E...values) {</span>
-<span class="source-line-no">1697</span><span id="line-1697">      reqnn("values", values);</span>
-<span class="source-line-no">1698</span><span id="line-1698">      return Arrays.stream(values).filter(Objects::nonNull).collect(Collectors.toCollection(TreeSet::new));</span>
-<span class="source-line-no">1699</span><span id="line-1699">   }</span>
-<span class="source-line-no">1700</span><span id="line-1700"></span>
-<span class="source-line-no">1701</span><span id="line-1701">   /**</span>
-<span class="source-line-no">1702</span><span id="line-1702">    * Returns a stream of the specified array.</span>
-<span class="source-line-no">1703</span><span id="line-1703">    *</span>
-<span class="source-line-no">1704</span><span id="line-1704">    * &lt;p&gt;</span>
-<span class="source-line-no">1705</span><span id="line-1705">    * Gracefully handles &lt;jk&gt;null&lt;/jk&gt; arrays by returning an empty stream.</span>
-<span class="source-line-no">1706</span><span id="line-1706">    *</span>
-<span class="source-line-no">1707</span><span id="line-1707">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">1708</span><span id="line-1708">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">1709</span><span id="line-1709">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;};</span>
-<span class="source-line-no">1710</span><span id="line-1710">    *</span>
-<span class="source-line-no">1711</span><span id="line-1711">    *    &lt;jc&gt;// Prints "a", "b", "c"&lt;/jc&gt;</span>
-<span class="source-line-no">1712</span><span id="line-1712">    *    &lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jv&gt;array&lt;/jv&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);</span>
-<span class="source-line-no">1713</span><span id="line-1713">    *</span>
-<span class="source-line-no">1714</span><span id="line-1714">    *    &lt;jc&gt;// Handles null gracefully - returns empty stream&lt;/jc&gt;</span>
-<span class="source-line-no">1715</span><span id="line-1715">    *    &lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);  &lt;jc&gt;// Prints nothing&lt;/jc&gt;</span>
-<span class="source-line-no">1716</span><span id="line-1716">    * &lt;/p&gt;</span>
-<span class="source-line-no">1717</span><span id="line-1717">    *</span>
-<span class="source-line-no">1718</span><span id="line-1718">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">1719</span><span id="line-1719">    * @param array The array to stream. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1720</span><span id="line-1720">    * @return A stream of the array elements, or an empty stream if the array is &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1721</span><span id="line-1721">    */</span>
-<span class="source-line-no">1722</span><span id="line-1722">   public static &lt;T&gt; Stream&lt;T&gt; stream(T[] array) {</span>
-<span class="source-line-no">1723</span><span id="line-1723">      return array == null ? Stream.empty() : Arrays.stream(array);</span>
-<span class="source-line-no">1724</span><span id="line-1724">   }</span>
-<span class="source-line-no">1725</span><span id="line-1725"></span>
-<span class="source-line-no">1726</span><span id="line-1726">   /**</span>
-<span class="source-line-no">1727</span><span id="line-1727">    * Wraps the specified list in a synchronized (thread-safe) view via {@link Collections#synchronizedList(List)}.</span>
-<span class="source-line-no">1728</span><span id="line-1728">    *</span>
-<span class="source-line-no">1729</span><span id="line-1729">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1730</span><span id="line-1730">    * @param value The list to wrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
-<span class="source-line-no">1731</span><span id="line-1731">    * @return A synchronized view of the list, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1732</span><span id="line-1732">    */</span>
-<span class="source-line-no">1733</span><span id="line-1733">   public static &lt;E&gt; List&lt;E&gt; synced(List&lt;E&gt; value) {</span>
-<span class="source-line-no">1734</span><span id="line-1734">      return value == null ? null : Collections.synchronizedList(value);</span>
-<span class="source-line-no">1735</span><span id="line-1735">   }</span>
-<span class="source-line-no">1736</span><span id="line-1736"></span>
-<span class="source-line-no">1737</span><span id="line-1737">   /**</span>
-<span class="source-line-no">1738</span><span id="line-1738">    * Wraps the specified map in a synchronized (thread-safe) view via {@link Collections#synchronizedMap(Map)}.</span>
-<span class="source-line-no">1739</span><span id="line-1739">    *</span>
-<span class="source-line-no">1740</span><span id="line-1740">    * @param &lt;K&gt; The key type.</span>
-<span class="source-line-no">1741</span><span id="line-1741">    * @param &lt;V&gt; The value type.</span>
-<span class="source-line-no">1742</span><span id="line-1742">    * @param value The map to wrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
-<span class="source-line-no">1743</span><span id="line-1743">    * @return A synchronized view of the map, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1744</span><span id="line-1744">    */</span>
-<span class="source-line-no">1745</span><span id="line-1745">   public static &lt;K,V&gt; Map&lt;K,V&gt; synced(Map&lt;K,V&gt; value) {</span>
-<span class="source-line-no">1746</span><span id="line-1746">      return value == null ? null : Collections.synchronizedMap(value);</span>
-<span class="source-line-no">1747</span><span id="line-1747">   }</span>
-<span class="source-line-no">1748</span><span id="line-1748"></span>
-<span class="source-line-no">1749</span><span id="line-1749">   /**</span>
-<span class="source-line-no">1750</span><span id="line-1750">    * Wraps the specified set in a synchronized (thread-safe) view via {@link Collections#synchronizedSet(Set)}.</span>
-<span class="source-line-no">1751</span><span id="line-1751">    *</span>
-<span class="source-line-no">1752</span><span id="line-1752">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1753</span><span id="line-1753">    * @param value The set to wrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
-<span class="source-line-no">1754</span><span id="line-1754">    * @return A synchronized view of the set, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1755</span><span id="line-1755">    */</span>
-<span class="source-line-no">1756</span><span id="line-1756">   public static &lt;E&gt; Set&lt;E&gt; synced(Set&lt;E&gt; value) {</span>
-<span class="source-line-no">1757</span><span id="line-1757">      return value == null ? null : Collections.synchronizedSet(value);</span>
-<span class="source-line-no">1758</span><span id="line-1758">   }</span>
-<span class="source-line-no">1759</span><span id="line-1759"></span>
-<span class="source-line-no">1760</span><span id="line-1760">   /**</span>
-<span class="source-line-no">1761</span><span id="line-1761">    * Converts the specified collection to an array.</span>
-<span class="source-line-no">1762</span><span id="line-1762">    *</span>
-<span class="source-line-no">1763</span><span id="line-1763">    * &lt;p&gt;</span>
-<span class="source-line-no">1764</span><span id="line-1764">    * Works on both object and primitive arrays.</span>
-<span class="source-line-no">1765</span><span id="line-1765">    *</span>
-<span class="source-line-no">1766</span><span id="line-1766">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1767</span><span id="line-1767">    * @param c The collection to convert to an array.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1768</span><span id="line-1768">    * @param elementType The component type of the collection.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1769</span><span id="line-1769">    * @return A new array.</span>
-<span class="source-line-no">1770</span><span id="line-1770">    */</span>
-<span class="source-line-no">1771</span><span id="line-1771">   public static &lt;E&gt; Object toArray(Collection&lt;?&gt; c, Class&lt;E&gt; elementType) {</span>
-<span class="source-line-no">1772</span><span id="line-1772">      var a = Array.newInstance(elementType, c.size());</span>
-<span class="source-line-no">1773</span><span id="line-1773">      Iterator&lt;?&gt; it = c.iterator();</span>
-<span class="source-line-no">1774</span><span id="line-1774">      int i = 0;</span>
-<span class="source-line-no">1775</span><span id="line-1775">      while (it.hasNext())</span>
-<span class="source-line-no">1776</span><span id="line-1776">         Array.set(a, i++, it.next());</span>
-<span class="source-line-no">1777</span><span id="line-1777">      return a;</span>
-<span class="source-line-no">1778</span><span id="line-1778">   }</span>
-<span class="source-line-no">1779</span><span id="line-1779"></span>
-<span class="source-line-no">1780</span><span id="line-1780">   /**</span>
-<span class="source-line-no">1781</span><span id="line-1781">    * Creates an {@link ArrayList} copy from a collection.</span>
-<span class="source-line-no">1782</span><span id="line-1782">    *</span>
-<span class="source-line-no">1783</span><span id="line-1783">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1784</span><span id="line-1784">    * @param value The collection to copy from.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns an empty list).</span>
-<span class="source-line-no">1785</span><span id="line-1785">    * @return A new modifiable list.</span>
-<span class="source-line-no">1786</span><span id="line-1786">    */</span>
-<span class="source-line-no">1787</span><span id="line-1787">   public static &lt;E&gt; List&lt;E&gt; toList(Collection&lt;E&gt; value) {</span>
-<span class="source-line-no">1788</span><span id="line-1788">      return toList(value, false);</span>
-<span class="source-line-no">1789</span><span id="line-1789">   }</span>
-<span class="source-line-no">1790</span><span id="line-1790"></span>
-<span class="source-line-no">1791</span><span id="line-1791">   /**</span>
-<span class="source-line-no">1792</span><span id="line-1792">    * Creates an {@link ArrayList} copy from a collection.</span>
-<span class="source-line-no">1793</span><span id="line-1793">    *</span>
-<span class="source-line-no">1794</span><span id="line-1794">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1795</span><span id="line-1795">    * @param value The collection to copy from.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1796</span><span id="line-1796">    * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; will return &lt;jk&gt;null&lt;/jk&gt; if the collection is empty or null.</span>
-<span class="source-line-no">1797</span><span id="line-1797">    * @return A new modifiable list, or an empty list if the input was &lt;jk&gt;null&lt;/jk&gt; (when nullIfEmpty is false), or &lt;jk&gt;null&lt;/jk&gt; if nullIfEmpty and the input was null or empty.</span>
-<span class="source-line-no">1798</span><span id="line-1798">    */</span>
-<span class="source-line-no">1799</span><span id="line-1799">   public static &lt;E&gt; List&lt;E&gt; toList(Collection&lt;E&gt; value, boolean nullIfEmpty) {</span>
-<span class="source-line-no">1800</span><span id="line-1800">      if (value == null)</span>
-<span class="source-line-no">1801</span><span id="line-1801">         return nullIfEmpty ? null : new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">1802</span><span id="line-1802">      if (nullIfEmpty &amp;&amp; value.isEmpty())</span>
-<span class="source-line-no">1803</span><span id="line-1803">         return null;</span>
-<span class="source-line-no">1804</span><span id="line-1804">      var l = new ArrayList&lt;E&gt;();</span>
-<span class="source-line-no">1805</span><span id="line-1805">      value.forEach(l::add);</span>
-<span class="source-line-no">1806</span><span id="line-1806">      return l;</span>
-<span class="source-line-no">1807</span><span id="line-1807">   }</span>
-<span class="source-line-no">1808</span><span id="line-1808"></span>
-<span class="source-line-no">1809</span><span id="line-1809">   /**</span>
-<span class="source-line-no">1810</span><span id="line-1810">    * Converts various collection-like objects to a {@link List}.</span>
-<span class="source-line-no">1811</span><span id="line-1811">    *</span>
-<span class="source-line-no">1812</span><span id="line-1812">    * &lt;p&gt;This utility method enables testing of any collection-like object by converting it to a List that can be</span>
-<span class="source-line-no">1813</span><span id="line-1813">    * passed to methods such as TestUtils.assertList().&lt;/p&gt;</span>
-<span class="source-line-no">1814</span><span id="line-1814">    *</span>
-<span class="source-line-no">1815</span><span id="line-1815">    * &lt;h5 class='section'&gt;Supported Input Types:&lt;/h5&gt;</span>
-<span class="source-line-no">1816</span><span id="line-1816">    * &lt;ul&gt;</span>
-<span class="source-line-no">1817</span><span id="line-1817">    *    &lt;li&gt;&lt;b&gt;List:&lt;/b&gt; Returns the input unchanged&lt;/li&gt;</span>
-<span class="source-line-no">1818</span><span id="line-1818">    *    &lt;li&gt;&lt;b&gt;Iterable:&lt;/b&gt; Any collection, set, queue, etc. (converted to List preserving order)&lt;/li&gt;</span>
-<span class="source-line-no">1819</span><span id="line-1819">    *    &lt;li&gt;&lt;b&gt;Iterator:&lt;/b&gt; Converts iterator contents to List&lt;/li&gt;</span>
-<span class="source-line-no">1820</span><span id="line-1820">    *    &lt;li&gt;&lt;b&gt;Enumeration:&lt;/b&gt; Converts enumeration contents to List&lt;/li&gt;</span>
-<span class="source-line-no">1821</span><span id="line-1821">    *    &lt;li&gt;&lt;b&gt;Stream:&lt;/b&gt; Converts stream contents to List (stream is consumed)&lt;/li&gt;</span>
-<span class="source-line-no">1822</span><span id="line-1822">    *    &lt;li&gt;&lt;b&gt;Map:&lt;/b&gt; Converts map entries to List of Map.Entry objects&lt;/li&gt;</span>
-<span class="source-line-no">1823</span><span id="line-1823">    *    &lt;li&gt;&lt;b&gt;Array:&lt;/b&gt; Converts any array type (including primitive arrays) to List&lt;/li&gt;</span>
-<span class="source-line-no">1824</span><span id="line-1824">    * &lt;/ul&gt;</span>
-<span class="source-line-no">1825</span><span id="line-1825">    *</span>
-<span class="source-line-no">1826</span><span id="line-1826">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">1827</span><span id="line-1827">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">1828</span><span id="line-1828">    *    &lt;jc&gt;// Test a Set&lt;/jc&gt;</span>
-<span class="source-line-no">1829</span><span id="line-1829">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;mySet&lt;/jv&gt; = Set.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
-<span class="source-line-no">1830</span><span id="line-1830">    *    assertList(toList(&lt;jv&gt;mySet&lt;/jv&gt;), &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
-<span class="source-line-no">1831</span><span id="line-1831">    *</span>
-<span class="source-line-no">1832</span><span id="line-1832">    *    &lt;jc&gt;// Test an array&lt;/jc&gt;</span>
-<span class="source-line-no">1833</span><span id="line-1833">    *    String[] &lt;jv&gt;myArray&lt;/jv&gt; = {&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;};</span>
-<span class="source-line-no">1834</span><span id="line-1834">    *    assertList(toList(&lt;jv&gt;myArray&lt;/jv&gt;), &lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;);</span>
-<span class="source-line-no">1835</span><span id="line-1835">    *</span>
-<span class="source-line-no">1836</span><span id="line-1836">    *    &lt;jc&gt;// Test a primitive array&lt;/jc&gt;</span>
-<span class="source-line-no">1837</span><span id="line-1837">    *    &lt;jk&gt;int&lt;/jk&gt;[] &lt;jv&gt;numbers&lt;/jv&gt; = {1, 2, 3};</span>
-<span class="source-line-no">1838</span><span id="line-1838">    *    assertList(toList(&lt;jv&gt;numbers&lt;/jv&gt;), &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;, &lt;js&gt;"3"&lt;/js&gt;);</span>
-<span class="source-line-no">1839</span><span id="line-1839">    *</span>
-<span class="source-line-no">1840</span><span id="line-1840">    *    &lt;jc&gt;// Test a Stream&lt;/jc&gt;</span>
-<span class="source-line-no">1841</span><span id="line-1841">    *    Stream&amp;lt;String&amp;gt; &lt;jv&gt;myStream&lt;/jv&gt; = Stream.of(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</span>
-<span class="source-line-no">1842</span><span id="line-1842">    *    assertList(toList(&lt;jv&gt;myStream&lt;/jv&gt;), &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</span>
-<span class="source-line-no">1843</span><span id="line-1843">    *</span>
-<span class="source-line-no">1844</span><span id="line-1844">    *    &lt;jc&gt;// Test a Map (converted to entries)&lt;/jc&gt;</span>
-<span class="source-line-no">1845</span><span id="line-1845">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;myMap&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, 1, &lt;js&gt;"b"&lt;/js&gt;, 2);</span>
-<span class="source-line-no">1846</span><span id="line-1846">    *    assertList(toList(&lt;jv&gt;myMap&lt;/jv&gt;), &lt;js&gt;"a=1"&lt;/js&gt;, &lt;js&gt;"b=2"&lt;/js&gt;);</span>
-<span class="source-line-no">1847</span><span id="line-1847">    *</span>
-<span class="source-line-no">1848</span><span id="line-1848">    *    &lt;jc&gt;// Test any Iterable collection&lt;/jc&gt;</span>
-<span class="source-line-no">1849</span><span id="line-1849">    *    Queue&amp;lt;String&amp;gt; &lt;jv&gt;myQueue&lt;/jv&gt; = new LinkedList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</span>
-<span class="source-line-no">1850</span><span id="line-1850">    *    assertList(toList(&lt;jv&gt;myQueue&lt;/jv&gt;), &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
-<span class="source-line-no">1851</span><span id="line-1851">    * &lt;/p&gt;</span>
-<span class="source-line-no">1852</span><span id="line-1852">    *</span>
-<span class="source-line-no">1853</span><span id="line-1853">    * &lt;h5 class='section'&gt;Integration with Testing:&lt;/h5&gt;</span>
-<span class="source-line-no">1854</span><span id="line-1854">    * &lt;p&gt;This method is specifically designed to work with testing frameworks to provide</span>
-<span class="source-line-no">1855</span><span id="line-1855">    * a unified testing approach for all collection-like types. Instead of having separate assertion methods</span>
-<span class="source-line-no">1856</span><span id="line-1856">    * for arrays, sets, and other collections, you can convert them all to Lists and use standard</span>
-<span class="source-line-no">1857</span><span id="line-1857">    * list assertion methods.&lt;/p&gt;</span>
-<span class="source-line-no">1858</span><span id="line-1858">    *</span>
-<span class="source-line-no">1859</span><span id="line-1859">    * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.</span>
-<span class="source-line-no">1860</span><span id="line-1860">    * @return A {@link List} containing the elements from the input object.</span>
-<span class="source-line-no">1861</span><span id="line-1861">    * @throws IllegalArgumentException if the input object cannot be converted to a List.</span>
-<span class="source-line-no">1862</span><span id="line-1862">    * @see #arrayToList(Object)</span>
-<span class="source-line-no">1863</span><span id="line-1863">    */</span>
-<span class="source-line-no">1864</span><span id="line-1864">   @SuppressWarnings({</span>
-<span class="source-line-no">1865</span><span id="line-1865">      "java:S1452"  // Wildcard required - List&lt;?&gt; for heterogeneous collections from various sources</span>
-<span class="source-line-no">1866</span><span id="line-1866">   })</span>
-<span class="source-line-no">1867</span><span id="line-1867">   public static final List&lt;?&gt; toList(Object o) {</span>
-<span class="source-line-no">1868</span><span id="line-1868">      reqnn("o", o);</span>
-<span class="source-line-no">1869</span><span id="line-1869">      if (o instanceof List&lt;?&gt; o2)</span>
-<span class="source-line-no">1870</span><span id="line-1870">         return o2;</span>
-<span class="source-line-no">1871</span><span id="line-1871">      if (o instanceof Iterable&lt;?&gt; o2)</span>
-<span class="source-line-no">1872</span><span id="line-1872">         return StreamSupport.stream(o2.spliterator(), false).toList();</span>
-<span class="source-line-no">1873</span><span id="line-1873">      if (o instanceof Iterator&lt;?&gt; o2)</span>
-<span class="source-line-no">1874</span><span id="line-1874">         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(o2, 0), false).toList();</span>
-<span class="source-line-no">1875</span><span id="line-1875">      if (o instanceof Enumeration&lt;?&gt; o2)</span>
-<span class="source-line-no">1876</span><span id="line-1876">         return Collections.list(o2);</span>
-<span class="source-line-no">1877</span><span id="line-1877">      if (o instanceof Stream&lt;?&gt; o2)</span>
-<span class="source-line-no">1878</span><span id="line-1878">         return o2.toList();</span>
-<span class="source-line-no">1879</span><span id="line-1879">      if (o instanceof Map&lt;?,?&gt; o2)</span>
-<span class="source-line-no">1880</span><span id="line-1880">         return toList(o2.entrySet());</span>
-<span class="source-line-no">1881</span><span id="line-1881">      if (o instanceof Optional&lt;?&gt; o2)</span>
-<span class="source-line-no">1882</span><span id="line-1882">         return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());</span>
-<span class="source-line-no">1883</span><span id="line-1883">      if (ClassUtils.isArray(o))</span>
-<span class="source-line-no">1884</span><span id="line-1884">         return arrayToList(o);</span>
-<span class="source-line-no">1885</span><span id="line-1885">      throw rex("Could not convert object of type %s to a list", ClassUtils.className(o));</span>
-<span class="source-line-no">1886</span><span id="line-1886">   }</span>
-<span class="source-line-no">1887</span><span id="line-1887"></span>
-<span class="source-line-no">1888</span><span id="line-1888">   /**</span>
-<span class="source-line-no">1889</span><span id="line-1889">    * Converts the specified array to an &lt;c&gt;ArrayList&lt;/c&gt;</span>
-<span class="source-line-no">1890</span><span id="line-1890">    *</span>
-<span class="source-line-no">1891</span><span id="line-1891">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1892</span><span id="line-1892">    * @param array The array to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument throws {@link NullPointerException}).</span>
-<span class="source-line-no">1893</span><span id="line-1893">    * @param elementType</span>
-<span class="source-line-no">1894</span><span id="line-1894">    *    The type of objects in the array.</span>
-<span class="source-line-no">1895</span><span id="line-1895">    *    It must match the actual component type in the array.</span>
-<span class="source-line-no">1896</span><span id="line-1896">    * @return A new {@link ArrayList}</span>
-<span class="source-line-no">1897</span><span id="line-1897">    */</span>
-<span class="source-line-no">1898</span><span id="line-1898">   public static &lt;E&gt; List&lt;E&gt; toList(Object array, Class&lt;E&gt; elementType) {</span>
-<span class="source-line-no">1899</span><span id="line-1899">      var l = new ArrayList&lt;E&gt;(Array.getLength(array));</span>
-<span class="source-line-no">1900</span><span id="line-1900">      for (var i = 0; i &lt; Array.getLength(array); i++)</span>
-<span class="source-line-no">1901</span><span id="line-1901">         l.add((E)Array.get(array, i));</span>
-<span class="source-line-no">1902</span><span id="line-1902">      return l;</span>
-<span class="source-line-no">1903</span><span id="line-1903">   }</span>
-<span class="source-line-no">1904</span><span id="line-1904"></span>
-<span class="source-line-no">1905</span><span id="line-1905">   /**</span>
-<span class="source-line-no">1906</span><span id="line-1906">    * Recursively converts the specified array into a list of objects.</span>
-<span class="source-line-no">1907</span><span id="line-1907">    *</span>
-<span class="source-line-no">1908</span><span id="line-1908">    * @param array The array to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument throws {@link NullPointerException}).</span>
-<span class="source-line-no">1909</span><span id="line-1909">    * @return A new {@link ArrayList}</span>
-<span class="source-line-no">1910</span><span id="line-1910">    */</span>
-<span class="source-line-no">1911</span><span id="line-1911">   public static List&lt;Object&gt; toObjectList(Object array) {</span>
-<span class="source-line-no">1912</span><span id="line-1912">      var l = new ArrayList&lt;&gt;(Array.getLength(array));</span>
-<span class="source-line-no">1913</span><span id="line-1913">      for (var i = 0; i &lt; Array.getLength(array); i++) {</span>
-<span class="source-line-no">1914</span><span id="line-1914">         var o = Array.get(array, i);</span>
-<span class="source-line-no">1915</span><span id="line-1915">         if (ClassUtils.isArray(o))</span>
-<span class="source-line-no">1916</span><span id="line-1916">            o = toObjectList(o);</span>
-<span class="source-line-no">1917</span><span id="line-1917">         l.add(o);</span>
-<span class="source-line-no">1918</span><span id="line-1918">      }</span>
-<span class="source-line-no">1919</span><span id="line-1919">      return l;</span>
-<span class="source-line-no">1920</span><span id="line-1920">   }</span>
-<span class="source-line-no">1921</span><span id="line-1921"></span>
-<span class="source-line-no">1922</span><span id="line-1922">   /**</span>
-<span class="source-line-no">1923</span><span id="line-1923">    * Creates a new set from the specified collection.</span>
-<span class="source-line-no">1924</span><span id="line-1924">    *</span>
-<span class="source-line-no">1925</span><span id="line-1925">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1926</span><span id="line-1926">    * @param val The value to copy from.</span>
-<span class="source-line-no">1927</span><span id="line-1927">    * @return A new {@link LinkedHashSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</span>
-<span class="source-line-no">1928</span><span id="line-1928">    */</span>
-<span class="source-line-no">1929</span><span id="line-1929">   public static &lt;E&gt; Set&lt;E&gt; toSet(Collection&lt;E&gt; val) {</span>
-<span class="source-line-no">1930</span><span id="line-1930">      return val == null ? null : new LinkedHashSet&lt;&gt;(val);</span>
-<span class="source-line-no">1931</span><span id="line-1931">   }</span>
-<span class="source-line-no">1932</span><span id="line-1932"></span>
-<span class="source-line-no">1933</span><span id="line-1933">   /**</span>
-<span class="source-line-no">1934</span><span id="line-1934">    * Converts the specified array to a &lt;c&gt;Set&lt;/c&gt;.</span>
-<span class="source-line-no">1935</span><span id="line-1935">    *</span>
-<span class="source-line-no">1936</span><span id="line-1936">    * &lt;p&gt;</span>
-<span class="source-line-no">1937</span><span id="line-1937">    * The order of the entries in the set are the same as the array.</span>
-<span class="source-line-no">1938</span><span id="line-1938">    *</span>
-<span class="source-line-no">1939</span><span id="line-1939">    * @param &lt;T&gt; The entry type of the array.</span>
-<span class="source-line-no">1940</span><span id="line-1940">    * @param array The array being wrapped in a &lt;c&gt;Set&lt;/c&gt; interface.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument throws {@link IllegalArgumentException}).</span>
-<span class="source-line-no">1941</span><span id="line-1941">    * @return The new set.</span>
-<span class="source-line-no">1942</span><span id="line-1942">    */</span>
-<span class="source-line-no">1943</span><span id="line-1943">   public static &lt;T&gt; Set&lt;T&gt; toSet(T[] array) {</span>
-<span class="source-line-no">1944</span><span id="line-1944">      reqnn("array", array);</span>
-<span class="source-line-no">1945</span><span id="line-1945">      return new AbstractSet&lt;&gt;() {</span>
-<span class="source-line-no">1946</span><span id="line-1946"></span>
-<span class="source-line-no">1947</span><span id="line-1947">         @Override /* Overridden from Set */</span>
-<span class="source-line-no">1948</span><span id="line-1948">         public Iterator&lt;T&gt; iterator() {</span>
-<span class="source-line-no">1949</span><span id="line-1949">            return new Iterator&lt;&gt;() {</span>
-<span class="source-line-no">1950</span><span id="line-1950">               int i = 0;</span>
-<span class="source-line-no">1951</span><span id="line-1951"></span>
-<span class="source-line-no">1952</span><span id="line-1952">               @Override /* Overridden from Iterator */</span>
-<span class="source-line-no">1953</span><span id="line-1953">               public boolean hasNext() {</span>
-<span class="source-line-no">1954</span><span id="line-1954">                  return i &lt; array.length;</span>
-<span class="source-line-no">1955</span><span id="line-1955">               }</span>
-<span class="source-line-no">1956</span><span id="line-1956"></span>
-<span class="source-line-no">1957</span><span id="line-1957">               @Override /* Overridden from Iterator */</span>
-<span class="source-line-no">1958</span><span id="line-1958">               public T next() {</span>
-<span class="source-line-no">1959</span><span id="line-1959">                  if (i &gt;= array.length)</span>
-<span class="source-line-no">1960</span><span id="line-1960">                     throw new NoSuchElementException();</span>
-<span class="source-line-no">1961</span><span id="line-1961">                  T t = array[i];</span>
-<span class="source-line-no">1962</span><span id="line-1962">                  i++;</span>
-<span class="source-line-no">1963</span><span id="line-1963">                  return t;</span>
-<span class="source-line-no">1964</span><span id="line-1964">               }</span>
-<span class="source-line-no">1965</span><span id="line-1965"></span>
-<span class="source-line-no">1966</span><span id="line-1966">               @Override /* Overridden from Iterator */</span>
-<span class="source-line-no">1967</span><span id="line-1967">               public void remove() {</span>
-<span class="source-line-no">1968</span><span id="line-1968">                  throw uoex();</span>
-<span class="source-line-no">1969</span><span id="line-1969">               }</span>
-<span class="source-line-no">1970</span><span id="line-1970">            };</span>
-<span class="source-line-no">1971</span><span id="line-1971">         }</span>
-<span class="source-line-no">1972</span><span id="line-1972"></span>
-<span class="source-line-no">1973</span><span id="line-1973">         @Override /* Overridden from Set */</span>
-<span class="source-line-no">1974</span><span id="line-1974">         public int size() {</span>
-<span class="source-line-no">1975</span><span id="line-1975">            return array.length;</span>
-<span class="source-line-no">1976</span><span id="line-1976">         }</span>
-<span class="source-line-no">1977</span><span id="line-1977">      };</span>
-<span class="source-line-no">1978</span><span id="line-1978">   }</span>
-<span class="source-line-no">1979</span><span id="line-1979"></span>
-<span class="source-line-no">1980</span><span id="line-1980">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1981</span><span id="line-1981">   // Primitive array creation methods</span>
+<span class="source-line-no">1652</span><span id="line-1652">      reqnn("values", values);</span>
+<span class="source-line-no">1653</span><span id="line-1653">      List&lt;E&gt; l = new ArrayList&lt;&gt;(Arrays.asList(values));</span>
+<span class="source-line-no">1654</span><span id="line-1654">      l.sort(comparator);</span>
+<span class="source-line-no">1655</span><span id="line-1655">      return l;</span>
+<span class="source-line-no">1656</span><span id="line-1656">   }</span>
+<span class="source-line-no">1657</span><span id="line-1657"></span>
+<span class="source-line-no">1658</span><span id="line-1658">   /**</span>
+<span class="source-line-no">1659</span><span id="line-1659">    * Convenience method for creating an {@link ArrayList} and sorting it.</span>
+<span class="source-line-no">1660</span><span id="line-1660">    *</span>
+<span class="source-line-no">1661</span><span id="line-1661">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1662</span><span id="line-1662">    * @param values The values to initialize the list with.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link IllegalArgumentException}).</span>
+<span class="source-line-no">1663</span><span id="line-1663">    * @return A new modifiable list.</span>
+<span class="source-line-no">1664</span><span id="line-1664">    */</span>
+<span class="source-line-no">1665</span><span id="line-1665">   @SafeVarargs</span>
+<span class="source-line-no">1666</span><span id="line-1666">   public static &lt;E&gt; List&lt;E&gt; sortedList(E...values) {</span>
+<span class="source-line-no">1667</span><span id="line-1667">      reqnn("values", values);</span>
+<span class="source-line-no">1668</span><span id="line-1668">      List&lt;E&gt; l = new ArrayList&lt;&gt;(Arrays.asList(values));</span>
+<span class="source-line-no">1669</span><span id="line-1669">      ((List&lt;Comparable&gt;)l).sort(null);</span>
+<span class="source-line-no">1670</span><span id="line-1670">      return l;</span>
+<span class="source-line-no">1671</span><span id="line-1671">   }</span>
+<span class="source-line-no">1672</span><span id="line-1672"></span>
+<span class="source-line-no">1673</span><span id="line-1673">   /**</span>
+<span class="source-line-no">1674</span><span id="line-1674">    * Convenience method for creating a {@link TreeMap}.</span>
+<span class="source-line-no">1675</span><span id="line-1675">    *</span>
+<span class="source-line-no">1676</span><span id="line-1676">    * @param &lt;K&gt; The key type.</span>
+<span class="source-line-no">1677</span><span id="line-1677">    * @param &lt;V&gt; The value type.</span>
+<span class="source-line-no">1678</span><span id="line-1678">    * @return A new modifiable set.</span>
+<span class="source-line-no">1679</span><span id="line-1679">    */</span>
+<span class="source-line-no">1680</span><span id="line-1680">   public static &lt;K,V&gt; SortedMap&lt;K,V&gt; sortedMap() {</span>
+<span class="source-line-no">1681</span><span id="line-1681">      return new TreeMap&lt;&gt;();</span>
+<span class="source-line-no">1682</span><span id="line-1682">   }</span>
+<span class="source-line-no">1683</span><span id="line-1683"></span>
+<span class="source-line-no">1684</span><span id="line-1684">   /**</span>
+<span class="source-line-no">1685</span><span id="line-1685">    * Convenience method for creating a {@link TreeSet}.</span>
+<span class="source-line-no">1686</span><span id="line-1686">    *</span>
+<span class="source-line-no">1687</span><span id="line-1687">    * &lt;p&gt;</span>
+<span class="source-line-no">1688</span><span id="line-1688">    * Note: &lt;jk&gt;null&lt;/jk&gt; values in the varargs array are automatically filtered out</span>
+<span class="source-line-no">1689</span><span id="line-1689">    * because {@link TreeSet} does not support &lt;jk&gt;null&lt;/jk&gt; elements.</span>
+<span class="source-line-no">1690</span><span id="line-1690">    *</span>
+<span class="source-line-no">1691</span><span id="line-1691">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1692</span><span id="line-1692">    * @param values The values to initialize the set with.</span>
+<span class="source-line-no">1693</span><span id="line-1693">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link IllegalArgumentException}).</span>
+<span class="source-line-no">1694</span><span id="line-1694">    *    &lt;br&gt;Can contain &lt;jk&gt;null&lt;/jk&gt; values (they will be filtered out).</span>
+<span class="source-line-no">1695</span><span id="line-1695">    * @return A new modifiable set.</span>
+<span class="source-line-no">1696</span><span id="line-1696">    */</span>
+<span class="source-line-no">1697</span><span id="line-1697">   @SafeVarargs</span>
+<span class="source-line-no">1698</span><span id="line-1698">   public static &lt;E&gt; SortedSet&lt;E&gt; sortedSet(E...values) {</span>
+<span class="source-line-no">1699</span><span id="line-1699">      reqnn("values", values);</span>
+<span class="source-line-no">1700</span><span id="line-1700">      return Arrays.stream(values).filter(Objects::nonNull).collect(Collectors.toCollection(TreeSet::new));</span>
+<span class="source-line-no">1701</span><span id="line-1701">   }</span>
+<span class="source-line-no">1702</span><span id="line-1702"></span>
+<span class="source-line-no">1703</span><span id="line-1703">   /**</span>
+<span class="source-line-no">1704</span><span id="line-1704">    * Returns a stream of the specified array.</span>
+<span class="source-line-no">1705</span><span id="line-1705">    *</span>
+<span class="source-line-no">1706</span><span id="line-1706">    * &lt;p&gt;</span>
+<span class="source-line-no">1707</span><span id="line-1707">    * Gracefully handles &lt;jk&gt;null&lt;/jk&gt; arrays by returning an empty stream.</span>
+<span class="source-line-no">1708</span><span id="line-1708">    *</span>
+<span class="source-line-no">1709</span><span id="line-1709">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">1710</span><span id="line-1710">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">1711</span><span id="line-1711">    *    String[] &lt;jv&gt;array&lt;/jv&gt; = {&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;};</span>
+<span class="source-line-no">1712</span><span id="line-1712">    *</span>
+<span class="source-line-no">1713</span><span id="line-1713">    *    &lt;jc&gt;// Prints "a", "b", "c"&lt;/jc&gt;</span>
+<span class="source-line-no">1714</span><span id="line-1714">    *    &lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jv&gt;array&lt;/jv&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);</span>
+<span class="source-line-no">1715</span><span id="line-1715">    *</span>
+<span class="source-line-no">1716</span><span id="line-1716">    *    &lt;jc&gt;// Handles null gracefully - returns empty stream&lt;/jc&gt;</span>
+<span class="source-line-no">1717</span><span id="line-1717">    *    &lt;jsm&gt;stream&lt;/jsm&gt;(&lt;jk&gt;null&lt;/jk&gt;).forEach(System.&lt;jk&gt;out&lt;/jk&gt;::println);  &lt;jc&gt;// Prints nothing&lt;/jc&gt;</span>
+<span class="source-line-no">1718</span><span id="line-1718">    * &lt;/p&gt;</span>
+<span class="source-line-no">1719</span><span id="line-1719">    *</span>
+<span class="source-line-no">1720</span><span id="line-1720">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">1721</span><span id="line-1721">    * @param array The array to stream. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1722</span><span id="line-1722">    * @return A stream of the array elements, or an empty stream if the array is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1723</span><span id="line-1723">    */</span>
+<span class="source-line-no">1724</span><span id="line-1724">   public static &lt;T&gt; Stream&lt;T&gt; stream(T[] array) {</span>
+<span class="source-line-no">1725</span><span id="line-1725">      return array == null ? Stream.empty() : Arrays.stream(array);</span>
+<span class="source-line-no">1726</span><span id="line-1726">   }</span>
+<span class="source-line-no">1727</span><span id="line-1727"></span>
+<span class="source-line-no">1728</span><span id="line-1728">   /**</span>
+<span class="source-line-no">1729</span><span id="line-1729">    * Wraps the specified list in a synchronized (thread-safe) view via {@link Collections#synchronizedList(List)}.</span>
+<span class="source-line-no">1730</span><span id="line-1730">    *</span>
+<span class="source-line-no">1731</span><span id="line-1731">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1732</span><span id="line-1732">    * @param value The list to wrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">1733</span><span id="line-1733">    * @return A synchronized view of the list, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1734</span><span id="line-1734">    */</span>
+<span class="source-line-no">1735</span><span id="line-1735">   public static &lt;E&gt; List&lt;E&gt; synced(List&lt;E&gt; value) {</span>
+<span class="source-line-no">1736</span><span id="line-1736">      return value == null ? null : Collections.synchronizedList(value);</span>
+<span class="source-line-no">1737</span><span id="line-1737">   }</span>
+<span class="source-line-no">1738</span><span id="line-1738"></span>
+<span class="source-line-no">1739</span><span id="line-1739">   /**</span>
+<span class="source-line-no">1740</span><span id="line-1740">    * Wraps the specified map in a synchronized (thread-safe) view via {@link Collections#synchronizedMap(Map)}.</span>
+<span class="source-line-no">1741</span><span id="line-1741">    *</span>
+<span class="source-line-no">1742</span><span id="line-1742">    * @param &lt;K&gt; The key type.</span>
+<span class="source-line-no">1743</span><span id="line-1743">    * @param &lt;V&gt; The value type.</span>
+<span class="source-line-no">1744</span><span id="line-1744">    * @param value The map to wrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">1745</span><span id="line-1745">    * @return A synchronized view of the map, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1746</span><span id="line-1746">    */</span>
+<span class="source-line-no">1747</span><span id="line-1747">   public static &lt;K,V&gt; Map&lt;K,V&gt; synced(Map&lt;K,V&gt; value) {</span>
+<span class="source-line-no">1748</span><span id="line-1748">      return value == null ? null : Collections.synchronizedMap(value);</span>
+<span class="source-line-no">1749</span><span id="line-1749">   }</span>
+<span class="source-line-no">1750</span><span id="line-1750"></span>
+<span class="source-line-no">1751</span><span id="line-1751">   /**</span>
+<span class="source-line-no">1752</span><span id="line-1752">    * Wraps the specified set in a synchronized (thread-safe) view via {@link Collections#synchronizedSet(Set)}.</span>
+<span class="source-line-no">1753</span><span id="line-1753">    *</span>
+<span class="source-line-no">1754</span><span id="line-1754">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1755</span><span id="line-1755">    * @param value The set to wrap.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">1756</span><span id="line-1756">    * @return A synchronized view of the set, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1757</span><span id="line-1757">    */</span>
+<span class="source-line-no">1758</span><span id="line-1758">   public static &lt;E&gt; Set&lt;E&gt; synced(Set&lt;E&gt; value) {</span>
+<span class="source-line-no">1759</span><span id="line-1759">      return value == null ? null : Collections.synchronizedSet(value);</span>
+<span class="source-line-no">1760</span><span id="line-1760">   }</span>
+<span class="source-line-no">1761</span><span id="line-1761"></span>
+<span class="source-line-no">1762</span><span id="line-1762">   /**</span>
+<span class="source-line-no">1763</span><span id="line-1763">    * Converts the specified collection to an array.</span>
+<span class="source-line-no">1764</span><span id="line-1764">    *</span>
+<span class="source-line-no">1765</span><span id="line-1765">    * &lt;p&gt;</span>
+<span class="source-line-no">1766</span><span id="line-1766">    * Works on both object and primitive arrays.</span>
+<span class="source-line-no">1767</span><span id="line-1767">    *</span>
+<span class="source-line-no">1768</span><span id="line-1768">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1769</span><span id="line-1769">    * @param c The collection to convert to an array.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1770</span><span id="line-1770">    * @param elementType The component type of the collection.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1771</span><span id="line-1771">    * @return A new array.</span>
+<span class="source-line-no">1772</span><span id="line-1772">    */</span>
+<span class="source-line-no">1773</span><span id="line-1773">   public static &lt;E&gt; Object toArray(Collection&lt;?&gt; c, Class&lt;E&gt; elementType) {</span>
+<span class="source-line-no">1774</span><span id="line-1774">      var a = Array.newInstance(elementType, c.size());</span>
+<span class="source-line-no">1775</span><span id="line-1775">      Iterator&lt;?&gt; it = c.iterator();</span>
+<span class="source-line-no">1776</span><span id="line-1776">      int i = 0;</span>
+<span class="source-line-no">1777</span><span id="line-1777">      while (it.hasNext())</span>
+<span class="source-line-no">1778</span><span id="line-1778">         Array.set(a, i++, it.next());</span>
+<span class="source-line-no">1779</span><span id="line-1779">      return a;</span>
+<span class="source-line-no">1780</span><span id="line-1780">   }</span>
+<span class="source-line-no">1781</span><span id="line-1781"></span>
+<span class="source-line-no">1782</span><span id="line-1782">   /**</span>
+<span class="source-line-no">1783</span><span id="line-1783">    * Creates an {@link ArrayList} copy from a collection.</span>
+<span class="source-line-no">1784</span><span id="line-1784">    *</span>
+<span class="source-line-no">1785</span><span id="line-1785">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1786</span><span id="line-1786">    * @param value The collection to copy from.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns an empty list).</span>
+<span class="source-line-no">1787</span><span id="line-1787">    * @return A new modifiable list.</span>
+<span class="source-line-no">1788</span><span id="line-1788">    */</span>
+<span class="source-line-no">1789</span><span id="line-1789">   public static &lt;E&gt; List&lt;E&gt; toList(Collection&lt;E&gt; value) {</span>
+<span class="source-line-no">1790</span><span id="line-1790">      return toList(value, false);</span>
+<span class="source-line-no">1791</span><span id="line-1791">   }</span>
+<span class="source-line-no">1792</span><span id="line-1792"></span>
+<span class="source-line-no">1793</span><span id="line-1793">   /**</span>
+<span class="source-line-no">1794</span><span id="line-1794">    * Creates an {@link ArrayList} copy from a collection.</span>
+<span class="source-line-no">1795</span><span id="line-1795">    *</span>
+<span class="source-line-no">1796</span><span id="line-1796">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1797</span><span id="line-1797">    * @param value The collection to copy from.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1798</span><span id="line-1798">    * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; will return &lt;jk&gt;null&lt;/jk&gt; if the collection is empty or null.</span>
+<span class="source-line-no">1799</span><span id="line-1799">    * @return A new modifiable list, or an empty list if the input was &lt;jk&gt;null&lt;/jk&gt; (when nullIfEmpty is false), or &lt;jk&gt;null&lt;/jk&gt; if nullIfEmpty and the input was null or empty.</span>
+<span class="source-line-no">1800</span><span id="line-1800">    */</span>
+<span class="source-line-no">1801</span><span id="line-1801">   public static &lt;E&gt; List&lt;E&gt; toList(Collection&lt;E&gt; value, boolean nullIfEmpty) {</span>
+<span class="source-line-no">1802</span><span id="line-1802">      if (value == null)</span>
+<span class="source-line-no">1803</span><span id="line-1803">         return nullIfEmpty ? null : new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">1804</span><span id="line-1804">      if (nullIfEmpty &amp;&amp; value.isEmpty())</span>
+<span class="source-line-no">1805</span><span id="line-1805">         return null;</span>
+<span class="source-line-no">1806</span><span id="line-1806">      var l = new ArrayList&lt;E&gt;();</span>
+<span class="source-line-no">1807</span><span id="line-1807">      value.forEach(l::add);</span>
+<span class="source-line-no">1808</span><span id="line-1808">      return l;</span>
+<span class="source-line-no">1809</span><span id="line-1809">   }</span>
+<span class="source-line-no">1810</span><span id="line-1810"></span>
+<span class="source-line-no">1811</span><span id="line-1811">   /**</span>
+<span class="source-line-no">1812</span><span id="line-1812">    * Converts various collection-like objects to a {@link List}.</span>
+<span class="source-line-no">1813</span><span id="line-1813">    *</span>
+<span class="source-line-no">1814</span><span id="line-1814">    * &lt;p&gt;This utility method enables testing of any collection-like object by converting it to a List that can be</span>
+<span class="source-line-no">1815</span><span id="line-1815">    * passed to methods such as TestUtils.assertList().&lt;/p&gt;</span>
+<span class="source-line-no">1816</span><span id="line-1816">    *</span>
+<span class="source-line-no">1817</span><span id="line-1817">    * &lt;h5 class='section'&gt;Supported Input Types:&lt;/h5&gt;</span>
+<span class="source-line-no">1818</span><span id="line-1818">    * &lt;ul&gt;</span>
+<span class="source-line-no">1819</span><span id="line-1819">    *    &lt;li&gt;&lt;b&gt;List:&lt;/b&gt; Returns the input unchanged&lt;/li&gt;</span>
+<span class="source-line-no">1820</span><span id="line-1820">    *    &lt;li&gt;&lt;b&gt;Iterable:&lt;/b&gt; Any collection, set, queue, etc. (converted to List preserving order)&lt;/li&gt;</span>
+<span class="source-line-no">1821</span><span id="line-1821">    *    &lt;li&gt;&lt;b&gt;Iterator:&lt;/b&gt; Converts iterator contents to List&lt;/li&gt;</span>
+<span class="source-line-no">1822</span><span id="line-1822">    *    &lt;li&gt;&lt;b&gt;Enumeration:&lt;/b&gt; Converts enumeration contents to List&lt;/li&gt;</span>
+<span class="source-line-no">1823</span><span id="line-1823">    *    &lt;li&gt;&lt;b&gt;Stream:&lt;/b&gt; Converts stream contents to List (stream is consumed)&lt;/li&gt;</span>
+<span class="source-line-no">1824</span><span id="line-1824">    *    &lt;li&gt;&lt;b&gt;Map:&lt;/b&gt; Converts map entries to List of Map.Entry objects&lt;/li&gt;</span>
+<span class="source-line-no">1825</span><span id="line-1825">    *    &lt;li&gt;&lt;b&gt;Array:&lt;/b&gt; Converts any array type (including primitive arrays) to List&lt;/li&gt;</span>
+<span class="source-line-no">1826</span><span id="line-1826">    * &lt;/ul&gt;</span>
+<span class="source-line-no">1827</span><span id="line-1827">    *</span>
+<span class="source-line-no">1828</span><span id="line-1828">    * &lt;h5 class='section'&gt;Usage Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">1829</span><span id="line-1829">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">1830</span><span id="line-1830">    *    &lt;jc&gt;// Test a Set&lt;/jc&gt;</span>
+<span class="source-line-no">1831</span><span id="line-1831">    *    Set&amp;lt;String&amp;gt; &lt;jv&gt;mySet&lt;/jv&gt; = Set.of(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
+<span class="source-line-no">1832</span><span id="line-1832">    *    assertList(toList(&lt;jv&gt;mySet&lt;/jv&gt;), &lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"b"&lt;/js&gt;, &lt;js&gt;"c"&lt;/js&gt;);</span>
+<span class="source-line-no">1833</span><span id="line-1833">    *</span>
+<span class="source-line-no">1834</span><span id="line-1834">    *    &lt;jc&gt;// Test an array&lt;/jc&gt;</span>
+<span class="source-line-no">1835</span><span id="line-1835">    *    String[] &lt;jv&gt;myArray&lt;/jv&gt; = {&lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;};</span>
+<span class="source-line-no">1836</span><span id="line-1836">    *    assertList(toList(&lt;jv&gt;myArray&lt;/jv&gt;), &lt;js&gt;"x"&lt;/js&gt;, &lt;js&gt;"y"&lt;/js&gt;, &lt;js&gt;"z"&lt;/js&gt;);</span>
+<span class="source-line-no">1837</span><span id="line-1837">    *</span>
+<span class="source-line-no">1838</span><span id="line-1838">    *    &lt;jc&gt;// Test a primitive array&lt;/jc&gt;</span>
+<span class="source-line-no">1839</span><span id="line-1839">    *    &lt;jk&gt;int&lt;/jk&gt;[] &lt;jv&gt;numbers&lt;/jv&gt; = {1, 2, 3};</span>
+<span class="source-line-no">1840</span><span id="line-1840">    *    assertList(toList(&lt;jv&gt;numbers&lt;/jv&gt;), &lt;js&gt;"1"&lt;/js&gt;, &lt;js&gt;"2"&lt;/js&gt;, &lt;js&gt;"3"&lt;/js&gt;);</span>
+<span class="source-line-no">1841</span><span id="line-1841">    *</span>
+<span class="source-line-no">1842</span><span id="line-1842">    *    &lt;jc&gt;// Test a Stream&lt;/jc&gt;</span>
+<span class="source-line-no">1843</span><span id="line-1843">    *    Stream&amp;lt;String&amp;gt; &lt;jv&gt;myStream&lt;/jv&gt; = Stream.of(&lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</span>
+<span class="source-line-no">1844</span><span id="line-1844">    *    assertList(toList(&lt;jv&gt;myStream&lt;/jv&gt;), &lt;js&gt;"foo"&lt;/js&gt;, &lt;js&gt;"bar"&lt;/js&gt;);</span>
+<span class="source-line-no">1845</span><span id="line-1845">    *</span>
+<span class="source-line-no">1846</span><span id="line-1846">    *    &lt;jc&gt;// Test a Map (converted to entries)&lt;/jc&gt;</span>
+<span class="source-line-no">1847</span><span id="line-1847">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;myMap&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, 1, &lt;js&gt;"b"&lt;/js&gt;, 2);</span>
+<span class="source-line-no">1848</span><span id="line-1848">    *    assertList(toList(&lt;jv&gt;myMap&lt;/jv&gt;), &lt;js&gt;"a=1"&lt;/js&gt;, &lt;js&gt;"b=2"&lt;/js&gt;);</span>
+<span class="source-line-no">1849</span><span id="line-1849">    *</span>
+<span class="source-line-no">1850</span><span id="line-1850">    *    &lt;jc&gt;// Test any Iterable collection&lt;/jc&gt;</span>
+<span class="source-line-no">1851</span><span id="line-1851">    *    Queue&amp;lt;String&amp;gt; &lt;jv&gt;myQueue&lt;/jv&gt; = new LinkedList&amp;lt;&amp;gt;(List.of(&lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;));</span>
+<span class="source-line-no">1852</span><span id="line-1852">    *    assertList(toList(&lt;jv&gt;myQueue&lt;/jv&gt;), &lt;js&gt;"first"&lt;/js&gt;, &lt;js&gt;"second"&lt;/js&gt;);</span>
+<span class="source-line-no">1853</span><span id="line-1853">    * &lt;/p&gt;</span>
+<span class="source-line-no">1854</span><span id="line-1854">    *</span>
+<span class="source-line-no">1855</span><span id="line-1855">    * &lt;h5 class='section'&gt;Integration with Testing:&lt;/h5&gt;</span>
+<span class="source-line-no">1856</span><span id="line-1856">    * &lt;p&gt;This method is specifically designed to work with testing frameworks to provide</span>
+<span class="source-line-no">1857</span><span id="line-1857">    * a unified testing approach for all collection-like types. Instead of having separate assertion methods</span>
+<span class="source-line-no">1858</span><span id="line-1858">    * for arrays, sets, and other collections, you can convert them all to Lists and use standard</span>
+<span class="source-line-no">1859</span><span id="line-1859">    * list assertion methods.&lt;/p&gt;</span>
+<span class="source-line-no">1860</span><span id="line-1860">    *</span>
+<span class="source-line-no">1861</span><span id="line-1861">    * @param o The object to convert to a List. Must not be null and must be a supported collection-like type.</span>
+<span class="source-line-no">1862</span><span id="line-1862">    * @return A {@link List} containing the elements from the input object.</span>
+<span class="source-line-no">1863</span><span id="line-1863">    * @throws IllegalArgumentException if the input object cannot be converted to a List.</span>
+<span class="source-line-no">1864</span><span id="line-1864">    * @see #arrayToList(Object)</span>
+<span class="source-line-no">1865</span><span id="line-1865">    */</span>
+<span class="source-line-no">1866</span><span id="line-1866">   @SuppressWarnings({</span>
+<span class="source-line-no">1867</span><span id="line-1867">      "java:S1452"  // Wildcard required - List&lt;?&gt; for heterogeneous collections from various sources</span>
+<span class="source-line-no">1868</span><span id="line-1868">   })</span>
+<span class="source-line-no">1869</span><span id="line-1869">   public static final List&lt;?&gt; toList(Object o) {</span>
+<span class="source-line-no">1870</span><span id="line-1870">      reqnn("o", o);</span>
+<span class="source-line-no">1871</span><span id="line-1871">      if (o instanceof List&lt;?&gt; o2)</span>
+<span class="source-line-no">1872</span><span id="line-1872">         return o2;</span>
+<span class="source-line-no">1873</span><span id="line-1873">      if (o instanceof Iterable&lt;?&gt; o2)</span>
+<span class="source-line-no">1874</span><span id="line-1874">         return StreamSupport.stream(o2.spliterator(), false).toList();</span>
+<span class="source-line-no">1875</span><span id="line-1875">      if (o instanceof Iterator&lt;?&gt; o2)</span>
+<span class="source-line-no">1876</span><span id="line-1876">         return StreamSupport.stream(Spliterators.spliteratorUnknownSize(o2, 0), false).toList();</span>
+<span class="source-line-no">1877</span><span id="line-1877">      if (o instanceof Enumeration&lt;?&gt; o2)</span>
+<span class="source-line-no">1878</span><span id="line-1878">         return Collections.list(o2);</span>
+<span class="source-line-no">1879</span><span id="line-1879">      if (o instanceof Stream&lt;?&gt; o2)</span>
+<span class="source-line-no">1880</span><span id="line-1880">         return o2.toList();</span>
+<span class="source-line-no">1881</span><span id="line-1881">      if (o instanceof Map&lt;?,?&gt; o2)</span>
+<span class="source-line-no">1882</span><span id="line-1882">         return toList(o2.entrySet());</span>
+<span class="source-line-no">1883</span><span id="line-1883">      if (o instanceof Optional&lt;?&gt; o2)</span>
+<span class="source-line-no">1884</span><span id="line-1884">         return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());</span>
+<span class="source-line-no">1885</span><span id="line-1885">      if (ClassUtils.isArray(o))</span>
+<span class="source-line-no">1886</span><span id="line-1886">         return arrayToList(o);</span>
+<span class="source-line-no">1887</span><span id="line-1887">      throw rex("Could not convert object of type %s to a list", ClassUtils.className(o));</span>
+<span class="source-line-no">1888</span><span id="line-1888">   }</span>
+<span class="source-line-no">1889</span><span id="line-1889"></span>
+<span class="source-line-no">1890</span><span id="line-1890">   /**</span>
+<span class="source-line-no">1891</span><span id="line-1891">    * Converts the specified array to an &lt;c&gt;ArrayList&lt;/c&gt;</span>
+<span class="source-line-no">1892</span><span id="line-1892">    *</span>
+<span class="source-line-no">1893</span><span id="line-1893">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1894</span><span id="line-1894">    * @param array The array to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument throws {@link NullPointerException}).</span>
+<span class="source-line-no">1895</span><span id="line-1895">    * @param elementType</span>
+<span class="source-line-no">1896</span><span id="line-1896">    *    The type of objects in the array.</span>
+<span class="source-line-no">1897</span><span id="line-1897">    *    It must match the actual component type in the array.</span>
+<span class="source-line-no">1898</span><span id="line-1898">    * @return A new {@link ArrayList}</span>
+<span class="source-line-no">1899</span><span id="line-1899">    */</span>
+<span class="source-line-no">1900</span><span id="line-1900">   public static &lt;E&gt; List&lt;E&gt; toList(Object array, Class&lt;E&gt; elementType) {</span>
+<span class="source-line-no">1901</span><span id="line-1901">      var l = new ArrayList&lt;E&gt;(Array.getLength(array));</span>
+<span class="source-line-no">1902</span><span id="line-1902">      for (var i = 0; i &lt; Array.getLength(array); i++)</span>
+<span class="source-line-no">1903</span><span id="line-1903">         l.add((E)Array.get(array, i));</span>
+<span class="source-line-no">1904</span><span id="line-1904">      return l;</span>
+<span class="source-line-no">1905</span><span id="line-1905">   }</span>
+<span class="source-line-no">1906</span><span id="line-1906"></span>
+<span class="source-line-no">1907</span><span id="line-1907">   /**</span>
+<span class="source-line-no">1908</span><span id="line-1908">    * Recursively converts the specified array into a list of objects.</span>
+<span class="source-line-no">1909</span><span id="line-1909">    *</span>
+<span class="source-line-no">1910</span><span id="line-1910">    * @param array The array to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument throws {@link NullPointerException}).</span>
+<span class="source-line-no">1911</span><span id="line-1911">    * @return A new {@link ArrayList}</span>
+<span class="source-line-no">1912</span><span id="line-1912">    */</span>
+<span class="source-line-no">1913</span><span id="line-1913">   public static List&lt;Object&gt; toObjectList(Object array) {</span>
+<span class="source-line-no">1914</span><span id="line-1914">      var l = new ArrayList&lt;&gt;(Array.getLength(array));</span>
+<span class="source-line-no">1915</span><span id="line-1915">      for (var i = 0; i &lt; Array.getLength(array); i++) {</span>
+<span class="source-line-no">1916</span><span id="line-1916">         var o = Array.get(array, i);</span>
+<span class="source-line-no">1917</span><span id="line-1917">         if (ClassUtils.isArray(o))</span>
+<span class="source-line-no">1918</span><span id="line-1918">            o = toObjectList(o);</span>
+<span class="source-line-no">1919</span><span id="line-1919">         l.add(o);</span>
+<span class="source-line-no">1920</span><span id="line-1920">      }</span>
+<span class="source-line-no">1921</span><span id="line-1921">      return l;</span>
+<span class="source-line-no">1922</span><span id="line-1922">   }</span>
+<span class="source-line-no">1923</span><span id="line-1923"></span>
+<span class="source-line-no">1924</span><span id="line-1924">   /**</span>
+<span class="source-line-no">1925</span><span id="line-1925">    * Creates a new set from the specified collection.</span>
+<span class="source-line-no">1926</span><span id="line-1926">    *</span>
+<span class="source-line-no">1927</span><span id="line-1927">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1928</span><span id="line-1928">    * @param val The value to copy from.</span>
+<span class="source-line-no">1929</span><span id="line-1929">    * @return A new {@link LinkedHashSet}, or &lt;jk&gt;null&lt;/jk&gt; if the input was null.</span>
+<span class="source-line-no">1930</span><span id="line-1930">    */</span>
+<span class="source-line-no">1931</span><span id="line-1931">   public static &lt;E&gt; Set&lt;E&gt; toSet(Collection&lt;E&gt; val) {</span>
+<span class="source-line-no">1932</span><span id="line-1932">      return val == null ? null : new LinkedHashSet&lt;&gt;(val);</span>
+<span class="source-line-no">1933</span><span id="line-1933">   }</span>
+<span class="source-line-no">1934</span><span id="line-1934"></span>
+<span class="source-line-no">1935</span><span id="line-1935">   /**</span>
+<span class="source-line-no">1936</span><span id="line-1936">    * Converts the specified array to a &lt;c&gt;Set&lt;/c&gt;.</span>
+<span class="source-line-no">1937</span><span id="line-1937">    *</span>
+<span class="source-line-no">1938</span><span id="line-1938">    * &lt;p&gt;</span>
+<span class="source-line-no">1939</span><span id="line-1939">    * The order of the entries in the set are the same as the array.</span>
+<span class="source-line-no">1940</span><span id="line-1940">    *</span>
+<span class="source-line-no">1941</span><span id="line-1941">    * @param &lt;T&gt; The entry type of the array.</span>
+<span class="source-line-no">1942</span><span id="line-1942">    * @param array The array being wrapped in a &lt;c&gt;Set&lt;/c&gt; interface.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; argument throws {@link IllegalArgumentException}).</span>
+<span class="source-line-no">1943</span><span id="line-1943">    * @return The new set.</span>
+<span class="source-line-no">1944</span><span id="line-1944">    */</span>
+<span class="source-line-no">1945</span><span id="line-1945">   public static &lt;T&gt; Set&lt;T&gt; toSet(T[] array) {</span>
+<span class="source-line-no">1946</span><span id="line-1946">      reqnn("array", array);</span>
+<span class="source-line-no">1947</span><span id="line-1947">      return new AbstractSet&lt;&gt;() {</span>
+<span class="source-line-no">1948</span><span id="line-1948"></span>
+<span class="source-line-no">1949</span><span id="line-1949">         @Override /* Overridden from Set */</span>
+<span class="source-line-no">1950</span><span id="line-1950">         public Iterator&lt;T&gt; iterator() {</span>
+<span class="source-line-no">1951</span><span id="line-1951">            return new Iterator&lt;&gt;() {</span>
+<span class="source-line-no">1952</span><span id="line-1952">               int i = 0;</span>
+<span class="source-line-no">1953</span><span id="line-1953"></span>
+<span class="source-line-no">1954</span><span id="line-1954">               @Override /* Overridden from Iterator */</span>
+<span class="source-line-no">1955</span><span id="line-1955">               public boolean hasNext() {</span>
+<span class="source-line-no">1956</span><span id="line-1956">                  return i &lt; array.length;</span>
+<span class="source-line-no">1957</span><span id="line-1957">               }</span>
+<span class="source-line-no">1958</span><span id="line-1958"></span>
+<span class="source-line-no">1959</span><span id="line-1959">               @Override /* Overridden from Iterator */</span>
+<span class="source-line-no">1960</span><span id="line-1960">               public T next() {</span>
+<span class="source-line-no">1961</span><span id="line-1961">                  if (i &gt;= array.length)</span>
+<span class="source-line-no">1962</span><span id="line-1962">                     throw new NoSuchElementException();</span>
+<span class="source-line-no">1963</span><span id="line-1963">                  T t = array[i];</span>
+<span class="source-line-no">1964</span><span id="line-1964">                  i++;</span>
+<span class="source-line-no">1965</span><span id="line-1965">                  return t;</span>
+<span class="source-line-no">1966</span><span id="line-1966">               }</span>
+<span class="source-line-no">1967</span><span id="line-1967"></span>
+<span class="source-line-no">1968</span><span id="line-1968">               @Override /* Overridden from Iterator */</span>
+<span class="source-line-no">1969</span><span id="line-1969">               public void remove() {</span>
+<span class="source-line-no">1970</span><span id="line-1970">                  throw uoex();</span>
+<span class="source-line-no">1971</span><span id="line-1971">               }</span>
+<span class="source-line-no">1972</span><span id="line-1972">            };</span>
+<span class="source-line-no">1973</span><span id="line-1973">         }</span>
+<span class="source-line-no">1974</span><span id="line-1974"></span>
+<span class="source-line-no">1975</span><span id="line-1975">         @Override /* Overridden from Set */</span>
+<span class="source-line-no">1976</span><span id="line-1976">         public int size() {</span>
+<span class="source-line-no">1977</span><span id="line-1977">            return array.length;</span>
+<span class="source-line-no">1978</span><span id="line-1978">         }</span>
+<span class="source-line-no">1979</span><span id="line-1979">      };</span>
+<span class="source-line-no">1980</span><span id="line-1980">   }</span>
+<span class="source-line-no">1981</span><span id="line-1981"></span>
 <span class="source-line-no">1982</span><span id="line-1982">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">1983</span><span id="line-1983"></span>
-<span class="source-line-no">1984</span><span id="line-1984">   /**</span>
-<span class="source-line-no">1985</span><span id="line-1985">    * Creates a new {@link TreeSet} from the specified collection.</span>
-<span class="source-line-no">1986</span><span id="line-1986">    *</span>
-<span class="source-line-no">1987</span><span id="line-1987">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">1988</span><span id="line-1988">    * @param value The value to copy from.</span>
-<span class="source-line-no">1989</span><span id="line-1989">    * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">1990</span><span id="line-1990">    */</span>
-<span class="source-line-no">1991</span><span id="line-1991">   public static &lt;E&gt; SortedSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value) {</span>
-<span class="source-line-no">1992</span><span id="line-1992">      if (value == null)</span>
-<span class="source-line-no">1993</span><span id="line-1993">         return new TreeSet&lt;&gt;();</span>
-<span class="source-line-no">1994</span><span id="line-1994">      var l = new TreeSet&lt;E&gt;();</span>
-<span class="source-line-no">1995</span><span id="line-1995">      value.forEach(l::add);</span>
-<span class="source-line-no">1996</span><span id="line-1996">      return l;</span>
-<span class="source-line-no">1997</span><span id="line-1997">   }</span>
-<span class="source-line-no">1998</span><span id="line-1998"></span>
-<span class="source-line-no">1999</span><span id="line-1999">   /**</span>
-<span class="source-line-no">2000</span><span id="line-2000">    * Creates a new {@link TreeSet} from the specified collection.</span>
-<span class="source-line-no">2001</span><span id="line-2001">    *</span>
-<span class="source-line-no">2002</span><span id="line-2002">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">2003</span><span id="line-2003">    * @param value The value to copy from.</span>
-<span class="source-line-no">2004</span><span id="line-2004">    * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; returns &lt;jk&gt;null&lt;/jk&gt; if the collection is empty.</span>
-<span class="source-line-no">2005</span><span id="line-2005">    * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was &lt;jk&gt;null&lt;/jk&gt;, or &lt;jk&gt;null&lt;/jk&gt; if nullIfEmpty and the collection is empty.</span>
-<span class="source-line-no">2006</span><span id="line-2006">    */</span>
-<span class="source-line-no">2007</span><span id="line-2007">   public static &lt;E&gt; SortedSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value, boolean nullIfEmpty) {</span>
-<span class="source-line-no">2008</span><span id="line-2008">      if (value == null)</span>
-<span class="source-line-no">2009</span><span id="line-2009">         return new TreeSet&lt;&gt;();</span>
-<span class="source-line-no">2010</span><span id="line-2010">      if (nullIfEmpty &amp;&amp; value.isEmpty())</span>
-<span class="source-line-no">2011</span><span id="line-2011">         return null;</span>
-<span class="source-line-no">2012</span><span id="line-2012">      var l = new TreeSet&lt;E&gt;();</span>
-<span class="source-line-no">2013</span><span id="line-2013">      value.forEach(l::add);</span>
-<span class="source-line-no">2014</span><span id="line-2014">      return l;</span>
-<span class="source-line-no">2015</span><span id="line-2015">   }</span>
-<span class="source-line-no">2016</span><span id="line-2016"></span>
-<span class="source-line-no">2017</span><span id="line-2017">   /**</span>
-<span class="source-line-no">2018</span><span id="line-2018">    * Creates a new {@link TreeSet} containing a copy of the specified set.</span>
-<span class="source-line-no">2019</span><span id="line-2019">    *</span>
-<span class="source-line-no">2020</span><span id="line-2020">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2021</span><span id="line-2021">    * @param copyFrom The set to copy from.</span>
-<span class="source-line-no">2022</span><span id="line-2022">    * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2023</span><span id="line-2023">    */</span>
-<span class="source-line-no">2024</span><span id="line-2024">   public static &lt;T&gt; SortedSet&lt;T&gt; toSortedSet(Set&lt;T&gt; copyFrom) {</span>
-<span class="source-line-no">2025</span><span id="line-2025">      return copyFrom == null ? new TreeSet&lt;&gt;() : new TreeSet&lt;&gt;(copyFrom);</span>
-<span class="source-line-no">2026</span><span id="line-2026">   }</span>
-<span class="source-line-no">2027</span><span id="line-2027"></span>
-<span class="source-line-no">2028</span><span id="line-2028">   /**</span>
-<span class="source-line-no">2029</span><span id="line-2029">    * Converts an array to a stream of objects.</span>
-<span class="source-line-no">2030</span><span id="line-2030">    * @param array The array to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; or non-array argument throws {@link IllegalArgumentException}).</span>
-<span class="source-line-no">2031</span><span id="line-2031">    * @return A new stream.</span>
-<span class="source-line-no">2032</span><span id="line-2032">    */</span>
-<span class="source-line-no">2033</span><span id="line-2033">   public static Stream&lt;Object&gt; toStream(Object array) {</span>
-<span class="source-line-no">2034</span><span id="line-2034">      req(ClassUtils.isArray(array), "Arg was not an array.  Type: %s", ClassUtils.className(array));</span>
-<span class="source-line-no">2035</span><span id="line-2035">      var length = Array.getLength(array);</span>
-<span class="source-line-no">2036</span><span id="line-2036">      return IntStream.range(0, length).mapToObj(i -&gt; Array.get(array, i));</span>
-<span class="source-line-no">2037</span><span id="line-2037">   }</span>
-<span class="source-line-no">2038</span><span id="line-2038"></span>
-<span class="source-line-no">2039</span><span id="line-2039">   /**</span>
-<span class="source-line-no">2040</span><span id="line-2040">    * Converts the specified collection to an array of strings.</span>
-<span class="source-line-no">2041</span><span id="line-2041">    *</span>
-<span class="source-line-no">2042</span><span id="line-2042">    * &lt;p&gt;</span>
-<span class="source-line-no">2043</span><span id="line-2043">    * Entries are converted to strings using {@link #toString()}.</span>
-<span class="source-line-no">2044</span><span id="line-2044">    * &lt;jk&gt;null&lt;/jk&gt; values remain &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2045</span><span id="line-2045">    *</span>
-<span class="source-line-no">2046</span><span id="line-2046">    * @param c The collection to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2047</span><span id="line-2047">    * @return The collection as a string array.</span>
-<span class="source-line-no">2048</span><span id="line-2048">    */</span>
-<span class="source-line-no">2049</span><span id="line-2049">   public static String[] toStringArray(Collection&lt;?&gt; c) {</span>
-<span class="source-line-no">2050</span><span id="line-2050">      var r = new String[c.size()];</span>
-<span class="source-line-no">2051</span><span id="line-2051">      var i = 0;</span>
-<span class="source-line-no">2052</span><span id="line-2052">      for (var o : c)</span>
-<span class="source-line-no">2053</span><span id="line-2053">         r[i++] = stringify(o);</span>
-<span class="source-line-no">2054</span><span id="line-2054">      return r;</span>
-<span class="source-line-no">2055</span><span id="line-2055">   }</span>
-<span class="source-line-no">2056</span><span id="line-2056"></span>
-<span class="source-line-no">2057</span><span id="line-2057">   /**</span>
-<span class="source-line-no">2058</span><span id="line-2058">    * Traverses all elements in the specified object and executes a consumer for each leaf.</span>
-<span class="source-line-no">2059</span><span id="line-2059">    *</span>
-<span class="source-line-no">2060</span><span id="line-2060">    * &lt;p&gt;</span>
-<span class="source-line-no">2061</span><span id="line-2061">    * Input shapes are processed as follows:</span>
-<span class="source-line-no">2062</span><span id="line-2062">    * &lt;ul&gt;</span>
-<span class="source-line-no">2063</span><span id="line-2063">    *    &lt;li&gt;&lt;b&gt;Flattened (recursively):&lt;/b&gt; {@link Iterable}, {@link Stream}, and any array type (including all 8 primitive</span>
-<span class="source-line-no">2064</span><span id="line-2064">    *       array types via {@link ClassUtils#isArray}), including arbitrary nesting and mixing of these.</span>
-<span class="source-line-no">2065</span><span id="line-2065">    *    &lt;li&gt;&lt;b&gt;Leaf (consumer called once):&lt;/b&gt; anything else — {@link String}, {@link Map}, custom beans, boxed primitives, etc.</span>
-<span class="source-line-no">2066</span><span id="line-2066">    *    &lt;li&gt;&lt;b&gt;{@code null} handling:&lt;/b&gt; a {@code null} root, or {@code null} encountered mid-traversal, causes the</span>
-<span class="source-line-no">2067</span><span id="line-2067">    *       consumer to be called zero times — no {@code null} elements are ever delivered.</span>
-<span class="source-line-no">2068</span><span id="line-2068">    * &lt;/ul&gt;</span>
-<span class="source-line-no">2069</span><span id="line-2069">    *</span>
-<span class="source-line-no">2070</span><span id="line-2070">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2071</span><span id="line-2071">    * @param o The object to traverse.  Can be &lt;jk&gt;null&lt;/jk&gt; (the consumer is not called).</span>
-<span class="source-line-no">2072</span><span id="line-2072">    * @param c The consumer of the leaf elements.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2073</span><span id="line-2073">    */</span>
-<span class="source-line-no">2074</span><span id="line-2074">   public static &lt;T&gt; void traverse(Object o, Consumer&lt;T&gt; c) {</span>
-<span class="source-line-no">2075</span><span id="line-2075">      CollectionUtils.&lt;T&gt;traverseToStream(o).forEach(c);</span>
-<span class="source-line-no">2076</span><span id="line-2076">   }</span>
-<span class="source-line-no">2077</span><span id="line-2077"></span>
-<span class="source-line-no">2078</span><span id="line-2078">   /**</span>
-<span class="source-line-no">2079</span><span id="line-2079">    * Shared recursive engine for {@link #traverse(Object, Consumer)}, {@link #accumulate(Object...)}, and</span>
-<span class="source-line-no">2080</span><span id="line-2080">    * {@link #deepStream(Object...)}.</span>
-<span class="source-line-no">2081</span><span id="line-2081">    *</span>
-<span class="source-line-no">2082</span><span id="line-2082">    * &lt;p&gt;</span>
-<span class="source-line-no">2083</span><span id="line-2083">    * Returns a lazily-evaluated {@link Stream} that recursively flattens {@link Iterable}, {@link Stream}, and</span>
-<span class="source-line-no">2084</span><span id="line-2084">    * array inputs (including all primitive array types), treating everything else as a single leaf element.</span>
-<span class="source-line-no">2085</span><span id="line-2085">    * {@code null} inputs return an empty stream.</span>
-<span class="source-line-no">2086</span><span id="line-2086">    */</span>
-<span class="source-line-no">2087</span><span id="line-2087">   private static &lt;T&gt; Stream&lt;T&gt; traverseToStream(Object o) {</span>
-<span class="source-line-no">2088</span><span id="line-2088">      if (o == null)</span>
-<span class="source-line-no">2089</span><span id="line-2089">         return Stream.empty();</span>
-<span class="source-line-no">2090</span><span id="line-2090">      if (o instanceof Iterable&lt;?&gt; o2)</span>
-<span class="source-line-no">2091</span><span id="line-2091">         return StreamSupport.stream(o2.spliterator(), false).flatMap(CollectionUtils::traverseToStream);</span>
-<span class="source-line-no">2092</span><span id="line-2092">      if (o instanceof Stream&lt;?&gt; o2)</span>
-<span class="source-line-no">2093</span><span id="line-2093">         return o2.flatMap(CollectionUtils::traverseToStream);</span>
-<span class="source-line-no">2094</span><span id="line-2094">      if (ClassUtils.isArray(o))</span>
-<span class="source-line-no">2095</span><span id="line-2095">         return toStream(o).flatMap(CollectionUtils::traverseToStream);</span>
-<span class="source-line-no">2096</span><span id="line-2096">      return Stream.of((T)o);</span>
-<span class="source-line-no">2097</span><span id="line-2097">   }</span>
-<span class="source-line-no">2098</span><span id="line-2098"></span>
-<span class="source-line-no">2099</span><span id="line-2099">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">2100</span><span id="line-2100">   // Stream utilities</span>
+<span class="source-line-no">1983</span><span id="line-1983">   // Primitive array creation methods</span>
+<span class="source-line-no">1984</span><span id="line-1984">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">1985</span><span id="line-1985"></span>
+<span class="source-line-no">1986</span><span id="line-1986">   /**</span>
+<span class="source-line-no">1987</span><span id="line-1987">    * Creates a new {@link TreeSet} from the specified collection.</span>
+<span class="source-line-no">1988</span><span id="line-1988">    *</span>
+<span class="source-line-no">1989</span><span id="line-1989">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">1990</span><span id="line-1990">    * @param value The value to copy from.</span>
+<span class="source-line-no">1991</span><span id="line-1991">    * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">1992</span><span id="line-1992">    */</span>
+<span class="source-line-no">1993</span><span id="line-1993">   public static &lt;E&gt; SortedSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value) {</span>
+<span class="source-line-no">1994</span><span id="line-1994">      if (value == null)</span>
+<span class="source-line-no">1995</span><span id="line-1995">         return new TreeSet&lt;&gt;();</span>
+<span class="source-line-no">1996</span><span id="line-1996">      var l = new TreeSet&lt;E&gt;();</span>
+<span class="source-line-no">1997</span><span id="line-1997">      value.forEach(l::add);</span>
+<span class="source-line-no">1998</span><span id="line-1998">      return l;</span>
+<span class="source-line-no">1999</span><span id="line-1999">   }</span>
+<span class="source-line-no">2000</span><span id="line-2000"></span>
+<span class="source-line-no">2001</span><span id="line-2001">   /**</span>
+<span class="source-line-no">2002</span><span id="line-2002">    * Creates a new {@link TreeSet} from the specified collection.</span>
+<span class="source-line-no">2003</span><span id="line-2003">    *</span>
+<span class="source-line-no">2004</span><span id="line-2004">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">2005</span><span id="line-2005">    * @param value The value to copy from.</span>
+<span class="source-line-no">2006</span><span id="line-2006">    * @param nullIfEmpty If &lt;jk&gt;true&lt;/jk&gt; returns &lt;jk&gt;null&lt;/jk&gt; if the collection is empty.</span>
+<span class="source-line-no">2007</span><span id="line-2007">    * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was &lt;jk&gt;null&lt;/jk&gt;, or &lt;jk&gt;null&lt;/jk&gt; if nullIfEmpty and the collection is empty.</span>
+<span class="source-line-no">2008</span><span id="line-2008">    */</span>
+<span class="source-line-no">2009</span><span id="line-2009">   public static &lt;E&gt; SortedSet&lt;E&gt; toSortedSet(Collection&lt;E&gt; value, boolean nullIfEmpty) {</span>
+<span class="source-line-no">2010</span><span id="line-2010">      if (value == null)</span>
+<span class="source-line-no">2011</span><span id="line-2011">         return new TreeSet&lt;&gt;();</span>
+<span class="source-line-no">2012</span><span id="line-2012">      if (nullIfEmpty &amp;&amp; value.isEmpty())</span>
+<span class="source-line-no">2013</span><span id="line-2013">         return null;</span>
+<span class="source-line-no">2014</span><span id="line-2014">      var l = new TreeSet&lt;E&gt;();</span>
+<span class="source-line-no">2015</span><span id="line-2015">      value.forEach(l::add);</span>
+<span class="source-line-no">2016</span><span id="line-2016">      return l;</span>
+<span class="source-line-no">2017</span><span id="line-2017">   }</span>
+<span class="source-line-no">2018</span><span id="line-2018"></span>
+<span class="source-line-no">2019</span><span id="line-2019">   /**</span>
+<span class="source-line-no">2020</span><span id="line-2020">    * Creates a new {@link TreeSet} containing a copy of the specified set.</span>
+<span class="source-line-no">2021</span><span id="line-2021">    *</span>
+<span class="source-line-no">2022</span><span id="line-2022">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2023</span><span id="line-2023">    * @param copyFrom The set to copy from.</span>
+<span class="source-line-no">2024</span><span id="line-2024">    * @return A new {@link TreeSet}, or an empty {@link TreeSet} if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2025</span><span id="line-2025">    */</span>
+<span class="source-line-no">2026</span><span id="line-2026">   public static &lt;T&gt; SortedSet&lt;T&gt; toSortedSet(Set&lt;T&gt; copyFrom) {</span>
+<span class="source-line-no">2027</span><span id="line-2027">      return copyFrom == null ? new TreeSet&lt;&gt;() : new TreeSet&lt;&gt;(copyFrom);</span>
+<span class="source-line-no">2028</span><span id="line-2028">   }</span>
+<span class="source-line-no">2029</span><span id="line-2029"></span>
+<span class="source-line-no">2030</span><span id="line-2030">   /**</span>
+<span class="source-line-no">2031</span><span id="line-2031">    * Converts an array to a stream of objects.</span>
+<span class="source-line-no">2032</span><span id="line-2032">    * @param array The array to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; or non-array argument throws {@link IllegalArgumentException}).</span>
+<span class="source-line-no">2033</span><span id="line-2033">    * @return A new stream.</span>
+<span class="source-line-no">2034</span><span id="line-2034">    */</span>
+<span class="source-line-no">2035</span><span id="line-2035">   public static Stream&lt;Object&gt; toStream(Object array) {</span>
+<span class="source-line-no">2036</span><span id="line-2036">      req(ClassUtils.isArray(array), "Arg was not an array.  Type: %s", ClassUtils.className(array));</span>
+<span class="source-line-no">2037</span><span id="line-2037">      var length = Array.getLength(array);</span>
+<span class="source-line-no">2038</span><span id="line-2038">      return IntStream.range(0, length).mapToObj(i -&gt; Array.get(array, i));</span>
+<span class="source-line-no">2039</span><span id="line-2039">   }</span>
+<span class="source-line-no">2040</span><span id="line-2040"></span>
+<span class="source-line-no">2041</span><span id="line-2041">   /**</span>
+<span class="source-line-no">2042</span><span id="line-2042">    * Converts the specified collection to an array of strings.</span>
+<span class="source-line-no">2043</span><span id="line-2043">    *</span>
+<span class="source-line-no">2044</span><span id="line-2044">    * &lt;p&gt;</span>
+<span class="source-line-no">2045</span><span id="line-2045">    * Entries are converted to strings using {@link #toString()}.</span>
+<span class="source-line-no">2046</span><span id="line-2046">    * &lt;jk&gt;null&lt;/jk&gt; values remain &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2047</span><span id="line-2047">    *</span>
+<span class="source-line-no">2048</span><span id="line-2048">    * @param c The collection to convert.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2049</span><span id="line-2049">    * @return The collection as a string array.</span>
+<span class="source-line-no">2050</span><span id="line-2050">    */</span>
+<span class="source-line-no">2051</span><span id="line-2051">   public static String[] toStringArray(Collection&lt;?&gt; c) {</span>
+<span class="source-line-no">2052</span><span id="line-2052">      var r = new String[c.size()];</span>
+<span class="source-line-no">2053</span><span id="line-2053">      var i = 0;</span>
+<span class="source-line-no">2054</span><span id="line-2054">      for (var o : c)</span>
+<span class="source-line-no">2055</span><span id="line-2055">         r[i++] = stringify(o);</span>
+<span class="source-line-no">2056</span><span id="line-2056">      return r;</span>
+<span class="source-line-no">2057</span><span id="line-2057">   }</span>
+<span class="source-line-no">2058</span><span id="line-2058"></span>
+<span class="source-line-no">2059</span><span id="line-2059">   /**</span>
+<span class="source-line-no">2060</span><span id="line-2060">    * Traverses all elements in the specified object and executes a consumer for each leaf.</span>
+<span class="source-line-no">2061</span><span id="line-2061">    *</span>
+<span class="source-line-no">2062</span><span id="line-2062">    * &lt;p&gt;</span>
+<span class="source-line-no">2063</span><span id="line-2063">    * Input shapes are processed as follows:</span>
+<span class="source-line-no">2064</span><span id="line-2064">    * &lt;ul&gt;</span>
+<span class="source-line-no">2065</span><span id="line-2065">    *    &lt;li&gt;&lt;b&gt;Flattened (recursively):&lt;/b&gt; {@link Iterable}, {@link Stream}, and any array type (including all 8 primitive</span>
+<span class="source-line-no">2066</span><span id="line-2066">    *       array types via {@link ClassUtils#isArray}), including arbitrary nesting and mixing of these.</span>
+<span class="source-line-no">2067</span><span id="line-2067">    *    &lt;li&gt;&lt;b&gt;Leaf (consumer called once):&lt;/b&gt; anything else — {@link String}, {@link Map}, custom beans, boxed primitives, etc.</span>
+<span class="source-line-no">2068</span><span id="line-2068">    *    &lt;li&gt;&lt;b&gt;{@code null} handling:&lt;/b&gt; a {@code null} root, or {@code null} encountered mid-traversal, causes the</span>
+<span class="source-line-no">2069</span><span id="line-2069">    *       consumer to be called zero times — no {@code null} elements are ever delivered.</span>
+<span class="source-line-no">2070</span><span id="line-2070">    * &lt;/ul&gt;</span>
+<span class="source-line-no">2071</span><span id="line-2071">    *</span>
+<span class="source-line-no">2072</span><span id="line-2072">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2073</span><span id="line-2073">    * @param o The object to traverse.  Can be &lt;jk&gt;null&lt;/jk&gt; (the consumer is not called).</span>
+<span class="source-line-no">2074</span><span id="line-2074">    * @param c The consumer of the leaf elements.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2075</span><span id="line-2075">    */</span>
+<span class="source-line-no">2076</span><span id="line-2076">   public static &lt;T&gt; void traverse(Object o, Consumer&lt;T&gt; c) {</span>
+<span class="source-line-no">2077</span><span id="line-2077">      CollectionUtils.&lt;T&gt;traverseToStream(o).forEach(c);</span>
+<span class="source-line-no">2078</span><span id="line-2078">   }</span>
+<span class="source-line-no">2079</span><span id="line-2079"></span>
+<span class="source-line-no">2080</span><span id="line-2080">   /**</span>
+<span class="source-line-no">2081</span><span id="line-2081">    * Shared recursive engine for {@link #traverse(Object, Consumer)}, {@link #accumulate(Object...)}, and</span>
+<span class="source-line-no">2082</span><span id="line-2082">    * {@link #deepStream(Object...)}.</span>
+<span class="source-line-no">2083</span><span id="line-2083">    *</span>
+<span class="source-line-no">2084</span><span id="line-2084">    * &lt;p&gt;</span>
+<span class="source-line-no">2085</span><span id="line-2085">    * Returns a lazily-evaluated {@link Stream} that recursively flattens {@link Iterable}, {@link Stream}, and</span>
+<span class="source-line-no">2086</span><span id="line-2086">    * array inputs (including all primitive array types), treating everything else as a single leaf element.</span>
+<span class="source-line-no">2087</span><span id="line-2087">    * {@code null} inputs return an empty stream.</span>
+<span class="source-line-no">2088</span><span id="line-2088">    */</span>
+<span class="source-line-no">2089</span><span id="line-2089">   private static &lt;T&gt; Stream&lt;T&gt; traverseToStream(Object o) {</span>
+<span class="source-line-no">2090</span><span id="line-2090">      if (o == null)</span>
+<span class="source-line-no">2091</span><span id="line-2091">         return Stream.empty();</span>
+<span class="source-line-no">2092</span><span id="line-2092">      if (o instanceof Iterable&lt;?&gt; o2)</span>
+<span class="source-line-no">2093</span><span id="line-2093">         return StreamSupport.stream(o2.spliterator(), false).flatMap(CollectionUtils::traverseToStream);</span>
+<span class="source-line-no">2094</span><span id="line-2094">      if (o instanceof Stream&lt;?&gt; o2)</span>
+<span class="source-line-no">2095</span><span id="line-2095">         return o2.flatMap(CollectionUtils::traverseToStream);</span>
+<span class="source-line-no">2096</span><span id="line-2096">      if (ClassUtils.isArray(o))</span>
+<span class="source-line-no">2097</span><span id="line-2097">         return toStream(o).flatMap(CollectionUtils::traverseToStream);</span>
+<span class="source-line-no">2098</span><span id="line-2098">      return Stream.of((T)o);</span>
+<span class="source-line-no">2099</span><span id="line-2099">   }</span>
+<span class="source-line-no">2100</span><span id="line-2100"></span>
 <span class="source-line-no">2101</span><span id="line-2101">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">2102</span><span id="line-2102"></span>
+<span class="source-line-no">2102</span><span id="line-2102">   // Stream utilities</span>
 <span class="source-line-no">2103</span><span id="line-2103">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">2104</span><span id="line-2104">   // Full-named factory/query methods (canonical forms; short-named methods delegate to these)</span>
+<span class="source-line-no">2104</span><span id="line-2104"></span>
 <span class="source-line-no">2105</span><span id="line-2105">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">2106</span><span id="line-2106"></span>
-<span class="source-line-no">2107</span><span id="line-2107">   /**</span>
-<span class="source-line-no">2108</span><span id="line-2108">    * Creates an array of objects (varargs form).</span>
-<span class="source-line-no">2109</span><span id="line-2109">    *</span>
-<span class="source-line-no">2110</span><span id="line-2110">    * @param &lt;T&gt; The component type of the array.</span>
-<span class="source-line-no">2111</span><span id="line-2111">    * @param x The objects to place in the array.  Can be &lt;jk&gt;null&lt;/jk&gt; (returned as-is).</span>
-<span class="source-line-no">2112</span><span id="line-2112">    * @return A new array containing the specified objects.</span>
-<span class="source-line-no">2113</span><span id="line-2113">    */</span>
-<span class="source-line-no">2114</span><span id="line-2114">   @SafeVarargs</span>
-<span class="source-line-no">2115</span><span id="line-2115">   public static &lt;T&gt; T[] array(T...x) {</span>
-<span class="source-line-no">2116</span><span id="line-2116">      return x;</span>
-<span class="source-line-no">2117</span><span id="line-2117">   }</span>
-<span class="source-line-no">2118</span><span id="line-2118"></span>
-<span class="source-line-no">2119</span><span id="line-2119">   /**</span>
-<span class="source-line-no">2120</span><span id="line-2120">    * Creates a 2-dimensional array.</span>
-<span class="source-line-no">2121</span><span id="line-2121">    *</span>
-<span class="source-line-no">2122</span><span id="line-2122">    * @param &lt;E&gt; The element type of the inner arrays.</span>
-<span class="source-line-no">2123</span><span id="line-2123">    * @param value The 1D arrays that will become rows in the 2D array.  Can be &lt;jk&gt;null&lt;/jk&gt; (returned as-is).</span>
-<span class="source-line-no">2124</span><span id="line-2124">    * @return A 2D array containing the specified rows.</span>
-<span class="source-line-no">2125</span><span id="line-2125">    */</span>
-<span class="source-line-no">2126</span><span id="line-2126">   @SafeVarargs</span>
-<span class="source-line-no">2127</span><span id="line-2127">   public static &lt;E&gt; E[][] array2d(E[]...value) {</span>
-<span class="source-line-no">2128</span><span id="line-2128">      return value;</span>
-<span class="source-line-no">2129</span><span id="line-2129">   }</span>
-<span class="source-line-no">2130</span><span id="line-2130"></span>
-<span class="source-line-no">2131</span><span id="line-2131">   /**</span>
-<span class="source-line-no">2132</span><span id="line-2132">    * Creates an Object array.</span>
-<span class="source-line-no">2133</span><span id="line-2133">    *</span>
-<span class="source-line-no">2134</span><span id="line-2134">    * @param value The objects to place in the array.  Can be &lt;jk&gt;null&lt;/jk&gt; (returned as-is).</span>
-<span class="source-line-no">2135</span><span id="line-2135">    * @return A new {@code Object[]} containing the specified objects.</span>
-<span class="source-line-no">2136</span><span id="line-2136">    */</span>
-<span class="source-line-no">2137</span><span id="line-2137">   public static Object[] objectArray(Object...value) {</span>
-<span class="source-line-no">2138</span><span id="line-2138">      return value;</span>
-<span class="source-line-no">2139</span><span id="line-2139">   }</span>
-<span class="source-line-no">2140</span><span id="line-2140"></span>
-<span class="source-line-no">2141</span><span id="line-2141">   /**</span>
-<span class="source-line-no">2142</span><span id="line-2142">    * Returns null for the specified array type.</span>
-<span class="source-line-no">2143</span><span id="line-2143">    *</span>
-<span class="source-line-no">2144</span><span id="line-2144">    * &lt;p&gt;Intentional null return for assertion testing.</span>
+<span class="source-line-no">2106</span><span id="line-2106">   // Full-named factory/query methods (canonical forms; short-named methods delegate to these)</span>
+<span class="source-line-no">2107</span><span id="line-2107">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">2108</span><span id="line-2108"></span>
+<span class="source-line-no">2109</span><span id="line-2109">   /**</span>
+<span class="source-line-no">2110</span><span id="line-2110">    * Creates an array of objects (varargs form).</span>
+<span class="source-line-no">2111</span><span id="line-2111">    *</span>
+<span class="source-line-no">2112</span><span id="line-2112">    * @param &lt;T&gt; The component type of the array.</span>
+<span class="source-line-no">2113</span><span id="line-2113">    * @param x The objects to place in the array.  Can be &lt;jk&gt;null&lt;/jk&gt; (returned as-is).</span>
+<span class="source-line-no">2114</span><span id="line-2114">    * @return A new array containing the specified objects.</span>
+<span class="source-line-no">2115</span><span id="line-2115">    */</span>
+<span class="source-line-no">2116</span><span id="line-2116">   @SafeVarargs</span>
+<span class="source-line-no">2117</span><span id="line-2117">   public static &lt;T&gt; T[] array(T...x) {</span>
+<span class="source-line-no">2118</span><span id="line-2118">      return x;</span>
+<span class="source-line-no">2119</span><span id="line-2119">   }</span>
+<span class="source-line-no">2120</span><span id="line-2120"></span>
+<span class="source-line-no">2121</span><span id="line-2121">   /**</span>
+<span class="source-line-no">2122</span><span id="line-2122">    * Creates a 2-dimensional array.</span>
+<span class="source-line-no">2123</span><span id="line-2123">    *</span>
+<span class="source-line-no">2124</span><span id="line-2124">    * @param &lt;E&gt; The element type of the inner arrays.</span>
+<span class="source-line-no">2125</span><span id="line-2125">    * @param value The 1D arrays that will become rows in the 2D array.  Can be &lt;jk&gt;null&lt;/jk&gt; (returned as-is).</span>
+<span class="source-line-no">2126</span><span id="line-2126">    * @return A 2D array containing the specified rows.</span>
+<span class="source-line-no">2127</span><span id="line-2127">    */</span>
+<span class="source-line-no">2128</span><span id="line-2128">   @SafeVarargs</span>
+<span class="source-line-no">2129</span><span id="line-2129">   public static &lt;E&gt; E[][] array2d(E[]...value) {</span>
+<span class="source-line-no">2130</span><span id="line-2130">      return value;</span>
+<span class="source-line-no">2131</span><span id="line-2131">   }</span>
+<span class="source-line-no">2132</span><span id="line-2132"></span>
+<span class="source-line-no">2133</span><span id="line-2133">   /**</span>
+<span class="source-line-no">2134</span><span id="line-2134">    * Creates an Object array.</span>
+<span class="source-line-no">2135</span><span id="line-2135">    *</span>
+<span class="source-line-no">2136</span><span id="line-2136">    * @param value The objects to place in the array.  Can be &lt;jk&gt;null&lt;/jk&gt; (returned as-is).</span>
+<span class="source-line-no">2137</span><span id="line-2137">    * @return A new {@code Object[]} containing the specified objects.</span>
+<span class="source-line-no">2138</span><span id="line-2138">    */</span>
+<span class="source-line-no">2139</span><span id="line-2139">   public static Object[] objectArray(Object...value) {</span>
+<span class="source-line-no">2140</span><span id="line-2140">      return value;</span>
+<span class="source-line-no">2141</span><span id="line-2141">   }</span>
+<span class="source-line-no">2142</span><span id="line-2142"></span>
+<span class="source-line-no">2143</span><span id="line-2143">   /**</span>
+<span class="source-line-no">2144</span><span id="line-2144">    * Returns null for the specified array type.</span>
 <span class="source-line-no">2145</span><span id="line-2145">    *</span>
-<span class="source-line-no">2146</span><span id="line-2146">    * @param &lt;T&gt; The component type.</span>
-<span class="source-line-no">2147</span><span id="line-2147">    * @param type The component type class.</span>
-<span class="source-line-no">2148</span><span id="line-2148">    * @return &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2149</span><span id="line-2149">    */</span>
-<span class="source-line-no">2150</span><span id="line-2150">   public static &lt;T&gt; T[] nullArray(Class&lt;T&gt; type) {</span>
-<span class="source-line-no">2151</span><span id="line-2151">      return null;</span>
-<span class="source-line-no">2152</span><span id="line-2152">   }</span>
-<span class="source-line-no">2153</span><span id="line-2153"></span>
-<span class="source-line-no">2154</span><span id="line-2154">   /**</span>
-<span class="source-line-no">2155</span><span id="line-2155">    * Creates a LinkedList from the specified values.</span>
-<span class="source-line-no">2156</span><span id="line-2156">    *</span>
-<span class="source-line-no">2157</span><span id="line-2157">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2158</span><span id="line-2158">    * @param values The values to add to the list.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link NullPointerException}).</span>
-<span class="source-line-no">2159</span><span id="line-2159">    * @return A new modifiable LinkedList containing the specified values.</span>
-<span class="source-line-no">2160</span><span id="line-2160">    */</span>
-<span class="source-line-no">2161</span><span id="line-2161">   @SafeVarargs</span>
-<span class="source-line-no">2162</span><span id="line-2162">   public static &lt;T&gt; List&lt;T&gt; linkedList(T...values) {</span>
-<span class="source-line-no">2163</span><span id="line-2163">      return new LinkedList&lt;&gt;(fixedSizeList(values));</span>
-<span class="source-line-no">2164</span><span id="line-2164">   }</span>
-<span class="source-line-no">2165</span><span id="line-2165"></span>
-<span class="source-line-no">2166</span><span id="line-2166">   /**</span>
-<span class="source-line-no">2167</span><span id="line-2167">    * Creates a HashSet from the specified values.</span>
-<span class="source-line-no">2168</span><span id="line-2168">    *</span>
-<span class="source-line-no">2169</span><span id="line-2169">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2170</span><span id="line-2170">    * @param values The values to add to the set.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link NullPointerException}).</span>
-<span class="source-line-no">2171</span><span id="line-2171">    * @return A new modifiable HashSet containing the specified values.</span>
-<span class="source-line-no">2172</span><span id="line-2172">    */</span>
-<span class="source-line-no">2173</span><span id="line-2173">   @SafeVarargs</span>
-<span class="source-line-no">2174</span><span id="line-2174">   public static &lt;T&gt; Set&lt;T&gt; hashSet(T...values) {</span>
-<span class="source-line-no">2175</span><span id="line-2175">      return new HashSet&lt;&gt;(Arrays.asList(values));</span>
-<span class="source-line-no">2176</span><span id="line-2176">   }</span>
-<span class="source-line-no">2177</span><span id="line-2177"></span>
-<span class="source-line-no">2178</span><span id="line-2178">   /**</span>
-<span class="source-line-no">2179</span><span id="line-2179">    * Creates an unmodifiable view of the specified list.</span>
-<span class="source-line-no">2180</span><span id="line-2180">    *</span>
-<span class="source-line-no">2181</span><span id="line-2181">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2182</span><span id="line-2182">    * @param value The list to make unmodifiable. Can be null.</span>
-<span class="source-line-no">2183</span><span id="line-2183">    * @return An unmodifiable view of the list, or null if the input was null.</span>
-<span class="source-line-no">2184</span><span id="line-2184">    */</span>
-<span class="source-line-no">2185</span><span id="line-2185">   public static &lt;T&gt; List&lt;T&gt; unmodifiable(List&lt;? extends T&gt; value) {</span>
-<span class="source-line-no">2186</span><span id="line-2186">      return value == null ? null : Collections.unmodifiableList(value);</span>
-<span class="source-line-no">2187</span><span id="line-2187">   }</span>
-<span class="source-line-no">2188</span><span id="line-2188"></span>
-<span class="source-line-no">2189</span><span id="line-2189">   /**</span>
-<span class="source-line-no">2190</span><span id="line-2190">    * Creates an unmodifiable view of the specified map.</span>
-<span class="source-line-no">2191</span><span id="line-2191">    *</span>
-<span class="source-line-no">2192</span><span id="line-2192">    * @param &lt;K&gt; The key type.</span>
-<span class="source-line-no">2193</span><span id="line-2193">    * @param &lt;V&gt; The value type.</span>
-<span class="source-line-no">2194</span><span id="line-2194">    * @param value The map to make unmodifiable. Can be null.</span>
-<span class="source-line-no">2195</span><span id="line-2195">    * @return An unmodifiable view of the map, or null if the input was null.</span>
-<span class="source-line-no">2196</span><span id="line-2196">    */</span>
-<span class="source-line-no">2197</span><span id="line-2197">   public static &lt;K,V&gt; Map&lt;K,V&gt; unmodifiable(Map&lt;? extends K,? extends V&gt; value) {</span>
-<span class="source-line-no">2198</span><span id="line-2198">      return value == null ? null : Collections.unmodifiableMap(value);</span>
-<span class="source-line-no">2199</span><span id="line-2199">   }</span>
-<span class="source-line-no">2200</span><span id="line-2200"></span>
-<span class="source-line-no">2201</span><span id="line-2201">   /**</span>
-<span class="source-line-no">2202</span><span id="line-2202">    * Creates an unmodifiable view of the specified set.</span>
-<span class="source-line-no">2203</span><span id="line-2203">    *</span>
-<span class="source-line-no">2204</span><span id="line-2204">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2205</span><span id="line-2205">    * @param value The set to make unmodifiable. Can be null.</span>
-<span class="source-line-no">2206</span><span id="line-2206">    * @return An unmodifiable view of the set, or null if the input was null.</span>
-<span class="source-line-no">2207</span><span id="line-2207">    */</span>
-<span class="source-line-no">2208</span><span id="line-2208">   public static &lt;T&gt; Set&lt;T&gt; unmodifiable(Set&lt;? extends T&gt; value) {</span>
-<span class="source-line-no">2209</span><span id="line-2209">      return value == null ? null : Collections.unmodifiableSet(value);</span>
-<span class="source-line-no">2210</span><span id="line-2210">   }</span>
-<span class="source-line-no">2211</span><span id="line-2211"></span>
-<span class="source-line-no">2212</span><span id="line-2212">   /**</span>
-<span class="source-line-no">2213</span><span id="line-2213">    * Creates an unmodifiable view of the specified sorted set.</span>
-<span class="source-line-no">2214</span><span id="line-2214">    *</span>
-<span class="source-line-no">2215</span><span id="line-2215">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2216</span><span id="line-2216">    * @param value The sorted set to make unmodifiable. Can be null.</span>
-<span class="source-line-no">2217</span><span id="line-2217">    * @return An unmodifiable view of the sorted set, or null if the input was null.</span>
-<span class="source-line-no">2218</span><span id="line-2218">    */</span>
-<span class="source-line-no">2219</span><span id="line-2219">   public static &lt;T&gt; SortedSet&lt;T&gt; unmodifiable(SortedSet&lt;T&gt; value) {</span>
-<span class="source-line-no">2220</span><span id="line-2220">      return value == null ? null : Collections.unmodifiableSortedSet(value);</span>
-<span class="source-line-no">2221</span><span id="line-2221">   }</span>
-<span class="source-line-no">2222</span><span id="line-2222"></span>
-<span class="source-line-no">2223</span><span id="line-2223">   /**</span>
-<span class="source-line-no">2224</span><span id="line-2224">    * Returns the element at the specified index, wrapped in an {@link Optional}.</span>
-<span class="source-line-no">2225</span><span id="line-2225">    *</span>
-<span class="source-line-no">2226</span><span id="line-2226">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">2227</span><span id="line-2227">    * @param l The list. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">2228</span><span id="line-2228">    * @param index The index to access.</span>
-<span class="source-line-no">2229</span><span id="line-2229">    * @return An Optional containing the element, or an empty Optional if null/out-of-bounds.</span>
-<span class="source-line-no">2230</span><span id="line-2230">    */</span>
-<span class="source-line-no">2231</span><span id="line-2231">   public static &lt;E&gt; Optional&lt;E&gt; optionalAt(List&lt;E&gt; l, int index) {</span>
-<span class="source-line-no">2232</span><span id="line-2232">      return Optional.ofNullable(elementAt(l, index));</span>
-<span class="source-line-no">2233</span><span id="line-2233">   }</span>
-<span class="source-line-no">2234</span><span id="line-2234"></span>
-<span class="source-line-no">2235</span><span id="line-2235">   /**</span>
-<span class="source-line-no">2236</span><span id="line-2236">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the specified map is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise returns the map.</span>
-<span class="source-line-no">2237</span><span id="line-2237">    *</span>
-<span class="source-line-no">2238</span><span id="line-2238">    * @param &lt;K&gt; The key type.</span>
-<span class="source-line-no">2239</span><span id="line-2239">    * @param &lt;V&gt; The value type.</span>
-<span class="source-line-no">2240</span><span id="line-2240">    * @param val The map to check.</span>
-<span class="source-line-no">2241</span><span id="line-2241">    * @return &lt;jk&gt;null&lt;/jk&gt; if the map is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise the map itself.</span>
-<span class="source-line-no">2242</span><span id="line-2242">    */</span>
-<span class="source-line-no">2243</span><span id="line-2243">   public static &lt;K,V&gt; Map&lt;K,V&gt; nullIfEmpty(Map&lt;K,V&gt; val) {</span>
-<span class="source-line-no">2244</span><span id="line-2244">      return isEmpty(val) ? null : val;</span>
-<span class="source-line-no">2245</span><span id="line-2245">   }</span>
-<span class="source-line-no">2246</span><span id="line-2246"></span>
-<span class="source-line-no">2247</span><span id="line-2247">   /**</span>
-<span class="source-line-no">2248</span><span id="line-2248">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the specified list is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise returns the list.</span>
-<span class="source-line-no">2249</span><span id="line-2249">    *</span>
-<span class="source-line-no">2250</span><span id="line-2250">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">2251</span><span id="line-2251">    * @param val The list to check.</span>
-<span class="source-line-no">2252</span><span id="line-2252">    * @return &lt;jk&gt;null&lt;/jk&gt; if the list is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise the list itself.</span>
-<span class="source-line-no">2253</span><span id="line-2253">    */</span>
-<span class="source-line-no">2254</span><span id="line-2254">   public static &lt;E&gt; List&lt;E&gt; nullIfEmpty(List&lt;E&gt; val) {</span>
-<span class="source-line-no">2255</span><span id="line-2255">      return isEmpty(val) ? null : val;</span>
-<span class="source-line-no">2256</span><span id="line-2256">   }</span>
-<span class="source-line-no">2257</span><span id="line-2257"></span>
-<span class="source-line-no">2258</span><span id="line-2258">   /**</span>
-<span class="source-line-no">2259</span><span id="line-2259">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the specified set is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise returns the set.</span>
-<span class="source-line-no">2260</span><span id="line-2260">    *</span>
-<span class="source-line-no">2261</span><span id="line-2261">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">2262</span><span id="line-2262">    * @param val The set to check.</span>
-<span class="source-line-no">2263</span><span id="line-2263">    * @return &lt;jk&gt;null&lt;/jk&gt; if the set is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise the set itself.</span>
-<span class="source-line-no">2264</span><span id="line-2264">    */</span>
-<span class="source-line-no">2265</span><span id="line-2265">   public static &lt;E&gt; Set&lt;E&gt; nullIfEmpty(Set&lt;E&gt; val) {</span>
-<span class="source-line-no">2266</span><span id="line-2266">      return isEmpty(val) ? null : val;</span>
-<span class="source-line-no">2267</span><span id="line-2267">   }</span>
-<span class="source-line-no">2268</span><span id="line-2268"></span>
-<span class="source-line-no">2269</span><span id="line-2269">   /**</span>
-<span class="source-line-no">2270</span><span id="line-2270">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified collection is not null and not empty.</span>
-<span class="source-line-no">2271</span><span id="line-2271">    *</span>
-<span class="source-line-no">2272</span><span id="line-2272">    * @param c The collection to check.</span>
-<span class="source-line-no">2273</span><span id="line-2273">    * @return &lt;jk&gt;true&lt;/jk&gt; if not null and not empty.</span>
-<span class="source-line-no">2274</span><span id="line-2274">    */</span>
-<span class="source-line-no">2275</span><span id="line-2275">   public static boolean isNotEmpty(Collection&lt;?&gt; c) {</span>
-<span class="source-line-no">2276</span><span id="line-2276">      return c != null &amp;&amp; ! c.isEmpty();</span>
-<span class="source-line-no">2277</span><span id="line-2277">   }</span>
-<span class="source-line-no">2278</span><span id="line-2278"></span>
-<span class="source-line-no">2279</span><span id="line-2279">   /**</span>
-<span class="source-line-no">2280</span><span id="line-2280">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified map is not null and not empty.</span>
-<span class="source-line-no">2281</span><span id="line-2281">    *</span>
-<span class="source-line-no">2282</span><span id="line-2282">    * @param m The map to check.</span>
-<span class="source-line-no">2283</span><span id="line-2283">    * @return &lt;jk&gt;true&lt;/jk&gt; if not null and not empty.</span>
-<span class="source-line-no">2284</span><span id="line-2284">    */</span>
-<span class="source-line-no">2285</span><span id="line-2285">   public static boolean isNotEmpty(Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">2286</span><span id="line-2286">      return m != null &amp;&amp; ! m.isEmpty();</span>
-<span class="source-line-no">2287</span><span id="line-2287">   }</span>
-<span class="source-line-no">2288</span><span id="line-2288"></span>
-<span class="source-line-no">2289</span><span id="line-2289">   /**</span>
-<span class="source-line-no">2290</span><span id="line-2290">    * Returns the element at the specified index.</span>
-<span class="source-line-no">2291</span><span id="line-2291">    *</span>
-<span class="source-line-no">2292</span><span id="line-2292">    * @param &lt;E&gt; The element type.</span>
-<span class="source-line-no">2293</span><span id="line-2293">    * @param l The list. Can be null.</span>
-<span class="source-line-no">2294</span><span id="line-2294">    * @param index The index to access.</span>
-<span class="source-line-no">2295</span><span id="line-2295">    * @return The element, or null if out-of-bounds/null list.</span>
-<span class="source-line-no">2296</span><span id="line-2296">    */</span>
-<span class="source-line-no">2297</span><span id="line-2297">   public static &lt;E&gt; E elementAt(List&lt;E&gt; l, int index) {</span>
-<span class="source-line-no">2298</span><span id="line-2298">      if (l == null || index &lt; 0 || index &gt;= l.size())</span>
-<span class="source-line-no">2299</span><span id="line-2299">         return null;</span>
-<span class="source-line-no">2300</span><span id="line-2300">      return l.get(index);</span>
-<span class="source-line-no">2301</span><span id="line-2301">   }</span>
-<span class="source-line-no">2302</span><span id="line-2302"></span>
-<span class="source-line-no">2303</span><span id="line-2303">   /**</span>
-<span class="source-line-no">2304</span><span id="line-2304">    * Creates a new modifiable LinkedHashSet.</span>
-<span class="source-line-no">2305</span><span id="line-2305">    *</span>
-<span class="source-line-no">2306</span><span id="line-2306">    * @param &lt;T&gt; The element type.</span>
-<span class="source-line-no">2307</span><span id="line-2307">    * @param values The values to add to the set.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link IllegalArgumentException}).</span>
-<span class="source-line-no">2308</span><span id="line-2308">    * @return A modifiable LinkedHashSet containing the specified values.</span>
-<span class="source-line-no">2309</span><span id="line-2309">    */</span>
-<span class="source-line-no">2310</span><span id="line-2310">   @SafeVarargs</span>
-<span class="source-line-no">2311</span><span id="line-2311">   public static &lt;T&gt; Set&lt;T&gt; set(T...values) {</span>
-<span class="source-line-no">2312</span><span id="line-2312">      reqnn("values", values);</span>
-<span class="source-line-no">2313</span><span id="line-2313">      return new LinkedHashSet&lt;&gt;(Arrays.asList(values));</span>
-<span class="source-line-no">2314</span><span id="line-2314">   }</span>
-<span class="source-line-no">2315</span><span id="line-2315"></span>
-<span class="source-line-no">2316</span><span id="line-2316">   /**</span>
-<span class="source-line-no">2317</span><span id="line-2317">    * Creates an int array.</span>
-<span class="source-line-no">2318</span><span id="line-2318">    *</span>
-<span class="source-line-no">2319</span><span id="line-2319">    * @param value The values.</span>
-<span class="source-line-no">2320</span><span id="line-2320">    * @return A new int array.</span>
-<span class="source-line-no">2321</span><span id="line-2321">    */</span>
-<span class="source-line-no">2322</span><span id="line-2322">   public static int[] intArray(int...value) { return value; }</span>
-<span class="source-line-no">2323</span><span id="line-2323"></span>
-<span class="source-line-no">2324</span><span id="line-2324">   /**</span>
-<span class="source-line-no">2325</span><span id="line-2325">    * Creates a long array.</span>
-<span class="source-line-no">2326</span><span id="line-2326">    *</span>
-<span class="source-line-no">2327</span><span id="line-2327">    * @param value The values.</span>
-<span class="source-line-no">2328</span><span id="line-2328">    * @return A new long array.</span>
-<span class="source-line-no">2329</span><span id="line-2329">    */</span>
-<span class="source-line-no">2330</span><span id="line-2330">   public static long[] longArray(long...value) { return value; }</span>
-<span class="source-line-no">2331</span><span id="line-2331"></span>
-<span class="source-line-no">2332</span><span id="line-2332">   /**</span>
-<span class="source-line-no">2333</span><span id="line-2333">    * Creates a byte array from ints.</span>
-<span class="source-line-no">2334</span><span id="line-2334">    *</span>
-<span class="source-line-no">2335</span><span id="line-2335">    * @param value The int values to convert to bytes.</span>
-<span class="source-line-no">2336</span><span id="line-2336">    * @return A new byte array.</span>
-<span class="source-line-no">2337</span><span id="line-2337">    */</span>
-<span class="source-line-no">2338</span><span id="line-2338">   public static byte[] byteArray(int...value) {</span>
-<span class="source-line-no">2339</span><span id="line-2339">      var result = new byte[value.length];</span>
-<span class="source-line-no">2340</span><span id="line-2340">      for (var i = 0; i &lt; value.length; i++)</span>
-<span class="source-line-no">2341</span><span id="line-2341">         result[i] = (byte)value[i];</span>
-<span class="source-line-no">2342</span><span id="line-2342">      return result;</span>
-<span class="source-line-no">2343</span><span id="line-2343">   }</span>
-<span class="source-line-no">2344</span><span id="line-2344"></span>
-<span class="source-line-no">2345</span><span id="line-2345">   /**</span>
-<span class="source-line-no">2346</span><span id="line-2346">    * Creates a char array.</span>
-<span class="source-line-no">2347</span><span id="line-2347">    *</span>
-<span class="source-line-no">2348</span><span id="line-2348">    * @param value The values.</span>
-<span class="source-line-no">2349</span><span id="line-2349">    * @return A new char array.</span>
-<span class="source-line-no">2350</span><span id="line-2350">    */</span>
-<span class="source-line-no">2351</span><span id="line-2351">   public static char[] charArray(char...value) { return value; }</span>
-<span class="source-line-no">2352</span><span id="line-2352"></span>
-<span class="source-line-no">2353</span><span id="line-2353">   /**</span>
-<span class="source-line-no">2354</span><span id="line-2354">    * Creates a float array.</span>
-<span class="source-line-no">2355</span><span id="line-2355">    *</span>
-<span class="source-line-no">2356</span><span id="line-2356">    * @param value The values.</span>
-<span class="source-line-no">2357</span><span id="line-2357">    * @return A new float array.</span>
-<span class="source-line-no">2358</span><span id="line-2358">    */</span>
-<span class="source-line-no">2359</span><span id="line-2359">   public static float[] floatArray(float...value) { return value; }</span>
-<span class="source-line-no">2360</span><span id="line-2360"></span>
-<span class="source-line-no">2361</span><span id="line-2361">   /**</span>
-<span class="source-line-no">2362</span><span id="line-2362">    * Creates a double array.</span>
-<span class="source-line-no">2363</span><span id="line-2363">    *</span>
-<span class="source-line-no">2364</span><span id="line-2364">    * @param value The values.</span>
-<span class="source-line-no">2365</span><span id="line-2365">    * @return A new double array.</span>
-<span class="source-line-no">2366</span><span id="line-2366">    */</span>
-<span class="source-line-no">2367</span><span id="line-2367">   public static double[] doubleArray(double...value) { return value; }</span>
-<span class="source-line-no">2368</span><span id="line-2368"></span>
-<span class="source-line-no">2369</span><span id="line-2369">   /**</span>
-<span class="source-line-no">2370</span><span id="line-2370">    * Creates a boolean array.</span>
-<span class="source-line-no">2371</span><span id="line-2371">    *</span>
-<span class="source-line-no">2372</span><span id="line-2372">    * @param value The values.</span>
-<span class="source-line-no">2373</span><span id="line-2373">    * @return A new boolean array.</span>
-<span class="source-line-no">2374</span><span id="line-2374">    */</span>
-<span class="source-line-no">2375</span><span id="line-2375">   public static boolean[] booleanArray(boolean...value) { return value; }</span>
-<span class="source-line-no">2376</span><span id="line-2376"></span>
-<span class="source-line-no">2377</span><span id="line-2377">   /**</span>
-<span class="source-line-no">2378</span><span id="line-2378">    * Creates a short array from ints.</span>
-<span class="source-line-no">2379</span><span id="line-2379">    *</span>
-<span class="source-line-no">2380</span><span id="line-2380">    * @param value The int values to convert to shorts.</span>
-<span class="source-line-no">2381</span><span id="line-2381">    * @return A new short array.</span>
-<span class="source-line-no">2382</span><span id="line-2382">    */</span>
-<span class="source-line-no">2383</span><span id="line-2383">   public static short[] shortArray(int...value) {</span>
-<span class="source-line-no">2384</span><span id="line-2384">      var result = new short[value.length];</span>
-<span class="source-line-no">2385</span><span id="line-2385">      for (var i = 0; i &lt; value.length; i++)</span>
-<span class="source-line-no">2386</span><span id="line-2386">         result[i] = (short)value[i];</span>
-<span class="source-line-no">2387</span><span id="line-2387">      return result;</span>
-<span class="source-line-no">2388</span><span id="line-2388">   }</span>
-<span class="source-line-no">2389</span><span id="line-2389"></span>
-<span class="source-line-no">2390</span><span id="line-2390">   private CollectionUtils() {}</span>
-<span class="source-line-no">2391</span><span id="line-2391">}</span>
+<span class="source-line-no">2146</span><span id="line-2146">    * &lt;p&gt;Intentional null return for assertion testing.</span>
+<span class="source-line-no">2147</span><span id="line-2147">    *</span>
+<span class="source-line-no">2148</span><span id="line-2148">    * @param &lt;T&gt; The component type.</span>
+<span class="source-line-no">2149</span><span id="line-2149">    * @param type The component type class.</span>
+<span class="source-line-no">2150</span><span id="line-2150">    * @return &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2151</span><span id="line-2151">    */</span>
+<span class="source-line-no">2152</span><span id="line-2152">   public static &lt;T&gt; T[] nullArray(Class&lt;T&gt; type) {</span>
+<span class="source-line-no">2153</span><span id="line-2153">      return null;</span>
+<span class="source-line-no">2154</span><span id="line-2154">   }</span>
+<span class="source-line-no">2155</span><span id="line-2155"></span>
+<span class="source-line-no">2156</span><span id="line-2156">   /**</span>
+<span class="source-line-no">2157</span><span id="line-2157">    * Creates a LinkedList from the specified values.</span>
+<span class="source-line-no">2158</span><span id="line-2158">    *</span>
+<span class="source-line-no">2159</span><span id="line-2159">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2160</span><span id="line-2160">    * @param values The values to add to the list.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link NullPointerException}).</span>
+<span class="source-line-no">2161</span><span id="line-2161">    * @return A new modifiable LinkedList containing the specified values.</span>
+<span class="source-line-no">2162</span><span id="line-2162">    */</span>
+<span class="source-line-no">2163</span><span id="line-2163">   @SafeVarargs</span>
+<span class="source-line-no">2164</span><span id="line-2164">   public static &lt;T&gt; List&lt;T&gt; linkedList(T...values) {</span>
+<span class="source-line-no">2165</span><span id="line-2165">      return new LinkedList&lt;&gt;(fixedSizeList(values));</span>
+<span class="source-line-no">2166</span><span id="line-2166">   }</span>
+<span class="source-line-no">2167</span><span id="line-2167"></span>
+<span class="source-line-no">2168</span><span id="line-2168">   /**</span>
+<span class="source-line-no">2169</span><span id="line-2169">    * Creates a HashSet from the specified values.</span>
+<span class="source-line-no">2170</span><span id="line-2170">    *</span>
+<span class="source-line-no">2171</span><span id="line-2171">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2172</span><span id="line-2172">    * @param values The values to add to the set.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link NullPointerException}).</span>
+<span class="source-line-no">2173</span><span id="line-2173">    * @return A new modifiable HashSet containing the specified values.</span>
+<span class="source-line-no">2174</span><span id="line-2174">    */</span>
+<span class="source-line-no">2175</span><span id="line-2175">   @SafeVarargs</span>
+<span class="source-line-no">2176</span><span id="line-2176">   public static &lt;T&gt; Set&lt;T&gt; hashSet(T...values) {</span>
+<span class="source-line-no">2177</span><span id="line-2177">      return new HashSet&lt;&gt;(Arrays.asList(values));</span>
+<span class="source-line-no">2178</span><span id="line-2178">   }</span>
+<span class="source-line-no">2179</span><span id="line-2179"></span>
+<span class="source-line-no">2180</span><span id="line-2180">   /**</span>
+<span class="source-line-no">2181</span><span id="line-2181">    * Creates an unmodifiable view of the specified list.</span>
+<span class="source-line-no">2182</span><span id="line-2182">    *</span>
+<span class="source-line-no">2183</span><span id="line-2183">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2184</span><span id="line-2184">    * @param value The list to make unmodifiable. Can be null.</span>
+<span class="source-line-no">2185</span><span id="line-2185">    * @return An unmodifiable view of the list, or null if the input was null.</span>
+<span class="source-line-no">2186</span><span id="line-2186">    */</span>
+<span class="source-line-no">2187</span><span id="line-2187">   public static &lt;T&gt; List&lt;T&gt; unmodifiable(List&lt;? extends T&gt; value) {</span>
+<span class="source-line-no">2188</span><span id="line-2188">      return value == null ? null : Collections.unmodifiableList(value);</span>
+<span class="source-line-no">2189</span><span id="line-2189">   }</span>
+<span class="source-line-no">2190</span><span id="line-2190"></span>
+<span class="source-line-no">2191</span><span id="line-2191">   /**</span>
+<span class="source-line-no">2192</span><span id="line-2192">    * Creates an unmodifiable view of the specified map.</span>
+<span class="source-line-no">2193</span><span id="line-2193">    *</span>
+<span class="source-line-no">2194</span><span id="line-2194">    * @param &lt;K&gt; The key type.</span>
+<span class="source-line-no">2195</span><span id="line-2195">    * @param &lt;V&gt; The value type.</span>
+<span class="source-line-no">2196</span><span id="line-2196">    * @param value The map to make unmodifiable. Can be null.</span>
+<span class="source-line-no">2197</span><span id="line-2197">    * @return An unmodifiable view of the map, or null if the input was null.</span>
+<span class="source-line-no">2198</span><span id="line-2198">    */</span>
+<span class="source-line-no">2199</span><span id="line-2199">   public static &lt;K,V&gt; Map&lt;K,V&gt; unmodifiable(Map&lt;? extends K,? extends V&gt; value) {</span>
+<span class="source-line-no">2200</span><span id="line-2200">      return value == null ? null : Collections.unmodifiableMap(value);</span>
+<span class="source-line-no">2201</span><span id="line-2201">   }</span>
+<span class="source-line-no">2202</span><span id="line-2202"></span>
+<span class="source-line-no">2203</span><span id="line-2203">   /**</span>
+<span class="source-line-no">2204</span><span id="line-2204">    * Creates an unmodifiable view of the specified set.</span>
+<span class="source-line-no">2205</span><span id="line-2205">    *</span>
+<span class="source-line-no">2206</span><span id="line-2206">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2207</span><span id="line-2207">    * @param value The set to make unmodifiable. Can be null.</span>
+<span class="source-line-no">2208</span><span id="line-2208">    * @return An unmodifiable view of the set, or null if the input was null.</span>
+<span class="source-line-no">2209</span><span id="line-2209">    */</span>
+<span class="source-line-no">2210</span><span id="line-2210">   public static &lt;T&gt; Set&lt;T&gt; unmodifiable(Set&lt;? extends T&gt; value) {</span>
+<span class="source-line-no">2211</span><span id="line-2211">      return value == null ? null : Collections.unmodifiableSet(value);</span>
+<span class="source-line-no">2212</span><span id="line-2212">   }</span>
+<span class="source-line-no">2213</span><span id="line-2213"></span>
+<span class="source-line-no">2214</span><span id="line-2214">   /**</span>
+<span class="source-line-no">2215</span><span id="line-2215">    * Creates an unmodifiable view of the specified sorted set.</span>
+<span class="source-line-no">2216</span><span id="line-2216">    *</span>
+<span class="source-line-no">2217</span><span id="line-2217">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2218</span><span id="line-2218">    * @param value The sorted set to make unmodifiable. Can be null.</span>
+<span class="source-line-no">2219</span><span id="line-2219">    * @return An unmodifiable view of the sorted set, or null if the input was null.</span>
+<span class="source-line-no">2220</span><span id="line-2220">    */</span>
+<span class="source-line-no">2221</span><span id="line-2221">   public static &lt;T&gt; SortedSet&lt;T&gt; unmodifiable(SortedSet&lt;T&gt; value) {</span>
+<span class="source-line-no">2222</span><span id="line-2222">      return value == null ? null : Collections.unmodifiableSortedSet(value);</span>
+<span class="source-line-no">2223</span><span id="line-2223">   }</span>
+<span class="source-line-no">2224</span><span id="line-2224"></span>
+<span class="source-line-no">2225</span><span id="line-2225">   /**</span>
+<span class="source-line-no">2226</span><span id="line-2226">    * Returns the element at the specified index, wrapped in an {@link Optional}.</span>
+<span class="source-line-no">2227</span><span id="line-2227">    *</span>
+<span class="source-line-no">2228</span><span id="line-2228">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">2229</span><span id="line-2229">    * @param l The list. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">2230</span><span id="line-2230">    * @param index The index to access.</span>
+<span class="source-line-no">2231</span><span id="line-2231">    * @return An Optional containing the element, or an empty Optional if null/out-of-bounds.</span>
+<span class="source-line-no">2232</span><span id="line-2232">    */</span>
+<span class="source-line-no">2233</span><span id="line-2233">   public static &lt;E&gt; Optional&lt;E&gt; optionalAt(List&lt;E&gt; l, int index) {</span>
+<span class="source-line-no">2234</span><span id="line-2234">      return Optional.ofNullable(elementAt(l, index));</span>
+<span class="source-line-no">2235</span><span id="line-2235">   }</span>
+<span class="source-line-no">2236</span><span id="line-2236"></span>
+<span class="source-line-no">2237</span><span id="line-2237">   /**</span>
+<span class="source-line-no">2238</span><span id="line-2238">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the specified map is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise returns the map.</span>
+<span class="source-line-no">2239</span><span id="line-2239">    *</span>
+<span class="source-line-no">2240</span><span id="line-2240">    * @param &lt;K&gt; The key type.</span>
+<span class="source-line-no">2241</span><span id="line-2241">    * @param &lt;V&gt; The value type.</span>
+<span class="source-line-no">2242</span><span id="line-2242">    * @param val The map to check.</span>
+<span class="source-line-no">2243</span><span id="line-2243">    * @return &lt;jk&gt;null&lt;/jk&gt; if the map is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise the map itself.</span>
+<span class="source-line-no">2244</span><span id="line-2244">    */</span>
+<span class="source-line-no">2245</span><span id="line-2245">   public static &lt;K,V&gt; Map&lt;K,V&gt; nullIfEmpty(Map&lt;K,V&gt; val) {</span>
+<span class="source-line-no">2246</span><span id="line-2246">      return isEmpty(val) ? null : val;</span>
+<span class="source-line-no">2247</span><span id="line-2247">   }</span>
+<span class="source-line-no">2248</span><span id="line-2248"></span>
+<span class="source-line-no">2249</span><span id="line-2249">   /**</span>
+<span class="source-line-no">2250</span><span id="line-2250">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the specified list is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise returns the list.</span>
+<span class="source-line-no">2251</span><span id="line-2251">    *</span>
+<span class="source-line-no">2252</span><span id="line-2252">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">2253</span><span id="line-2253">    * @param val The list to check.</span>
+<span class="source-line-no">2254</span><span id="line-2254">    * @return &lt;jk&gt;null&lt;/jk&gt; if the list is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise the list itself.</span>
+<span class="source-line-no">2255</span><span id="line-2255">    */</span>
+<span class="source-line-no">2256</span><span id="line-2256">   public static &lt;E&gt; List&lt;E&gt; nullIfEmpty(List&lt;E&gt; val) {</span>
+<span class="source-line-no">2257</span><span id="line-2257">      return isEmpty(val) ? null : val;</span>
+<span class="source-line-no">2258</span><span id="line-2258">   }</span>
+<span class="source-line-no">2259</span><span id="line-2259"></span>
+<span class="source-line-no">2260</span><span id="line-2260">   /**</span>
+<span class="source-line-no">2261</span><span id="line-2261">    * Returns &lt;jk&gt;null&lt;/jk&gt; if the specified set is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise returns the set.</span>
+<span class="source-line-no">2262</span><span id="line-2262">    *</span>
+<span class="source-line-no">2263</span><span id="line-2263">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">2264</span><span id="line-2264">    * @param val The set to check.</span>
+<span class="source-line-no">2265</span><span id="line-2265">    * @return &lt;jk&gt;null&lt;/jk&gt; if the set is &lt;jk&gt;null&lt;/jk&gt; or empty, otherwise the set itself.</span>
+<span class="source-line-no">2266</span><span id="line-2266">    */</span>
+<span class="source-line-no">2267</span><span id="line-2267">   public static &lt;E&gt; Set&lt;E&gt; nullIfEmpty(Set&lt;E&gt; val) {</span>
+<span class="source-line-no">2268</span><span id="line-2268">      return isEmpty(val) ? null : val;</span>
+<span class="source-line-no">2269</span><span id="line-2269">   }</span>
+<span class="source-line-no">2270</span><span id="line-2270"></span>
+<span class="source-line-no">2271</span><span id="line-2271">   /**</span>
+<span class="source-line-no">2272</span><span id="line-2272">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified collection is not null and not empty.</span>
+<span class="source-line-no">2273</span><span id="line-2273">    *</span>
+<span class="source-line-no">2274</span><span id="line-2274">    * @param c The collection to check.</span>
+<span class="source-line-no">2275</span><span id="line-2275">    * @return &lt;jk&gt;true&lt;/jk&gt; if not null and not empty.</span>
+<span class="source-line-no">2276</span><span id="line-2276">    */</span>
+<span class="source-line-no">2277</span><span id="line-2277">   public static boolean isNotEmpty(Collection&lt;?&gt; c) {</span>
+<span class="source-line-no">2278</span><span id="line-2278">      return c != null &amp;&amp; ! c.isEmpty();</span>
+<span class="source-line-no">2279</span><span id="line-2279">   }</span>
+<span class="source-line-no">2280</span><span id="line-2280"></span>
+<span class="source-line-no">2281</span><span id="line-2281">   /**</span>
+<span class="source-line-no">2282</span><span id="line-2282">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified map is not null and not empty.</span>
+<span class="source-line-no">2283</span><span id="line-2283">    *</span>
+<span class="source-line-no">2284</span><span id="line-2284">    * @param m The map to check.</span>
+<span class="source-line-no">2285</span><span id="line-2285">    * @return &lt;jk&gt;true&lt;/jk&gt; if not null and not empty.</span>
+<span class="source-line-no">2286</span><span id="line-2286">    */</span>
+<span class="source-line-no">2287</span><span id="line-2287">   public static boolean isNotEmpty(Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">2288</span><span id="line-2288">      return m != null &amp;&amp; ! m.isEmpty();</span>
+<span class="source-line-no">2289</span><span id="line-2289">   }</span>
+<span class="source-line-no">2290</span><span id="line-2290"></span>
+<span class="source-line-no">2291</span><span id="line-2291">   /**</span>
+<span class="source-line-no">2292</span><span id="line-2292">    * Returns the element at the specified index.</span>
+<span class="source-line-no">2293</span><span id="line-2293">    *</span>
+<span class="source-line-no">2294</span><span id="line-2294">    * @param &lt;E&gt; The element type.</span>
+<span class="source-line-no">2295</span><span id="line-2295">    * @param l The list. Can be null.</span>
+<span class="source-line-no">2296</span><span id="line-2296">    * @param index The index to access.</span>
+<span class="source-line-no">2297</span><span id="line-2297">    * @return The element, or null if out-of-bounds/null list.</span>
+<span class="source-line-no">2298</span><span id="line-2298">    */</span>
+<span class="source-line-no">2299</span><span id="line-2299">   public static &lt;E&gt; E elementAt(List&lt;E&gt; l, int index) {</span>
+<span class="source-line-no">2300</span><span id="line-2300">      if (l == null || index &lt; 0 || index &gt;= l.size())</span>
+<span class="source-line-no">2301</span><span id="line-2301">         return null;</span>
+<span class="source-line-no">2302</span><span id="line-2302">      return l.get(index);</span>
+<span class="source-line-no">2303</span><span id="line-2303">   }</span>
+<span class="source-line-no">2304</span><span id="line-2304"></span>
+<span class="source-line-no">2305</span><span id="line-2305">   /**</span>
+<span class="source-line-no">2306</span><span id="line-2306">    * Creates a new modifiable LinkedHashSet.</span>
+<span class="source-line-no">2307</span><span id="line-2307">    *</span>
+<span class="source-line-no">2308</span><span id="line-2308">    * @param &lt;T&gt; The element type.</span>
+<span class="source-line-no">2309</span><span id="line-2309">    * @param values The values to add to the set.  Must not be &lt;jk&gt;null&lt;/jk&gt; (a &lt;jk&gt;null&lt;/jk&gt; array throws {@link IllegalArgumentException}).</span>
+<span class="source-line-no">2310</span><span id="line-2310">    * @return A modifiable LinkedHashSet containing the specified values.</span>
+<span class="source-line-no">2311</span><span id="line-2311">    */</span>
+<span class="source-line-no">2312</span><span id="line-2312">   @SafeVarargs</span>
+<span class="source-line-no">2313</span><span id="line-2313">   public static &lt;T&gt; Set&lt;T&gt; set(T...values) {</span>
+<span class="source-line-no">2314</span><span id="line-2314">      reqnn("values", values);</span>
+<span class="source-line-no">2315</span><span id="line-2315">      return new LinkedHashSet&lt;&gt;(Arrays.asList(values));</span>
+<span class="source-line-no">2316</span><span id="line-2316">   }</span>
+<span class="source-line-no">2317</span><span id="line-2317"></span>
+<span class="source-line-no">2318</span><span id="line-2318">   /**</span>
+<span class="source-line-no">2319</span><span id="line-2319">    * Creates an int array.</span>
+<span class="source-line-no">2320</span><span id="line-2320">    *</span>
+<span class="source-line-no">2321</span><span id="line-2321">    * @param value The values.</span>
+<span class="source-line-no">2322</span><span id="line-2322">    * @return A new int array.</span>
+<span class="source-line-no">2323</span><span id="line-2323">    */</span>
+<span class="source-line-no">2324</span><span id="line-2324">   public static int[] intArray(int...value) { return value; }</span>
+<span class="source-line-no">2325</span><span id="line-2325"></span>
+<span class="source-line-no">2326</span><span id="line-2326">   /**</span>
+<span class="source-line-no">2327</span><span id="line-2327">    * Creates a long array.</span>
+<span class="source-line-no">2328</span><span id="line-2328">    *</span>
+<span class="source-line-no">2329</span><span id="line-2329">    * @param value The values.</span>
+<span class="source-line-no">2330</span><span id="line-2330">    * @return A new long array.</span>
+<span class="source-line-no">2331</span><span id="line-2331">    */</span>
+<span class="source-line-no">2332</span><span id="line-2332">   public static long[] longArray(long...value) { return value; }</span>
+<span class="source-line-no">2333</span><span id="line-2333"></span>
+<span class="source-line-no">2334</span><span id="line-2334">   /**</span>
+<span class="source-line-no">2335</span><span id="line-2335">    * Creates a byte array from ints.</span>
+<span class="source-line-no">2336</span><span id="line-2336">    *</span>
+<span class="source-line-no">2337</span><span id="line-2337">    * @param value The int values to convert to bytes.</span>
+<span class="source-line-no">2338</span><span id="line-2338">    * @return A new byte array.</span>
+<span class="source-line-no">2339</span><span id="line-2339">    */</span>
+<span class="source-line-no">2340</span><span id="line-2340">   public static byte[] byteArray(int...value) {</span>
+<span class="source-line-no">2341</span><span id="line-2341">      var result = new byte[value.length];</span>
+<span class="source-line-no">2342</span><span id="line-2342">      for (var i = 0; i &lt; value.length; i++)</span>
+<span class="source-line-no">2343</span><span id="line-2343">         result[i] = (byte)value[i];</span>
+<span class="source-line-no">2344</span><span id="line-2344">      return result;</span>
+<span class="source-line-no">2345</span><span id="line-2345">   }</span>
+<span class="source-line-no">2346</span><span id="line-2346"></span>
+<span class="source-line-no">2347</span><span id="line-2347">   /**</span>
+<span class="source-line-no">2348</span><span id="line-2348">    * Creates a char array.</span>
+<span class="source-line-no">2349</span><span id="line-2349">    *</span>
+<span class="source-line-no">2350</span><span id="line-2350">    * @param value The values.</span>
+<span class="source-line-no">2351</span><span id="line-2351">    * @return A new char array.</span>
+<span class="source-line-no">2352</span><span id="line-2352">    */</span>
+<span class="source-line-no">2353</span><span id="line-2353">   public static char[] charArray(char...value) { return value; }</span>
+<span class="source-line-no">2354</span><span id="line-2354"></span>
+<span class="source-line-no">2355</span><span id="line-2355">   /**</span>
+<span class="source-line-no">2356</span><span id="line-2356">    * Creates a float array.</span>
+<span class="source-line-no">2357</span><span id="line-2357">    *</span>
+<span class="source-line-no">2358</span><span id="line-2358">    * @param value The values.</span>
+<span class="source-line-no">2359</span><span id="line-2359">    * @return A new float array.</span>
+<span class="source-line-no">2360</span><span id="line-2360">    */</span>
+<span class="source-line-no">2361</span><span id="line-2361">   public static float[] floatArray(float...value) { return value; }</span>
+<span class="source-line-no">2362</span><span id="line-2362"></span>
+<span class="source-line-no">2363</span><span id="line-2363">   /**</span>
+<span class="source-line-no">2364</span><span id="line-2364">    * Creates a double array.</span>
+<span class="source-line-no">2365</span><span id="line-2365">    *</span>
+<span class="source-line-no">2366</span><span id="line-2366">    * @param value The values.</span>
+<span class="source-line-no">2367</span><span id="line-2367">    * @return A new double array.</span>
+<span class="source-line-no">2368</span><span id="line-2368">    */</span>
+<span class="source-line-no">2369</span><span id="line-2369">   public static double[] doubleArray(double...value) { return value; }</span>
+<span class="source-line-no">2370</span><span id="line-2370"></span>
+<span class="source-line-no">2371</span><span id="line-2371">   /**</span>
+<span class="source-line-no">2372</span><span id="line-2372">    * Creates a boolean array.</span>
+<span class="source-line-no">2373</span><span id="line-2373">    *</span>
+<span class="source-line-no">2374</span><span id="line-2374">    * @param value The values.</span>
+<span class="source-line-no">2375</span><span id="line-2375">    * @return A new boolean array.</span>
+<span class="source-line-no">2376</span><span id="line-2376">    */</span>
+<span class="source-line-no">2377</span><span id="line-2377">   public static boolean[] booleanArray(boolean...value) { return value; }</span>
+<span class="source-line-no">2378</span><span id="line-2378"></span>
+<span class="source-line-no">2379</span><span id="line-2379">   /**</span>
+<span class="source-line-no">2380</span><span id="line-2380">    * Creates a short array from ints.</span>
+<span class="source-line-no">2381</span><span id="line-2381">    *</span>
+<span class="source-line-no">2382</span><span id="line-2382">    * @param value The int values to convert to shorts.</span>
+<span class="source-line-no">2383</span><span id="line-2383">    * @return A new short array.</span>
+<span class="source-line-no">2384</span><span id="line-2384">    */</span>
+<span class="source-line-no">2385</span><span id="line-2385">   public static short[] shortArray(int...value) {</span>
+<span class="source-line-no">2386</span><span id="line-2386">      var result = new short[value.length];</span>
+<span class="source-line-no">2387</span><span id="line-2387">      for (var i = 0; i &lt; value.length; i++)</span>
+<span class="source-line-no">2388</span><span id="line-2388">         result[i] = (short)value[i];</span>
+<span class="source-line-no">2389</span><span id="line-2389">      return result;</span>
+<span class="source-line-no">2390</span><span id="line-2390">   }</span>
+<span class="source-line-no">2391</span><span id="line-2391"></span>
+<span class="source-line-no">2392</span><span id="line-2392">   private CollectionUtils() {}</span>
+<span class="source-line-no">2393</span><span id="line-2393">}</span>
 
 
 

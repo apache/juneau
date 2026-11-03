@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../commons/bean/BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanType</a>(<a href="../../commons/bean/BeanType.html#properties()">properties</a>="id,title,confirmLabel,fields")
-</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-246">ModalDef.Step</a></span>
+</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-260">ModalDef.Step</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">One page of a <a href="ModalDef.html#steps"><code>ModalDef.steps</code></a> wizard: an id, an optional title and confirm-button label, and the typed
  display fields painted for that page.</div>
@@ -106,7 +106,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#confirmLabel" class="member-name-link">confirmLabel</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">The confirm-button label for this step; omitted when unset (the runtime shows Next, or the final label on the last step).</div>
+<div class="block">The confirm-button label for this step; omitted when unset (the runtime shows Next; on the last step it shows the dialog's confirm label, else Finish).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Field.html" title="class in org.apache.juneau.console.widgets">ModalDef.Field</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#fields" class="member-name-link">fields</a></code></div>
@@ -191,28 +191,28 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="id">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-250">id</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-264">id</a></span></div>
 <div class="block">The step id, unique within the modal; a script selects a step by it.  Must not be blank.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="title">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-253">title</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-267">title</a></span></div>
 <div class="block">The dialog title shown while this step is current; omitted from the wire when unset (the modal title stays).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="confirmLabel">
 <h3>confirmLabel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-256">confirmLabel</a></span></div>
-<div class="block">The confirm-button label for this step; omitted when unset (the runtime shows Next, or the final label on the last step).</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-270">confirmLabel</a></span></div>
+<div class="block">The confirm-button label for this step; omitted when unset (the runtime shows Next; on the last step it shows the dialog's confirm label, else Finish).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="fields">
 <h3>fields</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Field.html" title="class in org.apache.juneau.console.widgets">ModalDef.Field</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-259">fields</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Field.html" title="class in org.apache.juneau.console.widgets">ModalDef.Field</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-273">fields</a></span></div>
 <div class="block">The typed display fields painted for this step, in display order; omitted from the wire when none are declared.</div>
 </section>
 </li>
@@ -227,7 +227,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Step</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-247">Step</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-261">Step</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -241,7 +241,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-268">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-282">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">Creates a step.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -256,7 +256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="title(java.lang.String)">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-282">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-296">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the dialog title shown while this step is current.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -269,7 +269,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="confirmLabel(java.lang.String)">
 <h3>confirmLabel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-293">confirmLabel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-307">confirmLabel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the confirm-button label for this step.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -282,7 +282,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="field(java.lang.String,java.lang.String)">
 <h3>field</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-305">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.Step.html#line-319">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds one typed display field to this step.</div>
 <dl class="notes">

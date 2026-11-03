@@ -16,25 +16,59 @@ import useBrokenLinks from '@docusaurus/useBrokenLinks';
 import {GROUPS, PROJECTS} from '@site/src/data/projects';
 import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
-import TabItem from '@theme/TabItem';
-import Tabs from '@theme/Tabs';
+import {useState} from 'react';
+import SAMPLES from '@site/src/data/hero-samples.json';
 import styles from './index.module.css';
 
 const DESCRIPTION =
-  'Apache Juneau: one bean, every format. Serialize Java objects to JSON, XML, HTML, YAML and more with one API, then serve them over REST.';
+  'Apache Juneau: one bean, every format. Serialize any Java object to 38 formats (JSON, XML, HTML, YAML, CSV, MessagePack, RDF and more) with one API, then serve it over REST.';
 
-// Output captured once from the default marshallers (Json.of, Xml.of, Yaml.of, Html.of) on 10.0.0-SNAPSHOT.
-// Re-capture rather than hand-edit if the serializers change.
-const SAMPLES = [
-  {value: 'json', label: 'JSON', call: 'Json.of(new Person("Ada", 36))', language: 'json',
-    output: '{"age":36,"name":"Ada"}'},
-  {value: 'xml', label: 'XML', call: 'Xml.of(new Person("Ada", 36))', language: 'xml',
-    output: '<object><age>36</age><name>Ada</name></object>'},
-  {value: 'yaml', label: 'YAML', call: 'Yaml.of(new Person("Ada", 36))', language: 'yaml',
-    output: 'age: 36\nname: Ada'},
-  {value: 'html', label: 'HTML', call: 'Html.of(new Person("Ada", 36))', language: 'html',
-    output: '<table><tr><td>age</td><td>36</td></tr><tr><td>name</td><td>Ada</td></tr></table>'},
+interface Sample {
+  id: string;
+  label: string;
+  group: 'core' | 'rdf';
+  call: string;
+  language: string;
+  binary: boolean;
+  output: string;
+}
+
+// Per-format outputs come from the real marshallers. Regenerate src/data/hero-samples.json with
+// scripts/capture-hero-samples.py rather than hand-editing it.
+const GROUPS_LABELS: {group: Sample['group']; label: string}[] = [
+  {group: 'core', label: 'Core formats'},
+  {group: 'rdf', label: 'RDF formats'},
 ];
+
+function FormatSample() {
+  const samples = SAMPLES as Sample[];
+  const [selected, setSelected] = useState('Json');
+  const sample = samples.find((s) => s.id === selected) ?? samples[0];
+  return (
+    <>
+      <CodeBlock language="java">{'record Person(String name, int age) {}'}</CodeBlock>
+      <div className={styles.formatPicker}>
+        <label htmlFor="hero-format">Format</label>
+        <select id="hero-format" className={styles.formatSelect} value={selected}
+          onChange={(e) => setSelected(e.target.value)}>
+          {GROUPS_LABELS.map((g) => (
+            <optgroup key={g.group} label={g.label}>
+              {samples.filter((s) => s.group === g.group).map((s) => (
+                <option key={s.id} value={s.id}>{s.label}</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+      </div>
+      <CodeBlock language="java">{sample.call}</CodeBlock>
+      <div className={styles.output}>
+        <CodeBlock language={sample.language} title={sample.binary ? 'Output (binary, shown as hex)' : 'Output'}>
+          {sample.output}
+        </CodeBlock>
+      </div>
+    </>
+  );
+}
 
 // The newest published release. Update it at release time together with the Downloads page and the announcement
 // bar in docusaurus.config.ts (New Release Guidelines, step 6.4). static/javadocs/releases.json is not used here:
@@ -146,7 +180,8 @@ export default function Home() {
               <div>
                 <h1 className={styles.tagline}>One bean. Every format.</h1>
                 <p className={styles.subline}>
-                  Serialize any Java object to JSON, XML, HTML, YAML and more with one API, then serve it over REST.
+                  Serialize any Java object to 38 formats (JSON, XML, HTML, YAML, CSV, MessagePack, RDF and more) with one API,
+                  then serve it over REST.
                 </p>
                 <div className={styles.buttons}>
                   <Link className="button button--primary button--lg" to="/docs/topics/GettingStarted">
@@ -158,15 +193,7 @@ export default function Home() {
                 </div>
               </div>
               <div className={styles.sample}>
-                <CodeBlock language="java">{'record Person(String name, int age) {}'}</CodeBlock>
-                <Tabs defaultValue="json">
-                  {SAMPLES.map((s) => (
-                    <TabItem key={s.value} value={s.value} label={s.label}>
-                      <CodeBlock language="java">{s.call}</CodeBlock>
-                      <CodeBlock language={s.language} title="Output">{s.output}</CodeBlock>
-                    </TabItem>
-                  ))}
-                </Tabs>
+                <FormatSample />
               </div>
             </div>
           </div>

@@ -20666,7 +20666,7 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/widgets/ModalDef.Step.html#confirmLabel" class="member-name-link">confirmLabel</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a></dt>
 <dd>
-<div class="block">The confirm-button label for this step; omitted when unset (the runtime shows Next, or the final label on the last step).</div>
+<div class="block">The confirm-button label for this step; omitted when unset (the runtime shows Next; on the last step it shows the dialog's confirm label, else Finish).</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RowAction.html#confirmLabel(java.lang.String)" class="member-name-link">confirmLabel(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></dt>
 <dd>
@@ -32103,7 +32103,7 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Builder twins of the Developer pages: Custom cards (<code>cards.ftlh</code>), Rendering flavors (<code>flavors.ftlh</code>,
  <code>flavors-react.ftlh</code>), Secure (<code>secure.ftlh</code>), Themes (<code>themes.ftlh</code>), Charts (builder only),
- Data sources (builder only) and Dashboard (builder only).</div>
+ Data sources (builder only), Dialogs (builder only) and Dashboard (builder only).</div>
 </dd>
 <dt><a href="org/apache/juneau/petstore/console/dev/DevRest.html" class="type-name-link" title="class in org.apache.juneau.petstore.console.dev">DevRest</a> - Class in <a href="org/apache/juneau/petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></dt>
 <dd>
@@ -32172,6 +32172,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Render the action's form/confirmation in a modal dialog.</div>
 </dd>
+<dt><a href="org/apache/juneau/petstore/console/pages/DevPageBuilders.html#dialogs()" class="member-name-link">dialogs()</a> - Static method in class org.apache.juneau.petstore.console.pages.<a href="org/apache/juneau/petstore/console/pages/DevPageBuilders.html" title="class in org.apache.juneau.petstore.console.pages">DevPageBuilders</a></dt>
+<dd>
+<div class="block">Dialogs (builder only): a table whose ribbon opens a <code>ModalDef.steps</code> wizard and a <code>nav:"folder"</code> dialog.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" class="type-name-link" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a> - Class in <a href="org/apache/juneau/petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></dt>
+<dd>
+<div class="block">Dialogs (builder only): a permanent demo of the two dialog navigation styles, a <code>ModalDef.steps</code> wizard and a
+ <code>nav:"folder"</code> sectioned form, each opened from a ribbon button.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html#%3Cinit%3E()" class="member-name-link">DialogsRest()</a> - Constructor for class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/marshall/Marshalled.html#dictionary()" class="member-name-link">dictionary()</a> - Element in annotation interface org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/Marshalled.html" title="annotation interface in org.apache.juneau.marshall">Marshalled</a></dt>
 <dd>
 <div class="block">Bean dictionary.</div>
@@ -38846,6 +38857,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/httppart/HttpPartSchema.Builder.html#fNone()" class="member-name-link">fNone()</a> - Method in class org.apache.juneau.marshall.httppart.<a href="org/apache/juneau/marshall/httppart/HttpPartSchema.Builder.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema.Builder</a></dt>
 <dd>
 <div class="block">Shortcut for <c>format(HttpPartFormat.NO_FORMAT)</c>.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html#folderForm()" class="member-name-link">folderForm()</a> - Method in class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a></dt>
+<dd>
+<div class="block">The folder-tab dialog: a sectioned form drawn with square-topped folder tabs.</div>
 </dd>
 <dt><a href="org/apache/juneau/http/header/ContentSecurityPolicy.Builder.html#fontSrc(java.lang.String...)" class="member-name-link">fontSrc(String...)</a> - Method in class org.apache.juneau.http.header.<a href="org/apache/juneau/http/header/ContentSecurityPolicy.Builder.html" title="class in org.apache.juneau.http.header">ContentSecurityPolicy.Builder</a></dt>
 <dd>
@@ -78340,6 +78355,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Performs natural string comparison that handles numbers correctly.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/widgets/ModalDef.html#nav" class="member-name-link">nav</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></dt>
+<dd>
+<div class="block">The inner-navigation style of a sectioned form's strip, <a href="org/apache/juneau/console/widgets/ModalDef.html#NAV_PILL"><code>ModalDef.NAV_PILL</code></a> or <a href="org/apache/juneau/console/widgets/ModalDef.html#NAV_FOLDER"><code>ModalDef.NAV_FOLDER</code></a> (see the class
+ Javadoc); omitted from the wire when unset (the runtime draws <a href="org/apache/juneau/console/widgets/ModalDef.html#NAV_PILL"><code>ModalDef.NAV_PILL</code></a>).</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/html5/HtmlBuilder.html#nav()" class="member-name-link">nav()</a> - Static method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/HtmlBuilder.html" title="class in org.apache.juneau.bean.html5">HtmlBuilder</a></dt>
 <dd>
 <div class="block">Creates an empty <a href="org/apache/juneau/bean/html5/Nav.html" title="class in org.apache.juneau.bean.html5"><code>Nav</code></a> element.</div>
@@ -78355,6 +78375,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/bean/html5/HtmlBuilder.html#nav(java.lang.Object...)" class="member-name-link">nav(Object...)</a> - Static method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/HtmlBuilder.html" title="class in org.apache.juneau.bean.html5">HtmlBuilder</a></dt>
 <dd>
 <div class="block">Creates a <a href="org/apache/juneau/bean/html5/Nav.html" title="class in org.apache.juneau.bean.html5"><code>Nav</code></a> element with the specified child nodes.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/widgets/ModalDef.html#nav(java.lang.String)" class="member-name-link">nav(String)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></dt>
+<dd>
+<div class="block">Selects the inner-navigation style of a sectioned form's strip.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/html/HtmlDocSerializer.Builder.html#nav(java.lang.String...)" class="member-name-link">nav(String...)</a> - Method in class org.apache.juneau.marshall.html.<a href="org/apache/juneau/marshall/html/HtmlDocSerializer.Builder.html" title="class in org.apache.juneau.marshall.html">HtmlDocSerializer.Builder</a></dt>
 <dd>
@@ -78380,6 +78404,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.ScopeBy.html#NAV" class="member-name-link">NAV</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.ScopeBy.html" title="enum class in org.apache.juneau.console.views">BadgeDef.ScopeBy</a></dt>
 <dd>
 <div class="block">Keys on the leaf of the page's <code>activeNav</code>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/widgets/ModalDef.html#NAV_FOLDER" class="member-name-link">NAV_FOLDER</a> - Static variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></dt>
+<dd>
+<div class="block">The <a href="org/apache/juneau/console/widgets/ModalDef.html#nav"><code>ModalDef.nav</code></a> token for square-topped folder tabs over a bottom rule.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/widgets/ModalDef.html#NAV_PILL" class="member-name-link">NAV_PILL</a> - Static variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></dt>
+<dd>
+<div class="block">The <a href="org/apache/juneau/console/widgets/ModalDef.html#nav"><code>ModalDef.nav</code></a> token for the default rounded section strip.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RowAction.OnSuccess.html#NAVIGATE" class="member-name-link">NAVIGATE</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a></dt>
 <dd>
@@ -78823,6 +78855,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/UuidFormat.html#NO_DASHES" class="member-name-link">NO_DASHES</a> - Enum constant in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></dt>
 <dd>
 <div class="block">Compact 32-hex-character form (no hyphens).</div>
+</dd>
+<dt><a href="org/apache/juneau/commons/utils/JsonValueSafety.html#NO_DEADLINE" class="member-name-link">NO_DEADLINE</a> - Static variable in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/JsonValueSafety.html" title="class in org.apache.juneau.commons.utils">JsonValueSafety</a></dt>
+<dd>
+<div class="block">Deadline value meaning "no wall-clock limit": the depth, <a href="org/apache/juneau/commons/utils/JsonValueSafety.html#MAX_NODES"><code>node-count</code></a> and cycle bounds still apply.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html#NO_ENGINE_DIAGNOSTIC" class="member-name-link">NO_ENGINE_DIAGNOSTIC</a> - Static variable in class org.apache.juneau.rest.server.view.freemarker.<a href="org/apache/juneau/rest/server/view/freemarker/FreemarkerViewRenderer.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerViewRenderer</a></dt>
 <dd>
@@ -88842,6 +88878,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/petstore/console/dev/DataRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page(RestRequest)</a> - Method in class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DataRest.html" title="class in org.apache.juneau.petstore.console.dev">DataRest</a></dt>
 <dd>
 <div class="block">Renders the Data sources page.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page(RestRequest)</a> - Method in class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a></dt>
+<dd>
+<div class="block">Renders the Dialogs page.</div>
 </dd>
 <dt><a href="org/apache/juneau/petstore/console/dev/flavors/Flavor.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page(RestRequest)</a> - Method in enum class org.apache.juneau.petstore.console.dev.flavors.<a href="org/apache/juneau/petstore/console/dev/flavors/Flavor.html" title="enum class in org.apache.juneau.petstore.console.dev.flavors">Flavor</a></dt>
 <dd>
@@ -99710,6 +99750,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Resets the bean converter for the current thread back to the system default.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#resetDefaults()" class="member-name-link">resetDefaults()</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,
+ search and options) and applies it at once, with no dialog.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/jsonschema/JsonSchema.html#resolve()" class="member-name-link">resolve()</a> - Method in class org.apache.juneau.bean.jsonschema.<a href="org/apache/juneau/bean/jsonschema/JsonSchema.html" title="class in org.apache.juneau.bean.jsonschema">JsonSchema</a></dt>
 <dd>
 <div class="block">Resolve schema if reference.</div>
@@ -102450,6 +102495,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/beanquery/Page.html#rows()" class="member-name-link">rows()</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/Page.html" title="class in org.apache.juneau.commons.beanquery">Page</a></dt>
 <dd>
 <div class="block">Returns the rows of this page.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html#rows()" class="member-name-link">rows()</a> - Method in class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a></dt>
+<dd>
+<div class="block">The rows the page's table draws: one per dialog style.</div>
 </dd>
 <dt><a href="org/apache/juneau/petstore/console/ops/AuditRest.html#rows()" class="member-name-link">rows()</a> - Method in class org.apache.juneau.petstore.console.ops.<a href="org/apache/juneau/petstore/console/ops/AuditRest.html" title="class in org.apache.juneau.petstore.console.ops">AuditRest</a></dt>
 <dd>&nbsp;</dd>
@@ -114143,6 +114192,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Starts a tool under a pseudo-terminal, optionally with input.</div>
 </dd>
+<dt><a href="org/apache/juneau/terminal/region/TerminalProcess.html#start(java.lang.String,java.util.List,int,int,java.nio.file.Path,java.util.Map)" class="member-name-link">start(String, List&lt;String&gt;, int, int, Path, Map&lt;String, String&gt;)</a> - Static method in class org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></dt>
+<dd>
+<div class="block">Starts a tool under a pseudo-terminal with extra environment variables.</div>
+</dd>
 <dt><a href="org/apache/juneau/terminal/region/TerminalProcess.html#start(java.lang.String,java.util.List,int,int,java.nio.file.Path,org.apache.juneau.terminal.region.TerminalPrompts)" class="member-name-link">start(String, List&lt;String&gt;, int, int, Path, TerminalPrompts)</a> - Static method in class org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></dt>
 <dd>
 <div class="block">Starts a tool under a pseudo-terminal with a prompt channel.</div>
@@ -116151,6 +116204,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/views/JobLogRegion.html#submit(org.apache.juneau.console.views.JobLogRegion.Submit)" class="member-name-link">submit(JobLogRegion.Submit)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/JobLogRegion.html" title="class in org.apache.juneau.console.views">JobLogRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html#submit(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">submit(JsonMap)</a> - Method in class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a></dt>
+<dd>
+<div class="block">Accepts either dialog's submit and stores nothing.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/JobLogRegion.Submit.html#submitLabel(java.lang.String)" class="member-name-link">submitLabel(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/JobLogRegion.Submit.html" title="class in org.apache.juneau.console.views">JobLogRegion.Submit</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/server/sse/SseBroadcaster.html#subscribe(java.lang.String)" class="member-name-link">subscribe(String)</a> - Method in class org.apache.juneau.rest.server.sse.<a href="org/apache/juneau/rest/server/sse/SseBroadcaster.html" title="class in org.apache.juneau.rest.server.sse">SseBroadcaster</a></dt>
@@ -118093,6 +118150,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/TerminalViewSource.UnknownTokenException.html" class="type-name-link" title="class in org.apache.juneau.console.views">TerminalViewSource.UnknownTokenException</a> - Exception in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
 <dd>
 <div class="block">Thrown for an unknown or stale token; endpoints answer <c>410 Gone</c>.</div>
+</dd>
+<dt><a href="org/apache/juneau/terminal/region/TerminalProcess.html#terminate(java.time.Duration)" class="member-name-link">terminate(Duration)</a> - Method in class org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></dt>
+<dd>
+<div class="block">Asks the runner to stop and waits for it, killing it if it does not.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/Swagger.html#termsOfService()" class="member-name-link">termsOfService()</a> - Element in annotation interface org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/Swagger.html" title="annotation interface in org.apache.juneau.rest.server">Swagger</a></dt>
 <dd>
@@ -131398,6 +131459,10 @@ the order they are declared.</div>
 <dt><a href="org/apache/juneau/terminal/report/TerminalEvent.html#withTrace(java.lang.String)" class="member-name-link">withTrace(String)</a> - Method in class org.apache.juneau.terminal.report.<a href="org/apache/juneau/terminal/report/TerminalEvent.html" title="class in org.apache.juneau.terminal.report">TerminalEvent</a></dt>
 <dd>
 <div class="block">Sets the stack trace of a <c>test</c> event.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/dev/DialogsRest.html#wizardForm()" class="member-name-link">wizardForm()</a> - Method in class org.apache.juneau.petstore.console.dev.<a href="org/apache/juneau/petstore/console/dev/DialogsRest.html" title="class in org.apache.juneau.petstore.console.dev">DialogsRest</a></dt>
+<dd>
+<div class="block">The wizard dialog: three steps with display fields, Back and Next, and a step rail.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/bean/BeanProp.html#wo()" class="member-name-link">wo()</a> - Element in annotation interface org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanProp.html" title="annotation interface in org.apache.juneau.commons.bean">BeanProp</a></dt>
 <dd>

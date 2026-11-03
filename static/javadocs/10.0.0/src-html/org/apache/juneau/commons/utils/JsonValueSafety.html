@@ -59,111 +59,120 @@
 <span class="source-line-no">046</span><span id="line-46">   /** Maximum allowed wall-clock time, in milliseconds, for a single traversal. */</span>
 <span class="source-line-no">047</span><span id="line-47">   public static final long MAX_TRAVERSAL_MILLIS = 100;</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
-<span class="source-line-no">049</span><span id="line-49">   private JsonValueSafety() {}</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * Computes a fresh traversal deadline from the current time.</span>
-<span class="source-line-no">053</span><span id="line-53">    *</span>
-<span class="source-line-no">054</span><span id="line-54">    * @return An absolute deadline in {@link System#nanoTime()} units, {@link #MAX_TRAVERSAL_MILLIS} milliseconds in the future.</span>
+<span class="source-line-no">049</span><span id="line-49">   /**</span>
+<span class="source-line-no">050</span><span id="line-50">    * Deadline value meaning "no wall-clock limit": the depth, {@link #MAX_NODES node-count} and cycle bounds still apply.</span>
+<span class="source-line-no">051</span><span id="line-51">    *</span>
+<span class="source-line-no">052</span><span id="line-52">    * &lt;p&gt;</span>
+<span class="source-line-no">053</span><span id="line-53">    * Use this for server-authored or already size-bounded values, where a slow walk (a loaded host, a GC pause)</span>
+<span class="source-line-no">054</span><span id="line-54">    * must not be reported as a violation.</span>
 <span class="source-line-no">055</span><span id="line-55">    */</span>
-<span class="source-line-no">056</span><span id="line-56">   public static long deadlineNanos() {</span>
-<span class="source-line-no">057</span><span id="line-57">      return System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(MAX_TRAVERSAL_MILLIS);</span>
-<span class="source-line-no">058</span><span id="line-58">   }</span>
+<span class="source-line-no">056</span><span id="line-56">   public static final long NO_DEADLINE = Long.MAX_VALUE;</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">   private JsonValueSafety() {}</span>
 <span class="source-line-no">059</span><span id="line-59"></span>
 <span class="source-line-no">060</span><span id="line-60">   /**</span>
-<span class="source-line-no">061</span><span id="line-61">    * Validates the specified value against the structural safety limits using a fresh {@link #deadlineNanos() deadline}.</span>
+<span class="source-line-no">061</span><span id="line-61">    * Computes a fresh traversal deadline from the current time.</span>
 <span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param value The value to walk.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns immediately.</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param label A human-readable label describing the value; used as a prefix in violation messages.</span>
-<span class="source-line-no">065</span><span id="line-65">    * @throws IllegalArgumentException If the value violates any of the depth, node-count, traversal-time, or JSON-shape constraints.</span>
-<span class="source-line-no">066</span><span id="line-66">    */</span>
-<span class="source-line-no">067</span><span id="line-67">   public static void check(Object value, String label) {</span>
-<span class="source-line-no">068</span><span id="line-68">      check(value, label, deadlineNanos());</span>
-<span class="source-line-no">069</span><span id="line-69">   }</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">   /**</span>
-<span class="source-line-no">072</span><span id="line-72">    * Validates the specified value against the structural safety limits using the specified traversal deadline.</span>
-<span class="source-line-no">073</span><span id="line-73">    *</span>
-<span class="source-line-no">074</span><span id="line-74">    * @param root The value to walk.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns immediately.</span>
-<span class="source-line-no">075</span><span id="line-75">    * @param label A human-readable label describing the value; used as a prefix in violation messages.</span>
-<span class="source-line-no">076</span><span id="line-76">    * @param deadlineNanos An absolute deadline in {@link System#nanoTime()} units after which the traversal is aborted.</span>
-<span class="source-line-no">077</span><span id="line-77">    * @throws IllegalArgumentException</span>
-<span class="source-line-no">078</span><span id="line-78">    *    If the value exceeds {@link #MAX_DEPTH}, exceeds {@link #MAX_NODES}, exceeds the traversal deadline, contains a</span>
-<span class="source-line-no">079</span><span id="line-79">    *    non-string JSON object key, or contains a leaf that is not a JSON value type ({@link String}, {@link Number}, or</span>
-<span class="source-line-no">080</span><span id="line-80">    *    {@link Boolean}).</span>
-<span class="source-line-no">081</span><span id="line-81">    */</span>
-<span class="source-line-no">082</span><span id="line-82">   public static void check(Object root, String label, long deadlineNanos) {</span>
-<span class="source-line-no">083</span><span id="line-83">      if (root == null)</span>
-<span class="source-line-no">084</span><span id="line-84">         return;</span>
-<span class="source-line-no">085</span><span id="line-85">      var seen = Collections.newSetFromMap(new IdentityHashMap&lt;Object,Boolean&gt;());</span>
-<span class="source-line-no">086</span><span id="line-86">      var stack = new ArrayDeque&lt;Framed&gt;();</span>
-<span class="source-line-no">087</span><span id="line-87">      stack.push(new Framed(root, 1));</span>
-<span class="source-line-no">088</span><span id="line-88">      var nodes = 0;</span>
-<span class="source-line-no">089</span><span id="line-89">      while (! stack.isEmpty()) {</span>
-<span class="source-line-no">090</span><span id="line-90">         // Bounded per-iteration work runs before the deadline check so a structurally-oversized input</span>
-<span class="source-line-no">091</span><span id="line-91">         // deterministically reports its depth/node-count violation instead of racing the wall clock.</span>
-<span class="source-line-no">092</span><span id="line-92">         var frame = stack.pop();</span>
-<span class="source-line-no">093</span><span id="line-93">         if (frame.depth() &gt; MAX_DEPTH)</span>
-<span class="source-line-no">094</span><span id="line-94">            throw iaex("%s exceeds maximum nesting depth of %s", label, MAX_DEPTH);</span>
-<span class="source-line-no">095</span><span id="line-95">         nodes = visitFrame(frame, label, seen, stack, nodes);</span>
-<span class="source-line-no">096</span><span id="line-96">         if (System.nanoTime() &gt;= deadlineNanos)</span>
-<span class="source-line-no">097</span><span id="line-97">            throw iaex("%s traversal exceeded %s ms", label, MAX_TRAVERSAL_MILLIS);</span>
-<span class="source-line-no">098</span><span id="line-98">      }</span>
-<span class="source-line-no">099</span><span id="line-99">   }</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   /**</span>
-<span class="source-line-no">102</span><span id="line-102">    * Processes one popped stack frame: counts it toward the node budget, and - if it's an unseen container -</span>
-<span class="source-line-no">103</span><span id="line-103">    * pushes its children onto {@code stack} for further traversal.</span>
-<span class="source-line-no">104</span><span id="line-104">    *</span>
-<span class="source-line-no">105</span><span id="line-105">    * @return The updated node count.</span>
-<span class="source-line-no">106</span><span id="line-106">    */</span>
-<span class="source-line-no">107</span><span id="line-107">   private static int visitFrame(Framed frame, String label, Set&lt;Object&gt; seen, ArrayDeque&lt;Framed&gt; stack, int nodes) {</span>
-<span class="source-line-no">108</span><span id="line-108">      var value = frame.value();</span>
-<span class="source-line-no">109</span><span id="line-109">      if (value == null)</span>
-<span class="source-line-no">110</span><span id="line-110">         return checkNodeBudget(nodes, label);</span>
-<span class="source-line-no">111</span><span id="line-111">      var container = value instanceof Map&lt;?,?&gt; || value instanceof Collection&lt;?&gt; || value.getClass().isArray();</span>
-<span class="source-line-no">112</span><span id="line-112">      if (container &amp;&amp; ! seen.add(value))</span>
-<span class="source-line-no">113</span><span id="line-113">         return nodes;</span>
-<span class="source-line-no">114</span><span id="line-114">      nodes = checkNodeBudget(nodes, label);</span>
-<span class="source-line-no">115</span><span id="line-115">      pushChildren(value, frame.depth(), label, stack);</span>
-<span class="source-line-no">116</span><span id="line-116">      return nodes;</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   private static int checkNodeBudget(int nodes, String label) {</span>
-<span class="source-line-no">120</span><span id="line-120">      if (++nodes &gt; MAX_NODES)</span>
-<span class="source-line-no">121</span><span id="line-121">         throw iaex("%s exceeds maximum node count of %s", label, MAX_NODES);</span>
-<span class="source-line-no">122</span><span id="line-122">      return nodes;</span>
-<span class="source-line-no">123</span><span id="line-123">   }</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">   private static void pushChildren(Object value, int depth, String label, ArrayDeque&lt;Framed&gt; stack) {</span>
-<span class="source-line-no">126</span><span id="line-126">      if (value instanceof Map&lt;?,?&gt; value2) {</span>
-<span class="source-line-no">127</span><span id="line-127">         for (var entry : value2.entrySet()) {</span>
-<span class="source-line-no">128</span><span id="line-128">            if (! (entry.getKey() instanceof String))</span>
-<span class="source-line-no">129</span><span id="line-129">               throw iaex("%s contains non-string JSON object key %s", label, entry.getKey());</span>
-<span class="source-line-no">130</span><span id="line-130">            stack.push(new Framed(entry.getValue(), depth + 1));</span>
-<span class="source-line-no">131</span><span id="line-131">         }</span>
-<span class="source-line-no">132</span><span id="line-132">      } else if (value instanceof Collection&lt;?&gt; value2) {</span>
-<span class="source-line-no">133</span><span id="line-133">         for (var child : value2)</span>
-<span class="source-line-no">134</span><span id="line-134">            stack.push(new Framed(child, depth + 1));</span>
-<span class="source-line-no">135</span><span id="line-135">      } else if (value.getClass().isArray()) {</span>
-<span class="source-line-no">136</span><span id="line-136">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
-<span class="source-line-no">137</span><span id="line-137">            stack.push(new Framed(Array.get(value, i), depth + 1));</span>
-<span class="source-line-no">138</span><span id="line-138">      } else if (! (value instanceof String || value instanceof Number || value instanceof Boolean))</span>
-<span class="source-line-no">139</span><span id="line-139">         throw iaex("%s contains non-JSON value type %s", label, value.getClass().getName());</span>
-<span class="source-line-no">140</span><span id="line-140">   }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   /**</span>
-<span class="source-line-no">143</span><span id="line-143">    * Computes the number of nanoseconds remaining before the specified deadline.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * @param deadlineNanos An absolute deadline in {@link System#nanoTime()} units.</span>
-<span class="source-line-no">146</span><span id="line-146">    * @return The remaining nanoseconds, or &lt;c&gt;0&lt;/c&gt; if the deadline has already passed.</span>
-<span class="source-line-no">147</span><span id="line-147">    */</span>
-<span class="source-line-no">148</span><span id="line-148">   public static long remainingNanos(long deadlineNanos) {</span>
-<span class="source-line-no">149</span><span id="line-149">      return Math.max(0, deadlineNanos - System.nanoTime());</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">   private record Framed(Object value, int depth) {}</span>
-<span class="source-line-no">153</span><span id="line-153">}</span>
+<span class="source-line-no">063</span><span id="line-63">    * @return An absolute deadline in {@link System#nanoTime()} units, {@link #MAX_TRAVERSAL_MILLIS} milliseconds in the future.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public static long deadlineNanos() {</span>
+<span class="source-line-no">066</span><span id="line-66">      return System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(MAX_TRAVERSAL_MILLIS);</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Validates the specified value against the structural safety limits using a fresh {@link #deadlineNanos() deadline}.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param value The value to walk.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns immediately.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param label A human-readable label describing the value; used as a prefix in violation messages.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @throws IllegalArgumentException If the value violates any of the depth, node-count, traversal-time, or JSON-shape constraints.</span>
+<span class="source-line-no">075</span><span id="line-75">    */</span>
+<span class="source-line-no">076</span><span id="line-76">   public static void check(Object value, String label) {</span>
+<span class="source-line-no">077</span><span id="line-77">      check(value, label, deadlineNanos());</span>
+<span class="source-line-no">078</span><span id="line-78">   }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">   /**</span>
+<span class="source-line-no">081</span><span id="line-81">    * Validates the specified value against the structural safety limits using the specified traversal deadline.</span>
+<span class="source-line-no">082</span><span id="line-82">    *</span>
+<span class="source-line-no">083</span><span id="line-83">    * @param root The value to walk.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case this method returns immediately.</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param label A human-readable label describing the value; used as a prefix in violation messages.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param deadlineNanos An absolute deadline in {@link System#nanoTime()} units after which the traversal is aborted.</span>
+<span class="source-line-no">086</span><span id="line-86">    * @throws IllegalArgumentException</span>
+<span class="source-line-no">087</span><span id="line-87">    *    If the value exceeds {@link #MAX_DEPTH}, exceeds {@link #MAX_NODES}, exceeds the traversal deadline, contains a</span>
+<span class="source-line-no">088</span><span id="line-88">    *    non-string JSON object key, or contains a leaf that is not a JSON value type ({@link String}, {@link Number}, or</span>
+<span class="source-line-no">089</span><span id="line-89">    *    {@link Boolean}).</span>
+<span class="source-line-no">090</span><span id="line-90">    */</span>
+<span class="source-line-no">091</span><span id="line-91">   public static void check(Object root, String label, long deadlineNanos) {</span>
+<span class="source-line-no">092</span><span id="line-92">      if (root == null)</span>
+<span class="source-line-no">093</span><span id="line-93">         return;</span>
+<span class="source-line-no">094</span><span id="line-94">      var seen = Collections.newSetFromMap(new IdentityHashMap&lt;Object,Boolean&gt;());</span>
+<span class="source-line-no">095</span><span id="line-95">      var stack = new ArrayDeque&lt;Framed&gt;();</span>
+<span class="source-line-no">096</span><span id="line-96">      stack.push(new Framed(root, 1));</span>
+<span class="source-line-no">097</span><span id="line-97">      var nodes = 0;</span>
+<span class="source-line-no">098</span><span id="line-98">      while (! stack.isEmpty()) {</span>
+<span class="source-line-no">099</span><span id="line-99">         // Bounded per-iteration work runs before the deadline check so a structurally-oversized input</span>
+<span class="source-line-no">100</span><span id="line-100">         // deterministically reports its depth/node-count violation instead of racing the wall clock.</span>
+<span class="source-line-no">101</span><span id="line-101">         var frame = stack.pop();</span>
+<span class="source-line-no">102</span><span id="line-102">         if (frame.depth() &gt; MAX_DEPTH)</span>
+<span class="source-line-no">103</span><span id="line-103">            throw iaex("%s exceeds maximum nesting depth of %s", label, MAX_DEPTH);</span>
+<span class="source-line-no">104</span><span id="line-104">         nodes = visitFrame(frame, label, seen, stack, nodes);</span>
+<span class="source-line-no">105</span><span id="line-105">         if (System.nanoTime() &gt;= deadlineNanos)</span>
+<span class="source-line-no">106</span><span id="line-106">            throw iaex("%s traversal exceeded %s ms", label, MAX_TRAVERSAL_MILLIS);</span>
+<span class="source-line-no">107</span><span id="line-107">      }</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   /**</span>
+<span class="source-line-no">111</span><span id="line-111">    * Processes one popped stack frame: counts it toward the node budget, and - if it's an unseen container -</span>
+<span class="source-line-no">112</span><span id="line-112">    * pushes its children onto {@code stack} for further traversal.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * @return The updated node count.</span>
+<span class="source-line-no">115</span><span id="line-115">    */</span>
+<span class="source-line-no">116</span><span id="line-116">   private static int visitFrame(Framed frame, String label, Set&lt;Object&gt; seen, ArrayDeque&lt;Framed&gt; stack, int nodes) {</span>
+<span class="source-line-no">117</span><span id="line-117">      var value = frame.value();</span>
+<span class="source-line-no">118</span><span id="line-118">      if (value == null)</span>
+<span class="source-line-no">119</span><span id="line-119">         return checkNodeBudget(nodes, label);</span>
+<span class="source-line-no">120</span><span id="line-120">      var container = value instanceof Map&lt;?,?&gt; || value instanceof Collection&lt;?&gt; || value.getClass().isArray();</span>
+<span class="source-line-no">121</span><span id="line-121">      if (container &amp;&amp; ! seen.add(value))</span>
+<span class="source-line-no">122</span><span id="line-122">         return nodes;</span>
+<span class="source-line-no">123</span><span id="line-123">      nodes = checkNodeBudget(nodes, label);</span>
+<span class="source-line-no">124</span><span id="line-124">      pushChildren(value, frame.depth(), label, stack);</span>
+<span class="source-line-no">125</span><span id="line-125">      return nodes;</span>
+<span class="source-line-no">126</span><span id="line-126">   }</span>
+<span class="source-line-no">127</span><span id="line-127"></span>
+<span class="source-line-no">128</span><span id="line-128">   private static int checkNodeBudget(int nodes, String label) {</span>
+<span class="source-line-no">129</span><span id="line-129">      if (++nodes &gt; MAX_NODES)</span>
+<span class="source-line-no">130</span><span id="line-130">         throw iaex("%s exceeds maximum node count of %s", label, MAX_NODES);</span>
+<span class="source-line-no">131</span><span id="line-131">      return nodes;</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   private static void pushChildren(Object value, int depth, String label, ArrayDeque&lt;Framed&gt; stack) {</span>
+<span class="source-line-no">135</span><span id="line-135">      if (value instanceof Map&lt;?,?&gt; value2) {</span>
+<span class="source-line-no">136</span><span id="line-136">         for (var entry : value2.entrySet()) {</span>
+<span class="source-line-no">137</span><span id="line-137">            if (! (entry.getKey() instanceof String))</span>
+<span class="source-line-no">138</span><span id="line-138">               throw iaex("%s contains non-string JSON object key %s", label, entry.getKey());</span>
+<span class="source-line-no">139</span><span id="line-139">            stack.push(new Framed(entry.getValue(), depth + 1));</span>
+<span class="source-line-no">140</span><span id="line-140">         }</span>
+<span class="source-line-no">141</span><span id="line-141">      } else if (value instanceof Collection&lt;?&gt; value2) {</span>
+<span class="source-line-no">142</span><span id="line-142">         for (var child : value2)</span>
+<span class="source-line-no">143</span><span id="line-143">            stack.push(new Framed(child, depth + 1));</span>
+<span class="source-line-no">144</span><span id="line-144">      } else if (value.getClass().isArray()) {</span>
+<span class="source-line-no">145</span><span id="line-145">         for (var i = 0; i &lt; Array.getLength(value); i++)</span>
+<span class="source-line-no">146</span><span id="line-146">            stack.push(new Framed(Array.get(value, i), depth + 1));</span>
+<span class="source-line-no">147</span><span id="line-147">      } else if (! (value instanceof String || value instanceof Number || value instanceof Boolean))</span>
+<span class="source-line-no">148</span><span id="line-148">         throw iaex("%s contains non-JSON value type %s", label, value.getClass().getName());</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   /**</span>
+<span class="source-line-no">152</span><span id="line-152">    * Computes the number of nanoseconds remaining before the specified deadline.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * @param deadlineNanos An absolute deadline in {@link System#nanoTime()} units.</span>
+<span class="source-line-no">155</span><span id="line-155">    * @return The remaining nanoseconds, or &lt;c&gt;0&lt;/c&gt; if the deadline has already passed.</span>
+<span class="source-line-no">156</span><span id="line-156">    */</span>
+<span class="source-line-no">157</span><span id="line-157">   public static long remainingNanos(long deadlineNanos) {</span>
+<span class="source-line-no">158</span><span id="line-158">      return Math.max(0, deadlineNanos - System.nanoTime());</span>
+<span class="source-line-no">159</span><span id="line-159">   }</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">   private record Framed(Object value, int depth) {}</span>
+<span class="source-line-no">162</span><span id="line-162">}</span>
 
 
 

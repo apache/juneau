@@ -1,0 +1,82 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+#
+# Supply-chain pinning policy: every third-party Action below is pinned to a full commit SHA,
+# not a floating tag, because a tag is mutable and a SHA pin is what makes "what code ran in CI"
+# part of this project's provenance story. To bump: resolve the new tag to its full commit SHA
+# and update the trailing version comment to match. Same policy as the apache/juneau workflows.
+#
+# Build check for the docs site: a PR or push to the docs branch must build, and must pass the
+# validation scripts that need nothing but this checkout.
+#
+name: "Docs build"
+
+on:
+  push:
+    branches: [ docs ]
+  pull_request:
+    branches: [ docs ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and validate
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: 20
+        cache: npm
+
+    # For check-java-fences.py, which parses each ```java fence with JavaFenceParse.java.
+    - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      with:
+        distribution: 'temurin'
+        java-version: 17
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build site
+      run: npm run build
+
+    # Validation scripts that run from a docs-only checkout (no Juneau sources, no Java).
+    - name: Verify documentation integrity
+      run: python3 scripts/verify-docs.py
+
+    - name: Check project pages
+      run: python3 scripts/check-project-pages.py
+
+    # K1b (marshaller facade count) is skipped automatically when no Juneau checkout is present.
+    - name: Check entry pages
+      run: python3 scripts/check-entry-pages.py
+
+    - name: Check code fences
+      run: python3 scripts/check-code-fences.py
+
+    # Not --strict: strict turns the existing juneau-terminal warning into a failure.
+    - name: Check doc inventory
+      run: python3 scripts/check-doc-inventory.py
+
+    - name: Check Java fences
+      run: python3 scripts/check-java-fences.py --strict --java "$JAVA_HOME/bin/java"
+
+    # Excluded (need the sibling Juneau checkout, which this job does not have):
+    # - check-topic-links.py: scans the Juneau sources for topic links (needs --juneau-root).
+    # - check-ai-artifacts.py: needs the Juneau checkout's scripts/current-release.py and RELEASE-NOTES.txt.
+    # - check-guide-snippets.py: compares guide= fences with juneau-examples-guides; fails without the module.

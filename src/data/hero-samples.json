@@ -1,0 +1,344 @@
+[
+  {
+    "id": "Json",
+    "label": "JSON",
+    "group": "core",
+    "call": "Json.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{\"age\":36,\"name\":\"Ada\"}"
+  },
+  {
+    "id": "Json5",
+    "label": "JSON5",
+    "group": "core",
+    "call": "Json5.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{age:36,name:'Ada'}"
+  },
+  {
+    "id": "Jsonl",
+    "label": "JSONL",
+    "group": "core",
+    "call": "Jsonl.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{\"age\":36,\"name\":\"Ada\"}"
+  },
+  {
+    "id": "Json5l",
+    "label": "JSON5L",
+    "group": "core",
+    "call": "Json5l.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{\"age\":36,\"name\":\"Ada\"}"
+  },
+  {
+    "id": "Jcs",
+    "label": "JCS",
+    "group": "core",
+    "call": "Jcs.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{\"age\":36,\"name\":\"Ada\"}"
+  },
+  {
+    "id": "Xml",
+    "label": "XML",
+    "group": "core",
+    "call": "Xml.of(new Person(\"Ada\", 36))",
+    "language": "xml",
+    "binary": false,
+    "output": "<object><age>36</age><name>Ada</name></object>"
+  },
+  {
+    "id": "Html",
+    "label": "HTML",
+    "group": "core",
+    "call": "Html.of(new Person(\"Ada\", 36))",
+    "language": "html",
+    "binary": false,
+    "output": "<table><tr><td>age</td><td>36</td></tr><tr><td>name</td><td>Ada</td></tr></table>"
+  },
+  {
+    "id": "Yaml",
+    "label": "YAML",
+    "group": "core",
+    "call": "Yaml.of(new Person(\"Ada\", 36))",
+    "language": "yaml",
+    "binary": false,
+    "output": "age: 36\nname: Ada"
+  },
+  {
+    "id": "Toml",
+    "label": "TOML",
+    "group": "core",
+    "call": "Toml.of(new Person(\"Ada\", 36))",
+    "language": "toml",
+    "binary": false,
+    "output": "age = 36\nname = \"Ada\""
+  },
+  {
+    "id": "Hocon",
+    "label": "HOCON",
+    "group": "core",
+    "call": "Hocon.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "\nage = 36\nname = Ada"
+  },
+  {
+    "id": "Hjson",
+    "label": "HJSON",
+    "group": "core",
+    "call": "Hjson.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "{\nage: 36\nname: Ada}"
+  },
+  {
+    "id": "Ini",
+    "label": "INI",
+    "group": "core",
+    "call": "Ini.of(new Person(\"Ada\", 36))",
+    "language": "ini",
+    "binary": false,
+    "output": "age = 36\nname = Ada"
+  },
+  {
+    "id": "Cbor",
+    "label": "CBOR",
+    "group": "core",
+    "call": "Cbor.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "a2 63 61 67 65 18 24 64 6e 61 6d 65 63 41 64 61"
+  },
+  {
+    "id": "Bson",
+    "label": "BSON",
+    "group": "core",
+    "call": "Bson.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "1c 00 00 00 10 61 67 65 00 24 00 00 00 02 6e 61 6d 65 00 04 00 00 00 41 64 61 00 00"
+  },
+  {
+    "id": "MsgPack",
+    "label": "MessagePack",
+    "group": "core",
+    "call": "MsgPack.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "82 a3 61 67 65 24 a4 6e 61 6d 65 a3 41 64 61"
+  },
+  {
+    "id": "Protobuf",
+    "label": "Protobuf",
+    "group": "core",
+    "call": "Protobuf.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "08 24 12 03 41 64 61"
+  },
+  {
+    "id": "Prototext",
+    "label": "Prototext",
+    "group": "core",
+    "call": "Prototext.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "age: 36\nname: \"Ada\""
+  },
+  {
+    "id": "Uon",
+    "label": "UON",
+    "group": "core",
+    "call": "Uon.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "(age=36,name=Ada)"
+  },
+  {
+    "id": "UrlEncoding",
+    "label": "URL-Encoding",
+    "group": "core",
+    "call": "UrlEncoding.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "age=36&name=Ada"
+  },
+  {
+    "id": "OpenApi",
+    "label": "OpenAPI",
+    "group": "core",
+    "call": "OpenApi.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "age=36,name=Ada"
+  },
+  {
+    "id": "Csv",
+    "label": "CSV",
+    "group": "core",
+    "call": "Csv.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "age,name\n36,Ada"
+  },
+  {
+    "id": "Parquet",
+    "label": "Parquet",
+    "group": "core",
+    "call": "Parquet.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "50 41 52 31 15 00 15 14 15 14 2c 15 02 15 00 15 06 15 06 00 00 02 00 00 00 03 01 24 00 00 00 15 00 15 1a 15 1a 2c 15 02 15 00 15 06 15 06 00 00 02 00 00 00 03 01 03 00 00 00 41 64 61 15 02 19 3c 48 04 72 6f 6f 74 15 04 00 15 02 25 02 18 03 61 67 65 25 22 00 15 0c 25 02 18 04 6e 61 6d 65 ..."
+  },
+  {
+    "id": "Markdown",
+    "label": "Markdown",
+    "group": "core",
+    "call": "Markdown.of(new Person(\"Ada\", 36))",
+    "language": "markdown",
+    "binary": false,
+    "output": "| Property | Value |\n|---|---|\n| age | 36 |\n| name | Ada |"
+  },
+  {
+    "id": "MarkdownDoc",
+    "label": "MarkdownDoc",
+    "group": "core",
+    "call": "MarkdownDoc.of(new Person(\"Ada\", 36))",
+    "language": "markdown",
+    "binary": false,
+    "output": "| Property | Value |\n|---|---|\n| age | 36 |\n| name | Ada |"
+  },
+  {
+    "id": "Sse",
+    "label": "SSE",
+    "group": "core",
+    "call": "Sse.of(new SseEvent(\"person\", Json.of(new Person(\"Ada\", 36))))",
+    "language": "text",
+    "binary": false,
+    "output": "event: person\ndata: {\"age\":36,\"name\":\"Ada\"}"
+  },
+  {
+    "id": "PlainText",
+    "label": "PlainText",
+    "group": "core",
+    "call": "PlainText.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "{age:36,name:'Ada'}"
+  },
+  {
+    "id": "RdfXml",
+    "label": "RDF/XML",
+    "group": "rdf",
+    "call": "RdfXml.of(new Person(\"Ada\", 36))",
+    "language": "xml",
+    "binary": false,
+    "output": "<rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://www.apache.org/juneau/\"\n    xmlns:jp=\"http://www.apache.org/juneaubp/\">\n  <rdf:Description>\n    <jp:age>36</jp:age>\n    <jp:name>Ada</jp:name>\n  </rdf:Description>\n</rdf:RDF>"
+  },
+  {
+    "id": "RdfXmlAbbrev",
+    "label": "RDF/XML-ABBREV",
+    "group": "rdf",
+    "call": "RdfXmlAbbrev.of(new Person(\"Ada\", 36))",
+    "language": "xml",
+    "binary": false,
+    "output": "<rdf:RDF\n    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\"\n    xmlns:j=\"http://www.apache.org/juneau/\"\n    xmlns:jp=\"http://www.apache.org/juneaubp/\">\n  <rdf:Description>\n    <jp:age>36</jp:age>\n    <jp:name>Ada</jp:name>\n  </rdf:Description>\n</rdf:RDF>"
+  },
+  {
+    "id": "NTriple",
+    "label": "N-Triple",
+    "group": "rdf",
+    "call": "NTriple.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "_:Be1b718fbX2D9a71X2D4bc8X2D8bfaX2De3f95dfcaf03 <http://www.apache.org/juneaubp/age> \"36\" .\n_:Be1b718fbX2D9a71X2D4bc8X2D8bfaX2De3f95dfcaf03 <http://www.apache.org/juneaubp/name> \"Ada\" ."
+  },
+  {
+    "id": "NQuads",
+    "label": "N-Quads",
+    "group": "rdf",
+    "call": "NQuads.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "_:B5a590a03X2Dab86X2D4776X2D9d50X2D3aaae6f194ea <http://www.apache.org/juneaubp/age> \"36\" .\n_:B5a590a03X2Dab86X2D4776X2D9d50X2D3aaae6f194ea <http://www.apache.org/juneaubp/name> \"Ada\" ."
+  },
+  {
+    "id": "N3",
+    "label": "N3",
+    "group": "rdf",
+    "call": "N3.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "PREFIX j:  <http://www.apache.org/juneau/>\nPREFIX jp: <http://www.apache.org/juneaubp/>\n\n[ jp:age   \"36\";\n  jp:name  \"Ada\"\n] ."
+  },
+  {
+    "id": "Turtle",
+    "label": "Turtle",
+    "group": "rdf",
+    "call": "Turtle.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "PREFIX j:  <http://www.apache.org/juneau/>\nPREFIX jp: <http://www.apache.org/juneaubp/>\n\n[ jp:age   \"36\";\n  jp:name  \"Ada\"\n] ."
+  },
+  {
+    "id": "TriG",
+    "label": "TriG",
+    "group": "rdf",
+    "call": "TriG.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": false,
+    "output": "PREFIX j:  <http://www.apache.org/juneau/>\nPREFIX jp: <http://www.apache.org/juneaubp/>\n\n[ jp:age   \"36\";\n  jp:name  \"Ada\"\n] ."
+  },
+  {
+    "id": "TriX",
+    "label": "TriX",
+    "group": "rdf",
+    "call": "TriX.of(new Person(\"Ada\", 36))",
+    "language": "xml",
+    "binary": false,
+    "output": "<trix xmlns=\"http://www.w3.org/2004/03/trix/trix-1/\">\n  <graph>\n    <triple>\n      <id>ed30807a-1c4d-4708-9291-bfc17e6ce14d</id>\n      <uri>http://www.apache.org/juneaubp/age</uri>\n      <plainLiteral>36</plainLiteral>\n    </triple>\n    <triple>\n      <id>ed30807a-1c4d-4708-9291-bfc17e6ce14d</id>\n      <uri>http://www.apache.org/juneaubp/name</uri>\n      <plainLiteral>Ada</plainLiteral>\n    </triple>\n  </graph>\n</trix>"
+  },
+  {
+    "id": "JsonLd",
+    "label": "JSON-LD",
+    "group": "rdf",
+    "call": "JsonLd.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{\n    \"@id\": \"_:9786c6b6-86d4-4f59-9b79-77622930b5c4\",\n    \"jp:age\": \"36\",\n    \"jp:name\": \"Ada\",\n    \"@context\": {\n        \"jp\": \"http://www.apache.org/juneaubp/\",\n        \"j\": \"http://www.apache.org/juneau/\"\n    }\n}"
+  },
+  {
+    "id": "RdfJson",
+    "label": "RDF/JSON",
+    "group": "rdf",
+    "call": "RdfJson.of(new Person(\"Ada\", 36))",
+    "language": "json",
+    "binary": false,
+    "output": "{ \n  \"_:7bb0010a-d0c2-4c5b-8c7e-7c99df67e30d\" : { \n    \"http://www.apache.org/juneaubp/name\" : [ { \n      \"type\" : \"literal\" ,\n      \"value\" : \"Ada\"\n    }\n     ] ,\n    \"http://www.apache.org/juneaubp/age\" : [ { \n      \"type\" : \"literal\" ,\n      \"value\" : \"36\"\n    }\n     ]\n  }\n}"
+  },
+  {
+    "id": "RdfProto",
+    "label": "RDF/Proto",
+    "group": "rdf",
+    "call": "RdfProto.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "27 0a 25 0a 02 6a 70 12 1f 68 74 74 70 3a 2f 2f 77 77 77 2e 61 70 61 63 68 65 2e 6f 72 67 2f 6a 75 6e 65 61 75 62 70 2f 24 0a 22 0a 01 6a 12 1d 68 74 74 70 3a 2f 2f 77 77 77 2e 61 70 61 63 68 65 2e 6f 72 67 2f 6a 75 6e 65 61 75 2f 5e 12 5c 0a 28 12 26 0a 24 31 62 38 66 37 39 37 33 2d 31 ..."
+  },
+  {
+    "id": "RdfThrift",
+    "label": "RDF/Thrift",
+    "group": "rdf",
+    "call": "RdfThrift.of(new Person(\"Ada\", 36))",
+    "language": "text",
+    "binary": true,
+    "output": "1c 18 02 6a 70 18 1f 68 74 74 70 3a 2f 2f 77 77 77 2e 61 70 61 63 68 65 2e 6f 72 67 2f 6a 75 6e 65 61 75 62 70 2f 00 00 1c 18 01 6a 18 1d 68 74 74 70 3a 2f 2f 77 77 77 2e 61 70 61 63 68 65 2e 6f 72 67 2f 6a 75 6e 65 61 75 2f 00 00 2c 1c 2c 18 24 31 39 35 64 33 35 61 31 2d 64 61 64 33 2d ..."
+  }
+]
