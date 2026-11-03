@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">            var result = typed.call(bound, ctx);</span>
 <span class="source-line-no">085</span><span id="line-85">            var tree = canonicalize(result);</span>
 <span class="source-line-no">086</span><span id="line-86">            try {</span>
-<span class="source-line-no">087</span><span id="line-87">               JsonValueSafety.check(tree, "Tool structuredContent");</span>
+<span class="source-line-no">087</span><span id="line-87">               JsonValueSafety.check(tree, "Tool structuredContent", JsonValueSafety.NO_DEADLINE); // Node-bounded; no wall clock.</span>
 <span class="source-line-no">088</span><span id="line-88">            } catch (IllegalArgumentException e) {</span>
 <span class="source-line-no">089</span><span id="line-89">               throw new McpException(-32603, e.getMessage());</span>
 <span class="source-line-no">090</span><span id="line-90">            }</span>

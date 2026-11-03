@@ -2858,7 +2858,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <dd><code>E</code> - The element type.</dd>
 <dt>Parameters:</dt>
 <dd><code>comparator</code> - The comparator to use to sort the list.  Can be <jk>null</jk> (natural ordering is used).</dd>
-<dd><code>values</code> - The values to initialize the list with.  Must not be <jk>null</jk>.</dd>
+<dd><code>values</code> - The values to initialize the list with.  Must not be <jk>null</jk> (a <jk>null</jk> array throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>A new modifiable list.</dd>
 </dl>
@@ -2868,13 +2868,13 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="sortedList(E...)">
 <h3 id="sortedList(java.lang.Object[])">sortedList</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1664">sortedList</a></span><wbr><span class="parameters">(E...&nbsp;values)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1665">sortedList</a></span><wbr><span class="parameters">(E...&nbsp;values)</span></div>
 <div class="block">Convenience method for creating an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link"><code>ArrayList</code></a> and sorting it.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>E</code> - The element type.</dd>
 <dt>Parameters:</dt>
-<dd><code>values</code> - The values to initialize the list with.  Must not be <jk>null</jk>.</dd>
+<dd><code>values</code> - The values to initialize the list with.  Must not be <jk>null</jk> (a <jk>null</jk> array throws <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>).</dd>
 <dt>Returns:</dt>
 <dd>A new modifiable list.</dd>
 </dl>
@@ -2884,7 +2884,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="sortedMap()">
 <h3>sortedMap</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedMap.html" title="class or interface in java.util" class="external-link">SortedMap</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1678">sortedMap</a></span>()</div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedMap.html" title="class or interface in java.util" class="external-link">SortedMap</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1680">sortedMap</a></span>()</div>
 <div class="block">Convenience method for creating a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeMap.html" title="class or interface in java.util" class="external-link"><code>TreeMap</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2899,7 +2899,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="sortedSet(E...)">
 <h3 id="sortedSet(java.lang.Object[])">sortedSet</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1695">sortedSet</a></span><wbr><span class="parameters">(E...&nbsp;values)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1697">sortedSet</a></span><wbr><span class="parameters">(E...&nbsp;values)</span></div>
 <div class="block">Convenience method for creating a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeSet.html" title="class or interface in java.util" class="external-link"><code>TreeSet</code></a>.
 
  <p>
@@ -2920,7 +2920,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="stream(T[])">
 <h3 id="stream(java.lang.Object[])">stream</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1722">stream</a></span><wbr><span class="parameters">(T[]&nbsp;array)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1724">stream</a></span><wbr><span class="parameters">(T[]&nbsp;array)</span></div>
 <div class="block">Returns a stream of the specified array.
 
  <p>
@@ -2949,7 +2949,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="synced(java.util.List)">
 <h3>synced</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1733">synced</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1735">synced</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Wraps the specified list in a synchronized (thread-safe) view via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#synchronizedList(java.util.List)" title="class or interface in java.util" class="external-link"><code>Collections.synchronizedList(List)</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2965,7 +2965,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="synced(java.util.Map)">
 <h3>synced</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1745">synced</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;value)</span></div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1747">synced</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;value)</span></div>
 <div class="block">Wraps the specified map in a synchronized (thread-safe) view via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#synchronizedMap(java.util.Map)" title="class or interface in java.util" class="external-link"><code>Collections.synchronizedMap(Map)</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2981,7 +2981,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="synced(java.util.Set)">
 <h3>synced</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1756">synced</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1758">synced</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Wraps the specified set in a synchronized (thread-safe) view via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collections.html#synchronizedSet(java.util.Set)" title="class or interface in java.util" class="external-link"><code>Collections.synchronizedSet(Set)</code></a>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -2996,7 +2996,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toArray(java.util.Collection,java.lang.Class)">
 <h3>toArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1771">toArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1773">toArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
 <div class="block">Converts the specified collection to an array.
 
@@ -3016,7 +3016,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toList(java.util.Collection)">
 <h3>toList</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1787">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1789">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link"><code>ArrayList</code></a> copy from a collection.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3031,7 +3031,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toList(java.util.Collection,boolean)">
 <h3>toList</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1799">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1801">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value,
  boolean&nbsp;nullIfEmpty)</span></div>
 <div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link"><code>ArrayList</code></a> copy from a collection.</div>
 <dl class="notes">
@@ -3048,7 +3048,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toList(java.lang.Object)">
 <h3>toList</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1864">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1866">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <div class="block">Converts various collection-like objects to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a>.
 
  <p>This utility method enables testing of any collection-like object by converting it to a List that can be
@@ -3116,7 +3116,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toList(java.lang.Object,java.lang.Class)">
 <h3>toList</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1898">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;array,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1900">toList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;array,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;elementType)</span></div>
 <div class="block">Converts the specified array to an <c>ArrayList</c></div>
 <dl class="notes">
@@ -3134,7 +3134,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toObjectList(java.lang.Object)">
 <h3>toObjectList</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1911">toObjectList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;array)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1913">toObjectList</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;array)</span></div>
 <div class="block">Recursively converts the specified array into a list of objects.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3147,7 +3147,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toSet(java.util.Collection)">
 <h3>toSet</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1929">toSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;val)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1931">toSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;val)</span></div>
 <div class="block">Creates a new set from the specified collection.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3162,7 +3162,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toSet(T[])">
 <h3 id="toSet(java.lang.Object[])">toSet</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1943">toSet</a></span><wbr><span class="parameters">(T[]&nbsp;array)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1945">toSet</a></span><wbr><span class="parameters">(T[]&nbsp;array)</span></div>
 <div class="block">Converts the specified array to a <c>Set</c>.
 
  <p>
@@ -3180,7 +3180,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toSortedSet(java.util.Collection)">
 <h3>toSortedSet</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1991">toSortedSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-1993">toSortedSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value)</span></div>
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeSet.html" title="class or interface in java.util" class="external-link"><code>TreeSet</code></a> from the specified collection.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3195,7 +3195,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toSortedSet(java.util.Collection,boolean)">
 <h3>toSortedSet</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2007">toSortedSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2009">toSortedSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;E&gt;&nbsp;value,
  boolean&nbsp;nullIfEmpty)</span></div>
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeSet.html" title="class or interface in java.util" class="external-link"><code>TreeSet</code></a> from the specified collection.</div>
 <dl class="notes">
@@ -3212,7 +3212,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toSortedSet(java.util.Set)">
 <h3>toSortedSet</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2024">toSortedSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2026">toSortedSet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;&nbsp;copyFrom)</span></div>
 <div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/TreeSet.html" title="class or interface in java.util" class="external-link"><code>TreeSet</code></a> containing a copy of the specified set.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3227,7 +3227,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toStream(java.lang.Object)">
 <h3>toStream</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2033">toStream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;array)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2035">toStream</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;array)</span></div>
 <div class="block">Converts an array to a stream of objects.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3240,7 +3240,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="toStringArray(java.util.Collection)">
 <h3>toStringArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2049">toStringArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2051">toStringArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Converts the specified collection to an array of strings.
 
  <p>
@@ -3257,7 +3257,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="traverse(java.lang.Object,java.util.function.Consumer)">
 <h3>traverse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2074">traverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2076">traverse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;T&gt;&nbsp;c)</span></div>
 <div class="block">Traverses all elements in the specified object and executes a consumer for each leaf.
 
@@ -3283,7 +3283,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="array(T...)">
 <h3 id="array(java.lang.Object[])">array</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2114">array</a></span><wbr><span class="parameters">(T...&nbsp;x)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2116">array</a></span><wbr><span class="parameters">(T...&nbsp;x)</span></div>
 <div class="block">Creates an array of objects (varargs form).</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3299,7 +3299,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="array2d(E[]...)">
 <h3 id="array2d(java.lang.Object[][][])">array2d</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type">E[][]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2126">array2d</a></span><wbr><span class="parameters">(E[]...&nbsp;value)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type">E[][]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2128">array2d</a></span><wbr><span class="parameters">(E[]...&nbsp;value)</span></div>
 <div class="block">Creates a 2-dimensional array.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3314,7 +3314,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="objectArray(java.lang.Object...)">
 <h3>objectArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2137">objectArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2139">objectArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;value)</span></div>
 <div class="block">Creates an Object array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3327,7 +3327,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="nullArray(java.lang.Class)">
 <h3>nullArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2150">nullArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2152">nullArray</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Returns null for the specified array type.
 
  <p>Intentional null return for assertion testing.</div>
@@ -3345,7 +3345,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="linkedList(T...)">
 <h3 id="linkedList(java.lang.Object[])">linkedList</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2161">linkedList</a></span><wbr><span class="parameters">(T...&nbsp;values)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2163">linkedList</a></span><wbr><span class="parameters">(T...&nbsp;values)</span></div>
 <div class="block">Creates a LinkedList from the specified values.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3361,7 +3361,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="hashSet(T...)">
 <h3 id="hashSet(java.lang.Object[])">hashSet</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2173">hashSet</a></span><wbr><span class="parameters">(T...&nbsp;values)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2175">hashSet</a></span><wbr><span class="parameters">(T...&nbsp;values)</span></div>
 <div class="block">Creates a HashSet from the specified values.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3376,7 +3376,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="unmodifiable(java.util.List)">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2185">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends T&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2187">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends T&gt;&nbsp;value)</span></div>
 <div class="block">Creates an unmodifiable view of the specified list.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3392,7 +3392,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="unmodifiable(java.util.Map)">
 <h3>unmodifiable</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2197">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;? extends K,<wbr>? extends V&gt;&nbsp;value)</span></div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2199">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;? extends K,<wbr>? extends V&gt;&nbsp;value)</span></div>
 <div class="block">Creates an unmodifiable view of the specified map.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3408,7 +3408,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="unmodifiable(java.util.Set)">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2208">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;? extends T&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2210">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;? extends T&gt;&nbsp;value)</span></div>
 <div class="block">Creates an unmodifiable view of the specified set.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3423,7 +3423,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="unmodifiable(java.util.SortedSet)">
 <h3>unmodifiable</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2219">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;T&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2221">unmodifiable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/SortedSet.html" title="class or interface in java.util" class="external-link">SortedSet</a>&lt;T&gt;&nbsp;value)</span></div>
 <div class="block">Creates an unmodifiable view of the specified sorted set.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3438,7 +3438,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="optionalAt(java.util.List,int)">
 <h3>optionalAt</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2231">optionalAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;l,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2233">optionalAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;l,
  int&nbsp;index)</span></div>
 <div class="block">Returns the element at the specified index, wrapped in an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.</div>
 <dl class="notes">
@@ -3456,7 +3456,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="nullIfEmpty(java.util.Map)">
 <h3>nullIfEmpty</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2243">nullIfEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;val)</span></div>
+V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2245">nullIfEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;val)</span></div>
 <div class="block">Returns <jk>null</jk> if the specified map is <jk>null</jk> or empty, otherwise returns the map.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3472,7 +3472,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="nullIfEmpty(java.util.List)">
 <h3>nullIfEmpty</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2254">nullIfEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;val)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2256">nullIfEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;val)</span></div>
 <div class="block">Returns <jk>null</jk> if the specified list is <jk>null</jk> or empty, otherwise returns the list.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3487,7 +3487,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="nullIfEmpty(java.util.Set)">
 <h3>nullIfEmpty</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2265">nullIfEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;&nbsp;val)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2267">nullIfEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;E&gt;&nbsp;val)</span></div>
 <div class="block">Returns <jk>null</jk> if the specified set is <jk>null</jk> or empty, otherwise returns the set.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3502,7 +3502,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isNotEmpty(java.util.Collection)">
 <h3>isNotEmpty</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2275">isNotEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2277">isNotEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;?&gt;&nbsp;c)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified collection is not null and not empty.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3515,7 +3515,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="isNotEmpty(java.util.Map)">
 <h3>isNotEmpty</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2285">isNotEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;m)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2287">isNotEmpty</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;m)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified map is not null and not empty.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3528,7 +3528,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="elementAt(java.util.List,int)">
 <h3>elementAt</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type">E</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2297">elementAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;l,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E&gt;</span>&nbsp;<span class="return-type">E</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2299">elementAt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;E&gt;&nbsp;l,
  int&nbsp;index)</span></div>
 <div class="block">Returns the element at the specified index.</div>
 <dl class="notes">
@@ -3546,7 +3546,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <section class="detail" id="set(T...)">
 <h3 id="set(java.lang.Object[])">set</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2310">set</a></span><wbr><span class="parameters">(T...&nbsp;values)</span></div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2312">set</a></span><wbr><span class="parameters">(T...&nbsp;values)</span></div>
 <div class="block">Creates a new modifiable LinkedHashSet.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -3561,7 +3561,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="intArray(int...)">
 <h3>intArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2322">intArray</a></span><wbr><span class="parameters">(int...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2324">intArray</a></span><wbr><span class="parameters">(int...&nbsp;value)</span></div>
 <div class="block">Creates an int array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3574,7 +3574,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="longArray(long...)">
 <h3>longArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2330">longArray</a></span><wbr><span class="parameters">(long...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2332">longArray</a></span><wbr><span class="parameters">(long...&nbsp;value)</span></div>
 <div class="block">Creates a long array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3587,7 +3587,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="byteArray(int...)">
 <h3>byteArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2338">byteArray</a></span><wbr><span class="parameters">(int...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2340">byteArray</a></span><wbr><span class="parameters">(int...&nbsp;value)</span></div>
 <div class="block">Creates a byte array from ints.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3600,7 +3600,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="charArray(char...)">
 <h3>charArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">char[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2351">charArray</a></span><wbr><span class="parameters">(char...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">char[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2353">charArray</a></span><wbr><span class="parameters">(char...&nbsp;value)</span></div>
 <div class="block">Creates a char array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3613,7 +3613,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="floatArray(float...)">
 <h3>floatArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2359">floatArray</a></span><wbr><span class="parameters">(float...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">float[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2361">floatArray</a></span><wbr><span class="parameters">(float...&nbsp;value)</span></div>
 <div class="block">Creates a float array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3626,7 +3626,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="doubleArray(double...)">
 <h3>doubleArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2367">doubleArray</a></span><wbr><span class="parameters">(double...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">double[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2369">doubleArray</a></span><wbr><span class="parameters">(double...&nbsp;value)</span></div>
 <div class="block">Creates a double array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3639,7 +3639,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="booleanArray(boolean...)">
 <h3>booleanArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2375">booleanArray</a></span><wbr><span class="parameters">(boolean...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2377">booleanArray</a></span><wbr><span class="parameters">(boolean...&nbsp;value)</span></div>
 <div class="block">Creates a boolean array.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -3652,7 +3652,7 @@ V&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/
 <li>
 <section class="detail" id="shortArray(int...)">
 <h3>shortArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">short[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2383">shortArray</a></span><wbr><span class="parameters">(int...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">short[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/CollectionUtils.html#line-2385">shortArray</a></span><wbr><span class="parameters">(int...&nbsp;value)</span></div>
 <div class="block">Creates a short array from ints.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

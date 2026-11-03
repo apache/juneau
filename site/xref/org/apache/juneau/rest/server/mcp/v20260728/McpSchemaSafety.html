@@ -43,10 +43,10 @@
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * The neutral {@link McpSchema} is an unconstrained JSON object carrier, and a client can send an</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * arbitrarily large or deep argument object. Before any validation runs, both the schema graph and the</em>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * argument graph are checked against the shared {@link JsonValueSafety} depth/node/deadline bounds,</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * so a hostile or accidentally-huge input is rejected up front rather than blowing the stack or spinning</em>
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * indefinitely. The two checks share a single deadline, so a slow schema graph cannot buy the argument</em>
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * graph extra time (or vice versa).</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * argument graph are checked against the shared {@link JsonValueSafety} depth/node bounds</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> * (no wall-clock deadline: the node bound caps the work, and a slow host must not reject valid input),</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * so a hostile or accidentally-huge input is rejected up front rather than blowing the stack or spinning</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> * indefinitely.</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * &lt;b&gt;No external fetches.&lt;/b&gt; The schema is converted to a {@link JsonSchema} bean and validated as-is. No</em>
@@ -180,10 +180,10 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">if</strong> (schema == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong>;
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">var</strong> schemaMap = schema.toJsonMap();
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> deadline = JsonValueSafety.deadlineNanos();
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			JsonValueSafety.check(schemaMap, <span class="jxr_string">"Tool input schema"</span>, deadline);
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			JsonValueSafety.check(args, <span class="jxr_string">"Tool input"</span>, deadline);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<em class="jxr_comment">// No wall clock here: both walks are node-bounded, and the validation step below has its own compute budget.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			JsonValueSafety.check(schemaMap, <span class="jxr_string">"Tool input schema"</span>, JsonValueSafety.NO_DEADLINE);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			JsonValueSafety.check(args, <span class="jxr_string">"Tool input"</span>, JsonValueSafety.NO_DEADLINE);
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, e.getMessage());
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 		}
@@ -194,158 +194,157 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * Runs {@link JsonSchemaValidator} on a daemon thread and enforces a fresh {@link #MAX_VALIDATION_MILLIS}</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * compute budget against the task's own compute time - deliberately &lt;b&gt;not&lt;/b&gt; the caller's remaining share</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * of the structural-traversal deadline computed in {@link #validateInput}. That deadline is a wall-clock</em>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * budget that is already partially spent by the two {@link JsonValueSafety#check} calls and the</em>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * schema-to-bean conversion above, both of which run on the (possibly preempted) request thread under load;</em>
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * deriving the validation budget from whatever wall-clock happened to remain would let purely-external</em>
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * scheduling pressure - not any property of the schema or arguments being validated - trip a false-positive</em>
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * {@code -32602} on a trivial validation. Anchoring a fresh budget here, measured from when the pool task</em>
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * actually starts (see {@link TaskStart#capture}), keeps the DoS guard (validation CPU still capped at</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * {@link #MAX_VALIDATION_MILLIS}) independent of that pre-check wall-clock entirely. Also never against</em>
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * however long the task had to wait in {@link #VALIDATION_POOL} for a free thread, and (when CPU timing is</em>
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 * available) never against wall-clock time it spent preempted rather than running.</em>
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> validateBounded(JsonSchema&lt;?&gt; schema, Object value) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> started = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> taskStart = <strong class="jxr_keyword">new</strong> AtomicReference&lt;TaskStart&gt;();
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> future = VALIDATION_POOL.submit(() -&gt; {
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			taskStart.set(TaskStart.capture());
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			started.countDown();
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			JsonSchemaValidator.of(schema).validate(value);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		});
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		awaitBounded(future, started, taskStart, MILLISECONDS.toNanos(MAX_VALIDATION_MILLIS));
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * Snapshot of when a validation task actually began running, captured on the validating thread itself as its</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * first instruction.</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * @param threadId The validating thread's id, so the waiting thread can sample that same thread's CPU time.</em>
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @param wallNanos The {@link System#nanoTime()} baseline, used by the wall-clock fallback.</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * @param cpuNanos The validating thread's CPU-time baseline in nanoseconds ({@link ThreadMXBean#getThreadCpuTime(long)}),</em>
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 * 	or {@code -1} if per-thread CPU timing is unavailable on this JVM.</em>
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	record TaskStart(<strong class="jxr_keyword">long</strong> threadId, <strong class="jxr_keyword">long</strong> wallNanos, <strong class="jxr_keyword">long</strong> cpuNanos) {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<em class="jxr_javadoccomment">/** Captures the current thread's start snapshot; must be called on the thread that runs the validation. */</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		<strong class="jxr_keyword">static</strong> TaskStart capture() {
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">var</strong> id = Thread.currentThread().getId();
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> TaskStart(id, System.nanoTime(), CPU_TIME_SUPPORTED ? THREAD_MX.getThreadCpuTime(id) : -1L);
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		}
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * Waits for a submitted validation task to complete, charging only its own compute time against</em>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * {@code remaining} (the caller's compute budget, a fresh interval unrelated to any other deadline the</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * caller may separately be tracking) - never however long it had to wait in {@link #VALIDATION_POOL} for a</em>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 * free thread.</em>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * This waits in two phases. First, {@code started} is awaited so the calling thread learns exactly when the</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * task begins running; this wait is bounded only by the generous {@link #MAX_SCHEDULING_MILLIS} backstop,</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * since scheduling delay under load (queueing behind other work in {@link #VALIDATION_POOL}) is not the thing</em>
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * being defended against. Second, once the task is running, its compute is bounded: when per-thread CPU</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * timing is available (the normal case) the waiting thread polls the validating thread's accumulated</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * &lt;i&gt;CPU&lt;/i&gt; time and trips only if that exceeds {@code remaining}, so preemption and scheduling latency</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * never shrink the budget - only real CPU work does. When CPU timing is unavailable, it falls back to the</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * original wall-clock window anchored to the task's actual start time.</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * Package-private (rather than private) purely so this can be exercised directly against a test-local</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * {@link Future}/latch pair - deterministically simulating scheduling delay, a CPU burn, or a sleep that</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * elapses wall-clock without consuming CPU - without needing to saturate the shared {@link #VALIDATION_POOL}.</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @param future The in-flight (or already-complete) validation task.</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * @param started Counted down by the task as its first instruction, once it actually begins running.</em>
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * @param taskStart Set by the task (before counting down {@code started}) to its {@link TaskStart} snapshot.</em>
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * @param remaining The caller's compute budget, in nanoseconds, captured fresh before submission (see</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * 	{@link #validateBounded} for why this must be independent of any pre-existing wall-clock deadline).</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> awaitBounded(Future&lt;?&gt; future, CountDownLatch started, AtomicReference&lt;TaskStart&gt; taskStart, <strong class="jxr_keyword">long</strong> remaining) {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">if</strong> (! started.await(MAX_SCHEDULING_MILLIS, MILLISECONDS)) {
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				future.cancel(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, <span class="jxr_string">"Tool input schema validation could not be scheduled within "</span> + MAX_SCHEDULING_MILLIS + <span class="jxr_string">" ms"</span>);
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			}
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">var</strong> start = taskStart.get();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">if</strong> (CPU_TIME_SUPPORTED &amp;&amp; start.cpuNanos() &gt;= 0)
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 				awaitByCpuTime(future, start.threadId(), start.cpuNanos(), remaining);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				future.get(Math.max(0, remaining - (System.nanoTime() - start.wallNanos())), NANOSECONDS);  <em class="jxr_comment">// HTT: wall-clock fallback; CI JVMs use the CPU-time path.</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		} <strong class="jxr_keyword">catch</strong> (TimeoutException e) {
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			future.cancel(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">throw</strong> validationTimeoutException();
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		} <strong class="jxr_keyword">catch</strong> (ExecutionException e) {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">var</strong> cause = e.getCause();
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			<strong class="jxr_keyword">if</strong> (cause instanceof McpException me)
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				<strong class="jxr_keyword">throw</strong> me;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, cause == <strong class="jxr_keyword">null</strong> ? e.getMessage() : cause.getMessage());
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			future.cancel(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			Thread.currentThread().interrupt();
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, <span class="jxr_string">"Tool input schema validation was interrupted"</span>);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		}
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * Bounds a running validation by the validating thread's actual CPU time.</em>
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * The waiting thread polls at {@link #CPU_POLL_INTERVAL_NANOS} intervals: each time the task hasn't finished</em>
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * yet, it re-samples thread CPU time and keeps waiting as long as the CPU consumed since {@code baseCpuNanos}</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * is within {@code budgetNanos}. Wall-clock elapsed while the thread was preempted (or deliberately sleeping)</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * accrues no CPU, so it never trips the budget; a schema that genuinely burns CPU does. Validation is pure</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * in-memory work with no I/O or blocking, so CPU accrual is a sufficient bound and no wall-clock ceiling is</em>
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * needed here - a task that never returns would necessarily be burning CPU and will trip the budget.</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * @param future The running validation task.</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @param threadId The validating thread's id.</em>
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * @param baseCpuNanos The validating thread's CPU-time baseline captured at task start.</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * @param budgetNanos The maximum CPU time, in nanoseconds, the validation may consume.</em>
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * @throws TimeoutException If the CPU budget is exceeded while the task is still running.</em>
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> awaitByCpuTime(Future&lt;?&gt; future, <strong class="jxr_keyword">long</strong> threadId, <strong class="jxr_keyword">long</strong> baseCpuNanos, <strong class="jxr_keyword">long</strong> budgetNanos)
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">throws</strong> InterruptedException, ExecutionException, TimeoutException {
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				future.get(CPU_POLL_INTERVAL_NANOS, NANOSECONDS);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			} <strong class="jxr_keyword">catch</strong> (TimeoutException poll) {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 				<strong class="jxr_keyword">if</strong> (! stillWithinCpuBudget(future, threadId, baseCpuNanos, budgetNanos))
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 					<strong class="jxr_keyword">throw</strong> poll;  <em class="jxr_comment">// CPU work exceeded the DoS budget (or CPU timing was lost) while the task is still running</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			}
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		}
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * Whether polling should keep waiting after a {@code future.get()} poll timed out: either the validating</em>
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * thread's CPU consumption since {@code baseCpuNanos} is still within {@code budgetNanos} (real CPU work,</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * still within budget - preemption/scheduling doesn't count against it), or the task actually finished</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 * inside the sampling race window (the next {@code get()} will harvest its result/exception).</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * @param future The running validation task.</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * @param threadId The validating thread's id.</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @param baseCpuNanos The validating thread's CPU-time baseline captured at task start.</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @param budgetNanos The maximum CPU time, in nanoseconds, the validation may consume.</em>
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if polling should continue; &lt;jk&gt;false&lt;/jk&gt; if the budget has been exceeded.</em>
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> stillWithinCpuBudget(Future&lt;?&gt; future, <strong class="jxr_keyword">long</strong> threadId, <strong class="jxr_keyword">long</strong> baseCpuNanos, <strong class="jxr_keyword">long</strong> budgetNanos) {
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> cpuNow = THREAD_MX.getThreadCpuTime(threadId);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">if</strong> (cpuNow &gt;= 0 &amp;&amp; cpuNow - baseCpuNanos &lt;= budgetNanos)
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> future.isDone();
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<em class="jxr_javadoccomment">/** Whether the compute budget is charged against thread CPU time (vs. the wall-clock fallback); for tests. */</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> cpuTimeBudgetEnabled() {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">return</strong> CPU_TIME_SUPPORTED;
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpException validationTimeoutException() {
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, <span class="jxr_string">"Tool input schema validation exceeded "</span> + MAX_VALIDATION_MILLIS + <span class="jxr_string">" ms"</span>);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> }
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * of any structural-traversal wall clock. Such a budget would already be partially spent by the two {@link JsonValueSafety#check} calls and the</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * schema-to-bean conversion above, both of which run on the (possibly preempted) request thread under load;</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">	 * deriving the validation budget from whatever wall-clock happened to remain would let purely-external</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">	 * scheduling pressure - not any property of the schema or arguments being validated - trip a false-positive</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> <em class="jxr_javadoccomment">	 * {@code -32602} on a trivial validation. Anchoring a fresh budget here, measured from when the pool task</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * actually starts (see {@link TaskStart#capture}), keeps the DoS guard (validation CPU still capped at</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * {@link #MAX_VALIDATION_MILLIS}) independent of that pre-check wall-clock entirely. Also never against</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * however long the task had to wait in {@link #VALIDATION_POOL} for a free thread, and (when CPU timing is</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * available) never against wall-clock time it spent preempted rather than running.</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> validateBounded(JsonSchema&lt;?&gt; schema, Object value) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		<strong class="jxr_keyword">var</strong> started = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> taskStart = <strong class="jxr_keyword">new</strong> AtomicReference&lt;TaskStart&gt;();
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> future = VALIDATION_POOL.submit(() -&gt; {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 			taskStart.set(TaskStart.capture());
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			started.countDown();
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			JsonSchemaValidator.of(schema).validate(value);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		});
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		awaitBounded(future, started, taskStart, MILLISECONDS.toNanos(MAX_VALIDATION_MILLIS));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * Snapshot of when a validation task actually began running, captured on the validating thread itself as its</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * first instruction.</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * @param threadId The validating thread's id, so the waiting thread can sample that same thread's CPU time.</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 * @param wallNanos The {@link System#nanoTime()} baseline, used by the wall-clock fallback.</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 * @param cpuNanos The validating thread's CPU-time baseline in nanoseconds ({@link ThreadMXBean#getThreadCpuTime(long)}),</em>
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> <em class="jxr_javadoccomment">	 * 	or {@code -1} if per-thread CPU timing is unavailable on this JVM.</em>
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	record TaskStart(<strong class="jxr_keyword">long</strong> threadId, <strong class="jxr_keyword">long</strong> wallNanos, <strong class="jxr_keyword">long</strong> cpuNanos) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<em class="jxr_javadoccomment">/** Captures the current thread's start snapshot; must be called on the thread that runs the validation. */</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">static</strong> TaskStart capture() {
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			<strong class="jxr_keyword">var</strong> id = Thread.currentThread().getId();
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> TaskStart(id, System.nanoTime(), CPU_TIME_SUPPORTED ? THREAD_MX.getThreadCpuTime(id) : -1L);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		}
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> <em class="jxr_javadoccomment">	 * Waits for a submitted validation task to complete, charging only its own compute time against</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> <em class="jxr_javadoccomment">	 * {@code remaining} (the caller's compute budget, a fresh interval unrelated to any other deadline the</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">	 * caller may separately be tracking) - never however long it had to wait in {@link #VALIDATION_POOL} for a</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">	 * free thread.</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">	 * This waits in two phases. First, {@code started} is awaited so the calling thread learns exactly when the</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">	 * task begins running; this wait is bounded only by the generous {@link #MAX_SCHEDULING_MILLIS} backstop,</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">	 * since scheduling delay under load (queueing behind other work in {@link #VALIDATION_POOL}) is not the thing</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> <em class="jxr_javadoccomment">	 * being defended against. Second, once the task is running, its compute is bounded: when per-thread CPU</em>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> <em class="jxr_javadoccomment">	 * timing is available (the normal case) the waiting thread polls the validating thread's accumulated</em>
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * &lt;i&gt;CPU&lt;/i&gt; time and trips only if that exceeds {@code remaining}, so preemption and scheduling latency</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * never shrink the budget - only real CPU work does. When CPU timing is unavailable, it falls back to the</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * original wall-clock window anchored to the task's actual start time.</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 * Package-private (rather than private) purely so this can be exercised directly against a test-local</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * {@link Future}/latch pair - deterministically simulating scheduling delay, a CPU burn, or a sleep that</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * elapses wall-clock without consuming CPU - without needing to saturate the shared {@link #VALIDATION_POOL}.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * @param future The in-flight (or already-complete) validation task.</em>
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * @param started Counted down by the task as its first instruction, once it actually begins running.</em>
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> <em class="jxr_javadoccomment">	 * @param taskStart Set by the task (before counting down {@code started}) to its {@link TaskStart} snapshot.</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * @param remaining The caller's compute budget, in nanoseconds, captured fresh before submission (see</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * 	{@link #validateBounded} for why this must be independent of any pre-existing wall-clock deadline).</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> awaitBounded(Future&lt;?&gt; future, CountDownLatch started, AtomicReference&lt;TaskStart&gt; taskStart, <strong class="jxr_keyword">long</strong> remaining) {
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">if</strong> (! started.await(MAX_SCHEDULING_MILLIS, MILLISECONDS)) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 				future.cancel(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, <span class="jxr_string">"Tool input schema validation could not be scheduled within "</span> + MAX_SCHEDULING_MILLIS + <span class="jxr_string">" ms"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			}
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">var</strong> start = taskStart.get();
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">if</strong> (CPU_TIME_SUPPORTED &amp;&amp; start.cpuNanos() &gt;= 0)
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				awaitByCpuTime(future, start.threadId(), start.cpuNanos(), remaining);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				future.get(Math.max(0, remaining - (System.nanoTime() - start.wallNanos())), NANOSECONDS);  <em class="jxr_comment">// HTT: wall-clock fallback; CI JVMs use the CPU-time path.</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		} <strong class="jxr_keyword">catch</strong> (TimeoutException e) {
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			future.cancel(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">throw</strong> validationTimeoutException();
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		} <strong class="jxr_keyword">catch</strong> (ExecutionException e) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">var</strong> cause = e.getCause();
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">if</strong> (cause instanceof McpException me)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				<strong class="jxr_keyword">throw</strong> me;
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, cause == <strong class="jxr_keyword">null</strong> ? e.getMessage() : cause.getMessage());
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			future.cancel(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, <span class="jxr_string">"Tool input schema validation was interrupted"</span>);
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * Bounds a running validation by the validating thread's actual CPU time.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * The waiting thread polls at {@link #CPU_POLL_INTERVAL_NANOS} intervals: each time the task hasn't finished</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * yet, it re-samples thread CPU time and keeps waiting as long as the CPU consumed since {@code baseCpuNanos}</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">	 * is within {@code budgetNanos}. Wall-clock elapsed while the thread was preempted (or deliberately sleeping)</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> <em class="jxr_javadoccomment">	 * accrues no CPU, so it never trips the budget; a schema that genuinely burns CPU does. Validation is pure</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> <em class="jxr_javadoccomment">	 * in-memory work with no I/O or blocking, so CPU accrual is a sufficient bound and no wall-clock ceiling is</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * needed here - a task that never returns would necessarily be burning CPU and will trip the budget.</em>
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * @param future The running validation task.</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * @param threadId The validating thread's id.</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * @param baseCpuNanos The validating thread's CPU-time baseline captured at task start.</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 * @param budgetNanos The maximum CPU time, in nanoseconds, the validation may consume.</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * @throws TimeoutException If the CPU budget is exceeded while the task is still running.</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> awaitByCpuTime(Future&lt;?&gt; future, <strong class="jxr_keyword">long</strong> threadId, <strong class="jxr_keyword">long</strong> baseCpuNanos, <strong class="jxr_keyword">long</strong> budgetNanos)
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">throws</strong> InterruptedException, ExecutionException, TimeoutException {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">while</strong> (<strong class="jxr_keyword">true</strong>) {
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				future.get(CPU_POLL_INTERVAL_NANOS, NANOSECONDS);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			} <strong class="jxr_keyword">catch</strong> (TimeoutException poll) {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">if</strong> (! stillWithinCpuBudget(future, threadId, baseCpuNanos, budgetNanos))
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 					<strong class="jxr_keyword">throw</strong> poll;  <em class="jxr_comment">// CPU work exceeded the DoS budget (or CPU timing was lost) while the task is still running</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> <em class="jxr_javadoccomment">	 * Whether polling should keep waiting after a {@code future.get()} poll timed out: either the validating</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">	 * thread's CPU consumption since {@code baseCpuNanos} is still within {@code budgetNanos} (real CPU work,</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">	 * still within budget - preemption/scheduling doesn't count against it), or the task actually finished</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> <em class="jxr_javadoccomment">	 * inside the sampling race window (the next {@code get()} will harvest its result/exception).</em>
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> <em class="jxr_javadoccomment">	 * @param future The running validation task.</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> <em class="jxr_javadoccomment">	 * @param threadId The validating thread's id.</em>
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> <em class="jxr_javadoccomment">	 * @param baseCpuNanos The validating thread's CPU-time baseline captured at task start.</em>
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> <em class="jxr_javadoccomment">	 * @param budgetNanos The maximum CPU time, in nanoseconds, the validation may consume.</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">	 * @return &lt;jk&gt;true&lt;/jk&gt; if polling should continue; &lt;jk&gt;false&lt;/jk&gt; if the budget has been exceeded.</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> stillWithinCpuBudget(Future&lt;?&gt; future, <strong class="jxr_keyword">long</strong> threadId, <strong class="jxr_keyword">long</strong> baseCpuNanos, <strong class="jxr_keyword">long</strong> budgetNanos) {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">var</strong> cpuNow = THREAD_MX.getThreadCpuTime(threadId);
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">if</strong> (cpuNow &gt;= 0 &amp;&amp; cpuNow - baseCpuNanos &lt;= budgetNanos)
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">return</strong> future.isDone();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<em class="jxr_javadoccomment">/** Whether the compute budget is charged against thread CPU time (vs. the wall-clock fallback); for tests. */</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> cpuTimeBudgetEnabled() {
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">return</strong> CPU_TIME_SUPPORTED;
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> McpException validationTimeoutException() {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> McpException(McpRevision.CODE_INVALID_PARAMS, <span class="jxr_string">"Tool input schema validation exceeded "</span> + MAX_VALIDATION_MILLIS + <span class="jxr_string">" ms"</span>);
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

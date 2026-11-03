@@ -79,56 +79,59 @@
 <span class="source-line-no">066</span><span id="line-66">               Column.create("state").label("State").render("pill"),</span>
 <span class="source-line-no">067</span><span id="line-67">               Column.create("result.message").label("Result"))</span>
 <span class="source-line-no">068</span><span id="line-68">            .ribbon(</span>
-<span class="source-line-no">069</span><span id="line-69">               RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form"),</span>
-<span class="source-line-no">070</span><span id="line-70">               RibbonItem.refresh().id("refresh")))</span>
-<span class="source-line-no">071</span><span id="line-71">         .table(TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")</span>
-<span class="source-line-no">072</span><span id="line-72">            .pollIntervalMs(2000)</span>
-<span class="source-line-no">073</span><span id="line-73">            .columns(</span>
-<span class="source-line-no">074</span><span id="line-74">               Column.create("species").label("Species"),</span>
-<span class="source-line-no">075</span><span id="line-75">               Column.create("available").label("Available"))</span>
-<span class="source-line-no">076</span><span id="line-76">            .detail(RowDetail.create("/console/ops/jobs/species/{id}").region(JobLogRegion.create("restock-species")</span>
-<span class="source-line-no">077</span><span id="line-77">               .submit(JobLogRegion.Submit.create("/console/ops/jobs/species/{id}/restock", "restock-species", "/console/ops/jobs/species/{id}/key")</span>
-<span class="source-line-no">078</span><span id="line-78">                  .submitLabel("Restock")</span>
-<span class="source-line-no">079</span><span id="line-79">                  .field(JobLogRegion.Field.of("count").label("How many (1-50)").type("number").defaultValue(1).required(true))</span>
-<span class="source-line-no">080</span><span id="line-80">                  .field(JobLogRegion.Field.of("species").type("hidden").source("row.species")))</span>
-<span class="source-line-no">081</span><span id="line-81">               .detail(JobLogRegion.Detail.of("fieldGrid", RegionDef.Field.of("available").label("Available")))</span>
-<span class="source-line-no">082</span><span id="line-82">               .output(JobLogRegion.Output.field("available").from("row.available"))</span>
-<span class="source-line-no">083</span><span id="line-83">               .toRegion())))</span>
-<span class="source-line-no">084</span><span id="line-84">         .card(CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()))</span>
-<span class="source-line-no">085</span><span id="line-85">         .card(CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()))</span>
-<span class="source-line-no">086</span><span id="line-86">         .table(TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")</span>
-<span class="source-line-no">087</span><span id="line-87">            .columns(</span>
-<span class="source-line-no">088</span><span id="line-88">               Column.create("pet").label("Pet"),</span>
-<span class="source-line-no">089</span><span id="line-89">               Column.create("submitted").label("Submitted").render("timestamp"),</span>
-<span class="source-line-no">090</span><span id="line-90">               Column.create("state").label("State").render("pill"),</span>
-<span class="source-line-no">091</span><span id="line-91">               Column.create("lines").label("Lines"))</span>
-<span class="source-line-no">092</span><span id="line-92">            .detail(RowDetail.create("/console/ops/jobs/groom-runs/{id}")</span>
-<span class="source-line-no">093</span><span id="line-93">               .region(RegionDef.create("regroom").type(RegionDef.TYPE_ROW_DETAIL).populate("petstore-regroom").allowPopulators("petstore-regroom")))</span>
-<span class="source-line-no">094</span><span id="line-94">            .ribbon(</span>
-<span class="source-line-no">095</span><span id="line-95">               RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form"),</span>
-<span class="source-line-no">096</span><span id="line-96">               RibbonItem.refresh().id("groom-refresh")));</span>
-<span class="source-line-no">097</span><span id="line-97">   }</span>
-<span class="source-line-no">098</span><span id="line-98"></span>
-<span class="source-line-no">099</span><span id="line-99">   /**</span>
-<span class="source-line-no">100</span><span id="line-100">    * P7 Audit.</span>
-<span class="source-line-no">101</span><span id="line-101">    *</span>
-<span class="source-line-no">102</span><span id="line-102">    * @return The page spec.</span>
-<span class="source-line-no">103</span><span id="line-103">    */</span>
-<span class="source-line-no">104</span><span id="line-104">   public static PageSpec audit() {</span>
-<span class="source-line-no">105</span><span id="line-105">      return PageSpec.create().tab("ops/audit").toolkit("views")</span>
-<span class="source-line-no">106</span><span id="line-106">         .table(TableSpec.create("audit").dataMode(DataMode.SERVER).dataUrl("/console/ops/audit/query")</span>
-<span class="source-line-no">107</span><span id="line-107">            .operators(SearchOperatorSet.standard())</span>
-<span class="source-line-no">108</span><span id="line-108">            .defaultOrder("at", Sort.DESC)</span>
-<span class="source-line-no">109</span><span id="line-109">            .columns(</span>
-<span class="source-line-no">110</span><span id="line-110">               Column.create("at").label("When").render("timestamp").searchType(SearchType.TIMESTAMP),</span>
-<span class="source-line-no">111</span><span id="line-111">               Column.create("actor").label("Actor").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">112</span><span id="line-112">               Column.create("action").label("Action").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">113</span><span id="line-113">               Column.create("entity").label("Entity").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">114</span><span id="line-114">               Column.create("entityId").label("Id").searchType(SearchType.TEXT),</span>
-<span class="source-line-no">115</span><span id="line-115">               Column.create("detail").label("Detail").searchType(SearchType.TEXT))</span>
-<span class="source-line-no">116</span><span id="line-116">            .ribbon(RibbonItem.export("copy", "csv"), RibbonItem.refresh().id("refresh")));</span>
-<span class="source-line-no">117</span><span id="line-117">   }</span>
-<span class="source-line-no">118</span><span id="line-118">}</span>
+<span class="source-line-no">069</span><span id="line-69">               RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form").group("entity"),</span>
+<span class="source-line-no">070</span><span id="line-70">               RibbonItem.resetDefaults().group("page"),</span>
+<span class="source-line-no">071</span><span id="line-71">               RibbonItem.refresh().id("refresh")))</span>
+<span class="source-line-no">072</span><span id="line-72">         .table(TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")</span>
+<span class="source-line-no">073</span><span id="line-73">            .pollIntervalMs(2000)</span>
+<span class="source-line-no">074</span><span id="line-74">            .columns(</span>
+<span class="source-line-no">075</span><span id="line-75">               Column.create("species").label("Species"),</span>
+<span class="source-line-no">076</span><span id="line-76">               Column.create("available").label("Available"))</span>
+<span class="source-line-no">077</span><span id="line-77">            .detail(RowDetail.create("/console/ops/jobs/species/{id}").region(JobLogRegion.create("restock-species")</span>
+<span class="source-line-no">078</span><span id="line-78">               .submit(JobLogRegion.Submit.create("/console/ops/jobs/species/{id}/restock", "restock-species", "/console/ops/jobs/species/{id}/key")</span>
+<span class="source-line-no">079</span><span id="line-79">                  .submitLabel("Restock")</span>
+<span class="source-line-no">080</span><span id="line-80">                  .field(JobLogRegion.Field.of("count").label("How many (1-50)").type("number").defaultValue(1).required(true))</span>
+<span class="source-line-no">081</span><span id="line-81">                  .field(JobLogRegion.Field.of("species").type("hidden").source("row.species")))</span>
+<span class="source-line-no">082</span><span id="line-82">               .detail(JobLogRegion.Detail.of("fieldGrid", RegionDef.Field.of("available").label("Available")))</span>
+<span class="source-line-no">083</span><span id="line-83">               .output(JobLogRegion.Output.field("available").from("row.available"))</span>
+<span class="source-line-no">084</span><span id="line-84">               .toRegion())))</span>
+<span class="source-line-no">085</span><span id="line-85">         .card(CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()))</span>
+<span class="source-line-no">086</span><span id="line-86">         .card(CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()))</span>
+<span class="source-line-no">087</span><span id="line-87">         .table(TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")</span>
+<span class="source-line-no">088</span><span id="line-88">            .columns(</span>
+<span class="source-line-no">089</span><span id="line-89">               Column.create("pet").label("Pet"),</span>
+<span class="source-line-no">090</span><span id="line-90">               Column.create("submitted").label("Submitted").render("timestamp"),</span>
+<span class="source-line-no">091</span><span id="line-91">               Column.create("state").label("State").render("pill"),</span>
+<span class="source-line-no">092</span><span id="line-92">               Column.create("lines").label("Lines"))</span>
+<span class="source-line-no">093</span><span id="line-93">            .detail(RowDetail.create("/console/ops/jobs/groom-runs/{id}")</span>
+<span class="source-line-no">094</span><span id="line-94">               .region(RegionDef.create("regroom").type(RegionDef.TYPE_ROW_DETAIL).populate("petstore-regroom").allowPopulators("petstore-regroom")))</span>
+<span class="source-line-no">095</span><span id="line-95">            .ribbon(</span>
+<span class="source-line-no">096</span><span id="line-96">               RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form").group("entity"),</span>
+<span class="source-line-no">097</span><span id="line-97">               RibbonItem.collapseAll().group("viewing"),</span>
+<span class="source-line-no">098</span><span id="line-98">               RibbonItem.resetDefaults().group("page"),</span>
+<span class="source-line-no">099</span><span id="line-99">               RibbonItem.refresh().id("groom-refresh")));</span>
+<span class="source-line-no">100</span><span id="line-100">   }</span>
+<span class="source-line-no">101</span><span id="line-101"></span>
+<span class="source-line-no">102</span><span id="line-102">   /**</span>
+<span class="source-line-no">103</span><span id="line-103">    * P7 Audit.</span>
+<span class="source-line-no">104</span><span id="line-104">    *</span>
+<span class="source-line-no">105</span><span id="line-105">    * @return The page spec.</span>
+<span class="source-line-no">106</span><span id="line-106">    */</span>
+<span class="source-line-no">107</span><span id="line-107">   public static PageSpec audit() {</span>
+<span class="source-line-no">108</span><span id="line-108">      return PageSpec.create().tab("ops/audit").toolkit("views")</span>
+<span class="source-line-no">109</span><span id="line-109">         .table(TableSpec.create("audit").dataMode(DataMode.SERVER).dataUrl("/console/ops/audit/query")</span>
+<span class="source-line-no">110</span><span id="line-110">            .operators(SearchOperatorSet.standard())</span>
+<span class="source-line-no">111</span><span id="line-111">            .defaultOrder("at", Sort.DESC)</span>
+<span class="source-line-no">112</span><span id="line-112">            .columns(</span>
+<span class="source-line-no">113</span><span id="line-113">               Column.create("at").label("When").render("timestamp").searchType(SearchType.TIMESTAMP),</span>
+<span class="source-line-no">114</span><span id="line-114">               Column.create("actor").label("Actor").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">115</span><span id="line-115">               Column.create("action").label("Action").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">116</span><span id="line-116">               Column.create("entity").label("Entity").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">117</span><span id="line-117">               Column.create("entityId").label("Id").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">118</span><span id="line-118">               Column.create("detail").label("Detail").searchType(SearchType.TEXT))</span>
+<span class="source-line-no">119</span><span id="line-119">            .ribbon(RibbonItem.export("copy", "csv").group("viewing"), RibbonItem.resetDefaults().group("page"), RibbonItem.refresh().id("refresh")));</span>
+<span class="source-line-no">120</span><span id="line-120">   }</span>
+<span class="source-line-no">121</span><span id="line-121">}</span>
 
 
 

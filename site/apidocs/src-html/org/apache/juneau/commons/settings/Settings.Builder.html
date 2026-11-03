@@ -388,474 +388,477 @@
 <span class="source-line-no">375</span><span id="line-375">      return b;</span>
 <span class="source-line-no">376</span><span id="line-376">   }</span>
 <span class="source-line-no">377</span><span id="line-377"></span>
-<span class="source-line-no">378</span><span id="line-378">   private static boolean isSpiSystemPropertySource(PropertySource s) {</span>
-<span class="source-line-no">379</span><span id="line-379">      return s.getClass().getName().equals(SystemPropertyPropertySource.class.getName());  // exact class name, any loader</span>
-<span class="source-line-no">380</span><span id="line-380">   }</span>
-<span class="source-line-no">381</span><span id="line-381"></span>
-<span class="source-line-no">382</span><span id="line-382">   private static final Settings INSTANCE = defaultBuilder(ServiceLoader.load(PropertySourceProvider.class).stream().map(ServiceLoader.Provider::get).toList())</span>
-<span class="source-line-no">383</span><span id="line-383">      .globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -&gt; null : MapStore::new)</span>
-<span class="source-line-no">384</span><span id="line-384">      .build();</span>
-<span class="source-line-no">385</span><span id="line-385"></span>
-<span class="source-line-no">386</span><span id="line-386">   /**</span>
-<span class="source-line-no">387</span><span id="line-387">    * Returns the singleton instance of Settings.</span>
-<span class="source-line-no">388</span><span id="line-388">    *</span>
-<span class="source-line-no">389</span><span id="line-389">    * @return The singleton Settings instance.</span>
-<span class="source-line-no">390</span><span id="line-390">    */</span>
-<span class="source-line-no">391</span><span id="line-391">   public static Settings get() {</span>
-<span class="source-line-no">392</span><span id="line-392">      return INSTANCE;</span>
-<span class="source-line-no">393</span><span id="line-393">   }</span>
-<span class="source-line-no">394</span><span id="line-394"></span>
-<span class="source-line-no">395</span><span id="line-395">   private final Memoizer&lt;PropertyStore&gt; globalStore;</span>
-<span class="source-line-no">396</span><span id="line-396">   @SuppressWarnings({</span>
-<span class="source-line-no">397</span><span id="line-397">      "java:S5164" // Cleanup method provided: cleanup()</span>
-<span class="source-line-no">398</span><span id="line-398">   })</span>
-<span class="source-line-no">399</span><span id="line-399">   private final ThreadLocal&lt;PropertyStore&gt; localStore;</span>
-<span class="source-line-no">400</span><span id="line-400">   private final List&lt;PropertySource&gt; sources;</span>
-<span class="source-line-no">401</span><span id="line-401">   private final Map&lt;Class&lt;?&gt;,Function&lt;String,?&gt;&gt; toTypeFunctions;</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   /**</span>
-<span class="source-line-no">404</span><span id="line-404">    * Constructor.</span>
-<span class="source-line-no">405</span><span id="line-405">    */</span>
-<span class="source-line-no">406</span><span id="line-406">   private Settings(Builder builder) {</span>
-<span class="source-line-no">407</span><span id="line-407">      this.globalStore = memoizer(builder.globalStoreSupplier);</span>
-<span class="source-line-no">408</span><span id="line-408">      this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);</span>
-<span class="source-line-no">409</span><span id="line-409">      this.sources = new CopyOnWriteArrayList&lt;&gt;(builder.sources);</span>
-<span class="source-line-no">410</span><span id="line-410">      this.toTypeFunctions = new ConcurrentHashMap&lt;&gt;(builder.customTypeFunctions);</span>
-<span class="source-line-no">411</span><span id="line-411">   }</span>
-<span class="source-line-no">412</span><span id="line-412"></span>
-<span class="source-line-no">413</span><span id="line-413">   /**</span>
-<span class="source-line-no">414</span><span id="line-414">    * Adds a property source after this settings instance has been built.</span>
-<span class="source-line-no">415</span><span id="line-415">    *</span>
-<span class="source-line-no">416</span><span id="line-416">    * @param source The property source to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">417</span><span id="line-417">    * @return This object for method chaining.</span>
-<span class="source-line-no">418</span><span id="line-418">    */</span>
-<span class="source-line-no">419</span><span id="line-419">   public Settings addSource(PropertySource source) {</span>
-<span class="source-line-no">420</span><span id="line-420">      reqnn("source", source);</span>
-<span class="source-line-no">421</span><span id="line-421">      sources.add(source);</span>
-<span class="source-line-no">422</span><span id="line-422">      return this;</span>
-<span class="source-line-no">423</span><span id="line-423">   }</span>
-<span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">   /**</span>
-<span class="source-line-no">426</span><span id="line-426">    * Returns the number of {@link PropertySource}s currently registered with this</span>
-<span class="source-line-no">427</span><span id="line-427">    * {@code Settings} instance.</span>
-<span class="source-line-no">428</span><span id="line-428">    *</span>
-<span class="source-line-no">429</span><span id="line-429">    * &lt;p&gt;</span>
-<span class="source-line-no">430</span><span id="line-430">    * Intended primarily for tests that need to verify nothing has leaked extra sources into the</span>
-<span class="source-line-no">431</span><span id="line-431">    * process-wide {@link #get() Settings.get()} singleton &amp;mdash; the historical failure mode</span>
-<span class="source-line-no">432</span><span id="line-432">    * documented where a per-{@code RestContext}</span>
-<span class="source-line-no">433</span><span id="line-433">    * config bridge added a {@code ConfigPropertySource} per cached {@code RestContext} via</span>
-<span class="source-line-no">434</span><span id="line-434">    * {@link #addSource(PropertySource)} and never removed it.</span>
-<span class="source-line-no">435</span><span id="line-435">    *</span>
-<span class="source-line-no">436</span><span id="line-436">    * @return The current source count. Always {@code &amp;gt;= 0}.</span>
-<span class="source-line-no">437</span><span id="line-437">    */</span>
-<span class="source-line-no">438</span><span id="line-438">   public int sourceCount() {</span>
-<span class="source-line-no">439</span><span id="line-439">      return sources.size();</span>
-<span class="source-line-no">440</span><span id="line-440">   }</span>
-<span class="source-line-no">441</span><span id="line-441"></span>
-<span class="source-line-no">442</span><span id="line-442">   /**</span>
-<span class="source-line-no">443</span><span id="line-443">    * Returns a live, read-only view of the registered sources, in registration order.  Package-private, for tests.</span>
-<span class="source-line-no">444</span><span id="line-444">    *</span>
-<span class="source-line-no">445</span><span id="line-445">    * @return An unmodifiable view; later {@link #addSource} / {@link #removeSource} calls show through.</span>
-<span class="source-line-no">446</span><span id="line-446">    */</span>
-<span class="source-line-no">447</span><span id="line-447">   List&lt;PropertySource&gt; sources() {</span>
-<span class="source-line-no">448</span><span id="line-448">      return Collections.unmodifiableList(sources);</span>
-<span class="source-line-no">449</span><span id="line-449">   }</span>
-<span class="source-line-no">450</span><span id="line-450"></span>
-<span class="source-line-no">451</span><span id="line-451">   /**</span>
-<span class="source-line-no">452</span><span id="line-452">    * Removes a previously-added property source.</span>
-<span class="source-line-no">453</span><span id="line-453">    *</span>
-<span class="source-line-no">454</span><span id="line-454">    * &lt;p&gt;</span>
-<span class="source-line-no">455</span><span id="line-455">    * The match is by identity ({@code ==}), not equality.  Callers that mutate the singleton</span>
-<span class="source-line-no">456</span><span id="line-456">    * {@link #get() Settings.get()} from a test should capture the exact reference returned to/passed</span>
-<span class="source-line-no">457</span><span id="line-457">    * into {@link #addSource(PropertySource)} and pass it back here in their teardown to avoid</span>
-<span class="source-line-no">458</span><span id="line-458">    * cross-test bleed.</span>
-<span class="source-line-no">459</span><span id="line-459">    *</span>
-<span class="source-line-no">460</span><span id="line-460">    * @param source The property source to remove. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">461</span><span id="line-461">    * @return &lt;jk&gt;true&lt;/jk&gt; if the source was present and removed, &lt;jk&gt;false&lt;/jk&gt; otherwise.</span>
-<span class="source-line-no">462</span><span id="line-462">    */</span>
-<span class="source-line-no">463</span><span id="line-463">   public boolean removeSource(PropertySource source) {</span>
-<span class="source-line-no">464</span><span id="line-464">      reqnn("source", source);</span>
-<span class="source-line-no">465</span><span id="line-465">      // Identity-based removal so that PropertySource impls without a sensible equals() still</span>
-<span class="source-line-no">466</span><span id="line-466">      // round-trip cleanly through add/remove pairs.</span>
-<span class="source-line-no">467</span><span id="line-467">      // Removals are serialized so the index found in the snapshot is still valid when removed; addSource only appends.</span>
-<span class="source-line-no">468</span><span id="line-468">      synchronized (sources) {</span>
-<span class="source-line-no">469</span><span id="line-469">         var snapshot = sources.toArray(new PropertySource[0]);</span>
-<span class="source-line-no">470</span><span id="line-470">         for (var i = 0; i &lt; snapshot.length; i++) {</span>
-<span class="source-line-no">471</span><span id="line-471">            if (snapshot[i] == source) {</span>
-<span class="source-line-no">472</span><span id="line-472">               sources.remove(i);</span>
-<span class="source-line-no">473</span><span id="line-473">               return true;</span>
-<span class="source-line-no">474</span><span id="line-474">            }</span>
-<span class="source-line-no">475</span><span id="line-475">         }</span>
-<span class="source-line-no">476</span><span id="line-476">      }</span>
-<span class="source-line-no">477</span><span id="line-477">      return false;</span>
-<span class="source-line-no">478</span><span id="line-478">   }</span>
-<span class="source-line-no">479</span><span id="line-479"></span>
-<span class="source-line-no">480</span><span id="line-480">   /**</span>
-<span class="source-line-no">481</span><span id="line-481">    * Returns a {@link StringSetting} for the specified system property.</span>
-<span class="source-line-no">482</span><span id="line-482">    *</span>
-<span class="source-line-no">483</span><span id="line-483">    * &lt;p&gt;</span>
-<span class="source-line-no">484</span><span id="line-484">    * The returned {@link StringSetting} is a resettable supplier that caches the lookup result.</span>
-<span class="source-line-no">485</span><span id="line-485">    * Use the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods</span>
-<span class="source-line-no">486</span><span id="line-486">    * to convert to different types.</span>
-<span class="source-line-no">487</span><span id="line-487">    *</span>
-<span class="source-line-no">488</span><span id="line-488">    * &lt;p&gt;</span>
-<span class="source-line-no">489</span><span id="line-489">    * The lookup order is:</span>
-<span class="source-line-no">490</span><span id="line-490">    * &lt;ol&gt;</span>
-<span class="source-line-no">491</span><span id="line-491">    *    &lt;li&gt;Per-thread override (if set via {@link #setLocal(String, String)})</span>
-<span class="source-line-no">492</span><span id="line-492">    *    &lt;li&gt;Global override (if set via {@link #setGlobal(String, String)})</span>
-<span class="source-line-no">493</span><span id="line-493">    *    &lt;li&gt;Sources added at runtime through {@link #addSource(PropertySource)}, newest first</span>
-<span class="source-line-no">494</span><span id="line-494">    *    &lt;li&gt;The system-default &lt;c&gt;Config&lt;/c&gt;, when juneau-config is on the classpath (SPI order 100)</span>
-<span class="source-line-no">495</span><span id="line-495">    *    &lt;li&gt;Command-line args (SPI order 50)</span>
-<span class="source-line-no">496</span><span id="line-496">    *    &lt;li&gt;Java system properties (SPI order 40)</span>
-<span class="source-line-no">497</span><span id="line-497">    *    &lt;li&gt;Environment variables, verbatim (SPI order 30)</span>
-<span class="source-line-no">498</span><span id="line-498">    *    &lt;li&gt;The &lt;c&gt;.env&lt;/c&gt; file (SPI order 20)</span>
-<span class="source-line-no">499</span><span id="line-499">    *    &lt;li&gt;The jar manifest (SPI order 10)</span>
-<span class="source-line-no">500</span><span id="line-500">    *    &lt;li&gt;Environment variables, relaxed spelling (registered first, so checked last)</span>
-<span class="source-line-no">501</span><span id="line-501">    * &lt;/ol&gt;</span>
-<span class="source-line-no">502</span><span id="line-502">    *</span>
-<span class="source-line-no">503</span><span id="line-503">    * &lt;p&gt;</span>
-<span class="source-line-no">504</span><span id="line-504">    * If SPI registered no system-property source (a shaded jar that does not merge &lt;c&gt;META-INF/services&lt;/c&gt;, for example),</span>
-<span class="source-line-no">505</span><span id="line-505">    * a fallback system-property source sits just above the relaxed environment source.</span>
-<span class="source-line-no">506</span><span id="line-506">    *</span>
-<span class="source-line-no">507</span><span id="line-507">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">508</span><span id="line-508">    * @return A {@link StringSetting} that provides the resolved property value.</span>
-<span class="source-line-no">509</span><span id="line-509">    */</span>
-<span class="source-line-no">510</span><span id="line-510">   public StringSetting get(String name) {</span>
-<span class="source-line-no">511</span><span id="line-511">      reqnn("name", name);</span>
-<span class="source-line-no">512</span><span id="line-512">      return new StringSetting(this, () -&gt; resolve(name));</span>
-<span class="source-line-no">513</span><span id="line-513">   }</span>
-<span class="source-line-no">514</span><span id="line-514"></span>
-<span class="source-line-no">515</span><span id="line-515">   /**</span>
-<span class="source-line-no">516</span><span id="line-516">    * Walks the thread-local store, the global store, then every source newest first. The one copy of the lookup order.</span>
-<span class="source-line-no">517</span><span id="line-517">    *</span>
-<span class="source-line-no">518</span><span id="line-518">    * @return The resolved value, or &lt;jk&gt;null&lt;/jk&gt; when no store or source defines the name or the winner is an explicit null.</span>
-<span class="source-line-no">519</span><span id="line-519">    */</span>
-<span class="source-line-no">520</span><span id="line-520">   private String resolve(String name) {</span>
-<span class="source-line-no">521</span><span id="line-521">      // 1. Check thread-local override</span>
-<span class="source-line-no">522</span><span id="line-522">      var v = localStore.get().get(name);</span>
-<span class="source-line-no">523</span><span id="line-523">      if (v.isPresent())</span>
-<span class="source-line-no">524</span><span id="line-524">         return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.</span>
-<span class="source-line-no">525</span><span id="line-525"></span>
-<span class="source-line-no">526</span><span id="line-526">      // 2. Check global override</span>
-<span class="source-line-no">527</span><span id="line-527">      v = globalLookup(name);</span>
-<span class="source-line-no">528</span><span id="line-528">      if (v.isPresent())</span>
-<span class="source-line-no">529</span><span id="line-529">         return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.</span>
-<span class="source-line-no">530</span><span id="line-530"></span>
-<span class="source-line-no">531</span><span id="line-531">      // 3. Check sources in reverse order (last added first)</span>
-<span class="source-line-no">532</span><span id="line-532">      // Iterate one snapshot so a concurrent removeSource() can't shrink the list between size() and get(i).</span>
-<span class="source-line-no">533</span><span id="line-533">      var snapshot = sources.toArray(new PropertySource[0]);</span>
-<span class="source-line-no">534</span><span id="line-534">      for (int i = snapshot.length - 1; i &gt;= 0; i--) {</span>
-<span class="source-line-no">535</span><span id="line-535">         var source = snapshot[i];</span>
-<span class="source-line-no">536</span><span id="line-536">         var result = source.get(name);</span>
-<span class="source-line-no">537</span><span id="line-537">         if (result.isPresent())</span>
-<span class="source-line-no">538</span><span id="line-538">            return result.value().orElse(null);</span>
-<span class="source-line-no">539</span><span id="line-539">      }</span>
-<span class="source-line-no">540</span><span id="line-540"></span>
-<span class="source-line-no">541</span><span id="line-541">      return null;</span>
-<span class="source-line-no">542</span><span id="line-542">   }</span>
+<span class="source-line-no">378</span><span id="line-378">   @SuppressWarnings({</span>
+<span class="source-line-no">379</span><span id="line-379">      "java:S1872" // Exact-class match by name on purpose: any classloader counts, subclasses must not (fail safe).</span>
+<span class="source-line-no">380</span><span id="line-380">   })</span>
+<span class="source-line-no">381</span><span id="line-381">   private static boolean isSpiSystemPropertySource(PropertySource s) {</span>
+<span class="source-line-no">382</span><span id="line-382">      return s.getClass().getName().equals(SystemPropertyPropertySource.class.getName());  // exact class name, any loader</span>
+<span class="source-line-no">383</span><span id="line-383">   }</span>
+<span class="source-line-no">384</span><span id="line-384"></span>
+<span class="source-line-no">385</span><span id="line-385">   private static final Settings INSTANCE = defaultBuilder(ServiceLoader.load(PropertySourceProvider.class).stream().map(ServiceLoader.Provider::get).toList())</span>
+<span class="source-line-no">386</span><span id="line-386">      .globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -&gt; null : MapStore::new)</span>
+<span class="source-line-no">387</span><span id="line-387">      .build();</span>
+<span class="source-line-no">388</span><span id="line-388"></span>
+<span class="source-line-no">389</span><span id="line-389">   /**</span>
+<span class="source-line-no">390</span><span id="line-390">    * Returns the singleton instance of Settings.</span>
+<span class="source-line-no">391</span><span id="line-391">    *</span>
+<span class="source-line-no">392</span><span id="line-392">    * @return The singleton Settings instance.</span>
+<span class="source-line-no">393</span><span id="line-393">    */</span>
+<span class="source-line-no">394</span><span id="line-394">   public static Settings get() {</span>
+<span class="source-line-no">395</span><span id="line-395">      return INSTANCE;</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
+<span class="source-line-no">398</span><span id="line-398">   private final Memoizer&lt;PropertyStore&gt; globalStore;</span>
+<span class="source-line-no">399</span><span id="line-399">   @SuppressWarnings({</span>
+<span class="source-line-no">400</span><span id="line-400">      "java:S5164" // Cleanup method provided: cleanup()</span>
+<span class="source-line-no">401</span><span id="line-401">   })</span>
+<span class="source-line-no">402</span><span id="line-402">   private final ThreadLocal&lt;PropertyStore&gt; localStore;</span>
+<span class="source-line-no">403</span><span id="line-403">   private final List&lt;PropertySource&gt; sources;</span>
+<span class="source-line-no">404</span><span id="line-404">   private final Map&lt;Class&lt;?&gt;,Function&lt;String,?&gt;&gt; toTypeFunctions;</span>
+<span class="source-line-no">405</span><span id="line-405"></span>
+<span class="source-line-no">406</span><span id="line-406">   /**</span>
+<span class="source-line-no">407</span><span id="line-407">    * Constructor.</span>
+<span class="source-line-no">408</span><span id="line-408">    */</span>
+<span class="source-line-no">409</span><span id="line-409">   private Settings(Builder builder) {</span>
+<span class="source-line-no">410</span><span id="line-410">      this.globalStore = memoizer(builder.globalStoreSupplier);</span>
+<span class="source-line-no">411</span><span id="line-411">      this.localStore = ThreadLocal.withInitial(builder.localStoreSupplier);</span>
+<span class="source-line-no">412</span><span id="line-412">      this.sources = new CopyOnWriteArrayList&lt;&gt;(builder.sources);</span>
+<span class="source-line-no">413</span><span id="line-413">      this.toTypeFunctions = new ConcurrentHashMap&lt;&gt;(builder.customTypeFunctions);</span>
+<span class="source-line-no">414</span><span id="line-414">   }</span>
+<span class="source-line-no">415</span><span id="line-415"></span>
+<span class="source-line-no">416</span><span id="line-416">   /**</span>
+<span class="source-line-no">417</span><span id="line-417">    * Adds a property source after this settings instance has been built.</span>
+<span class="source-line-no">418</span><span id="line-418">    *</span>
+<span class="source-line-no">419</span><span id="line-419">    * @param source The property source to add. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">420</span><span id="line-420">    * @return This object for method chaining.</span>
+<span class="source-line-no">421</span><span id="line-421">    */</span>
+<span class="source-line-no">422</span><span id="line-422">   public Settings addSource(PropertySource source) {</span>
+<span class="source-line-no">423</span><span id="line-423">      reqnn("source", source);</span>
+<span class="source-line-no">424</span><span id="line-424">      sources.add(source);</span>
+<span class="source-line-no">425</span><span id="line-425">      return this;</span>
+<span class="source-line-no">426</span><span id="line-426">   }</span>
+<span class="source-line-no">427</span><span id="line-427"></span>
+<span class="source-line-no">428</span><span id="line-428">   /**</span>
+<span class="source-line-no">429</span><span id="line-429">    * Returns the number of {@link PropertySource}s currently registered with this</span>
+<span class="source-line-no">430</span><span id="line-430">    * {@code Settings} instance.</span>
+<span class="source-line-no">431</span><span id="line-431">    *</span>
+<span class="source-line-no">432</span><span id="line-432">    * &lt;p&gt;</span>
+<span class="source-line-no">433</span><span id="line-433">    * Intended primarily for tests that need to verify nothing has leaked extra sources into the</span>
+<span class="source-line-no">434</span><span id="line-434">    * process-wide {@link #get() Settings.get()} singleton &amp;mdash; the historical failure mode</span>
+<span class="source-line-no">435</span><span id="line-435">    * documented where a per-{@code RestContext}</span>
+<span class="source-line-no">436</span><span id="line-436">    * config bridge added a {@code ConfigPropertySource} per cached {@code RestContext} via</span>
+<span class="source-line-no">437</span><span id="line-437">    * {@link #addSource(PropertySource)} and never removed it.</span>
+<span class="source-line-no">438</span><span id="line-438">    *</span>
+<span class="source-line-no">439</span><span id="line-439">    * @return The current source count. Always {@code &amp;gt;= 0}.</span>
+<span class="source-line-no">440</span><span id="line-440">    */</span>
+<span class="source-line-no">441</span><span id="line-441">   public int sourceCount() {</span>
+<span class="source-line-no">442</span><span id="line-442">      return sources.size();</span>
+<span class="source-line-no">443</span><span id="line-443">   }</span>
+<span class="source-line-no">444</span><span id="line-444"></span>
+<span class="source-line-no">445</span><span id="line-445">   /**</span>
+<span class="source-line-no">446</span><span id="line-446">    * Returns a live, read-only view of the registered sources, in registration order.  Package-private, for tests.</span>
+<span class="source-line-no">447</span><span id="line-447">    *</span>
+<span class="source-line-no">448</span><span id="line-448">    * @return An unmodifiable view; later {@link #addSource} / {@link #removeSource} calls show through.</span>
+<span class="source-line-no">449</span><span id="line-449">    */</span>
+<span class="source-line-no">450</span><span id="line-450">   List&lt;PropertySource&gt; sources() {</span>
+<span class="source-line-no">451</span><span id="line-451">      return Collections.unmodifiableList(sources);</span>
+<span class="source-line-no">452</span><span id="line-452">   }</span>
+<span class="source-line-no">453</span><span id="line-453"></span>
+<span class="source-line-no">454</span><span id="line-454">   /**</span>
+<span class="source-line-no">455</span><span id="line-455">    * Removes a previously-added property source.</span>
+<span class="source-line-no">456</span><span id="line-456">    *</span>
+<span class="source-line-no">457</span><span id="line-457">    * &lt;p&gt;</span>
+<span class="source-line-no">458</span><span id="line-458">    * The match is by identity ({@code ==}), not equality.  Callers that mutate the singleton</span>
+<span class="source-line-no">459</span><span id="line-459">    * {@link #get() Settings.get()} from a test should capture the exact reference returned to/passed</span>
+<span class="source-line-no">460</span><span id="line-460">    * into {@link #addSource(PropertySource)} and pass it back here in their teardown to avoid</span>
+<span class="source-line-no">461</span><span id="line-461">    * cross-test bleed.</span>
+<span class="source-line-no">462</span><span id="line-462">    *</span>
+<span class="source-line-no">463</span><span id="line-463">    * @param source The property source to remove. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">464</span><span id="line-464">    * @return &lt;jk&gt;true&lt;/jk&gt; if the source was present and removed, &lt;jk&gt;false&lt;/jk&gt; otherwise.</span>
+<span class="source-line-no">465</span><span id="line-465">    */</span>
+<span class="source-line-no">466</span><span id="line-466">   public boolean removeSource(PropertySource source) {</span>
+<span class="source-line-no">467</span><span id="line-467">      reqnn("source", source);</span>
+<span class="source-line-no">468</span><span id="line-468">      // Identity-based removal so that PropertySource impls without a sensible equals() still</span>
+<span class="source-line-no">469</span><span id="line-469">      // round-trip cleanly through add/remove pairs.</span>
+<span class="source-line-no">470</span><span id="line-470">      // Removals are serialized so the index found in the snapshot is still valid when removed; addSource only appends.</span>
+<span class="source-line-no">471</span><span id="line-471">      synchronized (sources) {</span>
+<span class="source-line-no">472</span><span id="line-472">         var snapshot = sources.toArray(new PropertySource[0]);</span>
+<span class="source-line-no">473</span><span id="line-473">         for (var i = 0; i &lt; snapshot.length; i++) {</span>
+<span class="source-line-no">474</span><span id="line-474">            if (snapshot[i] == source) {</span>
+<span class="source-line-no">475</span><span id="line-475">               sources.remove(i);</span>
+<span class="source-line-no">476</span><span id="line-476">               return true;</span>
+<span class="source-line-no">477</span><span id="line-477">            }</span>
+<span class="source-line-no">478</span><span id="line-478">         }</span>
+<span class="source-line-no">479</span><span id="line-479">      }</span>
+<span class="source-line-no">480</span><span id="line-480">      return false;</span>
+<span class="source-line-no">481</span><span id="line-481">   }</span>
+<span class="source-line-no">482</span><span id="line-482"></span>
+<span class="source-line-no">483</span><span id="line-483">   /**</span>
+<span class="source-line-no">484</span><span id="line-484">    * Returns a {@link StringSetting} for the specified system property.</span>
+<span class="source-line-no">485</span><span id="line-485">    *</span>
+<span class="source-line-no">486</span><span id="line-486">    * &lt;p&gt;</span>
+<span class="source-line-no">487</span><span id="line-487">    * The returned {@link StringSetting} is a resettable supplier that caches the lookup result.</span>
+<span class="source-line-no">488</span><span id="line-488">    * Use the {@link StringSetting#asInteger()}, {@link StringSetting#asBoolean()}, etc. methods</span>
+<span class="source-line-no">489</span><span id="line-489">    * to convert to different types.</span>
+<span class="source-line-no">490</span><span id="line-490">    *</span>
+<span class="source-line-no">491</span><span id="line-491">    * &lt;p&gt;</span>
+<span class="source-line-no">492</span><span id="line-492">    * The lookup order is:</span>
+<span class="source-line-no">493</span><span id="line-493">    * &lt;ol&gt;</span>
+<span class="source-line-no">494</span><span id="line-494">    *    &lt;li&gt;Per-thread override (if set via {@link #setLocal(String, String)})</span>
+<span class="source-line-no">495</span><span id="line-495">    *    &lt;li&gt;Global override (if set via {@link #setGlobal(String, String)})</span>
+<span class="source-line-no">496</span><span id="line-496">    *    &lt;li&gt;Sources added at runtime through {@link #addSource(PropertySource)}, newest first</span>
+<span class="source-line-no">497</span><span id="line-497">    *    &lt;li&gt;The system-default &lt;c&gt;Config&lt;/c&gt;, when juneau-config is on the classpath (SPI order 100)</span>
+<span class="source-line-no">498</span><span id="line-498">    *    &lt;li&gt;Command-line args (SPI order 50)</span>
+<span class="source-line-no">499</span><span id="line-499">    *    &lt;li&gt;Java system properties (SPI order 40)</span>
+<span class="source-line-no">500</span><span id="line-500">    *    &lt;li&gt;Environment variables, verbatim (SPI order 30)</span>
+<span class="source-line-no">501</span><span id="line-501">    *    &lt;li&gt;The &lt;c&gt;.env&lt;/c&gt; file (SPI order 20)</span>
+<span class="source-line-no">502</span><span id="line-502">    *    &lt;li&gt;The jar manifest (SPI order 10)</span>
+<span class="source-line-no">503</span><span id="line-503">    *    &lt;li&gt;Environment variables, relaxed spelling (registered first, so checked last)</span>
+<span class="source-line-no">504</span><span id="line-504">    * &lt;/ol&gt;</span>
+<span class="source-line-no">505</span><span id="line-505">    *</span>
+<span class="source-line-no">506</span><span id="line-506">    * &lt;p&gt;</span>
+<span class="source-line-no">507</span><span id="line-507">    * If SPI registered no system-property source (a shaded jar that does not merge &lt;c&gt;META-INF/services&lt;/c&gt;, for example),</span>
+<span class="source-line-no">508</span><span id="line-508">    * a fallback system-property source sits just above the relaxed environment source.</span>
+<span class="source-line-no">509</span><span id="line-509">    *</span>
+<span class="source-line-no">510</span><span id="line-510">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">511</span><span id="line-511">    * @return A {@link StringSetting} that provides the resolved property value.</span>
+<span class="source-line-no">512</span><span id="line-512">    */</span>
+<span class="source-line-no">513</span><span id="line-513">   public StringSetting get(String name) {</span>
+<span class="source-line-no">514</span><span id="line-514">      reqnn("name", name);</span>
+<span class="source-line-no">515</span><span id="line-515">      return new StringSetting(this, () -&gt; resolve(name));</span>
+<span class="source-line-no">516</span><span id="line-516">   }</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">   /**</span>
+<span class="source-line-no">519</span><span id="line-519">    * Walks the thread-local store, the global store, then every source newest first. The one copy of the lookup order.</span>
+<span class="source-line-no">520</span><span id="line-520">    *</span>
+<span class="source-line-no">521</span><span id="line-521">    * @return The resolved value, or &lt;jk&gt;null&lt;/jk&gt; when no store or source defines the name or the winner is an explicit null.</span>
+<span class="source-line-no">522</span><span id="line-522">    */</span>
+<span class="source-line-no">523</span><span id="line-523">   private String resolve(String name) {</span>
+<span class="source-line-no">524</span><span id="line-524">      // 1. Check thread-local override</span>
+<span class="source-line-no">525</span><span id="line-525">      var v = localStore.get().get(name);</span>
+<span class="source-line-no">526</span><span id="line-526">      if (v.isPresent())</span>
+<span class="source-line-no">527</span><span id="line-527">         return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.</span>
+<span class="source-line-no">528</span><span id="line-528"></span>
+<span class="source-line-no">529</span><span id="line-529">      // 2. Check global override</span>
+<span class="source-line-no">530</span><span id="line-530">      v = globalLookup(name);</span>
+<span class="source-line-no">531</span><span id="line-531">      if (v.isPresent())</span>
+<span class="source-line-no">532</span><span id="line-532">         return v.value().orElse(null); // Present result: Optional.empty() means explicit null override.</span>
+<span class="source-line-no">533</span><span id="line-533"></span>
+<span class="source-line-no">534</span><span id="line-534">      // 3. Check sources in reverse order (last added first)</span>
+<span class="source-line-no">535</span><span id="line-535">      // Iterate one snapshot so a concurrent removeSource() can't shrink the list between size() and get(i).</span>
+<span class="source-line-no">536</span><span id="line-536">      var snapshot = sources.toArray(new PropertySource[0]);</span>
+<span class="source-line-no">537</span><span id="line-537">      for (int i = snapshot.length - 1; i &gt;= 0; i--) {</span>
+<span class="source-line-no">538</span><span id="line-538">         var source = snapshot[i];</span>
+<span class="source-line-no">539</span><span id="line-539">         var result = source.get(name);</span>
+<span class="source-line-no">540</span><span id="line-540">         if (result.isPresent())</span>
+<span class="source-line-no">541</span><span id="line-541">            return result.value().orElse(null);</span>
+<span class="source-line-no">542</span><span id="line-542">      }</span>
 <span class="source-line-no">543</span><span id="line-543"></span>
-<span class="source-line-no">544</span><span id="line-544">   /**</span>
-<span class="source-line-no">545</span><span id="line-545">    * Returns the override value for the specified property, consulting only the per-thread</span>
-<span class="source-line-no">546</span><span id="line-546">    * (local) and global stores &amp;mdash; &lt;i&gt;not&lt;/i&gt; the sources list.</span>
-<span class="source-line-no">547</span><span id="line-547">    *</span>
-<span class="source-line-no">548</span><span id="line-548">    * &lt;p&gt;</span>
-<span class="source-line-no">549</span><span id="line-549">    * Intended for callers (notably the {@code @Value} resolution path) that interleave a</span>
-<span class="source-line-no">550</span><span id="line-550">    * caller-scoped property source between the Settings override stores and the sources list.</span>
-<span class="source-line-no">551</span><span id="line-551">    * Using this method, the caller can honor the "{@link #setLocal(String, String) local}</span>
-<span class="source-line-no">552</span><span id="line-552">    * / {@link #setGlobal(String, String) global} override wins" contract before consulting</span>
-<span class="source-line-no">553</span><span id="line-553">    * its own scoped sources, and still fall through to {@link #get(String)} (which checks</span>
-<span class="source-line-no">554</span><span id="line-554">    * the sources list) afterwards without the override stores accidentally being consulted twice.</span>
-<span class="source-line-no">555</span><span id="line-555">    *</span>
-<span class="source-line-no">556</span><span id="line-556">    * &lt;p&gt;</span>
-<span class="source-line-no">557</span><span id="line-557">    * Lookup order honored by this method:</span>
-<span class="source-line-no">558</span><span id="line-558">    * &lt;ol&gt;</span>
-<span class="source-line-no">559</span><span id="line-559">    *    &lt;li&gt;Per-thread (local) store</span>
-<span class="source-line-no">560</span><span id="line-560">    *    &lt;li&gt;Global store</span>
-<span class="source-line-no">561</span><span id="line-561">    * &lt;/ol&gt;</span>
-<span class="source-line-no">562</span><span id="line-562">    *</span>
-<span class="source-line-no">563</span><span id="line-563">    * &lt;p&gt;</span>
-<span class="source-line-no">564</span><span id="line-564">    * If a store is present with an empty value (i.e. an explicit null override), the returned</span>
-<span class="source-line-no">565</span><span id="line-565">    * {@link Optional} is {@code Optional.empty()} but {@link #isOverridden(String)} would</span>
-<span class="source-line-no">566</span><span id="line-566">    * return {@code true}. Callers needing to distinguish "absent" from "explicit null" should</span>
-<span class="source-line-no">567</span><span id="line-567">    * use {@link #isOverridden(String)} alongside this method.</span>
-<span class="source-line-no">568</span><span id="line-568">    *</span>
-<span class="source-line-no">569</span><span id="line-569">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">570</span><span id="line-570">    * @return The override value, or {@link Optional#empty()} if neither store carries an override.</span>
-<span class="source-line-no">571</span><span id="line-571">    * @see #isOverridden(String)</span>
-<span class="source-line-no">572</span><span id="line-572">    * @see #get(String)</span>
-<span class="source-line-no">573</span><span id="line-573">    */</span>
-<span class="source-line-no">574</span><span id="line-574">   public Optional&lt;String&gt; getOverride(String name) {</span>
-<span class="source-line-no">575</span><span id="line-575">      reqnn("name", name);</span>
-<span class="source-line-no">576</span><span id="line-576">      var v = localStore.get().get(name);</span>
-<span class="source-line-no">577</span><span id="line-577">      if (v.isPresent())</span>
-<span class="source-line-no">578</span><span id="line-578">         return v.value();</span>
-<span class="source-line-no">579</span><span id="line-579">      v = globalLookup(name);</span>
+<span class="source-line-no">544</span><span id="line-544">      return null;</span>
+<span class="source-line-no">545</span><span id="line-545">   }</span>
+<span class="source-line-no">546</span><span id="line-546"></span>
+<span class="source-line-no">547</span><span id="line-547">   /**</span>
+<span class="source-line-no">548</span><span id="line-548">    * Returns the override value for the specified property, consulting only the per-thread</span>
+<span class="source-line-no">549</span><span id="line-549">    * (local) and global stores &amp;mdash; &lt;i&gt;not&lt;/i&gt; the sources list.</span>
+<span class="source-line-no">550</span><span id="line-550">    *</span>
+<span class="source-line-no">551</span><span id="line-551">    * &lt;p&gt;</span>
+<span class="source-line-no">552</span><span id="line-552">    * Intended for callers (notably the {@code @Value} resolution path) that interleave a</span>
+<span class="source-line-no">553</span><span id="line-553">    * caller-scoped property source between the Settings override stores and the sources list.</span>
+<span class="source-line-no">554</span><span id="line-554">    * Using this method, the caller can honor the "{@link #setLocal(String, String) local}</span>
+<span class="source-line-no">555</span><span id="line-555">    * / {@link #setGlobal(String, String) global} override wins" contract before consulting</span>
+<span class="source-line-no">556</span><span id="line-556">    * its own scoped sources, and still fall through to {@link #get(String)} (which checks</span>
+<span class="source-line-no">557</span><span id="line-557">    * the sources list) afterwards without the override stores accidentally being consulted twice.</span>
+<span class="source-line-no">558</span><span id="line-558">    *</span>
+<span class="source-line-no">559</span><span id="line-559">    * &lt;p&gt;</span>
+<span class="source-line-no">560</span><span id="line-560">    * Lookup order honored by this method:</span>
+<span class="source-line-no">561</span><span id="line-561">    * &lt;ol&gt;</span>
+<span class="source-line-no">562</span><span id="line-562">    *    &lt;li&gt;Per-thread (local) store</span>
+<span class="source-line-no">563</span><span id="line-563">    *    &lt;li&gt;Global store</span>
+<span class="source-line-no">564</span><span id="line-564">    * &lt;/ol&gt;</span>
+<span class="source-line-no">565</span><span id="line-565">    *</span>
+<span class="source-line-no">566</span><span id="line-566">    * &lt;p&gt;</span>
+<span class="source-line-no">567</span><span id="line-567">    * If a store is present with an empty value (i.e. an explicit null override), the returned</span>
+<span class="source-line-no">568</span><span id="line-568">    * {@link Optional} is {@code Optional.empty()} but {@link #isOverridden(String)} would</span>
+<span class="source-line-no">569</span><span id="line-569">    * return {@code true}. Callers needing to distinguish "absent" from "explicit null" should</span>
+<span class="source-line-no">570</span><span id="line-570">    * use {@link #isOverridden(String)} alongside this method.</span>
+<span class="source-line-no">571</span><span id="line-571">    *</span>
+<span class="source-line-no">572</span><span id="line-572">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">573</span><span id="line-573">    * @return The override value, or {@link Optional#empty()} if neither store carries an override.</span>
+<span class="source-line-no">574</span><span id="line-574">    * @see #isOverridden(String)</span>
+<span class="source-line-no">575</span><span id="line-575">    * @see #get(String)</span>
+<span class="source-line-no">576</span><span id="line-576">    */</span>
+<span class="source-line-no">577</span><span id="line-577">   public Optional&lt;String&gt; getOverride(String name) {</span>
+<span class="source-line-no">578</span><span id="line-578">      reqnn("name", name);</span>
+<span class="source-line-no">579</span><span id="line-579">      var v = localStore.get().get(name);</span>
 <span class="source-line-no">580</span><span id="line-580">      if (v.isPresent())</span>
 <span class="source-line-no">581</span><span id="line-581">         return v.value();</span>
-<span class="source-line-no">582</span><span id="line-582">      return oe();</span>
-<span class="source-line-no">583</span><span id="line-583">   }</span>
-<span class="source-line-no">584</span><span id="line-584"></span>
-<span class="source-line-no">585</span><span id="line-585">   /**</span>
-<span class="source-line-no">586</span><span id="line-586">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified property has an override in either the per-thread</span>
-<span class="source-line-no">587</span><span id="line-587">    * (local) or global store.</span>
-<span class="source-line-no">588</span><span id="line-588">    *</span>
-<span class="source-line-no">589</span><span id="line-589">    * &lt;p&gt;</span>
-<span class="source-line-no">590</span><span id="line-590">    * Distinguishes the "explicit null override" case &amp;mdash; where {@link #getOverride(String)}</span>
-<span class="source-line-no">591</span><span id="line-591">    * returns {@link Optional#empty()} because the override value itself was {@code null} &amp;mdash;</span>
-<span class="source-line-no">592</span><span id="line-592">    * from the "no override" case.</span>
-<span class="source-line-no">593</span><span id="line-593">    *</span>
-<span class="source-line-no">594</span><span id="line-594">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">595</span><span id="line-595">    * @return &lt;jk&gt;true&lt;/jk&gt; if either store carries an override (even with a {@code null} value).</span>
-<span class="source-line-no">596</span><span id="line-596">    */</span>
-<span class="source-line-no">597</span><span id="line-597">   public boolean isOverridden(String name) {</span>
-<span class="source-line-no">598</span><span id="line-598">      reqnn("name", name);</span>
-<span class="source-line-no">599</span><span id="line-599">      return localStore.get().get(name).isPresent() || globalLookup(name).isPresent();</span>
-<span class="source-line-no">600</span><span id="line-600">   }</span>
-<span class="source-line-no">601</span><span id="line-601"></span>
-<span class="source-line-no">602</span><span id="line-602">   /** Looks up an override in the global store, which is absent (null) when global overrides are disabled. */</span>
-<span class="source-line-no">603</span><span id="line-603">   private PropertyLookupResult globalLookup(String name) {</span>
-<span class="source-line-no">604</span><span id="line-604">      var store = globalStore.get();</span>
-<span class="source-line-no">605</span><span id="line-605">      return n(store) ? PropertyLookupResult.missing() : store.get(name);</span>
-<span class="source-line-no">606</span><span id="line-606">   }</span>
-<span class="source-line-no">607</span><span id="line-607"></span>
-<span class="source-line-no">608</span><span id="line-608">   /**</span>
-<span class="source-line-no">609</span><span id="line-609">    * Looks up a system property, returning a default value if not found.</span>
-<span class="source-line-no">610</span><span id="line-610">    *</span>
-<span class="source-line-no">611</span><span id="line-611">    * &lt;p&gt;</span>
-<span class="source-line-no">612</span><span id="line-612">    * This method searches for a value using the same lookup order as {@link #get(String)}.</span>
-<span class="source-line-no">613</span><span id="line-613">    * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.</span>
-<span class="source-line-no">614</span><span id="line-614">    * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</span>
-<span class="source-line-no">615</span><span id="line-615">    * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.</span>
-<span class="source-line-no">616</span><span id="line-616">    *</span>
-<span class="source-line-no">617</span><span id="line-617">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">618</span><span id="line-618">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">619</span><span id="line-619">    *    &lt;jc&gt;// System property: -Dmy.property=true&lt;/jc&gt;</span>
-<span class="source-line-no">620</span><span id="line-620">    *    Boolean &lt;jv&gt;flag&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
-<span class="source-line-no">621</span><span id="line-621">    *</span>
-<span class="source-line-no">622</span><span id="line-622">    *    &lt;jc&gt;// Environment variable: MY_PROPERTY=UTF-8&lt;/jc&gt;</span>
-<span class="source-line-no">623</span><span id="line-623">    *    Charset &lt;jv&gt;charset&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, Charset.defaultCharset());  &lt;jc&gt;// UTF-8&lt;/jc&gt;</span>
+<span class="source-line-no">582</span><span id="line-582">      v = globalLookup(name);</span>
+<span class="source-line-no">583</span><span id="line-583">      if (v.isPresent())</span>
+<span class="source-line-no">584</span><span id="line-584">         return v.value();</span>
+<span class="source-line-no">585</span><span id="line-585">      return oe();</span>
+<span class="source-line-no">586</span><span id="line-586">   }</span>
+<span class="source-line-no">587</span><span id="line-587"></span>
+<span class="source-line-no">588</span><span id="line-588">   /**</span>
+<span class="source-line-no">589</span><span id="line-589">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the specified property has an override in either the per-thread</span>
+<span class="source-line-no">590</span><span id="line-590">    * (local) or global store.</span>
+<span class="source-line-no">591</span><span id="line-591">    *</span>
+<span class="source-line-no">592</span><span id="line-592">    * &lt;p&gt;</span>
+<span class="source-line-no">593</span><span id="line-593">    * Distinguishes the "explicit null override" case &amp;mdash; where {@link #getOverride(String)}</span>
+<span class="source-line-no">594</span><span id="line-594">    * returns {@link Optional#empty()} because the override value itself was {@code null} &amp;mdash;</span>
+<span class="source-line-no">595</span><span id="line-595">    * from the "no override" case.</span>
+<span class="source-line-no">596</span><span id="line-596">    *</span>
+<span class="source-line-no">597</span><span id="line-597">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">598</span><span id="line-598">    * @return &lt;jk&gt;true&lt;/jk&gt; if either store carries an override (even with a {@code null} value).</span>
+<span class="source-line-no">599</span><span id="line-599">    */</span>
+<span class="source-line-no">600</span><span id="line-600">   public boolean isOverridden(String name) {</span>
+<span class="source-line-no">601</span><span id="line-601">      reqnn("name", name);</span>
+<span class="source-line-no">602</span><span id="line-602">      return localStore.get().get(name).isPresent() || globalLookup(name).isPresent();</span>
+<span class="source-line-no">603</span><span id="line-603">   }</span>
+<span class="source-line-no">604</span><span id="line-604"></span>
+<span class="source-line-no">605</span><span id="line-605">   /** Looks up an override in the global store, which is absent (null) when global overrides are disabled. */</span>
+<span class="source-line-no">606</span><span id="line-606">   private PropertyLookupResult globalLookup(String name) {</span>
+<span class="source-line-no">607</span><span id="line-607">      var store = globalStore.get();</span>
+<span class="source-line-no">608</span><span id="line-608">      return n(store) ? PropertyLookupResult.missing() : store.get(name);</span>
+<span class="source-line-no">609</span><span id="line-609">   }</span>
+<span class="source-line-no">610</span><span id="line-610"></span>
+<span class="source-line-no">611</span><span id="line-611">   /**</span>
+<span class="source-line-no">612</span><span id="line-612">    * Looks up a system property, returning a default value if not found.</span>
+<span class="source-line-no">613</span><span id="line-613">    *</span>
+<span class="source-line-no">614</span><span id="line-614">    * &lt;p&gt;</span>
+<span class="source-line-no">615</span><span id="line-615">    * This method searches for a value using the same lookup order as {@link #get(String)}.</span>
+<span class="source-line-no">616</span><span id="line-616">    * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.</span>
+<span class="source-line-no">617</span><span id="line-617">    * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</span>
+<span class="source-line-no">618</span><span id="line-618">    * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.</span>
+<span class="source-line-no">619</span><span id="line-619">    *</span>
+<span class="source-line-no">620</span><span id="line-620">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">621</span><span id="line-621">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">622</span><span id="line-622">    *    &lt;jc&gt;// System property: -Dmy.property=true&lt;/jc&gt;</span>
+<span class="source-line-no">623</span><span id="line-623">    *    Boolean &lt;jv&gt;flag&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, &lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// true&lt;/jc&gt;</span>
 <span class="source-line-no">624</span><span id="line-624">    *</span>
-<span class="source-line-no">625</span><span id="line-625">    *    &lt;jc&gt;// Not found, returns default&lt;/jc&gt;</span>
-<span class="source-line-no">626</span><span id="line-626">    *    String &lt;jv&gt;value&lt;/jv&gt; = get(&lt;js&gt;"nonexistent"&lt;/js&gt;, &lt;js&gt;"default"&lt;/js&gt;);  &lt;jc&gt;// "default"&lt;/jc&gt;</span>
-<span class="source-line-no">627</span><span id="line-627">    * &lt;/p&gt;</span>
-<span class="source-line-no">628</span><span id="line-628">    *</span>
-<span class="source-line-no">629</span><span id="line-629">    * @param &lt;T&gt; The type to convert the value to.</span>
-<span class="source-line-no">630</span><span id="line-630">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">631</span><span id="line-631">    * @param def The default value to return if not found. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">632</span><span id="line-632">    * @return The found value (converted to type T), or the default value if not found.</span>
-<span class="source-line-no">633</span><span id="line-633">    * @see #get(String)</span>
-<span class="source-line-no">634</span><span id="line-634">    * @see #toType(String, Class)</span>
-<span class="source-line-no">635</span><span id="line-635">    */</span>
-<span class="source-line-no">636</span><span id="line-636">   public &lt;T&gt; T get(String name, T def) {</span>
-<span class="source-line-no">637</span><span id="line-637">      reqnn("def", def);</span>
-<span class="source-line-no">638</span><span id="line-638">      reqnn("name", name);</span>
-<span class="source-line-no">639</span><span id="line-639">      var v = resolve(name);</span>
-<span class="source-line-no">640</span><span id="line-640">      if (v == null)</span>
-<span class="source-line-no">641</span><span id="line-641">         return def;</span>
-<span class="source-line-no">642</span><span id="line-642">      var t = toType(v, (Class&lt;T&gt;)def.getClass());</span>
-<span class="source-line-no">643</span><span id="line-643">      return t == null ? def : t;  // matches the filter(Objects::nonNull) in StringSetting.asType</span>
-<span class="source-line-no">644</span><span id="line-644">   }</span>
-<span class="source-line-no">645</span><span id="line-645"></span>
-<span class="source-line-no">646</span><span id="line-646">   /**</span>
-<span class="source-line-no">647</span><span id="line-647">    * Sets a global override for the specified property.</span>
-<span class="source-line-no">648</span><span id="line-648">    *</span>
-<span class="source-line-no">649</span><span id="line-649">    * &lt;p&gt;</span>
-<span class="source-line-no">650</span><span id="line-650">    * This override will apply to all threads and takes precedence over system properties.</span>
-<span class="source-line-no">651</span><span id="line-651">    * However, per-thread overrides (set via {@link #setLocal(String, String)}) will still take precedence</span>
-<span class="source-line-no">652</span><span id="line-652">    * over global overrides.</span>
-<span class="source-line-no">653</span><span id="line-653">    *</span>
-<span class="source-line-no">654</span><span id="line-654">    * &lt;p&gt;</span>
-<span class="source-line-no">655</span><span id="line-655">    * If the &lt;c&gt;juneau.settings.disableGlobal&lt;/c&gt; system property is set to &lt;c&gt;true&lt;/c&gt;,</span>
-<span class="source-line-no">656</span><span id="line-656">    * this method will throw an exception. This allows system administrators</span>
-<span class="source-line-no">657</span><span id="line-657">    * to prevent applications from overriding system properties globally.</span>
-<span class="source-line-no">658</span><span id="line-658">    *</span>
-<span class="source-line-no">659</span><span id="line-659">    * &lt;p&gt;</span>
-<span class="source-line-no">660</span><span id="line-660">    * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the system</span>
-<span class="source-line-no">661</span><span id="line-661">    * property to return empty. Use {@link #unsetGlobal(String)} to completely remove the override.</span>
-<span class="source-line-no">662</span><span id="line-662">    *</span>
-<span class="source-line-no">663</span><span id="line-663">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">664</span><span id="line-664">    * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</span>
-<span class="source-line-no">665</span><span id="line-665">    * @return This object for method chaining.</span>
-<span class="source-line-no">666</span><span id="line-666">    * @see #unsetGlobal(String)</span>
-<span class="source-line-no">667</span><span id="line-667">    * @see #clearGlobal()</span>
-<span class="source-line-no">668</span><span id="line-668">    */</span>
-<span class="source-line-no">669</span><span id="line-669">   public Settings setGlobal(String name, String value) {</span>
-<span class="source-line-no">670</span><span id="line-670">      reqnn("name", name);</span>
-<span class="source-line-no">671</span><span id="line-671">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).set(name, value);</span>
-<span class="source-line-no">672</span><span id="line-672">      return this;</span>
-<span class="source-line-no">673</span><span id="line-673">   }</span>
-<span class="source-line-no">674</span><span id="line-674"></span>
-<span class="source-line-no">675</span><span id="line-675">   /**</span>
-<span class="source-line-no">676</span><span id="line-676">    * Removes a global override for the specified property.</span>
-<span class="source-line-no">677</span><span id="line-677">    *</span>
-<span class="source-line-no">678</span><span id="line-678">    * &lt;p&gt;</span>
-<span class="source-line-no">679</span><span id="line-679">    * After calling this method, the property will fall back to the system property value</span>
-<span class="source-line-no">680</span><span id="line-680">    * (or per-thread override if one exists).</span>
-<span class="source-line-no">681</span><span id="line-681">    *</span>
-<span class="source-line-no">682</span><span id="line-682">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">683</span><span id="line-683">    * @see #setGlobal(String, String)</span>
-<span class="source-line-no">684</span><span id="line-684">    * @see #clearGlobal()</span>
-<span class="source-line-no">685</span><span id="line-685">    */</span>
-<span class="source-line-no">686</span><span id="line-686">   public void unsetGlobal(String name) {</span>
-<span class="source-line-no">687</span><span id="line-687">      reqnn("name", name);</span>
-<span class="source-line-no">688</span><span id="line-688">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).unset(name);</span>
-<span class="source-line-no">689</span><span id="line-689">   }</span>
-<span class="source-line-no">690</span><span id="line-690"></span>
-<span class="source-line-no">691</span><span id="line-691">   /**</span>
-<span class="source-line-no">692</span><span id="line-692">    * Sets a per-thread override for the specified property.</span>
-<span class="source-line-no">693</span><span id="line-693">    *</span>
-<span class="source-line-no">694</span><span id="line-694">    * &lt;p&gt;</span>
-<span class="source-line-no">695</span><span id="line-695">    * This override will only apply to the current thread and takes precedence over global overrides</span>
-<span class="source-line-no">696</span><span id="line-696">    * and system properties. This is particularly useful in unit tests where you need to temporarily</span>
-<span class="source-line-no">697</span><span id="line-697">    * change a system property value without affecting other threads or tests.</span>
-<span class="source-line-no">698</span><span id="line-698">    *</span>
-<span class="source-line-no">699</span><span id="line-699">    * &lt;p&gt;</span>
-<span class="source-line-no">700</span><span id="line-700">    * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the property</span>
-<span class="source-line-no">701</span><span id="line-701">    * to return empty for this thread. Use {@link #unsetLocal(String)} to completely remove the override.</span>
-<span class="source-line-no">702</span><span id="line-702">    *</span>
-<span class="source-line-no">703</span><span id="line-703">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">704</span><span id="line-704">    * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</span>
-<span class="source-line-no">705</span><span id="line-705">    * @return This object for method chaining.</span>
-<span class="source-line-no">706</span><span id="line-706">    * @see #unsetLocal(String)</span>
-<span class="source-line-no">707</span><span id="line-707">    * @see #clearLocal()</span>
-<span class="source-line-no">708</span><span id="line-708">    */</span>
-<span class="source-line-no">709</span><span id="line-709">   public Settings setLocal(String name, String value) {</span>
-<span class="source-line-no">710</span><span id="line-710">      reqnn("name", name);</span>
-<span class="source-line-no">711</span><span id="line-711">      chk(nn(localStore.get()), MSG_localDisabled);</span>
-<span class="source-line-no">712</span><span id="line-712">      localStore.get().set(name, value);</span>
-<span class="source-line-no">713</span><span id="line-713">      return this;</span>
-<span class="source-line-no">714</span><span id="line-714">   }</span>
-<span class="source-line-no">715</span><span id="line-715"></span>
-<span class="source-line-no">716</span><span id="line-716">   /**</span>
-<span class="source-line-no">717</span><span id="line-717">    * Removes a per-thread override for the specified property.</span>
-<span class="source-line-no">718</span><span id="line-718">    *</span>
-<span class="source-line-no">719</span><span id="line-719">    * &lt;p&gt;</span>
-<span class="source-line-no">720</span><span id="line-720">    * After calling this method, the property will fall back to the global override (if set)</span>
-<span class="source-line-no">721</span><span id="line-721">    * or the system property value for the current thread.</span>
-<span class="source-line-no">722</span><span id="line-722">    *</span>
-<span class="source-line-no">723</span><span id="line-723">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">724</span><span id="line-724">    * @see #setLocal(String, String)</span>
-<span class="source-line-no">725</span><span id="line-725">    * @see #clearLocal()</span>
-<span class="source-line-no">726</span><span id="line-726">    */</span>
-<span class="source-line-no">727</span><span id="line-727">   public void unsetLocal(String name) {</span>
-<span class="source-line-no">728</span><span id="line-728">      reqnn("name", name);</span>
-<span class="source-line-no">729</span><span id="line-729">      chk(nn(localStore.get()), MSG_localDisabled);</span>
-<span class="source-line-no">730</span><span id="line-730">      localStore.get().unset(name);</span>
-<span class="source-line-no">731</span><span id="line-731">   }</span>
-<span class="source-line-no">732</span><span id="line-732"></span>
-<span class="source-line-no">733</span><span id="line-733">   /**</span>
-<span class="source-line-no">734</span><span id="line-734">    * Clears all per-thread overrides for the current thread.</span>
-<span class="source-line-no">735</span><span id="line-735">    *</span>
-<span class="source-line-no">736</span><span id="line-736">    * &lt;p&gt;</span>
-<span class="source-line-no">737</span><span id="line-737">    * After calling this method, all properties will fall back to global overrides (if set)</span>
-<span class="source-line-no">738</span><span id="line-738">    * or system property values for the current thread.</span>
-<span class="source-line-no">739</span><span id="line-739">    *</span>
-<span class="source-line-no">740</span><span id="line-740">    * &lt;p&gt;</span>
-<span class="source-line-no">741</span><span id="line-741">    * This is typically called in a &lt;c&gt;@AfterEach&lt;/c&gt; or &lt;c&gt;@After&lt;/c&gt; test method to clean up</span>
-<span class="source-line-no">742</span><span id="line-742">    * thread-local overrides after a test completes.</span>
-<span class="source-line-no">743</span><span id="line-743">    *</span>
-<span class="source-line-no">744</span><span id="line-744">    * @return This object for method chaining.</span>
-<span class="source-line-no">745</span><span id="line-745">    * @see #setLocal(String, String)</span>
-<span class="source-line-no">746</span><span id="line-746">    * @see #unsetLocal(String)</span>
-<span class="source-line-no">747</span><span id="line-747">    */</span>
-<span class="source-line-no">748</span><span id="line-748">   public Settings clearLocal() {</span>
-<span class="source-line-no">749</span><span id="line-749">      chk(nn(localStore.get()), MSG_localDisabled);</span>
-<span class="source-line-no">750</span><span id="line-750">      localStore.get().clear();</span>
-<span class="source-line-no">751</span><span id="line-751">      return this;</span>
-<span class="source-line-no">752</span><span id="line-752">   }</span>
-<span class="source-line-no">753</span><span id="line-753"></span>
-<span class="source-line-no">754</span><span id="line-754">   /**</span>
-<span class="source-line-no">755</span><span id="line-755">    * Cleans up thread-local storage for the current thread.</span>
-<span class="source-line-no">756</span><span id="line-756">    *</span>
-<span class="source-line-no">757</span><span id="line-757">    * &lt;p&gt;</span>
-<span class="source-line-no">758</span><span id="line-758">    * This method should be called when a thread is finished using this Settings instance to prevent memory leaks</span>
-<span class="source-line-no">759</span><span id="line-759">    * in thread pool environments where threads are reused.</span>
-<span class="source-line-no">760</span><span id="line-760">    */</span>
-<span class="source-line-no">761</span><span id="line-761">   public void cleanup() {</span>
-<span class="source-line-no">762</span><span id="line-762">      if (localStore != null) {</span>
-<span class="source-line-no">763</span><span id="line-763">         localStore.remove();</span>
-<span class="source-line-no">764</span><span id="line-764">      }</span>
-<span class="source-line-no">765</span><span id="line-765">   }</span>
-<span class="source-line-no">766</span><span id="line-766"></span>
-<span class="source-line-no">767</span><span id="line-767">   /**</span>
-<span class="source-line-no">768</span><span id="line-768">    * Clears all global overrides.</span>
-<span class="source-line-no">769</span><span id="line-769">    *</span>
-<span class="source-line-no">770</span><span id="line-770">    * &lt;p&gt;</span>
-<span class="source-line-no">771</span><span id="line-771">    * After calling this method, all properties will fall back to resolver values</span>
-<span class="source-line-no">772</span><span id="line-772">    * (or per-thread overrides if they exist).</span>
-<span class="source-line-no">773</span><span id="line-773">    *</span>
-<span class="source-line-no">774</span><span id="line-774">    * @return This object for method chaining.</span>
-<span class="source-line-no">775</span><span id="line-775">    * @see #setGlobal(String, String)</span>
-<span class="source-line-no">776</span><span id="line-776">    * @see #unsetGlobal(String)</span>
-<span class="source-line-no">777</span><span id="line-777">    */</span>
-<span class="source-line-no">778</span><span id="line-778">   public Settings clearGlobal() {</span>
-<span class="source-line-no">779</span><span id="line-779">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).clear();</span>
-<span class="source-line-no">780</span><span id="line-780">      return this;</span>
-<span class="source-line-no">781</span><span id="line-781">   }</span>
-<span class="source-line-no">782</span><span id="line-782"></span>
-<span class="source-line-no">783</span><span id="line-783">   /**</span>
-<span class="source-line-no">784</span><span id="line-784">    * Converts a string to the specified type using reflection to find conversion methods or constructors.</span>
-<span class="source-line-no">785</span><span id="line-785">    *</span>
-<span class="source-line-no">786</span><span id="line-786">    * &lt;p&gt;</span>
-<span class="source-line-no">787</span><span id="line-787">    * This method attempts to convert a string to the specified type using the following lookup order:</span>
-<span class="source-line-no">788</span><span id="line-788">    * &lt;ol&gt;</span>
-<span class="source-line-no">789</span><span id="line-789">    *    &lt;li&gt;Custom type functions registered via {@link Builder#addTypeFunction(Class, Function)}&lt;/li&gt;</span>
-<span class="source-line-no">790</span><span id="line-790">    *    &lt;li&gt;Special handling for {@link String} (returns the string as-is)&lt;/li&gt;</span>
-<span class="source-line-no">791</span><span id="line-791">    *    &lt;li&gt;Special handling for {@link Enum} types (uses {@link Enum#valueOf(Class, String)})&lt;/li&gt;</span>
-<span class="source-line-no">792</span><span id="line-792">    *    &lt;li&gt;Reflection lookup for static methods with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</span>
-<span class="source-line-no">793</span><span id="line-793">    *       on the target class&lt;/li&gt;</span>
-<span class="source-line-no">794</span><span id="line-794">    *    &lt;li&gt;Reflection lookup for static methods on the superclass (for abstract classes like {@link Charset}</span>
-<span class="source-line-no">795</span><span id="line-795">    *       where concrete implementations need to use the abstract class's static method)&lt;/li&gt;</span>
-<span class="source-line-no">796</span><span id="line-796">    *    &lt;li&gt;Reflection lookup for public constructors with signature &lt;c&gt;public T(String arg)&lt;/c&gt;&lt;/li&gt;</span>
-<span class="source-line-no">797</span><span id="line-797">    * &lt;/ol&gt;</span>
-<span class="source-line-no">798</span><span id="line-798">    *</span>
-<span class="source-line-no">799</span><span id="line-799">    * &lt;p&gt;</span>
-<span class="source-line-no">800</span><span id="line-800">    * When a conversion method or constructor is found via reflection, it is cached in the</span>
-<span class="source-line-no">801</span><span id="line-801">    * &lt;c&gt;toTypeFunctions&lt;/c&gt; map for future use.</span>
-<span class="source-line-no">802</span><span id="line-802">    *</span>
-<span class="source-line-no">803</span><span id="line-803">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">804</span><span id="line-804">    * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">805</span><span id="line-805">    *    &lt;li&gt;&lt;c&gt;Boolean&lt;/c&gt; - Uses &lt;c&gt;Boolean.valueOf(String)&lt;/c&gt; static method</span>
-<span class="source-line-no">806</span><span id="line-806">    *    &lt;li&gt;&lt;c&gt;Integer&lt;/c&gt; - Uses &lt;c&gt;Integer.valueOf(String)&lt;/c&gt; static method</span>
-<span class="source-line-no">807</span><span id="line-807">    *    &lt;li&gt;&lt;c&gt;Charset&lt;/c&gt; - Uses &lt;c&gt;Charset.forName(String)&lt;/c&gt; static method (even for concrete implementations)</span>
-<span class="source-line-no">808</span><span id="line-808">    *    &lt;li&gt;&lt;c&gt;File&lt;/c&gt; - Uses &lt;c&gt;File(String)&lt;/c&gt; constructor</span>
-<span class="source-line-no">809</span><span id="line-809">    * &lt;/ul&gt;</span>
-<span class="source-line-no">810</span><span id="line-810">    *</span>
-<span class="source-line-no">811</span><span id="line-811">    * @param &lt;T&gt; The target type.</span>
-<span class="source-line-no">812</span><span id="line-812">    * @param s The string to convert. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">813</span><span id="line-813">    * @param c The target class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">814</span><span id="line-814">    * @return The converted value.</span>
-<span class="source-line-no">815</span><span id="line-815">    * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).</span>
-<span class="source-line-no">816</span><span id="line-816">    */</span>
-<span class="source-line-no">817</span><span id="line-817">   @SuppressWarnings({</span>
-<span class="source-line-no">818</span><span id="line-818">      "rawtypes" // Raw types necessary for generic type handling</span>
-<span class="source-line-no">819</span><span id="line-819">   })</span>
-<span class="source-line-no">820</span><span id="line-820">   public &lt;T&gt; T toType(String s, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">821</span><span id="line-821">      reqnn("s", s);</span>
-<span class="source-line-no">822</span><span id="line-822">      reqnn("c", c);</span>
-<span class="source-line-no">823</span><span id="line-823">      var f = (Function&lt;String,T&gt;)toTypeFunctions.get(c);</span>
-<span class="source-line-no">824</span><span id="line-824">      if (f == null) {</span>
-<span class="source-line-no">825</span><span id="line-825">         if (c == String.class)</span>
-<span class="source-line-no">826</span><span id="line-826">            return (T)s;</span>
-<span class="source-line-no">827</span><span id="line-827">         if (c.isEnum())</span>
-<span class="source-line-no">828</span><span id="line-828">            return (T)Enum.valueOf((Class&lt;? extends Enum&gt;)c, s);</span>
-<span class="source-line-no">829</span><span id="line-829">         ClassInfoTyped&lt;T&gt; ci = info(c);</span>
-<span class="source-line-no">830</span><span id="line-830">         f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(String.class) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(null, s2)).orElse(null);</span>
-<span class="source-line-no">831</span><span id="line-831">         // Also accept `static T parse(CharSequence)` etc. — common for java.time types (Instant,</span>
-<span class="source-line-no">832</span><span id="line-832">         // LocalDate, Duration) whose static factories declare the wider CharSequence parameter.</span>
-<span class="source-line-no">833</span><span id="line-833">         if (f == null)</span>
-<span class="source-line-no">834</span><span id="line-834">            f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(CharSequence.class) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(null, s2)).orElse(null);</span>
-<span class="source-line-no">835</span><span id="line-835">         if (f == null)</span>
-<span class="source-line-no">836</span><span id="line-836">            f = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.class)).map(x -&gt; (Function&lt;String,T&gt;)x::newInstance).orElse(null);</span>
-<span class="source-line-no">837</span><span id="line-837">         if (f != null)</span>
-<span class="source-line-no">838</span><span id="line-838">            toTypeFunctions.putIfAbsent(c, f);</span>
-<span class="source-line-no">839</span><span id="line-839">      }</span>
-<span class="source-line-no">840</span><span id="line-840">      if (f == null)</span>
-<span class="source-line-no">841</span><span id="line-841">         throw rex("Invalid env type: %s", c);</span>
-<span class="source-line-no">842</span><span id="line-842">      return f.apply(s);</span>
-<span class="source-line-no">843</span><span id="line-843">   }</span>
-<span class="source-line-no">844</span><span id="line-844">}</span>
-<span class="source-line-no">845</span><span id="line-845"></span>
+<span class="source-line-no">625</span><span id="line-625">    *    &lt;jc&gt;// Environment variable: MY_PROPERTY=UTF-8&lt;/jc&gt;</span>
+<span class="source-line-no">626</span><span id="line-626">    *    Charset &lt;jv&gt;charset&lt;/jv&gt; = get(&lt;js&gt;"my.property"&lt;/js&gt;, Charset.defaultCharset());  &lt;jc&gt;// UTF-8&lt;/jc&gt;</span>
+<span class="source-line-no">627</span><span id="line-627">    *</span>
+<span class="source-line-no">628</span><span id="line-628">    *    &lt;jc&gt;// Not found, returns default&lt;/jc&gt;</span>
+<span class="source-line-no">629</span><span id="line-629">    *    String &lt;jv&gt;value&lt;/jv&gt; = get(&lt;js&gt;"nonexistent"&lt;/js&gt;, &lt;js&gt;"default"&lt;/js&gt;);  &lt;jc&gt;// "default"&lt;/jc&gt;</span>
+<span class="source-line-no">630</span><span id="line-630">    * &lt;/p&gt;</span>
+<span class="source-line-no">631</span><span id="line-631">    *</span>
+<span class="source-line-no">632</span><span id="line-632">    * @param &lt;T&gt; The type to convert the value to.</span>
+<span class="source-line-no">633</span><span id="line-633">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">634</span><span id="line-634">    * @param def The default value to return if not found. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">635</span><span id="line-635">    * @return The found value (converted to type T), or the default value if not found.</span>
+<span class="source-line-no">636</span><span id="line-636">    * @see #get(String)</span>
+<span class="source-line-no">637</span><span id="line-637">    * @see #toType(String, Class)</span>
+<span class="source-line-no">638</span><span id="line-638">    */</span>
+<span class="source-line-no">639</span><span id="line-639">   public &lt;T&gt; T get(String name, T def) {</span>
+<span class="source-line-no">640</span><span id="line-640">      reqnn("def", def);</span>
+<span class="source-line-no">641</span><span id="line-641">      reqnn("name", name);</span>
+<span class="source-line-no">642</span><span id="line-642">      var v = resolve(name);</span>
+<span class="source-line-no">643</span><span id="line-643">      if (v == null)</span>
+<span class="source-line-no">644</span><span id="line-644">         return def;</span>
+<span class="source-line-no">645</span><span id="line-645">      var t = toType(v, (Class&lt;T&gt;)def.getClass());</span>
+<span class="source-line-no">646</span><span id="line-646">      return t == null ? def : t;  // matches the filter(Objects::nonNull) in StringSetting.asType</span>
+<span class="source-line-no">647</span><span id="line-647">   }</span>
+<span class="source-line-no">648</span><span id="line-648"></span>
+<span class="source-line-no">649</span><span id="line-649">   /**</span>
+<span class="source-line-no">650</span><span id="line-650">    * Sets a global override for the specified property.</span>
+<span class="source-line-no">651</span><span id="line-651">    *</span>
+<span class="source-line-no">652</span><span id="line-652">    * &lt;p&gt;</span>
+<span class="source-line-no">653</span><span id="line-653">    * This override will apply to all threads and takes precedence over system properties.</span>
+<span class="source-line-no">654</span><span id="line-654">    * However, per-thread overrides (set via {@link #setLocal(String, String)}) will still take precedence</span>
+<span class="source-line-no">655</span><span id="line-655">    * over global overrides.</span>
+<span class="source-line-no">656</span><span id="line-656">    *</span>
+<span class="source-line-no">657</span><span id="line-657">    * &lt;p&gt;</span>
+<span class="source-line-no">658</span><span id="line-658">    * If the &lt;c&gt;juneau.settings.disableGlobal&lt;/c&gt; system property is set to &lt;c&gt;true&lt;/c&gt;,</span>
+<span class="source-line-no">659</span><span id="line-659">    * this method will throw an exception. This allows system administrators</span>
+<span class="source-line-no">660</span><span id="line-660">    * to prevent applications from overriding system properties globally.</span>
+<span class="source-line-no">661</span><span id="line-661">    *</span>
+<span class="source-line-no">662</span><span id="line-662">    * &lt;p&gt;</span>
+<span class="source-line-no">663</span><span id="line-663">    * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the system</span>
+<span class="source-line-no">664</span><span id="line-664">    * property to return empty. Use {@link #unsetGlobal(String)} to completely remove the override.</span>
+<span class="source-line-no">665</span><span id="line-665">    *</span>
+<span class="source-line-no">666</span><span id="line-666">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">667</span><span id="line-667">    * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</span>
+<span class="source-line-no">668</span><span id="line-668">    * @return This object for method chaining.</span>
+<span class="source-line-no">669</span><span id="line-669">    * @see #unsetGlobal(String)</span>
+<span class="source-line-no">670</span><span id="line-670">    * @see #clearGlobal()</span>
+<span class="source-line-no">671</span><span id="line-671">    */</span>
+<span class="source-line-no">672</span><span id="line-672">   public Settings setGlobal(String name, String value) {</span>
+<span class="source-line-no">673</span><span id="line-673">      reqnn("name", name);</span>
+<span class="source-line-no">674</span><span id="line-674">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).set(name, value);</span>
+<span class="source-line-no">675</span><span id="line-675">      return this;</span>
+<span class="source-line-no">676</span><span id="line-676">   }</span>
+<span class="source-line-no">677</span><span id="line-677"></span>
+<span class="source-line-no">678</span><span id="line-678">   /**</span>
+<span class="source-line-no">679</span><span id="line-679">    * Removes a global override for the specified property.</span>
+<span class="source-line-no">680</span><span id="line-680">    *</span>
+<span class="source-line-no">681</span><span id="line-681">    * &lt;p&gt;</span>
+<span class="source-line-no">682</span><span id="line-682">    * After calling this method, the property will fall back to the system property value</span>
+<span class="source-line-no">683</span><span id="line-683">    * (or per-thread override if one exists).</span>
+<span class="source-line-no">684</span><span id="line-684">    *</span>
+<span class="source-line-no">685</span><span id="line-685">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">686</span><span id="line-686">    * @see #setGlobal(String, String)</span>
+<span class="source-line-no">687</span><span id="line-687">    * @see #clearGlobal()</span>
+<span class="source-line-no">688</span><span id="line-688">    */</span>
+<span class="source-line-no">689</span><span id="line-689">   public void unsetGlobal(String name) {</span>
+<span class="source-line-no">690</span><span id="line-690">      reqnn("name", name);</span>
+<span class="source-line-no">691</span><span id="line-691">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).unset(name);</span>
+<span class="source-line-no">692</span><span id="line-692">   }</span>
+<span class="source-line-no">693</span><span id="line-693"></span>
+<span class="source-line-no">694</span><span id="line-694">   /**</span>
+<span class="source-line-no">695</span><span id="line-695">    * Sets a per-thread override for the specified property.</span>
+<span class="source-line-no">696</span><span id="line-696">    *</span>
+<span class="source-line-no">697</span><span id="line-697">    * &lt;p&gt;</span>
+<span class="source-line-no">698</span><span id="line-698">    * This override will only apply to the current thread and takes precedence over global overrides</span>
+<span class="source-line-no">699</span><span id="line-699">    * and system properties. This is particularly useful in unit tests where you need to temporarily</span>
+<span class="source-line-no">700</span><span id="line-700">    * change a system property value without affecting other threads or tests.</span>
+<span class="source-line-no">701</span><span id="line-701">    *</span>
+<span class="source-line-no">702</span><span id="line-702">    * &lt;p&gt;</span>
+<span class="source-line-no">703</span><span id="line-703">    * Setting a value to &lt;c&gt;null&lt;/c&gt; will store an empty optional, effectively overriding the property</span>
+<span class="source-line-no">704</span><span id="line-704">    * to return empty for this thread. Use {@link #unsetLocal(String)} to completely remove the override.</span>
+<span class="source-line-no">705</span><span id="line-705">    *</span>
+<span class="source-line-no">706</span><span id="line-706">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">707</span><span id="line-707">    * @param value The override value, or &lt;c&gt;null&lt;/c&gt; to set an empty override.</span>
+<span class="source-line-no">708</span><span id="line-708">    * @return This object for method chaining.</span>
+<span class="source-line-no">709</span><span id="line-709">    * @see #unsetLocal(String)</span>
+<span class="source-line-no">710</span><span id="line-710">    * @see #clearLocal()</span>
+<span class="source-line-no">711</span><span id="line-711">    */</span>
+<span class="source-line-no">712</span><span id="line-712">   public Settings setLocal(String name, String value) {</span>
+<span class="source-line-no">713</span><span id="line-713">      reqnn("name", name);</span>
+<span class="source-line-no">714</span><span id="line-714">      chk(nn(localStore.get()), MSG_localDisabled);</span>
+<span class="source-line-no">715</span><span id="line-715">      localStore.get().set(name, value);</span>
+<span class="source-line-no">716</span><span id="line-716">      return this;</span>
+<span class="source-line-no">717</span><span id="line-717">   }</span>
+<span class="source-line-no">718</span><span id="line-718"></span>
+<span class="source-line-no">719</span><span id="line-719">   /**</span>
+<span class="source-line-no">720</span><span id="line-720">    * Removes a per-thread override for the specified property.</span>
+<span class="source-line-no">721</span><span id="line-721">    *</span>
+<span class="source-line-no">722</span><span id="line-722">    * &lt;p&gt;</span>
+<span class="source-line-no">723</span><span id="line-723">    * After calling this method, the property will fall back to the global override (if set)</span>
+<span class="source-line-no">724</span><span id="line-724">    * or the system property value for the current thread.</span>
+<span class="source-line-no">725</span><span id="line-725">    *</span>
+<span class="source-line-no">726</span><span id="line-726">    * @param name The property name. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">727</span><span id="line-727">    * @see #setLocal(String, String)</span>
+<span class="source-line-no">728</span><span id="line-728">    * @see #clearLocal()</span>
+<span class="source-line-no">729</span><span id="line-729">    */</span>
+<span class="source-line-no">730</span><span id="line-730">   public void unsetLocal(String name) {</span>
+<span class="source-line-no">731</span><span id="line-731">      reqnn("name", name);</span>
+<span class="source-line-no">732</span><span id="line-732">      chk(nn(localStore.get()), MSG_localDisabled);</span>
+<span class="source-line-no">733</span><span id="line-733">      localStore.get().unset(name);</span>
+<span class="source-line-no">734</span><span id="line-734">   }</span>
+<span class="source-line-no">735</span><span id="line-735"></span>
+<span class="source-line-no">736</span><span id="line-736">   /**</span>
+<span class="source-line-no">737</span><span id="line-737">    * Clears all per-thread overrides for the current thread.</span>
+<span class="source-line-no">738</span><span id="line-738">    *</span>
+<span class="source-line-no">739</span><span id="line-739">    * &lt;p&gt;</span>
+<span class="source-line-no">740</span><span id="line-740">    * After calling this method, all properties will fall back to global overrides (if set)</span>
+<span class="source-line-no">741</span><span id="line-741">    * or system property values for the current thread.</span>
+<span class="source-line-no">742</span><span id="line-742">    *</span>
+<span class="source-line-no">743</span><span id="line-743">    * &lt;p&gt;</span>
+<span class="source-line-no">744</span><span id="line-744">    * This is typically called in a &lt;c&gt;@AfterEach&lt;/c&gt; or &lt;c&gt;@After&lt;/c&gt; test method to clean up</span>
+<span class="source-line-no">745</span><span id="line-745">    * thread-local overrides after a test completes.</span>
+<span class="source-line-no">746</span><span id="line-746">    *</span>
+<span class="source-line-no">747</span><span id="line-747">    * @return This object for method chaining.</span>
+<span class="source-line-no">748</span><span id="line-748">    * @see #setLocal(String, String)</span>
+<span class="source-line-no">749</span><span id="line-749">    * @see #unsetLocal(String)</span>
+<span class="source-line-no">750</span><span id="line-750">    */</span>
+<span class="source-line-no">751</span><span id="line-751">   public Settings clearLocal() {</span>
+<span class="source-line-no">752</span><span id="line-752">      chk(nn(localStore.get()), MSG_localDisabled);</span>
+<span class="source-line-no">753</span><span id="line-753">      localStore.get().clear();</span>
+<span class="source-line-no">754</span><span id="line-754">      return this;</span>
+<span class="source-line-no">755</span><span id="line-755">   }</span>
+<span class="source-line-no">756</span><span id="line-756"></span>
+<span class="source-line-no">757</span><span id="line-757">   /**</span>
+<span class="source-line-no">758</span><span id="line-758">    * Cleans up thread-local storage for the current thread.</span>
+<span class="source-line-no">759</span><span id="line-759">    *</span>
+<span class="source-line-no">760</span><span id="line-760">    * &lt;p&gt;</span>
+<span class="source-line-no">761</span><span id="line-761">    * This method should be called when a thread is finished using this Settings instance to prevent memory leaks</span>
+<span class="source-line-no">762</span><span id="line-762">    * in thread pool environments where threads are reused.</span>
+<span class="source-line-no">763</span><span id="line-763">    */</span>
+<span class="source-line-no">764</span><span id="line-764">   public void cleanup() {</span>
+<span class="source-line-no">765</span><span id="line-765">      if (localStore != null) {</span>
+<span class="source-line-no">766</span><span id="line-766">         localStore.remove();</span>
+<span class="source-line-no">767</span><span id="line-767">      }</span>
+<span class="source-line-no">768</span><span id="line-768">   }</span>
+<span class="source-line-no">769</span><span id="line-769"></span>
+<span class="source-line-no">770</span><span id="line-770">   /**</span>
+<span class="source-line-no">771</span><span id="line-771">    * Clears all global overrides.</span>
+<span class="source-line-no">772</span><span id="line-772">    *</span>
+<span class="source-line-no">773</span><span id="line-773">    * &lt;p&gt;</span>
+<span class="source-line-no">774</span><span id="line-774">    * After calling this method, all properties will fall back to resolver values</span>
+<span class="source-line-no">775</span><span id="line-775">    * (or per-thread overrides if they exist).</span>
+<span class="source-line-no">776</span><span id="line-776">    *</span>
+<span class="source-line-no">777</span><span id="line-777">    * @return This object for method chaining.</span>
+<span class="source-line-no">778</span><span id="line-778">    * @see #setGlobal(String, String)</span>
+<span class="source-line-no">779</span><span id="line-779">    * @see #unsetGlobal(String)</span>
+<span class="source-line-no">780</span><span id="line-780">    */</span>
+<span class="source-line-no">781</span><span id="line-781">   public Settings clearGlobal() {</span>
+<span class="source-line-no">782</span><span id="line-782">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).clear();</span>
+<span class="source-line-no">783</span><span id="line-783">      return this;</span>
+<span class="source-line-no">784</span><span id="line-784">   }</span>
+<span class="source-line-no">785</span><span id="line-785"></span>
+<span class="source-line-no">786</span><span id="line-786">   /**</span>
+<span class="source-line-no">787</span><span id="line-787">    * Converts a string to the specified type using reflection to find conversion methods or constructors.</span>
+<span class="source-line-no">788</span><span id="line-788">    *</span>
+<span class="source-line-no">789</span><span id="line-789">    * &lt;p&gt;</span>
+<span class="source-line-no">790</span><span id="line-790">    * This method attempts to convert a string to the specified type using the following lookup order:</span>
+<span class="source-line-no">791</span><span id="line-791">    * &lt;ol&gt;</span>
+<span class="source-line-no">792</span><span id="line-792">    *    &lt;li&gt;Custom type functions registered via {@link Builder#addTypeFunction(Class, Function)}&lt;/li&gt;</span>
+<span class="source-line-no">793</span><span id="line-793">    *    &lt;li&gt;Special handling for {@link String} (returns the string as-is)&lt;/li&gt;</span>
+<span class="source-line-no">794</span><span id="line-794">    *    &lt;li&gt;Special handling for {@link Enum} types (uses {@link Enum#valueOf(Class, String)})&lt;/li&gt;</span>
+<span class="source-line-no">795</span><span id="line-795">    *    &lt;li&gt;Reflection lookup for static methods with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</span>
+<span class="source-line-no">796</span><span id="line-796">    *       on the target class&lt;/li&gt;</span>
+<span class="source-line-no">797</span><span id="line-797">    *    &lt;li&gt;Reflection lookup for static methods on the superclass (for abstract classes like {@link Charset}</span>
+<span class="source-line-no">798</span><span id="line-798">    *       where concrete implementations need to use the abstract class's static method)&lt;/li&gt;</span>
+<span class="source-line-no">799</span><span id="line-799">    *    &lt;li&gt;Reflection lookup for public constructors with signature &lt;c&gt;public T(String arg)&lt;/c&gt;&lt;/li&gt;</span>
+<span class="source-line-no">800</span><span id="line-800">    * &lt;/ol&gt;</span>
+<span class="source-line-no">801</span><span id="line-801">    *</span>
+<span class="source-line-no">802</span><span id="line-802">    * &lt;p&gt;</span>
+<span class="source-line-no">803</span><span id="line-803">    * When a conversion method or constructor is found via reflection, it is cached in the</span>
+<span class="source-line-no">804</span><span id="line-804">    * &lt;c&gt;toTypeFunctions&lt;/c&gt; map for future use.</span>
+<span class="source-line-no">805</span><span id="line-805">    *</span>
+<span class="source-line-no">806</span><span id="line-806">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">807</span><span id="line-807">    * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">808</span><span id="line-808">    *    &lt;li&gt;&lt;c&gt;Boolean&lt;/c&gt; - Uses &lt;c&gt;Boolean.valueOf(String)&lt;/c&gt; static method</span>
+<span class="source-line-no">809</span><span id="line-809">    *    &lt;li&gt;&lt;c&gt;Integer&lt;/c&gt; - Uses &lt;c&gt;Integer.valueOf(String)&lt;/c&gt; static method</span>
+<span class="source-line-no">810</span><span id="line-810">    *    &lt;li&gt;&lt;c&gt;Charset&lt;/c&gt; - Uses &lt;c&gt;Charset.forName(String)&lt;/c&gt; static method (even for concrete implementations)</span>
+<span class="source-line-no">811</span><span id="line-811">    *    &lt;li&gt;&lt;c&gt;File&lt;/c&gt; - Uses &lt;c&gt;File(String)&lt;/c&gt; constructor</span>
+<span class="source-line-no">812</span><span id="line-812">    * &lt;/ul&gt;</span>
+<span class="source-line-no">813</span><span id="line-813">    *</span>
+<span class="source-line-no">814</span><span id="line-814">    * @param &lt;T&gt; The target type.</span>
+<span class="source-line-no">815</span><span id="line-815">    * @param s The string to convert. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">816</span><span id="line-816">    * @param c The target class. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">817</span><span id="line-817">    * @return The converted value.</span>
+<span class="source-line-no">818</span><span id="line-818">    * @throws RuntimeException If the type is not supported for conversion (no static method or constructor found).</span>
+<span class="source-line-no">819</span><span id="line-819">    */</span>
+<span class="source-line-no">820</span><span id="line-820">   @SuppressWarnings({</span>
+<span class="source-line-no">821</span><span id="line-821">      "rawtypes" // Raw types necessary for generic type handling</span>
+<span class="source-line-no">822</span><span id="line-822">   })</span>
+<span class="source-line-no">823</span><span id="line-823">   public &lt;T&gt; T toType(String s, Class&lt;T&gt; c) {</span>
+<span class="source-line-no">824</span><span id="line-824">      reqnn("s", s);</span>
+<span class="source-line-no">825</span><span id="line-825">      reqnn("c", c);</span>
+<span class="source-line-no">826</span><span id="line-826">      var f = (Function&lt;String,T&gt;)toTypeFunctions.get(c);</span>
+<span class="source-line-no">827</span><span id="line-827">      if (f == null) {</span>
+<span class="source-line-no">828</span><span id="line-828">         if (c == String.class)</span>
+<span class="source-line-no">829</span><span id="line-829">            return (T)s;</span>
+<span class="source-line-no">830</span><span id="line-830">         if (c.isEnum())</span>
+<span class="source-line-no">831</span><span id="line-831">            return (T)Enum.valueOf((Class&lt;? extends Enum&gt;)c, s);</span>
+<span class="source-line-no">832</span><span id="line-832">         ClassInfoTyped&lt;T&gt; ci = info(c);</span>
+<span class="source-line-no">833</span><span id="line-833">         f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(String.class) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(null, s2)).orElse(null);</span>
+<span class="source-line-no">834</span><span id="line-834">         // Also accept `static T parse(CharSequence)` etc. — common for java.time types (Instant,</span>
+<span class="source-line-no">835</span><span id="line-835">         // LocalDate, Duration) whose static factories declare the wider CharSequence parameter.</span>
+<span class="source-line-no">836</span><span id="line-836">         if (f == null)</span>
+<span class="source-line-no">837</span><span id="line-837">            f = ci.getDeclaredMethod(x -&gt; x.isStatic() &amp;&amp; x.hasParameterTypes(CharSequence.class) &amp;&amp; x.hasReturnType(c) &amp;&amp; FROM_STRING_METHOD_NAMES.contains(x.getName())).map(x -&gt; (Function&lt;String,T&gt;)s2 -&gt; x.invoke(null, s2)).orElse(null);</span>
+<span class="source-line-no">838</span><span id="line-838">         if (f == null)</span>
+<span class="source-line-no">839</span><span id="line-839">            f = ci.getPublicConstructor(x -&gt; x.hasParameterTypes(String.class)).map(x -&gt; (Function&lt;String,T&gt;)x::newInstance).orElse(null);</span>
+<span class="source-line-no">840</span><span id="line-840">         if (f != null)</span>
+<span class="source-line-no">841</span><span id="line-841">            toTypeFunctions.putIfAbsent(c, f);</span>
+<span class="source-line-no">842</span><span id="line-842">      }</span>
+<span class="source-line-no">843</span><span id="line-843">      if (f == null)</span>
+<span class="source-line-no">844</span><span id="line-844">         throw rex("Invalid env type: %s", c);</span>
+<span class="source-line-no">845</span><span id="line-845">      return f.apply(s);</span>
+<span class="source-line-no">846</span><span id="line-846">   }</span>
+<span class="source-line-no">847</span><span id="line-847">}</span>
+<span class="source-line-no">848</span><span id="line-848"></span>
 
 
 

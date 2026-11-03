@@ -131,127 +131,128 @@
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertSame(fake, s.get(2));
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@ResourceLock(value = <span class="jxr_string">"org.apache.juneau.commons.settings.Settings.singleton"</span>, mode = ResourceAccessMode.READ)
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	@Test <strong class="jxr_keyword">void</strong> d07_singleton_hasExactlyOneSystemPropertySource_andItIsNotTheConstant() {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">var</strong> matches = Settings.get().sources().stream()
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 			.filter(x -&gt; x == Settings.SYSTEM_PROPERTY_SOURCE || unwrap(x).getClass().getName().equals(SystemPropertyPropertySource.<strong class="jxr_keyword">class</strong>.getName()))
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 			.toList();
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(1, matches.size(), <span class="jxr_string">"today's chain has 2; D5 leaves 1"</span>);
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		assertNotSame(Settings.SYSTEM_PROPERTY_SOURCE, matches.get(0));
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> d08_detectionFailsSafe_subclassAndDecorator_keepFallback() {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">class</strong> SubSysProp <strong class="jxr_keyword">extends</strong> SystemPropertyPropertySource {}
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> sub = current(List.of(provider(40, <strong class="jxr_keyword">new</strong> SubSysProp())));
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertSame(Settings.SYSTEM_PROPERTY_SOURCE, sub.sources().get(1), <span class="jxr_string">"a subclass is not detected, so the fallback is kept"</span>);
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">new</strong> SystemPropertyPropertySource();
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		PropertySource decorator = <strong class="jxr_keyword">new</strong> PropertySource() {
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			@Override <strong class="jxr_keyword">public</strong> PropertyLookupResult get(String name) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">inner</strong>.get(name); }
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		};
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> dec = current(List.of(provider(40, decorator)));
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertSame(Settings.SYSTEM_PROPERTY_SOURCE, dec.sources().get(1), <span class="jxr_string">"a decorator is not detected, so the fallback is kept"</span>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_comment">// Precedence parity (these pass before and after D5)</em>
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	<strong class="jxr_keyword">private</strong> Set&lt;String&gt; parityKeys(List&lt;String&gt; matrix) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(matrix);
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		keys.addAll(System.getProperties().stringPropertyNames());
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : System.getenv().keySet()) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			keys.add(e);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			keys.add(e.toLowerCase(Locale.ROOT).replace('_', '.'));
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			keys.add(camel(e));
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		keys.removeIf(String::isBlank);  <em class="jxr_comment">// System.getProperty rejects empty keys (e.g. camel("__") is "")</em>
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		<strong class="jxr_keyword">return</strong> keys;
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertParity(List&lt;PropertySourceProvider&gt; providers, List&lt;String&gt; matrix) {
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">var</strong> l = legacy(providers);
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> c = current(providers);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : parityKeys(matrix)) {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 			assertEquals(walk(l, k), walk(c, k), <span class="jxr_string">"walk parity for key: "</span> + k);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			assertEquals(l.get(k).orElse(<strong class="jxr_keyword">null</strong>), c.get(k).orElse(<strong class="jxr_keyword">null</strong>), <span class="jxr_string">"get parity for key: "</span> + k);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			assertEquals(l.get(k).isPresent(), c.get(k).isPresent(), <span class="jxr_string">"isPresent parity for key: "</span> + k);
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		}
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	}
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; MATRIX = List.of(
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<span class="jxr_string">"d04.sp"</span>, <span class="jxr_string">"d04.sp.man"</span>, <span class="jxr_string">"d04.sp.env"</span>, <span class="jxr_string">"d04.sp.args"</span>, <span class="jxr_string">"d04.sp.cfg"</span>, <span class="jxr_string">"d04.sp.nullval"</span>, <span class="jxr_string">"d04.man"</span>, <span class="jxr_string">"d04.env"</span>, <span class="jxr_string">"d04.args"</span>, <span class="jxr_string">"d04.none"</span>);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">private</strong> List&lt;PropertySourceProvider&gt; parityProviders(<strong class="jxr_keyword">boolean</strong> withSysPropProvider) {
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> man = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		man.put(<span class="jxr_string">"d04.sp.man"</span>, <span class="jxr_string">"man"</span>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		man.put(<span class="jxr_string">"d04.man"</span>, <span class="jxr_string">"man"</span>);
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		<strong class="jxr_keyword">var</strong> env = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		env.put(<span class="jxr_string">"d04.sp.env"</span>, <span class="jxr_string">"dotenv"</span>);
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		env.put(<span class="jxr_string">"d04.env"</span>, <span class="jxr_string">"dotenv"</span>);
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		args.put(<span class="jxr_string">"d04.sp.args"</span>, <span class="jxr_string">"args"</span>);
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		args.put(<span class="jxr_string">"d04.args"</span>, <span class="jxr_string">"args"</span>);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">var</strong> cfg = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		cfg.put(<span class="jxr_string">"d04.sp.cfg"</span>, <span class="jxr_string">"cfg"</span>);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		cfg.put(<span class="jxr_string">"d04.sp.nullval"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;PropertySourceProvider&gt;();
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		l.add(provider(10, mapSource(man)));
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		l.add(provider(20, mapSource(env)));
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		l.add(<strong class="jxr_keyword">new</strong> SystemEnvPropertySourceProvider());
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">if</strong> (withSysPropProvider)
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			l.add(<strong class="jxr_keyword">new</strong> SystemPropertyPropertySourceProvider());
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		l.add(provider(50, mapSource(args)));
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		l.add(provider(100, mapSource(cfg)));
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">return</strong> l;
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> withParitySysProps(Runnable r) {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> names = List.of(<span class="jxr_string">"d04.sp"</span>, <span class="jxr_string">"d04.sp.man"</span>, <span class="jxr_string">"d04.sp.env"</span>, <span class="jxr_string">"d04.sp.args"</span>, <span class="jxr_string">"d04.sp.cfg"</span>, <span class="jxr_string">"d04.sp.nullval"</span>);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		names.forEach(n -&gt; System.setProperty(n, <span class="jxr_string">"sys"</span>));
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			r.run();
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			names.forEach(System::clearProperty);
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		}
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Test <strong class="jxr_keyword">void</strong> d04_precedenceParity_<strong class="jxr_keyword">case</strong>1() {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		withParitySysProps(() -&gt; assertParity(parityProviders(<strong class="jxr_keyword">true</strong>), MATRIX));
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<em class="jxr_comment">// The explicit null in the config slot (order 100, newest) shadows the "sys" system property on both chains.</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertEquals(<span class="jxr_string">"P:null"</span>, walk(current(parityProviders(<strong class="jxr_keyword">true</strong>)), <span class="jxr_string">"d04.sp.nullval"</span>));
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> d05_precedenceParity_<strong class="jxr_keyword">case</strong>2_noSysPropProvider() {
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		withParitySysProps(() -&gt; assertParity(parityProviders(false), MATRIX));
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	@Test <strong class="jxr_keyword">void</strong> d06_liveSystemProperties_afterChange() {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">var</strong> c = current(realProviders());
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		assertNull(c.get(<span class="jxr_string">"d06.k"</span>).orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		System.setProperty(<span class="jxr_string">"d06.k"</span>, <span class="jxr_string">"v"</span>);
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			assertEquals(<span class="jxr_string">"v"</span>, c.get(<span class="jxr_string">"d06.k"</span>).orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			System.clearProperty(<span class="jxr_string">"d06.k"</span>);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		}
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertNull(c.get(<span class="jxr_string">"d06.k"</span>).orElse(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 	}
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	@Test <strong class="jxr_keyword">void</strong> d10_camel_underscoreOnlyEnvKeys_doNotThrow() {
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		assertEquals(<span class="jxr_string">""</span>, camel(<span class="jxr_string">"_"</span>));
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(<span class="jxr_string">""</span>, camel(<span class="jxr_string">"__"</span>));
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(<span class="jxr_string">"fooBar"</span>, camel(<span class="jxr_string">"FOO__BAR"</span>));
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	}
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	@Test <strong class="jxr_keyword">void</strong> d09_commonsProviderOrders_arePinned() {
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		assertEquals(10, <strong class="jxr_keyword">new</strong> ManifestFilePropertySourceProvider().order());
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertEquals(20, <strong class="jxr_keyword">new</strong> DotenvPropertySourceProvider().order());
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(30, <strong class="jxr_keyword">new</strong> SystemEnvPropertySourceProvider().order());
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(40, <strong class="jxr_keyword">new</strong> SystemPropertyPropertySourceProvider().order());
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertEquals(50, <strong class="jxr_keyword">new</strong> ArgsPropertySourceProvider().order());
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<span class="jxr_string">"java:S1872"</span> <em class="jxr_comment">// Mirrors Settings.isSpiSystemPropertySource(): exact class by name, any classloader.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	})
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@ResourceLock(value = <span class="jxr_string">"org.apache.juneau.commons.settings.Settings.singleton"</span>, mode = ResourceAccessMode.READ)
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> d07_singleton_hasExactlyOneSystemPropertySource_andItIsNotTheConstant() {
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">var</strong> matches = Settings.get().sources().stream()
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			.filter(x -&gt; x == Settings.SYSTEM_PROPERTY_SOURCE || unwrap(x).getClass().getName().equals(SystemPropertyPropertySource.<strong class="jxr_keyword">class</strong>.getName()))
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			.toList();
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		assertEquals(1, matches.size(), <span class="jxr_string">"today's chain has 2; D5 leaves 1"</span>);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertNotSame(Settings.SYSTEM_PROPERTY_SOURCE, matches.get(0));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> d08_detectionFailsSafe_subclassAndDecorator_keepFallback() {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">class</strong> SubSysProp <strong class="jxr_keyword">extends</strong> SystemPropertyPropertySource {}
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> sub = current(List.of(provider(40, <strong class="jxr_keyword">new</strong> SubSysProp())));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertSame(Settings.SYSTEM_PROPERTY_SOURCE, sub.sources().get(1), <span class="jxr_string">"a subclass is not detected, so the fallback is kept"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> <strong class="jxr_keyword">inner</strong> = <strong class="jxr_keyword">new</strong> SystemPropertyPropertySource();
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		PropertySource decorator = <strong class="jxr_keyword">inner</strong>::get;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">var</strong> dec = current(List.of(provider(40, decorator)));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertSame(Settings.SYSTEM_PROPERTY_SOURCE, dec.sources().get(1), <span class="jxr_string">"a decorator is not detected, so the fallback is kept"</span>);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_comment">// Precedence parity (these pass before and after D5)</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	<em class="jxr_comment">// ------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">private</strong> Set&lt;String&gt; parityKeys(List&lt;String&gt; matrix) {
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(matrix);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		keys.addAll(System.getProperties().stringPropertyNames());
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : System.getenv().keySet()) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			keys.add(e);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			keys.add(e.toLowerCase(Locale.ROOT).replace('_', '.'));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			keys.add(camel(e));
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		keys.removeIf(String::isBlank);  <em class="jxr_comment">// System.getProperty rejects empty keys (e.g. camel("__") is "")</em>
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">return</strong> keys;
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> assertParity(List&lt;PropertySourceProvider&gt; providers, List&lt;String&gt; matrix) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		<strong class="jxr_keyword">var</strong> l = legacy(providers);
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> c = current(providers);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : parityKeys(matrix)) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			assertEquals(walk(l, k), walk(c, k), <span class="jxr_string">"walk parity for key: "</span> + k);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 			assertEquals(l.get(k).orElse(<strong class="jxr_keyword">null</strong>), c.get(k).orElse(<strong class="jxr_keyword">null</strong>), <span class="jxr_string">"get parity for key: "</span> + k);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			assertEquals(l.get(k).isPresent(), c.get(k).isPresent(), <span class="jxr_string">"isPresent parity for key: "</span> + k);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		}
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	}
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> List&lt;String&gt; MATRIX = List.of(
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<span class="jxr_string">"d04.sp"</span>, <span class="jxr_string">"d04.sp.man"</span>, <span class="jxr_string">"d04.sp.env"</span>, <span class="jxr_string">"d04.sp.args"</span>, <span class="jxr_string">"d04.sp.cfg"</span>, <span class="jxr_string">"d04.sp.nullval"</span>, <span class="jxr_string">"d04.man"</span>, <span class="jxr_string">"d04.env"</span>, <span class="jxr_string">"d04.args"</span>, <span class="jxr_string">"d04.none"</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">private</strong> List&lt;PropertySourceProvider&gt; parityProviders(<strong class="jxr_keyword">boolean</strong> withSysPropProvider) {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">var</strong> man = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		man.put(<span class="jxr_string">"d04.sp.man"</span>, <span class="jxr_string">"man"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		man.put(<span class="jxr_string">"d04.man"</span>, <span class="jxr_string">"man"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		<strong class="jxr_keyword">var</strong> env = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		env.put(<span class="jxr_string">"d04.sp.env"</span>, <span class="jxr_string">"dotenv"</span>);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		env.put(<span class="jxr_string">"d04.env"</span>, <span class="jxr_string">"dotenv"</span>);
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		args.put(<span class="jxr_string">"d04.sp.args"</span>, <span class="jxr_string">"args"</span>);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		args.put(<span class="jxr_string">"d04.args"</span>, <span class="jxr_string">"args"</span>);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">var</strong> cfg = <strong class="jxr_keyword">new</strong> HashMap&lt;String,String&gt;();
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		cfg.put(<span class="jxr_string">"d04.sp.cfg"</span>, <span class="jxr_string">"cfg"</span>);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		cfg.put(<span class="jxr_string">"d04.sp.nullval"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> l = <strong class="jxr_keyword">new</strong> ArrayList&lt;PropertySourceProvider&gt;();
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		l.add(provider(10, mapSource(man)));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		l.add(provider(20, mapSource(env)));
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		l.add(<strong class="jxr_keyword">new</strong> SystemEnvPropertySourceProvider());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">if</strong> (withSysPropProvider)
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			l.add(<strong class="jxr_keyword">new</strong> SystemPropertyPropertySourceProvider());
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		l.add(provider(50, mapSource(args)));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		l.add(provider(100, mapSource(cfg)));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		<strong class="jxr_keyword">return</strong> l;
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> withParitySysProps(Runnable r) {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">var</strong> names = List.of(<span class="jxr_string">"d04.sp"</span>, <span class="jxr_string">"d04.sp.man"</span>, <span class="jxr_string">"d04.sp.env"</span>, <span class="jxr_string">"d04.sp.args"</span>, <span class="jxr_string">"d04.sp.cfg"</span>, <span class="jxr_string">"d04.sp.nullval"</span>);
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		names.forEach(n -&gt; System.setProperty(n, <span class="jxr_string">"sys"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			r.run();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			names.forEach(System::clearProperty);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> d04_precedenceParity_<strong class="jxr_keyword">case</strong>1() {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		withParitySysProps(() -&gt; assertParity(parityProviders(<strong class="jxr_keyword">true</strong>), MATRIX));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		<em class="jxr_comment">// The explicit null in the config slot (order 100, newest) shadows the "sys" system property on both chains.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		assertEquals(<span class="jxr_string">"P:null"</span>, walk(current(parityProviders(<strong class="jxr_keyword">true</strong>)), <span class="jxr_string">"d04.sp.nullval"</span>));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	}
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	@Test <strong class="jxr_keyword">void</strong> d05_precedenceParity_<strong class="jxr_keyword">case</strong>2_noSysPropProvider() {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		withParitySysProps(() -&gt; assertParity(parityProviders(false), MATRIX));
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 	@Test <strong class="jxr_keyword">void</strong> d06_liveSystemProperties_afterChange() {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<strong class="jxr_keyword">var</strong> c = current(realProviders());
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertNull(c.get(<span class="jxr_string">"d06.k"</span>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		System.setProperty(<span class="jxr_string">"d06.k"</span>, <span class="jxr_string">"v"</span>);
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			assertEquals(<span class="jxr_string">"v"</span>, c.get(<span class="jxr_string">"d06.k"</span>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			System.clearProperty(<span class="jxr_string">"d06.k"</span>);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertNull(c.get(<span class="jxr_string">"d06.k"</span>).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Test <strong class="jxr_keyword">void</strong> d10_camel_underscoreOnlyEnvKeys_doNotThrow() {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		assertEquals(<span class="jxr_string">""</span>, camel(<span class="jxr_string">"_"</span>));
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		assertEquals(<span class="jxr_string">""</span>, camel(<span class="jxr_string">"__"</span>));
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertEquals(<span class="jxr_string">"fooBar"</span>, camel(<span class="jxr_string">"FOO__BAR"</span>));
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	@Test <strong class="jxr_keyword">void</strong> d09_commonsProviderOrders_arePinned() {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		assertEquals(10, <strong class="jxr_keyword">new</strong> ManifestFilePropertySourceProvider().order());
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertEquals(20, <strong class="jxr_keyword">new</strong> DotenvPropertySourceProvider().order());
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertEquals(30, <strong class="jxr_keyword">new</strong> SystemEnvPropertySourceProvider().order());
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertEquals(40, <strong class="jxr_keyword">new</strong> SystemPropertyPropertySourceProvider().order());
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertEquals(50, <strong class="jxr_keyword">new</strong> ArgsPropertySourceProvider().order());
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

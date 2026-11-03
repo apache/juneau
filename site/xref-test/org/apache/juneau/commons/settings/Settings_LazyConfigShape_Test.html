@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@Test <strong class="jxr_keyword">void</strong> f02_missInsideClinit_doesNotPoisonBuilderDefaults() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		<strong class="jxr_keyword">var</strong> unused = JsonSerializer.DEFAULT;   <em class="jxr_comment">// make sure its &lt;clinit&gt; has already run</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertNotNull(JsonSerializer.DEFAULT);   <em class="jxr_comment">// make sure its &lt;clinit&gt; has already run</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<em class="jxr_comment">// Config.setSystemDefault runs Settings lookups, so it goes before the lazy source is registered: a lazy source</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<em class="jxr_comment">// that resolved before the swap would bind to the old Config.</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> cfg = Config.create().store(MemoryStore.create().build()).build();

@@ -273,43 +273,46 @@
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">var</strong> added = <strong class="jxr_keyword">new</strong> AtomicBoolean();
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">var</strong> failures = <strong class="jxr_keyword">new</strong> ConcurrentLinkedQueue&lt;String&gt;();
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">var</strong> start = <strong class="jxr_keyword">new</strong> CountDownLatch(1);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">var</strong> pool = Executors.newFixedThreadPool(8);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> ArrayList&lt;Future&lt;?&gt;&gt;();
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t = 0; t &lt; 8; t++)
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				futures.add(pool.submit(() -&gt; {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 					start.await();
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 20_000; i++) {
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 						<strong class="jxr_keyword">var</strong> after = added.get();
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 						<strong class="jxr_keyword">var</strong> r = src.get(keys.get(i % keys.size()));
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 						<strong class="jxr_keyword">if</strong> (after &amp;&amp; i % keys.size() == 0 &amp;&amp; ! r.isPresent())
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 							failures.add(<span class="jxr_string">"lookup "</span> + i + <span class="jxr_string">" started after addFirst returned but missed"</span>);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 					}
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 				}));
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			start.countDown();
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			Thread.sleep(5);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			env.getPropertySources().addFirst(holding(<span class="jxr_string">"added"</span>));
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			added.set(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : futures)
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				f.get(60, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			pool.shutdownNow();
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertTrue(failures.isEmpty(), () -&gt; String.join(<span class="jxr_string">"\n"</span>, failures));
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(<span class="jxr_string">"v"</span>, value(src.get(K)));
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> a12_mockEnvironmentSetProperty_staysMissingUntilInvalidate() {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> env = <strong class="jxr_keyword">new</strong> MockEnvironment();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> src = <strong class="jxr_keyword">new</strong> SpringEnvironmentPropertySource(env);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertFalse(src.get(K).isPresent());
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		env.setProperty(K, <span class="jxr_string">"v"</span>);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertFalse(src.get(K).isPresent(), <span class="jxr_string">"Trap for test authors: MockEnvironment.setProperty mutates in place"</span>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		src.invalidate();
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(<span class="jxr_string">"v"</span>, value(src.get(K)));
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> }
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">var</strong> running = <strong class="jxr_keyword">new</strong> CountDownLatch(8);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> pool = Executors.newFixedThreadPool(8);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">var</strong> futures = <strong class="jxr_keyword">new</strong> ArrayList&lt;Future&lt;?&gt;&gt;();
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t = 0; t &lt; 8; t++)
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				futures.add(pool.submit(() -&gt; {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 					start.await();
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 					<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; 20_000; i++) {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 						<strong class="jxr_keyword">var</strong> after = added.get();
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 						<strong class="jxr_keyword">var</strong> r = src.get(keys.get(i % keys.size()));
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						<strong class="jxr_keyword">if</strong> (after &amp;&amp; i % keys.size() == 0 &amp;&amp; ! r.isPresent())
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 							failures.add(<span class="jxr_string">"lookup "</span> + i + <span class="jxr_string">" started after addFirst returned but missed"</span>);
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						<strong class="jxr_keyword">if</strong> (i == 0)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 							running.countDown();
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 					}
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				}));
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			start.countDown();
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			assertTrue(running.await(60, TimeUnit.SECONDS));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			env.getPropertySources().addFirst(holding(<span class="jxr_string">"added"</span>));
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			added.set(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> f : futures)
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 				f.get(60, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			pool.shutdownNow();
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		assertTrue(failures.isEmpty(), () -&gt; String.join(<span class="jxr_string">"\n"</span>, failures));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		assertEquals(<span class="jxr_string">"v"</span>, value(src.get(K)));
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@Test <strong class="jxr_keyword">void</strong> a12_mockEnvironmentSetProperty_staysMissingUntilInvalidate() {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">var</strong> env = <strong class="jxr_keyword">new</strong> MockEnvironment();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> src = <strong class="jxr_keyword">new</strong> SpringEnvironmentPropertySource(env);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertFalse(src.get(K).isPresent());
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		env.setProperty(K, <span class="jxr_string">"v"</span>);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertFalse(src.get(K).isPresent(), <span class="jxr_string">"Trap for test authors: MockEnvironment.setProperty mutates in place"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		src.invalidate();
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertEquals(<span class="jxr_string">"v"</span>, value(src.get(K)));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -1120,14 +1120,14 @@
 <a class="jxr_linenumber" name="L1112" href="#L1112">1112</a> 	}
 <a class="jxr_linenumber" name="L1113" href="#L1113">1113</a> 
 <a class="jxr_linenumber" name="L1114" href="#L1114">1114</a> 	@Test <strong class="jxr_keyword">void</strong> k08_httpProcessorReplaced_guardedContext_otherThread_newConnection_refused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RestClient.create().rootUrl(url).httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+<a class="jxr_linenumber" name="L1115" href="#L1115">1115</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RestClient.create().rootUrl(url).httpProcessor(hostOnlyProcessor()).build()) {
 <a class="jxr_linenumber" name="L1116" href="#L1116">1116</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(ExecutionException.<strong class="jxr_keyword">class</strong>, () -&gt; onOtherThread(() -&gt; status(c, guardedContext())));
 <a class="jxr_linenumber" name="L1117" href="#L1117">1117</a> 			assertContains(<span class="jxr_string">"request to open a connection of the ordinary pool"</span>, messages(ex));
 <a class="jxr_linenumber" name="L1118" href="#L1118">1118</a> 		}
 <a class="jxr_linenumber" name="L1119" href="#L1119">1119</a> 	}
 <a class="jxr_linenumber" name="L1120" href="#L1120">1120</a> 
 <a class="jxr_linenumber" name="L1121" href="#L1121">1121</a> 	@Test <strong class="jxr_keyword">void</strong> k09_httpProcessorReplaced_guardedContext_otherThread_reusedConnection_refused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RestClient.create().rootUrl(url).pooled().httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+<a class="jxr_linenumber" name="L1122" href="#L1122">1122</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RestClient.create().rootUrl(url).pooled().httpProcessor(hostOnlyProcessor()).build()) {
 <a class="jxr_linenumber" name="L1123" href="#L1123">1123</a> 			<em class="jxr_comment">// Leaves an open connection to the route in the ordinary pool.</em>
 <a class="jxr_linenumber" name="L1124" href="#L1124">1124</a> 			assertEquals(200, status(c, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L1125" href="#L1125">1125</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(ExecutionException.<strong class="jxr_keyword">class</strong>, () -&gt; onOtherThread(() -&gt; status(c, guardedContext())));
@@ -1175,7 +1175,7 @@
 <a class="jxr_linenumber" name="L1167" href="#L1167">1167</a> 	}
 <a class="jxr_linenumber" name="L1168" href="#L1168">1168</a> 
 <a class="jxr_linenumber" name="L1169" href="#L1169">1169</a> 	@Test <strong class="jxr_keyword">void</strong> k18_httpProcessor_guardedCallOnCallingThread_refused() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RestClient.create().rootUrl(url).httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+<a class="jxr_linenumber" name="L1170" href="#L1170">1170</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = RestClient.create().rootUrl(url).httpProcessor(hostOnlyProcessor()).build()) {
 <a class="jxr_linenumber" name="L1171" href="#L1171">1171</a> 			<strong class="jxr_keyword">var</strong> ex = assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; c.getRemote(HelloRemote.<strong class="jxr_keyword">class</strong>).call());
 <a class="jxr_linenumber" name="L1172" href="#L1172">1172</a> 			assertContains(<span class="jxr_string">"httpProcessor(...) replaces the client's request interceptors"</span>, messages(ex));
 <a class="jxr_linenumber" name="L1173" href="#L1173">1173</a> 			assertPlainOk(c);
@@ -1421,7 +1421,7 @@
 <a class="jxr_linenumber" name="L1413" href="#L1413">1413</a> 		})
 <a class="jxr_linenumber" name="L1414" href="#L1414">1414</a> 		<strong class="jxr_keyword">protected</strong> CloseableHttpClient createHttpClient() {
 <a class="jxr_linenumber" name="L1415" href="#L1415">1415</a> 			<strong class="jxr_keyword">super</strong>.createHttpClient();
-<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> 			httpClientBuilder().setHttpProcessor(HttpProcessorBuilder.create().build());
+<a class="jxr_linenumber" name="L1416" href="#L1416">1416</a> 			httpClientBuilder().setHttpProcessor(hostOnlyProcessor());
 <a class="jxr_linenumber" name="L1417" href="#L1417">1417</a> 			<strong class="jxr_keyword">return</strong> httpClientBuilder().build();
 <a class="jxr_linenumber" name="L1418" href="#L1418">1418</a> 		}
 <a class="jxr_linenumber" name="L1419" href="#L1419">1419</a> 	}
@@ -1655,96 +1655,103 @@
 <a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 		<strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> Exception;
 <a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 	}
 <a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 
-<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> withSystemProperty(String name, String value, ThrowingRunnable r) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 		<strong class="jxr_keyword">var</strong> previous = System.getProperty(name);
-<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		System.setProperty(name, value);
-<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 			r.run();
-<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 			<strong class="jxr_keyword">if</strong> (previous == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 				System.clearProperty(name);
-<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 				System.setProperty(name, previous);
-<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		}
-<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 	}
-<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 
-<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;HttpClientConnectionManager&gt; pools(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 		<strong class="jxr_keyword">return</strong> List.of(ordinaryPool(c), pinnedPool(c));
-<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 	}
-<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 
-<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String fetch(RestClient c, String uri) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> req = c.get(uri); <strong class="jxr_keyword">var</strong> res = req.run()) {
-<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 			<strong class="jxr_keyword">return</strong> res.getContent().asString();
-<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 		}
-<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 	}
-<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 
-<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertPlainOk(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 		assertEquals(<span class="jxr_string">"hi"</span>, fetch(c, url + <span class="jxr_string">"/hello"</span>));
-<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 	}
-<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 
-<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertGuardedRejected(RestClient c) {
-<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; c.getRemote(HelloRemote.<strong class="jxr_keyword">class</strong>).call());
-<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 		assertContains(<span class="jxr_string">"No allowed address for host '2130706433'"</span>, messages(ex));
-<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 	}
-<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 
-<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The leased connection goes back to the pool through releaseConnection(), not close().</em>
-<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 	})
-<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertOpen(HttpClientConnectionManager pool) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 		<strong class="jxr_keyword">var</strong> conn = pool.requestConnection(<strong class="jxr_keyword">new</strong> HttpRoute(<strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"127.0.0.1"</span>, port)), <strong class="jxr_keyword">null</strong>).get(1, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 		pool.releaseConnection(conn, <strong class="jxr_keyword">null</strong>, 0, TimeUnit.SECONDS);
-<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> 	}
-<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> 
-<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertShutDown(HttpClientConnectionManager pool) {
-<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> 		<strong class="jxr_keyword">var</strong> route = <strong class="jxr_keyword">new</strong> HttpRoute(<strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"127.0.0.1"</span>, port));
-<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; lease(pool, route));
-<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 	}
-<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 
-<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The test only needs the lease to succeed or throw; the connection is never used.</em>
-<a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> 	})
-<a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> lease(HttpClientConnectionManager pool, HttpRoute route) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 		pool.requestConnection(route, <strong class="jxr_keyword">null</strong>).get(1, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 	<em class="jxr_comment">// A replacement HttpProcessor that keeps only the Host header interceptor.  Any processor set this way trips the</em>
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 	<em class="jxr_comment">// guard, and without RequestTargetHost the plain calls go out with no Host header, which newer JDK HttpServers</em>
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 	<em class="jxr_comment">// (21.0.13 and later) reject with a 400.</em>
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpProcessor hostOnlyProcessor() {
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 		<strong class="jxr_keyword">return</strong> HttpProcessorBuilder.create().add(<strong class="jxr_keyword">new</strong> RequestTargetHost()).build();
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 	}
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> withSystemProperty(String name, String value, ThrowingRunnable r) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		<strong class="jxr_keyword">var</strong> previous = System.getProperty(name);
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		System.setProperty(name, value);
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 			r.run();
+<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 			<strong class="jxr_keyword">if</strong> (previous == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 				System.clearProperty(name);
+<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 				System.setProperty(name, previous);
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 		}
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 	}
+<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 
+<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;HttpClientConnectionManager&gt; pools(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 		<strong class="jxr_keyword">return</strong> List.of(ordinaryPool(c), pinnedPool(c));
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 	}
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 
+<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String fetch(RestClient c, String uri) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> req = c.get(uri); <strong class="jxr_keyword">var</strong> res = req.run()) {
+<a class="jxr_linenumber" name="L1676" href="#L1676">1676</a> 			<strong class="jxr_keyword">return</strong> res.getContent().asString();
+<a class="jxr_linenumber" name="L1677" href="#L1677">1677</a> 		}
+<a class="jxr_linenumber" name="L1678" href="#L1678">1678</a> 	}
+<a class="jxr_linenumber" name="L1679" href="#L1679">1679</a> 
+<a class="jxr_linenumber" name="L1680" href="#L1680">1680</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertPlainOk(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1681" href="#L1681">1681</a> 		assertEquals(<span class="jxr_string">"hi"</span>, fetch(c, url + <span class="jxr_string">"/hello"</span>));
+<a class="jxr_linenumber" name="L1682" href="#L1682">1682</a> 	}
+<a class="jxr_linenumber" name="L1683" href="#L1683">1683</a> 
+<a class="jxr_linenumber" name="L1684" href="#L1684">1684</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertGuardedRejected(RestClient c) {
+<a class="jxr_linenumber" name="L1685" href="#L1685">1685</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(Exception.<strong class="jxr_keyword">class</strong>, () -&gt; c.getRemote(HelloRemote.<strong class="jxr_keyword">class</strong>).call());
+<a class="jxr_linenumber" name="L1686" href="#L1686">1686</a> 		assertContains(<span class="jxr_string">"No allowed address for host '2130706433'"</span>, messages(ex));
+<a class="jxr_linenumber" name="L1687" href="#L1687">1687</a> 	}
+<a class="jxr_linenumber" name="L1688" href="#L1688">1688</a> 
+<a class="jxr_linenumber" name="L1689" href="#L1689">1689</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L1690" href="#L1690">1690</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The leased connection goes back to the pool through releaseConnection(), not close().</em>
+<a class="jxr_linenumber" name="L1691" href="#L1691">1691</a> 	})
+<a class="jxr_linenumber" name="L1692" href="#L1692">1692</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertOpen(HttpClientConnectionManager pool) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1693" href="#L1693">1693</a> 		<strong class="jxr_keyword">var</strong> conn = pool.requestConnection(<strong class="jxr_keyword">new</strong> HttpRoute(<strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"127.0.0.1"</span>, port)), <strong class="jxr_keyword">null</strong>).get(1, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L1694" href="#L1694">1694</a> 		pool.releaseConnection(conn, <strong class="jxr_keyword">null</strong>, 0, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L1695" href="#L1695">1695</a> 	}
+<a class="jxr_linenumber" name="L1696" href="#L1696">1696</a> 
+<a class="jxr_linenumber" name="L1697" href="#L1697">1697</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertShutDown(HttpClientConnectionManager pool) {
+<a class="jxr_linenumber" name="L1698" href="#L1698">1698</a> 		<strong class="jxr_keyword">var</strong> route = <strong class="jxr_keyword">new</strong> HttpRoute(<strong class="jxr_keyword">new</strong> HttpHost(<span class="jxr_string">"127.0.0.1"</span>, port));
+<a class="jxr_linenumber" name="L1699" href="#L1699">1699</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; lease(pool, route));
 <a class="jxr_linenumber" name="L1700" href="#L1700">1700</a> 	}
 <a class="jxr_linenumber" name="L1701" href="#L1701">1701</a> 
-<a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpClientConnectionManager ordinaryPool(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> 		<strong class="jxr_keyword">return</strong> (HttpClientConnectionManager)field(field(c.httpClient, <span class="jxr_string">"connManager"</span>), <span class="jxr_string">"ordinary"</span>);
-<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> 	}
-<a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> 
-<a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpClientConnectionManager pinnedPool(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> 		<strong class="jxr_keyword">return</strong> (HttpClientConnectionManager)field(field(c.httpClient, <span class="jxr_string">"connManager"</span>), <span class="jxr_string">"pinned"</span>);
-<a class="jxr_linenumber" name="L1708" href="#L1708">1708</a> 	}
-<a class="jxr_linenumber" name="L1709" href="#L1709">1709</a> 
-<a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// The operator's registry is a Lookup&lt;ConnectionSocketFactory&gt;.</em>
-<a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 	})
-<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ConnectionSocketFactory httpsFactory(HttpClientConnectionManager pool) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<strong class="jxr_keyword">var</strong> registry = (Lookup&lt;ConnectionSocketFactory&gt;)field(field(pool, <span class="jxr_string">"connectionOperator"</span>), <span class="jxr_string">"socketFactoryRegistry"</span>);
-<a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 		<strong class="jxr_keyword">return</strong> registry.lookup(<span class="jxr_string">"https"</span>);
-<a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 	}
-<a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 
-<a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object field(Object o, String name) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cl = o.getClass(); cl != <strong class="jxr_keyword">null</strong>; cl = cl.getSuperclass()) {
-<a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> 				<strong class="jxr_keyword">var</strong> f = cl.getDeclaredField(name);
-<a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 				f.setAccessible(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 				<strong class="jxr_keyword">return</strong> f.get(o);
-<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchFieldException e) { <em class="jxr_comment">/* Try the superclass. */</em> }
-<a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 		}
-<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchFieldException(name);
-<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 	}
-<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 
-<a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> 	<em class="jxr_comment">// Concatenates the messages of the whole cause chain (the proxy may wrap the failure).</em>
-<a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String messages(Throwable t) {
-<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x = t; x != <strong class="jxr_keyword">null</strong>; x = x.getCause()) {
-<a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> 			<strong class="jxr_keyword">if</strong> (x instanceof UndeclaredThrowableException u &amp;&amp; u.getUndeclaredThrowable() != x.getCause())
-<a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> 				sb.append(messages(u.getUndeclaredThrowable()));
-<a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 			sb.append(x.getClass().getName()).append(<span class="jxr_string">": "</span>).append(x.getMessage()).append('\n');
-<a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 		}
-<a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
-<a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 	}
-<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> }
+<a class="jxr_linenumber" name="L1702" href="#L1702">1702</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L1703" href="#L1703">1703</a> 		<span class="jxr_string">"resource"</span> <em class="jxr_comment">// The test only needs the lease to succeed or throw; the connection is never used.</em>
+<a class="jxr_linenumber" name="L1704" href="#L1704">1704</a> 	})
+<a class="jxr_linenumber" name="L1705" href="#L1705">1705</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> lease(HttpClientConnectionManager pool, HttpRoute route) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1706" href="#L1706">1706</a> 		pool.requestConnection(route, <strong class="jxr_keyword">null</strong>).get(1, TimeUnit.SECONDS);
+<a class="jxr_linenumber" name="L1707" href="#L1707">1707</a> 	}
+<a class="jxr_linenumber" name="L1708" href="#L1708">1708</a> 
+<a class="jxr_linenumber" name="L1709" href="#L1709">1709</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpClientConnectionManager ordinaryPool(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1710" href="#L1710">1710</a> 		<strong class="jxr_keyword">return</strong> (HttpClientConnectionManager)field(field(c.httpClient, <span class="jxr_string">"connManager"</span>), <span class="jxr_string">"ordinary"</span>);
+<a class="jxr_linenumber" name="L1711" href="#L1711">1711</a> 	}
+<a class="jxr_linenumber" name="L1712" href="#L1712">1712</a> 
+<a class="jxr_linenumber" name="L1713" href="#L1713">1713</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> HttpClientConnectionManager pinnedPool(RestClient c) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1714" href="#L1714">1714</a> 		<strong class="jxr_keyword">return</strong> (HttpClientConnectionManager)field(field(c.httpClient, <span class="jxr_string">"connManager"</span>), <span class="jxr_string">"pinned"</span>);
+<a class="jxr_linenumber" name="L1715" href="#L1715">1715</a> 	}
+<a class="jxr_linenumber" name="L1716" href="#L1716">1716</a> 
+<a class="jxr_linenumber" name="L1717" href="#L1717">1717</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L1718" href="#L1718">1718</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// The operator's registry is a Lookup&lt;ConnectionSocketFactory&gt;.</em>
+<a class="jxr_linenumber" name="L1719" href="#L1719">1719</a> 	})
+<a class="jxr_linenumber" name="L1720" href="#L1720">1720</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> ConnectionSocketFactory httpsFactory(HttpClientConnectionManager pool) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1721" href="#L1721">1721</a> 		<strong class="jxr_keyword">var</strong> registry = (Lookup&lt;ConnectionSocketFactory&gt;)field(field(pool, <span class="jxr_string">"connectionOperator"</span>), <span class="jxr_string">"socketFactoryRegistry"</span>);
+<a class="jxr_linenumber" name="L1722" href="#L1722">1722</a> 		<strong class="jxr_keyword">return</strong> registry.lookup(<span class="jxr_string">"https"</span>);
+<a class="jxr_linenumber" name="L1723" href="#L1723">1723</a> 	}
+<a class="jxr_linenumber" name="L1724" href="#L1724">1724</a> 
+<a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Object field(Object o, String name) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> cl = o.getClass(); cl != <strong class="jxr_keyword">null</strong>; cl = cl.getSuperclass()) {
+<a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 				<strong class="jxr_keyword">var</strong> f = cl.getDeclaredField(name);
+<a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> 				f.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> 				<strong class="jxr_keyword">return</strong> f.get(o);
+<a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) NoSuchFieldException e) { <em class="jxr_comment">/* Try the superclass. */</em> }
+<a class="jxr_linenumber" name="L1732" href="#L1732">1732</a> 		}
+<a class="jxr_linenumber" name="L1733" href="#L1733">1733</a> 		<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NoSuchFieldException(name);
+<a class="jxr_linenumber" name="L1734" href="#L1734">1734</a> 	}
+<a class="jxr_linenumber" name="L1735" href="#L1735">1735</a> 
+<a class="jxr_linenumber" name="L1736" href="#L1736">1736</a> 	<em class="jxr_comment">// Concatenates the messages of the whole cause chain (the proxy may wrap the failure).</em>
+<a class="jxr_linenumber" name="L1737" href="#L1737">1737</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String messages(Throwable t) {
+<a class="jxr_linenumber" name="L1738" href="#L1738">1738</a> 		<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L1739" href="#L1739">1739</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x = t; x != <strong class="jxr_keyword">null</strong>; x = x.getCause()) {
+<a class="jxr_linenumber" name="L1740" href="#L1740">1740</a> 			<strong class="jxr_keyword">if</strong> (x instanceof UndeclaredThrowableException u &amp;&amp; u.getUndeclaredThrowable() != x.getCause())
+<a class="jxr_linenumber" name="L1741" href="#L1741">1741</a> 				sb.append(messages(u.getUndeclaredThrowable()));
+<a class="jxr_linenumber" name="L1742" href="#L1742">1742</a> 			sb.append(x.getClass().getName()).append(<span class="jxr_string">": "</span>).append(x.getMessage()).append('\n');
+<a class="jxr_linenumber" name="L1743" href="#L1743">1743</a> 		}
+<a class="jxr_linenumber" name="L1744" href="#L1744">1744</a> 		<strong class="jxr_keyword">return</strong> sb.toString();
+<a class="jxr_linenumber" name="L1745" href="#L1745">1745</a> 	}
+<a class="jxr_linenumber" name="L1746" href="#L1746">1746</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

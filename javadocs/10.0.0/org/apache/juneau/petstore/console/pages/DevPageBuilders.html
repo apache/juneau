@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Builder twins of the Developer pages: Custom cards (<code>cards.ftlh</code>), Rendering flavors (<code>flavors.ftlh</code>,
  <code>flavors-react.ftlh</code>), Secure (<code>secure.ftlh</code>), Themes (<code>themes.ftlh</code>), Charts (builder only),
- Data sources (builder only) and Dashboard (builder only).
+ Data sources (builder only), Dialogs (builder only) and Dashboard (builder only).
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -125,20 +125,25 @@ loadScripts(document, 'script');</script>
  page script publishes, drawn by a line chart.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#flavor(org.apache.juneau.petstore.console.dev.flavors.Flavor)" class="member-name-link">flavor</a><wbr>(<a href="../dev/flavors/Flavor.html" title="enum class in org.apache.juneau.petstore.console.dev.flavors">Flavor</a>&nbsp;flavor)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#dialogs()" class="member-name-link">dialogs</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">One Rendering flavors page.</div>
+<div class="block">Dialogs (builder only): a table whose ribbon opens a <code>ModalDef.steps</code> wizard and a <code>nav:"folder"</code> dialog.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#secure()" class="member-name-link">secure</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#flavor(org.apache.juneau.petstore.console.dev.flavors.Flavor)" class="member-name-link">flavor</a><wbr>(<a href="../dev/flavors/Flavor.html" title="enum class in org.apache.juneau.petstore.console.dev.flavors">Flavor</a>&nbsp;flavor)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Secure.</div>
+<div class="block">One Rendering flavors page.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#themes(java.lang.String,boolean,java.util.List)" class="member-name-link">themes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;theme,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#secure()" class="member-name-link">secure</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Secure.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#themes(java.lang.String,boolean,java.util.List)" class="member-name-link">themes</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;theme,
  boolean&nbsp;custom,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;choices)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Themes.</div>
 </div>
 </div>
@@ -230,9 +235,20 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="dialogs()">
+<h3>dialogs</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/pages/DevPageBuilders.html#line-206">dialogs</a></span>()</div>
+<div class="block">Dialogs (builder only): a table whose ribbon opens a <code>ModalDef.steps</code> wizard and a <code>nav:"folder"</code> dialog.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The page spec.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="data()">
 <h3>data</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/pages/DevPageBuilders.html#line-207">data</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/pages/DevPageBuilders.html#line-224">data</a></span>()</div>
 <div class="block">Data sources (builder only): an hourly CSV source chunked by UTC day and cached in IndexedDB, over a range the
  page script publishes, drawn by a line chart.</div>
 <dl class="notes">
@@ -244,7 +260,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dashboard(java.lang.String,int)">
 <h3>dashboard</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/pages/DevPageBuilders.html#line-226">dashboard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;variant,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/pages/DevPageBuilders.html#line-243">dashboard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;variant,
  int&nbsp;version)</span></div>
 <div class="block">Dashboard (builder only): a rail of every section kind over a 2-column grid of charts, bound to one CSV source.</div>
 <dl class="notes">

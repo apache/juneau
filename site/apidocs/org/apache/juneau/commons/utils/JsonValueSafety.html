@@ -118,6 +118,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Maximum allowed wall-clock time, in milliseconds, for a single traversal.</div>
 </div>
+<div class="col-first odd-row-color"><code>static final long</code></div>
+<div class="col-second odd-row-color"><code><a href="#NO_DEADLINE" class="member-name-link">NO_DEADLINE</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">Deadline value meaning "no wall-clock limit": the depth, <a href="#MAX_NODES"><code>node-count</code></a> and cycle bounds still apply.</div>
+</div>
 </div>
 </section>
 </li>
@@ -217,6 +222,25 @@ loadScripts(document, 'script');</script>
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="NO_DEADLINE">
+<h3>NO_DEADLINE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-56">NO_DEADLINE</a></span></div>
+<div class="block">Deadline value meaning "no wall-clock limit": the depth, <a href="#MAX_NODES"><code>node-count</code></a> and cycle bounds still apply.
+
+ <p>
+ Use this for server-authored or already size-bounded values, where a slow walk (a loaded host, a GC pause)
+ must not be reported as a violation.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.commons.utils.JsonValueSafety.NO_DEADLINE">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -228,7 +252,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deadlineNanos()">
 <h3>deadlineNanos</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-56">deadlineNanos</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-65">deadlineNanos</a></span>()</div>
 <div class="block">Computes a fresh traversal deadline from the current time.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -239,7 +263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="check(java.lang.Object,java.lang.String)">
 <h3>check</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-67">check</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-76">check</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label)</span></div>
 <div class="block">Validates the specified value against the structural safety limits using a fresh <a href="#deadlineNanos()"><code>deadline</code></a>.</div>
 <dl class="notes">
@@ -254,7 +278,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="check(java.lang.Object,java.lang.String,long)">
 <h3>check</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-82">check</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-91">check</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;root,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
  long&nbsp;deadlineNanos)</span></div>
 <div class="block">Validates the specified value against the structural safety limits using the specified traversal deadline.</div>
@@ -273,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remainingNanos(long)">
 <h3>remainingNanos</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-148">remainingNanos</a></span><wbr><span class="parameters">(long&nbsp;deadlineNanos)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/JsonValueSafety.html#line-157">remainingNanos</a></span><wbr><span class="parameters">(long&nbsp;deadlineNanos)</span></div>
 <div class="block">Computes the number of nanoseconds remaining before the specified deadline.</div>
 <dl class="notes">
 <dt>Parameters:</dt>

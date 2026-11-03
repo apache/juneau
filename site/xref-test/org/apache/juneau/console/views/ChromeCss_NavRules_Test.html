@@ -102,7 +102,12 @@
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<span class="jxr_string">".jc-user-menu"</span>, <span class="jxr_string">".jc-user-menu &gt; .jc-menu"</span>))
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  			assertTrue(Pattern.compile(<span class="jxr_string">"(^|[},])&#92;&#92;s*+"</span> + Pattern.quote(sel) + <span class="jxr_string">"&#92;&#92;s*+&#92;&#92;{"</span>).matcher(css).find(), () -&gt; <span class="jxr_string">"missing rule "</span> + sel);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  }
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Test <strong class="jxr_keyword">void</strong> a03_headerlessNavDoesNotOffsetSticky() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<strong class="jxr_keyword">var</strong> css = stripComments(read(ConsoleChromeMixin.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"/org/apache/juneau/console/chrome.css"</span>)).replaceAll(<span class="jxr_string">"&#92;&#92;s++"</span>, <span class="jxr_string">" "</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		assertTrue(css.contains(<span class="jxr_string">"body:not(:has(&gt; .jc-header, &gt; .jc-chrome)) .juneau-page-nav { top: 0; }"</span>), <span class="jxr_string">"missing header-less nav reset"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

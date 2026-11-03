@@ -164,13 +164,13 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 	@Test <strong class="jxr_keyword">void</strong> j18_anExpandedPanelsJobHoldsTheTimersDraw_andThePillSaysPaused_withoutTheOptIn() {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(<span class="jxr_string">"fresh"</span>, s(<span class="jxr_string">"j18_idleState"</span>));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertEquals(<span class="jxr_string">"idle"</span>, s(<span class="jxr_string">"j18_idleState"</span>));
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 		yes(<span class="jxr_string">"j18_unexpandedRowNoHold"</span>, <span class="jxr_string">"j18_pendingHolds"</span>, <span class="jxr_string">"j18_pendingTimerDrawCancelled"</span>, <span class="jxr_string">"j18_runningHolds"</span>,
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<span class="jxr_string">"j18_runningTimerDrawCancelled"</span>, <span class="jxr_string">"j18_userReloadNotHeld"</span>, <span class="jxr_string">"j18_otherPanelStillHeld"</span>, <span class="jxr_string">"j18_collapsedReleases"</span>,
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 			<span class="jxr_string">"j18_reexpandHolds"</span>, <span class="jxr_string">"j18_endReleases"</span>, <span class="jxr_string">"j18_endDraws"</span>);
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertEquals(<span class="jxr_string">"paused"</span>, s(<span class="jxr_string">"j18_pendingState"</span>));
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertTrue(s(<span class="jxr_string">"j18_runningLabel"</span>).startsWith(<span class="jxr_string">"Paused"</span>), s(<span class="jxr_string">"j18_runningLabel"</span>));
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertEquals(<span class="jxr_string">"fresh"</span>, s(<span class="jxr_string">"j18_endState"</span>));
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertEquals(<span class="jxr_string">"idle"</span>, s(<span class="jxr_string">"j18_endState"</span>));
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	@Test <strong class="jxr_keyword">void</strong> j19_aRowActionsStreamNeverAdoptsAPendingRunsEntry() {

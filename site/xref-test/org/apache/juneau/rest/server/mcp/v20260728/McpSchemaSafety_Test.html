@@ -505,7 +505,45 @@
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L498" href="#L498">498</a> 		}
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 	}
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> }
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<em class="jxr_javadoccomment">/** A valid map whose first walk stalls past the {@link JsonValueSafety} deadline, like a loaded host or GC pause. */</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<span class="jxr_string">"java:S2160"</span>, <em class="jxr_comment">// Test double: equality is irrelevant, only the stalled entrySet() matters.</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<span class="jxr_string">"java:S2925"</span>  <em class="jxr_comment">// The sleep simulates a stalled host, not a wait for a condition.</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	})
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> StallingMap <strong class="jxr_keyword">extends</strong> LinkedHashMap&lt;String,Object&gt; {
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> stalled;
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		@Override
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">public</strong> Set&lt;Map.Entry&lt;String,Object&gt;&gt; entrySet() {
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			<strong class="jxr_keyword">if</strong> (! stalled) {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 				stalled = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 					Thread.sleep(JsonValueSafety.MAX_TRAVERSAL_MILLIS + 50);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 				} <strong class="jxr_keyword">catch</strong> (InterruptedException e) {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 					Thread.currentThread().interrupt();
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 				}
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 			}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.entrySet();
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		}
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 	}
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 	@Test
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<strong class="jxr_keyword">void</strong> d09_validateInput_slowArgumentWalk_notRejected() {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 		<strong class="jxr_keyword">var</strong> schema = McpSchema.of(JsonMap.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"object"</span>));
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> StallingMap();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		args.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 		assertDoesNotThrow(() -&gt; McpSchemaSafety.validateInput(schema, args));
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 	}
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 	@Test
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	<strong class="jxr_keyword">void</strong> d10_argumentsHash_slowWalk_notRejected() {
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">var</strong> args = <strong class="jxr_keyword">new</strong> StallingMap();
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		args.put(<span class="jxr_string">"a"</span>, 1);
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		assertDoesNotThrow(() -&gt; McpRevision.argumentsHash(args));
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 	}
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

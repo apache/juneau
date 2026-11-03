@@ -247,19 +247,34 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <div class="block">Starts a tool under a pseudo-terminal, optionally with input.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#start(java.lang.String,java.util.List,int,int,java.nio.file.Path,org.apache.juneau.terminal.region.TerminalPrompts)" class="member-name-link">start</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tool,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#start(java.lang.String,java.util.List,int,int,java.nio.file.Path,java.util.Map)" class="member-name-link">start</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tool,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;cmd,
+ int&nbsp;cols,
+ int&nbsp;rows,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;dir,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;env)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Starts a tool under a pseudo-terminal with extra environment variables.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#start(java.lang.String,java.util.List,int,int,java.nio.file.Path,org.apache.juneau.terminal.region.TerminalPrompts)" class="member-name-link">start</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tool,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;cmd,
  int&nbsp;cols,
  int&nbsp;rows,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;dir,
  <a href="TerminalPrompts.html" title="interface in org.apache.juneau.terminal.region">TerminalPrompts</a>&nbsp;prompts)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Starts a tool under a pseudo-terminal with a prompt channel.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileTerminalSource.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminal()" class="member-name-link">terminal</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="FileTerminalSource.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminal()" class="member-name-link">terminal</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The raw byte source over the log.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#terminate(java.time.Duration)" class="member-name-link">terminate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;grace)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Asks the runner to stop and waits for it, killing it if it does not.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#waitFor(long,java.util.concurrent.TimeUnit)" class="member-name-link">waitFor</a><wbr>(long&nbsp;timeout,
@@ -458,9 +473,44 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
+<section class="detail" id="start(java.lang.String,java.util.List,int,int,java.nio.file.Path,java.util.Map)">
+<h3>start</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-411">start</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tool,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;cmd,
+ int&nbsp;cols,
+ int&nbsp;rows,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;dir,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;env)</span>
+                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Starts a tool under a pseudo-terminal with extra environment variables.
+
+ <p>
+ Same as <a href="#start(java.lang.String,java.util.List,int,int,java.nio.file.Path)"><code>start(String, List, int, int, Path)</code></a>, except that <code>env</code> is added to the child's
+ environment (over what it inherits).
+ Use it for values that must not appear on the command line, such as secrets.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>tool</code> - The juneau_terminal tool parser.</dd>
+<dd><code>cmd</code> - The command and its arguments; at least one element.</dd>
+<dd><code>cols</code> - The terminal width, 1-9999.</dd>
+<dd><code>rows</code> - The terminal height, 1-9999.</dd>
+<dd><code>dir</code> - The run directory; see <a href="#start(java.lang.String,java.util.List,int,int,java.nio.file.Path)"><code>start(String, List, int, int, Path)</code></a>.</dd>
+<dd><code>env</code> - Variables to add to the child's environment; not <jk>null</jk>, may be empty.</dd>
+<dt>Returns:</dt>
+<dd>The running process.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the directory could not be prepared or the process could not start.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If an argument is out of range.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If the script is not configured, <code>python3</code> is not on the <code>PATH</code>, or
+   the run directory already holds a run.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code> - On Windows.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="terminal()">
 <h3>terminal</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileTerminalSource.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-510">terminal</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FileTerminalSource.html" title="class in org.apache.juneau.terminal.region">FileTerminalSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-549">terminal</a></span>()</div>
 <div class="block">The raw byte source over the log.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -471,7 +521,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="events()">
 <h3>events</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../console/views/FileTerminalViewSource.html" title="class in org.apache.juneau.console.views">FileTerminalViewSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-519">events</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../console/views/FileTerminalViewSource.html" title="class in org.apache.juneau.console.views">FileTerminalViewSource</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-558">events</a></span>()</div>
 <div class="block">The step events source over the events file.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -482,7 +532,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="log()">
 <h3>log</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-528">log</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-567">log</a></span>()</div>
 <div class="block">The byte log.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -493,7 +543,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="eventsFile()">
 <h3>eventsFile</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-537">eventsFile</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-576">eventsFile</a></span>()</div>
 <div class="block">The events file.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -504,7 +554,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="isDone()">
 <h3>isDone</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-546">isDone</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-585">isDone</a></span>()</div>
 <div class="block">Whether the process has exited and the events file ends with a <code>done</code> event.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -515,7 +565,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="waitFor(long,java.util.concurrent.TimeUnit)">
 <h3>waitFor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-559">waitFor</a></span><wbr><span class="parameters">(long&nbsp;timeout,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-598">waitFor</a></span><wbr><span class="parameters">(long&nbsp;timeout,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/TimeUnit.html" title="class or interface in java.util.concurrent" class="external-link">TimeUnit</a>&nbsp;unit)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/InterruptedException.html" title="class or interface in java.lang" class="external-link">InterruptedException</a>,
 <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/TimeoutException.html" title="class or interface in java.util.concurrent" class="external-link">TimeoutException</a></span></div>
@@ -535,7 +585,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="acceptsInput()">
 <h3>acceptsInput</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-573">acceptsInput</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-612">acceptsInput</a></span>()</div>
 <div class="block">Whether input is accepted right now.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -549,7 +599,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="write(byte[])">
 <h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-589">write</a></span><wbr><span class="parameters">(byte[]&nbsp;bytes)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-628">write</a></span><wbr><span class="parameters">(byte[]&nbsp;bytes)</span></div>
 <div class="block">Queues the bytes for the runner's stdin; never blocks.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -565,7 +615,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="acceptsAnswers()">
 <h3>acceptsAnswers</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-610">acceptsAnswers</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-649">acceptsAnswers</a></span>()</div>
 <div class="block">Whether an answer can be sent right now.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -576,7 +626,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="answer(java.lang.String)">
 <h3>answer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-621">answer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonLine)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-660">answer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jsonLine)</span></div>
 <div class="block">Writes one answer line to the script's prompt channel; never blocks behind another answer and never logs the line.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -590,7 +640,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 <li>
 <section class="detail" id="nudges(java.lang.String,org.apache.juneau.terminal.region.TerminalNudgePublisher)">
 <h3>nudges</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-652">nudges</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="TerminalProcess.html" title="class in org.apache.juneau.terminal.region">TerminalProcess</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-691">nudges</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;terminalId,
  <a href="TerminalNudgePublisher.html" title="interface in org.apache.juneau.terminal.region">TerminalNudgePublisher</a>&nbsp;publisher)</span></div>
 <div class="block">Polls the log's size every 100 ms and reports growth, then a final done, to a publisher.
 
@@ -612,9 +662,26 @@ implements <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base
 </section>
 </li>
 <li>
+<section class="detail" id="terminate(java.time.Duration)">
+<h3>terminate</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-763">terminate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Duration.html" title="class or interface in java.time" class="external-link">Duration</a>&nbsp;grace)</span></div>
+<div class="block">Asks the runner to stop and waits for it, killing it if it does not.
+
+ <p>
+ Sends SIGTERM to the runner, which passes it to the tool so that the tool can clean up and record that it was
+ cancelled.  If the process is still running after <code>grace</code>, this falls back to <a href="#close()"><code>close()</code></a>, which kills it.
+ It does nothing when the process has already exited, and it is safe to call more than once.
+ Call <a href="#close()"><code>close()</code></a> afterwards as usual to release the process's resources.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>grace</code> - How long to wait for the process to exit after SIGTERM; not <jk>null</jk>, zero or negative kills at once.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-727">close</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/terminal/region/TerminalProcess.html#line-791">close</a></span>()</div>
 <div class="block">Kills the runner and its tool if they are still running, then waits up to 5 seconds for
  the exit hook.
 

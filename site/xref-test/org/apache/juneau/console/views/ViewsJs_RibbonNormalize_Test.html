@@ -352,7 +352,72 @@
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 	@Test <strong class="jxr_keyword">void</strong> g04_ribbonToQueryParamsWrapperRemoved() {
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertEquals(Boolean.TRUE, report().get(<span class="jxr_string">"split_wrapperRemoved"</span>), () -&gt; report().toString());
 <a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> }
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<em class="jxr_comment">// Canonical toolbar group order and resetDefaults</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Test <strong class="jxr_keyword">void</strong> h01_shuffledTaggedGroupsSortIntoCanonicalOrder() {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertEquals(<span class="jxr_string">"entity:e1 filter:f1 filter:f2 viewing:v1 page:p1 status:s1"</span>, report().get(<span class="jxr_string">"order_shuffled"</span>));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Test <strong class="jxr_keyword">void</strong> h02_otherIdGroupsKeepTheirSlot() {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<em class="jxr_comment">// The two canonical groups swap between themselves; the "custom" group stays in the middle slot.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertEquals(<span class="jxr_string">"filter:f1 custom:c1 viewing:v1"</span>, report().get(<span class="jxr_string">"order_mixed"</span>));
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> h03_untaggedRibbonIsUnchanged() {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"order_untagged_isSameReference"</span>));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> h04_ungroupedRefreshJoinsPageAsItsLastMember() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertEquals(<span class="jxr_string">"filter:f1 page:r1 page:refresh"</span>, report().get(<span class="jxr_string">"order_refreshJoinsPage"</span>));
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> h05_taggedOptionGroupSortsLikeAnyTaggedItem() {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(<span class="jxr_string">"filter:og page:p1"</span>, report().get(<span class="jxr_string">"order_optionGroupTagged"</span>));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Test <strong class="jxr_keyword">void</strong> h06_taggedOptionGroupKeepsItsOwnNamedWrapper() {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertBean(r, <span class="jxr_string">"dom_optionGroupTagged_groupCount,dom_optionGroupTagged_titles,dom_optionGroupTagged_ownGroupName"</span>,
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<span class="jxr_string">"2,Mine|A+B,Phase"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	}
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 	@Test <strong class="jxr_keyword">void</strong> h07_resetDefaultsRendersNamedRestoreButtonThatResetsAndApplies() {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertBean(r, <span class="jxr_string">"pure_resetDefaults_icon,dom_resetDefaults_title,dom_resetDefaults_calledWithTableAndCtx,"</span>
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			+ <span class="jxr_string">"dom_resetDefaults_noConfig_clickDidNotThrow"</span>, <span class="jxr_string">"restore,Reset to defaults,true,true"</span>);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	@Test <strong class="jxr_keyword">void</strong> i01_declaredPausePollingRendersOneButtonInTheStatusGroup() {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		assertEquals(1.0, ((Number)r.get(<span class="jxr_string">"pp_groupCount"</span>)).doubleValue());
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		assertEquals(<span class="jxr_string">"status"</span>, r.get(<span class="jxr_string">"pp_groupId"</span>));
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertEquals(1.0, ((Number)r.get(<span class="jxr_string">"pp_buttonCount"</span>)).doubleValue());
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	@Test <strong class="jxr_keyword">void</strong> i02_pauseAndPlayIconsSwapWithAriaPressed_andTargetIsHonoured() {
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		assertEquals(<span class="jxr_string">"pause"</span>, r.get(<span class="jxr_string">"pp_idleIcon"</span>));
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(<span class="jxr_string">"false"</span>, r.get(<span class="jxr_string">"pp_idlePressed"</span>));
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertEquals(<span class="jxr_string">"play"</span>, r.get(<span class="jxr_string">"pp_pausedIcon"</span>));
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertEquals(<span class="jxr_string">"true"</span>, r.get(<span class="jxr_string">"pp_pausedPressed"</span>));
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		assertEquals(<span class="jxr_string">"pause"</span>, r.get(<span class="jxr_string">"pp_resumedIcon"</span>));
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		assertEquals(<span class="jxr_string">"false"</span>, r.get(<span class="jxr_string">"pp_resumedPressed"</span>));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertEquals(<span class="jxr_string">"cmd:b:pause-polling,cmd:b:resume-polling"</span>, r.get(<span class="jxr_string">"pp_published"</span>));
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 	}
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 	@Test <strong class="jxr_keyword">void</strong> i03_nonPollingViewRendersNoPauseButton() {
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"pp_nonPollingRendersNothing"</span>));
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	@Test <strong class="jxr_keyword">void</strong> i04_normalizeForcesStatusGroupWithoutMutating_andKeepsItThere() {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertEquals(<span class="jxr_string">"status"</span>, r.get(<span class="jxr_string">"pp_normalizedGroup"</span>));
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"pp_declaredUntouched"</span>));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"pp_alreadyStatusStays"</span>));
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

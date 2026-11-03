@@ -816,8 +816,8 @@
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L810" href="#L810">810</a> 				<em class="jxr_comment">// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.</em>
-<a class="jxr_linenumber" name="L811" href="#L811">811</a> 				<strong class="jxr_keyword">if</strong> (Duration.<strong class="jxr_keyword">class</strong>.isInstance(o))
-<a class="jxr_linenumber" name="L812" href="#L812">812</a> 					<strong class="jxr_keyword">return</strong> (Duration) o;
+<a class="jxr_linenumber" name="L811" href="#L811">811</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Duration x)
+<a class="jxr_linenumber" name="L812" href="#L812">812</a> 					<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> 				<strong class="jxr_keyword">return</strong> format.parse(o.toString());
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> 			}
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> 		};
@@ -838,8 +838,8 @@
 <a class="jxr_linenumber" name="L830" href="#L830">830</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L831" href="#L831">831</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L832" href="#L832">832</a> 				<em class="jxr_comment">// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.</em>
-<a class="jxr_linenumber" name="L833" href="#L833">833</a> 				<strong class="jxr_keyword">if</strong> (Period.<strong class="jxr_keyword">class</strong>.isInstance(o))
-<a class="jxr_linenumber" name="L834" href="#L834">834</a> 					<strong class="jxr_keyword">return</strong> (Period) o;
+<a class="jxr_linenumber" name="L833" href="#L833">833</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Period x)
+<a class="jxr_linenumber" name="L834" href="#L834">834</a> 					<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L835" href="#L835">835</a> 				<strong class="jxr_keyword">return</strong> format.parse(o.toString());
 <a class="jxr_linenumber" name="L836" href="#L836">836</a> 			}
 <a class="jxr_linenumber" name="L837" href="#L837">837</a> 		};
@@ -860,8 +860,8 @@
 <a class="jxr_linenumber" name="L852" href="#L852">852</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L853" href="#L853">853</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L854" href="#L854">854</a> 				<em class="jxr_comment">// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.</em>
-<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				<strong class="jxr_keyword">if</strong> (Calendar.<strong class="jxr_keyword">class</strong>.isInstance(o))
-<a class="jxr_linenumber" name="L856" href="#L856">856</a> 					<strong class="jxr_keyword">return</strong> (Calendar) o;
+<a class="jxr_linenumber" name="L855" href="#L855">855</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Calendar x)
+<a class="jxr_linenumber" name="L856" href="#L856">856</a> 					<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L857" href="#L857">857</a> 				<strong class="jxr_keyword">return</strong> format.parse(o.toString(), session.getTimeZoneId());
 <a class="jxr_linenumber" name="L858" href="#L858">858</a> 			}
 <a class="jxr_linenumber" name="L859" href="#L859">859</a> 		};
@@ -882,8 +882,8 @@
 <a class="jxr_linenumber" name="L874" href="#L874">874</a> 				<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L875" href="#L875">875</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L876" href="#L876">876</a> 				<em class="jxr_comment">// A typed parser (e.g. OpenAPI) may hand over an already-converted value; only strings/numbers need parsing.</em>
-<a class="jxr_linenumber" name="L877" href="#L877">877</a> 				<strong class="jxr_keyword">if</strong> (Date.<strong class="jxr_keyword">class</strong>.isInstance(o))
-<a class="jxr_linenumber" name="L878" href="#L878">878</a> 					<strong class="jxr_keyword">return</strong> (Date) o;
+<a class="jxr_linenumber" name="L877" href="#L877">877</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Date x)
+<a class="jxr_linenumber" name="L878" href="#L878">878</a> 					<strong class="jxr_keyword">return</strong> x;
 <a class="jxr_linenumber" name="L879" href="#L879">879</a> 				<strong class="jxr_keyword">if</strong> (o instanceof Calendar)
 <a class="jxr_linenumber" name="L880" href="#L880">880</a> 					<strong class="jxr_keyword">return</strong> (Date) session.convertToType(o, hint != <strong class="jxr_keyword">null</strong> ? (ClassMeta&lt;?&gt;) hint : session.getClassMeta(Date.<strong class="jxr_keyword">class</strong>));
 <a class="jxr_linenumber" name="L881" href="#L881">881</a> 				<strong class="jxr_keyword">return</strong> format.parse(o.toString(), session.getTimeZoneId());

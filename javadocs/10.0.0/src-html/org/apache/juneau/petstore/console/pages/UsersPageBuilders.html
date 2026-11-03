@@ -67,18 +67,19 @@
 <span class="source-line-no">054</span><span id="line-54">               RibbonItem.optionGroup("userStatus",</span>
 <span class="source-line-no">055</span><span id="line-55">                  RibbonItem.option("active").title("Active").column("userStatus").value("$eq(ACTIVE)"),</span>
 <span class="source-line-no">056</span><span id="line-56">                  RibbonItem.option("inactive").title("Inactive").column("userStatus").value("$eq(INACTIVE)"))</span>
-<span class="source-line-no">057</span><span id="line-57">                  .title("User status").deselectable(true),</span>
+<span class="source-line-no">057</span><span id="line-57">                  .title("User status").deselectable(true).group("filter"),</span>
 <span class="source-line-no">058</span><span id="line-58">               RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")</span>
-<span class="source-line-no">059</span><span id="line-59">                  .form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW),</span>
-<span class="source-line-no">060</span><span id="line-60">               RibbonItem.refresh())</span>
-<span class="source-line-no">061</span><span id="line-61">            .rowActions(</span>
-<span class="source-line-no">062</span><span id="line-62">               RowAction.create("edit").label("Edit").form("/console/users/form?username={username}").present(Present.DIALOG)</span>
-<span class="source-line-no">063</span><span id="line-63">                  .endpoint("/console/users/{username}").method(Method.PUT).onSuccess(OnSuccess.REDRAW),</span>
-<span class="source-line-no">064</span><span id="line-64">               RowAction.create("delete").label("Delete").endpoint("/console/users/{username}").method(Method.DELETE)</span>
-<span class="source-line-no">065</span><span id="line-65">                  .confirm("Delete user '{username}'?").confirmLabel("Delete").tone(Tone.DANGER).onSuccess(OnSuccess.REDRAW)),</span>
-<span class="source-line-no">066</span><span id="line-66">            "Users");</span>
-<span class="source-line-no">067</span><span id="line-67">   }</span>
-<span class="source-line-no">068</span><span id="line-68">}</span>
+<span class="source-line-no">059</span><span id="line-59">                  .form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),</span>
+<span class="source-line-no">060</span><span id="line-60">               RibbonItem.resetDefaults().group("page"),</span>
+<span class="source-line-no">061</span><span id="line-61">               RibbonItem.refresh())</span>
+<span class="source-line-no">062</span><span id="line-62">            .rowActions(</span>
+<span class="source-line-no">063</span><span id="line-63">               RowAction.create("edit").label("Edit").form("/console/users/form?username={username}").present(Present.DIALOG)</span>
+<span class="source-line-no">064</span><span id="line-64">                  .endpoint("/console/users/{username}").method(Method.PUT).onSuccess(OnSuccess.REDRAW),</span>
+<span class="source-line-no">065</span><span id="line-65">               RowAction.create("delete").label("Delete").endpoint("/console/users/{username}").method(Method.DELETE)</span>
+<span class="source-line-no">066</span><span id="line-66">                  .confirm("Delete user '{username}'?").confirmLabel("Delete").tone(Tone.DANGER).onSuccess(OnSuccess.REDRAW)),</span>
+<span class="source-line-no">067</span><span id="line-67">            "Users");</span>
+<span class="source-line-no">068</span><span id="line-68">   }</span>
+<span class="source-line-no">069</span><span id="line-69">}</span>
 
 
 

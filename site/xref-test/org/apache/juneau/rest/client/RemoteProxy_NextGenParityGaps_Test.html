@@ -811,7 +811,7 @@
 <a class="jxr_linenumber" name="L803" href="#L803">803</a> 	@Remote(path=<span class="jxr_string">"/m"</span>, timeout=<span class="jxr_string">"5s"</span>)
 <a class="jxr_linenumber" name="L804" href="#L804">804</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">interface</strong> M_TimeoutClient {
 <a class="jxr_linenumber" name="L805" href="#L805">805</a> 		@RemoteGet(<span class="jxr_string">"/a"</span>) String ifaceTimeout();
-<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		@RemoteGet(path=<span class="jxr_string">"/b"</span>, timeout=<span class="jxr_string">"50ms"</span>) String methodTimeout();
+<a class="jxr_linenumber" name="L806" href="#L806">806</a> 		@RemoteGet(path=<span class="jxr_string">"/b"</span>, timeout=<span class="jxr_string">"2s"</span>) String methodTimeout();
 <a class="jxr_linenumber" name="L807" href="#L807">807</a> 	}
 <a class="jxr_linenumber" name="L808" href="#L808">808</a> 
 <a class="jxr_linenumber" name="L809" href="#L809">809</a> 	@Remote(path=<span class="jxr_string">"/m"</span>)
@@ -826,7 +826,7 @@
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = captureClient(captured)) {
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 				c.remote(M_TimeoutClient.<strong class="jxr_keyword">class</strong>).methodTimeout();
 <a class="jxr_linenumber" name="L820" href="#L820">820</a> 			}
-<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			assertEquals(Duration.ofMillis(50), captured.get(0).getTimeout());
+<a class="jxr_linenumber" name="L821" href="#L821">821</a> 			assertEquals(Duration.ofSeconds(2), captured.get(0).getTimeout());
 <a class="jxr_linenumber" name="L822" href="#L822">822</a> 		}
 <a class="jxr_linenumber" name="L823" href="#L823">823</a> 
 <a class="jxr_linenumber" name="L824" href="#L824">824</a> 		@Test <strong class="jxr_keyword">void</strong> m02_interfaceTimeout_appliedWhenMethodSilent() <strong class="jxr_keyword">throws</strong> Exception {

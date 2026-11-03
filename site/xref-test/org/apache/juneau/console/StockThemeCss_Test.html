@@ -139,7 +139,19 @@
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 			assertFalse(read(name).toLowerCase().contains(<span class="jxr_string">"generated"</span>),
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 				() -&gt; <span class="jxr_string">"juneau-theme-"</span> + name + <span class="jxr_string">".css is hand-maintained and must not claim to be generated"</span>);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> }
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> a09_stockThemes_declareDangerStrong_afterDangerWash() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<em class="jxr_comment">// Filled destructive (.jc-btn-destructive) hover fill: darker than the invariant --jc-danger, so the white ink</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<em class="jxr_comment">// stays above 4.5:1 on hover too.  Inherited from OPEN by every derived palette.</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : ConsoleChromeMixin.BUILTIN_THEME_NAMES) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<strong class="jxr_keyword">var</strong> light = parse(read(name)).get(0);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			assertEquals(<span class="jxr_string">"#a12f2b"</span>, light.get(<span class="jxr_string">"--jc-danger-strong"</span>), () -&gt; <span class="jxr_string">"juneau-theme-"</span> + name + <span class="jxr_string">".css"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">var</strong> keys = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(light.keySet());
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 			assertEquals(keys.indexOf(<span class="jxr_string">"--jc-danger-wash"</span>) + 1, keys.indexOf(<span class="jxr_string">"--jc-danger-strong"</span>),
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				() -&gt; <span class="jxr_string">"--jc-danger-strong must follow --jc-danger-wash in juneau-theme-"</span> + name + <span class="jxr_string">".css"</span>);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 	}
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

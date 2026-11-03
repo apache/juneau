@@ -82,8 +82,8 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Widget.html" title="interface in org.apache.juneau.console.widgets">Widget</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../commons/bean/BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanType</a>(<a href="../../commons/bean/BeanType.html#properties()">properties</a>="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions,chrome,steps")
-</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-149">ModalDef</a></span>
+<div class="type-signature"><span class="annotations"><a href="../../commons/bean/BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanType</a>(<a href="../../commons/bean/BeanType.html#properties()">properties</a>="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions,chrome,steps,nav")
+</span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-157">ModalDef</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="Widget.html" title="interface in org.apache.juneau.console.widgets">Widget</a></span></div>
 <div class="block">The declarative modal (dialog) a <code>present=dialog</code> row action opens &mdash; the payload the
@@ -168,6 +168,14 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
  <a href="#steps"><code>steps</code></a> turns the dialog into a wizard: the runtime shows one <a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef.Step</code></a> at a time with Back and Next
  buttons, and the last step's button is the dialog's own confirm.  Both are additive-only and omitted from the wire
  when unset, so neither bumps <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a>.
+
+ <h5 class='section'><a href="#nav"><code>nav</code></a> &mdash; the inner-navigation style</h5>
+ <p>
+ <a href="#nav"><code>nav</code></a> picks how the runtime draws the section strip of a <a href="FormDef.html#sections"><code>sectioned</code></a> form:
+ <a href="#NAV_PILL"><code>NAV_PILL</code></a> (the default) or <a href="#NAV_FOLDER"><code>NAV_FOLDER</code></a> (square-topped folder tabs).  A wizard needs no value here:
+ <a href="#steps"><code>steps</code></a> alone makes the dialog a wizard, and the runtime then draws a numbered step indicator instead of a
+ strip.  <a href="#validate()"><code>validate()</code></a> rejects any other value; the runtime still treats an unknown one as <a href="#NAV_PILL"><code>NAV_PILL</code></a>.
+ Additive-only and omitted from the wire when unset, so it does not bump <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a>.
 
  <h5 class='section'>Not a new row-action wire field</h5>
  <p>
@@ -311,21 +319,37 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <div class="block">Whether the runtime must <b>not</b> close this dialog at confirm-click time, so the write's result can be
  painted into it as a receipt (see the class Javadoc); omitted from the wire when unset or <jk>false</jk>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#selfTargeted" class="member-name-link">selfTargeted</a></code></div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#nav" class="member-name-link">nav</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">The inner-navigation style of a sectioned form's strip, <a href="#NAV_PILL"><code>NAV_PILL</code></a> or <a href="#NAV_FOLDER"><code>NAV_FOLDER</code></a> (see the class
+ Javadoc); omitted from the wire when unset (the runtime draws <a href="#NAV_PILL"><code>NAV_PILL</code></a>).</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#NAV_FOLDER" class="member-name-link">NAV_FOLDER</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The <a href="#nav"><code>nav</code></a> token for square-topped folder tabs over a bottom rule.</div>
+</div>
+<div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#NAV_PILL" class="member-name-link">NAV_PILL</a></code></div>
+<div class="col-last odd-row-color">
+<div class="block">The <a href="#nav"><code>nav</code></a> token for the default rounded section strip.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></code></div>
+<div class="col-second even-row-color"><code><a href="#selfTargeted" class="member-name-link">selfTargeted</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Whether <a href="#idempotencyKey"><code>idempotencyKey</code></a> is a <b>self-targeted</b> key whose own value the runtime must send as the
  submitted target (see the class Javadoc); omitted from the wire when unset or <jk>false</jk>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#steps" class="member-name-link">steps</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#steps" class="member-name-link">steps</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">The wizard steps the runtime shows one at a time with Back and Next (see the class Javadoc); omitted from the
  wire when unset or empty.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#title" class="member-name-link">title</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#title" class="member-name-link">title</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">The modal title / confirmation prompt.</div>
 </div>
 </div>
@@ -409,19 +433,24 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
  as a receipt (see the class Javadoc).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selfTargeted(boolean)" class="member-name-link">selfTargeted</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nav(java.lang.String)" class="member-name-link">nav</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Selects the inner-navigation style of a sectioned form's strip.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#selfTargeted(boolean)" class="member-name-link">selfTargeted</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Declares that <a href="#idempotencyKey"><code>idempotencyKey</code></a> is a self-targeted key &mdash; the runtime sends the key's own value as
  the submitted target rather than a row id.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#step(org.apache.juneau.console.widgets.ModalDef.Step)" class="member-name-link">step</a><wbr>(<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#step(org.apache.juneau.console.widgets.ModalDef.Step)" class="member-name-link">step</a><wbr>(<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds one wizard step.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate()" class="member-name-link">validate</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validate()" class="member-name-link">validate</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Fail-closed bean validation.</div>
 </div>
 </div>
@@ -444,7 +473,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="CONTRACT_VERSION">
 <h3>CONTRACT_VERSION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-164">CONTRACT_VERSION</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-172">CONTRACT_VERSION</a></span></div>
 <div class="block">The frozen modal contract version.  Bumped only on a breaking wire change to this modal contract.
 
  <p>
@@ -464,7 +493,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="FIELD_KIND_TEXT">
 <h3>FIELD_KIND_TEXT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-167">FIELD_KIND_TEXT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-175">FIELD_KIND_TEXT</a></span></div>
 <div class="block">The <a href="ModalDef.Field.html#kind"><code>ModalDef.Field.kind</code></a> token for an ordinary text value &mdash; the default when the field declares none.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -479,7 +508,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="FIELD_KIND_CODE">
 <h3>FIELD_KIND_CODE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-170">FIELD_KIND_CODE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-178">FIELD_KIND_CODE</a></span></div>
 <div class="block">The <a href="ModalDef.Field.html#kind"><code>ModalDef.Field.kind</code></a> token for a monospaced, copyable value (an id, a URL, a generated token).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -492,9 +521,39 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 </section>
 </li>
 <li>
+<section class="detail" id="NAV_PILL">
+<h3>NAV_PILL</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-181">NAV_PILL</a></span></div>
+<div class="block">The <a href="#nav"><code>nav</code></a> token for the default rounded section strip.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.console.widgets.ModalDef.NAV_PILL">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="NAV_FOLDER">
+<h3>NAV_FOLDER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-184">NAV_FOLDER</a></span></div>
+<div class="block">The <a href="#nav"><code>nav</code></a> token for square-topped folder tabs over a bottom rule.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.console.widgets.ModalDef.NAV_FOLDER">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="contractVersion">
 <h3>contractVersion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-473">contractVersion</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-487">contractVersion</a></span></div>
 <div class="block">The frozen modal contract version discriminator.
 
  <p>
@@ -507,28 +566,28 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="title">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-476">title</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-490">title</a></span></div>
 <div class="block">The modal title / confirmation prompt.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="fields">
 <h3>fields</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Field.html" title="class in org.apache.juneau.console.widgets">ModalDef.Field</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-479">fields</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Field.html" title="class in org.apache.juneau.console.widgets">ModalDef.Field</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-493">fields</a></span></div>
 <div class="block">The typed confirmation fields, in display order; omitted from the wire when none are declared.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="form">
 <h3>form</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.html" title="class in org.apache.juneau.console.widgets">FormDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-482">form</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.html" title="class in org.apache.juneau.console.widgets">FormDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-496">form</a></span></div>
 <div class="block">The optional input form; omitted from the wire when unset (a confirm-only modal).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="idempotencyKey">
 <h3>idempotencyKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-489">idempotencyKey</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-503">idempotencyKey</a></span></div>
 <div class="block">The server-minted idempotency key value the runtime carries on the submit; omitted from the wire when unset.
  The value is minted (and its <code>(action, targetId)</code> binding re-checked on submit) by the rich-view
  module's idempotency-key helper.</div>
@@ -537,7 +596,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="selfTargeted">
 <h3>selfTargeted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-498">selfTargeted</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-512">selfTargeted</a></span></div>
 <div class="block">Whether <a href="#idempotencyKey"><code>idempotencyKey</code></a> is a <b>self-targeted</b> key whose own value the runtime must send as the
  submitted target (see the class Javadoc); omitted from the wire when unset or <jk>false</jk>.
 
@@ -548,7 +607,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="barSlot">
 <h3>barSlot</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BarSlot.html" title="class in org.apache.juneau.console.widgets">BarSlot</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-505">barSlot</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BarSlot.html" title="class in org.apache.juneau.console.widgets">BarSlot</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-519">barSlot</a></span></div>
 <div class="block">Optional additive bar slot anchored to this dialog's title &mdash; the <i>third</i> named <a href="BarSlot.html" title="class in org.apache.juneau.console.widgets"><code>BarSlot</code></a>
  attachment (see the class Javadoc for how this host differs from the other two).  Omitted from the wire when
  unset; painted by the runtime immediately after <a href="#title"><code>title</code></a>, ahead of <a href="#fields"><code>fields</code></a> and <a href="#form"><code>form</code></a>.</div>
@@ -557,7 +616,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="keepOpenOnSubmit">
 <h3>keepOpenOnSubmit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-515">keepOpenOnSubmit</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-529">keepOpenOnSubmit</a></span></div>
 <div class="block">Whether the runtime must <b>not</b> close this dialog at confirm-click time, so the write's result can be
  painted into it as a receipt (see the class Javadoc); omitted from the wire when unset or <jk>false</jk>.
 
@@ -569,7 +628,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="childActions">
 <h3>childActions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets">ModalDef.ChildAction</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-521">childActions</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets">ModalDef.ChildAction</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-535">childActions</a></span></div>
 <div class="block">The dialog-scoped catalog of stacked child actions a <code>type="action"</code> input in <a href="#form"><code>form</code></a> may open
  (see the class Javadoc); omitted from the wire when unset or empty.</div>
 </section>
@@ -577,7 +636,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="chrome">
 <h3>chrome</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-530">chrome</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-544">chrome</a></span></div>
 <div class="block">The name of a dialog chrome the page script registered with the runtime, which restyles this dialog's parts
  (see the class Javadoc); omitted from the wire when unset (the default chrome).
 
@@ -588,9 +647,20 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="steps">
 <h3>steps</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-539">steps</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-553">steps</a></span></div>
 <div class="block">The wizard steps the runtime shows one at a time with Back and Next (see the class Javadoc); omitted from the
  wire when unset or empty.
+
+ <p>
+ Additive-only: like <a href="#barSlot"><code>barSlot</code></a>, its presence does not bump <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="nav">
+<h3>nav</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-562">nav</a></span></div>
+<div class="block">The inner-navigation style of a sectioned form's strip, <a href="#NAV_PILL"><code>NAV_PILL</code></a> or <a href="#NAV_FOLDER"><code>NAV_FOLDER</code></a> (see the class
+ Javadoc); omitted from the wire when unset (the runtime draws <a href="#NAV_PILL"><code>NAV_PILL</code></a>).
 
  <p>
  Additive-only: like <a href="#barSlot"><code>barSlot</code></a>, its presence does not bump <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a>.</div>
@@ -607,7 +677,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ModalDef</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-154">ModalDef</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-162">ModalDef</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -621,7 +691,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="create(java.lang.String)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-548">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-571">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</span></div>
 <div class="block">Starts a new <a href="ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a> with the specified title / confirmation prompt.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -636,7 +706,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="field(java.lang.String,java.lang.String)">
 <h3>field</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-563">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-586">field</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds one typed confirmation field.</div>
 <dl class="notes">
@@ -651,7 +721,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="codeField(java.lang.String,java.lang.String)">
 <h3>codeField</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-577">codeField</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-600">codeField</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds one typed confirmation field displayed as monospaced, copyable <a href="#FIELD_KIND_CODE"><code>code</code></a>.</div>
 <dl class="notes">
@@ -666,7 +736,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="childAction(org.apache.juneau.console.widgets.ModalDef.ChildAction)">
 <h3>childAction</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-591">childAction</a></span><wbr><span class="parameters">(<a href="ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets">ModalDef.ChildAction</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-614">childAction</a></span><wbr><span class="parameters">(<a href="ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets">ModalDef.ChildAction</a>&nbsp;value)</span></div>
 <div class="block">Adds one entry to this dialog's child-action catalog.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -681,7 +751,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="chrome(java.lang.String)">
 <h3>chrome</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-606">chrome</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-629">chrome</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Selects the dialog chrome the page script registered under the given name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -692,9 +762,22 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 </section>
 </li>
 <li>
+<section class="detail" id="nav(java.lang.String)">
+<h3>nav</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-640">nav</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Selects the inner-navigation style of a sectioned form's strip.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - <a href="#NAV_PILL"><code>NAV_PILL</code></a> or <a href="#NAV_FOLDER"><code>NAV_FOLDER</code></a>.  Can be <jk>null</jk> to unset (the default pill strip).</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="step(org.apache.juneau.console.widgets.ModalDef.Step)">
 <h3>step</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-618">step</a></span><wbr><span class="parameters">(<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-652">step</a></span><wbr><span class="parameters">(<a href="ModalDef.Step.html" title="class in org.apache.juneau.console.widgets">ModalDef.Step</a>&nbsp;value)</span></div>
 <div class="block">Adds one wizard step.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -709,7 +792,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="keepOpenOnSubmit(boolean)">
 <h3>keepOpenOnSubmit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-638">keepOpenOnSubmit</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-672">keepOpenOnSubmit</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Declares that the runtime must keep this dialog open across its submit so the result can be painted into it
  as a receipt (see the class Javadoc).
 
@@ -727,7 +810,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="form(org.apache.juneau.console.widgets.FormDef)">
 <h3>form</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-649">form</a></span><wbr><span class="parameters">(<a href="FormDef.html" title="class in org.apache.juneau.console.widgets">FormDef</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-683">form</a></span><wbr><span class="parameters">(<a href="FormDef.html" title="class in org.apache.juneau.console.widgets">FormDef</a>&nbsp;value)</span></div>
 <div class="block">Sets the optional input form.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -740,7 +823,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="idempotencyKey(java.lang.String)">
 <h3>idempotencyKey</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-660">idempotencyKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-694">idempotencyKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the server-minted idempotency key value carried on the submit.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -753,7 +836,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="selfTargeted(boolean)">
 <h3>selfTargeted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-680">selfTargeted</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-714">selfTargeted</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Declares that <a href="#idempotencyKey"><code>idempotencyKey</code></a> is a self-targeted key &mdash; the runtime sends the key's own value as
  the submitted target rather than a row id.
 
@@ -775,7 +858,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="barSlot(org.apache.juneau.console.widgets.BarSlot)">
 <h3>barSlot</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-695">barSlot</a></span><wbr><span class="parameters">(<a href="BarSlot.html" title="class in org.apache.juneau.console.widgets">BarSlot</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-729">barSlot</a></span><wbr><span class="parameters">(<a href="BarSlot.html" title="class in org.apache.juneau.console.widgets">BarSlot</a>&nbsp;value)</span></div>
 <div class="block">Declares the additive bar slot anchored to this dialog's title.
 
  <p>
@@ -792,7 +875,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="validate()">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-720">validate</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-755">validate</a></span>()</div>
 <div class="block">Fail-closed bean validation.
 
  <p>
@@ -804,7 +887,8 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 
  <p>
  Also rejects, fail-closed at serve time rather than silently on the wire: a <a href="ModalDef.Field.html#kind"><code>ModalDef.Field.kind</code></a> outside the
- <a href="#FIELD_KIND_TEXT"><code>text</code></a>/<a href="#FIELD_KIND_CODE"><code>code</code></a> allowlist; a blank, duplicate or unlabelled
+ <a href="#FIELD_KIND_TEXT"><code>text</code></a>/<a href="#FIELD_KIND_CODE"><code>code</code></a> allowlist; a <a href="#nav"><code>nav</code></a> other than
+ <a href="#NAV_PILL"><code>NAV_PILL</code></a>/<a href="#NAV_FOLDER"><code>NAV_FOLDER</code></a>; a blank, duplicate or unlabelled
  <a href="ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef.ChildAction</code></a> id; <a href="ModalDef.ChildAction.html#carryDrafts"><code>ModalDef.ChildAction.carryDrafts</code></a> on a modal that declares no <a href="#form"><code>form</code></a> (nothing to
  collect <i>from</i>); and <a href="ModalDef.ChildAction.html#carryDrafts"><code>ModalDef.ChildAction.carryDrafts</code></a> on a child that declares no
  <a href="ModalDef.ChildAction.html#form"><code>ModalDef.ChildAction.form</code></a> (nowhere to put them &mdash; the runtime would take its confirm-only branch, issue
@@ -820,7 +904,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="checked()">
 <h3>checked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-824">checked</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-861">checked</a></span>()</div>
 <div class="block">The serving-path hook every app <code>@RestGet</code> that returns a <a href="ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a> should invoke.
 
  <p>

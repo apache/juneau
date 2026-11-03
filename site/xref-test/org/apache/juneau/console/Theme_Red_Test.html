@@ -45,8 +45,8 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.RED.getTokens().keySet());
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  	}
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a02_tokenCount_is105_mirroringOpensPin() {
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertSize(105, Theme.RED.getTokens());
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@Test <strong class="jxr_keyword">void</strong> a02_tokenCount_is106_mirroringOpensPin() {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertSize(106, Theme.RED.getTokens());
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  	}
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	@Test <strong class="jxr_keyword">void</strong> a03_name_isRed() {
@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  	@Test <strong class="jxr_keyword">void</strong> b01_recoloredSignatureValues() {
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">var</strong> tokens = Theme.RED.getTokens();
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertBean(tokens, <span class="jxr_string">"--jc-chrome-bg,--jc-accent,--jc-link,--jc-btn-primary"</span>, <span class="jxr_string">"#ffd9cf,#FF5630,#BF2600,#BF2600"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		assertBean(tokens, <span class="jxr_string">"--jc-chrome-bg,--jc-accent,--jc-link,--jc-btn-primary"</span>, <span class="jxr_string">"#ffd9cf,#ff481f,#BF2600,#BF2600"</span>);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Test <strong class="jxr_keyword">void</strong> b02_keptFromOpen_semanticStatusAndTagValues_areUnchanged() {

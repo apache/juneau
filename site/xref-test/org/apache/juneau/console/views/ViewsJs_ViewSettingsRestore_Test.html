@@ -196,35 +196,36 @@
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test <strong class="jxr_keyword">void</strong> e01_dialogSeedsFromRestoredSettings_notCatalogDefaults() {
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertEquals(List.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"status"</span>), report().get(<span class="jxr_string">"seed_draftVisible"</span>));
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(false, report().get(<span class="jxr_string">"seed_dialogStageChecked"</span>));
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test <strong class="jxr_keyword">void</strong> e02_staleBlob_resetNoticeReachesTheDialogOnce() {
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"stale_noticeArmed"</span>));
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(<span class="jxr_string">"Saved view settings were reset because the table changed."</span>, report().get(<span class="jxr_string">"stale_noticeText"</span>));
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"stale_noticeCleared"</span>));
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 	}
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	@Test <strong class="jxr_keyword">void</strong> e03_sortDraft_isSeededFromViewDefaultOrder() {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		<strong class="jxr_keyword">var</strong> expected = List.of(Map.of(<span class="jxr_string">"column"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"dir"</span>, <span class="jxr_string">"asc"</span>));
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		assertEquals(expected, report().get(<span class="jxr_string">"sortSeed_noBlob"</span>));
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(expected, report().get(<span class="jxr_string">"sortSeed_persisted"</span>));
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(List.of(), report().get(<span class="jxr_string">"sortSeed_emptyDefault"</span>));
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	@Test <strong class="jxr_keyword">void</strong> e04_teardown_clearsAutoRefreshTimer() {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"auto_timerAfterTeardown"</span>));
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Test <strong class="jxr_keyword">void</strong> e05_tableWithoutColumnConfig_ignoresStoredBlob() {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, col(<span class="jxr_string">"noColumnConfig_columns"</span>, <span class="jxr_string">"stage"</span>).get(<span class="jxr_string">"visible"</span>));
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"noColumnConfig_blobKept"</span>));
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Test <strong class="jxr_keyword">void</strong> e06_rowControlAriaLabels_includeTheColumnLabel() {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		assertEquals(<span class="jxr_string">"Show column Stage"</span>, report().get(<span class="jxr_string">"seed_ariaLabels"</span>));
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 	}
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> }
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		assertEquals(false, report().get(<span class="jxr_string">"seed_dialogStageShown"</span>));
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"seed_dialogStageAvailable"</span>));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	}
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 	@Test <strong class="jxr_keyword">void</strong> e02_staleBlob_resetNoticeReachesTheDialogOnce() {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"stale_noticeArmed"</span>));
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		assertEquals(<span class="jxr_string">"Saved view settings were reset because the table changed."</span>, report().get(<span class="jxr_string">"stale_noticeText"</span>));
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"stale_noticeCleared"</span>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	@Test <strong class="jxr_keyword">void</strong> e03_sortDraft_isSeededFromViewDefaultOrder() {
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> expected = List.of(Map.of(<span class="jxr_string">"column"</span>, <span class="jxr_string">"name"</span>, <span class="jxr_string">"dir"</span>, <span class="jxr_string">"asc"</span>));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertEquals(expected, report().get(<span class="jxr_string">"sortSeed_noBlob"</span>));
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertEquals(expected, report().get(<span class="jxr_string">"sortSeed_persisted"</span>));
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertEquals(List.of(), report().get(<span class="jxr_string">"sortSeed_emptyDefault"</span>));
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 	@Test <strong class="jxr_keyword">void</strong> e04_teardown_clearsAutoRefreshTimer() {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"auto_timerAfterTeardown"</span>));
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	}
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	@Test <strong class="jxr_keyword">void</strong> e05_tableWithoutColumnConfig_ignoresStoredBlob() {
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, col(<span class="jxr_string">"noColumnConfig_columns"</span>, <span class="jxr_string">"stage"</span>).get(<span class="jxr_string">"visible"</span>));
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"noColumnConfig_blobKept"</span>));
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	@Test <strong class="jxr_keyword">void</strong> e06_rowControlAriaLabels_includeTheColumnLabel() {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertEquals(<span class="jxr_string">"Remove column Status"</span>, report().get(<span class="jxr_string">"seed_ariaLabels"</span>));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

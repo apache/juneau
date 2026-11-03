@@ -258,10 +258,10 @@
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<span class="jxr_string">"{[1,Row 01,OK],[1,Row 01]},{[1,Row 01,OK],[1,Row 01]}"</span>);
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	@Test <strong class="jxr_keyword">void</strong> a04_reopenedDialogShowsStoredColumnUnchecked_withColumnScopedAriaLabel() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	@Test <strong class="jxr_keyword">void</strong> a04_reopenedDialogShowsStoredColumnUnderAvailable_notInTheShownGrid() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">var</strong> report = runHarness();
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		assertBean(report::toString, report, <span class="jxr_string">"server{reopen{checked,aria}},client{reopen{checked,aria}}"</span>,
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<span class="jxr_string">"{{false,Show column Status}},{{false,Show column Status}}"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		assertBean(report::toString, report, <span class="jxr_string">"server{reopen{shown,available}},client{reopen{shown,available}}"</span>,
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<span class="jxr_string">"{{false,Status}},{{false,Status}}"</span>);
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	@Test <strong class="jxr_keyword">void</strong> a05_untouchedApply_doesNotPersistEveryColumnAsTheSort() <strong class="jxr_keyword">throws</strong> Exception {
@@ -271,7 +271,7 @@
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 	@Test <strong class="jxr_keyword">void</strong> a06_staleBlob_showsResetNoticeEndToEnd_andDialogOpensOnDefaults() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">var</strong> report = runHarness();
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertBean(report::toString, report, <span class="jxr_string">"server{stale{notice,statusChecked}},client{stale{notice,statusChecked}}"</span>,
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertBean(report::toString, report, <span class="jxr_string">"server{stale{notice,statusShown}},client{stale{notice,statusShown}}"</span>,
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<span class="jxr_string">"{{Saved view settings were reset because the table changed.,true}},{{Saved view settings were reset because the table changed.,true}}"</span>);
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	}
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> }
