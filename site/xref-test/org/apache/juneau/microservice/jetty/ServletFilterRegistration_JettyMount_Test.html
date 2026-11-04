@@ -349,241 +349,242 @@
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> ms = create(C_Order_Config.<strong class="jxr_keyword">class</strong>);
 <a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			ms.start();
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertEquals(List.of(<span class="jxr_string">"C:REQUEST"</span>, <span class="jxr_string">"B:REQUEST"</span>, <span class="jxr_string">"A:REQUEST"</span>, <span class="jxr_string">"D:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			ms.stop();
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		}
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	@Configuration
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C_Tie_Config {
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		@Bean(name=<span class="jxr_string">"z"</span>) ServletFilterRegistration z() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"Z"</span>, <span class="jxr_string">"/*"</span>).build(); }
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		@Bean(name=<span class="jxr_string">"m"</span>) ServletFilterRegistration m() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"M"</span>, <span class="jxr_string">"/*"</span>).build(); }
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		@Bean(name=<span class="jxr_string">"q"</span>) ServletFilterRegistration q() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"Q"</span>, <span class="jxr_string">"/*"</span>).build(); }
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	@Test <strong class="jxr_keyword">void</strong> c02_equalOrder_byBeanName() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">var</strong> ms = create(C_Tie_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			ms.start();
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			assertEquals(List.of(<span class="jxr_string">"M:REQUEST"</span>, <span class="jxr_string">"Q:REQUEST"</span>, <span class="jxr_string">"Z:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 			ms.stop();
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		}
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	}
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Configuration
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C_OrderAnnotation_Config {
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		@Bean(name=<span class="jxr_string">"x"</span>) @org.apache.juneau.commons.inject.Order(-1000) ServletFilterRegistration x() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"X"</span>, <span class="jxr_string">"/*"</span>).order(5).build(); }
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		@Bean(name=<span class="jxr_string">"y"</span>) @org.apache.juneau.commons.inject.Order(1000) ServletFilterRegistration y() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"Y"</span>, <span class="jxr_string">"/*"</span>).order(1).build(); }
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	@Test <strong class="jxr_keyword">void</strong> c03_orderAnnotationIgnored() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> ms = create(C_OrderAnnotation_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 			ms.start();
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			assertEquals(List.of(<span class="jxr_string">"Y:REQUEST"</span>, <span class="jxr_string">"X:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			ms.stop();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		}
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<em class="jxr_comment">// d - AuthFilterChain auto-mount</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	@Configuration
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_Auth_Config {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Test <strong class="jxr_keyword">void</strong> d01_authAutoMount_present() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_Auth_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			ms.start();
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			assertEquals(<span class="jxr_string">"hello async=true"</span>, get(ms, <span class="jxr_string">"/hello/a"</span>));
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			get(ms, <span class="jxr_string">"/fwd/x"</span>);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:REQUEST"</span>, <span class="jxr_string">"AUTH:REQUEST"</span>), LOG, <span class="jxr_string">"Auth stays on REQUEST: the forward is not filtered"</span>);
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			ms.stop();
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	@Configuration
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_AuthAndFilters_Config {
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		@Bean(name=<span class="jxr_string">"boundary"</span>) ServletFilterRegistration boundary() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"BOUNDARY"</span>, <span class="jxr_string">"/hello/*"</span>).order(ServletFilterRegistration.HIGHEST_PRECEDENCE).build(); }
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		@Bean(name=<span class="jxr_string">"after"</span>) ServletFilterRegistration after() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"AFTER"</span>, <span class="jxr_string">"/hello/*"</span>).build(); }
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	}
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	@Test <strong class="jxr_keyword">void</strong> d02_boundaryBeforeAuth_defaultAfterAuth() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_AuthAndFilters_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			ms.start();
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			assertEquals(List.of(<span class="jxr_string">"BOUNDARY:REQUEST"</span>, <span class="jxr_string">"AUTH:REQUEST"</span>, <span class="jxr_string">"AFTER:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			ms.stop();
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	@Configuration
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_UnnamedTie_Config {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		@Bean ServletFilterRegistration unnamed() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"U"</span>, <span class="jxr_string">"/*"</span>).order(ServletFilterRegistration.AUTH_ORDER).build(); }
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	@Test <strong class="jxr_keyword">void</strong> d03_unnamedRegistrationAtAuthOrder_authFirst() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_UnnamedTie_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			ms.start();
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:REQUEST"</span>, <span class="jxr_string">"U:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			ms.stop();
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		}
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	@Configuration
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_Replace_Config {
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		@Bean(name=<span class="jxr_string">"authReg"</span>) ServletFilterRegistration authReg(AuthFilterChain chain) {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			<strong class="jxr_keyword">return</strong> ServletFilterRegistration.create(chain).urlPatterns(<span class="jxr_string">"/hello/*"</span>).dispatcherTypes(DispatcherType.FORWARD).build();
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		}
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 	}
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	@Test <strong class="jxr_keyword">void</strong> d04_replaceHook_registrationOfAuthInstanceReplacesAutoMount() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_Replace_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			ms.start();
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			assertEquals(List.of(), LOG, <span class="jxr_string">"The automatic REQUEST mount at /* is replaced"</span>);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			get(ms, <span class="jxr_string">"/fwd/x"</span>);
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:FORWARD"</span>), LOG);
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 			ms.stop();
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		}
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 	}
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<em class="jxr_comment">// e - collisions and misuse</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 	@Configuration
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E_DuplicateInstance_Config {
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Filter SHARED = <strong class="jxr_keyword">new</strong> Recorder(<span class="jxr_string">"S"</span>);
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		@Bean(name=<span class="jxr_string">"one"</span>) ServletFilterRegistration one() { <strong class="jxr_keyword">return</strong> ServletFilterRegistration.create(SHARED).urlPatterns(<span class="jxr_string">"/a/*"</span>).build(); }
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		@Bean(name=<span class="jxr_string">"two"</span>) ServletFilterRegistration two() { <strong class="jxr_keyword">return</strong> ServletFilterRegistration.create(SHARED).urlPatterns(<span class="jxr_string">"/b/*"</span>).build(); }
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	}
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	@Test <strong class="jxr_keyword">void</strong> e01_sameInstanceTwice_failsAtStart() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 		<strong class="jxr_keyword">var</strong> ms = create(E_DuplicateInstance_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">var</strong> root = rootCause(assertThrows(Exception.<strong class="jxr_keyword">class</strong>, ms::start));
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			assertInstanceOf(IllegalStateException.<strong class="jxr_keyword">class</strong>, root);
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			assertTrue(root.getMessage().contains(<span class="jxr_string">"'one'"</span>) &amp;&amp; root.getMessage().contains(<span class="jxr_string">"'two'"</span>), root.getMessage());
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			ms.stop();
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		}
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	@Configuration
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E_DuplicateName_Config {
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 		@Bean(name=<span class="jxr_string">"one"</span>) ServletFilterRegistration one() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"1"</span>, <span class="jxr_string">"/a/*"</span>).name(<span class="jxr_string">"same"</span>).build(); }
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		@Bean(name=<span class="jxr_string">"two"</span>) ServletFilterRegistration two() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"2"</span>, <span class="jxr_string">"/b/*"</span>).name(<span class="jxr_string">"same"</span>).build(); }
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 	}
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 	@Test <strong class="jxr_keyword">void</strong> e02_duplicateName_failsAtStart() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 		<strong class="jxr_keyword">var</strong> ms = create(E_DuplicateName_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">var</strong> root = rootCause(assertThrows(Exception.<strong class="jxr_keyword">class</strong>, ms::start));
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			assertInstanceOf(IllegalStateException.<strong class="jxr_keyword">class</strong>, root);
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			assertTrue(root.getMessage().contains(<span class="jxr_string">"same"</span>), root.getMessage());
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			ms.stop();
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 		}
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	}
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 	@Configuration
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E_TwoInstancesOneClass_Config {
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 		@Bean(name=<span class="jxr_string">"one"</span>) ServletFilterRegistration one() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"1"</span>, <span class="jxr_string">"/hello/*"</span>).build(); }
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		@Bean(name=<span class="jxr_string">"two"</span>) ServletFilterRegistration two() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"2"</span>, <span class="jxr_string">"/hello/*"</span>).build(); }
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 	}
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 	@Test <strong class="jxr_keyword">void</strong> e03_twoInstancesOfOneClass_bothRun() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">var</strong> ms = create(E_TwoInstancesOneClass_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 			ms.start();
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			assertEquals(List.of(<span class="jxr_string">"1:REQUEST"</span>, <span class="jxr_string">"2:REQUEST"</span>), LOG);
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 			ms.stop();
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 		}
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	}
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 	@Test <strong class="jxr_keyword">void</strong> e04_addFilterAfterStart_rejected() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 		<strong class="jxr_keyword">var</strong> ms = create();
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 			ms.start();
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			<strong class="jxr_keyword">var</strong> c = ms.getBeanStore().getBean(JettyServerComponent.<strong class="jxr_keyword">class</strong>).orElseThrow();
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 			<strong class="jxr_keyword">var</strong> late = <strong class="jxr_keyword">new</strong> Recorder(<span class="jxr_string">"L"</span>);
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">var</strong> req = EnumSet.of(DispatcherType.REQUEST);
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 			<strong class="jxr_keyword">var</strong> registration = ServletFilterRegistration.create(late).urlPatterns(<span class="jxr_string">"/hello/*"</span>).build();
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 			assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(late, req, <span class="jxr_string">"/hello/*"</span>));
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(registration));
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			ms.stop();
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		}
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 	}
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 	@Test <strong class="jxr_keyword">void</strong> e05_addFilterOverload_validatesInput() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">var</strong> ms = create();
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 			ms.start();
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			<strong class="jxr_keyword">var</strong> c = ms.getBeanStore().getBean(JettyServerComponent.<strong class="jxr_keyword">class</strong>).orElseThrow();
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> Recorder(<span class="jxr_string">"L"</span>);
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<strong class="jxr_keyword">var</strong> req = EnumSet.of(DispatcherType.REQUEST);
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(<strong class="jxr_keyword">null</strong>, req, <span class="jxr_string">"/a/*"</span>));
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(f, req));
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(f, req, <span class="jxr_string">"/console*"</span>));
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			<strong class="jxr_keyword">var</strong> none = EnumSet.noneOf(DispatcherType.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(f, none, <span class="jxr_string">"/a/*"</span>));
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter((ServletFilterRegistration)<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			ms.stop();
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		}
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 	}
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	<em class="jxr_comment">// f - async support</em>
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	@Configuration
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F_NotAsync_Config {
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		@Bean(name=<span class="jxr_string">"f"</span>) ServletFilterRegistration f() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"F"</span>, <span class="jxr_string">"/hello/*"</span>).asyncSupported(false).build(); }
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 	}
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 	@Test <strong class="jxr_keyword">void</strong> f01_asyncSupportedFalse_reachesTheRequest() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">var</strong> ms = create(F_NotAsync_Config.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			ms.start();
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			assertEquals(<span class="jxr_string">"hello async=false"</span>, get(ms, <span class="jxr_string">"/hello/a"</span>));
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			ms.stop();
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		}
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	}
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Throwable rootCause(Throwable t) {
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">var</strong> x = t;
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">while</strong> (x.getCause() != <strong class="jxr_keyword">null</strong> &amp;&amp; x.getCause() != x)
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			x = x.getCause();
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">return</strong> x;
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 	}
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<em class="jxr_comment">// Assert the response first so a failure reports whether the request reached the servlet at all.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			assertEquals(<span class="jxr_string">"hello async=true"</span>, get(ms, <span class="jxr_string">"/hello/a"</span>));
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			assertEquals(List.of(<span class="jxr_string">"C:REQUEST"</span>, <span class="jxr_string">"B:REQUEST"</span>, <span class="jxr_string">"A:REQUEST"</span>, <span class="jxr_string">"D:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			ms.stop();
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@Configuration
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C_Tie_Config {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		@Bean(name=<span class="jxr_string">"z"</span>) ServletFilterRegistration z() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"Z"</span>, <span class="jxr_string">"/*"</span>).build(); }
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		@Bean(name=<span class="jxr_string">"m"</span>) ServletFilterRegistration m() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"M"</span>, <span class="jxr_string">"/*"</span>).build(); }
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		@Bean(name=<span class="jxr_string">"q"</span>) ServletFilterRegistration q() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"Q"</span>, <span class="jxr_string">"/*"</span>).build(); }
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	@Test <strong class="jxr_keyword">void</strong> c02_equalOrder_byBeanName() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">var</strong> ms = create(C_Tie_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			ms.start();
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 			assertEquals(List.of(<span class="jxr_string">"M:REQUEST"</span>, <span class="jxr_string">"Q:REQUEST"</span>, <span class="jxr_string">"Z:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			ms.stop();
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		}
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Configuration
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C_OrderAnnotation_Config {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		@Bean(name=<span class="jxr_string">"x"</span>) @org.apache.juneau.commons.inject.Order(-1000) ServletFilterRegistration x() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"X"</span>, <span class="jxr_string">"/*"</span>).order(5).build(); }
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		@Bean(name=<span class="jxr_string">"y"</span>) @org.apache.juneau.commons.inject.Order(1000) ServletFilterRegistration y() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"Y"</span>, <span class="jxr_string">"/*"</span>).order(1).build(); }
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Test <strong class="jxr_keyword">void</strong> c03_orderAnnotationIgnored() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		<strong class="jxr_keyword">var</strong> ms = create(C_OrderAnnotation_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			ms.start();
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertEquals(List.of(<span class="jxr_string">"Y:REQUEST"</span>, <span class="jxr_string">"X:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			ms.stop();
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 	}
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<em class="jxr_comment">// d - AuthFilterChain auto-mount</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	@Configuration
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_Auth_Config {
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	@Test <strong class="jxr_keyword">void</strong> d01_authAutoMount_present() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_Auth_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 			ms.start();
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			assertEquals(<span class="jxr_string">"hello async=true"</span>, get(ms, <span class="jxr_string">"/hello/a"</span>));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			get(ms, <span class="jxr_string">"/fwd/x"</span>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:REQUEST"</span>, <span class="jxr_string">"AUTH:REQUEST"</span>), LOG, <span class="jxr_string">"Auth stays on REQUEST: the forward is not filtered"</span>);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			ms.stop();
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	}
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	@Configuration
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_AuthAndFilters_Config {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		@Bean(name=<span class="jxr_string">"boundary"</span>) ServletFilterRegistration boundary() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"BOUNDARY"</span>, <span class="jxr_string">"/hello/*"</span>).order(ServletFilterRegistration.HIGHEST_PRECEDENCE).build(); }
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		@Bean(name=<span class="jxr_string">"after"</span>) ServletFilterRegistration after() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"AFTER"</span>, <span class="jxr_string">"/hello/*"</span>).build(); }
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Test <strong class="jxr_keyword">void</strong> d02_boundaryBeforeAuth_defaultAfterAuth() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_AuthAndFilters_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			ms.start();
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			assertEquals(List.of(<span class="jxr_string">"BOUNDARY:REQUEST"</span>, <span class="jxr_string">"AUTH:REQUEST"</span>, <span class="jxr_string">"AFTER:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			ms.stop();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		}
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	@Configuration
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_UnnamedTie_Config {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		@Bean ServletFilterRegistration unnamed() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"U"</span>, <span class="jxr_string">"/*"</span>).order(ServletFilterRegistration.AUTH_ORDER).build(); }
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	@Test <strong class="jxr_keyword">void</strong> d03_unnamedRegistrationAtAuthOrder_authFirst() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_UnnamedTie_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 			ms.start();
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:REQUEST"</span>, <span class="jxr_string">"U:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			ms.stop();
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	}
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 	@Configuration
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D_Replace_Config {
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		@Bean AuthFilterChain auth(BeanStore bs) { <strong class="jxr_keyword">return</strong> AuthFilterChain.create(bs).append(<strong class="jxr_keyword">new</strong> RecordingAuth()).build(); }
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		@Bean(name=<span class="jxr_string">"authReg"</span>) ServletFilterRegistration authReg(AuthFilterChain chain) {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">return</strong> ServletFilterRegistration.create(chain).urlPatterns(<span class="jxr_string">"/hello/*"</span>).dispatcherTypes(DispatcherType.FORWARD).build();
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		}
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 	@Test <strong class="jxr_keyword">void</strong> d04_replaceHook_registrationOfAuthInstanceReplacesAutoMount() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">var</strong> ms = create(D_Replace_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			ms.start();
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			assertEquals(List.of(), LOG, <span class="jxr_string">"The automatic REQUEST mount at /* is replaced"</span>);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 			get(ms, <span class="jxr_string">"/fwd/x"</span>);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			assertEquals(List.of(<span class="jxr_string">"AUTH:FORWARD"</span>), LOG);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			ms.stop();
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		}
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 	}
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<em class="jxr_comment">// e - collisions and misuse</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 	@Configuration
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E_DuplicateInstance_Config {
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Filter SHARED = <strong class="jxr_keyword">new</strong> Recorder(<span class="jxr_string">"S"</span>);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		@Bean(name=<span class="jxr_string">"one"</span>) ServletFilterRegistration one() { <strong class="jxr_keyword">return</strong> ServletFilterRegistration.create(SHARED).urlPatterns(<span class="jxr_string">"/a/*"</span>).build(); }
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 		@Bean(name=<span class="jxr_string">"two"</span>) ServletFilterRegistration two() { <strong class="jxr_keyword">return</strong> ServletFilterRegistration.create(SHARED).urlPatterns(<span class="jxr_string">"/b/*"</span>).build(); }
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 	}
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 	@Test <strong class="jxr_keyword">void</strong> e01_sameInstanceTwice_failsAtStart() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		<strong class="jxr_keyword">var</strong> ms = create(E_DuplicateInstance_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 			<strong class="jxr_keyword">var</strong> root = rootCause(assertThrows(Exception.<strong class="jxr_keyword">class</strong>, ms::start));
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			assertInstanceOf(IllegalStateException.<strong class="jxr_keyword">class</strong>, root);
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			assertTrue(root.getMessage().contains(<span class="jxr_string">"'one'"</span>) &amp;&amp; root.getMessage().contains(<span class="jxr_string">"'two'"</span>), root.getMessage());
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			ms.stop();
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 	}
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 	@Configuration
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E_DuplicateName_Config {
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 		@Bean(name=<span class="jxr_string">"one"</span>) ServletFilterRegistration one() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"1"</span>, <span class="jxr_string">"/a/*"</span>).name(<span class="jxr_string">"same"</span>).build(); }
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		@Bean(name=<span class="jxr_string">"two"</span>) ServletFilterRegistration two() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"2"</span>, <span class="jxr_string">"/b/*"</span>).name(<span class="jxr_string">"same"</span>).build(); }
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 	}
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	@Test <strong class="jxr_keyword">void</strong> e02_duplicateName_failsAtStart() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 		<strong class="jxr_keyword">var</strong> ms = create(E_DuplicateName_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">var</strong> root = rootCause(assertThrows(Exception.<strong class="jxr_keyword">class</strong>, ms::start));
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			assertInstanceOf(IllegalStateException.<strong class="jxr_keyword">class</strong>, root);
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			assertTrue(root.getMessage().contains(<span class="jxr_string">"same"</span>), root.getMessage());
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 			ms.stop();
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 		}
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 	}
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 	@Configuration
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E_TwoInstancesOneClass_Config {
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		@Bean(name=<span class="jxr_string">"one"</span>) ServletFilterRegistration one() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"1"</span>, <span class="jxr_string">"/hello/*"</span>).build(); }
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		@Bean(name=<span class="jxr_string">"two"</span>) ServletFilterRegistration two() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"2"</span>, <span class="jxr_string">"/hello/*"</span>).build(); }
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	}
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	@Test <strong class="jxr_keyword">void</strong> e03_twoInstancesOfOneClass_bothRun() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		<strong class="jxr_keyword">var</strong> ms = create(E_TwoInstancesOneClass_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 			ms.start();
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			get(ms, <span class="jxr_string">"/hello/a"</span>);
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 			assertEquals(List.of(<span class="jxr_string">"1:REQUEST"</span>, <span class="jxr_string">"2:REQUEST"</span>), LOG);
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 			ms.stop();
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 		}
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 	}
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	@Test <strong class="jxr_keyword">void</strong> e04_addFilterAfterStart_rejected() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		<strong class="jxr_keyword">var</strong> ms = create();
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 			ms.start();
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 			<strong class="jxr_keyword">var</strong> c = ms.getBeanStore().getBean(JettyServerComponent.<strong class="jxr_keyword">class</strong>).orElseThrow();
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 			<strong class="jxr_keyword">var</strong> late = <strong class="jxr_keyword">new</strong> Recorder(<span class="jxr_string">"L"</span>);
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 			<strong class="jxr_keyword">var</strong> req = EnumSet.of(DispatcherType.REQUEST);
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 			<strong class="jxr_keyword">var</strong> registration = ServletFilterRegistration.create(late).urlPatterns(<span class="jxr_string">"/hello/*"</span>).build();
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(late, req, <span class="jxr_string">"/hello/*"</span>));
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 			assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(registration));
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 			ms.stop();
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		}
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	}
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	@Test <strong class="jxr_keyword">void</strong> e05_addFilterOverload_validatesInput() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		<strong class="jxr_keyword">var</strong> ms = create();
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			ms.start();
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			<strong class="jxr_keyword">var</strong> c = ms.getBeanStore().getBean(JettyServerComponent.<strong class="jxr_keyword">class</strong>).orElseThrow();
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<strong class="jxr_keyword">var</strong> f = <strong class="jxr_keyword">new</strong> Recorder(<span class="jxr_string">"L"</span>);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">var</strong> req = EnumSet.of(DispatcherType.REQUEST);
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(<strong class="jxr_keyword">null</strong>, req, <span class="jxr_string">"/a/*"</span>));
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(f, req));
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(f, req, <span class="jxr_string">"/console*"</span>));
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">var</strong> none = EnumSet.noneOf(DispatcherType.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter(f, none, <span class="jxr_string">"/a/*"</span>));
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 			assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; c.addFilter((ServletFilterRegistration)<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 			ms.stop();
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		}
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 	}
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 	<em class="jxr_comment">// f - async support</em>
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	@Configuration
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F_NotAsync_Config {
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		@Bean(name=<span class="jxr_string">"f"</span>) ServletFilterRegistration f() { <strong class="jxr_keyword">return</strong> reg(<span class="jxr_string">"F"</span>, <span class="jxr_string">"/hello/*"</span>).asyncSupported(false).build(); }
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 	}
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 	@Test <strong class="jxr_keyword">void</strong> f01_asyncSupportedFalse_reachesTheRequest() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 		<strong class="jxr_keyword">var</strong> ms = create(F_NotAsync_Config.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			ms.start();
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			assertEquals(<span class="jxr_string">"hello async=false"</span>, get(ms, <span class="jxr_string">"/hello/a"</span>));
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 			ms.stop();
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		}
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 	}
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Throwable rootCause(Throwable t) {
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">var</strong> x = t;
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		<strong class="jxr_keyword">while</strong> (x.getCause() != <strong class="jxr_keyword">null</strong> &amp;&amp; x.getCause() != x)
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			x = x.getCause();
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		<strong class="jxr_keyword">return</strong> x;
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 	}
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
