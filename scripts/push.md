@@ -33,14 +33,15 @@ Run from the docs checkout. The commit message is prompted for when omitted.
 ## What it does
 
 1. **Prechecks** (`precheck_list`): git `user.email` is `jamesbognar@apache.org`; the branch is `docs`; no unstaged or untracked-and-not-ignored file (`unreviewed_problem`); the branch has an upstream and is not behind it.
-2. **Build and checks:** runs `build-docs.py --staging` (or `--skip-maven` with `--no-stage`). `build-docs.py` is the single list of checks: verify-docs, check-project-pages, check-entry-pages, check-doc-inventory, check-topic-links, check-ai-artifacts, check-code-fences, check-java-fences and check-guide-snippets, then the Docusaurus build. The sibling-checkout checks run whenever the Juneau checkout exists. Stale AI artifacts fail the run; regenerate them with `python3 scripts/generate-ai-artifacts.py`. This script never regenerates. A build that rewrites tracked files (artifact maps, the javadoc index) only produces a warning, since only the index is committed.
-3. **Commit:** commits the index exactly as found (`git commit`). It stages nothing. With nothing staged the row is skipped.
-4. **Push:** `git push` to the upstream, when there is a new commit or unpushed commits.
-5. **Stage:** unless `--no-stage`, `release-docs-stage.py`'s `publish_build` stages the build from step 2 (no second build): fetch `../asf-staging`, copy `build/`, commit, force-push `asf-staging`, open the URL. The staged commit is printed at the end.
+2. **AI artifacts** (`regenerate_ai_artifacts`), once the Prechecks (including the unreviewed-changes refusal) pass: runs `check-ai-artifacts.py --juneau-root <checkout>`; when the generated `static/llms.txt` / `static/ai/` are stale, runs `generate-ai-artifacts.py`, prints the files it rewrote and stages exactly those paths. This is the one thing the script stages, and the test is provenance: only this run's own generator output, taken as the paths that were unstaged or untracked after the refusal guard found none. It refuses (nothing staged, exit 1) when the generator wrote anything outside `static/llms.txt` and `static/ai/`, when the artifacts are still stale afterwards, or when you had already staged one of those paths. When the run fails before the commit (or is interrupted), it unstages exactly the paths it staged (`git restore --staged`); the files stay on disk. With no Juneau checkout the row is skipped.
+3. **Build and checks:** runs `build-docs.py --staging` (or `--skip-maven` with `--no-stage`). `build-docs.py` is the single list of checks: verify-docs, check-project-pages, check-entry-pages, check-doc-inventory, check-topic-links, check-ai-artifacts, check-code-fences, check-java-fences and check-guide-snippets, then the Docusaurus build. The sibling-checkout checks run whenever the Juneau checkout exists. The check-ai-artifacts step passes here because step 2 regenerated the artifacts. A build that rewrites tracked files (artifact maps, the javadoc index) only produces a warning, since only the index is committed.
+4. **Commit:** commits the index exactly as found (`git commit`), which includes the step 2 files. It stages nothing else. With nothing staged the row is skipped.
+5. **Push:** `git push` to the upstream, when there is a new commit or unpushed commits.
+6. **Stage:** unless `--no-stage`, `release-docs-stage.py`'s `publish_build` stages the build from step 3 (no second build): fetch `../asf-staging`, copy `build/`, commit, force-push `asf-staging`, open the URL. The staged commit is printed at the end.
 
 ## Output and exit codes
 
-Progress is the `juneau-terminal` live view (Prechecks, the build rows, Commit, Push, Stage push, URL) or plain text when that is unavailable.
+Progress is the `juneau-terminal` live view (Prechecks, AI artifacts, the build rows, Commit, Push, Stage push, URL) or plain text when that is unavailable.
 
 | Code | Meaning |
 |---|---|
@@ -54,7 +55,7 @@ Progress is the `juneau-terminal` live view (Prechecks, the build rows, Commit, 
 - Everything outward-facing happens here: it pushes `docs` and force-pushes `asf-staging`. Run it only when you mean to.
 - It refuses on any unstaged or untracked file. Stage what you have reviewed, or `git stash push -- <paths>` the rest.
 - A staged push runs the full Maven build of the Juneau checkout (slow); `--no-stage` avoids it.
-- The checks run before the commit, so a failed check leaves your staged work untouched.
+- The checks run before the commit, so a failed check leaves your staged work untouched (the regenerated AI artifacts are unstaged again).
 - `release-docs.py` (production) is never called.
 
 ## See also

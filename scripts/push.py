@@ -33,9 +33,10 @@ Push the documentation
 
 This script:
 1. Runs the Prechecks: git identity, branch docs, no unreviewed (unstaged or untracked) files, not behind upstream
-2. Runs build-docs.py (the one list of checks, plus the Docusaurus build); --staging unless --no-stage
-3. Commits whatever is already staged (it stages nothing) and pushes docs to its upstream
-4. Stages the same build to asf-staging (release-docs-stage.py's fetch/copy/commit/push), unless --no-stage
+2. Regenerates stale AI artifacts (static/llms.txt, static/ai/) and stages exactly the files that run rewrote
+3. Runs build-docs.py (the one list of checks, plus the Docusaurus build); --staging unless --no-stage
+4. Commits whatever is already staged (it stages nothing else) and pushes docs to its upstream
+5. Stages the same build to asf-staging (release-docs-stage.py's fetch/copy/commit/push), unless --no-stage
 
 Usage:
     python3 scripts/push.py "Commit message" [--no-stage] [--dry-run]
@@ -52,6 +53,9 @@ Never promotes to production; that stays release-docs.py.
 """
 
 REQUIRED_BRANCH = 'docs'
+AI_CHECK = 'check-ai-artifacts.py'
+AI_GENERATE = 'generate-ai-artifacts.py'
+AI_ROW = 'ai-artifacts'
 
 
 def load_sibling(filename):
@@ -140,7 +144,7 @@ def precheck_list(stage, docs_dir):
 
 def push_plan(args):
     """The run's top-level rows, in order, as (id, label)."""
-    plan = [('prechecks', 'Prechecks'), *terminal_view.BUILD_ROWS, ('commit', 'Commit'), ('push', 'Push')]
+    plan = [('prechecks', 'Prechecks'), (AI_ROW, 'AI artifacts'), *terminal_view.BUILD_ROWS, ('commit', 'Commit'), ('push', 'Push')]
     if not args.no_stage:
         plan += [('stage', 'Stage push'), ('url', 'URL')]
     return plan
@@ -176,11 +180,102 @@ def commit_and_push(view, docs_dir, message):
     return 0
 
 
+def ai_artifact_path(path):
+    """True for a path the AI-artifacts generator may write: static/llms.txt and anything under static/ai/."""
+    return path == 'static/llms.txt' or path.startswith('static/ai/')
+
+
+def regenerate_ai_artifacts(view, docs_dir, juneau_root):
+    """
+    Regenerate stale AI artifacts and stage exactly what that run wrote; returns (exit code, staged paths).
+
+    This is the one thing this script stages, and the test is provenance: only files the generator itself wrote in this
+    run, after the unreviewed-changes refusal has passed (so every unstaged or untracked path now is that output).  It
+    refuses, staging nothing, when the generator wrote anything outside static/llms.txt and static/ai/, or when the
+    operator had already staged one of those paths (unstaging on a failed run would drop their review).
+    """
+    check = docs_dir / 'scripts' / AI_CHECK
+    generate = docs_dir / 'scripts' / AI_GENERATE
+    if juneau_root is None or not check.exists() or not generate.exists():
+        view.skip(AI_ROW, 'AI artifacts', "AI artifacts", "no Juneau checkout")
+        return 0, []
+    argv = ['--juneau-root', str(juneau_root)]
+
+    def run(script):
+        return subprocess.run([sys.executable, '-B', str(script), *argv], cwd=docs_dir, capture_output=True,
+                              text=True, check=False)
+
+    if run(check).returncode == 0:
+        view.skip(AI_ROW, 'AI artifacts', "AI artifacts", "up to date")
+        return 0, []
+    try:
+        already = [p for p in staged_paths(docs_dir) if ai_artifact_path(p)]
+        before = set(unreviewed_paths(docs_dir))
+    except RuntimeError as e:
+        return fail(view, f"Could not read the git state: {e}"), []
+    if already:
+        return fail(view, "The AI artifacts are stale, but you have staged some of them already: " + ", ".join(already),
+                    f"Regenerate them yourself (python3 scripts/{AI_GENERATE}) or unstage them, then run again."), []
+    with view.stage(AI_ROW, 'AI artifacts', "Regenerating AI artifacts"):
+        result = run(generate)
+    if result.returncode != 0:
+        return fail(view, f"scripts/{AI_GENERATE} failed (exit {result.returncode}). Nothing was committed or pushed.",
+                    *(result.stdout + result.stderr).strip().splitlines()[-10:]), []
+    try:
+        written = sorted(set(unreviewed_paths(docs_dir)) - before)
+    except RuntimeError as e:
+        return fail(view, f"Could not read the git state: {e}"), []
+    stray = [p for p in written if not ai_artifact_path(p)]
+    if stray:
+        return fail(view, f"scripts/{AI_GENERATE} wrote outside static/llms.txt and static/ai/; nothing was staged:",
+                    *stray), []
+    if run(check).returncode != 0:
+        return fail(view, "The AI artifacts are still stale after regenerating them. Nothing was committed or pushed."), []
+    if written:
+        code, _, err = git_out(docs_dir, 'add', '--', *written)
+        if code != 0:
+            unstage_regenerated(docs_dir, written)
+            return fail(view, f"git add failed: {err.strip()}"), []
+        view.say(f"Regenerated {len(written)} AI artifact file{'s' if len(written) != 1 else ''} and staged "
+                 f"{'it' if len(written) == 1 else 'them'} for this commit:")
+        for path in written:
+            view.say(f"   {path}")
+    return 0, written
+
+
+def unstage_regenerated(docs_dir, paths):
+    """Unstage exactly the paths regenerate_ai_artifacts staged (a no-op once they are committed); the files stay on disk."""
+    if paths:
+        git_out(docs_dir, 'restore', '--staged', '--', *paths)
+
+
 def push_steps(args, view, stage, docs_dir, juneau_root):
-    """Prechecks, the build gate, commit, push and (unless --no-stage) the staging deploy; returns the exit code."""
+    """
+    Prechecks, the AI-artifacts regeneration, the build gate, commit, push and (unless --no-stage) the staging deploy;
+    returns the exit code.  A run that ends in failure (or an exception) unstages whatever it regenerated and staged.
+    """
+    regenerated = []
+    try:
+        code = _run_steps(args, view, stage, docs_dir, juneau_root, regenerated)
+    except BaseException:
+        unstage_regenerated(docs_dir, regenerated)
+        raise
+    if code:
+        unstage_regenerated(docs_dir, regenerated)
+    return code
+
+
+def _run_steps(args, view, stage, docs_dir, juneau_root, regenerated):
+    """The steps of push_steps; appends to `regenerated` the paths it staged."""
     view.banner("Prechecks")
     if not view.prechecks(precheck_list(stage, docs_dir)):
         return 1
+
+    view.banner("AI artifacts")
+    code, paths = regenerate_ai_artifacts(view, docs_dir, juneau_root)
+    regenerated.extend(paths)
+    if code:
+        return code
 
     view.banner("Building and checking the documentation")
     if args.no_stage:
@@ -230,14 +325,17 @@ def dry_run(args, view, stage, docs_dir):
     print("Steps that would be executed:")
     print(f"  1. Prechecks: identity {stage.REQUIRED_GIT_EMAIL}, branch {REQUIRED_BRANCH}, no unreviewed "
           "(unstaged/untracked) changes, not behind upstream")
-    print(f"  2. python3 scripts/build-docs.py {'--skip-maven' if args.no_stage else '--staging'} "
+    print(f"  2. python3 scripts/{AI_CHECK}; when stale, python3 scripts/{AI_GENERATE}, then stage only the "
+          "files that run rewrote (static/llms.txt, static/ai/; refuses if it wrote anything else; unstaged again if "
+          "the run fails before the commit)")
+    print(f"  3. python3 scripts/build-docs.py {'--skip-maven' if args.no_stage else '--staging'} "
           "(every docs check, then the Docusaurus build)")
-    print(f"  3. Commit whatever is already staged: git commit -m \"{args.message}\" (stages nothing)")
-    print(f"  4. Push {REQUIRED_BRANCH} to its upstream")
+    print(f"  4. Commit whatever is already staged: git commit -m \"{args.message}\" (stages nothing else)")
+    print(f"  5. Push {REQUIRED_BRANCH} to its upstream")
     if args.no_stage:
-        print("  5. Staging skipped (--no-stage)")
+        print("  6. Staging skipped (--no-stage)")
     else:
-        print("  5. Stage the same build: fetch ../asf-staging, copy build/, commit, force-push asf-staging")
+        print("  6. Stage the same build: fetch ../asf-staging, copy build/, commit, force-push asf-staging")
     ok = view.prechecks(precheck_list(stage, docs_dir))
     print("\nDry run complete. Use without --dry-run to execute.")
     return 0 if ok else 1

@@ -60,6 +60,7 @@ class RecordingView(terminal_view.View):
         super().__init__()
         self.cmds = []
         self.skips = []
+        self.said = []
 
     def cmd(self, cmd, **kw):
         self.cmds.append((kw['id'], list(cmd)))
@@ -69,7 +70,7 @@ class RecordingView(terminal_view.View):
         self.skips.append((id, reason))
 
     def say(self, text='', level='info'):
-        pass
+        self.said.append(text)
 
 
 def test_identity_other_than_apache_fails(docs):
@@ -177,3 +178,163 @@ def test_dry_run_runs_the_prechecks_and_changes_nothing(docs, capsys):
 def test_push_never_calls_the_production_release():
     source = (Path(push.__file__)).read_text(encoding='utf-8')
     assert 'asf-site' not in source and "load_sibling('release-docs.py')" not in source
+
+
+# ---------------------------------------------------------------------------------------
+# AI artifacts: regenerated after the Prechecks pass, and only that run's own output is staged.
+# ---------------------------------------------------------------------------------------
+FAKE_CHECK = ("import pathlib, sys\n"
+              "root = pathlib.Path(__file__).resolve().parent.parent\n"
+              "sys.exit(0 if (root / 'static' / 'llms.txt').read_text() == 'new' else 1)\n")
+
+
+def fake_generator(extra=''):
+    return ("import pathlib\n"
+            "root = pathlib.Path(__file__).resolve().parent.parent\n"
+            "(root / 'static' / 'ai').mkdir(parents=True, exist_ok=True)\n"
+            "(root / 'static' / 'llms.txt').write_text('new')\n"
+            "(root / 'static' / 'ai' / 'manifest.json').write_text('{}')\n" + extra)
+
+
+@pytest.fixture
+def docs_ai(docs, tmp_path):
+    """docs with committed fake check/generate scripts and a stale static/llms.txt; returns (docs, juneau_root)."""
+    (docs / 'scripts').mkdir()
+    (docs / 'scripts' / 'check-ai-artifacts.py').write_text(FAKE_CHECK, encoding='utf-8')
+    (docs / 'scripts' / 'generate-ai-artifacts.py').write_text(fake_generator(), encoding='utf-8')
+    (docs / 'static').mkdir()
+    (docs / 'static' / 'llms.txt').write_text('old', encoding='utf-8')
+    git(docs, 'add', '-A')
+    git(docs, 'commit', '-q', '-m', 'ai fixtures')
+    juneau = tmp_path / 'juneau'
+    juneau.mkdir()
+    return docs, juneau
+
+
+def test_fresh_ai_artifacts_are_left_alone(docs_ai):
+    docs, juneau = docs_ai
+    (docs / 'static' / 'llms.txt').write_text('new', encoding='utf-8')
+    git(docs, 'commit', '-q', '-am', 'fresh')
+    view = RecordingView()
+
+    assert push.regenerate_ai_artifacts(view, docs, juneau) == (0, [])
+
+    assert git(docs, 'status', '--porcelain') == ''
+
+
+def test_stale_ai_artifacts_are_regenerated_and_exactly_those_paths_staged(docs_ai):
+    docs, juneau = docs_ai
+    (docs / 'a.md').write_text('reviewed\n', encoding='utf-8')
+    git(docs, 'add', 'a.md')                       # the operator's own staged work
+    view = RecordingView()
+
+    code, paths = push.regenerate_ai_artifacts(view, docs, juneau)
+
+    assert code == 0 and paths == ['static/ai/manifest.json', 'static/llms.txt']
+    assert git(docs, 'diff', '--cached', '--name-only').splitlines() == ['a.md', *paths]
+    assert git(docs, 'status', '--porcelain') .count('\n') == 2        # nothing left unstaged
+    said = '\n'.join(view.said)
+    assert 'static/llms.txt' in said and 'static/ai/manifest.json' in said
+
+
+def test_a_generator_that_touches_anything_else_is_refused_and_stages_nothing(docs_ai):
+    docs, juneau = docs_ai
+    (docs / 'scripts' / 'generate-ai-artifacts.py').write_text(
+        fake_generator("(root / 'a.md').write_text('clobbered')\n"), encoding='utf-8')
+    git(docs, 'commit', '-q', '-am', 'bad generator')
+    view = RecordingView()
+
+    code, paths = push.regenerate_ai_artifacts(view, docs, juneau)
+
+    assert code == 1 and paths == []
+    assert git(docs, 'diff', '--cached', '--name-only') == ''
+
+
+def test_a_path_the_operator_already_staged_is_refused(docs_ai):
+    docs, juneau = docs_ai
+    (docs / 'static' / 'llms.txt').write_text('hand edit', encoding='utf-8')
+    git(docs, 'add', 'static/llms.txt')
+
+    code, paths = push.regenerate_ai_artifacts(RecordingView(), docs, juneau)
+
+    assert code == 1 and paths == []
+    assert git(docs, 'diff', '--cached', '--name-only') == 'static/llms.txt'      # left staged, untouched
+
+
+def test_a_failing_generator_fails_the_step(docs_ai):
+    docs, juneau = docs_ai
+    (docs / 'scripts' / 'generate-ai-artifacts.py').write_text('import sys\nsys.exit(3)\n', encoding='utf-8')
+
+    assert push.regenerate_ai_artifacts(RecordingView(), docs, juneau) == (1, [])
+
+
+def test_without_a_juneau_checkout_the_step_is_skipped(docs_ai):
+    docs, _ = docs_ai
+    view = RecordingView()
+
+    assert push.regenerate_ai_artifacts(view, docs, None) == (0, [])
+
+    assert view.skips == [('ai-artifacts', 'no Juneau checkout')]
+
+
+def test_unstage_regenerated_unstages_exactly_those_paths(docs_ai):
+    docs, juneau = docs_ai
+    (docs / 'a.md').write_text('reviewed\n', encoding='utf-8')
+    git(docs, 'add', 'a.md')
+    _, paths = push.regenerate_ai_artifacts(RecordingView(), docs, juneau)
+
+    push.unstage_regenerated(docs, paths)
+
+    assert git(docs, 'diff', '--cached', '--name-only') == 'a.md'
+
+
+def test_a_run_that_fails_before_the_commit_unstages_what_it_regenerated(docs_ai, monkeypatch):
+    docs, juneau = docs_ai
+
+    def failing_steps(args, view, stage, docs_dir, juneau_root, regenerated):
+        regenerated.extend(push.regenerate_ai_artifacts(view, docs_dir, juneau_root)[1])
+        return 1
+    monkeypatch.setattr(push, '_run_steps', failing_steps)
+
+    assert push.push_steps(argparse.Namespace(), RecordingView(), stage, docs, juneau) == 1
+
+    assert git(docs, 'diff', '--cached', '--name-only') == ''
+
+
+def test_a_run_that_raises_before_the_commit_unstages_too(docs_ai, monkeypatch):
+    docs, juneau = docs_ai
+
+    def raising_steps(args, view, stage, docs_dir, juneau_root, regenerated):
+        regenerated.extend(push.regenerate_ai_artifacts(view, docs_dir, juneau_root)[1])
+        raise KeyboardInterrupt
+    monkeypatch.setattr(push, '_run_steps', raising_steps)
+
+    with pytest.raises(KeyboardInterrupt):
+        push.push_steps(argparse.Namespace(), RecordingView(), stage, docs, juneau)
+
+    assert git(docs, 'diff', '--cached', '--name-only') == ''
+
+
+def test_a_successful_run_leaves_the_regenerated_paths_staged_for_the_commit(docs_ai, monkeypatch):
+    docs, juneau = docs_ai
+
+    def ok_steps(args, view, stage, docs_dir, juneau_root, regenerated):
+        regenerated.extend(push.regenerate_ai_artifacts(view, docs_dir, juneau_root)[1])
+        return 0
+    monkeypatch.setattr(push, '_run_steps', ok_steps)
+
+    assert push.push_steps(argparse.Namespace(), RecordingView(), stage, docs, juneau) == 0
+
+    assert git(docs, 'diff', '--cached', '--name-only').splitlines() == ['static/ai/manifest.json', 'static/llms.txt']
+
+
+def test_the_plan_draws_the_ai_artifacts_row_right_after_the_prechecks():
+    ids = [id for id, _ in push.push_plan(argparse.Namespace(no_stage=True))]
+    assert ids[:2] == ['prechecks', 'ai-artifacts']
+
+
+def test_the_dry_run_names_the_one_staging_exception(docs, capsys):
+    push.dry_run(argparse.Namespace(no_stage=False, message='m'), terminal_view.View(), stage, docs)
+    out = capsys.readouterr().out
+    assert 'check-ai-artifacts.py' in out and 'generate-ai-artifacts.py' in out
+    assert 'stages nothing else' in out

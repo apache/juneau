@@ -50,3 +50,12 @@ def _no_outer_run_files(monkeypatch):
     the tests see the same run state as under a plain run (and don't write the outer run's logs or files)."""
     for name in LIVE_RUN_ENV:
         monkeypatch.delenv(name, raising=False)
+
+
+@pytest.fixture(autouse=True)
+def _private_mvn_lock(monkeypatch, tmp_path):
+    """Point the shared Maven lock and its priority queue at tmp_path, and forget any lock a parent push holds, so no
+    test or subprocess it starts (they inherit os.environ) can take or wait on the real /tmp/claude-501/juneau-mvn.lockdir."""
+    monkeypatch.setenv("JUNEAU_MVN_LOCKDIR", str(tmp_path / "mvn-lock.lockdir"))
+    monkeypatch.setenv("JUNEAU_MVN_PRIORITY_DIR", str(tmp_path / "mvn-lock.priority"))
+    monkeypatch.delenv("JUNEAU_MVN_LOCK_HELD", raising=False)
