@@ -28,6 +28,7 @@ import os
 import platform
 import re
 import shlex
+import shutil
 import signal
 import subprocess
 import sys
@@ -396,50 +397,40 @@ def workflow_yaml_check(repo_dir, outcome):
     return checks.Check("workflows", fn)
 
 
-AI_ARTIFACTS_CHECK = "ai artifacts"
-AI_ARTIFACTS_REGEN = "python3 scripts/generate-ai-artifacts.py"
-
-
-def ai_artifacts_check(juneau_root, docs_root):
+def packaging_tools_check(outcome):
     """
-    The Prechecks row's `ai artifacts` check: runs juneau-docs' scripts/check-ai-artifacts.py against this checkout
-    and warns (never blocks) when the generated static/llms.txt and static/ai/ are stale, naming the regenerate
-    command.  It never regenerates.  Without a juneau-docs sibling (or without that script in it) the check passes with a note.
+    The Prechecks row's `packaging tools` check: fails when a tool in _juneau.PACKAGING_TOOLS (the list test.py --full
+    makes juneau-terminal's packaging tests require) is not on PATH, naming each missing tool and how to install it.
+    Without it the push dies at Java Tests, minutes in, on the first packaging test that needs the tool.
     """
     checks = toolkit("checks")
-    script = docs_root / "scripts" / "check-ai-artifacts.py"
 
     def fn():
-        if not docs_root.exists():
-            return checks.Verdict("pass", "skipped: no juneau-docs sibling")
-        if not script.exists():
-            return checks.Verdict("pass", "skipped: juneau-docs has no scripts/check-ai-artifacts.py")
-        result = subprocess.run([sys.executable, "-B", str(script), "--juneau-root", str(juneau_root)],
-                                cwd=docs_root, capture_output=True, text=True, check=False)
-        if result.returncode == 0:
+        missing = {tool: hint for tool, hint in _juneau.PACKAGING_TOOLS.items() if shutil.which(tool) is None}
+        if not missing:
             return checks.PASS
-        lines = [line for line in (result.stdout + result.stderr).splitlines() if line.strip()]
-        return checks.Verdict("warn", "juneau-docs AI artifacts are stale", (
-            *lines, f"Regenerate them in juneau-docs ({AI_ARTIFACTS_REGEN}), stage the result, then run push juneau-docs."))
-    return checks.Check(AI_ARTIFACTS_CHECK, fn)
+        return checks.Verdict("fail", f"not on PATH: {', '.join(missing)}",
+                              (*(f"{tool}: {hint}" for tool, hint in missing.items()), outcome))
+    return checks.Check("packaging tools", fn)
 
 
-def prechecks(juneau_root, *, dry_run=False):
+def prechecks(juneau_root, *, dry_run=False, skip_tests=False):
     """
     The Prechecks row's checks, which refuse before any build or test gate a push that commit_and_push() would
     only refuse at the end: git's user.email isn't the ASF committer identity, the tree has unreviewed changes, the
     branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed), or a
-    .github/workflows file is not valid YAML (or PyYAML is missing).  The juneau-docs AI artifacts being stale
-    (ai_artifacts_check; skipped with a note without a juneau-docs sibling) is a warning, not a refusal: juneau-docs
-    has its own push.py.  The late checks stay (upstream can move during the long build); these only save the wait.
+    .github/workflows file is not valid YAML (or PyYAML is missing), or (unless skip_tests, since no test.py --full
+    runs) a packaging tool test.py --full needs is not on PATH.  The late checks stay (upstream can move during the long build); these only save the wait.
     """
     checks = toolkit("checks")
     outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
-    return [checks.identity(juneau_root, required=REQUIRED_GIT_EMAIL),
+    rows = [checks.identity(juneau_root, required=REQUIRED_GIT_EMAIL),
             checks.unreviewed(juneau_root, outcome=outcome),
             checks.upstream(juneau_root),
-            workflow_yaml_check(juneau_root, outcome),
-            ai_artifacts_check(juneau_root, juneau_root.parent / "juneau-docs")]
+            workflow_yaml_check(juneau_root, outcome)]
+    if not skip_tests:
+        rows.append(packaging_tools_check(outcome))
+    return rows
 
 
 def docs_pending(docs_root):
@@ -1086,7 +1077,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
         if not args.test_only:
             print(f"  {step_num}. Prechecks: refuse unless git user.email is {REQUIRED_GIT_EMAIL}, the tree has no unreviewed "
                   "(unstaged/untracked) changes and the branch isn't behind upstream (git fetch + compare) before any gate "
-                  "runs; the last two are checked again before the commit")
+                  "runs; the last two are checked again before the commit.  Unless --skip-tests, it also refuses when "
+                  f"{', '.join(_juneau.PACKAGING_TOOLS)} (the packaging tools test.py --full needs) is not on PATH")
             step_num += 1
         if args.tracker_audit:
             print(f"  {step_num}. Run tracker audit gate: python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau (blocks push if any plan file is flagged)")
@@ -1113,7 +1105,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             step_num += 1
             print(f"  {step_num}. Push to the tracked upstream")
         if not args.test_only:
-            toolkit("run").checks("prechecks", "Prechecks", prechecks(juneau_root, dry_run=True), dry_run=True)
+            toolkit("run").checks("prechecks", "Prechecks", prechecks(juneau_root, dry_run=True, skip_tests=args.skip_tests), dry_run=True)
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
@@ -1144,7 +1136,7 @@ def _push_steps_locked(s, args, run, console, script_dir, juneau_root, maven_loc
     step_num = 1
     # Prechecks refuse before any gate (the row says why); --test-only never commits or pushes, so it has none.
     if not args.test_only:
-        s.checks("prechecks", "Prechecks", prechecks(juneau_root))
+        s.checks("prechecks", "Prechecks", prechecks(juneau_root, skip_tests=args.skip_tests))
     if console and args.skip_tests:
         say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
 

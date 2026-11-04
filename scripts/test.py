@@ -998,8 +998,9 @@ PACKAGING_TOOLS_ENV = "JUNEAU_TERMINAL_REQUIRE_PACKAGING_TOOLS"
 
 
 def require_packaging_tools(explicit_full):
-	"""An explicit --full makes juneau-terminal's packaging tests fail, rather than skip, when uv, npm, ruby or twine is
-	missing; Maven's unittest run inherits the variable.  A run with no mode flag keeps the skips."""
+	"""An explicit --full makes juneau-terminal's packaging tests fail, rather than skip, when a tool in
+	_juneau.PACKAGING_TOOLS (uv, npm, ruby, twine; push.py's Prechecks check the same list) is missing;
+	Maven's unittest run inherits the variable.  A run with no mode flag keeps the skips."""
 	if explicit_full:
 		os.environ[PACKAGING_TOOLS_ENV] = "1"
 

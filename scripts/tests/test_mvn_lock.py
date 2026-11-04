@@ -148,3 +148,20 @@ def test_shell_wrapper_waits_for_python_holder(lockenv):
         time.sleep(0.5)
         assert p.poll() is None
     assert p.wait(timeout=15) == 0
+
+
+def test_release_removes_the_lock_even_when_a_test_has_replaced_subprocess_run(lockenv, monkeypatch):
+    """test_run_adoption's gates fixture replaces subprocess.run process-wide; a release that shelled out to `rm -rf`
+    then left the lock dir behind, and the next acquire in that process waited on its own pid forever."""
+    monkeypatch.setattr(subprocess, 'run', lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, '', ''))
+    with mvn_lock.MvnLock():
+        pass
+    assert not (lockenv / 'lockdir').exists()
+
+
+def test_a_stale_lock_is_broken_even_when_subprocess_run_is_replaced(lockenv, monkeypatch):
+    (lockenv / 'lockdir').mkdir()
+    (lockenv / 'lockdir' / 'pid').write_text('999999\n')
+    monkeypatch.setattr(subprocess, 'run', lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, '', ''))
+    with mvn_lock.MvnLock():
+        assert (lockenv / 'lockdir' / 'pid').read_text().strip() == str(os.getpid())

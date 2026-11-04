@@ -48,6 +48,8 @@ import io
 import json
 import os
 import pathlib
+import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -1413,72 +1415,48 @@ class TestWorkflowYamlGuard:
 
 
 # ---------------------------------------------------------------------------------------
-# AI-artifacts guard: stale juneau-docs static/ai is a non-blocking warning on the Prechecks row.
+# Packaging-tools guard: test.py --full needs uv, npm, ruby and twine, so Prechecks refuses without them.
 # ---------------------------------------------------------------------------------------
-def _write_ai_check(docs_repo: Path, exit_code: int, text: str = "") -> None:
-    """Stub juneau-docs/scripts/check-ai-artifacts.py that records its argv, prints `text` and exits `exit_code`."""
-    script = docs_repo / "scripts" / "check-ai-artifacts.py"
-    script.write_text(
-        "import pathlib, sys\n"
-        "pathlib.Path(__file__).with_name('ai-argv.txt').write_text(' '.join(sys.argv[1:]))\n"
-        f"print({text!r})\nsys.exit({exit_code})\n", encoding="utf-8")
+def _which_only(monkeypatch, present):
+    """Make shutil.which find exactly the tools named in `present`."""
+    monkeypatch.setattr(shutil, "which", lambda tool, *a, **k: f"/bin/{tool}" if tool in present else None)
 
 
-class TestAiArtifactsCheck:
-    def test_prechecks_list_it_and_a_fresh_result_passes(self, push_module, docs_repo, juneau_root):
-        _write_ai_check(docs_repo, 0)
-        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
+class TestPackagingToolsCheck:
+    def test_prechecks_list_it_and_all_tools_present_passes(self, push_module, repo, monkeypatch):
+        _which_only(monkeypatch, {"uv", "npm", "ruby", "twine"})
+        listed = {c.name: c for c in push_module.prechecks(repo)}
 
-        verdict = push_module.toolkit("checks").evaluate(listed["ai artifacts"])
+        assert push_module.toolkit("checks").evaluate(listed["packaging tools"]).status == "pass"
 
-        assert verdict.status == "pass"
-        assert (docs_repo / "scripts" / "ai-argv.txt").read_text() == f"--juneau-root {juneau_root}"
-
-    def test_stale_artifacts_warn_and_name_the_regenerate_command(self, push_module, docs_repo, juneau_root):
-        _write_ai_check(docs_repo, 1, "- generate-ai-artifacts.py --check failed")
-        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
+    def test_each_missing_tool_is_named_with_its_install_hint(self, push_module, repo, monkeypatch):
+        _which_only(monkeypatch, {"npm"})
         checks = push_module.toolkit("checks")
 
-        verdict = checks.evaluate(listed["ai artifacts"])
+        verdict = checks.evaluate(push_module.packaging_tools_check("Nothing ran."))
 
-        assert verdict.status == "warn"      # never blocks the push
+        assert verdict.status == "fail"
+        assert "uv, ruby, twine" in verdict.reason
         hint = " ".join(verdict.hint)
-        assert "python3 scripts/generate-ai-artifacts.py" in hint and "--check failed" in hint
-        assert "push juneau-docs" in hint
-        assert checks.evaluate(listed["ai artifacts"], dry_run=True).status == "warn"
+        assert "https://docs.astral.sh/uv/" in hint
+        assert "uv tool install --native-tls twine" in hint
+        assert "ruby" in hint and "brew install ruby" in hint
+        assert "brew install node" not in hint        # npm is present
+        assert "Nothing ran." in hint
 
-    def test_it_runs_even_when_juneau_docs_is_idle(self, push_module, docs_repo, juneau_root):
-        _write_ai_check(docs_repo, 1)
-        assert push_module.docs_pending(docs_repo) is None
+    def test_the_list_is_the_one_test_py_requires(self, push_module):
+        dist_support = (SCRIPTS_DIR.parent / "juneau-terminal" / "src" / "test" / "python" / "dist_support.py")
+        needed = set(re.findall(r'need\("(uv|npm|ruby|twine)"\)', (dist_support.parent / "test_dist_build.py").read_text()))
+        assert set(push_module._juneau.PACKAGING_TOOLS) == needed == {"uv", "npm", "ruby", "twine"}
 
-        names = [c.name for c in push_module.prechecks(juneau_root)]
+    def test_skip_tests_leaves_the_check_out(self, push_module, repo):
+        names = [c.name for c in push_module.prechecks(repo, skip_tests=True)]
+        assert "packaging tools" not in names
+        assert "packaging tools" in [c.name for c in push_module.prechecks(repo)]
 
-        assert "ai artifacts" in names
-
-    def test_never_regenerates(self, push_module, docs_repo, juneau_root):
-        _write_ai_check(docs_repo, 1)
-        (docs_repo / "scripts" / "generate-ai-artifacts.py").write_text(
-            "open('regenerated', 'w').write('x')\n", encoding="utf-8")
-        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
-
-        push_module.toolkit("checks").evaluate(listed["ai artifacts"])
-
-        assert not (docs_repo / "regenerated").exists() and not (docs_repo / "scripts" / "regenerated").exists()
-
-    def test_missing_sibling_is_skipped_with_a_note(self, push_module, tmp_path):
-        lone = tmp_path / "lone" / "juneau"
-        lone.mkdir(parents=True)
-
-        verdict = push_module.toolkit("checks").evaluate(
-            push_module.ai_artifacts_check(lone, lone.parent / "juneau-docs"))
-
-        assert verdict.status == "pass" and "no juneau-docs sibling" in verdict.reason
-
-    def test_a_docs_checkout_without_the_script_is_skipped(self, push_module, docs_repo, juneau_root):
-        verdict = push_module.toolkit("checks").evaluate(
-            push_module.ai_artifacts_check(juneau_root, docs_repo))
-
-        assert verdict.status == "pass" and "skipped" in verdict.reason
+    def test_the_ai_artifacts_check_is_gone(self, push_module, repo):
+        assert "ai artifacts" not in [c.name for c in push_module.prechecks(repo)]
+        assert not hasattr(push_module, "ai_artifacts_check")
 
 
 class TestDocsPendingHint:

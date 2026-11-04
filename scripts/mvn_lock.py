@@ -16,6 +16,7 @@ Documented in the Gotchas of push.md and build-docs.md.
 """
 
 import os
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -110,7 +111,7 @@ class MvnLock:
     def _break_if_stale(self):
         pid = _read_pid(self.lock)
         if pid is not None and not _alive(pid) and _read_pid(self.lock) == pid:
-            subprocess.run(['rm', '-rf', str(self.lock)], check=False)
+            shutil.rmtree(self.lock, ignore_errors=True)
 
     def acquire(self):
         """Wait for and take the lock, calling on_wait(holder_pid, seconds_waited) on each poll while it is busy."""
@@ -148,7 +149,7 @@ class MvnLock:
             os.environ[WRAPPER_ENV] = self._saved_wrapper
             self._saved_wrapper = None
         if _read_pid(self.lock) == os.getpid():
-            subprocess.run(['rm', '-rf', str(self.lock)], check=False)
+            shutil.rmtree(self.lock, ignore_errors=True)
 
     def __enter__(self):
         return self.acquire()

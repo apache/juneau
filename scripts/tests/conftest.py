@@ -80,6 +80,16 @@ def _no_outer_run_files(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def _private_mvn_lock(monkeypatch, tmp_path):
+    """Point the shared Maven lock (mvn_lock.py) and its priority queue at tmp_path, and forget any lock a parent push
+    holds, so no test or subprocess it starts (they inherit os.environ) can take or wait on the real
+    /tmp/claude-501/juneau-mvn.lockdir.  A run that hangs would otherwise block every other push and build."""
+    monkeypatch.setenv("JUNEAU_MVN_LOCKDIR", str(tmp_path / "mvn-lock.lockdir"))
+    monkeypatch.setenv("JUNEAU_MVN_PRIORITY_DIR", str(tmp_path / "mvn-lock.priority"))
+    monkeypatch.delenv("JUNEAU_MVN_LOCK_HELD", raising=False)
+
+
+@pytest.fixture(autouse=True)
 def _no_push_sound(monkeypatch):
     """Keep push.py's end-of-run bell and sound silent in every test, including subprocess runs (they inherit it)."""
     monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")

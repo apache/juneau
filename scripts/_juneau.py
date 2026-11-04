@@ -32,6 +32,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 PYTHON_SRC = ROOT / "juneau-terminal" / "src" / "main" / "python"
 
+#: The outside tools juneau-terminal's packaging tests (src/test/python/dist_support.py `need`) call, each with how to
+#: install it.  test.py --full makes their absence a failure, and push.py's Prechecks refuse without them, from this one list.
+PACKAGING_TOOLS = {
+    "uv": "see https://docs.astral.sh/uv/",
+    "npm": "brew install node",
+    "ruby": "system ruby, or brew install ruby",
+    "twine": "uv tool install --native-tls twine",
+}
+
 
 def load():
     """(juneau_terminal, juneau_terminal_scripts).  Raises bootstrap.BootstrapError when juneau-terminal's sources are not there."""
