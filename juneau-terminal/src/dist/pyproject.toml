@@ -1,0 +1,74 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
+# Template: build_dist.py fills in @VERSION@ and @HATCHLING@ and writes the result into the staged tree (target/dist/dist-src),
+# which holds the wheel root already renamed (see build_dist.py), so the include lists below are the whole layout.
+
+[build-system]
+requires = ["hatchling==@HATCHLING@"]
+build-backend = "hatchling.build"
+
+[project]
+name = "apache-juneau-terminal"
+version = "@VERSION@"
+description = "Terminal-protocol progress for Maven, pytest, Playwright, Gradle, npm and Bazel runs, and the juneau_terminal_scripts toolkit for push and release scripts."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.10"
+authors = [{ name = "The Apache Software Foundation", email = "dev@juneau.apache.org" }]
+classifiers = [
+    "Operating System :: POSIX",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Framework :: Pytest",
+    "Topic :: Software Development :: Build Tools",
+]
+
+[project.urls]
+Homepage = "https://juneau.apache.org/"
+Source = "https://github.com/apache/juneau/tree/master/juneau-terminal"
+
+[project.scripts]
+juneau-terminal = "juneau_terminal_cli:main"
+
+[project.entry-points.pytest11]
+juneau_terminal_pytest = "juneau_terminal_pytest"
+
+[tool.hatch.build]
+ignore-vcs = true
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "/juneau_terminal.py",
+    "/juneau_terminal_cli.py",
+    "/juneau_terminal_bootstrap.py",
+    "/juneau_terminal_pytest.py",
+    "/juneau_terminal_pytest_plugin",
+    "/juneau_terminal_playwright_reporter",
+    "/juneau_terminal_scripts",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/juneau_terminal.py",
+    "/juneau_terminal_cli.py",
+    "/juneau_terminal_bootstrap.py",
+    "/juneau_terminal_pytest.py",
+    "/juneau_terminal_pytest_plugin",
+    "/juneau_terminal_playwright_reporter",
+    "/juneau_terminal_scripts",
+    "/pyproject.toml",
+    "/README.md",
+    "/LICENSE",
+    "/NOTICE",
+]

@@ -245,7 +245,7 @@ def _bin_version(source, version):
     """(version string, sha-or-None); the zip is hashed at most once and only for the fallback name."""
     if version:
         return str(version), None
-    m = re.fullmatch(r"juneau-terminal-(.+)\.zip", Path(str(source)).name)
+    m = re.fullmatch(r"(?:apache-)?juneau-terminal-(.+)\.(?:zip|pyz)", Path(str(source)).name)
     if m:
         return m.group(1), None
     digest = hashlib.sha256(Path(str(source)).read_bytes()).hexdigest()
@@ -307,6 +307,15 @@ def _cli_source(pom, cache_dir, version):
     raise BootstrapError(f"no juneau-terminal toolkit found; {_REMEDY}, or run the repo's scripts/push.py once")
 
 
+def cli_bin(name, pom=None, cache_dir=None, version=None):
+    """bin_path for a command line, never running mvn: the pom defaults to the nearest pom.xml above this file and the
+    cache to target/juneau-terminal beside it.  The --bin entry below and the juneau-terminal command both use it."""
+    here = Path(__file__).resolve().parent
+    pom = pom or str(next((d / "pom.xml" for d in (here, *here.parents) if (d / "pom.xml").is_file()), Path("pom.xml")))
+    cache = cache_dir or str(Path(pom).resolve().parent / "target" / "juneau-terminal")
+    return bin_path(name, source=_cli_source(pom, cache, version), version=version)
+
+
 def main(argv=None):
     import argparse
     ap = argparse.ArgumentParser(prog="bootstrap.py", description="Print the path of a juneau-terminal bin script.")
@@ -318,11 +327,8 @@ def main(argv=None):
     if not args.bin:
         ap.print_usage(sys.stderr)
         return 2
-    here = Path(__file__).resolve().parent
-    pom = args.pom or str(next((d / "pom.xml" for d in (here, *here.parents) if (d / "pom.xml").is_file()), Path("pom.xml")))
-    cache = args.cache_dir or str(Path(pom).resolve().parent / "target" / "juneau-terminal")
     try:
-        print(bin_path(args.bin, source=_cli_source(pom, cache, args.version), version=args.version))
+        print(cli_bin(args.bin, pom=args.pom, cache_dir=args.cache_dir, version=args.version))
     except BootstrapError as e:
         print(e, file=sys.stderr)
         return 1

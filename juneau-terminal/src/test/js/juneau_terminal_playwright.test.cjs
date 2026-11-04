@@ -292,3 +292,26 @@ test("a report that can't be written is said once on stderr and doesn't throw", 
     fs.rmSync(dir, { recursive: true, force: true });
   }
 });
+
+test("a second copy of the reporter in the same process stays silent for a suite the first one reports", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "juneau-terminal-pw-"));
+  try {
+    const copy = path.join(dir, "juneau_terminal_playwright.cjs");
+    fs.copyFileSync(require.resolve(path.join(__dirname, "..", "..", "main", "js", "playwright_reporter",
+      "juneau_terminal_playwright.cjs")), copy);
+    const Other = require(copy);
+    assert.notEqual(Other, Reporter);   // a separate module, as an npm install and PW_TEST_REPORTER would give
+    const suite = { allTests: () => [fakeTest("a.spec.ts")] };
+    const first = [], second = [];
+    const a = new Reporter({ write: (text) => first.push(text), env: {} });
+    const b = new Other({ write: (text) => second.push(text), env: { JUNEAU_TERMINAL_PLAYWRIGHT_JSON: path.join(dir, "pw.json") } });
+    a.onBegin({ rootDir: ROOT }, suite);
+    b.onBegin({ rootDir: ROOT }, suite);
+    b.onEnd({ status: "passed", duration: 1 });
+    assert.equal(first.length, 2);
+    assert.deepEqual(second, []);
+    assert.equal(fs.existsSync(path.join(dir, "pw.json")), false);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});

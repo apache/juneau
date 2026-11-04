@@ -341,7 +341,8 @@ class ServletFilterRegistration_JettyMount_Test extends TestBase {
 		var ms = create(C_Order_Config.class);
 		try {
 			ms.start();
-			get(ms, "/hello/a");
+			// Assert the response first so a failure reports whether the request reached the servlet at all.
+			assertEquals("hello async=true", get(ms, "/hello/a"));
 			assertEquals(List.of("C:REQUEST", "B:REQUEST", "A:REQUEST", "D:REQUEST"), LOG);
 		} finally {
 			ms.stop();

@@ -38,14 +38,17 @@
 		<maven.compiler.target>17</maven.compiler.target>
         <maven.compiler.release>17</maven.compiler.release>
 
+		<!-- Stamps every reproducible build output: the module jars and, under -Papache-release, the juneau-terminal
+		     packages.  maven-release-plugin rewrites it at release:prepare; the value here is the starting point. -->
+		<project.build.outputTimestamp>2026-10-26T00:00:00Z</project.build.outputTimestamp>
+
 		<!-- Configure checksum algorithms: MD5, SHA-1, and SHA-512 -->
 		<aether.checksums.algorithms>MD5,SHA-1,SHA-512</aether.checksums.algorithms>
 
 		<juneau.compare.version>9.0.1</juneau.compare.version>
 		<junit.version>6.0.3</junit.version>
-		<!-- Pinned below apache parent 40's 3.6.0, which finds no tests in most modules (0 run in juneau-commons and juneau-marshall). -->
-		<surefire.version>3.5.4</surefire.version>
-		<!-- Pinned below apache parent 40's RAT 0.18, which crashes with an NPE on some modules and scans target/. -->
+		<!-- Pinned below apache parent 40's RAT 0.18, which crashes with an NPE in juneau-shaded under push.py's parallel
+		     (-T1C) clean install, although a serial rat:check passes. -->
 		<version.apache-rat-plugin>0.16.1</version.apache-rat-plugin>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
 		<jacoco.plugin.version>0.8.15</jacoco.plugin.version>
@@ -553,6 +556,8 @@
 					<additionalJOptions>
 						<additionalJOption>--allow-script-in-comments</additionalJOption>
 						<additionalJOption>-Xdoclint:reference,syntax</additionalJOption>
+						<additionalJOption>-header</additionalJOption>
+						<additionalJOption>&lt;a href="http://juneau.apache.org" target="_blank"&gt;&lt;img src="/img/oakleaf.svg" alt="Apache Juneau" style="height:20px; vertical-align:middle; margin-right:5px;"&gt;Apache Juneau&lt;/a&gt;</additionalJOption>
 					</additionalJOptions>
 					<additionalOptions>
 						<additionalOption>-quiet</additionalOption>

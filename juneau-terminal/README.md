@@ -8,9 +8,38 @@ The wire format is in [docs/terminal-protocol-v1.md](docs/terminal-protocol-v1.m
 The module is `pom` packaging. `mvn install` attaches the script as `org.apache.juneau:juneau-terminal:<version>:py`
 and runs the unit tests (`python3 -m unittest discover -s src/test/python`). `-DskipTests` skips them.
 
+## Install
+
+From Juneau 10.0.0 each release also ships juneau-terminal outside Maven, voted with the release:
+
+| Channel | Command | Gives |
+|---|---|---|
+| PyPI | `uv tool install apache-juneau-terminal`, `pipx install apache-juneau-terminal`, or `uvx --from apache-juneau-terminal juneau-terminal ...` | The `juneau-terminal` command, the toolkit, the pytest plugin and the Playwright reporter. |
+| Zipapp | `python3 apache-juneau-terminal-<v>.pyz ...`, from the release's download page | The same command in one file; nothing to install. |
+| Homebrew | `brew install apache/juneau/juneau-terminal` | The command only (it runs the release's `.pyz`). |
+| npm | `npm i -D @apache/juneau-terminal-playwright` | The Playwright reporter, for a `reporter:` entry in `playwright.config`. |
+
+The command is POSIX only and needs Python 3.10 or later:
+
+```bash
+juneau-terminal run maven -- mvn -q test                               # one tool as one terminal-protocol step
+juneau-terminal watch -d . -t push -- python3 scripts/push.py "message" # the same in a watchable tmux pane
+juneau-terminal path bin watch-run.sh                                  # the path of a packaged script
+juneau-terminal path reporter                                          # the Playwright reporter file
+juneau-terminal path plugin                                            # the directory holding the pytest plugin
+juneau-terminal --version                                              # package and terminal-protocol versions
+```
+
+`watch` and `pane` need tmux, and exit 2 outside it; `run` does not. Installed from PyPI, the pytest plugin is registered
+as a `pytest11` entry point but stays silent unless it is asked for (`-p juneau_terminal_pytest`, also through
+`PYTEST_ADDOPTS` or `PYTEST_PLUGINS`, or `JUNEAU_TERMINAL_PYTEST_STREAM=1`), so a plain `pytest` run looks as it did
+before. The `.pyz` also answers `--bin NAME` as the toolkit zip does.
+
 ## Using it from a push.py
 
-Paste this into the adopting script. It loads the script at the Juneau version the repo already pins, and returns
+This is for a repository that loads juneau-terminal through Maven (`dependency:copy`) at the Juneau version it pins,
+for example one that vendors `bootstrap.py`. With the command installed, `juneau-terminal run` does the same without a
+loader. Paste this into the adopting script. It loads the script at the Juneau version the repo already pins, and returns
 `None` (after one stderr warning) when it can't, so the adopter then runs its commands as it does today.
 
 ```python
@@ -115,6 +144,7 @@ off a terminal (`TERM=dumb` and `JUNEAU_TERMINAL_LIVE=0` count as off) it prints
 | `JUNEAU_TERMINAL_MARKERS_FILE=<path>` | The terminal-protocol markers go to that file too, one `##terminal` line each, while the console view draws as usual; with `TERMINAL_MARKERS=1` stdout and the file both get them. The run's owner empties it when its `run()` starts; nested scripts append. Also makes `bootstrap.load()` load juneau_terminal. See `docs/terminal-protocol-v1.md`, "Markers file". |
 | `JUNEAU_TERMINAL_RESULT=<path>` | At the end of the run (ok, failed or cancelled) the owner writes the result there as one JSON object, atomically: status, exit code, time, project, branch, head, commit, the rows (with their test totals), the notes and the log paths. Nested scripts' rows are included. Also makes `bootstrap.load()` load juneau_terminal. See `docs/terminal-protocol-v1.md`, "Result file". |
 | `JUNEAU_TERMINAL_PYTEST_PLUGIN=0` | Skips injecting `-p juneau_terminal_pytest` into pytest runs (the plugin that reports test progress). The suite under test gets only the plugin-only `pytest_plugin/` directory (in the zip, `<zip>/pytest_plugin`) on `PYTHONPATH`, never the engine or toolkit. |
+| `JUNEAU_TERMINAL_PYTEST_STREAM=1` | Plugin side: turns on the pytest plugin's `##pytest` stream when it was loaded only through the installed package's `pytest11` entry point (without it the plugin stays silent there). A run that names the plugin with `-p`, `PYTEST_ADDOPTS` or `PYTEST_PLUGINS` streams without it. |
 
 With `TERMINAL_MARKERS=1` stdout carries the terminal-protocol markers, so no view is drawn there; the board log still gets
 the rows.

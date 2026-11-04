@@ -40,6 +40,7 @@ from pathlib import Path
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.append(str(Path(__file__).resolve().parent))
 import _juneau  # noqa: E402
+import mvn_lock  # noqa: E402
 
 
 # git commit and git push run under a PTY so ssh, pinentry or a credential helper can prompt.  After this many silent
@@ -1124,7 +1125,21 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
                        plan=push_plan(args, script_dir, juneau_root, console))
 
 
-def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
+def _push_steps(s, args, run, console, script_dir, juneau_root):
+    """
+    The push steps, holding the shared Maven lock (see mvn_lock.py) from the first gate until the build and install
+    finish, so a concurrent push or agent build cannot clean target/ under the tests.  Released before the commit.
+    """
+    if args.dry_run:
+        return _push_steps_locked(s, args, run, console, script_dir, juneau_root, mvn_lock.MvnLock())
+    lock = mvn_lock.MvnLock(on_wait=mvn_lock.wait_notifier(say)).acquire()
+    try:
+        return _push_steps_locked(s, args, run, console, script_dir, juneau_root, lock)
+    finally:
+        lock.release()
+
+
+def _push_steps_locked(s, args, run, console, script_dir, juneau_root, maven_lock):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
     """The steps of the push inside its session s.  Returns the exit code."""
     step_num = 1
     # Prechecks refuse before any gate (the row says why); --test-only never commits or pushes, so it has none.
@@ -1261,6 +1276,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     ):
         return aborted("\n❌ Build process aborted due to build failure.")
     step_num += 1
+    maven_lock.release()  # the Maven span is over; the commit and push need no lock
 
     if args.test_only:
         run.note("info", "Test-only run: nothing was committed or pushed")

@@ -27,7 +27,7 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 |---|---|---|---|
 | `--build-only`, `-b` | none | off | Only build; skip the tests. |
 | `--test-only`, `-t` | none | off | Only run the tests; no build. Cannot be combined with `--build-only`. |
-| `--full`, `-f` | none | on when no other mode is given | Clean build, then the tests. |
+| `--full`, `-f` | none | on when no other mode is given | Clean build, then the tests. Given explicitly, it also sets `JUNEAU_TERMINAL_REQUIRE_PACKAGING_TOOLS=1`, so juneau-terminal's packaging tests fail instead of skipping when `uv`, `npm`, `ruby` or `twine` is missing. |
 | `--verbose`, `-v` | none | off | Accepted for compatibility. Maven output always streams live. |
 | `--no-container` | none | off | Exclude tests tagged `container` (`-DexcludedGroups=container`). |
 | `--timing-log` | path | none | Ignored, with a warning. Timings are in the run history; the option goes away in a later release. |

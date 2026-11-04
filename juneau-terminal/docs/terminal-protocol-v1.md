@@ -185,3 +185,6 @@ Under a terminal it is added only for the JSON report, with `JUNEAU_TERMINAL_PLA
 outside one an inherited `JUNEAU_TERMINAL_PLAYWRIGHT_MARKERS=0` is dropped. `JUNEAU_TERMINAL_PLAYWRIGHT_REPORTER=0`, in the command's environment or juneau-terminal's, leaves it out, and so does a
 command that names its own reporter (`--reporter x`, `--reporter=x`, or a `PW_TEST_REPORTER` already set). A report left
 at the JSON path by an earlier run is removed first, so a run cancelled before its end reports none.
+The reporter can also be loaded a second way, from a `reporter:` entry in `playwright.config` naming the npm package
+`@apache/juneau-terminal-playwright`; when both loads happen in one run, the first to begin reports it and the other
+stays silent and writes no JSON report.

@@ -146,6 +146,43 @@ class PomTest(unittest.TestCase):
         self.assertIn("and the juneau_terminal_scripts toolkit (.zip)", self.root.findtext(f"{POM}description"))
 
 
+class ReleaseProfileTest(unittest.TestCase):
+    """The apache-release profile builds the convenience packages before it attaches them, under the names Maven can spell."""
+
+    def setUp(self):
+        root = ET.parse(MODULE_ROOT / "pom.xml").getroot()
+        self.profile = next(p for p in root.findall(f"{POM}profiles/{POM}profile") if p.findtext(f"{POM}id") == "apache-release")
+        self.plugins = {p.findtext(f"{POM}artifactId"): p for p in self.profile.findall(f"{POM}build/{POM}plugins/{POM}plugin")}
+
+    def test_build_runs_before_the_attach(self):
+        build = self.plugins["exec-maven-plugin"].find(f"{POM}executions/{POM}execution")
+        attach = self.plugins["build-helper-maven-plugin"].find(f"{POM}executions/{POM}execution")
+        self.assertEqual((build.findtext(f"{POM}id"), build.findtext(f"{POM}phase")), ("juneau-terminal-dist", "prepare-package"))
+        self.assertEqual((attach.findtext(f"{POM}id"), attach.findtext(f"{POM}phase")), ("attach-juneau-terminal-dist", "package"))
+
+    def test_build_command(self):
+        cfg = self.plugins["exec-maven-plugin"].find(f".//{POM}configuration")
+        self.assertEqual(cfg.findtext(f"{POM}executable"), "python3")
+        self.assertEqual([a.text for a in cfg.findall(f"{POM}arguments/{POM}argument")],
+                         ["-B", "src/dist/build_dist.py", "--version", "${project.version}", "--epoch",
+                          "${project.build.outputTimestamp}", "--out", "${project.build.directory}/dist"])
+
+    def test_attached_files(self):
+        artifacts = self.plugins["build-helper-maven-plugin"].findall(f".//{POM}artifact")
+        d = "${project.build.directory}/dist"
+        self.assertEqual([(a.findtext(f"{POM}file"), a.findtext(f"{POM}type"), a.findtext(f"{POM}classifier"))
+                          for a in artifacts],
+                         [(f"{d}/maven/juneau-terminal-${{project.version}}.whl", "whl", None),
+                          (f"{d}/maven/juneau-terminal-${{project.version}}-sdist.tar.gz", "tar.gz", "sdist"),
+                          (f"{d}/juneau-terminal-${{project.version}}.pyz", "pyz", None),
+                          (f"{d}/juneau-terminal-${{project.version}}-playwright.tgz", "tgz", "playwright")])
+
+    def test_root_pom_defines_the_output_timestamp(self):
+        root = ET.parse(MODULE_ROOT.parent / "pom.xml").getroot()
+        stamp = root.findtext(f"{POM}properties/{POM}project.build.outputTimestamp")
+        self.assertRegex(stamp or "", r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
+
+
 # The spec's authoring example ("Authoring example"), verbatim inside main(), plus the argparse it assumes.
 EXAMPLE = textwrap.dedent('''\
     import argparse

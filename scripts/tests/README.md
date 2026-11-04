@@ -58,6 +58,9 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
 - `test_test_py_console.py` -- `test.py`'s console session: `--detail`, the PERF-GUARD notes and their levels under
   `--enforce-perf`, and `-f` on the JS-test command.
 
+- `test_test_py_packaging.py` -- `test.py --full` exports `JUNEAU_TERMINAL_REQUIRE_PACKAGING_TOOLS=1` for the
+  juneau-terminal packaging tests; a run with no mode flag, `--build-only` and `--test-only` do not.
+
 - `test_push_timings.py` -- `push-timings.py`'s thresholds: a module is flagged only when it is slower by both the
   relative and the absolute margin, faster modules get the `↓` mark, the env overrides, and the `--report` table
   file. Synthetic run-history records in a temp dir.

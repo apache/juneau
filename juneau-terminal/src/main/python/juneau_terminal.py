@@ -4791,49 +4791,90 @@ def _engine_dir():
     return Path(__file__).resolve().parent
 
 
+# Directory names, the installed wheel's and the .pyz's first, then the :zip's and the source tree's.
+_PLUGIN_DIRS = ("juneau_terminal_pytest_plugin", "pytest_plugin")
+_REPORTER_DIRS = ("juneau_terminal_playwright_reporter", "playwright_reporter")
+
+
+def _archive_of(path):
+    """The archive part of a module path inside a .zip or a .pyz (whichever suffix comes first), or None."""
+    hits = [path.index(s + os.sep) + len(s) for s in (".zip", ".pyz") if s + os.sep in path]
+    return path[:min(hits)] if hits else None
+
+
+def _toolkit_archive():
+    """The .zip or .pyz juneau_terminal_scripts was imported from, or None."""
+    return _archive_of(getattr(sys.modules.get("juneau_terminal_scripts"), "__file__", None) or "")
+
+
 def find_pytest_plugin():
     """The plugin-only directory to put on the child's PYTHONPATH so `-p juneau_terminal_pytest` imports, or None (spec 1.4).
     It holds nothing but the plugin module, so the suite under test never sees bootstrap, juneau_terminal or juneau_terminal_scripts.
-    In a zip it is the `pytest_plugin` subdirectory of the archive (zipimport accepts `x.zip/pytest_plugin`)."""
-    if (_engine_dir() / "pytest_plugin" / "juneau_terminal_pytest.py").is_file():
-        return str(_engine_dir() / "pytest_plugin")
-    scripts = sys.modules.get("juneau_terminal_scripts")
-    path = getattr(scripts, "__file__", None) or ""
-    marker = ".zip" + os.sep
-    if marker in path:
-        return path[:path.index(marker) + len(".zip")] + os.sep + "pytest_plugin"
-    return None
+    In an archive it is the plugin subdirectory of the archive (zipimport accepts `x.zip/pytest_plugin`); an archive
+    that cannot be read is assumed to have the :zip's layout."""
+    for name in _PLUGIN_DIRS:
+        if (_engine_dir() / name / "juneau_terminal_pytest.py").is_file():
+            return str(_engine_dir() / name)
+    archive = _toolkit_archive()
+    if archive is None:
+        return None
+    try:
+        with zipfile.ZipFile(archive) as z:
+            names = set(z.namelist())
+    except (OSError, zipfile.BadZipFile):
+        names = set()
+    return archive + os.sep + next((n for n in _PLUGIN_DIRS if f"{n}/juneau_terminal_pytest.py" in names), "pytest_plugin")
 
 
 _PLAYWRIGHT_REPORTER = "juneau_terminal_playwright.cjs"
 _playwright_extracted = None       # the reporter extracted from the zip, once per process
 
 
-def find_playwright_reporter():
-    """The Playwright reporter file for --reporter, or None.  On disk it is playwright_reporter/ beside the engine, or
-    the source tree's src/main/js/playwright_reporter/.  Node can't load from inside a zip, so from the toolkit zip the
-    member is extracted once per process into a temp directory that is removed at exit."""
+def find_playwright_reporter(extract_dir=None):
+    """The Playwright reporter file for --reporter, or None.  On disk it is in a reporter directory beside the engine, or
+    the source tree's src/main/js/playwright_reporter/.  Node can't load from inside an archive, so from a .zip or .pyz
+    the member is extracted once per process into a temp directory that is removed at exit.  With extract_dir (the
+    juneau-terminal command's `path reporter`, which prints the path for later use) it is written to
+    extract_dir/<sha256 prefix>/ instead and kept."""
     global _playwright_extracted
-    for where in (_engine_dir() / "playwright_reporter", _engine_dir().parent / "js" / "playwright_reporter"):
+    for where in (*(_engine_dir() / n for n in _REPORTER_DIRS), _engine_dir().parent / "js" / "playwright_reporter"):
         if (where / _PLAYWRIGHT_REPORTER).is_file():
             return str(where / _PLAYWRIGHT_REPORTER)
-    scripts = sys.modules.get("juneau_terminal_scripts")
-    path = getattr(scripts, "__file__", None) or ""
-    marker = ".zip" + os.sep
-    if marker not in path:
+    archive = _toolkit_archive()
+    if archive is None:
         return None
-    if _playwright_extracted is None:
+    if _playwright_extracted is None or extract_dir is not None:
         try:
-            with zipfile.ZipFile(path[:path.index(marker) + len(".zip")]) as z:
-                data = z.read("playwright_reporter/" + _PLAYWRIGHT_REPORTER)
-        except (OSError, KeyError, zipfile.BadZipFile):
+            with zipfile.ZipFile(archive) as z:
+                names = set(z.namelist())
+                member = next((f"{n}/{_PLAYWRIGHT_REPORTER}" for n in _REPORTER_DIRS
+                               if f"{n}/{_PLAYWRIGHT_REPORTER}" in names), None)
+                if member is None:
+                    return None
+                data = z.read(member)
+        except (OSError, zipfile.BadZipFile):
             return None
+        if extract_dir is not None:
+            return _keep_reporter(Path(extract_dir).expanduser() / hashlib.sha256(data).hexdigest()[:12], data)
         directory = tempfile.mkdtemp(prefix="juneau-terminal-playwright-")
         atexit.register(shutil.rmtree, directory, ignore_errors=True)
         target = Path(directory) / _PLAYWRIGHT_REPORTER
         target.write_bytes(data)
         _playwright_extracted = str(target)
     return _playwright_extracted
+
+
+def _keep_reporter(directory, data):
+    """Write the reporter into directory unless the same bytes are already there; atomic, so a running node keeps its file."""
+    directory.mkdir(parents=True, exist_ok=True)
+    target = directory / _PLAYWRIGHT_REPORTER
+    if not (target.is_file() and target.read_bytes() == data):
+        fd, tmp = tempfile.mkstemp(dir=str(directory), prefix="." + _PLAYWRIGHT_REPORTER + ".")
+        with os.fdopen(fd, "wb") as f:
+            f.write(data)
+        os.chmod(tmp, 0o644)
+        os.replace(tmp, target)
+    return str(target)
 
 
 _RUNNERS = ("uv", "poetry", "pipenv", "pdm", "hatch", "rye")

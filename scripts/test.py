@@ -994,6 +994,16 @@ def profile(module):
 	return code, out
 
 
+PACKAGING_TOOLS_ENV = "JUNEAU_TERMINAL_REQUIRE_PACKAGING_TOOLS"
+
+
+def require_packaging_tools(explicit_full):
+	"""An explicit --full makes juneau-terminal's packaging tests fail, rather than skip, when uv, npm, ruby or twine is
+	missing; Maven's unittest run inherits the variable.  A run with no mode flag keeps the skips."""
+	if explicit_full:
+		os.environ[PACKAGING_TOOLS_ENV] = "1"
+
+
 def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
 	parser = argparse.ArgumentParser(add_help=False)
 	parser.add_argument("--build-only", "-b", action="store_true")
@@ -1042,6 +1052,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	build_only = args.build_only
 	test_only = args.test_only
 	full = args.full or not (build_only or test_only or args.profile)
+	require_packaging_tools(args.full)
 
 	if args.profile:
 		exit_code, _ = profile(args.profile)

@@ -50,6 +50,85 @@
 				<skipTests>true</skipTests>
 			</properties>
 		</profile>
+
+		<!--
+			Release builds only (the apache-release profile maven-release-plugin turns on): builds the PyPI wheel and
+			sdist, the .pyz zipapp and the Playwright reporter's npm tarball into target/dist (see src/dist/build_dist.py,
+			which needs python3 3.10+ and hatchling or uv), and attaches them.  Every entry is stamped with
+			project.build.outputTimestamp, so the source release rebuilds them byte for byte.  prepare-package puts the
+			build before the package-phase attach whatever order the plugins merge in.
+		-->
+		<profile>
+			<id>apache-release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.6.4</version>
+						<executions>
+							<execution>
+								<id>juneau-terminal-dist</id>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>python3</executable>
+									<workingDirectory>${project.basedir}</workingDirectory>
+									<arguments>
+										<argument>-B</argument>
+										<argument>src/dist/build_dist.py</argument>
+										<argument>--version</argument>
+										<argument>${project.version}</argument>
+										<argument>--epoch</argument>
+										<argument>${project.build.outputTimestamp}</argument>
+										<argument>--out</argument>
+										<argument>${project.build.directory}/dist</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>build-helper-maven-plugin</artifactId>
+						<version>3.6.1</version>
+						<executions>
+							<execution>
+								<id>attach-juneau-terminal-dist</id>
+								<phase>package</phase>
+								<goals>
+									<goal>attach-artifact</goal>
+								</goals>
+								<configuration>
+									<artifacts>
+										<artifact>
+											<file>${project.build.directory}/dist/maven/juneau-terminal-${project.version}.whl</file>
+											<type>whl</type>
+										</artifact>
+										<artifact>
+											<file>${project.build.directory}/dist/maven/juneau-terminal-${project.version}-sdist.tar.gz</file>
+											<type>tar.gz</type>
+											<classifier>sdist</classifier>
+										</artifact>
+										<artifact>
+											<file>${project.build.directory}/dist/juneau-terminal-${project.version}.pyz</file>
+											<type>pyz</type>
+										</artifact>
+										<artifact>
+											<file>${project.build.directory}/dist/juneau-terminal-${project.version}-playwright.tgz</file>
+											<type>tgz</type>
+											<classifier>playwright</classifier>
+										</artifact>
+									</artifacts>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<build>

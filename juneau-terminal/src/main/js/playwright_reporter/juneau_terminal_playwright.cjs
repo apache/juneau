@@ -27,11 +27,18 @@
 // Files are relative to the config's rootDir, with "/" separators.  JUNEAU_TERMINAL_PLAYWRIGHT_MARKERS=0 sends no lines.
 // With JUNEAU_TERMINAL_PLAYWRIGHT_JSON set, onEnd writes a report there in the shape of Playwright's json reporter (suites,
 // specs, tests, results).  No dependencies.
+//
+// It can be loaded twice in one process: from a playwright.config `reporter` entry naming the npm package, and from the
+// runner's PW_TEST_REPORTER.  Each load is its own module (two copies of this file), so the record of which suites
+// already have a reporter lives on globalThis: the first instance to reach onBegin for a suite reports it, and any
+// other stays silent and writes no JSON report.
 
 const fs = require("node:fs");
 const path = require("node:path");
 
 const PREFIX = "##playwright ";
+const CLAIMED = Symbol.for("juneau-terminal-playwright.claimed");
+const claimed = globalThis[CLAIMED] || (globalThis[CLAIMED] = new WeakSet());
 
 class JuneauTerminalReporter {
   constructor(options = {}) {
@@ -63,6 +70,12 @@ class JuneauTerminalReporter {
   }
 
   onBegin(config, suite) {
+    if (claimed.has(suite)) {
+      this.markers = false; // a second instance in this process: the first one reports this run
+      this.jsonPath = "";
+      return;
+    }
+    claimed.add(suite);
     this.rootDir = config.rootDir || "";
     this.version = config.version;
     this.suite = suite;

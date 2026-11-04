@@ -82,6 +82,18 @@ def _line_start(tr):
         tr.write_line("")
 
 
+def _requested(config):
+    """True when this run asked for the stream: JUNEAU_TERMINAL_PYTEST_STREAM=1, or the plugin named explicitly with -p
+    (also through PYTEST_ADDOPTS) or in PYTEST_PLUGINS.  Loaded only through the installed package's pytest11 entry
+    point, the plugin stays silent, so a plain pytest run looks as it did before the package was installed."""
+    if os.environ.get("JUNEAU_TERMINAL_PYTEST_STREAM") == "1":
+        return True
+    ns = getattr(config, "known_args_namespace", None)
+    names = [p.strip() for p in (getattr(ns, "plugins", None) or [])]
+    names += [p.strip() for p in os.environ.get("PYTEST_PLUGINS", "").split(",")]
+    return "juneau_terminal_pytest" in names
+
+
 def pytest_configure(config):
     global _total_sent, _dead
     _total_sent = -1
@@ -89,6 +101,9 @@ def pytest_configure(config):
     _durations.clear()
     _current_file[0] = None
     _CONFIG[0] = None
+    if not _requested(config):
+        _dead = True
+        return
     if config.pluginmanager.hasplugin("xdist"):
         config.pluginmanager.register(_XdistHooks(), "juneau_terminal_pytest_xdist")
     if not _worker(config):

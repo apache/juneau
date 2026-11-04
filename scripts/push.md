@@ -59,6 +59,7 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 
 ## Gotchas
 
+- Maven runs are serialized across pushes and agents: from the first gate until the build and install finish, it holds the shared Maven lock (`mvn_lock.py`, the same `mkdir` lock directory as `~/agents/skills/juneau-worktrees/juneau-mvn-lock.sh`, `/tmp/claude-501/juneau-mvn.lockdir` unless `JUNEAU_MVN_LOCKDIR` is set). When another build holds it, the board says who (pid and command) at once and about every minute, instead of looking hung. A push killed mid-build releases the lock; a lock left by a dead pid is broken by the next waiter. Children (such as `test.py`) see `JUNEAU_MVN_LOCK_HELD` and a `JUNEAU_MVN_WRAPPER` that names the lock script is dropped for them, so they do not wait on their parent. The lock is released before the commit and push. `--dry-run` takes no lock.
 - It never stages for you. Anything unstaged or untracked-and-not-ignored makes the prechecks refuse, and the check repeats just before the commit.
 - The workflow-YAML guard needs PyYAML whenever the repo has workflow files, and fails closed without it: `pip install pyyaml`, or run the script with `uv run --with pyyaml`. The check repeats just before the commit, and also for a push-only run.
 - The commit takes the index exactly as it finds it, so stage the whole set you want pushed.
