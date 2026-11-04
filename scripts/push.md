@@ -50,6 +50,7 @@ Progress is the `juneau-terminal` live view (Prechecks, the build rows, Commit, 
 
 ## Gotchas
 
+- The Maven steps inside its `build-docs.py` run wait for the shared Maven lock (see `build-docs.md`), so starting this together with `push.py` in the Juneau checkout is safe: the second waits for the first's Maven span.
 - Everything outward-facing happens here: it pushes `docs` and force-pushes `asf-staging`. Run it only when you mean to.
 - It refuses on any unstaged or untracked file. Stage what you have reviewed, or `git stash push -- <paths>` the rest.
 - A staged push runs the full Maven build of the Juneau checkout (slow); `--no-stage` avoids it.

@@ -27,6 +27,7 @@ from datetime import datetime
 from pathlib import Path
 
 import terminal_view
+import mvn_lock
 from juneau_root import find_juneau_root
 
 # Module-level toggles flipped from main() so every run_command/stage_banner sees the choice.
@@ -272,6 +273,19 @@ def generate_maven_site(master_root):
     """Generate Maven site."""
     run_command(['mvn', 'site', '-DskipTests'], cwd=master_root, id='site', label='Site',
                 title="Generating Maven site")
+
+def copy_from_maven_output(args, rows, master_root, docs_dir):
+    """The Copy row: javadocs, and unless --skip-copy the Maven site, out of the Juneau checkout's target/."""
+    if rows['copy']:
+        VIEW.skip('copy', 'Copy', "Copying javadocs and site", rows['copy'])
+        return
+    with VIEW.stage('copy', 'Copy', "Copying javadocs and site") as step:
+        copy_current_javadocs(master_root, docs_dir)
+        if args.skip_copy:
+            say("Skipping Maven site copy (--skip-copy)")
+            step.summary = "javadocs; site skipped (--skip-copy)"
+        else:
+            copy_maven_site(master_root, docs_dir)
 
 def copy_maven_site(master_root, docs_dir):
     """Copy Maven site to static directory (Docusaurus will copy it to build)."""
@@ -666,23 +680,24 @@ def build(args, master_root, docs_dir):
         VIEW.skip('install', 'Install', "Maven install", rows['install'])
         VIEW.skip('site', 'Site', "Maven site", rows['site'])
     else:
-        compile_java_modules(master_root)
-        generate_maven_site(master_root)
-        verify_apidocs(master_root)
+        # Hold the shared Maven lock from the clean install until the javadocs and site are copied out of
+        # target/, so a concurrent Juneau push cannot clean target/ in between.
+        maven_lock = None if DRY_RUN else mvn_lock.MvnLock(on_wait=mvn_lock.wait_notifier(say)).acquire()
+        try:
+            compile_java_modules(master_root)
+            generate_maven_site(master_root)
+            verify_apidocs(master_root)
+            copy_from_maven_output(args, rows, master_root, docs_dir)
+        finally:
+            if maven_lock:
+                maven_lock.release()
 
     # Copy current javadocs to versioned folder, and the Maven site to the static directory
     # BEFORE building Docusaurus (Docusaurus will automatically copy static/ contents to build/).
     # Both need Maven output, so --skip-maven skips the row; --skip-copy skips the site copy only.
     if rows['copy']:
         VIEW.skip('copy', 'Copy', "Copying javadocs and site", rows['copy'])
-    else:
-        with VIEW.stage('copy', 'Copy', "Copying javadocs and site") as step:
-            copy_current_javadocs(master_root, docs_dir)
-            if args.skip_copy:
-                say("Skipping Maven site copy (--skip-copy)")
-                step.summary = "javadocs; site skipped (--skip-copy)"
-            else:
-                copy_maven_site(master_root, docs_dir)
+    # (otherwise the Copy row already ran above, inside the Maven lock)
 
     # Derive the artifact -> base-package map for the <DependencyInfo> "Javadocs"
     # link, validated against the javadocs now in place (freshly copied above, or

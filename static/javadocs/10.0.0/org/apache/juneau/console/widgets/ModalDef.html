@@ -874,36 +874,19 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <li>
 <section class="detail" id="validate()">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-755">validate</a></span>()</div>
-<div class="block">Fail-closed bean validation.
-
- <p>
- Requires a non-blank <a href="#title"><code>title</code></a> and a non-blank label on each <a href="ModalDef.Field.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef.Field</code></a>; when a <a href="#form"><code>form</code></a> is present
- it delegates to <a href="FormDef.html#validate()"><code>FormDef.validate()</code></a>.  Does <b>not</b> require <a href="#contractVersion"><code>contractVersion</code></a> to be set to
- <a href="#CONTRACT_VERSION"><code>CONTRACT_VERSION</code></a> (or set at all) &mdash; a modal whose version was explicitly cleared, or that
- arrived from a foreign producer that never set one, must not false-refuse on that alone.  Version-presence
- and structural well-formedness are deliberately independent properties (design note, &sect;5.4).
-
- <p>
- Also rejects, fail-closed at serve time rather than silently on the wire: a <a href="ModalDef.Field.html#kind"><code>ModalDef.Field.kind</code></a> outside the
- <a href="#FIELD_KIND_TEXT"><code>text</code></a>/<a href="#FIELD_KIND_CODE"><code>code</code></a> allowlist; a <a href="#nav"><code>nav</code></a> other than
- <a href="#NAV_PILL"><code>NAV_PILL</code></a>/<a href="#NAV_FOLDER"><code>NAV_FOLDER</code></a>; a blank, duplicate or unlabelled
- <a href="ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef.ChildAction</code></a> id; <a href="ModalDef.ChildAction.html#carryDrafts"><code>ModalDef.ChildAction.carryDrafts</code></a> on a modal that declares no <a href="#form"><code>form</code></a> (nothing to
- collect <i>from</i>); and <a href="ModalDef.ChildAction.html#carryDrafts"><code>ModalDef.ChildAction.carryDrafts</code></a> on a child that declares no
- <a href="ModalDef.ChildAction.html#form"><code>ModalDef.ChildAction.form</code></a> (nowhere to put them &mdash; the runtime would take its confirm-only branch, issue
- no GET, and the drafts would vanish silently).</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-760">validate</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="Widget.html#validate()">Widget</a></code></span></div>
+<div class="block">Fail-closed bean validation.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="Widget.html#validate()">validate</a></code>&nbsp;in interface&nbsp;<code><a href="Widget.html" title="interface in org.apache.juneau.console.widgets">Widget</a></code></dd>
-<dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If this modal is not well-formed.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="checked()">
 <h3>checked</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-861">checked</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ModalDef.html#line-864">checked</a></span>()</div>
 <div class="block">The serving-path hook every app <code>@RestGet</code> that returns a <a href="ModalDef.html" title="class in org.apache.juneau.console.widgets"><code>ModalDef</code></a> should invoke.
 
  <p>

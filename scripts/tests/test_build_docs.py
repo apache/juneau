@@ -251,3 +251,38 @@ def test_skip_maven_still_runs_the_link_checks_when_the_juneau_checkout_exists(m
     calls.clear()
     assert build_docs.build(args, tmp_path / 'missing', tmp_path) == 0
     assert calls == []
+
+
+def test_maven_stages_run_inside_the_shared_lock(monkeypatch, tmp_path):
+    events = []
+
+    class FakeLock:
+        def __init__(self, on_wait=None):
+            events.append('new')
+
+        def acquire(self):
+            events.append('acquire')
+            return self
+
+        def release(self):
+            events.append('release')
+
+    monkeypatch.setattr(build_docs.mvn_lock, 'MvnLock', FakeLock)
+    monkeypatch.setattr(build_docs, 'DRY_RUN', False)
+    monkeypatch.setattr(build_docs, 'compile_java_modules', lambda r: events.append('install'))
+    monkeypatch.setattr(build_docs, 'generate_maven_site', lambda r: events.append('site'))
+    monkeypatch.setattr(build_docs, 'verify_apidocs', lambda r: events.append('apidocs'))
+    monkeypatch.setattr(build_docs, 'copy_from_maven_output', lambda *a: events.append('copy'))
+    for name in ('generate_artifact_paths', 'generate_javadoc_packages', 'ensure_apidocs_symlink',
+                 'build_docusaurus', 'install_npm_dependencies', 'get_current_release'):
+        monkeypatch.setattr(build_docs, name, lambda *a, **k: None)
+    monkeypatch.setattr(build_docs, 'resolve_javadocs_version', lambda d: None)
+    monkeypatch.setattr(build_docs, 'dev_server_reason', lambda d: None)
+    monkeypatch.setattr(build_docs, 'run_command', lambda *a, **k: None)
+    monkeypatch.setattr(build_docs, 'check_prerequisites', lambda: None)
+    args = argparse.Namespace(skip_npm=True, skip_maven=False, skip_copy=False, skip_verify=True, staging=False)
+    try:
+        build_docs.build(args, tmp_path, tmp_path)
+    except SystemExit:
+        pass
+    assert events[:7] == ['new', 'acquire', 'install', 'site', 'apidocs', 'copy', 'release']

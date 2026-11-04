@@ -61,6 +61,7 @@ Progress is the `juneau-terminal` live view or plain stage banners; the finished
 
 ## Gotchas
 
+- Maven runs are serialized with the Juneau push and agent builds: the Install, Site and Copy stages hold the shared Maven lock (`mvn_lock.py`, the same `mkdir` lock directory as `~/agents/skills/juneau-worktrees/juneau-mvn-lock.sh`; `JUNEAU_MVN_LOCKDIR` overrides it), so a concurrent `push.py` in the Juneau checkout cannot clean `target/` mid-build. The wait is announced with the holder's pid and command, then about every minute. A killed build releases the lock. `--dry-run` and `--skip-maven` take no lock.
 - It changes tracked files (`artifact-paths.json`, `artifact-packages.json`, `static/javadocs/`); check `git status` afterwards.
 - A full build runs Maven over the whole Juneau tree and is slow; use the skip flags for iteration.
 - The completion reminder is suppressed when `JUNEAU_PUSH_ACTIVE` is set and the live view is active.

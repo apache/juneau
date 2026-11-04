@@ -2751,6 +2751,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/22.02.DrivingTheTerminal',
 									label: 'Driving a Run from Another Tool',
 								},
+								{
+									type: 'doc',
+									id: 'topics/22.03.InstallingJuneauTerminal',
+									label: 'Installing juneau-terminal',
+								},
 							],
 							link: {
 								type: 'doc',
