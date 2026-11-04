@@ -18,7 +18,9 @@ package org.apache.juneau.releng.run;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.juneau.commons.bean.BeanIgnore;
 
 /**
@@ -46,6 +48,9 @@ public class RunFile {
 
 	/** The kind of mail written and awaiting sending ({@code propose}, {@code vote}, {@code result}, {@code announce}), or {@code null}. The page treats it as paused. */
 	public String emailPending;
+
+	/** Mail kind ({@code propose}, {@code vote}, ...) to when it was recorded as sent; empty until one is. */
+	public Map<String, String> emails = new LinkedHashMap<>();
 
 	/** The file (kept out of the JSON state, which must not expose local paths). */
 	@BeanIgnore

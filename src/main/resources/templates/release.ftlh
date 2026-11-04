@@ -32,6 +32,8 @@
         </div>
     </div>
 
+    <div class="jc-card rl-vote-links" id="rl-vote-links" hidden></div>
+
     <div class="jc-card rl-pause" id="rl-pause" role="status" hidden></div>
 
     <div class="jc-card rl-terminal-card">

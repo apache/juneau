@@ -34,6 +34,7 @@ import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.apache.juneau.commons.inject.StackOverlay;
 import org.apache.juneau.commons.utils.IoUtils;
 import org.apache.juneau.rest.mock.MockRestClient;
+import org.apache.juneau.http.response.NotFound;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -316,5 +317,34 @@ class ReleaseRunRestTest {
 		b.dryRun = dryRun;
 		b.idempotencyKey = key;
 		return b;
+	}
+
+	@Test
+	void a18_emailEndpointReturnsSubjectAndBodyWithoutRecipients(@TempDir Path home) throws Exception {
+		var d = Files.createDirectories(home.resolve("runs/9.2.1/emails"));
+		Files.writeString(home.resolve("runs/9.2.1/run.json"), "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":1},\"phase\":\"vote\","
+			+ "\"emails\":{\"vote\":\"2026-11-03T10:00:00\"},\"attempts\":[]}");
+		Files.writeString(d.resolve("vote.eml.txt"), "To: dev@juneau.apache.org\nCc: a@b.c\nSubject: [VOTE] Release Apache Juneau 9.2.1 RC1\n\nHello\nWorld\n");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var r = rest(home, svc);
+		assertEquals("Subject: [VOTE] Release Apache Juneau 9.2.1 RC1\n\nHello\nWorld\n", r.email("vote"));
+		assertThrows(NotFound.class, () -> r.email("announce"), "not written yet");
+		assertThrows(NotFound.class, () -> r.email("../run"), "unknown kind");
+		var active = (org.apache.juneau.releng.run.RunFile)r.current().get("active");
+		assertTrue(active.emails.containsKey("vote"), "sent marker is exposed");
+		assertTrue(Json.of(active).contains("\"emails\""));
+	}
+
+	@Test
+	void a19_pageScriptHasVoteLinkCopyAndIsoCloseTime() throws Exception {
+		try (var in = ReleaseRunRestTest.class.getResourceAsStream("/static/js/release.js")) {
+			var text = new String(IoUtils.readBytes(in), java.nio.charset.StandardCharsets.UTF_8);
+			assertTrue(text.contains("lists.apache.org/list.html?dev@juneau.apache.org"), text);
+			assertTrue(text.contains("a.emails && a.emails.vote"), "link only once the vote mail is sent");
+			assertTrue(text.contains("/rest/runs/email/vote"), text);
+			assertTrue(text.contains("toISOString()"), text);
+			assertTrue(text.contains("summary.title"), "local time tooltip");
+		}
 	}
 }

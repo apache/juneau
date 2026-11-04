@@ -25,7 +25,13 @@ class StepError(RuntimeError):
     """A step failed.  The message is the row's failure text."""
 
 
-SECRET_KEYS = ("credential.apache.password", "credential.gpg.passphrase", "credential.github.token")
+SECRET_KEYS = ("credential.apache.password", "credential.gpg.passphrase", "credential.github.token",
+               "credential.pypi.token", "credential.npm.token")
+
+# The registry tokens are never asked for.  James stores each once in the macOS keychain (release.md, One-time setup),
+# under the "juneau-rm.<id>" service and fixed "token" account the release manager app uses for its GitHub token
+# (CredentialSpec.java:27-28 and :55-63), and keychain_token reads them with `security find-generic-password -w`.
+KEYCHAIN = {"credential.pypi.token": "juneau-rm.pypi", "credential.npm.token": "juneau-rm.npm"}
 
 # The non-secret credentials persisted in run.json 'identity' (so a resume does not re-ask them), by their key there.
 # The only writer of 'identity' reads this map, so a secret cannot reach it.
@@ -177,6 +183,22 @@ class Ctx:
             for key, name in IDENTITY.items():
                 if isinstance(ident.get(name), str) and ident[name]:
                     self.creds.setdefault(key, ident[name])
+
+    def keychain_token(self, key):
+        """A registry token read from the macOS keychain with `security find-generic-password -w`, cached for masking.
+        It runs through Runner.quiet, so the command and its output never reach the screen or full.log, and the value
+        is in no argv.  A missing entry stops the step with the command that adds it; the message never holds a value."""
+        if key in self.creds:
+            return self.creds[key]
+        service = KEYCHAIN[key]
+        r = self.runner.quiet(["security", "find-generic-password", "-s", service, "-a", "token", "-w"],
+                              title=f"Read {service} from the keychain")
+        token = (r.out or "").strip() if r.ok else ""
+        if not token:
+            raise StepError(f"no keychain entry for service {service} (account token).  Add it once with: "
+                            f"security add-generic-password -s {service} -a token -w   (release.md, One-time setup)")
+        self.creds[key] = token
+        return token
 
     def secrets(self):
         """Real secret values, for masking."""

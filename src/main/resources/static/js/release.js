@@ -58,15 +58,57 @@
     return ' (in ' + Math.floor(h / 24) + 'd ' + (h % 24) + 'h)';
   }
 
+  // The vote-close time in UTC ISO form (2026-11-06T18:00Z); the user's local time goes in the tooltip.
+  function isoUtc(deadline) {
+    const t = Date.parse(deadline);
+    return isNaN(t) ? null : new Date(t).toISOString().replace(/:\d\d(\.\d+)?Z$/, 'Z');
+  }
+
+  // The [VOTE] thread on lists.apache.org: a search of dev@juneau for the subject of this version and RC.
+  function voteThreadUrl(a) {
+    const q = '"[VOTE] Release Apache Juneau ' + a.version + ' RC' + a.rc + '"';
+    return 'https://lists.apache.org/list.html?dev@juneau.apache.org:lte=1y:' + encodeURIComponent(q);
+  }
+
+  function renderVoteLinks(a) {
+    const el = $('rl-vote-links');
+    el.replaceChildren();
+    const sent = a && a.emails && a.emails.vote;
+    el.hidden = !sent;
+    if (!sent) return;
+    const link = document.createElement('a');
+    link.href = voteThreadUrl(a);
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'VOTE thread';
+    const copy = document.createElement('button');
+    copy.type = 'button';
+    copy.className = 'jc-btn jc-btn-sm';
+    copy.textContent = 'Copy email';
+    copy.onclick = async () => {
+      const r = await fetch('/rest/runs/email/vote', { headers: { Accept: 'text/plain' } });
+      if (!r.ok) { alert((await r.text()) || r.statusText); return; }
+      await navigator.clipboard.writeText(await r.text());
+      copy.textContent = 'Copied';
+      setTimeout(() => { copy.textContent = 'Copy email'; }, 2000);
+    };
+    el.append(link, ' ', copy);
+  }
+
   function render(tick) {
     const a = state.active;
     // A newest attempt still recorded as running counts as busy, so Start does not flicker in between events.
     const newest = state.history[0];
     const live = state.live || (newest && newest.outcome === 'running' ? { attemptId: newest.id } : null);
-    $('rl-summary').textContent = a
+    const summary = $('rl-summary');
+    const iso = a && a.voteDeadline ? isoUtc(a.voteDeadline) : null;
+    summary.textContent = a
       ? a.version + ' RC' + a.rc + ' · phase ' + (PHASES[a.phase] || a.phase) + (a.last ? ' · ' + a.last : '')
-        + (a.voteDeadline ? ' · closes ' + a.voteDeadline + countdown(a.voteDeadline) : '')
+        + (a.voteDeadline ? ' · closes ' + (iso || a.voteDeadline) + countdown(a.voteDeadline) : '')
       : live ? 'Starting a release…' : 'No release in progress.';
+    if (iso) summary.title = 'Vote closes ' + new Date(a.voteDeadline).toLocaleString(undefined, { timeZoneName: 'short' });
+    else summary.removeAttribute('title');
+    renderVoteLinks(a);
     const pauseEl = $('rl-pause');
     // A pending mail counts as paused even if the pause block is missing (a kill between send() and the recorded pause).
     const text = a && a.pause && a.pause.message ? a.pause.message

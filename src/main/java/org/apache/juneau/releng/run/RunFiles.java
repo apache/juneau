@@ -199,6 +199,9 @@ public class RunFiles {
 				r.pause = p;
 			}
 			r.emailPending = m.get("emailPending") instanceof String s ? s : null;
+			if (m.get("emails") instanceof Map<?, ?> em)
+				for (var e : em.entrySet())
+					r.emails.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
 			var list = m.getList("attempts");
 			if (list != null)
 				for (var o : list)

@@ -27,3 +27,4 @@
 .rl-dry-tag { margin-left: 0.25rem; }
 .rl-pause { border-left: 4px solid var(--jc-accent); }
 .rl-pause[hidden] { display: none; }
+.rl-vote-links[hidden] { display: none; }

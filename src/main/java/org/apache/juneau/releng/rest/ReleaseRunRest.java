@@ -25,8 +25,10 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.http.Content;
+import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.BadRequest;
 import org.apache.juneau.http.response.Conflict;
+import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.http.response.InternalServerError;
 import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
@@ -72,6 +74,8 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	 * How many start keys are remembered; the oldest is forgotten first.
 	 */
 	private static final int MAX_START_KEYS = 100;
+
+	private static final java.util.Set<String> EMAIL_KINDS = java.util.Set.of("propose", "vote", "result", "announce");
 
 	private static final Pattern ATTEMPT_ID = Pattern.compile("attempt-(\\d{8}-\\d{6}-\\d{3})");
 
@@ -130,6 +134,33 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 			m.put("live", m("attemptId", l.attemptId(), "command", l.command(), "dryRun", l.dryRun())));
 		m.put("history", runFiles.history());
 		return m;
+	}
+
+	/**
+	 * A written mail as {@code Subject: ...}, a blank line and the body, ready to paste into a mail client. The
+	 * {@code To:}/{@code Cc:} header lines of the {@code .eml.txt} file are left out.
+	 */
+	@RestGet(path = "/email/{kind}", produces = "text/plain")
+	public String email(@Path("kind") String kind) throws java.io.IOException {
+		if (! EMAIL_KINDS.contains(kind))
+			throw new NotFound("No such email kind");
+		var active = runFiles.active().orElseThrow(() -> new NotFound("No release in progress"));
+		var f = runFiles.home().resolve("runs").resolve(active.version).resolve("emails").resolve(kind + ".eml.txt");
+		if (! Files.isRegularFile(f))
+			throw new NotFound("The " + kind + " email has not been written yet");
+		var out = new StringBuilder();
+		var inHead = true;
+		for (var line : Files.readAllLines(f)) {
+			if (inHead) {
+				if (line.isEmpty())
+					inHead = false;
+				if (! line.startsWith("To:") && ! line.startsWith("Cc:"))
+					out.append(line).append('\n');
+			} else {
+				out.append(line).append('\n');
+			}
+		}
+		return out.toString();
 	}
 
 	/**
