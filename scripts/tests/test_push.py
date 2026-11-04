@@ -96,6 +96,15 @@ def hermetic_git_env(monkeypatch):
     monkeypatch.setenv("GIT_TERMINAL_PROMPT", "0")
 
 
+@pytest.fixture(autouse=True)
+def packaging_tools_on_path(monkeypatch):
+    """Report the packaging tools (uv, npm, ruby, twine) as on PATH, so the Prechecks row's `packaging tools` check
+    passes on a machine without them (the GitHub runner has no uv or twine).  TestPackagingToolsCheck overrides it."""
+    real_which = shutil.which
+    tools = {"uv", "npm", "ruby", "twine"}
+    monkeypatch.setattr(shutil, "which", lambda tool, *a, **k: f"/bin/{tool}" if tool in tools else real_which(tool, *a, **k))
+
+
 def _run(cwd: Path, *argv: str) -> str:
     result = subprocess.run(argv, cwd=str(cwd), check=True, capture_output=True, text=True)
     return result.stdout.strip()

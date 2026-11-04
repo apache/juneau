@@ -2507,9 +2507,9 @@ class LiveRenderer:
 
     def _header_lines(self, cols):
         """The header as (text, wraps) pairs, its title first: a log line (Board, Output, Cancel) wraps, every other
-        line is cut."""
+        line is cut.  Empty once a pause has printed it into scrollback (a nested session never does, so its sticky header stays)."""
         title, head = [], []
-        for block in self.header or self.sticky:
+        for block in [] if self.header_printed else self.header or self.sticky:
             text = header_lines(block, cols, self.color, live=True)[0]
             if len(block) > 2 and block[2] == HEAD_MARK and not title:
                 title = [(text, False)]

@@ -1653,6 +1653,26 @@ class LiveTest(unittest.TestCase):
         self.assertEqual(self.screen.text().count("Push: Juneau · master"), 1)
         self.assertEqual(self.screen.text().count("Commit Message: m"), 1)
 
+    def test_the_header_shows_once_on_screen_after_pause_and_resume(self):
+        for pauses in (1, 2):
+            for header in ("Juneau", "Juneau " + "word " * 60):
+                for dims in ((60, 10), (60, 5)):
+                    with self.subTest(pauses=pauses, header=len(header), dims=dims):
+                        reset_run_state()
+                        self.dims = dims
+                        self.screen = Screen(rows=dims[1], cols=dims[0])
+                        self.live = jr.LiveRenderer(self.screen.feed, size=lambda: os.terminal_size(self.dims),
+                                                    clock=self.clock, color=False)
+                        self.board = jr.Board(clock=self.clock)
+                        self.session(header=(header, "master"))
+                        self.push(*start())
+                        for _ in range(pauses):
+                            self.live.pause()
+                            self.live.resume()
+                        self.assertEqual(self.screen.history().count("▶ Push: Juneau"), 1, self.screen.history())
+                        self.live.close()
+                        self.assertEqual(self.screen.history().count("▶ Push: Juneau"), 1, self.screen.history())
+
     def test_pause_prints_the_transcript_and_resume_draws_only_the_live_part(self):
         self.session()
         self.push(("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None}),
@@ -1663,7 +1683,7 @@ class LiveTest(unittest.TestCase):
         self.assertEqual(self.live.transcript, [])
         self.live.resume()
         lines = self.screen.text().splitlines()
-        self.assertEqual(lines.count("▶ Push: Juneau · master"), 2)      # scrollback's copy and the frame's title
+        self.assertEqual(lines.count("▶ Push: Juneau · master"), 1)      # scrollback's copy; the frame drops its own
         self.assertEqual(sum(line.startswith("✔ Alpha") for line in lines), 1)
 
     def test_after_close_a_block_prints_at_once(self):
