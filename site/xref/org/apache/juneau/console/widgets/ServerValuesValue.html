@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * An immutable named server-side scalar value declaration held by a {@link ServerValues} bean.</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Each value pairs a stable {@code name} (the key an author interpolates as &lt;js&gt;"$FV{name}"&lt;/js&gt;) with a</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * Each value pairs a stable {@code name} (the key an author interpolates as &lt;js&gt;"${FV:name}"&lt;/js&gt;) with a</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * session-aware {@code provider}.  The provider is invoked at serve time against a per-render</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * {@link VarResolverSession} and must return a scalar ({@link String} / {@link Number} / {@link Boolean}) or</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * &lt;jk&gt;null&lt;/jk&gt;; non-scalar results are rejected at resolve time rather than {@code toString()}-ed.</em>
@@ -45,7 +45,7 @@
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="ServerValuesValue" href="../../../../../org/apache/juneau/console/widgets/ServerValuesValue.html#ServerValuesValue">ServerValuesValue</a> {
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_javadoccomment">/** The interpolation name (the {@code x} in &lt;js&gt;"$FV{x}"&lt;/js&gt;).  Must not be null or blank. */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_javadoccomment">/** The interpolation name (the {@code x} in &lt;js&gt;"${FV:x}"&lt;/js&gt;).  Must not be null or blank. */</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> String name;
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<em class="jxr_javadoccomment">/** The session-aware scalar provider.  Must not be null. */</em>

@@ -145,7 +145,7 @@
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		}
 <a class="jxr_linenumber" name="L138" href="#L138">138</a> 		@RestGet
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">public</strong> HttpResource d(RestRequest req) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> stringResource(()-&gt;req.getVarResolverSession().resolve(<span class="jxr_string">"$RQ{foo}"</span>));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<strong class="jxr_keyword">return</strong> stringResource(()-&gt;req.getVarResolverSession().resolve(<span class="jxr_string">"${RQ:foo}"</span>));
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 		}
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 		@RestGet
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">public</strong> HttpResource e() {

@@ -1016,14 +1016,14 @@ loadScripts(document, 'script');</script>
       <code>RestResource</code>). <code>null</code> return falls through; non-<code>null</code> (including empty array) wins.
    <li><a href="Rest.html#paths()"><code>@Rest(paths)</code></a> annotation default on the most-derived class, SVL-resolved per
       element and comma-split.  A <code>VarResolver</code> is looked up on <code>store</code> (when present); SVL
-      variables like <code>$C{key}</code> resolve against beans visible to the bean store.
+      variables like <code>${C:key}</code> resolve against beans visible to the bean store.
  </ol></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>resourceClass</code> - The <code>@Rest</code>-annotated resource class. Must not be <code>null</code>.</dd>
 <dd><code>resource</code> - The resource instance. May be <code>null</code> (in which case the getter rung is skipped).</dd>
 <dd><code>store</code> - The bean store used to look up the <a href="../../commons/svl/VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> for SVL substitution on annotation
-   elements, and to back the resolver session for bean-driven SVL vars like <code>$C{key}</code>. May be
+   elements, and to back the resolver session for bean-driven SVL vars like <code>${C:key}</code>. May be
    <code>null</code> (SVL is then skipped; literals pass through unchanged).</dd>
 <dt>Returns:</dt>
 <dd>The resolved paths array (never <code>null</code>; possibly empty).</dd>
@@ -1689,7 +1689,7 @@ loadScripts(document, 'script');</script>
       hierarchy with the most-derived non-empty value winning. Each element is
       <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>-resolved
       against the bootstrap <a href="../../commons/svl/VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a>, then comma-split (trim
-      each piece, drop empties).  A single element like <code>"$C{health.paths}"</code> can therefore expand
+      each piece, drop empties).  A single element like <code>"${C:health.paths}"</code> can therefore expand
       to multiple mount paths.
  </ol>
 
@@ -2107,12 +2107,12 @@ loadScripts(document, 'script');</script>
    <ja>@Rest</ja>(
       messages=<js>"nls/Messages"</js>,
       properties={
-         <ja>@Property</ja>(name=<js>"title"</js>,value=<js>"$L{title}"</js>),  <jc>// Localized variable in Messages.properties</jc>
-         <ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"$S{java.vendor,Oracle}"</js>),  <jc>// System property with default value</jc>
+         <ja>@Property</ja>(name=<js>"title"</js>,value=<js>"${L:title}"</js>),  <jc>// Localized variable in Messages.properties</jc>
+         <ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"${S:java.vendor:Oracle}"</js>),  <jc>// System property with default value</jc>
          <ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
          <ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
-         <ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo}"</js>),  <jc>// Request variable.  value="bar"</jc>
-         <ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo,bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
+         <ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"${R:foo}"</js>),  <jc>// Request variable.  value="bar"</jc>
+         <ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"${R:foo:bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
       }
    )
    <jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet {
@@ -2124,16 +2124,16 @@ loadScripts(document, 'script');</script>
    <ja>@RestGet</ja>(<js>"/{name}/*"</js>)
    <ja>@HtmlDocConfig</ja>(
       navlinks={
-         <js>"up: $R{requestParentURI}"</js>,
+         <js>"up: ${R:requestParentURI}"</js>,
          <js>"api: servlet:/api"</js>,
          <js>"stats: servlet:/stats"</js>,
-         <js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
+         <js>"editLevel: servlet:/editLevel?logger=${A:attribute.name: OFF}"</js>
       }
       header={
-         <js>"&lt;h1&gt;$L{MyLocalizedPageTitle}&lt;/h1&gt;"</js>
+         <js>"&lt;h1&gt;${L:MyLocalizedPageTitle}&lt;/h1&gt;"</js>
       },
       aside={
-         <js>"$F{resources/AsideText.html}"</js>
+         <js>"${F:resources/AsideText.html}"</js>
       }
    )
    <jk>public</jk> LoggerEntry getLogger(RestRequest <jv>req</jv>, <ja>@Path</ja> String <jv>name</jv>) <jk>throws</jk> Exception {

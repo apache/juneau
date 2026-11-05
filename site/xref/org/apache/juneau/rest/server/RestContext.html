@@ -151,7 +151,7 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> @SuppressWarnings({
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	<span class="jxr_string">"java:S112"</span>, <em class="jxr_comment">// RuntimeException used in memoizer lambdas to re-wrap checked exceptions (ServletException/Exception) that Supplier&lt;T&gt; cannot declare</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<span class="jxr_string">"java:S125"</span>, <em class="jxr_comment">// Explanatory comments reference SVL ($C{...}/$E{...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<span class="jxr_string">"java:S125"</span>, <em class="jxr_comment">// Explanatory comments reference SVL (${C:...}/${E:...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<span class="jxr_string">"java:S1141"</span>, <em class="jxr_comment">// Nested try/catch blocks required for granular error reporting during initialization.</em>
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<span class="jxr_string">"java:S1192"</span>, <em class="jxr_comment">// Duplicate string literals are property key names and REST annotation attribute values; intentional</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	<span class="jxr_string">"java:S1200"</span>, <em class="jxr_comment">// Class has many dependencies; acceptable for this core context class</em>
@@ -693,7 +693,7 @@
 <a class="jxr_linenumber" name="L685" href="#L685">685</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;The resource's {@code getPaths()} getter (when non-{@code null}).</em>
 <a class="jxr_linenumber" name="L686" href="#L686">686</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link Rest#paths() @Rest(paths)} annotation default, walked top-down with the most-derived non-empty</em>
 <a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 * 		array winning.  Each element is SVL-resolved against a session of {@code vr} backed by</em>
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 * 		{@code beanStore} (so {@code $C{key}} consults whatever {@link Config} is registered), then</em>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 * 		{@code beanStore} (so {@code ${C:key}} consults whatever {@link Config} is registered), then</em>
 <a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">	 * 		comma-split.</em>
 <a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 *</em>
@@ -720,13 +720,13 @@
 <a class="jxr_linenumber" name="L712" href="#L712">712</a> <em class="jxr_javadoccomment">	 * 		{@code RestResource}). {@code null} return falls through; non-{@code null} (including empty array) wins.</em>
 <a class="jxr_linenumber" name="L713" href="#L713">713</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;{@link Rest#paths() @Rest(paths)} annotation default on the most-derived class, SVL-resolved per</em>
 <a class="jxr_linenumber" name="L714" href="#L714">714</a> <em class="jxr_javadoccomment">	 * 		element and comma-split.  A {@code VarResolver} is looked up on {@code store} (when present); SVL</em>
-<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * 		variables like {@code $C{key}} resolve against beans visible to the bean store.</em>
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> <em class="jxr_javadoccomment">	 * 		variables like {@code ${C:key}} resolve against beans visible to the bean store.</em>
 <a class="jxr_linenumber" name="L716" href="#L716">716</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L717" href="#L717">717</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L718" href="#L718">718</a> <em class="jxr_javadoccomment">	 * @param resourceClass The {@code @Rest}-annotated resource class. Must not be {@code null}.</em>
 <a class="jxr_linenumber" name="L719" href="#L719">719</a> <em class="jxr_javadoccomment">	 * @param resource The resource instance. May be {@code null} (in which case the getter rung is skipped).</em>
 <a class="jxr_linenumber" name="L720" href="#L720">720</a> <em class="jxr_javadoccomment">	 * @param store The bean store used to look up the {@link VarResolver} for SVL substitution on annotation</em>
-<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 * 	elements, and to back the resolver session for bean-driven SVL vars like {@code $C{key}}. May be</em>
+<a class="jxr_linenumber" name="L721" href="#L721">721</a> <em class="jxr_javadoccomment">	 * 	elements, and to back the resolver session for bean-driven SVL vars like {@code ${C:key}}. May be</em>
 <a class="jxr_linenumber" name="L722" href="#L722">722</a> <em class="jxr_javadoccomment">	 * 	{@code null} (SVL is then skipped; literals pass through unchanged).</em>
 <a class="jxr_linenumber" name="L723" href="#L723">723</a> <em class="jxr_javadoccomment">	 * @return The resolved paths array (never {@code null}; possibly empty).</em>
 <a class="jxr_linenumber" name="L724" href="#L724">724</a> <em class="jxr_javadoccomment">	 * @since 10.0.0</em>
@@ -770,10 +770,10 @@
 <a class="jxr_linenumber" name="L762" href="#L762">762</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L763" href="#L763">763</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L764" href="#L764">764</a> <em class="jxr_javadoccomment">	 * Each input element is SVL-resolved (via a session of the bootstrap {@link VarResolver} that's backed</em>
-<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * by {@code beanStore} when one is available, so bean-driven vars like {@code $C{key}} can find the</em>
+<a class="jxr_linenumber" name="L765" href="#L765">765</a> <em class="jxr_javadoccomment">	 * by {@code beanStore} when one is available, so bean-driven vars like {@code ${C:key}} can find the</em>
 <a class="jxr_linenumber" name="L766" href="#L766">766</a> <em class="jxr_javadoccomment">	 * registered {@link Config}), then split on {@code ,}; each piece is trimmed and empty pieces are</em>
-<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * dropped.  This lets a single element like {@code "$C{health.paths}"} or</em>
-<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * {@code "$E{HEALTH_PATHS,/healthz,/readyz}"} expand to multiple mount paths.</em>
+<a class="jxr_linenumber" name="L767" href="#L767">767</a> <em class="jxr_javadoccomment">	 * dropped.  This lets a single element like {@code "${C:health.paths}"} or</em>
+<a class="jxr_linenumber" name="L768" href="#L768">768</a> <em class="jxr_javadoccomment">	 * {@code "${E:HEALTH_PATHS:/healthz,/readyz}"} expand to multiple mount paths.</em>
 <a class="jxr_linenumber" name="L769" href="#L769">769</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L770" href="#L770">770</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String[] expandPathsElements(String[] elements, VarResolver vr, WritableBeanStore beanStore) {
 <a class="jxr_linenumber" name="L771" href="#L771">771</a> 		<em class="jxr_comment">// Open a single session for the whole array — reusing it across elements avoids re-walking the</em>
@@ -821,7 +821,7 @@
 <a class="jxr_linenumber" name="L813" href="#L813">813</a> <em class="jxr_javadoccomment">	 * preserves traversal order; {@code null} leaves are dropped.  Comma-split + SVL resolution are</em>
 <a class="jxr_linenumber" name="L814" href="#L814">814</a> <em class="jxr_javadoccomment">	 * intentionally &lt;i&gt;not&lt;/i&gt; applied here &amp;mdash; they happen downstream in</em>
 <a class="jxr_linenumber" name="L815" href="#L815">815</a> <em class="jxr_javadoccomment">	 * {@link #expandPathsElements(String[], VarResolver, WritableBeanStore)} so SVL substitution sees the</em>
-<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 * raw element (preserving {@code $E{NAME,defaultWithCommas}}-style defaults) before the post-SVL</em>
+<a class="jxr_linenumber" name="L816" href="#L816">816</a> <em class="jxr_javadoccomment">	 * raw element (preserving {@code ${E:NAME:defaultWithCommas}}-style defaults) before the post-SVL</em>
 <a class="jxr_linenumber" name="L817" href="#L817">817</a> <em class="jxr_javadoccomment">	 * comma-split fires.</em>
 <a class="jxr_linenumber" name="L818" href="#L818">818</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L819" href="#L819">819</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; normalizePaths(Object o) {
@@ -1262,9 +1262,9 @@
 <a class="jxr_linenumber" name="L1254" href="#L1254">1254</a> 		<strong class="jxr_keyword">if</strong> (v.isEmpty() &amp;&amp; eq(cf, <span class="jxr_string">"SYSTEM_DEFAULT"</span>))
 <a class="jxr_linenumber" name="L1255" href="#L1255">1255</a> 			v.set(Config.getSystemDefault());
 <a class="jxr_linenumber" name="L1256" href="#L1256">1256</a> 		<strong class="jxr_keyword">if</strong> (v.isEmpty() &amp;&amp; cf.isEmpty() &amp;&amp; isMixinContextField() &amp;&amp; getParentContext() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 			<em class="jxr_comment">// Mixin sub-contexts with no own @Rest(config) inherit the host's raw Config, so that $C{...}</em>
+<a class="jxr_linenumber" name="L1257" href="#L1257">1257</a> 			<em class="jxr_comment">// Mixin sub-contexts with no own @Rest(config) inherit the host's raw Config, so that ${C:...}</em>
 <a class="jxr_linenumber" name="L1258" href="#L1258">1258</a> 			<em class="jxr_comment">// SVL variables embedded in inherited class-level config (e.g. the @HtmlDocConfig theme/header/</em>
-<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 			<em class="jxr_comment">// footer declared via $C{REST/...} on BasicRestConfig) resolve against the host's loaded config</em>
+<a class="jxr_linenumber" name="L1259" href="#L1259">1259</a> 			<em class="jxr_comment">// footer declared via ${C:REST/...} on BasicRestConfig) resolve against the host's loaded config</em>
 <a class="jxr_linenumber" name="L1260" href="#L1260">1260</a> 			<em class="jxr_comment">// rather than an empty one.  This mirrors the way messages and varResolver tokens already inherit</em>
 <a class="jxr_linenumber" name="L1261" href="#L1261">1261</a> 			<em class="jxr_comment">// from the host for mixin sub-contexts.</em>
 <a class="jxr_linenumber" name="L1262" href="#L1262">1262</a> 			v.set(getParentContext().rawConfig.get());
@@ -2795,8 +2795,8 @@
 <a class="jxr_linenumber" name="L2787" href="#L2787">2787</a> 			<em class="jxr_comment">// the resolved array is what hosting runtimes (Jetty auto-discovery, Spring Boot ServletRegistrationBean)</em>
 <a class="jxr_linenumber" name="L2788" href="#L2788">2788</a> 			<em class="jxr_comment">// should consume rather than reading the raw @Rest(paths) annotation directly.  Each @Rest(paths)</em>
 <a class="jxr_linenumber" name="L2789" href="#L2789">2789</a> 			<em class="jxr_comment">// element is SVL-resolved through a VarResolver session backed by the live bean store — so</em>
-<a class="jxr_linenumber" name="L2790" href="#L2790">2790</a> 			<em class="jxr_comment">// $C{key} consults whatever Config is currently registered (test overlay, @Bean factory, or the</em>
-<a class="jxr_linenumber" name="L2791" href="#L2791">2791</a> 			<em class="jxr_comment">// framework's runtime Config) and $E{NAME,default} / $S{prop,default} use the bootstrap variable</em>
+<a class="jxr_linenumber" name="L2790" href="#L2790">2790</a> 			<em class="jxr_comment">// ${C:key} consults whatever Config is currently registered (test overlay, @Bean factory, or the</em>
+<a class="jxr_linenumber" name="L2791" href="#L2791">2791</a> 			<em class="jxr_comment">// framework's runtime Config) and ${E:NAME:default} / ${S:prop:default} use the bootstrap variable</em>
 <a class="jxr_linenumber" name="L2792" href="#L2792">2792</a> 			<em class="jxr_comment">// catalog without needing any beans.  The session-with-beanstore form is what makes test-time</em>
 <a class="jxr_linenumber" name="L2793" href="#L2793">2793</a> 			<em class="jxr_comment">// Config injection visible to SVL without firing the full runtime VarResolver memoizer.</em>
 <a class="jxr_linenumber" name="L2794" href="#L2794">2794</a> 			paths = resolveMountPaths(builder, resource.get(), getBootstrapVarResolver(), beanStore, getRestAnnotations());
@@ -3201,7 +3201,7 @@
 <a class="jxr_linenumber" name="L3193" href="#L3193">3193</a> 	}
 <a class="jxr_linenumber" name="L3194" href="#L3194">3194</a> 
 <a class="jxr_linenumber" name="L3195" href="#L3195">3195</a> 	<em class="jxr_comment">// Resolves a raw RestContext.* boolean default carried on RestContextProperties: SVL variables in the raw seed</em>
-<a class="jxr_linenumber" name="L3196" href="#L3196">3196</a> 	<em class="jxr_comment">// are resolved recursively through the resource var resolver (so a value such as $S{flag} or $C{...} resolves to</em>
+<a class="jxr_linenumber" name="L3196" href="#L3196">3196</a> 	<em class="jxr_comment">// are resolved recursively through the resource var resolver (so a value such as ${S:flag} or ${C:...} resolves to</em>
 <a class="jxr_linenumber" name="L3197" href="#L3197">3197</a> 	<em class="jxr_comment">// its target) before parsing to a boolean.  A blank or unresolved value parses to false.  This mirrors the enum</em>
 <a class="jxr_linenumber" name="L3198" href="#L3198">3198</a> 	<em class="jxr_comment">// treatment (getUriRelativityRaw()/getUriResolutionRaw()) — the bean carries the raw string and RestContext owns</em>
 <a class="jxr_linenumber" name="L3199" href="#L3199">3199</a> 	<em class="jxr_comment">// all SVL resolution and typing, since only RestContext holds the var resolver.</em>
@@ -4296,7 +4296,7 @@
 <a class="jxr_linenumber" name="L4288" href="#L4288">4288</a> <em class="jxr_javadoccomment">	 * 		hierarchy with the most-derived non-empty value winning. Each element is</em>
 <a class="jxr_linenumber" name="L4289" href="#L4289">4289</a> <em class="jxr_javadoccomment">	 * 		&lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;-resolved</em>
 <a class="jxr_linenumber" name="L4290" href="#L4290">4290</a> <em class="jxr_javadoccomment">	 * 		against the bootstrap {@link VarResolver VarResolver}, then comma-split (trim</em>
-<a class="jxr_linenumber" name="L4291" href="#L4291">4291</a> <em class="jxr_javadoccomment">	 * 		each piece, drop empties).  A single element like {@code "$C{health.paths}"} can therefore expand</em>
+<a class="jxr_linenumber" name="L4291" href="#L4291">4291</a> <em class="jxr_javadoccomment">	 * 		each piece, drop empties).  A single element like {@code "${C:health.paths}"} can therefore expand</em>
 <a class="jxr_linenumber" name="L4292" href="#L4292">4292</a> <em class="jxr_javadoccomment">	 * 		to multiple mount paths.</em>
 <a class="jxr_linenumber" name="L4293" href="#L4293">4293</a> <em class="jxr_javadoccomment">	 * &lt;/ol&gt;</em>
 <a class="jxr_linenumber" name="L4294" href="#L4294">4294</a> <em class="jxr_javadoccomment">	 *</em>
@@ -4663,12 +4663,12 @@
 <a class="jxr_linenumber" name="L4655" href="#L4655">4655</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(</em>
 <a class="jxr_linenumber" name="L4656" href="#L4656">4656</a> <em class="jxr_javadoccomment">	 * 		messages=&lt;js&gt;"nls/Messages"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L4657" href="#L4657">4657</a> <em class="jxr_javadoccomment">	 * 		properties={</em>
-<a class="jxr_linenumber" name="L4658" href="#L4658">4658</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"title"&lt;/js&gt;,value=&lt;js&gt;"$L{title}"&lt;/js&gt;),  &lt;jc&gt;// Localized variable in Messages.properties&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L4659" href="#L4659">4659</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"javaVendor"&lt;/js&gt;,value=&lt;js&gt;"$S{java.vendor,Oracle}"&lt;/js&gt;),  &lt;jc&gt;// System property with default value&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L4658" href="#L4658">4658</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"title"&lt;/js&gt;,value=&lt;js&gt;"${L:title}"&lt;/js&gt;),  &lt;jc&gt;// Localized variable in Messages.properties&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L4659" href="#L4659">4659</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"javaVendor"&lt;/js&gt;,value=&lt;js&gt;"${S:java.vendor:Oracle}"&lt;/js&gt;),  &lt;jc&gt;// System property with default value&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L4660" href="#L4660">4660</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"foo"&lt;/js&gt;,value=&lt;js&gt;"bar"&lt;/js&gt;),</em>
 <a class="jxr_linenumber" name="L4661" href="#L4661">4661</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"bar"&lt;/js&gt;,value=&lt;js&gt;"baz"&lt;/js&gt;),</em>
-<a class="jxr_linenumber" name="L4662" href="#L4662">4662</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"v1"&lt;/js&gt;,value=&lt;js&gt;"$R{foo}"&lt;/js&gt;),  &lt;jc&gt;// Request variable.  value="bar"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L4663" href="#L4663">4663</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"v1"&lt;/js&gt;,value=&lt;js&gt;"$R{foo,bar}"&lt;/js&gt;),  &lt;jc&gt;// Request variable.  value="bar"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L4662" href="#L4662">4662</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"v1"&lt;/js&gt;,value=&lt;js&gt;"${R:foo}"&lt;/js&gt;),  &lt;jc&gt;// Request variable.  value="bar"&lt;/jc&gt;</em>
+<a class="jxr_linenumber" name="L4663" href="#L4663">4663</a> <em class="jxr_javadoccomment">	 * 			&lt;ja&gt;@Property&lt;/ja&gt;(name=&lt;js&gt;"v1"&lt;/js&gt;,value=&lt;js&gt;"${R:foo:bar}"&lt;/js&gt;),  &lt;jc&gt;// Request variable.  value="bar"&lt;/jc&gt;</em>
 <a class="jxr_linenumber" name="L4664" href="#L4664">4664</a> <em class="jxr_javadoccomment">	 * 		}</em>
 <a class="jxr_linenumber" name="L4665" href="#L4665">4665</a> <em class="jxr_javadoccomment">	 * 	)</em>
 <a class="jxr_linenumber" name="L4666" href="#L4666">4666</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyRestResource &lt;jk&gt;extends&lt;/jk&gt; BasicRestServlet {</em>
@@ -4680,16 +4680,16 @@
 <a class="jxr_linenumber" name="L4672" href="#L4672">4672</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@RestGet&lt;/ja&gt;(&lt;js&gt;"/{name}/*"&lt;/js&gt;)</em>
 <a class="jxr_linenumber" name="L4673" href="#L4673">4673</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</em>
 <a class="jxr_linenumber" name="L4674" href="#L4674">4674</a> <em class="jxr_javadoccomment">	 * 		navlinks={</em>
-<a class="jxr_linenumber" name="L4675" href="#L4675">4675</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"up: $R{requestParentURI}"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L4675" href="#L4675">4675</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"up: ${R:requestParentURI}"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L4676" href="#L4676">4676</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"api: servlet:/api"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L4677" href="#L4677">4677</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"stats: servlet:/stats"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L4678" href="#L4678">4678</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L4678" href="#L4678">4678</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"editLevel: servlet:/editLevel?logger=${A:attribute.name: OFF}"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L4679" href="#L4679">4679</a> <em class="jxr_javadoccomment">	 * 		}</em>
 <a class="jxr_linenumber" name="L4680" href="#L4680">4680</a> <em class="jxr_javadoccomment">	 * 		header={</em>
-<a class="jxr_linenumber" name="L4681" href="#L4681">4681</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"&amp;lt;h1&amp;gt;$L{MyLocalizedPageTitle}&amp;lt;/h1&amp;gt;"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L4681" href="#L4681">4681</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"&amp;lt;h1&amp;gt;${L:MyLocalizedPageTitle}&amp;lt;/h1&amp;gt;"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L4682" href="#L4682">4682</a> <em class="jxr_javadoccomment">	 * 		},</em>
 <a class="jxr_linenumber" name="L4683" href="#L4683">4683</a> <em class="jxr_javadoccomment">	 * 		aside={</em>
-<a class="jxr_linenumber" name="L4684" href="#L4684">4684</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"$F{resources/AsideText.html}"&lt;/js&gt;</em>
+<a class="jxr_linenumber" name="L4684" href="#L4684">4684</a> <em class="jxr_javadoccomment">	 * 			&lt;js&gt;"${F:resources/AsideText.html}"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L4685" href="#L4685">4685</a> <em class="jxr_javadoccomment">	 * 		}</em>
 <a class="jxr_linenumber" name="L4686" href="#L4686">4686</a> <em class="jxr_javadoccomment">	 * 	)</em>
 <a class="jxr_linenumber" name="L4687" href="#L4687">4687</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public&lt;/jk&gt; LoggerEntry getLogger(RestRequest &lt;jv&gt;req&lt;/jv&gt;, &lt;ja&gt;@Path&lt;/ja&gt; String &lt;jv&gt;name&lt;/jv&gt;) &lt;jk&gt;throws&lt;/jk&gt; Exception {</em>

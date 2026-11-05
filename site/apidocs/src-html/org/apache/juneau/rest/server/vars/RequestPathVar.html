@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26"> * Request path variable resolver.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * The format for this var is &lt;js&gt;"$RP{key1[,key2...]}"&lt;/js&gt;.</span>
+<span class="source-line-no">029</span><span id="line-29"> * The format for this var is &lt;js&gt;"${RP:key1[:key2...]}"&lt;/js&gt;.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * Used to resolve values returned by {@link RestRequest#getPathParam(String)}.</span>
@@ -48,8 +48,8 @@
 <span class="source-line-no">035</span><span id="line-35"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *    &lt;jc&gt;// URI path pattern = "/foo/{foo}/bar/{bar}"&lt;/jc&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> *    String &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$RP{foo}"&lt;/js&gt;);</span>
-<span class="source-line-no">039</span><span id="line-39"> *    String &lt;jv&gt;fooOrBar&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$RP{foo,bar}"&lt;/js&gt;);</span>
+<span class="source-line-no">038</span><span id="line-38"> *    String &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${RP:foo}"&lt;/js&gt;);</span>
+<span class="source-line-no">039</span><span id="line-39"> *    String &lt;jv&gt;fooOrBar&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${RP:foo:bar}"&lt;/js&gt;);</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;/p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>

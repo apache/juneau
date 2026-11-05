@@ -166,7 +166,7 @@ loadScripts(document, 'script');</script>
    <a href="../Rest.html" title="annotation interface in org.apache.juneau.rest.server"><code>@Rest</code></a> annotation that resolves to at least one
    top-level path (via <code>paths()</code> or a <code>getPaths()</code> override).</dd>
 <dd><code>beanStore</code> - The bean store used for SVL resolution of <code>@Rest(paths)</code> elements
-   (e.g. <code>$C{key}</code> / <code>${env}</code> templates). May be <code>null</code> (SVL is then skipped;
+   (e.g. <code>${C:key}</code> / <code>${env}</code> templates). May be <code>null</code> (SVL is then skipped;
    literal paths pass through unchanged).</dd>
 <dt>Returns:</dt>
 <dd>A registration bean mapping the servlet at its self-declared paths.</dd>

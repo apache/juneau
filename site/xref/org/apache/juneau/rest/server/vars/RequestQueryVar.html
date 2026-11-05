@@ -32,7 +32,7 @@
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment"> * Request query variable resolver.</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * The format for this var is &lt;js&gt;"$RQ{key1[,key2...]}"&lt;/js&gt;.</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * The format for this var is &lt;js&gt;"${RQ:key1[:key2...]}"&lt;/js&gt;.</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Used to resolve values returned by {@link RestRequest#getQueryParam(String)}.</em>
@@ -41,8 +41,8 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * 	&lt;jc&gt;// URI = "...?foo=X&amp;amp;bar=Y"&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$RQ{foo}"&lt;/js&gt;);</em>
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;fooOrBar&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$RQ{foo,bar}"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;foo&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${RQ:foo}"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * 	String &lt;jv&gt;fooOrBar&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${RQ:foo:bar}"&lt;/js&gt;);</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  <em class="jxr_javadoccomment"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</em>

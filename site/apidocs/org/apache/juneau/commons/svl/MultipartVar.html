@@ -88,11 +88,11 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/MultipartVar.html#line-34">MultipartVar</a></span>
 <span class="extends-implements">extends <a href="SimpleVar.html" title="class in org.apache.juneau.commons.svl">SimpleVar</a></span></div>
-<div class="block">Interface for the resolution of vars that consist of a comma-delimited list.
+<div class="block">Interface for the resolution of vars that consist of a colon-delimited list.
 
  <h2 class='figure'>Example:</h2>
  <p class='bjava'>
-   <js>"$X{foo, bar, baz}"</js>
+   <js>"${X:foo:bar:baz}"</js>
  </p>
 
  <h2 class='section'>See Also:</h2><ul>
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 <code><a href="SimpleVar.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)">resolveTo</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.commons.svl.Var">Methods inherited from class&nbsp;org.apache.juneau.commons.svl.<a href="Var.html" title="class in org.apache.juneau.commons.svl">Var</a></h3>
-<code><a href="Var.html#allowNested()">allowNested</a>, <a href="Var.html#allowRecurse()">allowRecurse</a>, <a href="Var.html#canResolve(org.apache.juneau.commons.svl.VarResolverSession)">canResolve</a>, <a href="Var.html#doResolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">doResolve</a>, <a href="Var.html#getName()">getName</a>, <a href="Var.html#isStable()">isStable</a></code></div>
+<code><a href="Var.html#allowNested()">allowNested</a>, <a href="Var.html#allowRecurse()">allowRecurse</a>, <a href="Var.html#canResolve(org.apache.juneau.commons.svl.VarResolverSession)">canResolve</a>, <a href="Var.html#doResolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">doResolve</a>, <a href="Var.html#getName()">getName</a>, <a href="Var.html#isStable()">isStable</a>, <a href="Var.html#resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">resolveValue</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -204,7 +204,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String[])">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/MultipartVar.html#line-58">resolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/MultipartVar.html#line-60">resolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>[]&nbsp;args)</span></div>
 <div class="block">The interface that needs to be implemented for this interface.</div>
 <dl class="notes">

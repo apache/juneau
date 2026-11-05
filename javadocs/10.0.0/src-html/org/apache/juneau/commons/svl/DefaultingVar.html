@@ -34,7 +34,7 @@
 <span class="source-line-no">021</span><span id="line-21"> *</span>
 <span class="source-line-no">022</span><span id="line-22"> * &lt;p&gt;</span>
 <span class="source-line-no">023</span><span id="line-23"> * For example, to resolve the system property &lt;js&gt;"myProperty"&lt;/js&gt; but resolve to &lt;js&gt;"not found"&lt;/js&gt; if the</span>
-<span class="source-line-no">024</span><span id="line-24"> * property doesn't exist: &lt;js&gt;"$S{myProperty,not found}"&lt;/js&gt;</span>
+<span class="source-line-no">024</span><span id="line-24"> * property doesn't exist: &lt;js&gt;"${S:myProperty:not found}"&lt;/js&gt;</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * Subclasses must implement the following method:</span>
@@ -61,15 +61,28 @@
 <span class="source-line-no">048</span><span id="line-48">   public String doResolve(VarResolverSession session, String s) throws Exception {</span>
 <span class="source-line-no">049</span><span id="line-49">      var i = s.indexOf(',');</span>
 <span class="source-line-no">050</span><span id="line-50">      if (i == -1)</span>
-<span class="source-line-no">051</span><span id="line-51">         return resolve(session, s.trim());</span>
-<span class="source-line-no">052</span><span id="line-52">      var s1 = s.substring(0, i);</span>
-<span class="source-line-no">053</span><span id="line-53">      var s2 = s.length() == i ? null : s.substring(i + 1);</span>
+<span class="source-line-no">051</span><span id="line-51">         return resolve(session, VarSplit.restoreCommas(s.trim()));</span>
+<span class="source-line-no">052</span><span id="line-52">      var s1 = VarSplit.restoreCommas(s.substring(0, i));</span>
+<span class="source-line-no">053</span><span id="line-53">      var s2 = s.length() == i ? null : VarSplit.restoreCommas(s.substring(i + 1));</span>
 <span class="source-line-no">054</span><span id="line-54">      var v = resolve(session, s1);</span>
 <span class="source-line-no">055</span><span id="line-55">      if (v == null)</span>
 <span class="source-line-no">056</span><span id="line-56">         v = s2;</span>
 <span class="source-line-no">057</span><span id="line-57">      return v;</span>
 <span class="source-line-no">058</span><span id="line-58">   }</span>
-<span class="source-line-no">059</span><span id="line-59">}</span>
+<span class="source-line-no">059</span><span id="line-59"></span>
+<span class="source-line-no">060</span><span id="line-60">   @Override /* Overridden from Var */</span>
+<span class="source-line-no">061</span><span id="line-61">   Object doResolveValue(VarResolverSession session, String s) throws Exception {</span>
+<span class="source-line-no">062</span><span id="line-62">      var i = s.indexOf(',');</span>
+<span class="source-line-no">063</span><span id="line-63">      if (i == -1)</span>
+<span class="source-line-no">064</span><span id="line-64">         return resolveValue(session, VarSplit.restoreCommas(s.trim()));</span>
+<span class="source-line-no">065</span><span id="line-65">      var s1 = VarSplit.restoreCommas(s.substring(0, i));</span>
+<span class="source-line-no">066</span><span id="line-66">      var s2 = VarSplit.restoreCommas(s.substring(i + 1));</span>
+<span class="source-line-no">067</span><span id="line-67">      var v = resolveValue(session, s1);</span>
+<span class="source-line-no">068</span><span id="line-68">      if (v == null)</span>
+<span class="source-line-no">069</span><span id="line-69">         v = s2;</span>
+<span class="source-line-no">070</span><span id="line-70">      return v;</span>
+<span class="source-line-no">071</span><span id="line-71">   }</span>
+<span class="source-line-no">072</span><span id="line-72">}</span>
 
 
 

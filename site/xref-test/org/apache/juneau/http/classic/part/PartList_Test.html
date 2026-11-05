@@ -153,9 +153,9 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 		System.setProperty(pname, <span class="jxr_string">"y"</span>);
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		x.append(<span class="jxr_string">"X1"</span>,<span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		x.append(<span class="jxr_string">"X2"</span>,<span class="jxr_string">"$S{"</span>+pname+<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		x.append(<span class="jxr_string">"X2"</span>,<span class="jxr_string">"${S:"</span>+pname+<span class="jxr_string">"}"</span>);
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		x.append(<span class="jxr_string">"X3"</span>,<span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		x.append(<span class="jxr_string">"X4"</span>,()-&gt;<span class="jxr_string">"$S{"</span>+pname+<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		x.append(<span class="jxr_string">"X4"</span>,()-&gt;<span class="jxr_string">"${S:"</span>+pname+<span class="jxr_string">"}"</span>);
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		x.append(<strong class="jxr_keyword">new</strong> SerializedPart(<span class="jxr_string">"X5"</span>,<span class="jxr_string">"bar"</span>,HttpPartType.QUERY,openApiSession(),<strong class="jxr_keyword">null</strong>,false));
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(<span class="jxr_string">"X1=bar&amp;X2=y&amp;X3=bar&amp;X4=y&amp;X5=bar"</span>, s(x));

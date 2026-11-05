@@ -121,42 +121,72 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;<a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bean(java.lang.Class,T)" class="member-name-link">bean</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
- T&nbsp;value)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowFunctions(java.lang.String...)" class="member-name-link">allowFunctions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;patterns)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Restricts which functions (including the reserved <c>$op</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;<a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bean(java.lang.Class,T)" class="member-name-link">bean</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
+ T&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a bean to the resolved <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a>'s local bean store.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#beanStore()" class="member-name-link">beanStore</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#beanStore()" class="member-name-link">beanStore</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the bean store used by this builder.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Builds the var resolver.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultFunctions()" class="member-name-link">defaultFunctions</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultFunctions()" class="member-name-link">defaultFunctions</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Registers the built-in <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog plus any third-party functions
  discovered via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html#load(java.lang.Class)" title="class or interface in java.util" class="external-link"><code>ServiceLoader.load(Class)</code></a> on <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultVars()" class="member-name-link">defaultVars</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultVars()" class="member-name-link">defaultVars</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds the default variables to this builder.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#functions(java.lang.Class...)" class="member-name-link">functions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>&gt;...&nbsp;values)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#functions(java.lang.Class...)" class="member-name-link">functions</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>&gt;...&nbsp;values)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Register one or more <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> <i>classes</i> on this builder.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#functions(org.apache.juneau.commons.svl.VarFunction...)" class="member-name-link">functions</a><wbr>(<a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>...&nbsp;values)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#functions(org.apache.juneau.commons.svl.VarFunction...)" class="member-name-link">functions</a><wbr>(<a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>...&nbsp;values)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Register one or more <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> instances on this builder.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxCollectionSize(int)" class="member-name-link">maxCollectionSize</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the maximum number of elements allowed in a collection built by an expression.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxExprDepth(int)" class="member-name-link">maxExprDepth</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the maximum expression nesting depth accepted by the parser.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxRecursionDepth(int)" class="member-name-link">maxRecursionDepth</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the maximum depth for re-resolving a var's output.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#strict(boolean)" class="member-name-link">strict</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Enables or disables strict expression evaluation.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#valueFormatter(java.util.function.Function)" class="member-name-link">valueFormatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the formatter that converts the typed result of a <code>#{...}</code> expression to text.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#vars(java.lang.Class...)" class="member-name-link">vars</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;values)</code></div>
@@ -193,14 +223,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-90">Builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-96">Builder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.svl.VarResolver)">
 <h3>Builder</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-102">Builder</a></span><wbr><span class="parameters">(<a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a>&nbsp;copyFrom)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-108">Builder</a></span><wbr><span class="parameters">(<a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a>&nbsp;copyFrom)</span></div>
 <div class="block">Copy constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -217,9 +247,96 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="maxRecursionDepth(int)">
+<h3>maxRecursionDepth</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-130">maxRecursionDepth</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Sets the maximum depth for re-resolving a var's output.
+
+ <p>
+ Default is <a href="VarResolver.html#DEFAULT_MAX_RECURSION_DEPTH"><code>VarResolver.DEFAULT_MAX_RECURSION_DEPTH</code></a> (32).  Must be positive.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum recursion depth.  Must be at least 1.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="strict(boolean)">
+<h3>strict</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-146">strict</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="block">Enables or disables strict expression evaluation.
+
+ <p>
+ Default is <jk>false</jk> (lenient).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - <jk>true</jk> to enable strict mode.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxCollectionSize(int)">
+<h3>maxCollectionSize</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-160">maxCollectionSize</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Sets the maximum number of elements allowed in a collection built by an expression.
+
+ <p>
+ Default is <a href="VarResolver.html#DEFAULT_MAX_COLLECTION_SIZE"><code>VarResolver.DEFAULT_MAX_COLLECTION_SIZE</code></a> (1000).  Must be positive.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum collection size.  Must be at least 1.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="valueFormatter(java.util.function.Function)">
+<h3>valueFormatter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-183">valueFormatter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block">Sets the formatter that converts the typed result of a <code>#{...}</code> expression to text.
+
+ <p>
+ Default is a <a href="JsonValueFormatter.html" title="class in org.apache.juneau.commons.svl"><code>JsonValueFormatter</code></a> honouring <a href="#maxCollectionSize(int)"><code>maxCollectionSize(int)</code></a> and strict mode.  A
+ session can replace it per render with <a href="VarResolverSession.html#valueFormatter(java.util.function.Function)"><code>VarResolverSession.valueFormatter(Function)</code></a>.
+ A <jk>null</jk> result from the formatter is treated as the empty string.
+
+ <p>
+ A custom formatter <em>replaces</em> the default, so it does not get the default's depth, size, node and
+ cycle limits (it must guard itself).  It is also bypassed for <a href="Structure.html" title="class in org.apache.juneau.commons.svl"><code>Structure</code></a> values, which use
+ <a href="Structure.html#toString()"><code>Structure.toString()</code></a> unless a session formatter is set.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The formatter.  <jk>null</jk> restores the default.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxExprDepth(int)">
+<h3>maxExprDepth</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-197">maxExprDepth</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="block">Sets the maximum expression nesting depth accepted by the parser.
+
+ <p>
+ Default is <a href="VarResolver.html#DEFAULT_MAX_EXPR_DEPTH"><code>VarResolver.DEFAULT_MAX_EXPR_DEPTH</code></a> (32).  Must be positive.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The maximum expression depth.  Must be at least 1.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="beanStore()">
 <h3>beanStore</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-114">beanStore</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-209">beanStore</a></span>()</div>
 <div class="block">Returns the bean store used by this builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -230,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bean(java.lang.Class,T)">
 <h3 id="bean(java.lang.Class,java.lang.Object)">bean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-131">bean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-226">bean</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
  T&nbsp;value)</span></div>
 <div class="block">Adds a bean to the resolved <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a>'s local bean store.
 
@@ -252,7 +369,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultVars()">
 <h3>defaultVars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-160">defaultVars</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-255">defaultVars</a></span>()</div>
 <div class="block">Adds the default variables to this builder.
 
  <p>
@@ -283,7 +400,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="vars(java.lang.Class...)">
 <h3>vars</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-174">vars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;values)</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-269">vars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="Var.html" title="class in org.apache.juneau.commons.svl">Var</a>&gt;...&nbsp;values)</span></div>
 <div class="block">Register new variables with this resolver.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -297,7 +414,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="vars(org.apache.juneau.commons.svl.Var...)">
 <h3>vars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-188">vars</a></span><wbr><span class="parameters">(<a href="Var.html" title="class in org.apache.juneau.commons.svl">Var</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-283">vars</a></span><wbr><span class="parameters">(<a href="Var.html" title="class in org.apache.juneau.commons.svl">Var</a>...&nbsp;values)</span></div>
 <div class="block">Register new variables with this resolver.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -311,7 +428,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="vars(org.apache.juneau.commons.svl.VarList)">
 <h3>vars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-201">vars</a></span><wbr><span class="parameters">(<a href="VarList.html" title="class in org.apache.juneau.commons.svl">VarList</a>&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-296">vars</a></span><wbr><span class="parameters">(<a href="VarList.html" title="class in org.apache.juneau.commons.svl">VarList</a>&nbsp;values)</span></div>
 <div class="block">Register new variables with this resolver.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -323,9 +440,37 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="allowFunctions(java.lang.String...)">
+<h3>allowFunctions</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-322">allowFunctions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;patterns)</span></div>
+<div class="block">Restricts which functions (including the reserved <c>$op.*</c> operator functions) the resolver exposes.
+
+ <p>
+ Each pattern is a glob over function names: <c>*</c> matches any run of characters, anything else matches
+ exactly.  A function is permitted if its name matches at least one pattern.  Operators dispatch to
+ <c>$op.*</c> functions (<c>$op.add</c>, <c>$op.ternary</c>, <c>$op.select</c>, ...), so they are denied by
+ the allowlist too; use <c>allowFunctions("$op.*", ...)</c> to keep them.
+
+ <p>
+ If this method is never called, every function is permitted.  Calling it with no patterns denies everything,
+ operators included.  Repeated calls are additive, including after <a href="VarResolver.html#copy()"><code>VarResolver.copy()</code></a>: a copy can widen the allowlist but cannot narrow it.  The filter is applied to the final function set at
+ <a href="#build()"><code>build()</code></a> time, and is preserved by <a href="VarResolver.html#copy()"><code>VarResolver.copy()</code></a>.
+
+ <p>
+ A denied function or operator is treated like an unknown one (strict mode: <a href="ExprException.html" title="class in org.apache.juneau.commons.svl"><code>ExprException</code></a> saying it
+ is "not permitted"; lenient mode: the expression is emitted verbatim).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>patterns</code> - The glob patterns.  Must not be <jk>null</jk> or contain <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This builder.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="functions(org.apache.juneau.commons.svl.VarFunction...)">
 <h3>functions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-218">functions</a></span><wbr><span class="parameters">(<a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-344">functions</a></span><wbr><span class="parameters">(<a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>...&nbsp;values)</span></div>
 <div class="block">Register one or more <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> instances on this builder.
 
  <p>
@@ -345,7 +490,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="functions(java.lang.Class...)">
 <h3>functions</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-232">functions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>&gt;...&nbsp;values)</span></div>
+</span><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-358">functions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a>&gt;...&nbsp;values)</span></div>
 <div class="block">Register one or more <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> <i>classes</i> on this builder. Each class
  must have a public no-arg constructor; instances are created via the bean store at
  <a href="#build()"><code>build()</code></a> time so dependency injection works the same way it does for
@@ -361,7 +506,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultFunctions()">
 <h3>defaultFunctions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-258">defaultFunctions</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-384">defaultFunctions</a></span>()</div>
 <div class="block">Registers the built-in <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a> catalog plus any third-party functions
  discovered via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html#load(java.lang.Class)" title="class or interface in java.util" class="external-link"><code>ServiceLoader.load(Class)</code></a> on <a href="VarFunction.html" title="interface in org.apache.juneau.commons.svl"><code>VarFunction</code></a>.
 
@@ -386,7 +531,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="build()">
 <h3>build</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-271">build</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/VarResolver.Builder.html#line-397">build</a></span>()</div>
 <div class="block">Builds the var resolver.</div>
 <dl class="notes">
 <dt>Returns:</dt>

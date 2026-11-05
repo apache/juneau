@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		assertTrue(TomlSerializer.create().build().write(<strong class="jxr_keyword">new</strong> Outer()).contains(<span class="jxr_string">"inner = {"</span>));
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@TomlConfig(nullValue=<span class="jxr_string">"$X{~}"</span>, sortKeys=<span class="jxr_string">"$X{true}"</span>, useInlineTables=<span class="jxr_string">"$X{false}"</span>, inlineTableThreshold=<span class="jxr_string">"$X{1}"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	@TomlConfig(nullValue=<span class="jxr_string">"${X:~}"</span>, sortKeys=<span class="jxr_string">"${X:true}"</span>, useInlineTables=<span class="jxr_string">"${X:false}"</span>, inlineTableThreshold=<span class="jxr_string">"${X:1}"</span>)
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> D {}
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test <strong class="jxr_keyword">void</strong> c01_varResolved() <strong class="jxr_keyword">throws</strong> Exception {

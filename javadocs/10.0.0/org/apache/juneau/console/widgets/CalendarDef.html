@@ -91,7 +91,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
  <p>
  This is the <a href="Widget.html" title="interface in org.apache.juneau.console.widgets"><code>Widget</code></a> marker type &mdash; the <code>juneau-console-widgets</code>
  <code>org.apache.juneau.console.widgets.Widget</code>, <b>not</b> <code>org.apache.juneau.marshall.html.HtmlWidget</code>
- (the unrelated <code>$W{...}</code> HTML header-widget SPI).  It is <b>bean-only</b>: the emitter
+ (the unrelated <code>${W:...}</code> HTML header-widget SPI).  It is <b>bean-only</b>: the emitter
  (<code>CalendarTable</code>) and the <code>juneau-calendar.js</code>/<code>.css</code> runtime live in
  <code>juneau-console-views</code>, which composes this bean.  Widgets keeps no dependency on views.
 

@@ -39,10 +39,10 @@
 <span class="source-line-no">026</span><span id="line-26"> * JVM args variable resolver.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * The format for this var is &lt;js&gt;"$A{arg[,default]}"&lt;/js&gt;.</span>
+<span class="source-line-no">029</span><span id="line-29"> * The format for this var is &lt;js&gt;"${A:arg[:default]}"&lt;/js&gt;.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> * The argument can be either a positional index (e.g. &lt;js&gt;"$A{0}"&lt;/js&gt;) or a named option (e.g. &lt;js&gt;"$A{port}"&lt;/js&gt;).</span>
+<span class="source-line-no">032</span><span id="line-32"> * The argument can be either a positional index (e.g. &lt;js&gt;"${A:0}"&lt;/js&gt;) or a named option (e.g. &lt;js&gt;"${A:port}"&lt;/js&gt;).</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * This variable resolver requires that the command-line arguments be made available through any of the following:</span>
@@ -57,11 +57,11 @@
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;jc&gt;// Create an args object from the main(String[]) method.&lt;/jc&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> *    Args &lt;jv&gt;args&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Args(&lt;jv&gt;argv&lt;/jv&gt;);</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Create a variable resolver that resolves JVM arguments (e.g. "$A{1}")&lt;/jc&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;jc&gt;// Create a variable resolver that resolves JVM arguments (e.g. "${A:1}")&lt;/jc&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *    VarResolver &lt;jv&gt;varResolver&lt;/jv&gt; = VarResolver.&lt;jsm&gt;create&lt;/jsm&gt;().vars(ArgsVar.&lt;jsm&gt;create&lt;/jsm&gt;(() -&amp;gt; &lt;jv&gt;args&lt;/jv&gt;)).build();</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Use it!&lt;/jc&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;varResolver&lt;/jv&gt;.resolve(&lt;js&gt;"Arg #1 is set to $A{1}"&lt;/js&gt;));</span>
+<span class="source-line-no">051</span><span id="line-51"> *    System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;varResolver&lt;/jv&gt;.resolve(&lt;js&gt;"Arg #1 is set to ${A:1}"&lt;/js&gt;));</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> *</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;p&gt;</span>

@@ -711,7 +711,7 @@
 <a class="jxr_linenumber" name="L703" href="#L703">703</a> 
 <a class="jxr_linenumber" name="L704" href="#L704">704</a> 	@Test <strong class="jxr_keyword">void</strong> j01_resolve_systemProperty() {
 <a class="jxr_linenumber" name="L705" href="#L705">705</a> 		<strong class="jxr_keyword">var</strong> s = (SerializerSession) JsonSerializer.DEFAULT.createSession().build();
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<em class="jxr_comment">// VarResolver.DEFAULT supports $S{name,default}; we pass a literal that won't expand.</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 		<em class="jxr_comment">// VarResolver.DEFAULT supports ${S:name:default}; we pass a literal that won't expand.</em>
 <a class="jxr_linenumber" name="L707" href="#L707">707</a> 		assertEquals(<span class="jxr_string">"plain text"</span>, s.resolve(<span class="jxr_string">"plain text"</span>));
 <a class="jxr_linenumber" name="L708" href="#L708">708</a> 	}
 <a class="jxr_linenumber" name="L709" href="#L709">709</a> 

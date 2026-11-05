@@ -54,9 +54,9 @@
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * Also showcases the Config API + SVL variable resolver: the root page's header is driven by</span>
-<span class="source-line-no">044</span><span id="line-44"> * {@code $C{Petstore/appName}}, which resolves against the {@code [Petstore]} section of</span>
-<span class="source-line-no">045</span><span id="line-45"> * {@code juneau-petstore-jetty.cfg} (the same {@code $C{...}} pattern already used by the {@code source} navlink</span>
-<span class="source-line-no">046</span><span id="line-46"> * below, which resolves {@code $C{Source/gitHub}}).  Jetty-only — Spring Boot's embedded container has no</span>
+<span class="source-line-no">044</span><span id="line-44"> * {@code ${C:Petstore/appName}}, which resolves against the {@code [Petstore]} section of</span>
+<span class="source-line-no">045</span><span id="line-45"> * {@code juneau-petstore-jetty.cfg} (the same {@code ${C:...}} pattern already used by the {@code source} navlink</span>
+<span class="source-line-no">046</span><span id="line-46"> * below, which resolves {@code ${C:Source/gitHub}}).  Jetty-only — Spring Boot's embedded container has no</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@code .cfg}/{@code Config} equivalent.</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
@@ -93,13 +93,13 @@
 <span class="source-line-no">080</span><span id="line-80">      ContentTypeMenuItem.class</span>
 <span class="source-line-no">081</span><span id="line-81">   },</span>
 <span class="source-line-no">082</span><span id="line-82">   header={</span>
-<span class="source-line-no">083</span><span id="line-83">      "&lt;h3&gt;$C{Petstore/appName}&lt;/h3&gt;"</span>
+<span class="source-line-no">083</span><span id="line-83">      "&lt;h3&gt;${C:Petstore/appName}&lt;/h3&gt;"</span>
 <span class="source-line-no">084</span><span id="line-84">   },</span>
 <span class="source-line-no">085</span><span id="line-85">   navlinks={</span>
 <span class="source-line-no">086</span><span id="line-86">      "api: servlet:/api",</span>
 <span class="source-line-no">087</span><span id="line-87">      "stats: servlet:/stats",</span>
-<span class="source-line-no">088</span><span id="line-88">      "$W{ContentTypeMenuItem}",</span>
-<span class="source-line-no">089</span><span id="line-89">      "source: $C{Source/gitHub}/org/apache/juneau/petstore/jetty/RootResources.java"</span>
+<span class="source-line-no">088</span><span id="line-88">      "${W:ContentTypeMenuItem}",</span>
+<span class="source-line-no">089</span><span id="line-89">      "source: ${C:Source/gitHub}/org/apache/juneau/petstore/jetty/RootResources.java"</span>
 <span class="source-line-no">090</span><span id="line-90">   },</span>
 <span class="source-line-no">091</span><span id="line-91">   aside={</span>
 <span class="source-line-no">092</span><span id="line-92">      "&lt;div class='text'&gt;",</span>

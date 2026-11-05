@@ -424,7 +424,7 @@ loadScripts(document, 'script');</script>
       Format: HTML
    <li class='note'>
       Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-      (e.g. <js>"$L{my.localized.variable}"</js>).
+      (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -609,7 +609,7 @@ loadScripts(document, 'script');</script>
    WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
       .<jsm>create</jsm>()
       .head(
-         <js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
+         <js>"&lt;link rel='icon' href='${U:servlet:/htdocs/mypageicon.ico}'&gt;"</js>
       )
       .build();
  </p></div>
@@ -1051,16 +1051,16 @@ loadScripts(document, 'script');</script>
 <div class="block">HTML Widgets.
 
  <p>
- Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+ Defines widgets that can be used in conjunction with string variables of the form <js>"${W:name}"</js>to quickly
  generate arbitrary replacement text.
 
  Widgets resolve the following variables:
  <ul class='spaced-list'>
-   <li><js>"$W{name}"</js> - Contents returned by <a href="HtmlWidget.html#getHtml(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getHtml(VarResolverSession)</code></a>.
-   <li><js>"$W{name.script}"</js> - Contents returned by <a href="HtmlWidget.html#getScript(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getScript(VarResolverSession)</code></a>.
+   <li><js>"${W:name}"</js> - Contents returned by <a href="HtmlWidget.html#getHtml(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getHtml(VarResolverSession)</code></a>.
+   <li><js>"${W:name.script}"</js> - Contents returned by <a href="HtmlWidget.html#getScript(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getScript(VarResolverSession)</code></a>.
       <br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
           in the HTML page.
-   <li><js>"$W{name.style}"</js> - Contents returned by <a href="HtmlWidget.html#getStyle(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getStyle(VarResolverSession)</code></a>.
+   <li><js>"${W:name.style}"</js> - Contents returned by <a href="HtmlWidget.html#getStyle(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getStyle(VarResolverSession)</code></a>.
       <br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
           in the HTML page.
  </ul>
@@ -1076,10 +1076,10 @@ loadScripts(document, 'script');</script>
          MyWidget.<jk>class</jk>
       )
       .navlinks(
-         <js>"$W{MyWidget}"</js>
+         <js>"${W:MyWidget}"</js>
       )
       .aside(
-         <js>"Check out this widget:  $W{MyWidget}"</js>
+         <js>"Check out this widget:  ${W:MyWidget}"</js>
       )
       .build();
  </p>

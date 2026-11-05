@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().vars(CounterVar.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> counter = <strong class="jxr_keyword">new</strong> AtomicInteger();
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  		vr.addBean(AtomicInteger.<strong class="jxr_keyword">class</strong>, counter);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">var</strong> sup = vr.resolveSupplier(<span class="jxr_string">"$C{x}"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">var</strong> sup = vr.resolveSupplier(<span class="jxr_string">"${C:x}"</span>);
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		assertEquals(<span class="jxr_string">"x-1"</span>, sup.get());
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		assertEquals(<span class="jxr_string">"x-2"</span>, sup.get());
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		assertEquals(<span class="jxr_string">"x-3"</span>, sup.get());
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> counter = <strong class="jxr_keyword">new</strong> AtomicInteger();
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> s = vr.createSession();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		s.bean(AtomicInteger.<strong class="jxr_keyword">class</strong>, counter);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> sup = s.resolveSupplier(<span class="jxr_string">"$C{x}"</span>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> sup = s.resolveSupplier(<span class="jxr_string">"${C:x}"</span>);
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		assertEquals(<span class="jxr_string">"x-1"</span>, sup.get());
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		assertEquals(<span class="jxr_string">"x-2"</span>, sup.get());
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	}
@@ -94,7 +94,7 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> counter = <strong class="jxr_keyword">new</strong> AtomicInteger();
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<em class="jxr_comment">// Use the resolver-level bean store so every session sees the same counter.</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		vr.addBean(AtomicInteger.<strong class="jxr_keyword">class</strong>, counter);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> sup = vr.resolveSupplier(<span class="jxr_string">"$C{x}"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<strong class="jxr_keyword">var</strong> sup = vr.resolveSupplier(<span class="jxr_string">"${C:x}"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> threadCount = 16;
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> iterations = 100;

@@ -74,10 +74,10 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment"> * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/releases"&lt;/js&gt;, mixins=DataTablesMixin.&lt;jk&gt;class&lt;/jk&gt;)</em>
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  <em class="jxr_javadoccomment"> * 	&lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</em>
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 		stylesheet=&lt;js&gt;"$S{juneau.datatables.cssUrl:<a href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css" target="alexandria_uri">https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css</a>}"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  <em class="jxr_javadoccomment"> * 		stylesheet=&lt;js&gt;"${S:juneau.datatables.cssUrl\:https\://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css}"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  <em class="jxr_javadoccomment"> * 		head={</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 			&lt;js&gt;"&amp;lt;script src='$S{juneau.datatables.jqueryUrl:<a href="https://code.jquery.com/jquery-3.7.1.min.js" target="alexandria_uri">https://code.jquery.com/jquery-3.7.1.min.js</a>}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</em>
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 			&lt;js&gt;"&amp;lt;script src='$S{juneau.datatables.jsUrl:<a href="https://cdn.datatables.net/2.1.8/js/dataTables.min.js" target="alexandria_uri">https://cdn.datatables.net/2.1.8/js/dataTables.min.js</a>}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  <em class="jxr_javadoccomment"> * 			&lt;js&gt;"&amp;lt;script src='${S:juneau.datatables.jqueryUrl\:https\://code.jquery.com/jquery-3.7.1.min.js}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment"> * 			&lt;js&gt;"&amp;lt;script src='${S:juneau.datatables.jsUrl\:https\://cdn.datatables.net/2.1.8/js/dataTables.min.js}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment"> * 			&lt;js&gt;"&amp;lt;script src='servlet:/juneau-datatables.js'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;</em>
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment"> * 		}</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment"> * 	)</em>

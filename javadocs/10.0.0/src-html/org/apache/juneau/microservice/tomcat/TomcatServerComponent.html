@@ -186,8 +186,8 @@
 <span class="source-line-no">173</span><span id="line-173">    * mount time. The programmatic Builder rung is N/A for Tomcat auto-discovery (the {@code RestContext} does</span>
 <span class="source-line-no">174</span><span id="line-174">    * not exist yet at this point in the lifecycle); users can substitute by overriding {@code getPaths()} on</span>
 <span class="source-line-no">175</span><span id="line-175">    * the resource class, or by leaning on SVL inside {@code @Rest(paths=...)} elements (e.g.</span>
-<span class="source-line-no">176</span><span id="line-176">    * {@code paths={"$C{health.paths}"}}) so each element is resolved through {@code Config} /</span>
-<span class="source-line-no">177</span><span id="line-177">    * {@code $E{...}} / {@code $S{...}} before being comma-split.</span>
+<span class="source-line-no">176</span><span id="line-176">    * {@code paths={"${C:health.paths}"}}) so each element is resolved through {@code Config} /</span>
+<span class="source-line-no">177</span><span id="line-177">    * {@code ${E:...}} / {@code ${S:...}} before being comma-split.</span>
 <span class="source-line-no">178</span><span id="line-178">    *</span>
 <span class="source-line-no">179</span><span id="line-179">    * @return The normalized exact-match path-specs (for multi-mount), or the singular {@code @Rest(path)}-style</span>
 <span class="source-line-no">180</span><span id="line-180">    *    {@code "/...&amp;#47;*"} pathspec when no {@code paths} are resolved.</span>
@@ -233,8 +233,8 @@
 <span class="source-line-no">220</span><span id="line-220"></span>
 <span class="source-line-no">221</span><span id="line-221">         if (availablePortEnv.isEmpty())</span>
 <span class="source-line-no">222</span><span id="line-222">            // Intentional real-JVM-property publish: the bound port is exposed as a process-global system</span>
-<span class="source-line-no">223</span><span id="line-223">            // property so external config/templates (e.g. the bundled jetty.xml's $S{availablePort}) can read</span>
-<span class="source-line-no">224</span><span id="line-224">            // it.  The $S{...} SVL var resolves via raw System.getProperty (bypassing the Settings override</span>
+<span class="source-line-no">223</span><span id="line-223">            // property so external config/templates (e.g. the bundled jetty.xml's ${S:availablePort}) can read</span>
+<span class="source-line-no">224</span><span id="line-224">            // it.  The ${S:...} SVL var resolves via raw System.getProperty (bypassing the Settings override</span>
 <span class="source-line-no">225</span><span id="line-225">            // chain), so a Settings-based write would be invisible to those consumers.  The @Value-injected</span>
 <span class="source-line-no">226</span><span id="line-226">            // availablePortEnv read side is already Settings-abstracted; only this publish must stay raw.</span>
 <span class="source-line-no">227</span><span id="line-227">            System.setProperty("availablePort", String.valueOf(availablePort));</span>
@@ -311,7 +311,7 @@
 <span class="source-line-no">298</span><span id="line-298"></span>
 <span class="source-line-no">299</span><span id="line-299">         if (serverPortEnv.isEmpty())</span>
 <span class="source-line-no">300</span><span id="line-300">            // Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external</span>
-<span class="source-line-no">301</span><span id="line-301">            // publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A</span>
+<span class="source-line-no">301</span><span id="line-301">            // publication of the bound port, consumed via raw System.getProperty (and ${S:...} SVL).  A</span>
 <span class="source-line-no">302</span><span id="line-302">            // Settings-based write would not be visible to those raw readers, so this is kept.  The</span>
 <span class="source-line-no">303</span><span id="line-303">            // @Value-injected serverPortEnv read side is already Settings-abstracted.</span>
 <span class="source-line-no">304</span><span id="line-304">            System.setProperty("juneau.serverPort", String.valueOf(availablePort));</span>

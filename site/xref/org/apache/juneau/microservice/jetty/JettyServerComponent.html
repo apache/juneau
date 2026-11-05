@@ -191,8 +191,8 @@
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> <em class="jxr_javadoccomment">	 * mount time. The programmatic Builder rung is N/A for Jetty auto-discovery (the {@code RestContext} does</em>
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * not exist yet at this point in the lifecycle); users can substitute by overriding {@code getPaths()} on</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * the resource class, or by leaning on SVL inside {@code @Rest(paths=...)} elements (e.g.</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * {@code paths={"$C{health.paths}"}}) so each element is resolved through {@code Config} /</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * {@code $E{...}} / {@code $S{...}} before being comma-split.</em>
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * {@code paths={"${C:health.paths}"}}) so each element is resolved through {@code Config} /</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * {@code ${E:...}} / {@code ${S:...}} before being comma-split.</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 * @return The normalized exact-match path-specs (for multi-mount), or the singular {@code @Rest(path)}-style</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * 	{@code "/...&amp;#47;*"} pathspec when no {@code paths} are resolved.</em>
@@ -241,7 +241,7 @@
 <a class="jxr_linenumber" name="L233" href="#L233">233</a> 
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">if</strong> (availablePortEnv.isEmpty())
 <a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<em class="jxr_comment">// Intentional real-JVM-property publish: the bundled jetty.xml binds its connector to</em>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<em class="jxr_comment">// $S{availablePort,10000}, and the $S{...} SVL var resolves via raw System.getProperty (bypassing</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				<em class="jxr_comment">// ${S:availablePort:10000}, and the ${S:...} SVL var resolves via raw System.getProperty (bypassing</em>
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 				<em class="jxr_comment">// the Settings override chain).  A Settings-based write would be invisible to jetty.xml, so the</em>
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 				<em class="jxr_comment">// bound port MUST be published as a real system property here.  The @Value-injected availablePortEnv</em>
 <a class="jxr_linenumber" name="L239" href="#L239">239</a> 				<em class="jxr_comment">// read side is already Settings-abstracted; only this publish must stay raw.</em>
@@ -367,7 +367,7 @@
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 			<strong class="jxr_keyword">if</strong> (serverPortEnv.isEmpty())
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 				<em class="jxr_comment">// Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 				<em class="jxr_comment">// publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 				<em class="jxr_comment">// publication of the bound port, consumed via raw System.getProperty (and ${S:...} SVL).  A</em>
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 				<em class="jxr_comment">// Settings-based write would not be visible to those raw readers, so this is kept.  The</em>
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 				<em class="jxr_comment">// @Value-injected serverPortEnv read side is already Settings-abstracted.</em>
 <a class="jxr_linenumber" name="L365" href="#L365">365</a> 				System.setProperty(<span class="jxr_string">"juneau.serverPort"</span>, String.valueOf(availablePort));

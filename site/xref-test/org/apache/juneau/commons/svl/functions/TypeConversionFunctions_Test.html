@@ -38,8 +38,8 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	@Test <strong class="jxr_keyword">void</strong> a01_toInt() { assertEquals(<span class="jxr_string">"42"</span>, vr.resolve(<span class="jxr_string">"#{toInt(42)}"</span>)); }
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@Test <strong class="jxr_keyword">void</strong> a02_toLong() { assertEquals(<span class="jxr_string">"999999999999"</span>, vr.resolve(<span class="jxr_string">"#{toLong(999999999999)}"</span>)); }
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  	@Test <strong class="jxr_keyword">void</strong> a03_toDouble() { assertEquals(<span class="jxr_string">"3.14"</span>, vr.resolve(<span class="jxr_string">"#{toDouble(3.14)}"</span>)); }
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a04_toBool_<strong class="jxr_keyword">true</strong>() { assertEquals(<span class="jxr_string">"true"</span>, vr.resolve(<span class="jxr_string">"#{toBool(yes)}"</span>)); }
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a05_toBool_false() { assertEquals(<span class="jxr_string">"false"</span>, vr.resolve(<span class="jxr_string">"#{toBool(no)}"</span>)); }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a04_toBool_<strong class="jxr_keyword">true</strong>() { assertEquals(<span class="jxr_string">"true"</span>, vr.resolve(<span class="jxr_string">"#{toBool('yes')}"</span>)); }
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a05_toBool_false() { assertEquals(<span class="jxr_string">"false"</span>, vr.resolve(<span class="jxr_string">"#{toBool('no')}"</span>)); }
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  }
 </pre>
 <hr/>

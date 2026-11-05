@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50"></span>
 <span class="source-line-no">051</span><span id="line-51">   /**</span>
 <span class="source-line-no">052</span><span id="line-52">    * {@code #{substring(s, start)}} / {@code #{substring(s, start, end)}} — replacement for the</span>
-<span class="source-line-no">053</span><span id="line-53">    * legacy {@code $ST{...}} {@code SubstringVar}.</span>
+<span class="source-line-no">053</span><span id="line-53">    * legacy {@code ST} {@code SubstringVar}.</span>
 <span class="source-line-no">054</span><span id="line-54">    *</span>
 <span class="source-line-no">055</span><span id="line-55">    * &lt;p&gt;</span>
 <span class="source-line-no">056</span><span id="line-56">    * Both endpoints are clamped to {@code [0, len(s)]} so out-of-range arguments don't throw —</span>
@@ -86,13 +86,13 @@
 <span class="source-line-no">073</span><span id="line-73">      }</span>
 <span class="source-line-no">074</span><span id="line-74">   }</span>
 <span class="source-line-no">075</span><span id="line-75"></span>
-<span class="source-line-no">076</span><span id="line-76">   /** {@code #{upper(s)}} — replacement for the legacy {@code $UC{...}}. */</span>
+<span class="source-line-no">076</span><span id="line-76">   /** {@code #{upper(s)}} — replacement for the legacy {@code UC} variable. */</span>
 <span class="source-line-no">077</span><span id="line-77">   public static class Upper extends TypedFunction {</span>
 <span class="source-line-no">078</span><span id="line-78">      @Override public String name() { return "upper"; }</span>
 <span class="source-line-no">079</span><span id="line-79">      public String invoke(String s) { return s == null ? "" : s.toUpperCase(); }</span>
 <span class="source-line-no">080</span><span id="line-80">   }</span>
 <span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   /** {@code #{lower(s)}} — replacement for the legacy {@code $LC{...}}. */</span>
+<span class="source-line-no">082</span><span id="line-82">   /** {@code #{lower(s)}} — replacement for the legacy {@code LC} variable. */</span>
 <span class="source-line-no">083</span><span id="line-83">   public static class Lower extends TypedFunction {</span>
 <span class="source-line-no">084</span><span id="line-84">      @Override public String name() { return "lower"; }</span>
 <span class="source-line-no">085</span><span id="line-85">      public String invoke(String s) { return s == null ? "" : s.toLowerCase(); }</span>
@@ -177,7 +177,7 @@
 <span class="source-line-no">164</span><span id="line-164"></span>
 <span class="source-line-no">165</span><span id="line-165">   /**</span>
 <span class="source-line-no">166</span><span id="line-166">    * {@code #{len(s)}} / {@code #{len(s, delimiter)}} — replacement for the legacy</span>
-<span class="source-line-no">167</span><span id="line-167">    * {@code $LN{...}}.</span>
+<span class="source-line-no">167</span><span id="line-167">    * {@code LN} variable.</span>
 <span class="source-line-no">168</span><span id="line-168">    *</span>
 <span class="source-line-no">169</span><span id="line-169">    * &lt;p&gt;</span>
 <span class="source-line-no">170</span><span id="line-170">    * Single-arg form returns the character count. Two-arg form splits on the literal</span>
@@ -339,20 +339,30 @@
 <span class="source-line-no">326</span><span id="line-326">    * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">327</span><span id="line-327">    * &lt;p&gt;</span>
 <span class="source-line-no">328</span><span id="line-328">    * {@code #{join("/", ${tenant}, ${id})}} → {@code acme/42}</span>
-<span class="source-line-no">329</span><span id="line-329">    */</span>
-<span class="source-line-no">330</span><span id="line-330">   public static class Join extends TypedFunction {</span>
-<span class="source-line-no">331</span><span id="line-331">      @Override public String name() { return "join"; }</span>
-<span class="source-line-no">332</span><span id="line-332">      public String invoke(String separator, String[] parts) {</span>
-<span class="source-line-no">333</span><span id="line-333">         var sep = separator == null ? "" : separator;</span>
-<span class="source-line-no">334</span><span id="line-334">         var sb = new StringBuilder();</span>
-<span class="source-line-no">335</span><span id="line-335">         for (var i = 0; i &lt; parts.length; i++) {</span>
-<span class="source-line-no">336</span><span id="line-336">            if (i &gt; 0) sb.append(sep);</span>
-<span class="source-line-no">337</span><span id="line-337">            sb.append(parts[i] == null ? "" : parts[i]);</span>
-<span class="source-line-no">338</span><span id="line-338">         }</span>
-<span class="source-line-no">339</span><span id="line-339">         return sb.toString();</span>
-<span class="source-line-no">340</span><span id="line-340">      }</span>
-<span class="source-line-no">341</span><span id="line-341">   }</span>
-<span class="source-line-no">342</span><span id="line-342">}</span>
+<span class="source-line-no">329</span><span id="line-329">    *</span>
+<span class="source-line-no">330</span><span id="line-330">    * &lt;p&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    * A single {@link Collection} argument supplies the parts.  Each part is rendered with {@code toString()} (doubles</span>
+<span class="source-line-no">332</span><span id="line-332">    * without a trailing {@code .0}), so a nested {@link Map} or {@link List} part prints as its Java {@code toString()},</span>
+<span class="source-line-no">333</span><span id="line-333">    * not as JSON like the value formatter does; this inconsistency is known and intentional for now.</span>
+<span class="source-line-no">334</span><span id="line-334">    */</span>
+<span class="source-line-no">335</span><span id="line-335">   public static class Join implements VarFunction {</span>
+<span class="source-line-no">336</span><span id="line-336">      @Override public String name() { return "join"; }</span>
+<span class="source-line-no">337</span><span id="line-337">      @Override public int minArity() { return 1; }</span>
+<span class="source-line-no">338</span><span id="line-338">      @Override public int maxArity() { return Integer.MAX_VALUE; }</span>
+<span class="source-line-no">339</span><span id="line-339">      @Override public String invoke(VarResolverSession session, List&lt;Object&gt; args) {</span>
+<span class="source-line-no">340</span><span id="line-340">         var sep = args.get(0) == null ? "" : args.get(0).toString();</span>
+<span class="source-line-no">341</span><span id="line-341">         // A single collection argument supplies the parts.</span>
+<span class="source-line-no">342</span><span id="line-342">         List&lt;?&gt; parts = args.size() == 2 &amp;&amp; args.get(1) instanceof Collection&lt;?&gt; c ? new ArrayList&lt;&gt;(c) : args.subList(1, args.size());</span>
+<span class="source-line-no">343</span><span id="line-343">         var sb = new StringBuilder();</span>
+<span class="source-line-no">344</span><span id="line-344">         for (var i = 0; i &lt; parts.size(); i++) {</span>
+<span class="source-line-no">345</span><span id="line-345">            if (i &gt; 0) sb.append(sep);</span>
+<span class="source-line-no">346</span><span id="line-346">            var p = parts.get(i);</span>
+<span class="source-line-no">347</span><span id="line-347">            sb.append(p instanceof Double || p instanceof Float ? ArithmeticFunctions.render(((Number)p).doubleValue()) : p == null ? "" : p.toString());</span>
+<span class="source-line-no">348</span><span id="line-348">         }</span>
+<span class="source-line-no">349</span><span id="line-349">         return sb.toString();</span>
+<span class="source-line-no">350</span><span id="line-350">      }</span>
+<span class="source-line-no">351</span><span id="line-351">   }</span>
+<span class="source-line-no">352</span><span id="line-352">}</span>
 
 
 

@@ -229,7 +229,7 @@
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">	 * Each {@code headers()} entry is a {@code "Name: value"} string (the colon-separated form), resolved through</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * {@link VarResolver#DEFAULT} so values such as {@code "$S{sysprop}"} expand.  A non-empty {@code version()}</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">	 * {@link VarResolver#DEFAULT} so values such as {@code "${S:sysprop}"} expand.  A non-empty {@code version()}</em>
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">	 * appends a {@code Client-Version} header (or the name given by {@code versionHeader()}).</em>
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
@@ -253,7 +253,7 @@
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * Parses an array of constant {@code "name&lt;delim&gt;value"} strings into resolved name/value entries.</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "$S{sysprop}"} expand), then</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">	 * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "${S:sysprop}"} expand), then</em>
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * split on the first occurrence of {@code delim} ({@code ':'} for the {@code "Name: value"} header form, {@code '='}</em>
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * for the {@code "name=value"} query/form-data form).  Entries with no delimiter are skipped.  Both the name and the</em>
 <a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 * value are trimmed.</em>

@@ -114,7 +114,7 @@
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> RecordingMetricsRecorder B_REC = <strong class="jxr_keyword">new</strong> RecordingMetricsRecorder();
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Rest(observability = <span class="jxr_string">"$S{test.svl.obs.b,}"</span>)
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Rest(observability = <span class="jxr_string">"${S:test.svl.obs.b:}"</span>)
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B <strong class="jxr_keyword">extends</strong> RestServlet {
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 1L;
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
@@ -136,7 +136,7 @@
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> b01_svlObservability_resolvedAtBuildTime_suppressesMetrics() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 		B_REC.clear();
 <a class="jxr_linenumber" name="L130" href="#L130">130</a> 		CB.get(<span class="jxr_string">"/ping"</span>).run().assertStatus(200);
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertSize(() -&gt; <span class="jxr_string">"$S{} SVL variable resolving to 'false' at context build time must suppress observability block"</span>, 0, B_REC.events);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertSize(() -&gt; <span class="jxr_string">"${S:} SVL variable resolving to 'false' at context build time must suppress observability block"</span>, 0, B_REC.events);
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> }
 </pre>

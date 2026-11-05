@@ -124,8 +124,8 @@ loadScripts(document, 'script');</script>
  <p class='bjava'>
    <ja>@Rest</ja>(
       messages=<js>"nls/AddressBookResource"</js>,
-      title=<js>"$L{title}"</js>,
-      description=<js>"$L{description}"</js>
+      title=<js>"${L:title}"</js>,
+      description=<js>"${L:description}"</js>
    )
    <ja>@HtmlDocConfig</ja>(
       navlinks={
@@ -137,7 +137,7 @@ loadScripts(document, 'script');</script>
  </p>
 
  <p>
- The <c>$L{...}</c> variable represent localized strings pulled from the resource bundle identified by the
+ The <c>${L:...}</c> variable represent localized strings pulled from the resource bundle identified by the
  <c>messages</c> annotation.
  <br>These variables are replaced at runtime based on the HTTP request locale.
  <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.

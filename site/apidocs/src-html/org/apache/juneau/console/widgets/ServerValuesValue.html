@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24"> * An immutable named server-side scalar value declaration held by a {@link ServerValues} bean.</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> * Each value pairs a stable {@code name} (the key an author interpolates as &lt;js&gt;"$FV{name}"&lt;/js&gt;) with a</span>
+<span class="source-line-no">027</span><span id="line-27"> * Each value pairs a stable {@code name} (the key an author interpolates as &lt;js&gt;"${FV:name}"&lt;/js&gt;) with a</span>
 <span class="source-line-no">028</span><span id="line-28"> * session-aware {@code provider}.  The provider is invoked at serve time against a per-render</span>
 <span class="source-line-no">029</span><span id="line-29"> * {@link VarResolverSession} and must return a scalar ({@link String} / {@link Number} / {@link Boolean}) or</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;jk&gt;null&lt;/jk&gt;; non-scalar results are rejected at resolve time rather than {@code toString()}-ed.</span>
@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37"> */</span>
 <span class="source-line-no">038</span><span id="line-38">public final class ServerValuesValue {</span>
 <span class="source-line-no">039</span><span id="line-39"></span>
-<span class="source-line-no">040</span><span id="line-40">   /** The interpolation name (the {@code x} in &lt;js&gt;"$FV{x}"&lt;/js&gt;).  Must not be null or blank. */</span>
+<span class="source-line-no">040</span><span id="line-40">   /** The interpolation name (the {@code x} in &lt;js&gt;"${FV:x}"&lt;/js&gt;).  Must not be null or blank. */</span>
 <span class="source-line-no">041</span><span id="line-41">   public final String name;</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
 <span class="source-line-no">043</span><span id="line-43">   /** The session-aware scalar provider.  Must not be null. */</span>

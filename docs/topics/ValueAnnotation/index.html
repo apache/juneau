@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.10.2">
 <title data-rh="true">@Value Annotation Basics | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.staged.apache.org/img/juneau-social-card.png"><meta data-rh="true" name="twitter:image" content="https://juneau.staged.apache.org/img/juneau-social-card.png"><meta data-rh="true" property="og:url" content="https://juneau.staged.apache.org/docs/topics/ValueAnnotation/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="@Value Annotation Basics | Apache Juneau"><meta data-rh="true" name="description" content="The @Value annotation"><meta data-rh="true" property="og:description" content="The @Value annotation"><link data-rh="true" rel="icon" href="/img/oakleaf.svg"><link data-rh="true" rel="canonical" href="https://juneau.staged.apache.org/docs/topics/ValueAnnotation/"><link data-rh="true" rel="alternate" href="https://juneau.staged.apache.org/docs/topics/ValueAnnotation/" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.staged.apache.org/docs/topics/ValueAnnotation/" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"2.1. juneau-commons","item":"https://juneau.staged.apache.org/docs/topics/JuneauCommons"},{"@type":"ListItem","position":2,"name":"2.1.10. Inject Package","item":"https://juneau.staged.apache.org/docs/topics/JuneauCommonsInject"},{"@type":"ListItem","position":3,"name":"2.1.10.1. @Value Annotation Basics","item":"https://juneau.staged.apache.org/docs/topics/ValueAnnotation"}]}</script><link rel="stylesheet" href="/assets/css/styles.c8c4dbd2.css">
-<script src="/assets/js/runtime~main.01181690.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.e9f20624.js" defer="defer"></script>
 <script src="/assets/js/main.1222e4f7.js" defer="defer"></script>
 </head>
 <body>
@@ -23,13 +23,13 @@ values into beans created by <a href="/site/apidocs/org/apache/juneau/commons/in
 <p>The two are mutually exclusive on the same injection site — applying both raises
 <code>BeanCreationException</code>.</p>
 <h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the--shortcut">The <code>${...}</code> shortcut<a href="#the--shortcut" class="hash-link" aria-label="Direct link to the--shortcut" title="Direct link to the--shortcut" translate="no">​</a></h2>
-<p>Inside a <code>@Value</code> expression (or anywhere you can write SVL), <code>${key}</code> is shorthand for <code>$P{key}</code> —
+<p>Inside a <code>@Value</code> expression (or anywhere you can write SVL), <code>${key}</code> is shorthand for <code>${P:key}</code> —
 the <a href="/site/apidocs/org/apache/juneau/commons/svl/vars/PropertyVar.html" target="_blank">PropertyVar</a> that
 looks up a unified property by name from <code>Settings</code>. The shortcut also accepts a Spring-style
 default after a colon:</p>
 <div class="language-text codeBlockContainer_Ckt0 theme-code-block"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar"><code class="codeBlockLines_e6Vv"><div class="token-line"><span class="token plain">${some.key}                — required key, missing → empty string</span><br></div><div class="token-line"><span class="token plain">${some.key:fallback}       — default-when-missing</span><br></div><div class="token-line"><span class="token plain">${section/sub.key}         — nested property names (Config sections, etc.)</span><br></div><div class="token-line"><span class="token plain">${a.b:${other:none}}       — nested expansion (defaults composed)</span><br></div></code></pre></div></div>
-<p>This is purely surface syntax — the tokenizer rewrites <code>${...}</code> to <code>$P{...}</code> before resolution.
-Everything <code>$P{...}</code> does (recursive resolution, default values, env-var fallback through chained
+<p>This is purely surface syntax — the tokenizer rewrites <code>${...}</code> to <code>${P:...}</code> before resolution.
+Everything <code>${P:...}</code> does (recursive resolution, default values, env-var fallback through chained
 sources) works identically with <code>${...}</code>. See
 <a class="" href="/docs/topics/MarshallSimpleVariableLanguage/">Simple Variable Language Basics</a> and
 <a class="" href="/docs/topics/Variables/">Variable Basics</a> for the underlying mechanics.</p>
@@ -166,7 +166,7 @@ without any explicit wiring.</p>
 <ul>
 <li class=""><a class="" href="/docs/topics/MarshallSimpleVariableLanguage/">Simple Variable Language Basics</a> — the full SVL surface,
 the <code>#{...}</code> function catalog, and the <code>VarTemplate</code> compiled-template API.</li>
-<li class=""><a class="" href="/docs/topics/SvlVariables/">SVL Variables</a> — list of built-in <code>$X{...}</code> resolvers.</li>
+<li class=""><a class="" href="/docs/topics/SvlVariables/">SVL Variables</a> — list of built-in <code>${X:...}</code> resolvers.</li>
 <li class=""><a class="" href="/docs/topics/Variables/">Variable Basics</a> — how variables work inside a <code>Config</code>.</li>
 <li class="">
 <a href="/site/apidocs/org/apache/juneau/commons/inject/Value.html" target="_blank">org.apache.juneau.commons.inject.Value</a>

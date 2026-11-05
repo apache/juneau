@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">    *</span>
 <span class="source-line-no">222</span><span id="line-222">    * &lt;p&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    * Each {@code headers()} entry is a {@code "Name: value"} string (the colon-separated form), resolved through</span>
-<span class="source-line-no">224</span><span id="line-224">    * {@link VarResolver#DEFAULT} so values such as {@code "$S{sysprop}"} expand.  A non-empty {@code version()}</span>
+<span class="source-line-no">224</span><span id="line-224">    * {@link VarResolver#DEFAULT} so values such as {@code "${S:sysprop}"} expand.  A non-empty {@code version()}</span>
 <span class="source-line-no">225</span><span id="line-225">    * appends a {@code Client-Version} header (or the name given by {@code versionHeader()}).</span>
 <span class="source-line-no">226</span><span id="line-226">    *</span>
 <span class="source-line-no">227</span><span id="line-227">    * &lt;p&gt;</span>
@@ -258,7 +258,7 @@
 <span class="source-line-no">245</span><span id="line-245">    * Parses an array of constant {@code "name&lt;delim&gt;value"} strings into resolved name/value entries.</span>
 <span class="source-line-no">246</span><span id="line-246">    *</span>
 <span class="source-line-no">247</span><span id="line-247">    * &lt;p&gt;</span>
-<span class="source-line-no">248</span><span id="line-248">    * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "$S{sysprop}"} expand), then</span>
+<span class="source-line-no">248</span><span id="line-248">    * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "${S:sysprop}"} expand), then</span>
 <span class="source-line-no">249</span><span id="line-249">    * split on the first occurrence of {@code delim} ({@code ':'} for the {@code "Name: value"} header form, {@code '='}</span>
 <span class="source-line-no">250</span><span id="line-250">    * for the {@code "name=value"} query/form-data form).  Entries with no delimiter are skipped.  Both the name and the</span>
 <span class="source-line-no">251</span><span id="line-251">    * value are trimmed.</span>

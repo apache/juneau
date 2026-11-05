@@ -457,7 +457,7 @@
 <a class="jxr_linenumber" name="L449" href="#L449">449</a> 
 <a class="jxr_linenumber" name="L450" href="#L450">450</a> 	@Rest(eagerInit = <span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L451" href="#L451">451</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Fix_ReadSvl {
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		@RestOp(method = <span class="jxr_string">"$S{MethodSafety_Test.r08}"</span>, path = <span class="jxr_string">"/x"</span>, read = <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		@RestOp(method = <span class="jxr_string">"${S:MethodSafety_Test.r08}"</span>, path = <span class="jxr_string">"/x"</span>, read = <strong class="jxr_keyword">true</strong>)
 <a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">public</strong> String op() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"x"</span>; }
 <a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> 
@@ -508,7 +508,7 @@
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 	@Rest(eagerInit = <span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Fix_ReadSvlEmpty <strong class="jxr_keyword">extends</strong> Fix_ReadParent {
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 		@Override
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		@RestOp(method = <span class="jxr_string">"$S{MethodSafety_Test.r13.unset}"</span>, path = <span class="jxr_string">"/x"</span>)
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 		@RestOp(method = <span class="jxr_string">"${S:MethodSafety_Test.r13.unset}"</span>, path = <span class="jxr_string">"/x"</span>)
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 		<strong class="jxr_keyword">public</strong> String view() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"x"</span>; }
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 	}
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 

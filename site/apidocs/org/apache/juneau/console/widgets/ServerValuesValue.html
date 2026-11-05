@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <div class="block">An immutable named server-side scalar value declaration held by a <a href="ServerValues.html" title="class in org.apache.juneau.console.widgets"><code>ServerValues</code></a> bean.
 
  <p>
- Each value pairs a stable <code>name</code> (the key an author interpolates as <js>"$FV{name}"</js>) with a
+ Each value pairs a stable <code>name</code> (the key an author interpolates as <js>"${FV:name}"</js>) with a
  session-aware <code>provider</code>.  The provider is invoked at serve time against a per-render
  <a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a> and must return a scalar (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>) or
  <jk>null</jk>; non-scalar results are rejected at resolve time rather than <code>toString()</code>-ed.
@@ -115,7 +115,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#name" class="member-name-link">name</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">The interpolation name (the <code>x</code> in <js>"$FV{x}"</js>).</div>
+<div class="block">The interpolation name (the <code>x</code> in <js>"${FV:x}"</js>).</div>
 </div>
 <div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>,<wbr>?&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#provider" class="member-name-link">provider</a></code></div>
@@ -170,7 +170,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="name">
 <h3>name</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/ServerValuesValue.html#line-41">name</a></span></div>
-<div class="block">The interpolation name (the <code>x</code> in <js>"$FV{x}"</js>).  Must not be null or blank.</div>
+<div class="block">The interpolation name (the <code>x</code> in <js>"${FV:x}"</js>).  Must not be null or blank.</div>
 </section>
 </li>
 <li>

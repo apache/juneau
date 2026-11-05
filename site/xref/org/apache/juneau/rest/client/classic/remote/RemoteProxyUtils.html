@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <em class="jxr_javadoccomment">	 * Ported from the next-generation engine's {@code RrpcInterfaceMeta.parseConstantParts(...)}.  Each entry is</em>
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * resolved through {@link VarResolver#DEFAULT} (so values such as {@code "$S{sysprop}"} expand), then split on the</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">	 * resolved through {@link VarResolver#DEFAULT} (so values such as {@code "${S:sysprop}"} expand), then split on the</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">	 * first occurrence of {@code delim} ({@code ':'} for the {@code "Name: value"} header form, {@code '='} for the</em>
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  <em class="jxr_javadoccomment">	 * {@code "name=value"} query/form-data form).  Entries with no delimiter are skipped.  Both the name and the value</em>
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  <em class="jxr_javadoccomment">	 * are trimmed.</em>

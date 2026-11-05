@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;b&gt;Path prefix:&lt;/b&gt; defaults to {@code /actuator} and is configurable via the {@code juneau.actuator.path}</span>
-<span class="source-line-no">052</span><span id="line-52"> * system property (resolved through the standard {@code $S{...}} SVL var).  Mount the group at a custom prefix</span>
+<span class="source-line-no">052</span><span id="line-52"> * system property (resolved through the standard {@code ${S:...}} SVL var).  Mount the group at a custom prefix</span>
 <span class="source-line-no">053</span><span id="line-53"> * either by setting that property or by subclassing with your own {@link Rest#path() @Rest(path=...)}.</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;p&gt;</span>
@@ -84,7 +84,7 @@
 <span class="source-line-no">071</span><span id="line-71"> * @since 10.0.0</span>
 <span class="source-line-no">072</span><span id="line-72"> */</span>
 <span class="source-line-no">073</span><span id="line-73">@Rest(</span>
-<span class="source-line-no">074</span><span id="line-74">   path="$S{juneau.actuator.path,/actuator}",</span>
+<span class="source-line-no">074</span><span id="line-74">   path="${S:juneau.actuator.path:/actuator}",</span>
 <span class="source-line-no">075</span><span id="line-75">   title="Management",</span>
 <span class="source-line-no">076</span><span id="line-76">   description="Actuator-style management surface.",</span>
 <span class="source-line-no">077</span><span id="line-77">   mixins={</span>

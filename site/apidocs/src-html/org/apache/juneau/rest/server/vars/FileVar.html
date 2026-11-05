@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * File resource variable resolver</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * The format for this var is &lt;js&gt;"$F{path[,defaultValue]}"&lt;/js&gt;.</span>
+<span class="source-line-no">030</span><span id="line-30"> * The format for this var is &lt;js&gt;"${F:path[:defaultValue]}"&lt;/js&gt;.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * Contents of files are retrieved from the resource context using {@link RestContext#getStaticFiles()}.</span>
@@ -59,7 +59,7 @@
 <span class="source-line-no">046</span><span id="line-46"> * Example:</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *  &lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</span>
-<span class="source-line-no">049</span><span id="line-49"> *       aside=&lt;js&gt;"$F{resources/MyAsideMessage.html, Oops not found!}"&lt;/js&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *       aside=&lt;js&gt;"${F:resources/MyAsideMessage.html: Oops not found!}"&lt;/js&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *    )</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;/p&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *</span>

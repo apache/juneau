@@ -143,7 +143,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Rest(paths = {<span class="jxr_string">"/x,/y"</span>})
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Fix_PathsAnnotation {}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Rest(paths = {<span class="jxr_string">"$Boom{oops},/fallback"</span>})
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Rest(paths = {<span class="jxr_string">"${Boom:oops},/fallback"</span>})
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Fix_PathsAnnotationSvlThrows {}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_javadoccomment">/** A custom SVL var whose resolution always throws, to exercise the applySvl catch-and-fallback branch. */</em>
@@ -165,9 +165,9 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		store.addBean(VarResolver.<strong class="jxr_keyword">class</strong>, vr);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		<strong class="jxr_keyword">try</strong> (store) {
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">var</strong> r = RestContext.resolveTopLevelPaths(Fix_PathsAnnotationSvlThrows.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">null</strong>, store);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<em class="jxr_comment">// The "$Boom{oops},/fallback" literal has no comma-split applied to the (unresolved) raw element on</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<em class="jxr_comment">// The "${Boom:oops},/fallback" literal has no comma-split applied to the (unresolved) raw element on</em>
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<em class="jxr_comment">// SVL failure -- applySvl returns the whole literal unchanged, which is then comma-split downstream.</em>
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			assertEquals(List.of(<span class="jxr_string">"$Boom{oops}"</span>, <span class="jxr_string">"/fallback"</span>), Arrays.asList(r));
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			assertEquals(List.of(<span class="jxr_string">"${Boom:oops}"</span>, <span class="jxr_string">"/fallback"</span>), Arrays.asList(r));
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 

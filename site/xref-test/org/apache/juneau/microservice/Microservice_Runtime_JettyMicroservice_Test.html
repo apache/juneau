@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 			<strong class="jxr_keyword">var</strong> vr = ms.getVarResolver();
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			assertNotNull(vr);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			assertEquals(<span class="jxr_string">"valueX"</span>, vr.resolve(<span class="jxr_string">"$C{MySection/key}"</span>));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			assertEquals(<span class="jxr_string">"valueX"</span>, vr.resolve(<span class="jxr_string">"${C:MySection/key}"</span>));
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			ms.stop();
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		}
@@ -489,7 +489,7 @@
 <a class="jxr_linenumber" name="L481" href="#L481">481</a> 	@Test <strong class="jxr_keyword">void</strong> j01_builder_varBean_isAvailableViaVarResolver() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L482" href="#L482">482</a> 		<strong class="jxr_keyword">var</strong> ms = Microservice.create().varBean(String.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"from-bean"</span>).build();
 <a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<em class="jxr_comment">// We can't trivially resolve a $S{...} pointing at a named String bean here; just verify the</em>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<em class="jxr_comment">// We can't trivially resolve a ${S:...} pointing at a named String bean here; just verify the</em>
 <a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<em class="jxr_comment">// var resolver was constructed and the bean store contains the var resolver.</em>
 <a class="jxr_linenumber" name="L486" href="#L486">486</a> 			assertNotNull(ms.getVarResolver());
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 		} <strong class="jxr_keyword">finally</strong> {

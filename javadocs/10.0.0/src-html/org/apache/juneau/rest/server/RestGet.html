@@ -158,7 +158,7 @@
 <span class="source-line-no">145</span><span id="line-145">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">147</span><span id="line-147">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
+<span class="source-line-no">148</span><span id="line-148">    *       (e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">149</span><span id="line-149">    * &lt;/ul&gt;</span>
 <span class="source-line-no">150</span><span id="line-150">    *</span>
 <span class="source-line-no">151</span><span id="line-151">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
@@ -185,7 +185,7 @@
 <span class="source-line-no">172</span><span id="line-172">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">173</span><span id="line-173">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    *    &lt;jc&gt;// Defined via annotation resolving to a config file setting with default value.&lt;/jc&gt;</span>
-<span class="source-line-no">175</span><span id="line-175">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(defaultRequestAttributes={&lt;js&gt;"Foo=bar"&lt;/js&gt;, &lt;js&gt;"Baz: $C{REST/myAttributeValue}"&lt;/js&gt;})</span>
+<span class="source-line-no">175</span><span id="line-175">    *    &lt;ja&gt;@Rest&lt;/ja&gt;(defaultRequestAttributes={&lt;js&gt;"Foo=bar"&lt;/js&gt;, &lt;js&gt;"Baz: ${C:REST/myAttributeValue}"&lt;/js&gt;})</span>
 <span class="source-line-no">176</span><span id="line-176">    *    &lt;jk&gt;public class&lt;/jk&gt; MyResource {</span>
 <span class="source-line-no">177</span><span id="line-177">    *</span>
 <span class="source-line-no">178</span><span id="line-178">    *       &lt;jc&gt;// Override at the method level.&lt;/jc&gt;</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">185</span><span id="line-185">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">186</span><span id="line-186">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">187</span><span id="line-187">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">187</span><span id="line-187">    *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">188</span><span id="line-188">    * &lt;/ul&gt;</span>
 <span class="source-line-no">189</span><span id="line-189">    *</span>
 <span class="source-line-no">190</span><span id="line-190">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
@@ -224,7 +224,7 @@
 <span class="source-line-no">211</span><span id="line-211">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">212</span><span id="line-212">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">213</span><span id="line-213">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">214</span><span id="line-214">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
+<span class="source-line-no">214</span><span id="line-214">    *       (e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">215</span><span id="line-215">    * &lt;/ul&gt;</span>
 <span class="source-line-no">216</span><span id="line-216">    *</span>
 <span class="source-line-no">217</span><span id="line-217">    *</span>
@@ -254,7 +254,7 @@
 <span class="source-line-no">241</span><span id="line-241">    *       Key and value is trimmed of whitespace.</span>
 <span class="source-line-no">242</span><span id="line-242">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">243</span><span id="line-243">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">244</span><span id="line-244">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
+<span class="source-line-no">244</span><span id="line-244">    *       (e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">245</span><span id="line-245">    * &lt;/ul&gt;</span>
 <span class="source-line-no">246</span><span id="line-246">    *</span>
 <span class="source-line-no">247</span><span id="line-247">    * @return The annotation value.</span>
@@ -277,7 +277,7 @@
 <span class="source-line-no">264</span><span id="line-264">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">265</span><span id="line-265">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">266</span><span id="line-266">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">267</span><span id="line-267">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
+<span class="source-line-no">267</span><span id="line-267">    *       (e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">268</span><span id="line-268">    * &lt;/ul&gt;</span>
 <span class="source-line-no">269</span><span id="line-269">    *</span>
 <span class="source-line-no">270</span><span id="line-270">    *</span>
@@ -294,7 +294,7 @@
 <span class="source-line-no">281</span><span id="line-281">    *    &lt;li&gt;</span>
 <span class="source-line-no">282</span><span id="line-282">    *       The value returned by {@link Operation#getDescription()} in the auto-generated swagger.</span>
 <span class="source-line-no">283</span><span id="line-283">    *    &lt;li&gt;</span>
-<span class="source-line-no">284</span><span id="line-284">    *       The &lt;js&gt;"$RS{operationDescription}"&lt;/js&gt; variable.</span>
+<span class="source-line-no">284</span><span id="line-284">    *       The &lt;js&gt;"${RS:operationDescription}"&lt;/js&gt; variable.</span>
 <span class="source-line-no">285</span><span id="line-285">    *    &lt;li&gt;</span>
 <span class="source-line-no">286</span><span id="line-286">    *       The description of the method in the Swagger page.</span>
 <span class="source-line-no">287</span><span id="line-287">    * &lt;/ul&gt;</span>
@@ -304,7 +304,7 @@
 <span class="source-line-no">291</span><span id="line-291">    *       Corresponds to the swagger field &lt;c&gt;/paths/{path}/{method}/description&lt;/c&gt;.</span>
 <span class="source-line-no">292</span><span id="line-292">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">293</span><span id="line-293">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">294</span><span id="line-294">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">294</span><span id="line-294">    *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">295</span><span id="line-295">    * &lt;/ul&gt;</span>
 <span class="source-line-no">296</span><span id="line-296">    *</span>
 <span class="source-line-no">297</span><span id="line-297">    * @return The annotation value.</span>
@@ -432,7 +432,7 @@
 <span class="source-line-no">419</span><span id="line-419">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">420</span><span id="line-420">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">421</span><span id="line-421">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">422</span><span id="line-422">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">422</span><span id="line-422">    *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">423</span><span id="line-423">    * &lt;/ul&gt;</span>
 <span class="source-line-no">424</span><span id="line-424">    *</span>
 <span class="source-line-no">425</span><span id="line-425">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
@@ -537,7 +537,7 @@
 <span class="source-line-no">524</span><span id="line-524">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
 <span class="source-line-no">525</span><span id="line-525">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">526</span><span id="line-526">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">527</span><span id="line-527">    *       (e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</span>
+<span class="source-line-no">527</span><span id="line-527">    *       (e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</span>
 <span class="source-line-no">528</span><span id="line-528">    * &lt;/ul&gt;</span>
 <span class="source-line-no">529</span><span id="line-529">    *</span>
 <span class="source-line-no">530</span><span id="line-530">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>
@@ -641,7 +641,7 @@
 <span class="source-line-no">628</span><span id="line-628">    *       If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()}.</span>
 <span class="source-line-no">629</span><span id="line-629">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">630</span><span id="line-630">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">631</span><span id="line-631">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">631</span><span id="line-631">    *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">632</span><span id="line-632">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">633</span><span id="line-633">    *       When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.</span>
 <span class="source-line-no">634</span><span id="line-634">    * &lt;/ul&gt;</span>
@@ -739,7 +739,7 @@
 <span class="source-line-no">726</span><span id="line-726">    *    &lt;li&gt;</span>
 <span class="source-line-no">727</span><span id="line-727">    *       The value returned by {@link Operation#getSummary()} in the auto-generated swagger.</span>
 <span class="source-line-no">728</span><span id="line-728">    *    &lt;li&gt;</span>
-<span class="source-line-no">729</span><span id="line-729">    *       The &lt;js&gt;"$RS{operationSummary}"&lt;/js&gt; variable.</span>
+<span class="source-line-no">729</span><span id="line-729">    *       The &lt;js&gt;"${RS:operationSummary}"&lt;/js&gt; variable.</span>
 <span class="source-line-no">730</span><span id="line-730">    *    &lt;li&gt;</span>
 <span class="source-line-no">731</span><span id="line-731">    *       The summary of the method in the Swagger page.</span>
 <span class="source-line-no">732</span><span id="line-732">    * &lt;/ul&gt;</span>
@@ -749,7 +749,7 @@
 <span class="source-line-no">736</span><span id="line-736">    *       Corresponds to the swagger field &lt;c&gt;/paths/{path}/{method}/summary&lt;/c&gt;.</span>
 <span class="source-line-no">737</span><span id="line-737">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">738</span><span id="line-738">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">739</span><span id="line-739">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">739</span><span id="line-739">    *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">740</span><span id="line-740">    * &lt;/ul&gt;</span>
 <span class="source-line-no">741</span><span id="line-741">    *</span>
 <span class="source-line-no">742</span><span id="line-742">    * @return The annotation value.</span>
@@ -795,7 +795,7 @@
 <span class="source-line-no">782</span><span id="line-782">    *       These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.</span>
 <span class="source-line-no">783</span><span id="line-783">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">784</span><span id="line-784">    *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">785</span><span id="line-785">    *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">785</span><span id="line-785">    *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">786</span><span id="line-786">    * &lt;/ul&gt;</span>
 <span class="source-line-no">787</span><span id="line-787">    *</span>
 <span class="source-line-no">788</span><span id="line-788">    * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</span>

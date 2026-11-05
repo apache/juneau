@@ -39,7 +39,7 @@
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * The 4 documented stable built-ins are {@code EnvVariablesVar} / {@code SystemPropertiesVar} /</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * {@code ManifestFileVar} / {@code ArgsVar}. This test exercises {@code SystemPropertiesVar}</em>
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * (via {@code $S{...}}) because it's the easiest to control deterministically in a test —</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * (via {@code ${S:...}}) because it's the easiest to control deterministically in a test —</em>
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * env vars and manifest files are environment-dependent.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> */</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  @ResourceLock(Resources.SYSTEM_PROPERTIES)
@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <strong class="jxr_keyword">class</strong> Value_StableFolding_Test <strong class="jxr_keyword">extends</strong> <a name="TestBase" href="../../../../../org/apache/juneau/commons/TestBase.html#TestBase">TestBase</a> {
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> SysPropBean {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		@Value(<span class="jxr_string">"$S{Value_StableFolding_Test.sysprop}"</span>)
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		@Value(<span class="jxr_string">"${S:Value_StableFolding_Test.sysprop}"</span>)
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  		String value;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	}
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  
@@ -62,9 +62,9 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	@Test <strong class="jxr_keyword">void</strong> a01_systemPropertyFoldsAtCompileTime() {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		System.setProperty(<span class="jxr_string">"Value_StableFolding_Test.sysprop"</span>, <span class="jxr_string">"fred"</span>);
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<em class="jxr_comment">// Compile through ValueResolver's cache so the field-injection path is exercised.</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> t = ValueResolver.getCompiledTemplate(<span class="jxr_string">"$S{Value_StableFolding_Test.sysprop}"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">var</strong> t = ValueResolver.getCompiledTemplate(<span class="jxr_string">"${S:Value_StableFolding_Test.sysprop}"</span>);
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  		assertTrue(t.isLiteral(),
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<span class="jxr_string">"$S{...} with SystemPropertiesVar opts-in to stable folding — template should be literal after compile"</span>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<span class="jxr_string">"${S:...} with SystemPropertiesVar opts-in to stable folding — template should be literal after compile"</span>);
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<em class="jxr_comment">// Mutate the property AFTER compile — folded value is frozen.</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		System.setProperty(<span class="jxr_string">"Value_StableFolding_Test.sysprop"</span>, <span class="jxr_string">"barney"</span>);

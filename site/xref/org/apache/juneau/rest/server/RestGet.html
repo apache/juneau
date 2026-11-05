@@ -153,7 +153,7 @@
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
@@ -180,7 +180,7 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * 	&lt;jc&gt;// Defined via annotation resolving to a config file setting with default value.&lt;/jc&gt;</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(defaultRequestAttributes={&lt;js&gt;"Foo=bar"&lt;/js&gt;, &lt;js&gt;"Baz: $C{REST/myAttributeValue}"&lt;/js&gt;})</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 * 	&lt;ja&gt;@Rest&lt;/ja&gt;(defaultRequestAttributes={&lt;js&gt;"Foo=bar"&lt;/js&gt;, &lt;js&gt;"Baz: ${C:REST/myAttributeValue}"&lt;/js&gt;})</em>
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * 	&lt;jk&gt;public class&lt;/jk&gt; MyResource {</em>
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 * 		&lt;jc&gt;// Override at the method level.&lt;/jc&gt;</em>
@@ -192,7 +192,7 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
@@ -219,7 +219,7 @@
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> <em class="jxr_javadoccomment">	 *</em>
@@ -249,7 +249,7 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> <em class="jxr_javadoccomment">	 * 		Key and value is trimmed of whitespace.</em>
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
@@ -272,7 +272,7 @@
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 *</em>
@@ -289,7 +289,7 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 * 		The value returned by {@link Operation#getDescription()} in the auto-generated swagger.</em>
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * 		The &lt;js&gt;"$RS{operationDescription}"&lt;/js&gt; variable.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">	 * 		The &lt;js&gt;"${RS:operationDescription}"&lt;/js&gt; variable.</em>
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">	 * 		The description of the method in the Swagger page.</em>
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
@@ -299,7 +299,7 @@
 <a class="jxr_linenumber" name="L291" href="#L291">291</a> <em class="jxr_javadoccomment">	 * 		Corresponds to the swagger field &lt;c&gt;/paths/{path}/{method}/description&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L295" href="#L295">295</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L296" href="#L296">296</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L297" href="#L297">297</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
@@ -427,7 +427,7 @@
 <a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$S{mySystemProperty}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${S:mySystemProperty}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>
@@ -636,7 +636,7 @@
 <a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()}.</em>
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.</em>
 <a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
@@ -734,7 +734,7 @@
 <a class="jxr_linenumber" name="L726" href="#L726">726</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
 <a class="jxr_linenumber" name="L727" href="#L727">727</a> <em class="jxr_javadoccomment">	 * 		The value returned by {@link Operation#getSummary()} in the auto-generated swagger.</em>
 <a class="jxr_linenumber" name="L728" href="#L728">728</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
-<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * 		The &lt;js&gt;"$RS{operationSummary}"&lt;/js&gt; variable.</em>
+<a class="jxr_linenumber" name="L729" href="#L729">729</a> <em class="jxr_javadoccomment">	 * 		The &lt;js&gt;"${RS:operationSummary}"&lt;/js&gt; variable.</em>
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;</em>
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> <em class="jxr_javadoccomment">	 * 		The summary of the method in the Swagger page.</em>
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
@@ -744,7 +744,7 @@
 <a class="jxr_linenumber" name="L736" href="#L736">736</a> <em class="jxr_javadoccomment">	 * 		Corresponds to the swagger field &lt;c&gt;/paths/{path}/{method}/summary&lt;/c&gt;.</em>
 <a class="jxr_linenumber" name="L737" href="#L737">737</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L739" href="#L739">739</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L741" href="#L741">741</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L742" href="#L742">742</a> <em class="jxr_javadoccomment">	 * @return The annotation value.</em>
@@ -790,7 +790,7 @@
 <a class="jxr_linenumber" name="L782" href="#L782">782</a> <em class="jxr_javadoccomment">	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.</em>
 <a class="jxr_linenumber" name="L783" href="#L783">783</a> <em class="jxr_javadoccomment">	 * 	&lt;li class='note'&gt;</em>
 <a class="jxr_linenumber" name="L784" href="#L784">784</a> <em class="jxr_javadoccomment">	 * 		Supports &lt;a class="doclink" href="<a href="https://juneau.apache.org/docs/topics/RestServerSvlVariables" target="alexandria_uri">https://juneau.apache.org/docs/topics/RestServerSvlVariables</a>"&gt;REST Server SVL Variables&lt;/a&gt;</em>
-<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</em>
+<a class="jxr_linenumber" name="L785" href="#L785">785</a> <em class="jxr_javadoccomment">	 * 		(e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</em>
 <a class="jxr_linenumber" name="L786" href="#L786">786</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L787" href="#L787">787</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L788" href="#L788">788</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;See Also:&lt;/h4&gt;&lt;ul&gt;</em>

@@ -47,7 +47,7 @@
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<em class="jxr_comment">// User-supplied regexes are compiled once and reused.  Bounded (entire cache cleared past maxSize) to guard</em>
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_comment">// against unbounded growth from arbitrary user input.  Pattern is immutable/thread-safe; a fresh Matcher is</em>
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<em class="jxr_comment">// created per invocation, so behavior is identical to compiling on every call.</em>
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;String,Pattern&gt; PATTERN_CACHE = Cache.of(String.<strong class="jxr_keyword">class</strong>, Pattern.<strong class="jxr_keyword">class</strong>).maxSize(1000).supplier(Pattern::compile).build();
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Cache&lt;String,Pattern&gt; PATTERN_CACHE = Cache.of(String.<strong class="jxr_keyword">class</strong>, Pattern.<strong class="jxr_keyword">class</strong>).maxSize(1000).supplier(Pattern::compile).build();
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<em class="jxr_javadoccomment">/** All function classes in this category. */</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	@SuppressWarnings({
@@ -58,7 +58,7 @@
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		Match.<strong class="jxr_keyword">class</strong>, Extract.<strong class="jxr_keyword">class</strong>, ReplaceRegex.<strong class="jxr_keyword">class</strong>
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  	};
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/** {@code #{match(s, regex)}} — replacement for the legacy {@code $PM{...}}. Returns {@code "true"} or {@code "false"}. */</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_javadoccomment">/** {@code #{match(s, regex)}} — replacement for the legacy {@code PM} variable. Returns {@code "true"} or {@code "false"}. */</em>
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Match <strong class="jxr_keyword">extends</strong> TypedFunction {
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		@Override <strong class="jxr_keyword">public</strong> String name() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"match"</span>; }
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">public</strong> String invoke(String s, String regex) {
@@ -69,7 +69,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">	 * {@code #{extract(s, regex)}} / {@code #{extract(s, regex, group)}} — replacement for the</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * legacy {@code $PE{...}}. Returns the first match; if {@code group} is supplied, returns</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">	 * legacy {@code PE} variable. Returns the first match; if {@code group} is supplied, returns</em>
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">	 * that capture group from the first match.</em>
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Extract <strong class="jxr_keyword">extends</strong> TypedFunction {
@@ -85,7 +85,7 @@
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		}
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<em class="jxr_javadoccomment">/** {@code #{replaceRegex(s, regex, replacement)}} — replacement for the legacy {@code $PR{...}}. */</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<em class="jxr_javadoccomment">/** {@code #{replaceRegex(s, regex, replacement)}} — replacement for the legacy {@code PR} variable. */</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> ReplaceRegex <strong class="jxr_keyword">extends</strong> TypedFunction {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		@Override <strong class="jxr_keyword">public</strong> String name() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"replaceRegex"</span>; }
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">public</strong> String invoke(String s, String regex, String replacement) {

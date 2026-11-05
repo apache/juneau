@@ -49,7 +49,7 @@
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment"> * The test publishes {@code 0} as the {@code availablePort} system property before {@link JettyMicroservice#run}</em>
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * is invoked.  The bundled {@code jetty.xml} resolves {@code $S{availablePort,10000}} to that pre-set value, so</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment"> * is invoked.  The bundled {@code jetty.xml} resolves {@code ${S:availablePort:10000}} to that pre-set value, so</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment"> * Jetty binds an OS-assigned port &amp;mdash; this avoids the bundled default port {@code 10000} colliding with</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment"> * whatever else is bound on the developer's machine, and avoids the race of reserving a port and releasing it</em>
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment"> * before Jetty binds.</em>
@@ -76,7 +76,7 @@
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  	})
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">void</strong> runStartsServerServesRequestAndStops() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<em class="jxr_comment">// Pre-publish port 0; JettyServerComponent's @Value("${availablePort}") sentinel honors a pre-set value, and</em>
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// the bundled jetty.xml binds the connector to $S{availablePort}.  The OS picks the port at bind time, so</em>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<em class="jxr_comment">// the bundled jetty.xml binds the connector to ${S:availablePort}.  The OS picks the port at bind time, so</em>
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<em class="jxr_comment">// nothing can take it between reserving and binding; the real port is read back from the connector.</em>
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  		System.setProperty(<span class="jxr_string">"availablePort"</span>, <span class="jxr_string">"0"</span>);
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">var</strong> ms = JettyMicroservice.run(<strong class="jxr_keyword">new</strong> String[0], <strong class="jxr_keyword">new</strong> Root(), false);

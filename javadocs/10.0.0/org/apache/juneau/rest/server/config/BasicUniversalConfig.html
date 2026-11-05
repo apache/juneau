@@ -126,7 +126,7 @@ extends <a href="DefaultConfig.html" title="interface in org.apache.juneau.rest.
                <li class='jc'><a href="../../../marshall/plaintext/PlainTextParser.html" title="class in org.apache.juneau.marshall.plaintext"><code>PlainTextParser</code></a>
             </ul>
          </li>
-         <li class='jma'><a href="../Rest.html#config()"><code>config</code></a>:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
+         <li class='jma'><a href="../Rest.html#config()"><code>config</code></a>:  <js>"${S:juneau.configFile:SYSTEM_DEFAULT}"</js>
       </ul>
    </li>
    <li class='ja'><a href="../../../marshall/MarshalledConfig.html" title="annotation interface in org.apache.juneau.marshall"><code>MarshalledConfig</code></a>:
@@ -141,11 +141,11 @@ extends <a href="DefaultConfig.html" title="interface in org.apache.juneau.rest.
    </li>
    <li class='ja'><a href="../../../marshall/html/HtmlDocConfig.html" title="annotation interface in org.apache.juneau.marshall.html"><code>HtmlDocConfig</code></a>:
       <ul>
-         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#header()"><code>header</code></a>:  <js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;$C{REST/header}"</js>
+         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#header()"><code>header</code></a>:  <js>"&lt;h1&gt;${RS:title}&lt;/h1&gt;&lt;h2&gt;${RS:operationSummary:description}&lt;/h2&gt;${C:REST/header}"</js>
          <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#navlinks()"><code>navlinks</code></a>:  <js>"up: request:/.."</js>
-         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#stylesheet()"><code>stylesheet</code></a>:  <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
-         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#head()"><code>head</code></a>:  <js>"$C{REST/head}"</js>
-         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#footer()"><code>footer</code></a>:  <js>"$C{REST/footer}"</js>
+         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#stylesheet()"><code>stylesheet</code></a>:  <js>"${C:REST/theme:servlet:/htdocs/themes/devops.css}"</js>
+         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#head()"><code>head</code></a>:  <js>"${C:REST/head}"</js>
+         <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#footer()"><code>footer</code></a>:  <js>"${C:REST/footer}"</js>
          <li class='jma'><a href="../../../marshall/html/HtmlDocConfig.html#nowrap()"><code>nowrap</code></a>:  <js>"true"</js>
       </ul>
    </li>

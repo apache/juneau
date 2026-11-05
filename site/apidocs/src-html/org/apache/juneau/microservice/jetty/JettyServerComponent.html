@@ -196,8 +196,8 @@
 <span class="source-line-no">183</span><span id="line-183">    * mount time. The programmatic Builder rung is N/A for Jetty auto-discovery (the {@code RestContext} does</span>
 <span class="source-line-no">184</span><span id="line-184">    * not exist yet at this point in the lifecycle); users can substitute by overriding {@code getPaths()} on</span>
 <span class="source-line-no">185</span><span id="line-185">    * the resource class, or by leaning on SVL inside {@code @Rest(paths=...)} elements (e.g.</span>
-<span class="source-line-no">186</span><span id="line-186">    * {@code paths={"$C{health.paths}"}}) so each element is resolved through {@code Config} /</span>
-<span class="source-line-no">187</span><span id="line-187">    * {@code $E{...}} / {@code $S{...}} before being comma-split.</span>
+<span class="source-line-no">186</span><span id="line-186">    * {@code paths={"${C:health.paths}"}}) so each element is resolved through {@code Config} /</span>
+<span class="source-line-no">187</span><span id="line-187">    * {@code ${E:...}} / {@code ${S:...}} before being comma-split.</span>
 <span class="source-line-no">188</span><span id="line-188">    *</span>
 <span class="source-line-no">189</span><span id="line-189">    * @return The normalized exact-match path-specs (for multi-mount), or the singular {@code @Rest(path)}-style</span>
 <span class="source-line-no">190</span><span id="line-190">    *    {@code "/...&amp;#47;*"} pathspec when no {@code paths} are resolved.</span>
@@ -246,7 +246,7 @@
 <span class="source-line-no">233</span><span id="line-233"></span>
 <span class="source-line-no">234</span><span id="line-234">         if (availablePortEnv.isEmpty())</span>
 <span class="source-line-no">235</span><span id="line-235">            // Intentional real-JVM-property publish: the bundled jetty.xml binds its connector to</span>
-<span class="source-line-no">236</span><span id="line-236">            // $S{availablePort,10000}, and the $S{...} SVL var resolves via raw System.getProperty (bypassing</span>
+<span class="source-line-no">236</span><span id="line-236">            // ${S:availablePort:10000}, and the ${S:...} SVL var resolves via raw System.getProperty (bypassing</span>
 <span class="source-line-no">237</span><span id="line-237">            // the Settings override chain).  A Settings-based write would be invisible to jetty.xml, so the</span>
 <span class="source-line-no">238</span><span id="line-238">            // bound port MUST be published as a real system property here.  The @Value-injected availablePortEnv</span>
 <span class="source-line-no">239</span><span id="line-239">            // read side is already Settings-abstracted; only this publish must stay raw.</span>
@@ -372,7 +372,7 @@
 <span class="source-line-no">359</span><span id="line-359"></span>
 <span class="source-line-no">360</span><span id="line-360">         if (serverPortEnv.isEmpty())</span>
 <span class="source-line-no">361</span><span id="line-361">            // Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external</span>
-<span class="source-line-no">362</span><span id="line-362">            // publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A</span>
+<span class="source-line-no">362</span><span id="line-362">            // publication of the bound port, consumed via raw System.getProperty (and ${S:...} SVL).  A</span>
 <span class="source-line-no">363</span><span id="line-363">            // Settings-based write would not be visible to those raw readers, so this is kept.  The</span>
 <span class="source-line-no">364</span><span id="line-364">            // @Value-injected serverPortEnv read side is already Settings-abstracted.</span>
 <span class="source-line-no">365</span><span id="line-365">            System.setProperty("juneau.serverPort", String.valueOf(availablePort));</span>

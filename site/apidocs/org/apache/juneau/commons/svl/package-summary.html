@@ -67,7 +67,17 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="package-signature">package <span class="element-name">org.apache.juneau.commons.svl</span></div>
 <section class="package-description" id="package-description">
-<div class="block">Simple Variable Language</div>
+<div class="block">Simple Variable Language (SVL).
+
+ <p>
+ SVL has two marker forms: <c>${Type:key:default}</c> (a var lookup; a body whose prefix is not a registered
+ var name is a property lookup) and <c>#{expr}</c> (a typed expression with operators, paths, collections and
+ functions).  Top-level <c>:</c> separates parts; a backslash before <c>:</c>, <c>'</c>, <c>"</c>, <c>,</c> or <c>}</c> is removed before the var sees the text (<c>\\</c> is one backslash).  The 9.x dollar-brace variable form and
+ the comma separator were removed in 10.0.
+
+ <p>
+ See <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> for the builder options (<c>strict</c>,
+ <c>allowFunctions</c>, <c>valueFormatter</c>, <c>maxExprDepth</c>, <c>maxCollectionSize</c>).</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -95,7 +105,7 @@ loadScripts(document, 'script');</script>
 </li>
 <li>
 <div id="class-summary">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exceptions</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="class-summary-tab0" role="tab" aria-selected="true" aria-controls="class-summary.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary', 2)" class="active-table-tab">All Classes and Interfaces</button><button id="class-summary-tab1" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab1', 2)" class="table-tab">Interfaces</button><button id="class-summary-tab2" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab2', 2)" class="table-tab">Classes</button><button id="class-summary-tab3" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab3', 2)" class="table-tab">Enum Classes</button><button id="class-summary-tab5" role="tab" aria-selected="false" aria-controls="class-summary.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('class-summary', 'class-summary-tab5', 2)" class="table-tab">Exceptions</button></div>
 <div id="class-summary.tabpanel" role="tabpanel" aria-labelledby="class-summary-tab0">
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
@@ -103,6 +113,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="DefaultingVar.html" title="class in org.apache.juneau.commons.svl">DefaultingVar</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Interface for the resolution of vars with a default value if the <c>resolve()</c> method returns <jk>null</jk>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab5"><a href="ExprException.html" title="class in org.apache.juneau.commons.svl">ExprException</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab5">
+<div class="block">Thrown when an SVL <c>#{...}</c> expression cannot be lexed or parsed.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonValueFormatter.html" title="class in org.apache.juneau.commons.svl">JsonValueFormatter</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Default formatter that turns the typed result of a <code>#{...}</code> expression into text.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MapVar.html" title="class in org.apache.juneau.commons.svl">MapVar</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
@@ -114,7 +132,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="MultipartVar.html" title="class in org.apache.juneau.commons.svl">MultipartVar</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
-<div class="block">Interface for the resolution of vars that consist of a comma-delimited list.</div>
+<div class="block">Interface for the resolution of vars that consist of a colon-delimited list.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="SimpleVar.html" title="class in org.apache.juneau.commons.svl">SimpleVar</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -123,6 +141,14 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StreamedVar.html" title="class in org.apache.juneau.commons.svl">StreamedVar</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Abstract superclass of all Simple Var Language variables that write their values directly to a writer.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="Structure.html" title="class in org.apache.juneau.commons.svl">Structure</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">A typed, structured value (list, block or table) that an SVL expression function can return.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab3"><a href="Structure.Kind.html" title="enum class in org.apache.juneau.commons.svl">Structure.Kind</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab3">
+<div class="block">The kind of structure.</div>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="TypedFunction.html" title="class in org.apache.juneau.commons.svl">TypedFunction</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
@@ -143,7 +169,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first even-row-color class-summary class-summary-tab2"><a href="VarResolver.html" title="class in org.apache.juneau.commons.svl">VarResolver</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.</div>
+<div class="block">Utility class for resolving variables of the form <js>"${X:key}"</js> in strings.</div>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab2"><a href="VarResolver.Builder.html" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">

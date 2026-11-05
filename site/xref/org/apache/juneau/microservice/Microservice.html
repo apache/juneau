@@ -1024,28 +1024,28 @@
 <a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;aBean&lt;/ck&gt; = {foo:'bar',baz:123}</em>
 <a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# A system property&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;locale&lt;/ck&gt; = $S{java.locale, en_US}</em>
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;locale&lt;/ck&gt; = ${S:java.locale: en_US}</em>
 <a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# An environment variable&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;path&lt;/ck&gt; = $E{PATH, unknown}</em>
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;path&lt;/ck&gt; = ${E:PATH: unknown}</em>
 <a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# A manifest file entry&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;mainClass&lt;/ck&gt; = $MF{Main-Class}</em>
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;mainClass&lt;/ck&gt; = ${MF:Main-Class}</em>
 <a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# Another value in this config file&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;sameAsAnInt&lt;/ck&gt; = $C{MySection/anInt}</em>
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;sameAsAnInt&lt;/ck&gt; = ${C:MySection/anInt}</em>
 <a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# A command-line argument in the form "myarg=foo"&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;myArg&lt;/ck&gt; = $A{myarg}</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;myArg&lt;/ck&gt; = ${A:myarg}</em>
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# The first command-line argument&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;firstArg&lt;/ck&gt; = $A{0}</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;firstArg&lt;/ck&gt; = ${A:0}</em>
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;nested&lt;/ck&gt; = $S{mySystemProperty,$E{MY_ENV_VAR,$A{0}}}</em>
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;nested&lt;/ck&gt; = ${S:mySystemProperty:${E:MY_ENV_VAR:${A:0}}}</em>
 <a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> <em class="jxr_javadoccomment">	 * 	&lt;cc&gt;# A POJO with embedded variables&lt;/cc&gt;</em>
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;aBean2&lt;/ck&gt; = {foo:'$A{0}',baz:$C{MySection/anInt}}</em>
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> <em class="jxr_javadoccomment">	 * 	&lt;ck&gt;aBean2&lt;/ck&gt; = {foo:'${A:0}',baz:${C:MySection/anInt}}</em>
 <a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
 <a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>

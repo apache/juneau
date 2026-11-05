@@ -328,7 +328,7 @@
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 		description=<span class="jxr_string">"Returns information about the specified file or directory."</span>
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	)
 <a class="jxr_linenumber" name="L322" href="#L322">322</a> 	@HtmlDocConfig(
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		nav={<span class="jxr_string">"&lt;h5&gt;Folder:  $RA{fullPath}&lt;/h5&gt;"</span>}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		nav={<span class="jxr_string">"&lt;h5&gt;Folder:  ${RA:fullPath}&lt;/h5&gt;"</span>}
 <a class="jxr_linenumber" name="L324" href="#L324">324</a> 	)
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@SuppressWarnings({
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<span class="jxr_string">"java:S112"</span> <em class="jxr_comment">// throws Exception intentional - callback/lifecycle method</em>
@@ -464,7 +464,7 @@
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> 		)
 <a class="jxr_linenumber" name="L457" href="#L457">457</a> 	)
 <a class="jxr_linenumber" name="L458" href="#L458">458</a> 	@HtmlDocConfig(
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		nav={<span class="jxr_string">"&lt;h5&gt;Folder:  $RA{fullPath}&lt;/h5&gt;"</span>}
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		nav={<span class="jxr_string">"&lt;h5&gt;Folder:  ${RA:fullPath}&lt;/h5&gt;"</span>}
 <a class="jxr_linenumber" name="L460" href="#L460">460</a> 	)
 <a class="jxr_linenumber" name="L461" href="#L461">461</a> 	<strong class="jxr_keyword">public</strong> LogParser viewParsedEntries(
 <a class="jxr_linenumber" name="L462" href="#L462">462</a> 			RestRequest req,

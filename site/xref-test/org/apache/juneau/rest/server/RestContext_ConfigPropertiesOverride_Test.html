@@ -215,7 +215,7 @@
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 	<em class="jxr_comment">// Lenient enum resolution for uriRelativity / uriResolution: blank, invalid, mis-cased, whitespace-padded, and</em>
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<em class="jxr_comment">// SVL ($S{...}) values all fall back to the hard default rather than throwing, and a valid value (with SVL and</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	<em class="jxr_comment">// SVL (${S:...}) values all fall back to the hard default rather than throwing, and a valid value (with SVL and</em>
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 	<em class="jxr_comment">// surrounding whitespace tolerated) resolves to its enum constant. The RestContext.* env value is applied through</em>
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 	<em class="jxr_comment">// the resource's var resolver in RestContext#getUriRelativity() / #getUriResolution().</em>
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
@@ -275,7 +275,7 @@
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@Test <strong class="jxr_keyword">void</strong> d06_uriRelativity_svlValueResolves() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L269" href="#L269">269</a> 		System.setProperty(<span class="jxr_string">"rcpo.uriRelativity"</span>, <span class="jxr_string">"PATH_INFO"</span>);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriRelativity"</span>, <span class="jxr_string">"$S{rcpo.uriRelativity}"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriRelativity"</span>, <span class="jxr_string">"${S:rcpo.uriRelativity}"</span>);
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">var</strong> ctx = build(D01.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> D01());
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 			assertEquals(UriRelativity.PATH_INFO, ctx.getUriRelativity());
@@ -340,7 +340,7 @@
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> e06_uriResolution_svlValueResolves() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 		System.setProperty(<span class="jxr_string">"rcpo.uriResolution"</span>, <span class="jxr_string">"ABSOLUTE"</span>);
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriResolution"</span>, <span class="jxr_string">"$S{rcpo.uriResolution}"</span>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriResolution"</span>, <span class="jxr_string">"${S:rcpo.uriResolution}"</span>);
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">var</strong> ctx = build(E01.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> E01());
 <a class="jxr_linenumber" name="L338" href="#L338">338</a> 			assertEquals(UriResolution.ABSOLUTE, ctx.getUriResolution());
@@ -360,13 +360,13 @@
 <a class="jxr_linenumber" name="L352" href="#L352">352</a> 
 <a class="jxr_linenumber" name="L353" href="#L353">353</a> 	@Test <strong class="jxr_keyword">void</strong> f01_beanCarriesRawStringVerbatim() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L354" href="#L354">354</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriRelativity"</span>, <span class="jxr_string">" path_info "</span>);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriResolution"</span>, <span class="jxr_string">"$S{rcpo.absent}"</span>);
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		System.setProperty(<span class="jxr_string">"RestContext.uriResolution"</span>, <span class="jxr_string">"${S:rcpo.absent}"</span>);
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L357" href="#L357">357</a> 			<strong class="jxr_keyword">var</strong> ctx = build(F01.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> F01());
 <a class="jxr_linenumber" name="L358" href="#L358">358</a> 			<strong class="jxr_keyword">var</strong> p = ctx.getRestContextProperties();
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<em class="jxr_comment">// Raw strings are stored verbatim (no trim, no SVL, no enum conversion).</em>
 <a class="jxr_linenumber" name="L360" href="#L360">360</a> 			assertEquals(<span class="jxr_string">" path_info "</span>, p.getUriRelativityRaw());
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(<span class="jxr_string">"$S{rcpo.absent}"</span>, p.getUriResolutionRaw());
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			assertEquals(<span class="jxr_string">"${S:rcpo.absent}"</span>, p.getUriResolutionRaw());
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		} <strong class="jxr_keyword">finally</strong> {
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 			System.clearProperty(<span class="jxr_string">"RestContext.uriRelativity"</span>);
 <a class="jxr_linenumber" name="L364" href="#L364">364</a> 			System.clearProperty(<span class="jxr_string">"RestContext.uriResolution"</span>);
@@ -441,7 +441,7 @@
 <a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
 <a class="jxr_linenumber" name="L434" href="#L434">434</a> 
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_comment">// Boolean settings resolve SVL ($S{...}) in the RestContext.* env default the same as the enum settings do: the</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	<em class="jxr_comment">// Boolean settings resolve SVL (${S:...}) in the RestContext.* env default the same as the enum settings do: the</em>
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<em class="jxr_comment">// raw seed is resolved recursively through the resource var resolver before being parsed to boolean. Covers both</em>
 <a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_comment">// a merge-path boolean (virtualThreads / eagerInit) and a direct-read boolean (responseTraceparent), with literal,</em>
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	<em class="jxr_comment">// blank, and absent inputs asserted alongside to pin the full behavior surface. These settings are intentionally</em>
@@ -471,7 +471,7 @@
 <a class="jxr_linenumber" name="L463" href="#L463">463</a> 
 <a class="jxr_linenumber" name="L464" href="#L464">464</a> 	@Test <strong class="jxr_keyword">void</strong> i03_virtualThreads_svlValueResolves() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L465" href="#L465">465</a> 		System.setProperty(<span class="jxr_string">"rcpo.virtualThreads"</span>, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		System.setProperty(<span class="jxr_string">"RestContext.virtualThreads"</span>, <span class="jxr_string">"$S{rcpo.virtualThreads}"</span>);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		System.setProperty(<span class="jxr_string">"RestContext.virtualThreads"</span>, <span class="jxr_string">"${S:rcpo.virtualThreads}"</span>);
 <a class="jxr_linenumber" name="L467" href="#L467">467</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L468" href="#L468">468</a> 			assertTrue(build(I01.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> I01()).isVirtualThreadsEnabled());
 <a class="jxr_linenumber" name="L469" href="#L469">469</a> 		} <strong class="jxr_keyword">finally</strong> {
@@ -495,7 +495,7 @@
 <a class="jxr_linenumber" name="L487" href="#L487">487</a> 
 <a class="jxr_linenumber" name="L488" href="#L488">488</a> 	@Test <strong class="jxr_keyword">void</strong> i06_eagerInit_svlValueResolves() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L489" href="#L489">489</a> 		System.setProperty(<span class="jxr_string">"rcpo.eagerInit"</span>, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		System.setProperty(<span class="jxr_string">"RestContext.eagerInit"</span>, <span class="jxr_string">"$S{rcpo.eagerInit}"</span>);
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		System.setProperty(<span class="jxr_string">"RestContext.eagerInit"</span>, <span class="jxr_string">"${S:rcpo.eagerInit}"</span>);
 <a class="jxr_linenumber" name="L491" href="#L491">491</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L492" href="#L492">492</a> 			assertTrue(build(I01.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> I01()).isEagerInit());
 <a class="jxr_linenumber" name="L493" href="#L493">493</a> 		} <strong class="jxr_keyword">finally</strong> {
@@ -507,7 +507,7 @@
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 	@Test <strong class="jxr_keyword">void</strong> i07_responseTraceparent_svlValueResolves() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 		<em class="jxr_comment">// Default is true; assert an SVL value resolves recursively (would parse false under a literal-only bug).</em>
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 		System.setProperty(<span class="jxr_string">"rcpo.responseTraceparent"</span>, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		System.setProperty(<span class="jxr_string">"RestContext.responseTraceparent"</span>, <span class="jxr_string">"$S{rcpo.responseTraceparent}"</span>);
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 		System.setProperty(<span class="jxr_string">"RestContext.responseTraceparent"</span>, <span class="jxr_string">"${S:rcpo.responseTraceparent}"</span>);
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 		<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L504" href="#L504">504</a> 			assertTrue(build(I01.<strong class="jxr_keyword">class</strong>, <strong class="jxr_keyword">new</strong> I01()).isResponseTraceparent());
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 		} <strong class="jxr_keyword">finally</strong> {

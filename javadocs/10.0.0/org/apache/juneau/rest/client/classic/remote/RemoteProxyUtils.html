@@ -179,7 +179,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  Ported from the next-generation engine's <code>RrpcInterfaceMeta.parseConstantParts(...)</code>.  Each entry is
- resolved through <a href="../../../../commons/svl/VarResolver.html#DEFAULT"><code>VarResolver.DEFAULT</code></a> (so values such as <code>"$S{sysprop}"</code> expand), then split on the
+ resolved through <a href="../../../../commons/svl/VarResolver.html#DEFAULT"><code>VarResolver.DEFAULT</code></a> (so values such as <code>"${S:sysprop}"</code> expand), then split on the
  first occurrence of <code>delim</code> (<code>':'</code> for the <code>"Name: value"</code> header form, <code>'='</code> for the
  <code>"name=value"</code> query/form-data form).  Entries with no delimiter are skipped.  Both the name and the value
  are trimmed.</div>

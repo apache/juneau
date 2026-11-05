@@ -445,8 +445,8 @@ loadScripts(document, 'script');</script>
  Non-<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> leaves are coerced via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#valueOf(java.lang.Object)" title="class or interface in java.lang" class="external-link"><code>String.valueOf(Object)</code></a>.  Each leaf string then runs
  through the same per-element pipeline used for <code>@Rest(paths=...)</code> annotation elements: SVL is
  applied via the bean-store-backed <a href="../../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a>
- (so <code>$C{key}</code> consults the live <a href="../../../config/Config.html" title="class in org.apache.juneau.config"><code>Config</code></a>, <code>$E{NAME,default}</code>
- and <code>$S{prop,default}</code> resolve through the bootstrap variable catalog), and the post-SVL value is
+ (so <code>${C:key}</code> consults the live <a href="../../../config/Config.html" title="class in org.apache.juneau.config"><code>Config</code></a>, <code>${E:NAME:default}</code>
+ and <code>${S:prop:default}</code> resolve through the bootstrap variable catalog), and the post-SVL value is
  comma-split with each piece trimmed and empty pieces dropped.
 
  <h4 class='section'>Notes:</h4><ul>

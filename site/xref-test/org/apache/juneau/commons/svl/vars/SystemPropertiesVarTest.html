@@ -41,14 +41,14 @@
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().vars(SystemPropertiesVar.<strong class="jxr_keyword">class</strong>).build();
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  		System.setProperty(<span class="jxr_string">"SystemPropertiesVar.x"</span>, <span class="jxr_string">"foo"</span>);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertEquals(<span class="jxr_string">"foo"</span>, vr.resolve(<span class="jxr_string">"$S{SystemPropertiesVar.x}"</span>));
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"foo"</span>, vr.resolve(<span class="jxr_string">"$S{SystemPropertiesVar.x,bar}"</span>));
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"$S{SystemPropertiesVar.y}"</span>));
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(<span class="jxr_string">"bar"</span>, vr.resolve(<span class="jxr_string">"$S{SystemPropertiesVar.y,bar}"</span>));
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(<span class="jxr_string">"bar,bar"</span>, vr.resolve(<span class="jxr_string">"$S{SystemPropertiesVar.y,bar,bar}"</span>));
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(<span class="jxr_string">" bar "</span>, vr.resolve(<span class="jxr_string">"$S{ SystemPropertiesVar.y , bar }"</span>));
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(<span class="jxr_string">" bar,bar "</span>, vr.resolve(<span class="jxr_string">"$S{ SystemPropertiesVar.y , bar,bar }"</span>));
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"$S{SystemPropertiesVar.y,}"</span>));
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		assertEquals(<span class="jxr_string">"foo"</span>, vr.resolve(<span class="jxr_string">"${S:SystemPropertiesVar.x}"</span>));
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"foo"</span>, vr.resolve(<span class="jxr_string">"${S:SystemPropertiesVar.x:bar}"</span>));
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"${S:SystemPropertiesVar.y}"</span>));
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		assertEquals(<span class="jxr_string">"bar"</span>, vr.resolve(<span class="jxr_string">"${S:SystemPropertiesVar.y:bar}"</span>));
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		assertEquals(<span class="jxr_string">"bar,bar"</span>, vr.resolve(<span class="jxr_string">"${S:SystemPropertiesVar.y:bar,bar}"</span>));
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		assertEquals(<span class="jxr_string">" bar "</span>, vr.resolve(<span class="jxr_string">"${S: SystemPropertiesVar.y : bar }"</span>));
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		assertEquals(<span class="jxr_string">" bar,bar "</span>, vr.resolve(<span class="jxr_string">"${S: SystemPropertiesVar.y : bar,bar }"</span>));
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"${S:SystemPropertiesVar.y:}"</span>));
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  	}
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  }
 </pre>

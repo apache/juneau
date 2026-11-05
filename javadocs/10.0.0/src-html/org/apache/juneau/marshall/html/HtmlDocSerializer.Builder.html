@@ -63,8 +63,8 @@
 <span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(</span>
 <span class="source-line-no">052</span><span id="line-52"> *       messages=&lt;js&gt;"nls/AddressBookResource"&lt;/js&gt;,</span>
-<span class="source-line-no">053</span><span id="line-53"> *       title=&lt;js&gt;"$L{title}"&lt;/js&gt;,</span>
-<span class="source-line-no">054</span><span id="line-54"> *       description=&lt;js&gt;"$L{description}"&lt;/js&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> *       title=&lt;js&gt;"${L:title}"&lt;/js&gt;,</span>
+<span class="source-line-no">054</span><span id="line-54"> *       description=&lt;js&gt;"${L:description}"&lt;/js&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *    )</span>
 <span class="source-line-no">056</span><span id="line-56"> *    &lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</span>
 <span class="source-line-no">057</span><span id="line-57"> *       navlinks={</span>
@@ -76,7 +76,7 @@
 <span class="source-line-no">063</span><span id="line-63"> * &lt;/p&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;p&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * The &lt;c&gt;$L{...}&lt;/c&gt; variable represent localized strings pulled from the resource bundle identified by the</span>
+<span class="source-line-no">066</span><span id="line-66"> * The &lt;c&gt;${L:...}&lt;/c&gt; variable represent localized strings pulled from the resource bundle identified by the</span>
 <span class="source-line-no">067</span><span id="line-67"> * &lt;c&gt;messages&lt;/c&gt; annotation.</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;br&gt;These variables are replaced at runtime based on the HTTP request locale.</span>
 <span class="source-line-no">069</span><span id="line-69"> * &lt;br&gt;Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.</span>
@@ -240,7 +240,7 @@
 <span class="source-line-no">227</span><span id="line-227">       *       Format: HTML</span>
 <span class="source-line-no">228</span><span id="line-228">       *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">229</span><span id="line-229">       *       Supports &lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables"&gt;REST Server SVL Variables&lt;/a&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">       *       (e.g. &lt;js&gt;"$L{my.localized.variable}"&lt;/js&gt;).</span>
+<span class="source-line-no">230</span><span id="line-230">       *       (e.g. &lt;js&gt;"${L:my.localized.variable}"&lt;/js&gt;).</span>
 <span class="source-line-no">231</span><span id="line-231">       *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">232</span><span id="line-232">       *       A value of &lt;js&gt;"NONE"&lt;/js&gt; can be used to force no value.</span>
 <span class="source-line-no">233</span><span id="line-233">       *    &lt;li class='note'&gt;</span>
@@ -397,7 +397,7 @@
 <span class="source-line-no">384</span><span id="line-384">       *    WriterSerializer &lt;jv&gt;serializer&lt;/jv&gt; = HtmlDocSerializer</span>
 <span class="source-line-no">385</span><span id="line-385">       *       .&lt;jsm&gt;create&lt;/jsm&gt;()</span>
 <span class="source-line-no">386</span><span id="line-386">       *       .head(</span>
-<span class="source-line-no">387</span><span id="line-387">       *          &lt;js&gt;"&amp;lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&amp;gt;"&lt;/js&gt;</span>
+<span class="source-line-no">387</span><span id="line-387">       *          &lt;js&gt;"&amp;lt;link rel='icon' href='${U:servlet:/htdocs/mypageicon.ico}'&amp;gt;"&lt;/js&gt;</span>
 <span class="source-line-no">388</span><span id="line-388">       *       )</span>
 <span class="source-line-no">389</span><span id="line-389">       *       .build();</span>
 <span class="source-line-no">390</span><span id="line-390">       * &lt;/p&gt;</span>
@@ -780,16 +780,16 @@
 <span class="source-line-no">767</span><span id="line-767">       * HTML Widgets.</span>
 <span class="source-line-no">768</span><span id="line-768">       *</span>
 <span class="source-line-no">769</span><span id="line-769">       * &lt;p&gt;</span>
-<span class="source-line-no">770</span><span id="line-770">       * Defines widgets that can be used in conjunction with string variables of the form &lt;js&gt;"$W{name}"&lt;/js&gt;to quickly</span>
+<span class="source-line-no">770</span><span id="line-770">       * Defines widgets that can be used in conjunction with string variables of the form &lt;js&gt;"${W:name}"&lt;/js&gt;to quickly</span>
 <span class="source-line-no">771</span><span id="line-771">       * generate arbitrary replacement text.</span>
 <span class="source-line-no">772</span><span id="line-772">       *</span>
 <span class="source-line-no">773</span><span id="line-773">       * Widgets resolve the following variables:</span>
 <span class="source-line-no">774</span><span id="line-774">       * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">775</span><span id="line-775">       *    &lt;li&gt;&lt;js&gt;"$W{name}"&lt;/js&gt; - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.</span>
-<span class="source-line-no">776</span><span id="line-776">       *    &lt;li&gt;&lt;js&gt;"$W{name.script}"&lt;/js&gt; - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.</span>
+<span class="source-line-no">775</span><span id="line-775">       *    &lt;li&gt;&lt;js&gt;"${W:name}"&lt;/js&gt; - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.</span>
+<span class="source-line-no">776</span><span id="line-776">       *    &lt;li&gt;&lt;js&gt;"${W:name.script}"&lt;/js&gt; - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.</span>
 <span class="source-line-no">777</span><span id="line-777">       *       &lt;br&gt;The script contents are automatically inserted into the &lt;xt&gt;&amp;lt;head/script&amp;gt;&lt;/xt&gt; section</span>
 <span class="source-line-no">778</span><span id="line-778">       *           in the HTML page.</span>
-<span class="source-line-no">779</span><span id="line-779">       *    &lt;li&gt;&lt;js&gt;"$W{name.style}"&lt;/js&gt; - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.</span>
+<span class="source-line-no">779</span><span id="line-779">       *    &lt;li&gt;&lt;js&gt;"${W:name.style}"&lt;/js&gt; - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.</span>
 <span class="source-line-no">780</span><span id="line-780">       *       &lt;br&gt;The styles contents are automatically inserted into the &lt;xt&gt;&amp;lt;head/style&amp;gt;&lt;/xt&gt; section</span>
 <span class="source-line-no">781</span><span id="line-781">       *           in the HTML page.</span>
 <span class="source-line-no">782</span><span id="line-782">       * &lt;/ul&gt;</span>
@@ -805,10 +805,10 @@
 <span class="source-line-no">792</span><span id="line-792">       *          MyWidget.&lt;jk&gt;class&lt;/jk&gt;</span>
 <span class="source-line-no">793</span><span id="line-793">       *       )</span>
 <span class="source-line-no">794</span><span id="line-794">       *       .navlinks(</span>
-<span class="source-line-no">795</span><span id="line-795">       *          &lt;js&gt;"$W{MyWidget}"&lt;/js&gt;</span>
+<span class="source-line-no">795</span><span id="line-795">       *          &lt;js&gt;"${W:MyWidget}"&lt;/js&gt;</span>
 <span class="source-line-no">796</span><span id="line-796">       *       )</span>
 <span class="source-line-no">797</span><span id="line-797">       *       .aside(</span>
-<span class="source-line-no">798</span><span id="line-798">       *          &lt;js&gt;"Check out this widget:  $W{MyWidget}"&lt;/js&gt;</span>
+<span class="source-line-no">798</span><span id="line-798">       *          &lt;js&gt;"Check out this widget:  ${W:MyWidget}"&lt;/js&gt;</span>
 <span class="source-line-no">799</span><span id="line-799">       *       )</span>
 <span class="source-line-no">800</span><span id="line-800">       *       .build();</span>
 <span class="source-line-no">801</span><span id="line-801">       * &lt;/p&gt;</span>

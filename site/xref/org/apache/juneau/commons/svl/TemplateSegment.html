@@ -34,9 +34,9 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * tokenizer in {@link VarTemplateCompiler}:</em>
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * &lt;ul&gt;</em>
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link LiteralSegment} — fixed text appended verbatim.</em>
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link VarRefSegment} — a {@code ${...}} or {@code $X{...}} reference; resolves the</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link VarRefSegment} — a {@code ${...}} reference; resolves the</em>
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * 		captured {@link Var} (cached at compile time) against the session.</em>
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link ScriptSegment} — a {@code #{name(args...)}} function call. Function dispatch</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * 	&lt;li&gt;{@link ExprSegment} — a {@code #{expression}}. Function dispatch</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * 		is wired by {@link VarTemplate}; bare segments are constructed by the compiler.</em>
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * &lt;/ul&gt;</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> *</em>
@@ -44,7 +44,7 @@
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> * Segments are immutable and threadsafe. The compile-binding contract documented on</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * {@link VarTemplate} applies to the captured {@link Var} references in {@link VarRefSegment}.</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">abstract</strong> sealed <strong class="jxr_keyword">class</strong> <a name="TemplateSegment" href="../../../../../org/apache/juneau/commons/svl/TemplateSegment.html#TemplateSegment">TemplateSegment</a> permits LiteralSegment, VarRefSegment, <a name="ScriptSegment" href="../../../../../org/apache/juneau/commons/svl/ScriptSegment.html#ScriptSegment">ScriptSegment</a> {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <strong class="jxr_keyword">abstract</strong> sealed <strong class="jxr_keyword">class</strong> <a name="TemplateSegment" href="../../../../../org/apache/juneau/commons/svl/TemplateSegment.html#TemplateSegment">TemplateSegment</a> permits LiteralSegment, VarRefSegment, <a name="ExprSegment" href="../../../../../org/apache/juneau/commons/svl/ExprSegment.html#ExprSegment">ExprSegment</a> {
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  
 <a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 * Resolves this segment and appends the result to {@code out}.</em>
@@ -84,12 +84,12 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">boolean</strong> isLiteral() { <strong class="jxr_keyword">return</strong> false; }
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * Helper used by {@link VarRefSegment} and {@link ScriptSegment} to wrap arbitrary</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">	 * Helper used by {@link VarRefSegment} and {@link ExprSegment} to wrap arbitrary</em>
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  <em class="jxr_javadoccomment">	 * checked exceptions raised during dispatch in a {@link VarResolverException} carrying</em>
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  <em class="jxr_javadoccomment">	 * the failing var/function name and the surrounding template source for diagnostics.</em>
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  <em class="jxr_javadoccomment">	 * @param e The original exception.</em>
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * @param sourceFragment A short representation of the failing token (e.g. {@code "$X{...}"}).</em>
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  <em class="jxr_javadoccomment">	 * @param sourceFragment A short representation of the failing token (e.g. {@code "${X:...}"}).</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * @param identifier The var prefix or function name.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * @return The wrapped exception (never returns; always throws).</em>
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 */</em>

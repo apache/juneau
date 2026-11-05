@@ -35,15 +35,15 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> VarResolver vr = VarResolver.create().functions(RegexFunctions.ALL).build();
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	@Test <strong class="jxr_keyword">void</strong> a01_match_<strong class="jxr_keyword">true</strong>() { assertEquals(<span class="jxr_string">"true"</span>, vr.resolve(<span class="jxr_string">"#{match(hello123, \&quot;&#92;&#92;&#92;&#92;d+\&quot;)}"</span>)); }
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@Test <strong class="jxr_keyword">void</strong> a02_match_false() { assertEquals(<span class="jxr_string">"false"</span>, vr.resolve(<span class="jxr_string">"#{match(hello, \&quot;&#92;&#92;&#92;&#92;d+\&quot;)}"</span>)); }
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	@Test <strong class="jxr_keyword">void</strong> a01_match_<strong class="jxr_keyword">true</strong>() { assertEquals(<span class="jxr_string">"true"</span>, vr.resolve(<span class="jxr_string">"#{match('hello123', '&#92;&#92;d+')}"</span>)); }
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	@Test <strong class="jxr_keyword">void</strong> a02_match_false() { assertEquals(<span class="jxr_string">"false"</span>, vr.resolve(<span class="jxr_string">"#{match('hello', '&#92;&#92;d+')}"</span>)); }
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a03_extract_full() { assertEquals(<span class="jxr_string">"123"</span>, vr.resolve(<span class="jxr_string">"#{extract(hello123world, \&quot;&#92;&#92;&#92;&#92;d+\&quot;)}"</span>)); }
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	@Test <strong class="jxr_keyword">void</strong> a03_extract_full() { assertEquals(<span class="jxr_string">"123"</span>, vr.resolve(<span class="jxr_string">"#{extract('hello123world', '&#92;&#92;d+')}"</span>)); }
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	@Test <strong class="jxr_keyword">void</strong> a04_extract_group() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertEquals(<span class="jxr_string">"hello"</span>, vr.resolve(<span class="jxr_string">"#{extract(\&quot;name=hello;\&quot;, \&quot;name=([a-z]+);\&quot;, 1)}"</span>));
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		assertEquals(<span class="jxr_string">"hello"</span>, vr.resolve(<span class="jxr_string">"#{extract('name=hello;', 'name=([a-z]+);', 1)}"</span>));
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	}
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> a05_replaceRegex() { assertEquals(<span class="jxr_string">"hX"</span>, vr.resolve(<span class="jxr_string">"#{replaceRegex(hello, \&quot;e.lo\&quot;, X)}"</span>)); }
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	@Test <strong class="jxr_keyword">void</strong> a05_replaceRegex() { assertEquals(<span class="jxr_string">"hX"</span>, vr.resolve(<span class="jxr_string">"#{replaceRegex('hello', 'e.lo', 'X')}"</span>)); }
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  }
 </pre>
 <hr/>

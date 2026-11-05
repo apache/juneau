@@ -94,9 +94,9 @@
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		System.setProperty(pname, <span class="jxr_string">"y"</span>);
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		x.append(<span class="jxr_string">"X1"</span>,<span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		x.append(<span class="jxr_string">"X2"</span>,<span class="jxr_string">"$S{"</span>+pname+<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		x.append(<span class="jxr_string">"X2"</span>,<span class="jxr_string">"${S:"</span>+pname+<span class="jxr_string">"}"</span>);
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		x.append(<span class="jxr_string">"X3"</span>,<span class="jxr_string">"bar"</span>);
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		x.append(<span class="jxr_string">"X4"</span>,()-&gt;<span class="jxr_string">"$S{"</span>+pname+<span class="jxr_string">"}"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		x.append(<span class="jxr_string">"X4"</span>,()-&gt;<span class="jxr_string">"${S:"</span>+pname+<span class="jxr_string">"}"</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		x.append(SerializedHeader.of(<span class="jxr_string">"X5"</span>,<span class="jxr_string">"bar"</span>,openApiSession(),<strong class="jxr_keyword">null</strong>,false));
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		assertList(x, <span class="jxr_string">"X1: bar"</span>, <span class="jxr_string">"X2: y"</span>, <span class="jxr_string">"X3: bar"</span>, <span class="jxr_string">"X4: y"</span>, <span class="jxr_string">"X5: bar"</span>);

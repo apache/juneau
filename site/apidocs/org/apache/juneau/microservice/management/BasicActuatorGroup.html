@@ -117,7 +117,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  <b>Path prefix:</b> defaults to <code>/actuator</code> and is configurable via the <code>juneau.actuator.path</code>
- system property (resolved through the standard <code>$S{...}</code> SVL var).  Mount the group at a custom prefix
+ system property (resolved through the standard <code>${S:...}</code> SVL var).  Mount the group at a custom prefix
  either by setting that property or by subclassing with your own <a href="../../rest/server/Rest.html#path()"><code>@Rest(path=...)</code></a>.
 
  <p>

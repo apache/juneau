@@ -553,28 +553,28 @@ implements <a href="../config/event/ConfigEventListener.html" title="interface i
    <ck>aBean</ck> = {foo:'bar',baz:123}
 
    <cc># A system property</cc>
-   <ck>locale</ck> = $S{java.locale, en_US}
+   <ck>locale</ck> = ${S:java.locale: en_US}
 
    <cc># An environment variable</cc>
-   <ck>path</ck> = $E{PATH, unknown}
+   <ck>path</ck> = ${E:PATH: unknown}
 
    <cc># A manifest file entry</cc>
-   <ck>mainClass</ck> = $MF{Main-Class}
+   <ck>mainClass</ck> = ${MF:Main-Class}
 
    <cc># Another value in this config file</cc>
-   <ck>sameAsAnInt</ck> = $C{MySection/anInt}
+   <ck>sameAsAnInt</ck> = ${C:MySection/anInt}
 
    <cc># A command-line argument in the form "myarg=foo"</cc>
-   <ck>myArg</ck> = $A{myarg}
+   <ck>myArg</ck> = ${A:myarg}
 
    <cc># The first command-line argument</cc>
-   <ck>firstArg</ck> = $A{0}
+   <ck>firstArg</ck> = ${A:0}
 
    <cc># Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.</cc>
-   <ck>nested</ck> = $S{mySystemProperty,$E{MY_ENV_VAR,$A{0}}}
+   <ck>nested</ck> = ${S:mySystemProperty:${E:MY_ENV_VAR:${A:0}}}
 
    <cc># A POJO with embedded variables</cc>
-   <ck>aBean2</ck> = {foo:'$A{0}',baz:$C{MySection/anInt}}
+   <ck>aBean2</ck> = {foo:'${A:0}',baz:${C:MySection/anInt}}
  </p>
 
  <p class='bjava'>

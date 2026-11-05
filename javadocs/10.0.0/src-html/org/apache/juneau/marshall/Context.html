@@ -383,7 +383,7 @@
 <span class="source-line-no">370</span><span id="line-370">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">371</span><span id="line-371">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">372</span><span id="line-372">       *    &lt;jc&gt;// A class annotated with a config annotation.&lt;/jc&gt;</span>
-<span class="source-line-no">373</span><span id="line-373">       *    &lt;ja&gt;@MarshalledConfig&lt;/ja&gt;(unsortedProperties=&lt;js&gt;"$S{unsortedProperties,false}"&lt;/js&gt;)</span>
+<span class="source-line-no">373</span><span id="line-373">       *    &lt;ja&gt;@MarshalledConfig&lt;/ja&gt;(unsortedProperties=&lt;js&gt;"${S:unsortedProperties:false}"&lt;/js&gt;)</span>
 <span class="source-line-no">374</span><span id="line-374">       *    &lt;jk&gt;public class&lt;/jk&gt; MyClass {...}</span>
 <span class="source-line-no">375</span><span id="line-375">       *</span>
 <span class="source-line-no">376</span><span id="line-376">       *    &lt;jc&gt;// Find all annotations that themselves are annotated with @ContextPropertiesApply.&lt;/jc&gt;</span>
@@ -483,7 +483,7 @@
 <span class="source-line-no">470</span><span id="line-470">       * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
 <span class="source-line-no">471</span><span id="line-471">       * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">472</span><span id="line-472">       *    &lt;jc&gt;// A class annotated with a config annotation.&lt;/jc&gt;</span>
-<span class="source-line-no">473</span><span id="line-473">       *    &lt;ja&gt;@MarshalledConfig&lt;/ja&gt;(unsortedProperties=&lt;js&gt;"$S{unsortedProperties,false}"&lt;/js&gt;)</span>
+<span class="source-line-no">473</span><span id="line-473">       *    &lt;ja&gt;@MarshalledConfig&lt;/ja&gt;(unsortedProperties=&lt;js&gt;"${S:unsortedProperties:false}"&lt;/js&gt;)</span>
 <span class="source-line-no">474</span><span id="line-474">       *    &lt;jk&gt;public class&lt;/jk&gt; MyClass {...}</span>
 <span class="source-line-no">475</span><span id="line-475">       *</span>
 <span class="source-line-no">476</span><span id="line-476">       *    &lt;jc&gt;// Apply any settings found on the annotations.&lt;/jc&gt;</span>
@@ -494,7 +494,7 @@
 <span class="source-line-no">481</span><span id="line-481">       *</span>
 <span class="source-line-no">482</span><span id="line-482">       *    &lt;jc&gt;// A method annotated with a config annotation.&lt;/jc&gt;</span>
 <span class="source-line-no">483</span><span id="line-483">       *    &lt;jk&gt;public class&lt;/jk&gt; MyClass {</span>
-<span class="source-line-no">484</span><span id="line-484">       *       &lt;ja&gt;@MarshalledConfig&lt;/ja&gt;(unsortedProperties=&lt;js&gt;"$S{unsortedProperties,false}"&lt;/js&gt;)</span>
+<span class="source-line-no">484</span><span id="line-484">       *       &lt;ja&gt;@MarshalledConfig&lt;/ja&gt;(unsortedProperties=&lt;js&gt;"${S:unsortedProperties:false}"&lt;/js&gt;)</span>
 <span class="source-line-no">485</span><span id="line-485">       *       &lt;jk&gt;public void&lt;/jk&gt; myMethod() {...}</span>
 <span class="source-line-no">486</span><span id="line-486">       *    }</span>
 <span class="source-line-no">487</span><span id="line-487">       *</span>

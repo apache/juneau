@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69">    *    {@link Rest @Rest} annotation that resolves to at least one</span>
 <span class="source-line-no">070</span><span id="line-70">    *    top-level path (via {@code paths()} or a {@code getPaths()} override).</span>
 <span class="source-line-no">071</span><span id="line-71">    * @param beanStore The bean store used for SVL resolution of {@code @Rest(paths)} elements</span>
-<span class="source-line-no">072</span><span id="line-72">    *    (e.g. {@code $C{key}} / {@code ${env}} templates). May be {@code null} (SVL is then skipped;</span>
+<span class="source-line-no">072</span><span id="line-72">    *    (e.g. {@code ${C:key}} / {@code ${env}} templates). May be {@code null} (SVL is then skipped;</span>
 <span class="source-line-no">073</span><span id="line-73">    *    literal paths pass through unchanged).</span>
 <span class="source-line-no">074</span><span id="line-74">    * @return A registration bean mapping the servlet at its self-declared paths.</span>
 <span class="source-line-no">075</span><span id="line-75">    * @throws IllegalArgumentException If {@code servlet} is {@code null} or resolves to no</span>

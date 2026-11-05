@@ -67,7 +67,7 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">public</strong> String invoke(String s) <strong class="jxr_keyword">throws</strong> java.io.IOException { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> java.io.IOException(<span class="jxr_string">"boom"</span>); }
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	}
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/** Throws an unchecked exception from invoke - should propagate as-is, not get wrapped. */</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<em class="jxr_javadoccomment">/** Throws an unchecked exception from invoke - surfaces as the cause of an {@link ExprException}, not propagated as-is. */</em>
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> RuntimeThrower <strong class="jxr_keyword">extends</strong> TypedFunction {
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		@Override <strong class="jxr_keyword">public</strong> String name() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"runtimethrow"</span>; }
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">public</strong> String invoke(String s) { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"kaboom"</span>); }
@@ -81,15 +81,15 @@
 <a class="jxr_linenumber" name="L73" href="#L73">73</a>  	@Test
 <a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">void</strong> a01_multiOverload_dispatchSkipsNonMatchingArityToFindLaterMatch() {
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().functions(<strong class="jxr_keyword">new</strong> Substring()).build();
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"llo"</span>, vr.resolve(<span class="jxr_string">"#{substring(hello, 2)}"</span>));
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">"el"</span>, vr.resolve(<span class="jxr_string">"#{substring(hello, 1, 3)}"</span>));
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertEquals(<span class="jxr_string">"llo"</span>, vr.resolve(<span class="jxr_string">"#{substring('hello', 2)}"</span>));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertEquals(<span class="jxr_string">"el"</span>, vr.resolve(<span class="jxr_string">"#{substring('hello', 1, 3)}"</span>));
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Test
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">void</strong> a02_fixedArityOverloadCombinedWithVariadic_fixedArityPreferredWhenMatching() {
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().functions(<strong class="jxr_keyword">new</strong> MultiVariadic()).build();
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(<span class="jxr_string">"pair:a,b"</span>, vr.resolve(<span class="jxr_string">"#{multi(a, b)}"</span>));
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(<span class="jxr_string">"variadic:3"</span>, vr.resolve(<span class="jxr_string">"#{multi(a, b, c)}"</span>));
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		assertEquals(<span class="jxr_string">"pair:a,b"</span>, vr.resolve(<span class="jxr_string">"#{multi('a', 'b')}"</span>));
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		assertEquals(<span class="jxr_string">"variadic:3"</span>, vr.resolve(<span class="jxr_string">"#{multi('a', 'b', 'c')}"</span>));
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	}
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test
@@ -104,30 +104,31 @@
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@Test
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  	<strong class="jxr_keyword">void</strong> a04_nullInvokeResult_resolvesToEmptyString() {
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().functions(<strong class="jxr_keyword">new</strong> NullReturning()).build();
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"#{nullfn(x)}"</span>));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		assertEquals(<span class="jxr_string">""</span>, vr.resolve(<span class="jxr_string">"#{nullfn('x')}"</span>));
 <a class="jxr_linenumber" name="L100" href="#L100">100</a> 	}
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 	@Test
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">void</strong> a05_checkedExceptionFromInvoke_wrappedAsIllegalArgumentException() {
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	<strong class="jxr_keyword">void</strong> a05_checkedExceptionFromInvoke_wrappedAsExprException() {
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().functions(<strong class="jxr_keyword">new</strong> CheckedThrower()).build();
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; vr.resolve(<span class="jxr_string">"#{checkedthrow(x)}"</span>));
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(ExprException.<strong class="jxr_keyword">class</strong>, () -&gt; vr.resolve(<span class="jxr_string">"#{checkedthrow('x')}"</span>));
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"checkedthrow"</span>), ex.getMessage());
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"boom"</span>), ex.getMessage());
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	}
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">void</strong> a06_runtimeExceptionFromInvoke_propagatedUnwrapped() {
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	<strong class="jxr_keyword">void</strong> a06_runtimeExceptionFromInvoke_wrappedAsExprExceptionCause() {
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<strong class="jxr_keyword">var</strong> vr = VarResolver.create().functions(<strong class="jxr_keyword">new</strong> RuntimeThrower()).build();
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; vr.resolve(<span class="jxr_string">"#{runtimethrow(x)}"</span>));
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(<span class="jxr_string">"kaboom"</span>, ex.getMessage());
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	@Test
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	<strong class="jxr_keyword">void</strong> a07_noInvokeMethodDeclared_constructionThrows() {
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, NoInvoke::<strong class="jxr_keyword">new</strong>);
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"must declare a public invoke"</span>), ex.getMessage());
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	}
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> }
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(ExprException.<strong class="jxr_keyword">class</strong>, () -&gt; vr.resolve(<span class="jxr_string">"#{runtimethrow('x')}"</span>));
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertInstanceOf(IllegalStateException.<strong class="jxr_keyword">class</strong>, ex.getCause());
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(<span class="jxr_string">"kaboom"</span>, ex.getCause().getMessage());
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	@Test
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">void</strong> a07_noInvokeMethodDeclared_constructionThrows() {
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, NoInvoke::<strong class="jxr_keyword">new</strong>);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"must declare a public invoke"</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	}
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -143,8 +143,8 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Rest(
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 		messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>,
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		title=<span class="jxr_string">"$L{foo}"</span>,
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		description=<span class="jxr_string">"$L{foo}"</span>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		title=<span class="jxr_string">"${L:foo}"</span>,
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		description=<span class="jxr_string">"${L:foo}"</span>
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	)
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B2 {}
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 
@@ -192,7 +192,7 @@
 <a class="jxr_linenumber" name="L184" href="#L184">184</a> 		messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>,
 <a class="jxr_linenumber" name="L185" href="#L185">185</a> 		title=<span class="jxr_string">"a-title"</span>,
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 		description=<span class="jxr_string">"a-description"</span>,
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		swagger=@Swagger(<span class="jxr_string">"{info:{title:'$L{bar}',description:'$L{bar}'}}"</span>)
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		swagger=@Swagger(<span class="jxr_string">"{info:{title:'${L:bar}',description:'${L:bar}'}}"</span>)
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 	)
 <a class="jxr_linenumber" name="L189" href="#L189">189</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> B4 {}
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 
@@ -256,12 +256,12 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 					<span class="jxr_string">"license:{name:'a-name',url:'a-url'}"</span>,
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 				<span class="jxr_string">"}"</span>
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 			},
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			title=<span class="jxr_string">"$L{baz}"</span>,
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			description=<span class="jxr_string">"$L{baz}"</span>,
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			version=<span class="jxr_string">"$L{foo}"</span>,
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			termsOfService=<span class="jxr_string">"$L{foo}"</span>,
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			contact=@Contact(name=<span class="jxr_string">"$L{foo}"</span>,url=<span class="jxr_string">"$L{bar}"</span>,email=<span class="jxr_string">"$L{baz}"</span>),
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			license=@License(name=<span class="jxr_string">"$L{foo}"</span>,url=<span class="jxr_string">"$L{bar}"</span>)
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			title=<span class="jxr_string">"${L:baz}"</span>,
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			description=<span class="jxr_string">"${L:baz}"</span>,
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			version=<span class="jxr_string">"${L:foo}"</span>,
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			termsOfService=<span class="jxr_string">"${L:foo}"</span>,
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			contact=@Contact(name=<span class="jxr_string">"${L:foo}"</span>,url=<span class="jxr_string">"${L:bar}"</span>,email=<span class="jxr_string">"${L:baz}"</span>),
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			license=@License(name=<span class="jxr_string">"${L:foo}"</span>,url=<span class="jxr_string">"${L:bar}"</span>)
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		),
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 		messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>
 <a class="jxr_linenumber" name="L259" href="#L259">259</a> 	)
@@ -443,8 +443,8 @@
 <a class="jxr_linenumber" name="L435" href="#L435">435</a> 
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 	@Rest(
 <a class="jxr_linenumber" name="L437" href="#L437">437</a> 		swagger=@Swagger(
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			value=<span class="jxr_string">"{tags:[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]}"</span>,
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			tags=@Tag(name=<span class="jxr_string">"$L{foo}"</span>,description=<span class="jxr_string">"$L{foo}"</span>,externalDocs=@ExternalDocs(description=<span class="jxr_string">"$L{foo}"</span>,url=<span class="jxr_string">"$L{foo}"</span>))
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			value=<span class="jxr_string">"{tags:[{name:'${L:foo}',description:'${L:foo}',externalDocs:{description:'${L:foo}',url:'${L:foo}'}}]}"</span>,
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			tags=@Tag(name=<span class="jxr_string">"${L:foo}"</span>,description=<span class="jxr_string">"${L:foo}"</span>,externalDocs=@ExternalDocs(description=<span class="jxr_string">"${L:foo}"</span>,url=<span class="jxr_string">"${L:foo}"</span>))
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 		),
 <a class="jxr_linenumber" name="L441" href="#L441">441</a> 		messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>
 <a class="jxr_linenumber" name="L442" href="#L442">442</a> 	)
@@ -527,7 +527,7 @@
 <a class="jxr_linenumber" name="L519" href="#L519">519</a> 	<em class="jxr_comment">// JsonList localized</em>
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 	@Rest(messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>)
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C11 {
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		@RestGet(swagger=@OpSwagger(tags=<span class="jxr_string">"['$L{foo}', '$L{bar}']"</span>))
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 		@RestGet(swagger=@OpSwagger(tags=<span class="jxr_string">"['${L:foo}', '${L:bar}']"</span>))
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> a() {<em class="jxr_comment">/* no-op */</em>}
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 	}
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 
@@ -547,7 +547,7 @@
 <a class="jxr_linenumber" name="L539" href="#L539">539</a> 	<em class="jxr_comment">// Comma-delimited list localized</em>
 <a class="jxr_linenumber" name="L540" href="#L540">540</a> 	@Rest(messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>)
 <a class="jxr_linenumber" name="L541" href="#L541">541</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C12 {
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		@RestGet(swagger=@OpSwagger(tags=<span class="jxr_string">" $L{foo}, $L{bar} "</span>))
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		@RestGet(swagger=@OpSwagger(tags=<span class="jxr_string">" ${L:foo}, ${L:bar} "</span>))
 <a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> a() {<em class="jxr_comment">/* no-op */</em>}
 <a class="jxr_linenumber" name="L544" href="#L544">544</a> 	}
 <a class="jxr_linenumber" name="L545" href="#L545">545</a> 
@@ -625,7 +625,7 @@
 <a class="jxr_linenumber" name="L617" href="#L617">617</a> 	@Rest(
 <a class="jxr_linenumber" name="L618" href="#L618">618</a> 		swagger=@Swagger(
 <a class="jxr_linenumber" name="L619" href="#L619">619</a> 			value=<span class="jxr_string">"{externalDocs:{description:'a-description',url:'a-url'}}"</span>,
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			externalDocs=@ExternalDocs(description=<span class="jxr_string">"$L{foo}"</span>,url=<span class="jxr_string">"$L{bar}"</span>)
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			externalDocs=@ExternalDocs(description=<span class="jxr_string">"${L:foo}"</span>,url=<span class="jxr_string">"${L:bar}"</span>)
 <a class="jxr_linenumber" name="L621" href="#L621">621</a> 		),
 <a class="jxr_linenumber" name="L622" href="#L622">622</a> 		messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>
 <a class="jxr_linenumber" name="L623" href="#L623">623</a> 	)
@@ -738,11 +738,11 @@
 <a class="jxr_linenumber" name="L730" href="#L730">730</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E5 {
 <a class="jxr_linenumber" name="L731" href="#L731">731</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,
 <a class="jxr_linenumber" name="L732" href="#L732">732</a> 			swagger=@OpSwagger(
-<a class="jxr_linenumber" name="L733" href="#L733">733</a> 				summary=<span class="jxr_string">"$L{foo}"</span>,
-<a class="jxr_linenumber" name="L734" href="#L734">734</a> 				operationId=<span class="jxr_string">"$L{foo}"</span>,
-<a class="jxr_linenumber" name="L735" href="#L735">735</a> 				description=<span class="jxr_string">"$L{foo}"</span>,
-<a class="jxr_linenumber" name="L736" href="#L736">736</a> 				deprecated=<span class="jxr_string">"$L{false}"</span>,
-<a class="jxr_linenumber" name="L737" href="#L737">737</a> 				schemes=<span class="jxr_string">"$L{foo}"</span>
+<a class="jxr_linenumber" name="L733" href="#L733">733</a> 				summary=<span class="jxr_string">"${L:foo}"</span>,
+<a class="jxr_linenumber" name="L734" href="#L734">734</a> 				operationId=<span class="jxr_string">"${L:foo}"</span>,
+<a class="jxr_linenumber" name="L735" href="#L735">735</a> 				description=<span class="jxr_string">"${L:foo}"</span>,
+<a class="jxr_linenumber" name="L736" href="#L736">736</a> 				deprecated=<span class="jxr_string">"${L:false}"</span>,
+<a class="jxr_linenumber" name="L737" href="#L737">737</a> 				schemes=<span class="jxr_string">"${L:foo}"</span>
 <a class="jxr_linenumber" name="L738" href="#L738">738</a> 			)
 <a class="jxr_linenumber" name="L739" href="#L739">739</a> 		)
 <a class="jxr_linenumber" name="L740" href="#L740">740</a> 		<strong class="jxr_keyword">public</strong> X a() {
@@ -873,7 +873,7 @@
 <a class="jxr_linenumber" name="L865" href="#L865">865</a> 
 <a class="jxr_linenumber" name="L866" href="#L866">866</a> 	@Rest(messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>, swagger=@Swagger(<span class="jxr_string">"paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"</span>))
 <a class="jxr_linenumber" name="L867" href="#L867">867</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> F6 {
-<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(tags=<span class="jxr_string">"$L{foo}"</span>))
+<a class="jxr_linenumber" name="L868" href="#L868">868</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(tags=<span class="jxr_string">"${L:foo}"</span>))
 <a class="jxr_linenumber" name="L869" href="#L869">869</a> 		<strong class="jxr_keyword">public</strong> X a() {
 <a class="jxr_linenumber" name="L870" href="#L870">870</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L871" href="#L871">871</a> 		}
@@ -956,7 +956,7 @@
 <a class="jxr_linenumber" name="L948" href="#L948">948</a> 
 <a class="jxr_linenumber" name="L949" href="#L949">949</a> 	@Rest(messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>, swagger=@Swagger(<span class="jxr_string">"paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"</span>))
 <a class="jxr_linenumber" name="L950" href="#L950">950</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> G6 {
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(externalDocs=@ExternalDocs(description=<span class="jxr_string">"$L{foo}"</span>,url=<span class="jxr_string">"$L{foo}"</span>)))
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(externalDocs=@ExternalDocs(description=<span class="jxr_string">"${L:foo}"</span>,url=<span class="jxr_string">"${L:foo}"</span>)))
 <a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">public</strong> X a() {
 <a class="jxr_linenumber" name="L953" href="#L953">953</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L954" href="#L954">954</a> 		}
@@ -1039,7 +1039,7 @@
 <a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 
 <a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 	@Rest(messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>, swagger=@Swagger(<span class="jxr_string">"paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"</span>))
 <a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> H6 {
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(consumes=<span class="jxr_string">"['$L{foo}']"</span>))
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(consumes=<span class="jxr_string">"['${L:foo}']"</span>))
 <a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		<strong class="jxr_keyword">public</strong> X a() {
 <a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		}
@@ -1165,7 +1165,7 @@
 <a class="jxr_linenumber" name="L1157" href="#L1157">1157</a> 
 <a class="jxr_linenumber" name="L1158" href="#L1158">1158</a> 	@Rest(messages=<span class="jxr_string">"BasicRestInfoProviderTest"</span>, swagger=@Swagger(<span class="jxr_string">"paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"</span>))
 <a class="jxr_linenumber" name="L1159" href="#L1159">1159</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> I6 {
-<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(produces=<span class="jxr_string">"['$L{foo}']"</span>))
+<a class="jxr_linenumber" name="L1160" href="#L1160">1160</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}"</span>,swagger=@OpSwagger(produces=<span class="jxr_string">"['${L:foo}']"</span>))
 <a class="jxr_linenumber" name="L1161" href="#L1161">1161</a> 		<strong class="jxr_keyword">public</strong> X a() {
 <a class="jxr_linenumber" name="L1162" href="#L1162">1162</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L1163" href="#L1163">1163</a> 		}
@@ -1541,7 +1541,7 @@
 <a class="jxr_linenumber" name="L1533" href="#L1533">1533</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}/responses/100"</span>)
 <a class="jxr_linenumber" name="L1534" href="#L1534">1534</a> 		<strong class="jxr_keyword">public</strong> O5c a() {<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;}
 <a class="jxr_linenumber" name="L1535" href="#L1535">1535</a> 	}
-<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 	@Response @StatusCode(100) @Schema(description=<span class="jxr_string">"$L{foo}"</span>)
+<a class="jxr_linenumber" name="L1536" href="#L1536">1536</a> 	@Response @StatusCode(100) @Schema(description=<span class="jxr_string">"${L:foo}"</span>)
 <a class="jxr_linenumber" name="L1537" href="#L1537">1537</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> O5c {}
 <a class="jxr_linenumber" name="L1538" href="#L1538">1538</a> 
 <a class="jxr_linenumber" name="L1539" href="#L1539">1539</a> 	@Test <strong class="jxr_keyword">void</strong> o05a_response_100_description_swaggerOnAnnotation_localized() <strong class="jxr_keyword">throws</strong> Exception {
@@ -1639,7 +1639,7 @@
 <a class="jxr_linenumber" name="L1631" href="#L1631">1631</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}/responses/100"</span>)
 <a class="jxr_linenumber" name="L1632" href="#L1632">1632</a> 		<strong class="jxr_keyword">public</strong> P5c a() {<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;}
 <a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> 	}
-<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 	@Response(headers=@Header(name=<span class="jxr_string">"X-Foo"</span>,schema=@Schema(description=<span class="jxr_string">"$L{foo}"</span>,type=<span class="jxr_string">"integer"</span>,format=<span class="jxr_string">"int32"</span>))) @StatusCode(100)
+<a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 	@Response(headers=@Header(name=<span class="jxr_string">"X-Foo"</span>,schema=@Schema(description=<span class="jxr_string">"${L:foo}"</span>,type=<span class="jxr_string">"integer"</span>,format=<span class="jxr_string">"int32"</span>))) @StatusCode(100)
 <a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> P5c {}
 <a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 
 <a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	@Test <strong class="jxr_keyword">void</strong> p05a_response_100_headers_swaggerOnAnnotation_localized() <strong class="jxr_keyword">throws</strong> Exception {
@@ -1733,7 +1733,7 @@
 <a class="jxr_linenumber" name="L1725" href="#L1725">1725</a> 		@RestGet(path=<span class="jxr_string">"/path/{foo}/responses/100"</span>)
 <a class="jxr_linenumber" name="L1726" href="#L1726">1726</a> 		<strong class="jxr_keyword">public</strong> R5c a() {<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;}
 <a class="jxr_linenumber" name="L1727" href="#L1727">1727</a> 	}
-<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 	@Response(examples=<span class="jxr_string">"{foo:{bar:'$L{foo}'}}"</span>) @StatusCode(100)
+<a class="jxr_linenumber" name="L1728" href="#L1728">1728</a> 	@Response(examples=<span class="jxr_string">"{foo:{bar:'${L:foo}'}}"</span>) @StatusCode(100)
 <a class="jxr_linenumber" name="L1729" href="#L1729">1729</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> R5c {}
 <a class="jxr_linenumber" name="L1730" href="#L1730">1730</a> 
 <a class="jxr_linenumber" name="L1731" href="#L1731">1731</a> 	@Test <strong class="jxr_keyword">void</strong> r05a_response_100_examples_swaggerOnAnnotation_lodalized() <strong class="jxr_keyword">throws</strong> Exception {
