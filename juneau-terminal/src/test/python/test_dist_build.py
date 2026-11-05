@@ -239,7 +239,9 @@ class OutsideToolsTest(Tmp):
         self.assertEqual(build(self.tmp, "tgz").returncode, 0)
         home = self.tmp / "home"
         home.mkdir()
+        # No retries: nothing listens on the registry port, and npm's default backoff would burn ~70s.
         p = subprocess.run([npm, "publish", "--dry-run", "--tag", "snapshot", "--registry", "http://127.0.0.1:9",
+                            "--fetch-retries=0", "--fetch-timeout=2000",
                             str(self.tmp / TGZ)], capture_output=True, text=True, cwd=self.tmp,
                            env={**os.environ, "HOME": str(home), "npm_config_cache": str(home / ".npm")})
         self.assertEqual(p.returncode, 0, p.stdout + p.stderr)

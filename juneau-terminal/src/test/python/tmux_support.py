@@ -86,7 +86,7 @@ class PaneCase(unittest.TestCase):
         return r.returncode, r.stdout
 
     def start(self, *args):
-        return subprocess.Popen([str(self.SCRIPT), *args], stdout=subprocess.PIPE, text=True, env=self.env)
+        return subprocess.Popen([str(self.SCRIPT), *args], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, env=self.env)   # the leader's late tmux errors stay out of the log
 
     def panes(self):
         out = subprocess.run(["tmux", "-L", self.sock, "list-panes", "-s", "-t", "t", "-F", "#{pane_id}"],
@@ -117,7 +117,7 @@ class WatchCase(PaneCase):
         self.env["JUNEAU_TERMINAL_LOG_DIR"] = str(self.logs)
 
     def popen(self, *args):
-        return subprocess.Popen([str(self.SCRIPT), *args], stdout=subprocess.PIPE, text=True, env=self.env)
+        return subprocess.Popen([str(self.SCRIPT), *args], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, env=self.env)   # the leader's late tmux errors stay out of the log
 
     def pane_sub(self, *args):
         """Run tmux-pane.sh (the runner behind watch-run.sh) and return (returncode, stdout + stderr)."""

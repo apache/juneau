@@ -345,7 +345,8 @@ class HeaderLinesTest(SessionCase):
         seen = []
         sys.modules["juneau_terminal"] = jr
         with mock.patch.object(run, "console_requested", return_value=True), \
-                mock.patch.object(jr, "session", side_effect=lambda *a, **k: seen.append((a, k))):
+                mock.patch.object(jr, "session", side_effect=lambda *a, **k: seen.append((a, k))), \
+                redirect_stdout(io.StringIO()):
             with run.session("Push", header=("Juneau", "master"), lines=("Commit Message: m",), exit=False):
                 pass
         self.assertEqual(seen[0][0][:2], ("Push", ("Juneau", "master")))

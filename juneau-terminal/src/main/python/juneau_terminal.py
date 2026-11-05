@@ -4262,6 +4262,7 @@ class MavenParser(Parser):
     # A module can run a non-Surefire suite under the exec plugin (juneau-terminal's Python unittest).  Its summary counts
     # only between that plugin's header and the next one, and only in unittest's own two-line shape.
     EXEC_GOALS = ("exec", "exec-maven-plugin")
+    UNITTEST_EXEC = re.compile(r"\(python-unittest\) @ ")    # the execution id of that suite's header
     UNITTEST_RAN = re.compile(r"(?:^|\s)Ran (\d+) tests? in ([\d.]+)s\s*$")
     UNITTEST_RESULT = re.compile(r"(?:^|\s)(?:OK(?: \(([^)]*)\))?|FAILED \(([^)]*)\))\s*$")
     UNITTEST_COUNT = re.compile(r"(failures|errors|skipped)=(\d+)")
@@ -4374,8 +4375,9 @@ class MavenParser(Parser):
         d = self.dirs.get(artifact)
         return d is None or any((d / "src" / "test" / lang).is_dir() for lang in ("java", "python"))
 
-    def _plugin_header(self, plugin, goal, artifact):
-        """Advance one artifact's compile/test phase at a plugin header; returns compiled/tested events."""
+    def _plugin_header(self, plugin, goal, artifact, unittest=False):
+        """Advance one artifact's compile/test phase at a plugin header; returns compiled/tested events.  unittest marks
+        the header of the module's Python suite: the module's tests have not ended yet, so Surefire's phase is held open."""
         if self.packaging.get(artifact) == "pom":
             return []
         sub = f"{self.step_id}/{artifact}"
@@ -4388,7 +4390,7 @@ class MavenParser(Parser):
             if self.tests_mode and not self._has_tests(artifact):
                 phase = "done"
                 events.append(("tested", sub))
-        elif phase == "surefire":
+        elif phase == "surefire" and not unittest:
             phase = "tested"
             events.append(("tested", sub))
         if plugin == "compiler":
@@ -4650,7 +4652,12 @@ class MavenParser(Parser):
         m = self.ANY_PLUGIN.match(line)
         if m:
             plugin = re.sub(r"^maven-(.+)-plugin$", r"\1", m.group(1))
-            events += self._plugin_header(plugin, m.group(3), m.group(4))
+            held = plugin in self.EXEC_GOALS and m.group(3) == "exec" and bool(self.UNITTEST_EXEC.search(line))
+            events += self._plugin_header(plugin, m.group(3), m.group(4), unittest=held)
+            if held and self.packaging.get(m.group(4)) != "pom":
+                # a silent run of minutes: name it on the module's line (its elapsed time runs there) and keep the module
+                # uncounted until the summary, so the bar and the n/N do not read complete meanwhile
+                events.append(("unit_goal", f"{self.step_id}/{m.group(4)}", "python-unittest"))
             if self.phase.get(m.group(4)) in ("tested", "done") and self.packaging.get(m.group(4)) != "pom":
                 self.goal_of = (f"{self.step_id}/{m.group(4)}", f"{plugin}:{m.group(3)}")
                 events.append(("unit_goal", *self.goal_of))
@@ -4749,6 +4756,10 @@ class MavenParser(Parser):
         if sub in self.open:
             events.append(("tests", sub, *c))
         events.append(("class_done", sub, "fail" if f + e else "skip" if tests and s == tests else "pass"))
+        artifact = self._artifact_of(sub)
+        if self.phase.get(artifact) == "surefire":      # held open at the suite's header
+            self.phase[artifact] = "tested"
+            events.append(("tested", sub))
         return events
 
     def _failure_note(self):

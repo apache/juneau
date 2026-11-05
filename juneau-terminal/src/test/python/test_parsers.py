@@ -404,6 +404,20 @@ class MavenParserTest(unittest.TestCase):
         self.assertEqual(self._unittest(parser, "Ran 9 tests in 0.1s", "OK"), [])
         self.assertEqual(parser.total, 7)
 
+    def test_the_python_suite_names_itself_and_holds_the_module_open_until_its_summary(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        parser.phase["mod-a"] = "compiled"
+        parser.on_line("[INFO] --- surefire:3.2.5:test (default-test) @ mod-a ---")
+        self.assertEqual(parser.phase["mod-a"], "surefire")
+        events = parser.on_line("[INFO] --- exec:3.5.0:exec (python-unittest) @ mod-a ---")
+        self.assertIn(("unit_goal", "mvn/mod-a", "python-unittest"), events)
+        self.assertNotIn(("tested", "mvn/mod-a"), events)
+        self.assertEqual(parser.on_line("[INFO] --- jacoco:0.8.12:report (report) @ mod-b ---"), [])
+        events = self._unittest(parser, "Ran 5 tests in 0.1s", "", "OK")
+        self.assertEqual([e for e in events if e[0] == "tested"], [("tested", "mvn/mod-a")])
+
     def test_a_ran_line_without_a_unittest_result_line_does_not_count(self):
         parser = self._exec_module()
         self.assertEqual(self._unittest(parser, "Ran 5 tests in 0.1s", "something else", "OK"), [])

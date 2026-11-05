@@ -248,3 +248,28 @@ class Screen:
     def history(self):
         """Everything the terminal holds: the scrollback, then the screen."""
         return "\n".join(self.scrollback + [self.text()]).strip("\n")
+
+# Many tests build a Console and let it go without close(); its board log would then be reported as an unclosed file in the
+# middle of the run.  Hold every Console until exit and close it there, so the run prints only its dots and summary.
+import atexit as _atexit
+_consoles = []
+_console_init = jr.Console.__init__
+
+
+def _tracked_init(self, *args, **kwargs):
+    _console_init(self, *args, **kwargs)
+    _consoles.append(self)
+
+
+jr.Console.__init__ = _tracked_init
+
+
+def _close_consoles():
+    for c in _consoles:
+        try:
+            c.close()
+        except Exception:     # a console a test already broke on purpose
+            pass
+
+
+_atexit.register(_close_consoles)

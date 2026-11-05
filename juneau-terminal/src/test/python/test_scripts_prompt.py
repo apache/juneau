@@ -179,11 +179,11 @@ class InlineKindsTest(unittest.TestCase):
         fields = [prompt.Field("name", "Name", default="Ann"), prompt.Field("count", "Count", type="int", required=True),
                   prompt.Field("notes", "Notes", multiline=True)]
         answers = ["", "abc", "7", "line1", "line2", "."]
-        with mock.patch("builtins.input", side_effect=answers):
+        with mock.patch("builtins.input", side_effect=answers), contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(prompt.form("Details", fields), {"name": "Ann", "count": 7, "notes": "line1\nline2"})
 
     def test_inline_form_secret_field_uses_getpass(self):
-        with mock.patch("builtins.input", side_effect=["Ann"]), \
+        with mock.patch("builtins.input", side_effect=["Ann"]), contextlib.redirect_stdout(io.StringIO()), \
                 mock.patch.object(prompt.getpass, "getpass", return_value="pw") as gp:
             got = prompt.form("Login", [prompt.Field("user", "User"), prompt.Field("pass", "Password", secret=True)])
         self.assertEqual(got, {"user": "Ann", "pass": "pw"})
@@ -205,13 +205,14 @@ class InlineKindsTest(unittest.TestCase):
         self.assertIn("too long for a link", out.getvalue())
 
     def test_inline_choice_and_confirm_expect(self):
-        with mock.patch("builtins.input", side_effect=["b"]):
-            self.assertEqual(prompt.choice("Pick", [("a", "Alpha"), ("b", "Beta")]), "b")
-        with mock.patch("builtins.input", side_effect=["2"]):
-            self.assertEqual(prompt.choice("Pick", ["a", "b"]), "b")
-        with mock.patch("builtins.input", side_effect=["nope", "RELEASE"]):
-            self.assertFalse(prompt.confirm("Type RELEASE", expect="RELEASE"))
-            self.assertTrue(prompt.confirm("Type RELEASE", expect="RELEASE"))
+        with contextlib.redirect_stdout(io.StringIO()):
+            with mock.patch("builtins.input", side_effect=["b"]):
+                self.assertEqual(prompt.choice("Pick", [("a", "Alpha"), ("b", "Beta")]), "b")
+            with mock.patch("builtins.input", side_effect=["2"]):
+                self.assertEqual(prompt.choice("Pick", ["a", "b"]), "b")
+            with mock.patch("builtins.input", side_effect=["nope", "RELEASE"]):
+                self.assertFalse(prompt.confirm("Type RELEASE", expect="RELEASE"))
+                self.assertTrue(prompt.confirm("Type RELEASE", expect="RELEASE"))
 
 
 class ChannelCase(unittest.TestCase):
@@ -375,7 +376,9 @@ class ChannelTest(ChannelCase):
 
     def test_unknown_version_is_eof(self):
         os.write(self.in_w, b'{"v":2,"type":"answer","id":"p1","value":"x"}\n')
-        self.assertIsNone(prompt.text("T"))
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertIsNone(prompt.text("T"))
+        self.assertIn("unsupported protocol version", err.getvalue())
 
     def test_step_field_follows_current_step(self):
         prompt.current_step = "tag"

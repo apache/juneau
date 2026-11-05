@@ -627,6 +627,25 @@ class UnitGoalTest(unittest.TestCase):
         lines = live_region_lines(b)
         self.assertTrue(any(l.strip().startswith("a") and "gpg:sign" in l for l in lines), lines)
 
+    def test_a_running_python_suite_is_named_and_the_bar_is_not_full(self):
+        # push-20261104 replay: the last module's silent Python unittest run must not read as 77/77 with a stale goal
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="Petstore"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass", src="sub"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1000, src="sub"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/t", title="Juneau Terminal"))
+        b.apply("unit_goal", dict(step="mvn", id="mvn/t", goal="python-unittest"))
+        lines = live_region_lines(b)
+        self.assertTrue(any("Juneau Terminal" in l and "python-unittest" in l for l in lines), lines)
+        self.assertTrue(any("1/2" in l for l in lines), lines)
+        self.assertFalse(any("2/2" in l for l in lines), lines)
+
+
     def test_only_the_newest_module_stays_once_its_tests_end(self):
         # under -T a module's unit_end only comes with the Reactor Summary: modules whose tests ended must not pile up
         reset_run_state()
