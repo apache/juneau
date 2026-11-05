@@ -306,4 +306,33 @@ class ClassMeta_Test extends TestBase {
 		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
 		assertList(l4, "5");
 	}
+	public static class C01_Node {
+		public Map<String,C01_Node> children;
+		public List<C01_Node> list;
+	}
+
+	// J1117: the class meta must not be published to the cache before swaps/beanMeta are assigned.
+	@Test void c01_concurrentGetClassMeta_swapsNeverNull() throws Exception {
+		for (var n = 0; n < 50; n++) {
+			var bc = BeanContext.create().build();
+			var pool = java.util.concurrent.Executors.newFixedThreadPool(8);
+			try {
+				var latch = new java.util.concurrent.CountDownLatch(1);
+				var futures = new ArrayList<java.util.concurrent.Future<?>>();
+				for (var t = 0; t < 8; t++)
+					futures.add(pool.submit(() -> {
+						latch.await();
+						bc.getClassMeta(C01_Node.class).getSwap(bc.getSession());
+						bc.getClassMeta(Map.class, String.class, C01_Node.class).getSwap(bc.getSession());
+						bc.getClassMeta(List.class, C01_Node.class).getSwap(bc.getSession());
+						return null;
+					}));
+				latch.countDown();
+				for (var f : futures)
+					f.get();
+			} finally {
+				pool.shutdownNow();
+			}
+		}
+	}
 }

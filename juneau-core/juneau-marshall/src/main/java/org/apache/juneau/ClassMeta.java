@@ -184,10 +184,6 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 		this.beanContext = beanContext;
 		this.cat = new Categories();
 
-		// We always immediately add this class meta to the bean context cache so that we can resolve recursive references.
-		if (nn(beanContext) && nn(beanContext.getCmCache()) && isCacheable(innerClass))
-			beanContext.getCmCache().put(innerClass, this);
-
 		var ap = beanContext.getAnnotationProvider();
 
 		if (isChildOf(Delegate.class)) {
@@ -259,6 +255,11 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 
 		this.args = null;
 		this.stringMutater = Mutaters.get(String.class, inner());
+
+		// Publish only after every field (beanMeta, swaps, ...) is assigned, so concurrent getClassMeta
+		// callers and the copy constructor never see this instance with swaps == null.
+		if (nn(beanContext) && nn(beanContext.getCmCache()) && isCacheable(innerClass))
+			beanContext.getCmCache().put(innerClass, this);
 	}
 
 	protected ObjectSwap<?,?> findSwap(Class<?> c) {
