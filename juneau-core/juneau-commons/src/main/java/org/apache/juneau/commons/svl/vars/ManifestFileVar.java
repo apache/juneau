@@ -26,7 +26,7 @@ import org.apache.juneau.commons.svl.*;
  * Manifest file entries variable resolver.
  *
  * <p>
- * The format for this var is <js>"$MF{key[,default]}"</js>.
+ * The format for this var is <js>"${MF:key[:default]}"</js>.
  *
  * <p>
  * This variable resolver requires that a {@link ManifestFile} object be made available by either:
@@ -40,11 +40,11 @@ import org.apache.juneau.commons.svl.*;
  * 	<jc>// Create a ManifestFile object that contains the manifest of the jar file containing this class.</jc>
  * 	ManifestFile <jv>manifestFile</jv> = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());
  *
- * 	<jc>// Create a variable resolver that resolves manifest file entries (e.g. "$MF{Main-Class}")</jc>
+ * 	<jc>// Create a variable resolver that resolves manifest file entries (e.g. "${MF:Main-Class}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ManifestFileVar.<jsm>create</jsm>(() -&gt; <jv>manifestFile</jv>)).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"The main class is $MF{Main-Class}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"The main class is ${MF:Main-Class}"</js>));
  * </p>
  *
  * <p>

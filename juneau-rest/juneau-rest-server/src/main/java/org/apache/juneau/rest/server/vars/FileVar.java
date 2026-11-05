@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.*;
  * File resource variable resolver
  *
  * <p>
- * The format for this var is <js>"$F{path[,defaultValue]}"</js>.
+ * The format for this var is <js>"${F:path[:defaultValue]}"</js>.
  *
  * <p>
  * Contents of files are retrieved from the resource context using {@link RestContext#getStaticFiles()}.
@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.*;
  * Example:
  * <p class='bjava'>
  *  <ja>@HtmlDocConfig</ja>(
- * 		aside=<js>"$F{resources/MyAsideMessage.html, Oops not found!}"</js>
+ * 		aside=<js>"${F:resources/MyAsideMessage.html: Oops not found!}"</js>
  * 	)
  * </p>
  *

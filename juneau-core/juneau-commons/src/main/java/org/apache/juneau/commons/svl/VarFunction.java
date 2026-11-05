@@ -23,7 +23,7 @@ import java.util.*;
  *
  * <p>
  * A {@code VarFunction} is invoked when an SVL template contains a
- * <c>#{name(arg1, arg2, ...)}</c> reference — distinct from {@code $X{...}} variables. Functions
+ * <c>#{name(arg1, arg2, ...)}</c> reference — distinct from {@code ${X:...}} variables. Functions
  * compose freely with {@code ${...}} lookups and other {@code #{...}} calls; arguments are
  * pre-resolved by the runtime before {@link #invoke(VarResolverSession, List) invoke} is called.
  *
@@ -114,4 +114,19 @@ public interface VarFunction {
 	 *	 {@code null} (the runtime treats {@code null} as the empty string for SVL output).
 	 */
 	String invoke(VarResolverSession session, List<Object> args);
+
+	/**
+	 * Typed variant of {@link #invoke(VarResolverSession, List)} used by <c>#{...}</c> expressions.
+	 *
+	 * <p>
+	 * The default delegates to {@link #invoke(VarResolverSession, List)}.
+	 *
+	 * @param session The session.
+	 * @param args The already-evaluated arguments (typed values, not necessarily strings).
+	 * @return The result; <jk>null</jk> means absent.
+	 * @throws Exception Function-specific failure.
+	 */
+	default Object invokeValue(VarResolverSession session, List<Object> args) throws Exception {
+		return invoke(session, args);
+	}
 }

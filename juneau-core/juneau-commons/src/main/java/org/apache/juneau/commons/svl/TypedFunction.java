@@ -132,6 +132,12 @@ public abstract class TypedFunction implements VarFunction {
 
 	@Override
 	public final String invoke(VarResolverSession session, List<Object> args) {
+		var result = invokeValue(session, args);
+		return result == null ? "" : result.toString();
+	}
+
+	@Override
+	public final Object invokeValue(VarResolverSession session, List<Object> args) {
 		var n = args.size();
 		Overload o = null;
 		for (var c : overloads) {
@@ -150,8 +156,7 @@ public abstract class TypedFunction implements VarFunction {
 			} else {
 				effective = coerced;
 			}
-			var result = o.method().invoke(this, effective);
-			return result == null ? "" : result.toString();
+			return o.method().invoke(this, effective);
 		} catch (InvocationTargetException e) {
 			var cause = e.getTargetException();
 			if (cause instanceof RuntimeException cause2)

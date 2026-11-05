@@ -137,7 +137,7 @@ class RestOp_Returns_Test extends TestBase {
 		}
 		@RestGet
 		public HttpResource d(RestRequest req) {
-			return stringResource(()->req.getVarResolverSession().resolve("$RQ{foo}"));
+			return stringResource(()->req.getVarResolverSession().resolve("${RQ:foo}"));
 		}
 		@RestGet
 		public HttpResource e() {

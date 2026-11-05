@@ -1175,9 +1175,9 @@ class Config_Test extends TestBase {
 
 		var cf = init(
 			"[s1]",
-			"f1 = $S{foo}",
-			"f2 = $S{foo,bar}",
-			"f3 = $S{$S{baz,bing},bar}"
+			"f1 = ${S:foo}",
+			"f2 = ${S:foo:bar}",
+			"f3 = ${S:${S:baz:bing}:bar}"
 		);
 
 		System.getProperties().remove("foo");
@@ -1194,13 +1194,13 @@ class Config_Test extends TestBase {
 		assertEquals("123", cf.get("s1/f2").get());
 		assertEquals("bar", cf.get("s1/f3").get());
 
-		System.setProperty("foo", "$S{bar}");
+		System.setProperty("foo", "${S:bar}");
 		System.setProperty("bar", "baz");
 		assertEquals("baz", cf.get("s1/f1").get());
 		assertEquals("baz", cf.get("s1/f2").get());
 		assertEquals("bar", cf.get("s1/f3").get());
 
-		System.setProperty("bing", "$S{foo}");
+		System.setProperty("bing", "${S:foo}");
 		assertEquals("baz", cf.get("s1/f3").get());
 
 		System.setProperty("baz", "foo");
@@ -1416,7 +1416,7 @@ class Config_Test extends TestBase {
 		assertEquals("int", cf.get("A/a2").as(int[].class).orElse(ints(4)).getClass().getComponentType().getSimpleName());
 
 		System.setProperty("X", "[4,5,6]");
-		cf = init("x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "[A]", "a1=[1,2,3]");
+		cf = init("x1=${C:A/a1}", "x2=${S:X}", "x3=${S:Y}", "[A]", "a1=[1,2,3]");
 		assertJson("[1,2,3]", cf.get("x1").as(int[].class).orElse(ints(9)));
 		assertJson("[4,5,6]", cf.get("x2").as(int[].class).orElse(ints(9)));
 		assertJson("[]", cf.get("x3").as(int[].class).orElse(ints(9)));
@@ -1438,7 +1438,7 @@ class Config_Test extends TestBase {
 		assertJson("['1','2','3']", cf.get("A/a1").asStringArray().get());
 
 		System.setProperty("X", "4,5,6");
-		cf = init(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,$S{X}}", "[A]", "a1=1,2,3");
+		cf = init(null, "x1=${C:A/a1}", "x2=${S:X}", "x3=${S:Y}", "x4=${S:Y:${S:X}}", "[A]", "a1=1,2,3");
 		assertJson("['1','2','3']", cf.get("x1").asStringArray().orElse(a("9")));
 		assertJson("['4','5','6']", cf.get("x2").asStringArray().orElse(a("9")));
 		assertJson("['9']", cf.get("x9").asStringArray().orElse(a("9")));
@@ -1450,7 +1450,7 @@ class Config_Test extends TestBase {
 	// getSectionMap(String name)
 	//====================================================================================================
 	@Test void a14_getSectionMap() {
-		var cf = init("[A]", "a1=1", "", "[D]", "d1=$C{A/a1}","d2=$S{X}");
+		var cf = init("[A]", "a1=1", "", "[D]", "d1=${C:A/a1}","d2=${S:X}");
 
 		assertJson("{a1:'1'}", cf.getSection("A").asMap().get());
 		assertFalse(cf.getSection("B").asMap().isPresent());
@@ -1481,11 +1481,11 @@ class Config_Test extends TestBase {
 	//====================================================================================================
 	@Test void a16_resolvingWithOverride() {
 		var cf = init();
-		cf.set("a", "$A{X}");
-		cf.set("b", "$B{X}");
-		cf.set("c", "$A{$B{X}}");
-		cf.set("d", "$B{$A{X}}");
-		cf.set("e", "$D{X}");
+		cf.set("a", "${A:X}");
+		cf.set("b", "${B:X}");
+		cf.set("c", "${A:${B:X}}");
+		cf.set("d", "${B:${A:X}}");
+		cf.set("e", "${D:X}");
 
 		var vr = VarResolver.create().defaultVars().vars(ALVar.class, BLVar.class).build();
 
@@ -1495,7 +1495,8 @@ class Config_Test extends TestBase {
 		assertEquals("bXb", cf.get("b").get());
 		assertEquals("abXba", cf.get("c").get());
 		assertEquals("baXab", cf.get("d").get());
-		assertEquals("$D{X}", cf.get("e").get());
+		// 10.0: no $D var registered, so ${D:X} is a scope lookup of key D with default X (the legacy form stayed literal).
+		assertEquals("X", cf.get("e").get());
 
 		// Create new resolver that addx $C and overrides $A
 		var vr2 = vr.copy().vars(AUVar.class, DUVar.class).build();

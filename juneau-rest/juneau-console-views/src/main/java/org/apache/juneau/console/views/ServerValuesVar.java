@@ -20,12 +20,12 @@ import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.console.widgets.*;
 
 /**
- * The <js>"$FV{name}"</js> / <js>"$FV{name,default}"</js> server-values variable.
+ * The <js>"${FV:name}"</js> / <js>"${FV:name:default}"</js> server-values variable.
  *
  * <p>
  * Resolves author-declared scalar values from a {@link ServerValuesRegistry} placed in the per-render session by
- * the widget emitter.  It is a {@link DefaultingVar}: <js>"$FV{name}"</js> resolves the named provider and
- * <js>"$FV{name,default}"</js> falls back to {@code default} when the provider is missing or returns
+ * the widget emitter.  It is a {@link DefaultingVar}: <js>"${FV:name}"</js> resolves the named provider and
+ * <js>"${FV:name:default}"</js> falls back to {@code default} when the provider is missing or returns
  * <jk>null</jk>.
  *
  * <p>
@@ -37,7 +37,7 @@ import org.apache.juneau.console.widgets.*;
  * <p>
  * {@link #allowRecurse()} is <jk>false</jk>: a provider's returned string is emitted literally and is never
  * re-parsed as SVL (untrusted computed data must not be recursively resolved).  When no registry is present in
- * the session the var is not resolvable and the <js>"$FV{...}"</js> token is left literal (fail-open).
+ * the session the var is not resolvable and the <js>"${FV:...}"</js> token is left literal (fail-open).
  *
  * @since 10.0.0
  */

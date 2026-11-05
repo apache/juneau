@@ -50,7 +50,7 @@ public final class StringFunctions {
 
 	/**
 	 * {@code #{substring(s, start)}} / {@code #{substring(s, start, end)}} — replacement for the
-	 * legacy {@code $ST{...}} {@code SubstringVar}.
+	 * legacy {@code ST} {@code SubstringVar}.
 	 *
 	 * <p>
 	 * Both endpoints are clamped to {@code [0, len(s)]} so out-of-range arguments don't throw —
@@ -73,13 +73,13 @@ public final class StringFunctions {
 		}
 	}
 
-	/** {@code #{upper(s)}} — replacement for the legacy {@code $UC{...}}. */
+	/** {@code #{upper(s)}} — replacement for the legacy {@code UC} variable. */
 	public static class Upper extends TypedFunction {
 		@Override public String name() { return "upper"; }
 		public String invoke(String s) { return s == null ? "" : s.toUpperCase(); }
 	}
 
-	/** {@code #{lower(s)}} — replacement for the legacy {@code $LC{...}}. */
+	/** {@code #{lower(s)}} — replacement for the legacy {@code LC} variable. */
 	public static class Lower extends TypedFunction {
 		@Override public String name() { return "lower"; }
 		public String invoke(String s) { return s == null ? "" : s.toLowerCase(); }
@@ -164,7 +164,7 @@ public final class StringFunctions {
 
 	/**
 	 * {@code #{len(s)}} / {@code #{len(s, delimiter)}} — replacement for the legacy
-	 * {@code $LN{...}}.
+	 * {@code LN} variable.
 	 *
 	 * <p>
 	 * Single-arg form returns the character count. Two-arg form splits on the literal
@@ -326,15 +326,25 @@ public final class StringFunctions {
 	 * <h2 class='section'>Example:</h2>
 	 * <p>
 	 * {@code #{join("/", ${tenant}, ${id})}} → {@code acme/42}
+	 *
+	 * <p>
+	 * A single {@link Collection} argument supplies the parts.  Each part is rendered with {@code toString()} (doubles
+	 * without a trailing {@code .0}), so a nested {@link Map} or {@link List} part prints as its Java {@code toString()},
+	 * not as JSON like the value formatter does; this inconsistency is known and intentional for now.
 	 */
-	public static class Join extends TypedFunction {
+	public static class Join implements VarFunction {
 		@Override public String name() { return "join"; }
-		public String invoke(String separator, String[] parts) {
-			var sep = separator == null ? "" : separator;
+		@Override public int minArity() { return 1; }
+		@Override public int maxArity() { return Integer.MAX_VALUE; }
+		@Override public String invoke(VarResolverSession session, List<Object> args) {
+			var sep = args.get(0) == null ? "" : args.get(0).toString();
+			// A single collection argument supplies the parts.
+			List<?> parts = args.size() == 2 && args.get(1) instanceof Collection<?> c ? new ArrayList<>(c) : args.subList(1, args.size());
 			var sb = new StringBuilder();
-			for (var i = 0; i < parts.length; i++) {
+			for (var i = 0; i < parts.size(); i++) {
 				if (i > 0) sb.append(sep);
-				sb.append(parts[i] == null ? "" : parts[i]);
+				var p = parts.get(i);
+				sb.append(p instanceof Double || p instanceof Float ? ArithmeticFunctions.render(((Number)p).doubleValue()) : p == null ? "" : p.toString());
 			}
 			return sb.toString();
 		}

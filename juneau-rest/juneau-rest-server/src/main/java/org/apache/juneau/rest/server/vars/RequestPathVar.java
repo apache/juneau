@@ -26,7 +26,7 @@ import org.apache.juneau.rest.server.*;
  * Request path variable resolver.
  *
  * <p>
- * The format for this var is <js>"$RP{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${RP:key1[:key2...]}"</js>.
  *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getPathParam(String)}.
@@ -35,8 +35,8 @@ import org.apache.juneau.rest.server.*;
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// URI path pattern = "/foo/{foo}/bar/{bar}"</jc>
- * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RP{foo}"</js>);
- * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RP{foo,bar}"</js>);
+ * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RP:foo}"</js>);
+ * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RP:foo:bar}"</js>);
  * </p>
  *
  * <h2 class='section'>Notes:</h2><ul>

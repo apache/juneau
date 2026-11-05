@@ -45,7 +45,7 @@ import org.apache.juneau.rest.server.*;
  * 				</ul>
  * 			</li>
  * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/json"</js>
- * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
+ * 			<li class='jma'>{@link Rest#config() config}:  <js>"${S:juneau.configFile:SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
  * 	<li class='ja'>{@link MarshalledConfig}:

@@ -144,7 +144,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -171,7 +171,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: ${C:REST/myAttributeValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Override at the method level.</jc>
@@ -183,7 +183,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -210,7 +210,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 *
@@ -240,7 +240,7 @@ public @interface RestOptions {
 	 * 		Key and value is trimmed of whitespace.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -263,7 +263,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 *
@@ -280,7 +280,7 @@ public @interface RestOptions {
 	 * 	<li>
 	 * 		The value returned by {@link Operation#getDescription()} in the auto-generated swagger.
 	 * 	<li>
-	 * 		The <js>"$RS{operationDescription}"</js> variable.
+	 * 		The <js>"${RS:operationDescription}"</js> variable.
 	 * 	<li>
 	 * 		The description of the method in the Swagger page.
 	 * </ul>
@@ -290,7 +290,7 @@ public @interface RestOptions {
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -418,7 +418,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -523,7 +523,7 @@ public @interface RestOptions {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -627,7 +627,7 @@ public @interface RestOptions {
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()}.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
@@ -725,7 +725,7 @@ public @interface RestOptions {
 	 * 	<li>
 	 * 		The value returned by {@link Operation#getSummary()} in the auto-generated swagger.
 	 * 	<li>
-	 * 		The <js>"$RS{operationSummary}"</js> variable.
+	 * 		The <js>"${RS:operationSummary}"</js> variable.
 	 * 	<li>
 	 * 		The summary of the method in the Swagger page.
 	 * </ul>
@@ -735,7 +735,7 @@ public @interface RestOptions {
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -781,7 +781,7 @@ public @interface RestOptions {
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>

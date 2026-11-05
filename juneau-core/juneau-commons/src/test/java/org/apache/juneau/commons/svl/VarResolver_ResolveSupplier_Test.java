@@ -50,7 +50,7 @@ class VarResolver_ResolveSupplier_Test extends TestBase {
 		var vr = VarResolver.create().vars(CounterVar.class).build();
 		var counter = new AtomicInteger();
 		vr.addBean(AtomicInteger.class, counter);
-		var sup = vr.resolveSupplier("$C{x}");
+		var sup = vr.resolveSupplier("${C:x}");
 		assertEquals("x-1", sup.get());
 		assertEquals("x-2", sup.get());
 		assertEquals("x-3", sup.get());
@@ -68,7 +68,7 @@ class VarResolver_ResolveSupplier_Test extends TestBase {
 		var counter = new AtomicInteger();
 		var s = vr.createSession();
 		s.bean(AtomicInteger.class, counter);
-		var sup = s.resolveSupplier("$C{x}");
+		var sup = s.resolveSupplier("${C:x}");
 		assertEquals("x-1", sup.get());
 		assertEquals("x-2", sup.get());
 	}
@@ -86,7 +86,7 @@ class VarResolver_ResolveSupplier_Test extends TestBase {
 		var counter = new AtomicInteger();
 		// Use the resolver-level bean store so every session sees the same counter.
 		vr.addBean(AtomicInteger.class, counter);
-		var sup = vr.resolveSupplier("$C{x}");
+		var sup = vr.resolveSupplier("${C:x}");
 
 		var threadCount = 16;
 		var iterations = 100;

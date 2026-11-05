@@ -228,7 +228,7 @@ class PetstoreJetty_Test extends TestBase {
 
 	/**
 	 * Confirms the console store page renders in the console chrome.  (The old router page's
-	 * {@code $C{Petstore/appName}} header check left with that page; the console brand is static.)
+	 * {@code ${C:Petstore/appName}} header check left with that page; the console brand is static.)
 	 */
 	@Test void a02_consoleStoreRenders() throws Exception {
 		var resp = get("/console/store", "text/html");

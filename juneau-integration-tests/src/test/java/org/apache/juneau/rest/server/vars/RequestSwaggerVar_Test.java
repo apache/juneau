@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link RequestSwaggerVar} ($RS{key}) covering the full key matrix:
+ * Tests for {@link RequestSwaggerVar} (${RS:key}) covering the full key matrix:
  * contact, description, externalDocs, license, operationDescription,
  * operationSummary, siteName, tags, termsOfService, title, version,
  * unknown-key fallback, and multipart fallback semantics inherited from
@@ -57,7 +57,7 @@ class RequestSwaggerVar_Test extends TestBase {
 	public static class A {
 		@RestGet(path="/key/{key}", summary="op-summary", description="op-description")
 		public String resolve(RestRequest req, @Path("key") String key) {
-			return req.getVarResolverSession().resolve("$RS{" + key + "}");
+			return req.getVarResolverSession().resolve("${RS:" + key + "}");
 		}
 
 		@RestGet(path="/raw")
@@ -134,78 +134,78 @@ class RequestSwaggerVar_Test extends TestBase {
 
 	@Test void b01_unknownKey_returnsEmpty() throws Exception {
 		// Unknown key: resolve(...) returns null, VarResolver substitutes empty string.
-		clientA.get("/raw").queryData("expr", "$RS{nonsense}").run()
+		clientA.get("/raw").queryData("expr", "${RS:nonsense}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b02_unknownKey_withFallback_usesFallback() throws Exception {
 		// Multipart with comma: first segment unknown -> null, second resolves to title.
-		clientA.get("/raw").queryData("expr", "$RS{nonsense,title}").run()
+		clientA.get("/raw").queryData("expr", "${RS:nonsense:title}").run()
 			.assertStatus(200)
 			.assertContent("a-title");
 	}
 
 	@Test void b03_emptyKey_returnsEmpty() throws Exception {
 		// Empty key -> charAt returns 0 -> falls through all branches -> null -> "".
-		clientA.get("/raw").queryData("expr", "$RS{}").run()
+		clientA.get("/raw").queryData("expr", "${RS:}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b04_keyStartingWithUnknownLetter() throws Exception {
 		// 'z' isn't matched by any branch -> null -> "".
-		clientA.get("/raw").queryData("expr", "$RS{zzz}").run()
+		clientA.get("/raw").queryData("expr", "${RS:zzz}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b05_cPrefix_notMatching() throws Exception {
 		// 'c' branch entered but "cxx" isn't "contact" -> null.
-		clientA.get("/raw").queryData("expr", "$RS{cxx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:cxx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b06_dPrefix_notMatching() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{dxx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:dxx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b07_ePrefix_notMatching() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{exx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:exx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b08_lPrefix_notMatching() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{lxx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:lxx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b09_oPrefix_notMatching() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{oxx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:oxx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b10_rPrefix_notMatching() throws Exception {
 		// 'r' is dispatched (siteName) but only matches "siteName" exactly.
-		clientA.get("/raw").queryData("expr", "$RS{rxx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:rxx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b11_tPrefix_notMatching() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{txx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:txx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void b12_vPrefix_notMatching() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{vxx}").run()
+		clientA.get("/raw").queryData("expr", "${RS:vxx}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
@@ -219,7 +219,7 @@ class RequestSwaggerVar_Test extends TestBase {
 	public static class C {
 		@RestGet(path="/{key}")
 		public String get(RestRequest req, @Path("key") String key) {
-			return req.getVarResolverSession().resolve("$RS{" + key + "}");
+			return req.getVarResolverSession().resolve("${RS:" + key + "}");
 		}
 
 		@RestGet(path="/raw")
@@ -238,55 +238,55 @@ class RequestSwaggerVar_Test extends TestBase {
 		// No info populated -> null -> token preserved.
 		// Note: DefaultConfig provides defaults like siteName via env/system properties; title may be null
 		// when the @Rest title/description aren't set.  We just make sure this path doesn't blow up.
-		clientC.get("/raw").queryData("expr", "$RS{title}").run()
+		clientC.get("/raw").queryData("expr", "${RS:title}").run()
 			.assertStatus(200);
 	}
 
 	@Test void c02_operationSummary_noOperationSwagger() throws Exception {
 		// No summary on the operation -> map(...).orElse(null) -> null -> "".
-		clientC.get("/raw").queryData("expr", "$RS{operationSummary}").run()
+		clientC.get("/raw").queryData("expr", "${RS:operationSummary}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c03_operationDescription_noOperationSwagger() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{operationDescription}").run()
+		clientC.get("/raw").queryData("expr", "${RS:operationDescription}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c04_externalDocs_absent() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{externalDocs}").run()
+		clientC.get("/raw").queryData("expr", "${RS:externalDocs}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c05_tags_absent() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{tags}").run()
+		clientC.get("/raw").queryData("expr", "${RS:tags}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c06_contact_absent() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{contact}").run()
+		clientC.get("/raw").queryData("expr", "${RS:contact}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c07_license_absent() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{license}").run()
+		clientC.get("/raw").queryData("expr", "${RS:license}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c08_termsOfService_absent() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{termsOfService}").run()
+		clientC.get("/raw").queryData("expr", "${RS:termsOfService}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void c09_version_absent() throws Exception {
-		clientC.get("/raw").queryData("expr", "$RS{version}").run()
+		clientC.get("/raw").queryData("expr", "${RS:version}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
@@ -312,75 +312,75 @@ class RequestSwaggerVar_Test extends TestBase {
 
 	@Test void e01_contact_infoPresent_contactNull() throws Exception {
 		// info exists (because @Rest(title=...)) but contact is null -> orElse(null) -> "".
-		clientE.get("/raw").queryData("expr", "$RS{contact}").run()
+		clientE.get("/raw").queryData("expr", "${RS:contact}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void e02_description_infoPresent_descriptionNull() throws Exception {
-		clientE.get("/raw").queryData("expr", "$RS{description}").run()
+		clientE.get("/raw").queryData("expr", "${RS:description}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void e03_license_infoPresent_licenseNull() throws Exception {
-		clientE.get("/raw").queryData("expr", "$RS{license}").run()
+		clientE.get("/raw").queryData("expr", "${RS:license}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void e04_termsOfService_infoPresent_tosNull() throws Exception {
-		clientE.get("/raw").queryData("expr", "$RS{termsOfService}").run()
+		clientE.get("/raw").queryData("expr", "${RS:termsOfService}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void e05_version_infoPresent_versionNull() throws Exception {
-		clientE.get("/raw").queryData("expr", "$RS{version}").run()
+		clientE.get("/raw").queryData("expr", "${RS:version}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	@Test void e06_title_infoPresent_titleSet() throws Exception {
 		// Sanity: title is populated when info is.
-		clientE.get("/raw").queryData("expr", "$RS{title}").run()
+		clientE.get("/raw").queryData("expr", "${RS:title}").run()
 			.assertStatus(200)
 			.assertContent("b-title");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// d - Multipart fallback: $RS{missing,title} should resolve to the first non-null key.
+	// d - Multipart fallback: ${RS:missing:title} should resolve to the first non-null key.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_multipartFallback_secondWins_noOperationSummary() throws Exception {
 		// /raw operation has no @RestGet summary -> first key resolves to null, falls through to title.
-		clientA.get("/raw").queryData("expr", "$RS{operationSummary,title}").run()
+		clientA.get("/raw").queryData("expr", "${RS:operationSummary:title}").run()
 			.assertStatus(200)
 			.assertContent("a-title");
 	}
 
 	@Test void d02_multipartFallback_firstWins() throws Exception {
-		clientA.get("/raw").queryData("expr", "$RS{title,description}").run()
+		clientA.get("/raw").queryData("expr", "${RS:title:description}").run()
 			.assertStatus(200)
 			.assertContent("a-title");
 	}
 
 	@Test void d03_multipartFallback_allUnknown_returnsEmpty() throws Exception {
 		// All keys unknown/null -> resolver substitutes "".
-		clientA.get("/raw").queryData("expr", "$RS{zzz,yyy}").run()
+		clientA.get("/raw").queryData("expr", "${RS:zzz:yyy}").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// f - Nested-variable handling: allowNested()=false, allowRecurse()=false. Putting another var
-	//     inside a $RS{...} body causes the resolver to NOT recursively resolve it (returned literal).
+	//     inside a ${RS:...} body causes the resolver to NOT recursively resolve it (returned literal).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_allowNested_isFalse_innerVarLeftLiteral() throws Exception {
-		// Inner $RQ{x} would normally resolve to "title", but allowNested()==false means the body
-		// is passed verbatim as the key.  "$RQ{x}" is not a recognized key -> null -> "".
-		clientA.get("/raw").queryData("expr", "$RS{$RQ{x}}").queryData("x", "title").run()
+		// Inner ${RQ:x} would normally resolve to "title", but allowNested()==false means the body
+		// is passed verbatim as the key.  "${RQ:x}" is not a recognized key -> null -> "".
+		clientA.get("/raw").queryData("expr", "${RS:${RQ:x}}").queryData("x", "title").run()
 			.assertStatus(200)
 			.assertContent("");
 	}
@@ -399,7 +399,7 @@ class RequestSwaggerVar_Test extends TestBase {
 	public static class F {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RS{title}");
+			return req.getVarResolverSession().resolve("${RS:title}");
 		}
 	}
 }

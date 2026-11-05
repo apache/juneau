@@ -22,7 +22,7 @@ import org.apache.juneau.commons.svl.*;
  * HTML widget variable resolver.
  *
  * <p>
- * The format for this var is <js>"$W{widgetName}"</js>.
+ * The format for this var is <js>"${W:widgetName}"</js>.
  *
  * <p>
  * Widgets are simple class that produce some sort of string based on a passed-in HTTP request.

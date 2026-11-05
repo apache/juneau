@@ -38,32 +38,33 @@ class VarFunctionDiscovery_Test extends TestBase {
 
 	@Test void defaultResolverHasBuiltins() {
 		// Sample one function from each built-in category.
-		assertEquals("FOO", VarResolver.DEFAULT.resolve("#{upper(foo)}"));    // string
-		assertEquals("3", VarResolver.DEFAULT.resolve("#{toInt(3)}"));        // type-conv
+		assertEquals("FOO", VarResolver.DEFAULT.resolve("#{upper('foo')}"));    // string
+		assertEquals("3", VarResolver.DEFAULT.resolve("#{toInt('3')}"));        // type-conv
 		assertEquals("5", VarResolver.DEFAULT.resolve("#{add(2, 3)}"));       // arithmetic
-		assertEquals("true", VarResolver.DEFAULT.resolve("#{eq(a, a)}"));     // boolean
-		assertEquals("yes", VarResolver.DEFAULT.resolve("#{if(true, yes, no)}"));  // conditional
-		assertEquals("true", VarResolver.DEFAULT.resolve("#{match(abc, \"a.c\")}")); // regex
-		assertEquals("Zm9v", VarResolver.DEFAULT.resolve("#{base64Encode(foo)}"));   // encoding
+		assertEquals("true", VarResolver.DEFAULT.resolve("#{eq('a', 'a')}"));     // boolean
+		assertEquals("yes", VarResolver.DEFAULT.resolve("#{if(true, 'yes', 'no')}"));  // conditional
+		assertEquals("true", VarResolver.DEFAULT.resolve("#{match('abc', \"a.c\")}")); // regex
+		assertEquals("Zm9v", VarResolver.DEFAULT.resolve("#{base64Encode('foo')}"));   // encoding
 	}
 
 	@Test void explicitRegistrationOverridesBuiltin() {
 		var vr = VarResolver.create().defaultFunctions().functions(BangUpper.class).build();
-		assertEquals("HELLO!", vr.resolve("#{upper(hello)}"));
+		assertEquals("HELLO!", vr.resolve("#{upper('hello')}"));
 	}
 
 	@Test void unknownFunctionFailsLazily() {
-		// Unknown function name resolves to an exception at resolve-time.
-		var vr = VarResolver.DEFAULT;
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{nosuchfn(x)}"));
+		// Unknown function: lenient mode keeps the literal text; strict mode fails at compile time naming the function.
+		assertEquals("#{nosuchfn('x')}", VarResolver.DEFAULT.resolve("#{nosuchfn('x')}"));
+		var strict = VarResolver.create().defaultFunctions().strict(true).build();
+		var ex = assertThrows(ExprException.class, () -> strict.resolve("#{nosuchfn('x')}"));
 		assertTrue(ex.getMessage().contains("nosuchfn"), () -> "Expected message to mention function name; got: " + ex.getMessage());
 	}
 
 	@Test void emptyCatalogResolverHasNoBuiltins() {
 		// VarResolver.create().build() — no .defaultFunctions() — still resolves Vars but not
 		// any function references.
-		var vr = VarResolver.create().defaultVars().build();
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{upper(foo)}"));
+		var vr = VarResolver.create().defaultVars().strict(true).build();
+		var ex = assertThrows(ExprException.class, () -> vr.resolve("#{upper('foo')}"));
 		assertTrue(ex.getMessage().contains("upper"), () -> "Expected message to mention 'upper'; got: " + ex.getMessage());
 	}
 
@@ -74,13 +75,13 @@ class VarFunctionDiscovery_Test extends TestBase {
 		// Build to inspect the resulting map indirectly via resolve calls.
 		var vr = b.build();
 		for (var template : List.of(
-				"#{upper(x)}",          // StringFunctions
-				"#{toInt(1)}",          // TypeConversionFunctions
+				"#{upper('x')}",          // StringFunctions
+				"#{toInt('1')}",          // TypeConversionFunctions
 				"#{add(1, 2)}",         // ArithmeticFunctions
 				"#{and(true, true)}",   // BooleanFunctions
-				"#{coalesce(\"\", x)}", // ConditionalFunctions
-				"#{match(abc, abc)}",   // RegexFunctions
-				"#{urlEncode(x)}",      // EncodingFunctions
+				"#{coalesce(\"\", 'x')}", // ConditionalFunctions
+				"#{match('abc', 'abc')}",   // RegexFunctions
+				"#{urlEncode('x')}",      // EncodingFunctions
 				"#{formatDate(0)}",     // DateFunctions
 				"#{uuid()}",            // RandomFunctions
 				"#{size(\"[]\")}"       // JsonFunctions

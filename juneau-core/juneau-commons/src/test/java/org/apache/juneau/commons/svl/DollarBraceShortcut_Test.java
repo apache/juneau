@@ -27,9 +27,9 @@ import org.junit.jupiter.api.parallel.*;
  * Tests for the {@code ${xxx}} shortcut in {@link VarResolverSession}'s tokenizer.
  *
  * <p>
- * The shortcut routes {@code ${xxx}} to {@code $P{xxx}} (i.e. through {@code PropertyVar}, which
- * reads from {@link Settings}). The first top-level {@code ':'} in the body is rewritten to
- * {@code ','} so Spring-idiom defaults {@code ${key:default}} resolve via {@code DefaultingVar}.
+ * The empty-prefix form {@code ${xxx}} routes to {@code ${P:xxx}} (i.e. through {@code PropertyVar}, which
+ * reads from {@link Settings}). The first top-level {@code ':'} in the body splits key and default so
+ * Spring-idiom defaults {@code ${key:default}} resolve via {@code DefaultingVar}.
  */
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
 class DollarBraceShortcut_Test extends TestBase {
@@ -62,9 +62,9 @@ class DollarBraceShortcut_Test extends TestBase {
 	@Test
 	void a02_dollarBrace_identicalToDollarP() {
 		Settings.get().setGlobal(K1, "v");
-		var dp = VarResolver.DEFAULT.resolve("$P{" + K1 + "}");
+		var dp = VarResolver.DEFAULT.resolve("${P:" + K1 + "}");
 		var db = VarResolver.DEFAULT.resolve("${" + K1 + "}");
-		assertEquals(dp, db, "${...} must resolve identically to $P{...}");
+		assertEquals(dp, db, "${...} must resolve identically to ${P:...}");
 	}
 
 	@Test
@@ -98,8 +98,7 @@ class DollarBraceShortcut_Test extends TestBase {
 
 	@Test
 	void b04_dollarBrace_default_commaInDefaultStillWorks() {
-		// Translation rewrites the first top-level ':' to ','; pre-existing ',' in the default text
-		// is preserved by DefaultingVar (which splits on FIRST ',' only).
+		// The default is verbatim after the first top-level ':'; commas in it are literal.
 		assertEquals("a,b,c", VarResolver.DEFAULT.resolve("${" + K1 + ":a,b,c}"));
 	}
 
@@ -124,34 +123,41 @@ class DollarBraceShortcut_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Backward compatibility: existing $X{...} forms still work.
+	// Explicit ${P:...} / ${S:...} forms and the removed legacy $X{...} syntax. // svl-migrate:skip (deliberate legacy-syntax fixture)
 	//====================================================================================================
 
 	@Test
-	void d01_dollarP_stillWorks() {
+	void d01_explicitP_works() {
 		Settings.get().setGlobal(K2, "p-val");
-		assertEquals("p-val", VarResolver.DEFAULT.resolve("$P{" + K2 + "}"));
+		assertEquals("p-val", VarResolver.DEFAULT.resolve("${P:" + K2 + "}"));
 	}
 
 	@Test
-	void d02_dollarP_commaDefaultUnchanged() {
-		// $P{...} keeps the original DefaultingVar "," separator semantics; no ':' translation.
-		assertEquals("default-val", VarResolver.DEFAULT.resolve("$P{" + K2 + ",default-val}"));
+	void d02_explicitP_colonDefault() {
+		// ${P:key:default}: first top-level ':' after the type splits key/default.
+		assertEquals("default-val", VarResolver.DEFAULT.resolve("${P:" + K2 + ":default-val}"));
 	}
 
 	@Test
-	void d03_dollarP_colonNotTranslated() {
-		// For explicit $P{...}, ':' is NOT a separator; the whole body is treated as a single key.
-		// Result is "" because key "k2:fallback" doesn't exist.
-		Settings.get().unsetGlobal(K2);
-		assertEquals("", VarResolver.DEFAULT.resolve("$P{" + K2 + ":fallback}"));
+	void d03_legacyDollarP_lenientKeepsLiteral() {
+		Settings.get().setGlobal(K2, "p-val");
+		var legacy = "$P{" + K2 + "}"; // svl-migrate:skip (deliberate legacy-syntax fixture)
+		assertEquals(legacy, VarResolver.DEFAULT.resolve(legacy));
+		assertEquals("$P{" + K2 + ",d}", VarResolver.DEFAULT.resolve("$P{" + K2 + ",d}")); // svl-migrate:skip (deliberate legacy-syntax fixture)
 	}
 
 	@Test
-	void d04_dollarS_systemPropertyVar_unchanged() {
+	void d03b_legacyDollarP_strictThrows() {
+		var strict = VarResolver.create().defaultVars().strict(true).build();
+		var ex = assertThrows(ExprException.class, () -> strict.resolve("$P{" + K2 + "}")); // svl-migrate:skip (deliberate legacy-syntax fixture)
+		assertTrue(ex.getMessage().contains("Legacy variable syntax $X{...} is no longer supported"), ex.getMessage()); // svl-migrate:skip (deliberate legacy-syntax fixture)
+	}
+
+	@Test
+	void d04_explicitS_systemPropertyVar() {
 		System.setProperty("DollarBraceShortcut_Test.d04", "sys-val");
 		try {
-			assertEquals("sys-val", VarResolver.DEFAULT.resolve("$S{DollarBraceShortcut_Test.d04}"));
+			assertEquals("sys-val", VarResolver.DEFAULT.resolve("${S:DollarBraceShortcut_Test.d04}"));
 		} finally {
 			System.clearProperty("DollarBraceShortcut_Test.d04");
 		}

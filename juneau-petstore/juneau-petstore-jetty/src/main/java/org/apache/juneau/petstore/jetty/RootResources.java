@@ -41,9 +41,9 @@ import org.apache.juneau.rest.server.widget.*;
  *
  * <p>
  * Also showcases the Config API + SVL variable resolver: the root page's header is driven by
- * {@code $C{Petstore/appName}}, which resolves against the {@code [Petstore]} section of
- * {@code juneau-petstore-jetty.cfg} (the same {@code $C{...}} pattern already used by the {@code source} navlink
- * below, which resolves {@code $C{Source/gitHub}}).  Jetty-only — Spring Boot's embedded container has no
+ * {@code ${C:Petstore/appName}}, which resolves against the {@code [Petstore]} section of
+ * {@code juneau-petstore-jetty.cfg} (the same {@code ${C:...}} pattern already used by the {@code source} navlink
+ * below, which resolves {@code ${C:Source/gitHub}}).  Jetty-only — Spring Boot's embedded container has no
  * {@code .cfg}/{@code Config} equivalent.
  *
  * <p>
@@ -80,13 +80,13 @@ import org.apache.juneau.rest.server.widget.*;
 		ContentTypeMenuItem.class
 	},
 	header={
-		"<h3>$C{Petstore/appName}</h3>"
+		"<h3>${C:Petstore/appName}</h3>"
 	},
 	navlinks={
 		"api: servlet:/api",
 		"stats: servlet:/stats",
-		"$W{ContentTypeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/petstore/jetty/RootResources.java"
+		"${W:ContentTypeMenuItem}",
+		"source: ${C:Source/gitHub}/org/apache/juneau/petstore/jetty/RootResources.java"
 	},
 	aside={
 		"<div class='text'>",

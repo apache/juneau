@@ -30,6 +30,6 @@ class TypeConversionFunctions_Test extends TestBase {
 	@Test void a01_toInt() { assertEquals("42", vr.resolve("#{toInt(42)}")); }
 	@Test void a02_toLong() { assertEquals("999999999999", vr.resolve("#{toLong(999999999999)}")); }
 	@Test void a03_toDouble() { assertEquals("3.14", vr.resolve("#{toDouble(3.14)}")); }
-	@Test void a04_toBool_true() { assertEquals("true", vr.resolve("#{toBool(yes)}")); }
-	@Test void a05_toBool_false() { assertEquals("false", vr.resolve("#{toBool(no)}")); }
+	@Test void a04_toBool_true() { assertEquals("true", vr.resolve("#{toBool('yes')}")); }
+	@Test void a05_toBool_false() { assertEquals("false", vr.resolve("#{toBool('no')}")); }
 }

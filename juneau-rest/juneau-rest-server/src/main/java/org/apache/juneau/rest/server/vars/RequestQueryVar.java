@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
  * Request query variable resolver.
  *
  * <p>
- * The format for this var is <js>"$RQ{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${RQ:key1[:key2...]}"</js>.
  *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getQueryParam(String)}.
@@ -33,8 +33,8 @@ import org.apache.juneau.rest.server.*;
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<jc>// URI = "...?foo=X&amp;bar=Y"</jc>
- * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RQ{foo}"</js>);
- * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RQ{foo,bar}"</js>);
+ * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RQ:foo}"</js>);
+ * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RQ:foo:bar}"</js>);
  * </p>
  *
  * <h2 class='section'>Notes:</h2><ul>

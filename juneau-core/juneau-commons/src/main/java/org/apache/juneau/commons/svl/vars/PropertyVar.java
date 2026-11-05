@@ -23,7 +23,7 @@ import org.apache.juneau.commons.svl.*;
  * Unified property variable resolver.
  *
  * <p>
- * The format for this var is <js>"$P{propertyName[,defaultValue]}"</js>.
+ * The format for this var is <js>"${P:propertyName[:defaultValue]}"</js>.
  *
  * <h2 class='section'>Caller-scoped property sources:</h2>
  * <p>

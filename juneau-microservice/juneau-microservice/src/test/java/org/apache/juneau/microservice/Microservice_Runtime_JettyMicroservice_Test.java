@@ -107,7 +107,7 @@ class Microservice_Runtime_JettyMicroservice_Test extends TestBase {
 		try {
 			var vr = ms.getVarResolver();
 			assertNotNull(vr);
-			assertEquals("valueX", vr.resolve("$C{MySection/key}"));
+			assertEquals("valueX", vr.resolve("${C:MySection/key}"));
 		} finally {
 			ms.stop();
 		}
@@ -481,7 +481,7 @@ class Microservice_Runtime_JettyMicroservice_Test extends TestBase {
 	@Test void j01_builder_varBean_isAvailableViaVarResolver() throws Exception {
 		var ms = Microservice.create().varBean(String.class, "from-bean").build();
 		try {
-			// We can't trivially resolve a $S{...} pointing at a named String bean here; just verify the
+			// We can't trivially resolve a ${S:...} pointing at a named String bean here; just verify the
 			// var resolver was constructed and the bean store contains the var resolver.
 			assertNotNull(ms.getVarResolver());
 		} finally {

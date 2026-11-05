@@ -42,7 +42,7 @@ public class ConfigDemo {
 		// A whole section through an interface.
 		var server = yaml.getSection("server").asInterface(AppSettings.class).orElseThrow();
 
-		// $S{app.port,8080} is resolved every time the value is read.
+		// ${S:app.port:8080} is resolved every time the value is read.
 		System.setProperty("app.port", "9090");
 		String overridden;
 		try {

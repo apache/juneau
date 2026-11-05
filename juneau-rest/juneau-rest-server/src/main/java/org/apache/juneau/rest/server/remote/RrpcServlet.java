@@ -101,8 +101,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	)
 	@HtmlDocConfig(
 		nav= {
-			"<h5>Interface:  $RP{javaInterface}</h5>",
-			"<h5>Method:  $RP{javaMethod}</h5>"
+			"<h5>Interface:  ${RP:javaInterface}</h5>",
+			"<h5>Method:  ${RP:javaMethod}</h5>"
 		}
 	)
 	public Object invoke(
@@ -142,7 +142,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 		description="Shows a list of all the exposed methods on an interface."
 	)
 	@HtmlDocConfig(
-		nav="<h5>Interface:  $RP{javaInterface}</h5>"
+		nav="<h5>Interface:  ${RP:javaInterface}</h5>"
 	)
 	// @formatter:on
 	public Collection<LinkString> listMethods(@Path("javaInterface") @Schema(description = "Java interface name") String javaInterface) throws Exception {
@@ -160,8 +160,8 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	)
 	@HtmlDocConfig(
 		nav={
-			"<h5>Interface:  $RP{javaInterface}</h5>",
-			"<h5>Method:  $RP{javaMethod}</h5>"
+			"<h5>Interface:  ${RP:javaInterface}</h5>",
+			"<h5>Method:  ${RP:javaMethod}</h5>"
 		}
 	)
 	public Div showEntryForm(

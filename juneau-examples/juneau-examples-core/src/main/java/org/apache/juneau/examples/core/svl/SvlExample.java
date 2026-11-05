@@ -37,33 +37,33 @@ public class SvlExample {
 
 		var vr = VarResolver.DEFAULT;
 
-		// $E{key[,default]} for getting environment variables
-		System.out.println(vr.resolve("JAVA_HOME=$E{JAVA_HOME, not defined}"));
+		// ${E:key[:default]} for getting environment variables
+		System.out.println(vr.resolve("JAVA_HOME=${E:JAVA_HOME: not defined}"));
 
-		// $S{key[,default]} for getting system properties (uses System.getProperty() )
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("os.name=$S{os.name, not defined}"));
+		// ${S:key[:default]} for getting system properties (uses System.getProperty() )
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("os.name=${S:os.name: not defined}"));
 
-		// #{if(cond, then, else)} general if or if-else condition // NOSONAR
-		// #{notEmpty(s)} returns true if not empty
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is #{if(#{notEmpty($E{TEST_VAR})}, not empty, empty)}"));
+		// #{if('cond', 'then', 'else')} general if or if-else condition // NOSONAR
+		// #{notEmpty('s')} returns true if not empty
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is #{if(notEmpty(${E:TEST_VAR}), 'not empty', 'empty')}"));
 
-		// #{switch(value, pattern1, val1, ..., default)} glob-pattern switch-case // NOSONAR
-		System.out.println(vr.resolve("#{switch(Carrot, *Ap*, Fruit, *Car*, Veg, *, N/A)}"));
+		// #{switch('value', 'pattern1', 'val1', ..., 'default')} glob-pattern switch-case // NOSONAR
+		System.out.println(vr.resolve("#{switch('Carrot', '*Ap*', 'Fruit', '*Car*', 'Veg', '*', 'N/A')}"));
 
-		// #{replaceRegex(s, regex, replacement)} pattern replace
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("Java version=#{replaceRegex($S{java.version}, \"(_([0-9]+))\", \" build=$2\")}"));
+		// #{replaceRegex('s', 'regex', 'replacement')} pattern replace
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("Java version=#{replaceRegex(${S:java.version}, '(_([0-9]+))', ' build=$2')}"));
 
-		// #{upper(s)} / #{lower(s)} case conversion
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("#{lower(JAVA_HOME)} #{upper($E{JAVA_HOME})}"));
+		// #{upper('s')} / #{lower('s')} case conversion
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("#{lower('JAVA_HOME')} #{upper(${E:JAVA_HOME})}"));
 
 		// #{len(s[,delimiter])} length / part count
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("parts = #{len($S{os.version}, \".\")}, charcount = #{len($S{os.version})}"));
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("parts = #{len(${S:os.version}, '.')}, charcount = #{len(${S:os.version})}"));
 
-		// #{substring(s, start[, end])} substring extraction
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("version = #{substring($S{java.version}, 0, 3)}"));
+		// #{substring('s', start[, end])} substring extraction
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("version = #{substring(${S:java.version}, 0, 3)}"));
 
-		// #{extract(s, regex[, group])} regex group extraction
-		RichLogger.getLogger(SvlExample.class).info(vr.resolve("update = #{extract($S{java.version}, \"_([0-9]+)\", 1)}"));
+		// #{extract('s', regex[, group])} regex group extraction
+		RichLogger.getLogger(SvlExample.class).info(vr.resolve("update = #{extract(${S:java.version}, '_([0-9]+)', 1)}"));
 
 		/*
 		 *  See all supported variable types at,

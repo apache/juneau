@@ -24,7 +24,7 @@ import java.io.*;
  * Abstract superclass of all Simple Var Language variables.
  *
  * <p>
- * Vars are used to convert simple variables of the form <js>"$varName{varKey}"</js> into something else by the
+ * Vars are used to convert simple variables of the form <js>"${varName:varKey}"</js> into something else by the
  * {@link VarResolver} class.
  *
  * <p>
@@ -106,7 +106,7 @@ public abstract class Var {
 	 * Returns whether nested variables are supported by this variable.
 	 *
 	 * <p>
-	 * For example, in <js>"$X{$Y{xxx}}"</js>, $Y is a nested variable that will be resolved if this method returns
+	 * For example, in <js>"${X:${Y:xxx}}"</js>, $Y is a nested variable that will be resolved if this method returns
 	 * <jk>true</jk>.
 	 *
 	 * <p>
@@ -123,7 +123,7 @@ public abstract class Var {
 	 * Returns whether variables in the resolved contents of this variable should also be resolved.
 	 *
 	 * <p>
-	 * For example, if <js>"$X{xxx}"</js> resolves to <js>"$Y{xxx}"</js>, then the $Y variable will be recursively
+	 * For example, if <js>"${X:xxx}"</js> resolves to <js>"${Y:xxx}"</js>, then the $Y variable will be recursively
 	 * resolved if this method returns <jk>true</jk>.
 	 *
 	 * <p>
@@ -203,6 +203,39 @@ public abstract class Var {
 	}
 
 	/**
+	 * Resolves this var to a typed value for use inside <c>#{...}</c> expressions.
+	 *
+	 * <p>
+	 * The default delegates to {@link #resolve(VarResolverSession, String)} (or, for a streamed var, buffers
+	 * {@link #resolveTo(VarResolverSession, java.io.Writer, String)}).  A <jk>null</jk> return means "absent", which is
+	 * what the <c>:default</c> and <c>?:</c> operators test for.
+	 *
+	 * @param session The session.
+	 * @param arg The var body.
+	 * @return The value, or <jk>null</jk> if absent.
+	 * @throws Exception Var-specific failure.
+	 */
+	protected Object resolveValue(VarResolverSession session, String arg) throws Exception {
+		return resolve(session, arg);
+	}
+
+	/**
+	 * Typed counterpart of {@link #doResolve(VarResolverSession, String)}.
+	 *
+	 * <p>
+	 * Default implementation returns the result of <c>doResolve</c>.  Defaulting and multipart vars override it to
+	 * apply their logic to the typed {@link #resolveValue(VarResolverSession, String)} result.
+	 *
+	 * @param session The session.
+	 * @param body The var body.
+	 * @return The value, or <jk>null</jk> if absent.
+	 * @throws Exception Var-specific failure.
+	 */
+	Object doResolveValue(VarResolverSession session, String body) throws Exception {
+		return doResolve(session, body);
+	}
+
+	/**
 	 * The method called from {@link VarResolver}.
 	 *
 	 * <p>
@@ -223,7 +256,7 @@ public abstract class Var {
 	 *
 	 * <p>
 	 * For example, the system property variable returns <js>"S"</js> since the format of the variable is
-	 * <js>"$S{system.property}"</js>.
+	 * <js>"${S:system.property}"</js>.
 	 *
 	 * @return The name of this variable.
 	 */

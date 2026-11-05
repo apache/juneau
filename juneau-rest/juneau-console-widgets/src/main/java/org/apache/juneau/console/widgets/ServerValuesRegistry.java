@@ -28,7 +28,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * A registry is added to a <b>sibling</b> {@link VarResolverSession} bean store so provider values never leak
  * across requests.  {@code ServerValuesVar} ({@code $FV}) looks this bean up in the session and delegates each
- * <js>"$FV{name}"</js> resolution to {@link #resolve(VarResolverSession, String)}.
+ * <js>"${FV:name}"</js> resolution to {@link #resolve(VarResolverSession, String)}.
  *
  * <p>
  * Resolution rejects non-scalar provider results (no {@code List.toString()} join) and memoizes only entries

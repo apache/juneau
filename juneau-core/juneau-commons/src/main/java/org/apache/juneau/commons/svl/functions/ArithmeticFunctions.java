@@ -40,8 +40,16 @@ public final class ArithmeticFunctions {
 		Min.class, Max.class, Abs.class
 	};
 
-	/** Render a double as a String, dropping the decimal portion when it's an exact integer. */
-	static String render(double v) {
+	/**
+	 * Render a double as a String, dropping the decimal portion when it's an exact integer.
+	 *
+	 * <p>
+	 * Canonical scalar double rendering shared by {@code ArgCoercer} and {@code OpFunctions}.
+	 *
+	 * @param v The value.
+	 * @return The rendered string.
+	 */
+	public static String render(double v) {
 		if (Double.isNaN(v) || Double.isInfinite(v)) return String.valueOf(v);
 		if (v == Math.floor(v) && Math.abs(v) < 1e18)
 			return String.valueOf((long) v);

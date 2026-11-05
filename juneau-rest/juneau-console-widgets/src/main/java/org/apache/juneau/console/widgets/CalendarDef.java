@@ -30,7 +30,7 @@ import org.apache.juneau.commons.http.*;
  * <p>
  * This is the {@link Widget} marker type &mdash; the {@code juneau-console-widgets}
  * {@code org.apache.juneau.console.widgets.Widget}, <b>not</b> {@code org.apache.juneau.marshall.html.HtmlWidget}
- * (the unrelated {@code $W{...}} HTML header-widget SPI).  It is <b>bean-only</b>: the emitter
+ * (the unrelated {@code ${W:...}} HTML header-widget SPI).  It is <b>bean-only</b>: the emitter
  * ({@code CalendarTable}) and the {@code juneau-calendar.js}/{@code .css} runtime live in
  * {@code juneau-console-views}, which composes this bean.  Widgets keeps no dependency on views.
  *

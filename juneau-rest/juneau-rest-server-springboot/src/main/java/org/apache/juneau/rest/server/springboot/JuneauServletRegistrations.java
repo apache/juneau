@@ -69,7 +69,7 @@ public class JuneauServletRegistrations {
 	 * 	{@link Rest @Rest} annotation that resolves to at least one
 	 * 	top-level path (via {@code paths()} or a {@code getPaths()} override).
 	 * @param beanStore The bean store used for SVL resolution of {@code @Rest(paths)} elements
-	 * 	(e.g. {@code $C{key}} / {@code ${env}} templates). May be {@code null} (SVL is then skipped;
+	 * 	(e.g. {@code ${C:key}} / {@code ${env}} templates). May be {@code null} (SVL is then skipped;
 	 * 	literal paths pass through unchanged).
 	 * @return A registration bean mapping the servlet at its self-declared paths.
 	 * @throws IllegalArgumentException If {@code servlet} is {@code null} or resolves to no

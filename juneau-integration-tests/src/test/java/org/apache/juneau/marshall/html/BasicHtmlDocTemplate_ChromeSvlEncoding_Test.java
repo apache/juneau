@@ -66,7 +66,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	@HtmlDocConfig(aside = "<h5>$RQ{q}</h5>")
+	@HtmlDocConfig(aside = "<h5>${RQ:q}</h5>")
 	public static class A01_Aside extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -80,7 +80,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(header = "<h5>$RH{X-Q}</h5>")
+	@HtmlDocConfig(header = "<h5>${RH:X-Q}</h5>")
 	public static class A02_Header extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -100,7 +100,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(footer = "<h5>$RF{q}</h5>")
+	@HtmlDocConfig(footer = "<h5>${RF:q}</h5>")
 	public static class A03_Footer extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestPost
 		public String page() {
@@ -120,7 +120,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(nav = "<h5>$RP{p}</h5>")
+	@HtmlDocConfig(nav = "<h5>${RP:p}</h5>")
 	public static class A04_Nav extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/page/{p}")
 		public String page() {
@@ -134,7 +134,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(head = "<meta name='q' content='$RQ{q}'>")
+	@HtmlDocConfig(head = "<meta name='q' content='${RQ:q}'>")
 	public static class A05_Head extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -151,7 +151,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(aside = "<h5>$RQ{q}</h5>")
+	@HtmlDocConfig(aside = "<h5>${RQ:q}</h5>")
 	public static class A06_Quotes extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -168,7 +168,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(navlinks = "<h5>$RQ{q}</h5>")
+	@HtmlDocConfig(navlinks = "<h5>${RQ:q}</h5>")
 	public static class A07_NavlinkHtml extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -227,7 +227,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(widgets = TagWidget.class, aside = "$W{TagWidget}")
+	@HtmlDocConfig(widgets = TagWidget.class, aside = "${W:TagWidget}")
 	public static class C01_Widget extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -242,7 +242,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest
-	@HtmlDocConfig(aside = "$C{noSuchChromeKey,<span>passthrough</span>}")
+	@HtmlDocConfig(aside = "${C:noSuchChromeKey:<span>passthrough</span>}")
 	public static class C02_Config extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -257,7 +257,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	}
 
 	@Rest(title = "ChromeTitle")
-	@HtmlDocConfig(aside = "$RS{title}")
+	@HtmlDocConfig(aside = "${RS:title}")
 	public static class C03_SwaggerTitle extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public String page() {
@@ -279,7 +279,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	public static class D01_PlainResolve {
 		@RestGet
 		public String page(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RQ{q}");
+			return req.getVarResolverSession().resolve("${RQ:q}");
 		}
 
 		@RestGet("/var")
@@ -332,7 +332,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	@HtmlDocConfig(noResultsMessage = "<h5>$RQ{q}</h5>")
+	@HtmlDocConfig(noResultsMessage = "<h5>${RQ:q}</h5>")
 	public static class F01_NoResults extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public List<String> page() {
@@ -373,8 +373,8 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	@Rest
 	@HtmlDocConfig(
 		widgets = TagWidget.class,
-		script = "var x = \"$RQ{q}\";",
-		style = ".x{content:\"$RQ{q}\";}"
+		script = "var x = \"${RQ:q}\";",
+		style = ".x{content:\"${RQ:q}\";}"
 	)
 	public static class G01_ScriptStyle extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
@@ -386,7 +386,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	@Test
 	void g01_scriptDoesNotInterpolateRequestQuery() throws Exception {
 		var html = htmlGet(G01_ScriptStyle.class, "/page?" + SAMPLE_QUERY);
-		assertTrue(html.contains("$RQ{q}"), html);
+		assertTrue(html.contains("${RQ:q}"), html);
 		assertFalse(html.contains(SAMPLE), html);
 		assertTrue(html.contains("var widgetScript=1;"), html);
 	}
@@ -394,7 +394,7 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 	@Test
 	void g02_styleDoesNotInterpolateRequestQuery() throws Exception {
 		var html = htmlGet(G01_ScriptStyle.class, "/page?" + SAMPLE_QUERY);
-		assertTrue(html.contains("$RQ{q}"), html);
+		assertTrue(html.contains("${RQ:q}"), html);
 		assertFalse(html.contains(SAMPLE), html);
 		assertTrue(html.contains(".widgetStyle{color:navy}"), html);
 	}

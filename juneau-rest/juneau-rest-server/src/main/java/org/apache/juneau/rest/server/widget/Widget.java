@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 
 /**
- * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
+ * Defines an interface for resolvers of <js>"${W:...}"</js> string variables.
  *
  * <p>
  * Widgets must provide one of the following public constructors:
@@ -70,7 +70,7 @@ public abstract class Widget implements HtmlWidget {
 	 * The widget key.
 	 *
 	 * <p>
-	 * (i.e. The variable name inside the <js>"$W{...}"</js> variable).
+	 * (i.e. The variable name inside the <js>"${W:...}"</js> variable).
 	 *
 	 * <p>
 	 * The returned value must not be <jk>null</jk>.

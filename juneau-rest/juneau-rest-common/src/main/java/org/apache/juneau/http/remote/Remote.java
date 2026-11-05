@@ -62,7 +62,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${P:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -86,7 +86,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -113,7 +113,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -135,7 +135,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${P:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -147,7 +147,7 @@ public @interface Remote {
 	 *
 	 * <p>
 	 * Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * (e.g. <js>"$P{mySystemProperty}"</js>).
+	 * (e.g. <js>"${P:mySystemProperty}"</js>).
 	 * </p>
 	 *
 	 * @return The annotation value.
@@ -172,7 +172,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Only <c>http</c>/<c>https</c> schemes are permitted when the override yields an absolute URL; other schemes
 	 * 		are rejected (SSRF guardrail).
@@ -260,7 +260,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${P:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -276,7 +276,7 @@ public @interface Remote {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${P:mySystemProperty}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.

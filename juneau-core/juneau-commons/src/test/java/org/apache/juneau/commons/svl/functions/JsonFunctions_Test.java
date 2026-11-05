@@ -27,45 +27,38 @@ class JsonFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(JsonFunctions.ALL).build();
 
-	// JSON document with double-quotes used internally; the helper escapes them for embedding
-	// inside a `"`-quoted script argument (so the script parser sees the entire JSON as one
-	// argument despite the inner commas and quotes).
+	// JSON document with double-quotes used internally; the helper wraps it as a SpEL single-quoted string
+	// literal (a single quote inside is doubled), so the expression parser sees it as one argument.
 	private static final String JSON_DOC =
 		"{\"name\":\"alice\",\"age\":30,\"tags\":[\"a\",\"b\",\"c\"],\"address\":{\"city\":\"sf\"}}";
 
-	/** Wrap a string for use as a {@code "..."}-quoted script arg by escaping {@code "} and {@code \\}. */
+	/** Wrap a string as a {@code '...'} SpEL string literal (doubling any embedded single quote). */
 	private static String arg(String raw) {
-		var sb = new StringBuilder("\"");
-		for (var c : raw.toCharArray()) {
-			if (c == '"' || c == '\\') sb.append('\\');
-			sb.append(c);
-		}
-		sb.append('"');
-		return sb.toString();
+		return "'" + raw.replace("'", "''") + "'";
 	}
 
 	@Test void a01_jsonPath_topLevel() {
-		assertEquals("alice", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/name\")}"));
+		assertEquals("alice", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", '/name')}"));
 	}
 
 	@Test void a02_jsonPath_arrayIndex() {
-		assertEquals("b", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/tags/1\")}"));
+		assertEquals("b", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", '/tags/1')}"));
 	}
 
 	@Test void a03_jsonPath_nested() {
-		assertEquals("sf", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/address/city\")}"));
+		assertEquals("sf", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", '/address/city')}"));
 	}
 
 	@Test void a04_jsonPath_missing_emptyDefault() {
-		assertEquals("", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/nope\")}"));
+		assertEquals("", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", '/nope')}"));
 	}
 
 	@Test void a05_jsonPath_missing_explicitDefault() {
-		assertEquals("fallback", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", \"/nope\", fallback)}"));
+		assertEquals("fallback", vr.resolve("#{jsonPath(" + arg(JSON_DOC) + ", '/nope', 'fallback')}"));
 	}
 
 	@Test void a06_get_fromObject() {
-		assertEquals("alice", vr.resolve("#{get(" + arg(JSON_DOC) + ", name)}"));
+		assertEquals("alice", vr.resolve("#{get(" + arg(JSON_DOC) + ", 'name')}"));
 	}
 
 	@Test void a07_get_fromArray() {
@@ -73,7 +66,7 @@ class JsonFunctions_Test extends TestBase {
 	}
 
 	@Test void a08_get_missing() {
-		assertEquals("", vr.resolve("#{get(" + arg(JSON_DOC) + ", nope)}"));
+		assertEquals("", vr.resolve("#{get(" + arg(JSON_DOC) + ", 'nope')}"));
 	}
 
 	@Test void a09_keys_object() {

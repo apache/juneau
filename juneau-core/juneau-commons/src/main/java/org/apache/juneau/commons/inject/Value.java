@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * The {@code value()} string is passed through Juneau's {@code VarResolver} (so
- * {@code ${...}} / {@code $P{...}} placeholders are expanded against
+ * {@code ${...}} / {@code ${P:...}} placeholders are expanded against
  * {@link org.apache.juneau.commons.settings.Settings#get() Settings.get()}), then coerced to the
  * target Java type via {@link org.apache.juneau.commons.settings.Settings#toType(String, Class)}.
  *

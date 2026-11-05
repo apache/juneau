@@ -45,7 +45,7 @@ class SoapXmlConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SoapXmlConfig(
-		soapAction="$X{foo}"
+		soapAction="${X:foo}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

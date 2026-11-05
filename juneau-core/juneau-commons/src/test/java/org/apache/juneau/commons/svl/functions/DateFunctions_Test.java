@@ -37,20 +37,20 @@ class DateFunctions_Test extends TestBase {
 	}
 
 	@Test void a02_parseDate_isoInstant() {
-		assertEquals("0", vr.resolve("#{parseDate(\"1970-01-01T00:00:00Z\")}"));
+		assertEquals("0", vr.resolve("#{parseDate('1970-01-01T00:00:00Z')}"));
 	}
 
 	@Test void a03_parseDate_isoDate() {
 		// 2026-05-25 UTC midnight via Java time:
 		var expected = String.valueOf(java.time.LocalDate.of(2026, 5, 25)
 			.atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli());
-		assertEquals(expected, vr.resolve("#{parseDate(\"2026-05-25\")}"));
+		assertEquals(expected, vr.resolve("#{parseDate('2026-05-25')}"));
 	}
 
 	@Test void a04_parseDate_pattern() {
 		var expected = String.valueOf(java.time.LocalDate.of(2026, 5, 25)
 			.atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli());
-		assertEquals(expected, vr.resolve("#{parseDate(\"2026-05-25\", \"yyyy-MM-dd\")}"));
+		assertEquals(expected, vr.resolve("#{parseDate('2026-05-25', 'yyyy-MM-dd')}"));
 	}
 
 	@Test void a05_formatDate_iso() {
@@ -60,12 +60,12 @@ class DateFunctions_Test extends TestBase {
 	@Test void a06_formatDate_pattern() {
 		var epoch = java.time.LocalDate.of(2026, 5, 25)
 			.atStartOfDay(java.time.ZoneOffset.UTC).toInstant().toEpochMilli();
-		assertEquals("2026-05-25", vr.resolve("#{formatDate(" + epoch + ", \"yyyy-MM-dd\")}"));
+		assertEquals("2026-05-25", vr.resolve("#{formatDate(" + epoch + ", 'yyyy-MM-dd')}"));
 	}
 
 	@Test void a07_roundTrip() {
 		// parseDate then formatDate should preserve the value.
-		var ts = vr.resolve("#{parseDate(\"2026-05-25T12:34:56Z\")}");
+		var ts = vr.resolve("#{parseDate('2026-05-25T12:34:56Z')}");
 		assertEquals("2026-05-25T12:34:56Z", vr.resolve("#{formatDate(" + ts + ")}"));
 	}
 }

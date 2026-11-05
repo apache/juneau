@@ -68,7 +68,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -104,7 +104,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -130,7 +130,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -172,7 +172,7 @@ public @interface SerializerConfig {
 	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -201,7 +201,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -225,7 +225,7 @@ public @interface SerializerConfig {
 	 *	<li class='note'>
 	 * 		Default value: <js>"0"</js>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -256,7 +256,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -294,7 +294,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default value: <js>"100"</js>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -317,7 +317,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: 100
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -349,7 +349,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -371,7 +371,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: <c>"</c>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -410,7 +410,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -437,7 +437,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -463,7 +463,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Default: <js>"utf-8"</js>.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
@@ -498,7 +498,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -529,7 +529,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -553,7 +553,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -575,7 +575,7 @@ public @interface SerializerConfig {
 	 * 	<li class='note'>
 	 * 		Format: JSON object representing a {@link UriContext}
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -604,7 +604,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -635,7 +635,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -660,7 +660,7 @@ public @interface SerializerConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>

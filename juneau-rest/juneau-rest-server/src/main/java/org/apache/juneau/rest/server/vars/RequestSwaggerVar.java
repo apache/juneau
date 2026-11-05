@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * Rest info variable resolver.
  *
  * <p>
- * The format for this var is <js>"$RS{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${RS:key1[:key2...]}"</js>.
  *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getSwagger()}.
@@ -57,8 +57,8 @@ import org.apache.juneau.rest.server.*;
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- * 	String <jv>title</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RS{title}"</js>);
- * 	String <jv>titleOrDescription</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RS{title,description}"</js>);
+ * 	String <jv>title</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RS:title}"</js>);
+ * 	String <jv>titleOrDescription</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RS:title:description}"</js>);
  * </p>
  *
  * <h2 class='section'>Notes:</h2><ul>

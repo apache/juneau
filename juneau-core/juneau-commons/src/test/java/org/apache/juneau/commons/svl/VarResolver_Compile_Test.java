@@ -64,38 +64,38 @@ class VarResolver_Compile_Test extends TestBase {
 
 	@Test void a03_compileWithSimpleVar() {
 		var vr = vr();
-		var tpl = vr.compile("$E{x}");
+		var tpl = vr.compile("${E:x}");
 		assertEquals("[x]", tpl.resolve(vr.createSession()));
 		assertFalse(tpl.isLiteral());
 	}
 
 	@Test void a04_compileWithDefault() {
 		var vr = vr();
-		var tpl = vr.compile("$E{x}-$E{y}");
+		var tpl = vr.compile("${E:x}-${E:y}");
 		assertEquals("[x]-[y]", tpl.resolve(vr.createSession()));
 		assertFalse(tpl.isLiteral());
 	}
 
 	@Test void a05_compileNested() {
 		var vr = vr();
-		var tpl = vr.compile("$E{$E{x}}");
+		var tpl = vr.compile("${E:${E:x}}");
 		assertEquals("[[x]]", tpl.resolve(vr.createSession()));
 	}
 
 	@Test void a06_compileEscape() {
 		var vr = vr();
-		// Backslash-dollar should escape the $; output is literal "$E{x}".
-		var tpl = vr.compile("\\$E{x}");
-		assertEquals("$E{x}", tpl.resolve(vr.createSession()));
+		// Backslash-dollar should escape the $; output is literal "${E:x}".
+		var tpl = vr.compile("\\${E:x}");
+		assertEquals("${E:x}", tpl.resolve(vr.createSession()));
 		// With the segment-aware compile, the escape is interpreted at compile time and
-		// the template reduces to a single LiteralSegment("$E{x}") — isLiteral() correctly
+		// the template reduces to a single LiteralSegment("${E:x}") — isLiteral() correctly
 		// reflects this, even though the source contains a backslash.
 		assertTrue(tpl.isLiteral());
 	}
 
 	@Test void a07_compileMultipleResolves() {
 		var vr = vr();
-		var tpl = vr.compile("$E{a}$E{b}");
+		var tpl = vr.compile("${E:a}${E:b}");
 		var s = vr.createSession();
 		assertEquals("[a][b]", tpl.resolve(s));
 		assertEquals("[a][b]", tpl.resolve(s));
@@ -104,14 +104,14 @@ class VarResolver_Compile_Test extends TestBase {
 
 	@Test void a08_getSourceReturnsRawInput() {
 		var vr = vr();
-		var tpl = vr.compile("$E{a}");
-		assertEquals("$E{a}", tpl.getSource());
+		var tpl = vr.compile("${E:a}");
+		assertEquals("${E:a}", tpl.getSource());
 	}
 
 	@Test void a09_compileViaSession() {
 		var vr = vr();
 		var s = vr.createSession();
-		var tpl = s.compile("$E{x}");
+		var tpl = s.compile("${E:x}");
 		assertEquals("[x]", tpl.resolve(s));
 	}
 
@@ -122,8 +122,8 @@ class VarResolver_Compile_Test extends TestBase {
 	}
 
 	@Test void a11_isLiteralFalseForHashBrace() {
-		var vr = vr();
-		var tpl = vr.compile("#{upper(foo)}");
+		var vr = VarResolver.create().defaultFunctions().build();
+		var tpl = vr.compile("#{upper('foo')}");
 		assertFalse(tpl.isLiteral());
 	}
 

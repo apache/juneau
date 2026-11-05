@@ -96,7 +96,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 					<li class='jc'>{@link RdfProtoParser}
  * 				</ul>
  * 			</li>
- * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
+ * 			<li class='jma'>{@link Rest#config() config}:  <js>"${S:juneau.configFile:SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
  * 	<li class='ja'>{@link MarshalledConfig}:
@@ -111,11 +111,11 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	</li>
  * 	<li class='ja'>{@link HtmlDocConfig}:
  * 		<ul>
- * 			<li class='jma'>{@link HtmlDocConfig#header() header}:  <js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;$C{REST/header}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#header() header}:  <js>"&lt;h1&gt;${RS:title}&lt;/h1&gt;&lt;h2&gt;${RS:operationSummary:description}&lt;/h2&gt;${C:REST/header}"</js>
  * 			<li class='jma'>{@link HtmlDocConfig#navlinks() navlinks}:  <js>"up: request:/.."</js>
- * 			<li class='jma'>{@link HtmlDocConfig#stylesheet() stylesheet}:  <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
- * 			<li class='jma'>{@link HtmlDocConfig#head() head}:  <js>"$C{REST/head}"</js>
- * 			<li class='jma'>{@link HtmlDocConfig#footer() footer}:  <js>"$C{REST/footer}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#stylesheet() stylesheet}:  <js>"${C:REST/theme:servlet:/htdocs/themes/devops.css}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#head() head}:  <js>"${C:REST/head}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#footer() footer}:  <js>"${C:REST/footer}"</js>
  * 			<li class='jma'>{@link HtmlDocConfig#nowrap() nowrap}:  <js>"true"</js>
  * 		</ul>
  * 	</li>

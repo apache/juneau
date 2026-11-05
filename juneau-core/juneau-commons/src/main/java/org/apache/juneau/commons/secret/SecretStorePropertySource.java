@@ -22,7 +22,7 @@ import org.apache.juneau.commons.settings.*;
 
 /**
  * Opt-in bridge that exposes a chosen {@link SecretStore} as a {@link PropertySource}, so a secret can be resolved
- * through the property/{@code $P{...}}/{@code @Value} machinery <b>only where a consumer deliberately wires it in</b>.
+ * through the property/{@code ${P:...}}/{@code @Value} machinery <b>only where a consumer deliberately wires it in</b>.
  *
  * <p>
  * By default a {@link SecretStore} is intentionally <b>not</b> part of the general config/SVL namespace &mdash; that is

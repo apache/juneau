@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.*;
  * Widget that places a powered-by-Apache message on the page.
  *
  * <p>
- * The variable it resolves is <js>"$W{PoweredByApache}"</js>.
+ * The variable it resolves is <js>"${W:PoweredByApache}"</js>.
  *
  * <p>
  * It produces a simple Apache icon floating on the right.
@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.*;
  * 		widgets={
  * 			PoweredByApache.<jk>class</jk>
  * 		},
- * 		footer=<js>"$W{PoweredByApache}"</js>
+ * 		footer=<js>"${W:PoweredByApache}"</js>
  * 	)
  * </p>
  *

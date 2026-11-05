@@ -85,17 +85,17 @@ class XmlConfigAnnotationTest extends TestBase {
 	}
 
 	@XmlConfig(
-		addBeanTypes="$X{true}",
-		addNamespaceUrisToRoot="$X{true}",
-		disableAutoDetectNamespaces="$X{true}",
-		defaultNamespace="$X{foo}",
-		enableNamespaces="$X{true}",
+		addBeanTypes="${X:true}",
+		addNamespaceUrisToRoot="${X:true}",
+		disableAutoDetectNamespaces="${X:true}",
+		defaultNamespace="${X:foo}",
+		enableNamespaces="${X:true}",
 		eventAllocator=AA.class,
-		namespaces="$X{foo}",
-		preserveRootElement="$X{true}",
+		namespaces="${X:foo}",
+		preserveRootElement="${X:true}",
 		reporter=AB.class,
 		resolver=AC.class,
-		validating="$X{true}"
+		validating="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

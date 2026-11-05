@@ -47,9 +47,9 @@ import org.apache.juneau.commons.svl.*;
  *
  * <p>
  * The resolver intentionally uses {@link VarResolver#DEFAULT}, which already includes
- * {@code PropertyVar} (the {@code $P{key[,default]}} variable that reads from {@link Settings}).
+ * {@code PropertyVar} (the {@code ${P:key[:default]}} variable that reads from {@link Settings}).
  * After the property-variable unification, the {@code ${key}} shortcut routes through that same {@code PropertyVar},
- * so {@code @Value("${db.url}")} and {@code @Value("$P{db.url}")} are equivalent.
+ * so {@code @Value("${db.url}")} and {@code @Value("${P:db.url}")} are equivalent.
  */
 public final class ValueResolver {
 

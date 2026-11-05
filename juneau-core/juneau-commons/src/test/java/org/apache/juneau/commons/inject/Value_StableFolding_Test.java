@@ -31,7 +31,7 @@ import org.junit.jupiter.api.parallel.*;
  * <p>
  * The 4 documented stable built-ins are {@code EnvVariablesVar} / {@code SystemPropertiesVar} /
  * {@code ManifestFileVar} / {@code ArgsVar}. This test exercises {@code SystemPropertiesVar}
- * (via {@code $S{...}}) because it's the easiest to control deterministically in a test —
+ * (via {@code ${S:...}}) because it's the easiest to control deterministically in a test —
  * env vars and manifest files are environment-dependent.
  */
 @ResourceLock(Resources.SYSTEM_PROPERTIES)
@@ -41,7 +41,7 @@ import org.junit.jupiter.api.parallel.*;
 class Value_StableFolding_Test extends TestBase {
 
 	public static class SysPropBean {
-		@Value("$S{Value_StableFolding_Test.sysprop}")
+		@Value("${S:Value_StableFolding_Test.sysprop}")
 		String value;
 	}
 
@@ -54,9 +54,9 @@ class Value_StableFolding_Test extends TestBase {
 	@Test void a01_systemPropertyFoldsAtCompileTime() {
 		System.setProperty("Value_StableFolding_Test.sysprop", "fred");
 		// Compile through ValueResolver's cache so the field-injection path is exercised.
-		var t = ValueResolver.getCompiledTemplate("$S{Value_StableFolding_Test.sysprop}");
+		var t = ValueResolver.getCompiledTemplate("${S:Value_StableFolding_Test.sysprop}");
 		assertTrue(t.isLiteral(),
-			"$S{...} with SystemPropertiesVar opts-in to stable folding — template should be literal after compile");
+			"${S:...} with SystemPropertiesVar opts-in to stable folding — template should be literal after compile");
 
 		// Mutate the property AFTER compile — folded value is frozen.
 		System.setProperty("Value_StableFolding_Test.sysprop", "barney");

@@ -26,7 +26,7 @@ import jakarta.servlet.http.*;
  * Request attribute variable resolver.
  *
  * <p>
- * The format for this var is <js>"$RA{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${RA:key1[:key2...]}"</js>.
  *
  * <p>
  * Used to resolve values returned by {@link HttpServletRequest#getAttribute(String)}.
@@ -34,8 +34,8 @@ import jakarta.servlet.http.*;
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RA{foo}"</js>);
- * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RA{foo,bar}"</js>);
+ * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RA:foo}"</js>);
+ * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RA:foo:bar}"</js>);
  * </p>
  *
  * <h2 class='section'>Notes:</h2><ul>

@@ -216,13 +216,13 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// a09 — getPaths() returns String with SVL ($E{...,/default}) → SVL applied then comma-split
+	// a09 — getPaths() returns String with SVL (${E:...:/default}) → SVL applied then comma-split
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(paths={"/from-annotation"})
 	public static class A09_ReturnsStringWithSvl extends RestServlet {
 		private static final long serialVersionUID = 1L;
-		@Override public Object getPaths() { return "$E{REST_PATHS_TEST_VAR,/fallback}"; }
+		@Override public Object getPaths() { return "${E:REST_PATHS_TEST_VAR:/fallback}"; }
 	}
 
 	@Test
@@ -232,31 +232,31 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/fallback"}, ctx.getPaths(),
-			"A getter returning a $E{...,/default} String should SVL-resolve to the literal default when the env var is unset");
+			"A getter returning a ${E:...:/default} String should SVL-resolve to the literal default when the env var is unset");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// a10 — getPaths() returns List of one SVL String with an env-var default containing commas.
 	//       The post-SVL value contains commas; comma-split happens on the SVL-resolved string, not on
-	//       the raw element.  This matches the @Rest(paths={"$E{NAME,/x,/y}"}) annotation behavior
+	//       the raw element.  This matches the @Rest(paths={"${E:NAME:/x,/y}"}) annotation behavior
 	//       documented in RestPathsRuntimeOverride_SVL_Test#e01.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(paths={"/from-annotation"})
 	public static class A10_ReturnsListWithSvlCdl extends RestServlet {
 		private static final long serialVersionUID = 1L;
-		@Override public Object getPaths() { return List.of("$E{REST_PATHS_TEST_VAR2,/x,/y}"); }
+		@Override public Object getPaths() { return List.of("${E:REST_PATHS_TEST_VAR2:/x,/y}"); }
 	}
 
 	@Test
 	void a10_returnsListWithSvlAndCdl() throws Exception {
-		// $E{NAME,a,b,c} concatenates everything after the first comma as the default — SVL returns
+		// ${E:NAME:a,b,c} concatenates everything after the first comma as the default — SVL returns
 		// "/x,/y" here, then the post-SVL comma-split produces two mount paths.
 		var args = new RestContext.Args(A10_ReturnsListWithSvlCdl.class, null, null, A10_ReturnsListWithSvlCdl::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/x", "/y"}, ctx.getPaths(),
-			"SVL with embedded commas in the default should resolve first, then the post-SVL value comma-splits — comma-split must NOT fire on the raw $E{...} element");
+			"SVL with embedded commas in the default should resolve first, then the post-SVL value comma-splits — comma-split must NOT fire on the raw ${E:...} element");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

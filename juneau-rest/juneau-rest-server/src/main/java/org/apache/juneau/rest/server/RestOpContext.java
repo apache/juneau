@@ -929,7 +929,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * the entire result.
 	 *
 	 * <p>
-	 * SVL variables (e.g. {@code $S{key,default}} or the shorthand {@code ${key:default}}) in path
+	 * SVL variables (e.g. {@code ${S:key:default}} or the shorthand {@code ${key:default}}) in path
 	 * strings are resolved via the host {@link RestContext}'s {@link VarResolver} before being
 	 * compiled into {@link UrlPathMatcher} patterns &mdash; this closes the asymmetry with class-level
 	 * {@link Rest#path() @Rest(path)} / {@link Rest#paths() @Rest(paths)}, which are also

@@ -59,7 +59,7 @@ class TypedFunction_Coverage_Test extends TestBase {
 		public String invoke(String s) throws java.io.IOException { throw new java.io.IOException("boom"); }
 	}
 
-	/** Throws an unchecked exception from invoke - should propagate as-is, not get wrapped. */
+	/** Throws an unchecked exception from invoke - surfaces as the cause of an {@link ExprException}, not propagated as-is. */
 	public static class RuntimeThrower extends TypedFunction {
 		@Override public String name() { return "runtimethrow"; }
 		public String invoke(String s) { throw new IllegalStateException("kaboom"); }
@@ -73,15 +73,15 @@ class TypedFunction_Coverage_Test extends TestBase {
 	@Test
 	void a01_multiOverload_dispatchSkipsNonMatchingArityToFindLaterMatch() {
 		var vr = VarResolver.create().functions(new Substring()).build();
-		assertEquals("llo", vr.resolve("#{substring(hello, 2)}"));
-		assertEquals("el", vr.resolve("#{substring(hello, 1, 3)}"));
+		assertEquals("llo", vr.resolve("#{substring('hello', 2)}"));
+		assertEquals("el", vr.resolve("#{substring('hello', 1, 3)}"));
 	}
 
 	@Test
 	void a02_fixedArityOverloadCombinedWithVariadic_fixedArityPreferredWhenMatching() {
 		var vr = VarResolver.create().functions(new MultiVariadic()).build();
-		assertEquals("pair:a,b", vr.resolve("#{multi(a, b)}"));
-		assertEquals("variadic:3", vr.resolve("#{multi(a, b, c)}"));
+		assertEquals("pair:a,b", vr.resolve("#{multi('a', 'b')}"));
+		assertEquals("variadic:3", vr.resolve("#{multi('a', 'b', 'c')}"));
 	}
 
 	@Test
@@ -96,22 +96,23 @@ class TypedFunction_Coverage_Test extends TestBase {
 	@Test
 	void a04_nullInvokeResult_resolvesToEmptyString() {
 		var vr = VarResolver.create().functions(new NullReturning()).build();
-		assertEquals("", vr.resolve("#{nullfn(x)}"));
+		assertEquals("", vr.resolve("#{nullfn('x')}"));
 	}
 
 	@Test
-	void a05_checkedExceptionFromInvoke_wrappedAsIllegalArgumentException() {
+	void a05_checkedExceptionFromInvoke_wrappedAsExprException() {
 		var vr = VarResolver.create().functions(new CheckedThrower()).build();
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{checkedthrow(x)}"));
+		var ex = assertThrows(ExprException.class, () -> vr.resolve("#{checkedthrow('x')}"));
 		assertTrue(ex.getMessage().contains("checkedthrow"), ex.getMessage());
 		assertTrue(ex.getMessage().contains("boom"), ex.getMessage());
 	}
 
 	@Test
-	void a06_runtimeExceptionFromInvoke_propagatedUnwrapped() {
+	void a06_runtimeExceptionFromInvoke_wrappedAsExprExceptionCause() {
 		var vr = VarResolver.create().functions(new RuntimeThrower()).build();
-		var ex = assertThrows(IllegalStateException.class, () -> vr.resolve("#{runtimethrow(x)}"));
-		assertEquals("kaboom", ex.getMessage());
+		var ex = assertThrows(ExprException.class, () -> vr.resolve("#{runtimethrow('x')}"));
+		assertInstanceOf(IllegalStateException.class, ex.getCause());
+		assertEquals("kaboom", ex.getCause().getMessage());
 	}
 
 	@Test

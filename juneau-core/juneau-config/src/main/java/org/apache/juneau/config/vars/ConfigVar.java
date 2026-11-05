@@ -23,7 +23,7 @@ import org.apache.juneau.config.*;
  * Config file variable resolver.
  *
  * <p>
- * The format for this var is <js>"$C{key[,defaultValue]}"</js>.
+ * The format for this var is <js>"${C:key[:defaultValue]}"</js>.
  * See {@link Config#get(String)} for the format of the key.
  *
  * <p>
@@ -34,7 +34,7 @@ import org.apache.juneau.config.*;
  * 	<jc>// Create a config object.</jc>
  * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  *
- * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
+ * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "${C:MySection/myKey}")</jc>
  * 	VarResolver <jv>resolver</jv> = VarResolver
  * 		.<jsm>create</jsm>()
  * 		.vars(ConfigVar.<jk>class</jk>)
@@ -42,7 +42,7 @@ import org.apache.juneau.config.*;
  * 		.build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>resolver</jv>.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>resolver</jv>.resolve(<js>"Value for myKey in section MySection is ${C:MySection/myKey}"</js>));
  * </p>
  *
  * <p>

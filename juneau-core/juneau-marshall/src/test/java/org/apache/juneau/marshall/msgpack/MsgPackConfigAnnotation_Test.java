@@ -45,7 +45,7 @@ class MsgPackConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	 @MsgPackConfig(
-		addBeanTypes="$X{true}"
+		addBeanTypes="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

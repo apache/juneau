@@ -50,8 +50,8 @@ import org.apache.juneau.marshall.*;
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
- * 		title=<js>"$L{title}"</js>,
- * 		description=<js>"$L{description}"</js>
+ * 		title=<js>"${L:title}"</js>,
+ * 		description=<js>"${L:description}"</js>
  * 	)
  * 	<ja>@HtmlDocConfig</ja>(
  * 		navlinks={
@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.*;
  * </p>
  *
  * <p>
- * The <c>$L{...}</c> variable represent localized strings pulled from the resource bundle identified by the
+ * The <c>${L:...}</c> variable represent localized strings pulled from the resource bundle identified by the
  * <c>messages</c> annotation.
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
@@ -227,7 +227,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 		Format: HTML
 		 * 	<li class='note'>
 		 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+		 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 		 * 	<li class='note'>
 		 * 		A value of <js>"NONE"</js> can be used to force no value.
 		 * 	<li class='note'>
@@ -384,7 +384,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.head(
-		 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
+		 * 			<js>"&lt;link rel='icon' href='${U:servlet:/htdocs/mypageicon.ico}'&gt;"</js>
 		 * 		)
 		 * 		.build();
 		 * </p>
@@ -767,16 +767,16 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * HTML Widgets.
 		 *
 		 * <p>
-		 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+		 * Defines widgets that can be used in conjunction with string variables of the form <js>"${W:name}"</js>to quickly
 		 * generate arbitrary replacement text.
 		 *
 		 * Widgets resolve the following variables:
 		 * <ul class='spaced-list'>
-		 * 	<li><js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
-		 * 	<li><js>"$W{name.script}"</js> - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.
+		 * 	<li><js>"${W:name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
+		 * 	<li><js>"${W:name.script}"</js> - Contents returned by {@link HtmlWidget#getScript(VarResolverSession)}.
 		 * 		<br>The script contents are automatically inserted into the <xt>&lt;head/script&gt;</xt> section
 		 * 			 in the HTML page.
-		 * 	<li><js>"$W{name.style}"</js> - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.
+		 * 	<li><js>"${W:name.style}"</js> - Contents returned by {@link HtmlWidget#getStyle(VarResolverSession)}.
 		 * 		<br>The styles contents are automatically inserted into the <xt>&lt;head/style&gt;</xt> section
 		 * 			 in the HTML page.
 		 * </ul>
@@ -792,10 +792,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * 			MyWidget.<jk>class</jk>
 		 * 		)
 		 * 		.navlinks(
-		 * 			<js>"$W{MyWidget}"</js>
+		 * 			<js>"${W:MyWidget}"</js>
 		 * 		)
 		 * 		.aside(
-		 * 			<js>"Check out this widget:  $W{MyWidget}"</js>
+		 * 			<js>"Check out this widget:  ${W:MyWidget}"</js>
 		 * 		)
 		 * 		.build();
 		 * </p>

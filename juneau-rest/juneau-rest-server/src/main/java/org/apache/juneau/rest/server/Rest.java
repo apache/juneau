@@ -87,7 +87,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
 	 * 	<li class='note'>
@@ -114,7 +114,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Method names are case-insensitive.
 	 * 	<li class='note'>
@@ -155,7 +155,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
 	 * 	<li class='note'>
@@ -401,7 +401,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -422,7 +422,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use the keyword <c>SYSTEM_DEFAULT</c> to refer to the system default configuration
 	 * 		returned by the {@link Config#getSystemDefault()}.
@@ -450,7 +450,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -491,7 +491,7 @@ public @interface Rest {
 	 * 		The programmatic knob {@link RestContext.Builder#lazyChildInit(boolean)} overrides this annotation.
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$E{LAZY_CHILDREN,false}"</js>).
+	 * 		(e.g. <js>"${E:LAZY_CHILDREN:false}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -512,7 +512,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -621,7 +621,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -637,7 +637,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -664,7 +664,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -687,7 +687,7 @@ public @interface Rest {
 	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
-	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
+	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: ${C:REST/myAttributeValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
 	 *
 	 * 		<jc>// Override at the method level.</jc>
@@ -699,7 +699,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -723,7 +723,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -739,7 +739,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -760,7 +760,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
@@ -799,7 +799,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -836,7 +836,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use {@link #noInherit()} to prevent inheriting an opt-in from a parent {@code @Rest}.
 	 * </ul>
@@ -877,7 +877,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Use {@link #noInherit()} to prevent inheriting an opt-in from a parent {@code @Rest}.
 	 * </ul>
@@ -919,7 +919,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$E{ENABLE_VIRTUAL_THREADS,false}"</js>).
+	 * 		(e.g. <js>"${E:ENABLE_VIRTUAL_THREADS:false}"</js>).
 	 * 	<li class='note'>
 	 * 		Synchronized blocks and JNI calls in handler code <i>pin</i> a virtual thread to its carrier thread
 	 * 		— prefer {@link java.util.concurrent.locks.ReentrantLock} over {@code synchronized} in handlers run
@@ -957,7 +957,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$E{ENABLE_OBSERVABILITY,false}"</js>).
+	 * 		(e.g. <js>"${E:ENABLE_OBSERVABILITY:false}"</js>).
 	 * 	<li class='note'>
 	 * 		Per-operation overrides via {@link RestOp#observability()} (or verb annotations) take precedence over
 	 * 		this resource-level setting.
@@ -990,7 +990,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$E{ASYNC_TIMEOUT_MS,30000}"</js>).
+	 * 		(e.g. <js>"${E:ASYNC_TIMEOUT_MS:30000}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -1175,7 +1175,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -1216,7 +1216,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1414,8 +1414,8 @@ public @interface Rest {
 	 * <ol>
 	 * 	<li>The element runs through
 	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		variable substitution (e.g. {@code $C{health.paths}}, {@code $E{HEALTH_PATHS,/healthz}},
-	 * 		{@code $S{my.system.prop,/healthz}}) using the bootstrap {@link org.apache.juneau.commons.svl.VarResolver
+	 * 		variable substitution (e.g. {@code ${C:health.paths}}, {@code ${E:HEALTH_PATHS:/healthz}},
+	 * 		{@code ${S:my.system.prop:/healthz}}) using the bootstrap {@link org.apache.juneau.commons.svl.VarResolver
 	 * 		VarResolver} on the bean store.
 	 * 	<li>The post-SVL value is split on {@code ,}; each piece is trimmed and empty pieces are dropped.
 	 * 		A single template element can therefore expand to zero, one, or many mount paths.
@@ -1424,13 +1424,13 @@ public @interface Rest {
 	 * <h4 class='figure'>Examples:</h4>
 	 * <p class='bjava'>
 	 * 	<jc>// 1. Single key resolving to a multi-value config string.</jc>
-	 * 	<ja>@Rest</ja>(paths={<js>"$C{health.paths}"</js>})
+	 * 	<ja>@Rest</ja>(paths={<js>"${C:health.paths}"</js>})
 	 *
 	 * 	<jc>// 2. Mix literal + resolved element.</jc>
-	 * 	<ja>@Rest</ja>(paths={<js>"/api"</js>, <js>"$C{extra.paths}"</js>})
+	 * 	<ja>@Rest</ja>(paths={<js>"/api"</js>, <js>"${C:extra.paths}"</js>})
 	 *
 	 * 	<jc>// 3. Env var with comma-separated defaults baked in.</jc>
-	 * 	<ja>@Rest</ja>(paths={<js>"$E{HEALTH_PATHS,/healthz,/readyz}"</js>})
+	 * 	<ja>@Rest</ja>(paths={<js>"${E:HEALTH_PATHS:/healthz,/readyz}"</js>})
 	 * </p>
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
@@ -1486,7 +1486,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1554,7 +1554,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1640,7 +1640,7 @@ public @interface Rest {
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()}.
 	 * 	<li>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1748,8 +1748,8 @@ public @interface Rest {
 	 * <p class='bjava'>
 	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		header={
-	 * 			<js>"&lt;h1&gt;$RS{siteName}&lt;/h1&gt;"</js>,
-	 * 			<js>"&lt;h2&gt;$RS{title}&lt;/h2&gt;"</js>
+	 * 			<js>"&lt;h1&gt;${RS:siteName}&lt;/h1&gt;"</js>,
+	 * 			<js>"&lt;h2&gt;${RS:title}&lt;/h2&gt;"</js>
 	 * 		}
 	 * 	)
 	 * </p>
@@ -1757,7 +1757,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1855,7 +1855,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
 	 * </ul>
@@ -1873,7 +1873,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1889,7 +1889,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1908,7 +1908,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1927,7 +1927,7 @@ public @interface Rest {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		(e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.

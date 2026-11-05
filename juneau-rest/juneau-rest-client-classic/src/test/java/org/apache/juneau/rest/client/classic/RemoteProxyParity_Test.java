@@ -231,7 +231,7 @@ class RemoteProxyParity_Test {
 	// Tier 2 - baseUrl() : interface-level base/host override (resolved via VarResolver system property)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Remote(baseUrl = "$S{juneau.test.baseUrl}")
+	@Remote(baseUrl = "${S:juneau.test.baseUrl}")
 	public interface BaseUrlRemote {
 		@RemoteGet(path = "/base")
 		void call();

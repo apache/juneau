@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.swagger.*;
 // @formatter:off
 @Rest(
 	// Configuration file.
-	config="$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}",
+	config="${S:j.configFile:${E:J_CONFIG_FILE:SYSTEM_DEFAULT}}",
 
 	// Standard fields.
 	path="",
@@ -100,32 +100,32 @@ import org.apache.juneau.rest.server.swagger.*;
 	serializers={},
 
 	// Configurable settings.
-	allowedHeaderParams="$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}",
-	allowedMethodHeaders="$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}",
-	allowedMethodParams="$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}",
-	clientVersionHeader="$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}",
-	defaultAccept="$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}",
-	defaultCharset="$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}",
-	defaultContentType="$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}",
-	defaultRequestAttributes="$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}",
-	defaultRequestHeaders="$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}",
-	defaultResponseHeaders="$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}",
-	disableContentParam="$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}",
-	maxInput="$S{j.maxInput,$E{J_MAX_INPUT,1000000}}",
-	messages="$S{j.messages,$E{J_MESSAGES,}}",
-	renderResponseStackTraces="$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}",
-	uriAuthority="$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}",
-	uriContext="$S{j.uriContext,$E{J_URI_CONTEXT,}}",
-	uriRelativity="$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}",
-	uriResolution="$S{j.uriResolution,$E{J_URI_RESOLUTION,}}",
+	allowedHeaderParams="${S:j.allowedHeaderParams:${E:J_ALLOWED_HEADER_PARAMS:Accept,Content-Type}}",
+	allowedMethodHeaders="${S:j.allowedMethodHeaders:${E:J_ALLOWED_METHOD_HEADERS:}}",
+	allowedMethodParams="${S:j.allowedMethodParams:${E:J_ALLOWED_METHOD_PARAMS:HEAD,OPTIONS}}",
+	clientVersionHeader="${S:j.clientVersionHeader:${E:J_CLIENT_VERSION_HEADER:Client-Version}}",
+	defaultAccept="${S:j.defaultAccept:${E:J_DEFAULT_ACCEPT:}}",
+	defaultCharset="${S:j.defaultCharset:${E:J_DEFAULT_CHARSET:UTF-8}}",
+	defaultContentType="${S:j.defaultContentType:${E:J_DEFAULT_CONTENT_TYPE:}}",
+	defaultRequestAttributes="${S:j.defaultRequestAttributes:${E:J_DEFAULT_REQUEST_ATTRIBUTES:}}",
+	defaultRequestHeaders="${S:j.defaultRequestHeaders:${E:J_DEFAULT_REQUEST_HEADERS:}}",
+	defaultResponseHeaders="${S:j.defaultResponseHeaders:${E:J_DEFAULT_RESPONSE_HEADERS:}}",
+	disableContentParam="${S:j.disableContentParam:${E:J_DISABLE_CONTENT_PARAM:false}}",
+	maxInput="${S:j.maxInput:${E:J_MAX_INPUT:1000000}}",
+	messages="${S:j.messages:${E:J_MESSAGES:}}",
+	renderResponseStackTraces="${S:j.renderResponseStackTraces:${E:J_RENDER_RESPONSE_STACK_TRACES:false}}",
+	uriAuthority="${S:j.uriAuthority:${E:J_URI_AUTHORITY:}}",
+	uriContext="${S:j.uriContext:${E:J_URI_CONTEXT:}}",
+	uriRelativity="${S:j.uriRelativity:${E:J_URI_RELATIVITY:}}",
+	uriResolution="${S:j.uriResolution:${E:J_URI_RESOLUTION:}}",
 
 	// Metadata settings.
 	consumes={},
 	description="",
 	produces={},
-	siteName="$S{j.siteName,$E{J_SITE_NAME,}}",
+	siteName="${S:j.siteName:${E:J_SITE_NAME:}}",
 	swagger=@Swagger,
-	title="$S{j.title,$E{J_TITLE,}}",
+	title="${S:j.title:${E:J_TITLE:}}",
 
 	// Injectable/overridable beans.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.

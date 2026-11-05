@@ -59,7 +59,7 @@ class VarTemplateCompiler_Test extends TestBase {
 	/** Stable + recursive-allowed Var that returns a string starting with {@code $}. */
 	public static class RecursiveStableVar extends SimpleVar {
 		public RecursiveStableVar() { super("RS"); }
-		@Override public String resolve(VarResolverSession session, String arg) { return "$E{" + arg + "}"; }
+		@Override public String resolve(VarResolverSession session, String arg) { return "${E:" + arg + "}"; }
 		@Override protected boolean isStable() { return true; }
 		@Override protected boolean allowRecurse() { return true; }
 	}
@@ -103,8 +103,23 @@ class VarTemplateCompiler_Test extends TestBase {
 	private static VarResolver vr() {
 		return VarResolver.create()
 			.vars(EchoVar.class)
+			.defaultFunctions()
 			.functions(new UpperFn(), new IdFn())
 			.build();
+	}
+
+	/** Same fixtures as {@link #vr()} but strict: malformed or unknown expressions throw {@link ExprException}. */
+	private static VarResolver svr() {
+		return VarResolver.create()
+			.vars(EchoVar.class)
+			.defaultFunctions()
+			.functions(new UpperFn(), new IdFn())
+			.strict(true)
+			.build();
+	}
+
+	private static ExprException strictFail(String template) {
+		return assertThrows(ExprException.class, () -> svr().compile(template));
 	}
 
 	// =========================================================================
@@ -119,14 +134,14 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void a02_escapeDollar() {
 		var vr = vr();
-		// "\$E{x}" -> literal "$E{x}".
-		assertEquals("$E{x}", vr.compile("\\$E{x}").resolve(vr.createSession()));
+		// "\${E:x}" -> literal "${E:x}".
+		assertEquals("${E:x}", vr.compile("\\${E:x}").resolve(vr.createSession()));
 	}
 
 	@Test void a03_escapeHash() {
 		var vr = vr();
 		// Line 165 covers \# specifically — \# emits a literal '#'.
-		assertEquals("#{upper(x)}", vr.compile("\\#{upper(x)}").resolve(vr.createSession()));
+		assertEquals("#{upper('x')}", vr.compile("\\#{upper('x')}").resolve(vr.createSession()));
 	}
 
 	@Test void a04_escapeOtherCharPreservesBackslash() {
@@ -147,7 +162,7 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void b01_multiVar() {
 		var vr = vr();
-		assertEquals("[a]-[b]-[c]", vr.compile("$E{a}-$E{b}-$E{c}").resolve(vr.createSession()));
+		assertEquals("[a]-[b]-[c]", vr.compile("${E:a}-${E:b}-${E:c}").resolve(vr.createSession()));
 	}
 
 	@Test void b02_emptyTemplate() {
@@ -174,8 +189,8 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void b05_emptyVarBody() {
 		var vr = vr();
-		// $E{} -> resolves to "[]" (empty body string passed to var).
-		assertEquals("[]", vr.compile("$E{}").resolve(vr.createSession()));
+		// ${E:} -> resolves to "[]" (empty body string passed to var).
+		assertEquals("[]", vr.compile("${E:}").resolve(vr.createSession()));
 	}
 
 	@Test void b06_compileCacheReturnsSameForLiteral() {
@@ -213,14 +228,14 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void c04_unclosedVarBody() {
 		var vr = vr();
-		// "$E{abc" with no matching '}' — state S3 EOF; literal "$E{abc" emitted (line 295).
-		assertEquals("$E{abc", vr.compile("$E{abc").resolve(vr.createSession()));
+		// "${E:abc" with no matching '}' — state S3 EOF; literal "${E:abc" emitted (line 295).
+		assertEquals("${E:abc", vr.compile("${E:abc").resolve(vr.createSession()));
 	}
 
 	@Test void c05_unclosedVarBodyWithEscapes() {
 		var vr = vr();
-		// "$E{a\\}" without closing '}' — hasInnerEscapes path; AS2 unescape applied.
-		assertEquals("$E{a}", vr.compile("$E{a\\}").resolve(vr.createSession()));
+		// "${E:a\\}" without closing '}' — hasInnerEscapes path; AS2 unescape applied.
+		assertEquals("${E:a}", vr.compile("${E:a\\}").resolve(vr.createSession()));
 	}
 
 	@Test void c06_unclosedHashBody() {
@@ -259,9 +274,9 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void d01_innerEscapeInBody() {
 		var vr = vr();
-		// "$E{a\\}b}" — backslash-} inside body; fold/dispatch sees "a}b" as the arg.
+		// "${E:a\\}b}" — backslash-} inside body; fold/dispatch sees "a}b" as the arg.
 		// The body collector tracks the escape so the inner \} doesn't close the var.
-		assertEquals("[a\\}b]", vr.compile("$E{a\\}b}").resolve(vr.createSession()));
+		assertEquals("[a}b]", vr.compile("${E:a\\}b}").resolve(vr.createSession()));
 	}
 
 	@Test void d02_innerEscapeInS2Prefix() {
@@ -276,16 +291,16 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void d03_braceDepthInBody() {
 		var vr = vr();
-		// "$E{a{b}c}" — inner '{' bumps depth, matching '}' decrements; only outer '}' closes.
+		// "${E:a{b}c}" — inner '{' bumps depth, matching '}' decrements; only outer '}' closes.
 		// The hasInternalVar flag is set (line 218) which suppresses stable-folding even
 		// for non-stable vars — here EchoVar is non-stable so it's just a sanity check.
-		assertEquals("[a{b}c]", vr.compile("$E{a{b}c}").resolve(vr.createSession()));
+		assertEquals("[a{b}c]", vr.compile("${E:a{b}c}").resolve(vr.createSession()));
 	}
 
 	@Test void d04_nestedDollarVar() {
 		var vr = vr();
-		// "$E{$E{x}}" — outer body contains inner "${" which compile() recurses on.
-		assertEquals("[[x]]", vr.compile("$E{$E{x}}").resolve(vr.createSession()));
+		// "${E:${E:x}}" — outer body contains inner "${" which compile() recurses on.
+		assertEquals("[[x]]", vr.compile("${E:${E:x}}").resolve(vr.createSession()));
 	}
 
 	@Test void d05_dollarBraceShortcut() {
@@ -320,7 +335,7 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void f01_stableVarThatThrowsFallsBackToDispatch() {
 		var vr = VarResolver.create().vars(new ThrowingStableVar()).build();
 		// Compile must NOT throw — the fold path catches the exception (line 406-407).
-		var tpl = vr.compile("$TH{x}");
+		var tpl = vr.compile("${TH:x}");
 		// Resolve invokes the dispatch which DOES throw at runtime.
 		assertThrows(RuntimeException.class, () -> tpl.resolve(vr.createSession()));
 	}
@@ -330,14 +345,14 @@ class VarTemplateCompiler_Test extends TestBase {
 		// resolve(...) returns null -> tryFoldStableVar returns null (line 395-396).
 		// The dispatch segment is emitted instead. At runtime, the dispatch path
 		// handles null by treating it as empty string (observed legacy behavior).
-		var tpl = vr.compile("$NL{x}");
+		var tpl = vr.compile("${NL:x}");
 		assertEquals("", tpl.resolve(vr.createSession()));
 	}
 
 	@Test void f03_stableVarCannotResolveSkipsFolding() {
 		var vr = VarResolver.create().vars(new CannotResolveVar()).build();
 		// canResolve false -> tryFoldStableVar returns null (line 390-391).
-		var tpl = vr.compile("$CR{x}");
+		var tpl = vr.compile("${CR:x}");
 		// The dispatch segment is emitted; resolve at runtime would also short-circuit
 		// because canResolve still returns false. The segment-dispatch path returns
 		// the fallthrough source.
@@ -348,23 +363,23 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void f04_stableRecursiveVarWithDollarInOutputDoesNotFold() {
 		// allowRecurse + resolved value contains '$' -> skip folding (line 403).
 		var vr = VarResolver.create().vars(new RecursiveStableVar(), new EchoVar()).build();
-		var tpl = vr.compile("$RS{x}");
+		var tpl = vr.compile("${RS:x}");
 		// Because folding was skipped, the dispatch happens at resolve time; the result
-		// is "$E{x}" which then gets recursively resolved (allowRecurse=true) to "[x]".
+		// is "${E:x}" which then gets recursively resolved (allowRecurse=true) to "[x]".
 		assertEquals("[x]", tpl.resolve(vr.createSession()));
 	}
 
 	@Test void f05_nonStableVarNotFolded() {
 		// EchoVar is non-stable (default). isStable() false -> line 384 short-circuits.
 		var vr = vr();
-		var tpl = vr.compile("$E{x}");
+		var tpl = vr.compile("${E:x}");
 		assertFalse(tpl.isLiteral(), "non-stable var should not fold");
 	}
 
 	@Test void f06_stableVarWithInternalVarNotFolded() {
 		// hasInternalVar=true via inner '{' -> line 384 short-circuits ('hasInternalVar' branch).
 		var vr = VarResolver.create().vars(new RecursiveStableVar()).build();
-		var tpl = vr.compile("$RS{a{b}c}");
+		var tpl = vr.compile("${RS:a{b}c}");
 		assertNotNull(tpl.resolve(vr.createSession()));
 	}
 
@@ -374,9 +389,9 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void g01_emptyFunctionName() {
 		var vr = vr();
-		// "#{()}" — parseFunctionName: pos==start at line 447 -> "Expected function name".
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{()}"));
-		assertTrue(ex.getMessage().contains("Expected function name"), ex.getMessage());
+		// "#{()}" — parseFunctionName: pos==start at line 447 -> "Unexpected ')'".
+		var ex = strictFail("#{()}");
+		assertTrue(ex.getMessage().contains("Unexpected ')'"), ex.getMessage());
 	}
 
 	@Test void g02_functionNameStartsWithDigit() {
@@ -384,41 +399,40 @@ class VarTemplateCompiler_Test extends TestBase {
 		// "#{1foo()}" — parseFunctionName captures "1foo", then line 450 detects non-letter start.
 		// parseError no longer routes the assembled message (which contains the user's source fragment
 		// with literal '{' / '}') through MessageFormat, so the visible message is preserved verbatim.
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{1foo()}"));
-		assertTrue(ex.getMessage().contains("Function name must start with a letter"), ex.getMessage());
+		var ex = strictFail("#{1foo()}");
+		assertTrue(ex.getMessage().contains("Unexpected 'foo'"), ex.getMessage());
 		assertTrue(ex.getMessage().contains("1foo"), ex.getMessage());
 	}
 
 	@Test void g03_functionNameStartsWithUnderscore() {
 		var vr = vr();
 		// "_x()" — '_' is allowed in identifier chars but isLetter('_') is false.
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{_foo()}"));
-		assertTrue(ex.getMessage().contains("Function name must start with a letter"), ex.getMessage());
+		var ex = strictFail("#{_foo()}");
+		assertTrue(ex.getMessage().contains("unknown function '_foo'"), ex.getMessage());
 	}
 
 	@Test void g04_whitespaceOnlyBody() {
 		var vr = vr();
 		// "#{   }" — skipWs eats all of body, parseFunctionName finds pos==start.
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{   }"));
-		assertTrue(ex.getMessage().contains("Expected function name"), ex.getMessage());
+		var ex = strictFail("#{   }");
+		assertTrue(ex.getMessage().contains("Empty expression"), ex.getMessage());
 	}
 
 	@Test void g05_emptyBody() {
 		var vr = vr();
 		// "#{}" — same path as whitespace-only.
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{}"));
-		assertTrue(ex.getMessage().contains("Expected function name"), ex.getMessage());
+		var ex = strictFail("#{}");
+		assertTrue(ex.getMessage().contains("Empty expression"), ex.getMessage());
 	}
 
 	@Test void g06_validFunctionNameWithUnderscoreAfterStart() {
 		var vr = VarResolver.create().functions(new IdFn()).build();
 		// Underscore inside the name is fine (line 441 condition allows '_').
 		// Also covers digits-after-letter.
-		// id1 is unknown but compile must succeed (lazy-fail).
-		var tpl = vr.compile("#{id1()}");
-		assertNotNull(tpl);
-		// Resolve fails because 'id1' isn't registered.
-		assertThrows(IllegalArgumentException.class, () -> tpl.resolve(vr.createSession()));
+		// id1 is unknown: lenient keeps the literal text, strict fails at compile time naming the function.
+		assertEquals("#{id1()}", vr.resolve("#{id1()}"));
+		var ex = strictFail("#{id1()}");
+		assertTrue(ex.getMessage().contains("unknown function 'id1'"), ex.getMessage());
 	}
 
 	// =========================================================================
@@ -436,26 +450,26 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void h02_unclosedArgList() {
 		var vr = vr();
 		// Closed body but missing ')': "#{upper(}".
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{upper(}"));
-		assertTrue(ex.getMessage().contains("Invalid script in template"), ex.getMessage());
+		var ex = strictFail("#{upper(}");
+		assertTrue(ex.getMessage().contains("Unexpected end of expression"), ex.getMessage());
 	}
 
 	@Test void h03_trailingContentAfterCloseParen() {
 		var vr = vr();
 		// "#{upper(x)trailing}" — expectEnd fails (line 592-593).
-		assertThrows(IllegalArgumentException.class, () -> vr.compile("#{upper(x)trailing}"));
+		strictFail("#{upper(x)trailing}");
 	}
 
 	@Test void h04_missingOpenParen() {
 		var vr = vr();
 		// "#{upper x}" — after parseFunctionName (consuming "upper"), expect('(') fails.
-		assertThrows(IllegalArgumentException.class, () -> vr.compile("#{upper x}"));
+		strictFail("#{upper x}");
 	}
 
 	@Test void h05_unexpectedEndInArg() {
 		var vr = vr();
 		// Trailing comma forces parseArg to look for another arg and fail.
-		assertThrows(IllegalArgumentException.class, () -> vr.compile("#{upper(a,}"));
+		strictFail("#{upper(a,}");
 	}
 
 	// =========================================================================
@@ -474,14 +488,14 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void i03_quotedEscapeBackslash() {
 		var vr = vr();
-		// "\\\\" inside double-quotes -> single '\\' in the arg.
-		assertEquals("A\\B", vr.resolve("#{id(\"A\\\\B\")}"));
+		// Backslash is not an escape character inside an expression string literal: kept verbatim.
+		assertEquals("A\\\\B", vr.resolve("#{id(\"A\\\\B\")}"));
 	}
 
 	@Test void i04_quotedEscapeSameQuote() {
 		var vr = vr();
-		// '\"' inside double-quoted string -> embedded '"'.
-		assertEquals("a\"b", vr.resolve("#{id(\"a\\\"b\")}"));
+		// A doubled quote inside a double-quoted string -> embedded '"'.
+		assertEquals("a\"b", vr.resolve("#{id(\"a\"\"b\")}"));
 	}
 
 	@Test void i05_quotedEscapeOtherCharPreservesBackslash() {
@@ -492,8 +506,8 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void i06_quotedSingleEscapeSingle() {
 		var vr = vr();
-		// '\\' inside single-quoted -> '\\' (escape match).
-		assertEquals("it's", vr.resolve("#{id('it\\'s')}"));
+		// A doubled quote inside a single-quoted string -> embedded quote.
+		assertEquals("it's", vr.resolve("#{id('it''s')}"));
 	}
 
 	@Test void i07_unterminatedQuotedString() {
@@ -502,8 +516,8 @@ class VarTemplateCompiler_Test extends TestBase {
 		// The '#{}' body close still has to be reached, so use:
 		//   "#{id(\"abc)}"  (quote opened, never closed; ')}' is consumed as part of string)
 		// At EOF of body, parseQuotedString throws (line 518).
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{id(\"abc)}"));
-		assertTrue(ex.getMessage().contains("Unterminated quoted string"), ex.getMessage());
+		var ex = strictFail("#{id(\"abc)}");
+		assertTrue(ex.getMessage().contains("Unterminated #{"), ex.getMessage());
 	}
 
 	@Test void i08_quotedTrailingBackslash() {
@@ -516,7 +530,7 @@ class VarTemplateCompiler_Test extends TestBase {
 		//   pos at '\\' -> pos+1 is '"' -> next==quote so escape branch consumes both.
 		// Need a case where pos+1 is past end while in quoted string... but that means
 		// the string is unterminated. Skip — covered by i07.
-		assertEquals("x\\", vr.resolve("#{id(\"x\\\\\")}"));
+		assertEquals("x\\\\", vr.resolve("#{id(\"x\\\\\")}"));
 	}
 
 	// =========================================================================
@@ -525,7 +539,7 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void j01_bareIdentifier() {
 		var vr = vr();
-		assertEquals("HELLO", vr.resolve("#{upper(hello)}"));
+		assertEquals("HELLO", vr.resolve("#{upper('hello')}"));
 	}
 
 	@Test void j02_bareNumber() {
@@ -550,33 +564,33 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void j06_bareTokenWithUnderscoreDotDash() {
 		var vr = vr();
-		assertEquals("a.b-c_d", vr.resolve("#{id(a.b-c_d)}"));
+		assertEquals("a.b-c_d", vr.resolve("#{id('a.b-c_d')}"));
 	}
 
 	@Test void j07_bareTokenStopsAtTab() {
 		var vr = vr();
-		// Tab inside a bare token terminates capture (line 574 \\t branch).
-		assertEquals("a", vr.resolve("#{id(a\t)}"));
+		// Whitespace after a token is skipped (tab).
+		assertEquals("a", vr.resolve("#{id('a'\t)}"));
 	}
 
 	@Test void j08_bareTokenStopsAtNewline() {
 		var vr = vr();
 		// Newline -> covers \\n branch.
-		assertEquals("a", vr.resolve("#{id(a\n)}"));
+		assertEquals("a", vr.resolve("#{id('a'\n)}"));
 	}
 
 	@Test void j09_bareTokenStopsAtCarriageReturn() {
 		var vr = vr();
 		// \\r branch.
-		assertEquals("a", vr.resolve("#{id(a\r)}"));
+		assertEquals("a", vr.resolve("#{id('a'\r)}"));
 	}
 
 	@Test void j10_emptyBareToken() {
 		var vr = vr();
 		// "#{id(,a)}" — first arg is empty bare token. parseArg sees ',' (separator)
-		// and parseBareToken finds pos==start -> "Expected argument" (line 578-579).
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{id(,a)}"));
-		assertTrue(ex.getMessage().contains("Expected argument"), ex.getMessage());
+		// and parseBareToken finds pos==start -> "Unexpected ','" (line 578-579).
+		var ex = strictFail("#{id(,a)}");
+		assertTrue(ex.getMessage().contains("Unexpected ','"), ex.getMessage());
 	}
 
 	// =========================================================================
@@ -592,26 +606,26 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void k02_nestedTypedDollarVar() {
 		var vr = vr();
-		assertEquals("[hello]", vr.resolve("#{id($E{hello})}"));
+		assertEquals("[hello]", vr.resolve("#{id(${E:hello})}"));
 	}
 
 	@Test void k03_nestedHashScript() {
 		var vr = vr();
-		assertEquals("HELLO", vr.resolve("#{id(#{upper(hello)})}"));
+		assertEquals("HELLO", vr.resolve("#{id(upper('hello'))}"));
 	}
 
 	@Test void k04_nestedMarkerMissingBrace() {
 		var vr = vr();
 		// "#{id($E)}" — first char '$' begins parseNestedMarker; consumes 'E' as prefix; // NOSONAR
 		// next char is ')' which fails the '{' expectation (line 540-541).
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{id($E)}"));
-		assertTrue(ex.getMessage().contains("Invalid script in template"), ex.getMessage());
+		var ex = strictFail("#{id($E)}");
+		assertTrue(ex.getMessage().contains("Unexpected character '$'"), ex.getMessage());
 	}
 
 	@Test void k05_nestedMarkerHashMissingBrace() {
 		var vr = vr();
 		// "#{id(#x)}" — '#' begins nested marker but no '{' follows.
-		assertThrows(IllegalArgumentException.class, () -> vr.compile("#{id(#x)}"));
+		strictFail("#{id(#x)}");
 	}
 
 	@Test void k06_nestedMarkerUnterminated() {
@@ -624,20 +638,20 @@ class VarTemplateCompiler_Test extends TestBase {
 		// the body unclosed (S3H EOF fallthrough) and emit a literal — we therefore use
 		// a balanced outer-close that forces the body parse to fail:
 		//   "#{id(${abc)} more}" — outer '}' matches, body parse fails on inner.
-		assertThrows(IllegalArgumentException.class, () -> vr.compile("#{id(${abc)} more}"));
+		strictFail("#{id(${abc)} more}");
 	}
 
 	@Test void k07_nestedMarkerWithEscapeInBody() {
 		var vr = vr();
-		// "#{id($E{a\\}b})}" — escape inside nested marker body must NOT close at \\}.
+		// "#{id(${E:a\\}b})}" — escape inside nested marker body must NOT close at \\}.
 		// Combined Java string literal:
-		assertEquals("[a\\}b]", vr.resolve("#{id($E{a\\}b})}"));
+		assertEquals("[a}b]", vr.resolve("#{id(${E:a\\}b})}"));
 	}
 
 	@Test void k08_nestedMarkerDeepBraces() {
 		var vr = vr();
-		// "#{id($E{a{b{c}d}e})}" — multiple nested '{' incrementing depth (line 551).
-		assertEquals("[a{b{c}d}e]", vr.resolve("#{id($E{a{b{c}d}e})}"));
+		// "#{id(${E:a{b{c}d}e})}" — multiple nested '{' incrementing depth (line 551).
+		assertEquals("[a{b{c}d}e]", vr.resolve("#{id(${E:a{b{c}d}e})}"));
 	}
 
 	// =========================================================================
@@ -647,7 +661,7 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void l01_whitespaceAroundArgs() {
 		var vr = vr();
 		// Spaces / tabs / newlines between args must be skipped.
-		assertEquals("HELLO", vr.resolve("#{ upper ( hello ) }"));
+		assertEquals("HELLO", vr.resolve("#{ upper ( 'hello' ) }"));
 	}
 
 	@Test void l02_whitespaceBeforeAndAfterCommas() {
@@ -664,7 +678,7 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void l03_tabsAndNewlinesAsWhitespace() {
 		var vr = vr();
 		// skipWs() handles \t, \n, \r (lines 604).
-		assertEquals("HELLO", vr.resolve("#{\tupper\n(\rhello\t)\n}"));
+		assertEquals("HELLO", vr.resolve("#{\tupper\n(\r'hello'\t)\n}"));
 	}
 
 	// =========================================================================
@@ -678,21 +692,21 @@ class VarTemplateCompiler_Test extends TestBase {
 		var open = new StringBuilder();
 		var close = new StringBuilder();
 		for (var i = 0; i < 10; i++) {
-			open.append("#{upper(");
-			close.append(")}");
+			open.append("upper(");
+			close.append(")");
 		}
-		var tpl = open.toString() + s + close.toString();
+		var tpl = "#{" + open + "'" + s + "'" + close + "}";
 		assertEquals("X", vr.resolve(tpl));
 	}
 
 	@Test void m02_deeplyNestedDollarVars() {
 		var vr = vr();
-		// Deep $E{...} nesting.
+		// Deep ${E:...} nesting.
 		var s = "x";
 		var open = new StringBuilder();
 		var close = new StringBuilder();
 		for (var i = 0; i < 5; i++) {
-			open.append("$E{");
+			open.append("${E:");
 			close.append("}");
 		}
 		// Each layer wraps with [...]
@@ -709,16 +723,16 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void n01_compiledTemplateReusable() {
 		// One compile, many resolves — the segments array is allocated once.
 		var vr = vr();
-		var tpl = vr.compile("$E{a}-$E{b}");
+		var tpl = vr.compile("${E:a}-${E:b}");
 		var s = vr.createSession();
 		for (var i = 0; i < 100; i++)
 			assertEquals("[a]-[b]", tpl.resolve(s));
 	}
 
 	@Test void n02_compileWithUnknownVarFallthrough() {
-		// Unknown prefix "$X{...}" with no registered Var — fallthrough emits the source.
+		// Legacy "$X{...}" syntax (removed in 10.0) — lenient mode keeps the source as literal text. // svl-migrate:skip (deliberate legacy-syntax fixture)
 		var vr = vr();
-		assertEquals("$X{x}", vr.compile("$X{x}").resolve(vr.createSession()));
+		assertEquals("$X{x}", vr.compile("$X{x}").resolve(vr.createSession())); // svl-migrate:skip (deliberate legacy-syntax fixture)
 	}
 
 	// =========================================================================
@@ -729,7 +743,7 @@ class VarTemplateCompiler_Test extends TestBase {
 		// CountingStable returns its arg uppercased. Stable -> folded once.
 		var counter = new AtomicInteger();
 		var vr = VarResolver.create().vars(new CountingStable(counter)).build();
-		var tpl = vr.compile("hello $CS{world}");
+		var tpl = vr.compile("hello ${CS:world}");
 		assertEquals(1, counter.get(), "Stable var folded once at compile time");
 		for (var i = 0; i < 5; i++)
 			assertEquals("hello WORLD", tpl.resolve(vr.createSession()));
@@ -765,7 +779,7 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void p01_stableStreamedVarIsNotFolded() {
 		// Even though the var is stable, it's a StreamedVar so the fold path skips it.
 		var vr = VarResolver.create().vars(new StableStreamedVar()).build();
-		var tpl = vr.compile("$SS{x}");
+		var tpl = vr.compile("${SS:x}");
 		// Resolution still works at runtime via streaming dispatch.
 		assertEquals("[x]", tpl.resolve(vr.createSession()));
 	}
@@ -773,17 +787,17 @@ class VarTemplateCompiler_Test extends TestBase {
 	@Test void p02_uppercaseFunctionName() {
 		// Exercises the (c >= 'A' && c <= 'Z') branch in parseFunctionName (line 441).
 		var vr = vr();
-		// Unknown fn — lazy-fail: compile succeeds.
-		var tpl = vr.compile("#{UPPER(x)}");
-		assertNotNull(tpl);
-		assertThrows(IllegalArgumentException.class, () -> tpl.resolve(vr.createSession()));
+		// Function names are case-sensitive: UPPER is unknown (lenient literal, strict compile-time error).
+		assertEquals("#{UPPER('x')}", vr.resolve("#{UPPER('x')}"));
+		var ex = strictFail("#{UPPER('x')}");
+		assertTrue(ex.getMessage().contains("unknown function 'UPPER'"), ex.getMessage());
 	}
 
 	@Test void p03_compileSegmentsCount() {
 		// A compiled multi-segment template exposes its segment count via segments().
 		var vr = vr();
-		var tpl = vr.compile("hello $E{a} world $E{b}");
-		// 4 segments: "hello ", $E{a}, " world ", $E{b} // NOSONAR
+		var tpl = vr.compile("hello ${E:a} world ${E:b}");
+		// 4 segments: "hello ", ${E:a}, " world ", ${E:b} // NOSONAR
 		assertEquals(4, tpl.segments().length);
 	}
 }

@@ -45,11 +45,11 @@ class UonConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@UonConfig(
-		addBeanTypes="$X{true}",
-		decoding="$X{true}",
-		encoding="$X{true}",
-		paramFormat="$X{UON}",
-		validateEnd="$X{true}"
+		addBeanTypes="${X:true}",
+		decoding="${X:true}",
+		encoding="${X:true}",
+		paramFormat="${X:UON}",
+		validateEnd="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

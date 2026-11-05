@@ -76,7 +76,7 @@ class ArgCoercer_Test extends TestBase {
 
 	private VarResolver vr() {
 		return VarResolver.create()
-			.functions(new IntFn(), new LongFn(), new DoubleFn(), new BoolFn(),
+			.defaultFunctions().functions(new IntFn(), new LongFn(), new DoubleFn(), new BoolFn(),
 				new ArrFn(), new JsonArrFn(), new ObjFn())
 			.build();
 	}
@@ -87,7 +87,7 @@ class ArgCoercer_Test extends TestBase {
 	}
 
 	@Test void a02_intCoercionFailsOnNonNumeric() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr().resolve("#{intfn(notanumber)}"));
+		var ex = assertThrows(ExprException.class, () -> vr().resolve("#{intfn('notanumber')}"));
 		assertTrue(ex.getMessage().contains("cannot coerce"), ex.getMessage());
 	}
 
@@ -101,47 +101,46 @@ class ArgCoercer_Test extends TestBase {
 
 	@Test void a05_booleanCoercionTrueTokens() {
 		assertEquals("bool=true", vr().resolve("#{boolfn(true)}"));
-		assertEquals("bool=true", vr().resolve("#{boolfn(TRUE)}"));
-		assertEquals("bool=true", vr().resolve("#{boolfn(1)}"));
-		assertEquals("bool=true", vr().resolve("#{boolfn(yes)}"));
-		assertEquals("bool=true", vr().resolve("#{boolfn(YES)}"));
-		assertEquals("bool=true", vr().resolve("#{boolfn(on)}"));
-		assertEquals("bool=true", vr().resolve("#{boolfn(ON)}"));
+		assertEquals("bool=true", vr().resolve("#{boolfn('TRUE')}"));
+		assertEquals("bool=true", vr().resolve("#{boolfn('1')}"));
+		assertEquals("bool=true", vr().resolve("#{boolfn('yes')}"));
+		assertEquals("bool=true", vr().resolve("#{boolfn('YES')}"));
+		assertEquals("bool=true", vr().resolve("#{boolfn('on')}"));
+		assertEquals("bool=true", vr().resolve("#{boolfn('ON')}"));
 	}
 
 	@Test void a06_booleanCoercionFalseTokens() {
 		assertEquals("bool=false", vr().resolve("#{boolfn(false)}"));
-		assertEquals("bool=false", vr().resolve("#{boolfn(0)}"));
-		assertEquals("bool=false", vr().resolve("#{boolfn(no)}"));
-		assertEquals("bool=false", vr().resolve("#{boolfn(off)}"));
+		assertEquals("bool=false", vr().resolve("#{boolfn('0')}"));
+		assertEquals("bool=false", vr().resolve("#{boolfn('no')}"));
+		assertEquals("bool=false", vr().resolve("#{boolfn('off')}"));
 		// Empty / quoted-empty coerces to false.
 		assertEquals("bool=false", vr().resolve("#{boolfn(\"\")}"));
 	}
 
 	@Test void a07_booleanCoercionRejectsUnknown() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr().resolve("#{boolfn(perhaps)}"));
+		var ex = assertThrows(ExprException.class, () -> vr().resolve("#{boolfn('perhaps')}"));
 		assertTrue(ex.getMessage().contains("cannot coerce 'perhaps' to boolean"), ex.getMessage());
 	}
 
 	@Test void a08_stringArrayJsonShortcutInNonFinalSlot() {
-		// JSON-array shortcut form must be quoted in the script body so the recursive-descent
-		// parser doesn't split on the inner commas. Once delivered to ArgCoercer as a single
+		// JSON-array shortcut form must be a quoted string literal in the expression. Once delivered to ArgCoercer as a single
 		// String, the JSON-array parse handles the rest. The String[] slot must be NON-final
 		// for JSON-array coercion to apply (a final String[] is variadic per the "final
 		// slot collects excess" rule).
-		assertEquals("X=[a, b, c]", vr().resolve("#{jsonArr(\"[\\\"a\\\",\\\"b\\\",\\\"c\\\"]\", X)}"));
+		assertEquals("X=[a, b, c]", vr().resolve("#{jsonArr('[\"a\",\"b\",\"c\"]', 'X')}"));
 	}
 
 	@Test void a09_stringArrayVariadicGather() {
 		// Final String[] slot — args are gathered, not JSON-parsed.
-		assertEquals("arr=[a, b, c]", vr().resolve("#{arrfn(a, b, c)}"));
+		assertEquals("arr=[a, b, c]", vr().resolve("#{arrfn('a', 'b', 'c')}"));
 	}
 
 	@Test void a09b_stringArrayBareWrappedInNonFinalSlot() {
-		assertEquals("X=[hello]", vr().resolve("#{jsonArr(hello, X)}"));
+		assertEquals("X=[hello]", vr().resolve("#{jsonArr('hello', 'X')}"));
 	}
 
 	@Test void a10_objectPassthrough() {
-		assertEquals("obj=hello", vr().resolve("#{objfn(hello)}"));
+		assertEquals("obj=hello", vr().resolve("#{objfn('hello')}"));
 	}
 }

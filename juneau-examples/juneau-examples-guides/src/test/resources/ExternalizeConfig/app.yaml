@@ -18,11 +18,11 @@ server:
   # Host name clients use to reach the service.
   host: localhost
   # Defaults to 8080; start the JVM with -Dapp.port=9090 to override.
-  port: $S{app.port,8080}
+  port: ${S:app.port:8080}
   # Built from the two entries above.
-  baseUrl: http://$C{server/host}:$C{server/port}
+  baseUrl: http://${C:server/host}:${C:server/port}
 database:
   # Read from the APP_DB_USER environment variable, falling back to "app".
-  user: $E{APP_DB_USER,app}
+  user: ${E:APP_DB_USER:app}
   poolSize: 10
 # endregion settings

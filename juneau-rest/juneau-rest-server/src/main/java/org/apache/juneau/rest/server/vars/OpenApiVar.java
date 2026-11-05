@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
  * OpenAPI 3.1 attribute variable resolver — sibling of {@link SwaggerVar} for the OpenAPI 3.1 path.
  *
  * <p>
- * The format for this var is <js>"$OS{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${OS:key1[:key2...]}"</js>.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <h2 class='section'>Notes:</h2><ul>

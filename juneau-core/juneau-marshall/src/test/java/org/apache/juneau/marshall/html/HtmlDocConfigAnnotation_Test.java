@@ -61,17 +61,17 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@HtmlDocConfig(
-		aside="$X{foo}",
-		footer="$X{foo}",
-		head="$X{foo}",
-		header="$X{foo}",
-		nav="$X{foo}",
-		navlinks="$X{foo1}",
-		noResultsMessage="$X{foo}",
-		nowrap="$X{true}",
-		script="$X{foo1}",
-		style="$X{foo1}",
-		stylesheet="$X{foo1}",
+		aside="${X:foo}",
+		footer="${X:foo}",
+		head="${X:foo}",
+		header="${X:foo}",
+		nav="${X:foo}",
+		navlinks="${X:foo1}",
+		noResultsMessage="${X:foo}",
+		nowrap="${X:true}",
+		script="${X:foo1}",
+		style="${X:foo1}",
+		stylesheet="${X:foo1}",
 		template=BasicHtmlDocTemplate.class
 	)
 	static class A {}
@@ -148,15 +148,15 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@HtmlDocConfig(
-		aside={"$X{foo2}","$X{INHERIT}"},
-		footer={"$X{foo2}","$X{INHERIT}"},
-		head={"$X{foo2}","$X{INHERIT}"},
-		header={"$X{foo2}","$X{INHERIT}"},
-		nav={"$X{foo2}","$X{INHERIT}"},
-		navlinks={"$X{foo2}","$X{INHERIT}"},
-		script={"$X{foo2}","$X{INHERIT}"},
-		style={"$X{foo2}","$X{INHERIT}"},
-		stylesheet={"$X{foo2}","$X{INHERIT}"}
+		aside={"${X:foo2}","${X:INHERIT}"},
+		footer={"${X:foo2}","${X:INHERIT}"},
+		head={"${X:foo2}","${X:INHERIT}"},
+		header={"${X:foo2}","${X:INHERIT}"},
+		nav={"${X:foo2}","${X:INHERIT}"},
+		navlinks={"${X:foo2}","${X:INHERIT}"},
+		script={"${X:foo2}","${X:INHERIT}"},
+		style={"${X:foo2}","${X:INHERIT}"},
+		stylesheet={"${X:foo2}","${X:INHERIT}"}
 	)
 	static class D1 extends A {}
 	static ClassInfo d1 = ClassInfo.of(D1.class);
@@ -176,15 +176,15 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	}
 
 	@HtmlDocConfig(
-		aside={"$X{INHERIT}","$X{foo2}"},
-		footer={"$X{INHERIT}","$X{foo2}"},
-		head={"$X{INHERIT}","$X{foo2}"},
-		header={"$X{INHERIT}","$X{foo2}"},
-		nav={"$X{INHERIT}","$X{foo2}"},
-		navlinks={"$X{INHERIT}","$X{foo2}"},
-		script={"$X{INHERIT}","$X{foo2}"},
-		style={"$X{INHERIT}","$X{foo2}"},
-		stylesheet={"$X{INHERIT}","$X{foo2}"}
+		aside={"${X:INHERIT}","${X:foo2}"},
+		footer={"${X:INHERIT}","${X:foo2}"},
+		head={"${X:INHERIT}","${X:foo2}"},
+		header={"${X:INHERIT}","${X:foo2}"},
+		nav={"${X:INHERIT}","${X:foo2}"},
+		navlinks={"${X:INHERIT}","${X:foo2}"},
+		script={"${X:INHERIT}","${X:foo2}"},
+		style={"${X:INHERIT}","${X:foo2}"},
+		stylesheet={"${X:INHERIT}","${X:foo2}"}
 	)
 	static class D2 extends A {}
 	static ClassInfo d2 = ClassInfo.of(D2.class);
@@ -204,15 +204,15 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	}
 
 	@HtmlDocConfig(
-		aside={"$X{foo2}"},
-		footer={"$X{foo2}"},
-		head={"$X{foo2}"},
-		header={"$X{foo2}"},
-		nav={"$X{foo2}"},
-		navlinks={"$X{foo2}"},
-		script={"$X{foo2}"},
-		style={"$X{foo2}"},
-		stylesheet={"$X{foo2}"}
+		aside={"${X:foo2}"},
+		footer={"${X:foo2}"},
+		head={"${X:foo2}"},
+		header={"${X:foo2}"},
+		nav={"${X:foo2}"},
+		navlinks={"${X:foo2}"},
+		script={"${X:foo2}"},
+		style={"${X:foo2}"},
+		stylesheet={"${X:foo2}"}
 	)
 	static class D3 extends A {}
 	static ClassInfo d3 = ClassInfo.of(D3.class);
@@ -264,17 +264,17 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@HtmlDocConfig(
-		aside="$W{E}",
-		footer="$W{E}",
-		head="$W{E}",
-		header="$W{E}",
-		nav="$W{E}",
-		navlinks="$W{E}",
-		noResultsMessage="$W{E}",
-		nowrap="$W{E}",
-		script="$W{E}",
-		style="$W{E}",
-		stylesheet="$W{E}",
+		aside="${W:E}",
+		footer="${W:E}",
+		head="${W:E}",
+		header="${W:E}",
+		nav="${W:E}",
+		navlinks="${W:E}",
+		noResultsMessage="${W:E}",
+		nowrap="${W:E}",
+		script="${W:E}",
+		style="${W:E}",
+		stylesheet="${W:E}",
 		widgets=EWidget.class
 	)
 	static class E {}
@@ -302,17 +302,17 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 	@Test void f01_widgets_basic() {
 		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()));
 		var x = HtmlDocSerializer.create().apply(al).build().getSession();
-		check("$W{E}", x.getAside());
-		check("$W{E}", x.getFooter());
-		check("$W{E}", x.getHead());
-		check("$W{E}", x.getHeader());
-		check("$W{E}", x.getNav());
-		check("$W{E}", x.getNavlinks());
-		check("$W{E}", x.getNoResultsMessage());
+		check("${W:E}", x.getAside());
+		check("${W:E}", x.getFooter());
+		check("${W:E}", x.getHead());
+		check("${W:E}", x.getHeader());
+		check("${W:E}", x.getNav());
+		check("${W:E}", x.getNavlinks());
+		check("${W:E}", x.getNoResultsMessage());
 		check("false", x.isNowrap());
-		check("$W{E}", x.getScript());
-		check("$W{E}", x.getStyle());
-		check("$W{E}", x.getStylesheet());
+		check("${W:E}", x.getScript());
+		check("${W:E}", x.getStyle());
+		check("${W:E}", x.getStylesheet());
 		check("BasicHtmlDocTemplate", x.getTemplate());
 	}
 

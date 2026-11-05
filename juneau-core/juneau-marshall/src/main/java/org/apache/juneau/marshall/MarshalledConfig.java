@@ -77,7 +77,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -141,7 +141,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -161,7 +161,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -346,7 +346,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -369,7 +369,7 @@ public @interface MarshalledConfig {
 	 * 	<li class='note'>
 	 * 		Default value: <js>"_type"</js>.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>

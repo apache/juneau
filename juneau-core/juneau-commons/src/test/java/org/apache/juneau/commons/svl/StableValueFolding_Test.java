@@ -70,7 +70,7 @@ class StableValueFolding_Test extends TestBase {
 		var counter = new AtomicInteger();
 		var vr = VarResolver.create().vars(new CountingVar(counter, true)).build();
 
-		var tpl = vr.compile("hello $CV{name}");
+		var tpl = vr.compile("hello ${CV:name}");
 		assertEquals(1, counter.get(), "Stable var resolved exactly once at compile time");
 
 		// Resolving N more times should not increment the counter (template is folded).
@@ -86,7 +86,7 @@ class StableValueFolding_Test extends TestBase {
 		var counter = new AtomicInteger();
 		var vr = VarResolver.create().vars(new CountingVar(counter, false)).build();
 
-		var tpl = vr.compile("hello $CV{name}");
+		var tpl = vr.compile("hello ${CV:name}");
 		assertEquals(0, counter.get(), "Compile must not invoke unstable var");
 
 		assertEquals("hello [name]", tpl.resolve(vr.createSession()));
@@ -101,7 +101,7 @@ class StableValueFolding_Test extends TestBase {
 		System.setProperty("StableValueFolding_Test.a03", "fred");
 		try {
 			var vr = VarResolver.create().vars(SystemPropertiesVar.class).build();
-			var tpl = vr.compile("$S{StableValueFolding_Test.a03}");
+			var tpl = vr.compile("${S:StableValueFolding_Test.a03}");
 
 			// Mutate the property after compile — folded value should not change.
 			System.setProperty("StableValueFolding_Test.a03", "barney");
@@ -122,7 +122,7 @@ class StableValueFolding_Test extends TestBase {
 		// Body contains a nested ${...} — fold must NOT apply; the inner ref needs runtime.
 		System.setProperty("StableValueFolding_Test.a04", "x");
 		try {
-			var tpl = vr.compile("$CV{$S{StableValueFolding_Test.a04}}");
+			var tpl = vr.compile("${CV:${S:StableValueFolding_Test.a04}}");
 			assertEquals(0, counter.get(), "Outer var must not be folded when body has live nested marker");
 			assertEquals("[x]", tpl.resolve(vr.createSession()));
 		} finally {

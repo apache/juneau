@@ -66,7 +66,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -105,7 +105,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -129,7 +129,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -153,7 +153,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -217,7 +217,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -246,7 +246,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -268,7 +268,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='note'>
 	 * 		Format: Comma-delimited list of patterns
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -292,7 +292,7 @@ public @interface JsonSchemaConfig {
 	 *	<li class='note'>
 	 * 		Default value: <js>"0"</js>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -316,7 +316,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='note'>
 	 * 		Default value: <js>"100"</js>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -362,7 +362,7 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"${C:myConfigVar}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>

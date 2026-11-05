@@ -25,7 +25,7 @@ import org.apache.juneau.commons.svl.*;
  * Environment-file variable resolver.
  *
  * <p>
- * The format for this var is <js>"$EF{key[,default]}"</js>.
+ * The format for this var is <js>"${EF:key[:default]}"</js>.
  *
  * <p>
  * This variable is functionally identical to {@link DotenvVar}, but provides a

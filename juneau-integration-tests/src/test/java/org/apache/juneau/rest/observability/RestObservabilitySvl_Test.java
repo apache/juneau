@@ -106,7 +106,7 @@ class RestObservabilitySvl_Test extends TestBase {
 
 	private static final RecordingMetricsRecorder B_REC = new RecordingMetricsRecorder();
 
-	@Rest(observability = "$S{test.svl.obs.b,}")
+	@Rest(observability = "${S:test.svl.obs.b:}")
 	public static class B extends RestServlet {
 		private static final long serialVersionUID = 1L;
 
@@ -128,6 +128,6 @@ class RestObservabilitySvl_Test extends TestBase {
 	@Test void b01_svlObservability_resolvedAtBuildTime_suppressesMetrics() throws Exception {
 		B_REC.clear();
 		CB.get("/ping").run().assertStatus(200);
-		assertSize(() -> "$S{} SVL variable resolving to 'false' at context build time must suppress observability block", 0, B_REC.events);
+		assertSize(() -> "${S:} SVL variable resolving to 'false' at context build time must suppress observability block", 0, B_REC.events);
 	}
 }

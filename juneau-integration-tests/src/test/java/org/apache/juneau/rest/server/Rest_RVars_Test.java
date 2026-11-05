@@ -37,13 +37,13 @@ class Rest_RVars_Test extends TestBase {
 			"A2: a2",
 			"foo: bar",
 			"bar: baz",
-			"R1a: $R{requestURI}",
-			"R1b: $R{requestParentURI}",
-			"R2: $R{foo}",
-			"R3: $R{$R{foo}}",
-			"R4: $R{A1}",
-			"R5: $R{A2}",
-			"R6: $R{C}",
+			"R1a: ${R:requestURI}",
+			"R1b: ${R:requestParentURI}",
+			"R2: ${R:foo}",
+			"R3: ${R:${R:foo}}",
+			"R4: ${R:A1}",
+			"R5: ${R:A2}",
+			"R6: ${R:C}",
 		}
 	)
 	public static class A {

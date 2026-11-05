@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
  * Request form data variable resolver.
  *
  * <p>
- * The format for this var is <js>"$RF{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${RF:key1[:key2...]}"</js>.
  *
  * <p>
  * Used to resolve values returned by {@link RestRequest#getFormParam(String)}.
@@ -32,8 +32,8 @@ import org.apache.juneau.rest.server.*;
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RF{foo}"</js>);
- * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RF{foo,bar}"</js>);
+ * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RF:foo}"</js>);
+ * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${RF:foo:bar}"</js>);
  * </p>
  *
  * <h2 class='section'>Notes:</h2><ul>

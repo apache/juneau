@@ -20,11 +20,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 /**
- * Interface for the resolution of vars that consist of a comma-delimited list.
+ * Interface for the resolution of vars that consist of a colon-delimited list.
  *
  * <h2 class='figure'>Example:</h2>
  * <p class='bjava'>
- * 	<js>"$X{foo, bar, baz}"</js>
+ * 	<js>"${X:foo:bar:baz}"</js>
  * </p>
  *
  * <h2 class='section'>See Also:</h2><ul>
@@ -45,6 +45,8 @@ public abstract class MultipartVar extends SimpleVar {
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String s) {
 		String[] s2 = s.indexOf(',') == -1 ? a(s.trim()) : splita(s);
+		for (var k = 0; k < s2.length; k++)
+			s2[k] = VarSplit.restoreCommas(s2[k]);
 		return resolve(session, s2);
 	}
 

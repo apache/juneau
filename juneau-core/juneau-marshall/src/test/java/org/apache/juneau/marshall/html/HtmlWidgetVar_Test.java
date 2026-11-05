@@ -23,7 +23,7 @@ import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@link HtmlWidgetVar} resolution of <js>"$W{...}"</js> variables.
+ * Tests {@link HtmlWidgetVar} resolution of <js>"${W:...}"</js> variables.
  *
  * <p>
  * Covers the defensive per-widget degradation contract: a widget whose {@link HtmlWidget#getHtml(VarResolverSession)}
@@ -59,23 +59,23 @@ class HtmlWidgetVar_Test extends TestBase {
 
 	@Test void a01_resolvesRegisteredWidget() {
 		var s = session(widget("greeting", "hello"));
-		assertEquals("before hello after", s.resolve("before $W{greeting} after"));
+		assertEquals("before hello after", s.resolve("before ${W:greeting} after"));
 	}
 
 	@Test void a02_unregisteredWidgetReturnsPlaceholder() {
 		var s = session(widget("greeting", "hello"));
-		assertEquals("before unknown-widget-missing after", s.resolve("before $W{missing} after"));
+		assertEquals("before unknown-widget-missing after", s.resolve("before ${W:missing} after"));
 	}
 
 	@Test void a03_throwingWidgetDegradesToEmptyAndDoesNotPropagate() {
 		var s = session(throwingWidget("boom"));
 		// The failing widget must degrade to empty rather than throw, and surrounding text must still render.
-		assertDoesNotThrow(() -> s.resolve("before $W{boom} after"));
-		assertEquals("before  after", s.resolve("before $W{boom} after"));
+		assertDoesNotThrow(() -> s.resolve("before ${W:boom} after"));
+		assertEquals("before  after", s.resolve("before ${W:boom} after"));
 	}
 
 	@Test void a04_throwingWidgetDoesNotAffectSiblingWidgets() {
 		var s = session(throwingWidget("boom"), widget("ok", "OK"));
-		assertEquals("[] [OK]", s.resolve("[$W{boom}] [$W{ok}]"));
+		assertEquals("[] [OK]", s.resolve("[${W:boom}] [${W:ok}]"));
 	}
 }

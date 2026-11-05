@@ -144,7 +144,7 @@ class RequestAttributes_Test extends TestBase {
 				+ ",m2=" + attrs.get("m2").asString().orElse("?");
 		}
 
-		// addDefault var-resolution: $E{...} would be resolved if it referenced a var. Use a literal for safe assertion.
+		// addDefault var-resolution: ${E:...} would be resolved if it referenced a var. Use a literal for safe assertion.
 		@RestGet(path="/addDefaultVarResolve")
 		public String addDefaultVarResolve(RequestAttributes attrs) {
 			attrs.addDefault("plain", "no-vars-here");

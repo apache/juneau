@@ -46,12 +46,12 @@ class HtmlConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@HtmlConfig(
-		addBeanTypes="$X{true}",
-		addKeyValueTableHeaders="$X{true}",
-		disableDetectLabelParameters="$X{true}",
-		disableDetectLinksInStrings="$X{true}",
-		labelParameter="$X{foo}",
-		uriAnchorText="$X{TO_STRING}"
+		addBeanTypes="${X:true}",
+		addKeyValueTableHeaders="${X:true}",
+		disableDetectLabelParameters="${X:true}",
+		disableDetectLinksInStrings="${X:true}",
+		labelParameter="${X:foo}",
+		uriAnchorText="${X:TO_STRING}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

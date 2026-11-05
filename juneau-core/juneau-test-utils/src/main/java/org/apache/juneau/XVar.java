@@ -21,7 +21,7 @@ import java.io.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
- * Dummy variable for resolving <code>$X{...}</code> variables.
+ * Dummy variable for resolving <code>${X:...}</code> variables.
  */
 public class XVar extends Var {
 

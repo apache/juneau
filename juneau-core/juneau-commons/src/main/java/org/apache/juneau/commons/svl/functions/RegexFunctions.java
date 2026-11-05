@@ -39,7 +39,7 @@ public final class RegexFunctions {
 	// User-supplied regexes are compiled once and reused.  Bounded (entire cache cleared past maxSize) to guard
 	// against unbounded growth from arbitrary user input.  Pattern is immutable/thread-safe; a fresh Matcher is
 	// created per invocation, so behavior is identical to compiling on every call.
-	private static final Cache<String,Pattern> PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();
+	static final Cache<String,Pattern> PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
@@ -50,7 +50,7 @@ public final class RegexFunctions {
 		Match.class, Extract.class, ReplaceRegex.class
 	};
 
-	/** {@code #{match(s, regex)}} — replacement for the legacy {@code $PM{...}}. Returns {@code "true"} or {@code "false"}. */
+	/** {@code #{match(s, regex)}} — replacement for the legacy {@code PM} variable. Returns {@code "true"} or {@code "false"}. */
 	public static class Match extends TypedFunction {
 		@Override public String name() { return "match"; }
 		public String invoke(String s, String regex) {
@@ -61,7 +61,7 @@ public final class RegexFunctions {
 
 	/**
 	 * {@code #{extract(s, regex)}} / {@code #{extract(s, regex, group)}} — replacement for the
-	 * legacy {@code $PE{...}}. Returns the first match; if {@code group} is supplied, returns
+	 * legacy {@code PE} variable. Returns the first match; if {@code group} is supplied, returns
 	 * that capture group from the first match.
 	 */
 	public static class Extract extends TypedFunction {
@@ -77,7 +77,7 @@ public final class RegexFunctions {
 		}
 	}
 
-	/** {@code #{replaceRegex(s, regex, replacement)}} — replacement for the legacy {@code $PR{...}}. */
+	/** {@code #{replaceRegex(s, regex, replacement)}} — replacement for the legacy {@code PR} variable. */
 	public static class ReplaceRegex extends TypedFunction {
 		@Override public String name() { return "replaceRegex"; }
 		public String invoke(String s, String regex, String replacement) {

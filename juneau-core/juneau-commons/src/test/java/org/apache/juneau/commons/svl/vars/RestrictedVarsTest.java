@@ -29,9 +29,9 @@ class RestrictedVarsTest extends TestBase {
 	@Test void a01_noNest() throws Exception {
 		var vr = VarResolver.create().vars(NoNestVar.class).build();
 
-		test(vr, "$NoNest{foo}", "foo");
-		test(vr, "$NoNest{$NoNest{foo}}", "$NoNest{foo}");
-		test(vr, "$NoNest{foo $NoNest{foo} bar}", "foo $NoNest{foo} bar");
+		test(vr, "${NoNest:foo}", "foo");
+		test(vr, "${NoNest:${NoNest:foo}}", "${NoNest:foo}");
+		test(vr, "${NoNest:foo ${NoNest:foo} bar}", "foo ${NoNest:foo} bar");
 	}
 
 	public static class XVar extends SimpleVar {
@@ -66,9 +66,9 @@ class RestrictedVarsTest extends TestBase {
 	@Test void a02_noRecurse() throws Exception {
 		var vr = VarResolver.create().vars(XVar.class, NoRecurseVar.class).build();
 
-		test(vr, "$NoRecurse{foo}", "$X{foo}");
-		test(vr, "$NoRecurse{$NoRecurse{foo}}", "$X{$X{foo}}");
-		test(vr, "$NoRecurse{foo $NoRecurse{foo} bar}", "$X{foo $X{foo} bar}");
+		test(vr, "${NoRecurse:foo}", "${X:foo}");
+		test(vr, "${NoRecurse:${NoRecurse:foo}}", "${X:${X:foo}}");
+		test(vr, "${NoRecurse:foo ${NoRecurse:foo} bar}", "${X:foo ${X:foo} bar}");
 	}
 
 	public static class NoRecurseVar extends SimpleVar {
@@ -79,7 +79,7 @@ class RestrictedVarsTest extends TestBase {
 
 		@Override
 		public String resolve(VarResolverSession session, String arg) throws Exception {
-			return "$X{"+arg+"}";
+			return "${X:"+arg+"}";
 		}
 
 		@Override
@@ -91,9 +91,9 @@ class RestrictedVarsTest extends TestBase {
 	@Test void a03_noNestOrRecurse() throws Exception {
 		var vr = VarResolver.create().vars(XVar.class, NoEitherVar.class).build();
 
-		test(vr, "$NoEither{foo}", "$X{foo}");
-		test(vr, "$NoEither{$NoEither{foo}}", "$X{$NoEither{foo}}");
-		test(vr, "$NoEither{foo $NoEither{foo} bar}", "$X{foo $NoEither{foo} bar}");
+		test(vr, "${NoEither:foo}", "${X:foo}");
+		test(vr, "${NoEither:${NoEither:foo}}", "${X:${NoEither:foo}}");
+		test(vr, "${NoEither:foo ${NoEither:foo} bar}", "${X:foo ${NoEither:foo} bar}");
 	}
 
 	public static class NoEitherVar extends SimpleVar {
@@ -104,7 +104,7 @@ class RestrictedVarsTest extends TestBase {
 
 		@Override
 		public String resolve(VarResolverSession session, String arg) throws Exception {
-			return "$X{" + arg + "}";
+			return "${X:" + arg + "}";
 		}
 
 		@Override

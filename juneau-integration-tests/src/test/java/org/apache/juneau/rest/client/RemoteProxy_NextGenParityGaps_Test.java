@@ -63,7 +63,7 @@ import org.junit.jupiter.api.io.*;
  * <p>
  * Constant parse formats follow the {@code @Remote(headers={"Name: value"})} precedent: <b>headers</b> use the
  * colon form ({@code "Name: value"}); <b>queryData</b>/<b>formData</b> use the equals form ({@code "name=value"}).
- * All constant values resolve through {@code VarResolver.DEFAULT} (e.g. {@code "$S{sysprop}"}).  When the same part
+ * All constant values resolve through {@code VarResolver.DEFAULT} (e.g. {@code "${S:sysprop}"}).  When the same part
  * name is declared at both scopes, the method-level constant wins; a caller-supplied parameter value composes with
  * (does not erase) the constant.  Constant <i>path</i> values are intentionally out of scope (path stays handled by
  * the {@code path} template + {@code @Path} params).
@@ -326,8 +326,8 @@ class RemoteProxy_NextGenParityGaps_Test {
 		@RemoteGet(path="/echo", queryData={"shared=const"}) String get(@Query("shared") String shared);
 	}
 
-	/** VarResolver expansion of a {@code $S{...}} system property inside a constant value. */
-	@Remote(path="/e", queryData={"vq=$S{RemoteProxy_NextGenParityGaps_Test.e}"})
+	/** VarResolver expansion of a {@code ${S:...}} system property inside a constant value. */
+	@Remote(path="/e", queryData={"vq=${S:RemoteProxy_NextGenParityGaps_Test.e}"})
 	public interface E_VarClient {
 		@RemoteGet("/echo") String get();
 	}
@@ -1080,7 +1080,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 	//   (c) @Url param beats baseUrl
 	//   (d) absent @Url/baseUrl → existing rootUrl + path/templating behavior unchanged (no regression)
 	//   (e) baseUrl yielding a non-http(s) scheme is rejected (SSRF guardrail)
-	//   (f) baseUrl resolves $S{...} via VarResolver.DEFAULT
+	//   (f) baseUrl resolves ${S:...} via VarResolver.DEFAULT
 	// =================================================================================================================
 
 	@Remote(path="/qbase", baseUrl="http://iface.example")
@@ -1100,7 +1100,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 		@RemoteGet("/m") String get();
 	}
 
-	@Remote(path="/qbase", baseUrl="$S{RemoteProxy_NextGenParityGaps_Test.q}")
+	@Remote(path="/qbase", baseUrl="${S:RemoteProxy_NextGenParityGaps_Test.q}")
 	public interface Q_VarBaseUrlClient {
 		@RemoteGet("/m") String get();
 	}

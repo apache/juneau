@@ -56,26 +56,26 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	public static class AA extends SerializerListener {}
 
 	@SerializerConfig(
-		addBeanTypes="$X{true}",
-		addRootType="$X{true}",
-		binaryFormat="$X{HEX}",
-		detectRecursions="$X{true}",
-		ignoreRecursions="$X{true}",
-		initialDepth="$X{1}",
+		addBeanTypes="${X:true}",
+		addRootType="${X:true}",
+		binaryFormat="${X:HEX}",
+		detectRecursions="${X:true}",
+		ignoreRecursions="${X:true}",
+		initialDepth="${X:1}",
 		listener=AA.class,
-		maxDepth="$X{1}",
-		maxIndent="$X{1}",
-		quoteChar="$X{'}",
-		sortCollections="$X{true}",
-		sortMaps="$X{true}",
-		trimEmptyCollections="$X{true}",
-		trimEmptyMaps="$X{true}",
-		keepNullProperties="$X{false}",
-		trimStrings="$X{true}",
+		maxDepth="${X:1}",
+		maxIndent="${X:1}",
+		quoteChar="${X:\\'}", // escaped lone quote
+		sortCollections="${X:true}",
+		sortMaps="${X:true}",
+		trimEmptyCollections="${X:true}",
+		trimEmptyMaps="${X:true}",
+		keepNullProperties="${X:false}",
+		trimStrings="${X:true}",
 		uriContext="{}",
-		uriRelativity="$X{RESOURCE}",
-		uriResolution="$X{ABSOLUTE}",
-		useWhitespace="$X{true}"
+		uriRelativity="${X:RESOURCE}",
+		uriResolution="${X:ABSOLUTE}",
+		useWhitespace="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);
@@ -222,7 +222,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@SerializerConfig(
-		quoteChar="$X{ab}"
+		quoteChar="${X:ab}"
 	)
 	static class D {}
 	static ClassInfo d = ClassInfo.of(D.class);
@@ -234,7 +234,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	}
 
 	@SerializerConfig(
-		streamCharset="$X{ISO-8859-1}"
+		streamCharset="${X:ISO-8859-1}"
 	)
 	static class E {}
 	static ClassInfo e = ClassInfo.of(E.class);
@@ -246,7 +246,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	}
 
 	@SerializerConfig(
-		streamCharset="$X{DEFAULT}"
+		streamCharset="${X:DEFAULT}"
 	)
 	static class E2 {}
 	static ClassInfo e2 = ClassInfo.of(E2.class);
@@ -258,9 +258,9 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	}
 
 	@SerializerConfig(
-		initialDepth="$X{abc}",
-		maxDepth="$X{xyz}",
-		maxIndent="$X{invalid}"
+		initialDepth="${X:abc}",
+		maxDepth="${X:xyz}",
+		maxIndent="${X:invalid}"
 	)
 	static class F {}
 	static ClassInfo f = ClassInfo.of(F.class);

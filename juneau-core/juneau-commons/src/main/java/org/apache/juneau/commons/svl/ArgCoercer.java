@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.svl.functions.*;
+
 /**
  * Centralized argument coercion for {@link VarFunction} dispatch.
  *
@@ -80,7 +82,7 @@ final class ArgCoercer {
 	 * <p>
 	 * Used by {@link TypedFunction#invoke(VarResolverSession, List)}. The args are resolved
 	 * strings produced by {@link VarTemplate#resolve(VarResolverSession)} per
-	 * {@link ScriptSegment} arg template.
+	 * {@link ExprSegment} argument.
 	 *
 	 * @param fnName The function name (for diagnostic messages).
 	 * @param paramTypes The target Java types — one per arg slot. Last slot may be
@@ -129,8 +131,27 @@ final class ArgCoercer {
 	 * @return The coerced value.
 	 */
 	static Object coerceOne(String fnName, int argIndex, Class<?> target, Object raw) {
-		if (target == String.class)
+		if (target == String.class) {
+			if (raw instanceof Double || raw instanceof Float)
+				return ArithmeticFunctions.render(((Number)raw).doubleValue());
 			return raw == null ? "" : raw.toString();
+		}
+		if (raw instanceof Number num) {
+			if (target == int.class || target == Integer.class)
+				return num.intValue();
+			if (target == long.class || target == Long.class)
+				return num.longValue();
+			if (target == double.class || target == Double.class)
+				return num.doubleValue();
+		}
+		if (raw instanceof Boolean && (target == boolean.class || target == Boolean.class))
+			return raw;
+		if (raw == null && ! target.isPrimitive() && target != String[].class)
+			return null;
+		if (raw != null && !(raw instanceof String) && target != String[].class && target.isInstance(raw))
+			return raw;
+		if (raw == null && target == boolean.class)
+			throw iaex("Function '%s' arg %s: cannot coerce '' to boolean (null is not allowed for a primitive boolean)", fnName, argIndex);
 		var s = raw == null ? "" : raw.toString();
 		try {
 			if (target == int.class || target == Integer.class)

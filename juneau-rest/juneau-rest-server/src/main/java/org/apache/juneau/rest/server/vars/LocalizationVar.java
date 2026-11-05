@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.*;
  * Localized string variable resolver.
  *
  * <p>
- * The format for this var is <js>"$L{key[,args...]}"</js>.
+ * The format for this var is <js>"${L:key[:args...]}"</js>.
  *
  * <p>
  * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.

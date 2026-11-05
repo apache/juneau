@@ -39,7 +39,7 @@ import jakarta.servlet.*;
  * <ul>
  * 	<li>A {@link RestServlet#getPaths() RestServlet.getPaths()} override beats
  * 		{@link Rest#paths() @Rest(paths)}.
- * 	<li>SVL substitution applied per-element to {@code @Rest(paths={"$C{key}"})} resolves through the
+ * 	<li>SVL substitution applied per-element to {@code @Rest(paths={"${C:key}"})} resolves through the
  * 		microservice's bean store ({@link Config} bean) before the comma-split and produces the
  * 		runtime-resolved mount paths.
  * 	<li>Collision detection still runs on the resolved paths.
@@ -118,10 +118,10 @@ class RestPathsRuntimeOverride_JettyMount_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// b — SVL ($C{...}) inside @Rest(paths) element resolves through Config and comma-splits
+	// b — SVL (${C:...}) inside @Rest(paths) element resolves through Config and comma-splits
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Rest(paths={"$C{b.paths}"})
+	@Rest(paths={"${C:b.paths}"})
 	public static class B_SvlConfigKey extends RestServlet {
 		private static final long serialVersionUID = 1L;
 	}

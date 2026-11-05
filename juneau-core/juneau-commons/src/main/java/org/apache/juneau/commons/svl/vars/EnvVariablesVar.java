@@ -23,15 +23,15 @@ import org.apache.juneau.commons.svl.*;
  * Environment variable variable resolver.
  *
  * <p>
- * The format for this var is <js>"$E{envVar[,defaultValue]}"</js>.
+ * The format for this var is <js>"${E:envVar[:defaultValue]}"</js>.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- * 	<jc>// Create a variable resolver that resolves environment variables (e.g. "$E{PATH}")</jc>
+ * 	<jc>// Create a variable resolver that resolves environment variables (e.g. "${E:PATH}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(EnvVariablesVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Environment variable PATH is set to $E{PATH}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Environment variable PATH is set to ${E:PATH}"</js>));
  * </p>
  *
  * <p>
@@ -67,7 +67,7 @@ public class EnvVariablesVar extends DefaultingVar {
 	 * opts in to compile-time stable-value folding.
 	 *
 	 * <p>
-	 * Compiled templates resolve {@code $E{...}} references once at compile time and replace
+	 * Compiled templates resolve {@code ${E:...}} references once at compile time and replace
 	 * them with literal segments — the runtime dispatch is eliminated.
 	 *
 	 * @return Always {@code true}.

@@ -94,9 +94,16 @@ public class VarResolverSession {
 
 	private final WritableBeanStore beanStore;
 
+	private int recursionDepth;
+
+	/** Number of {@code ${...}} references inside {@code #{...}} currently being resolved on this session. */
+	private int exprVarDepth;
+
 	private boolean htmlDocEncode;
 
 	private boolean scriptStyleRefuse;
+
+	private Function<Object,String> valueFormatter;
 
 	/**
 	 * Constructor.
@@ -111,6 +118,130 @@ public class VarResolverSession {
 		this.context = context;
 		this.beanStore = new BasicBeanStore(beanStore);
 	}
+
+	/**
+	 * Looks up a registered function by exact name.
+	 *
+	 * <p>
+	 * Functions excluded by {@link VarResolver.Builder#allowFunctions(String...)} are not returned, so a
+	 * <jk>null</jk> result means absent <i>or denied</i>; use {@link #isFunctionDenied(String)} to tell them apart.
+	 *
+	 * @param name The function name.
+	 * @return The function, or <jk>null</jk> if none is registered under that name (or it is not allowed).
+	 */
+	public VarFunction findFunction(String name) { return context.findFunction(name); }
+
+	/**
+	 * Returns <jk>true</jk> if the named function (or operator) is excluded by the resolver's allowlist.
+	 *
+	 * @param name The function name (e.g. <js>"upper"</js> or <js>"$op.add"</js>).
+	 * @return <jk>true</jk> if the name was registered and filtered out by the allowlist, or is an <c>$op.*</c> name the allowlist does not permit.
+	 */
+	public boolean isFunctionDenied(String name) { return context.isDenied(name) || (name.startsWith("$op.") && ! context.isAllowed(name)); }
+
+	/**
+	 * Resolves a <c>${Type:body}</c> reference to a typed value for the expression evaluator.
+	 *
+	 * <p>
+	 * Finds the var by prefix and returns <c>var.doResolveValue(session, body)</c>, so defaults ({@link DefaultingVar})
+	 * and multipart keys are honoured.  The body is resolved with the existing nested-marker machinery first when the
+	 * var allows nesting and the body contains a <c>$</c>.  The {@link #resolveScriptStyle(String)} refusal and the
+	 * {@link #resolveHtmlDoc(String)} encoding apply exactly as they do to template <c>${...}</c> references: under
+	 * HTML-doc encoding a value from a non-passthrough var is escaped, and a non-<c>String</c> value other than a
+	 * <c>Number</c> or <c>Boolean</c> is first converted with <c>String.valueOf</c> (as the template path does), so
+	 * markup inside a collection or bean cannot bypass the escaping.
+	 *
+	 * @param prefix The var name (e.g. <js>"S"</js>).
+	 * @param body The var body (already in the var's own syntax, e.g. <js>"key,default"</js>).
+	 * @return The value, or <jk>null</jk> if absent or (lenient mode) the var is unknown.
+	 * @throws VarResolverException If the var is unknown and the resolver is strict, or the var fails.
+	 */
+	Object resolveValue(String prefix, String body) {
+		var v = isScriptStyleRefused(prefix) ? null : getVar(prefix);
+		if (v == null) {
+			if (context.strict)
+				throw new VarResolverException("Unknown or unavailable variable '%s'", prefix);
+			return null;
+		}
+		try {
+			var b = (v.allowNested() && body.indexOf('$') != -1) ? resolve(body) : body;
+			var r = v.doResolveValue(this, b);
+			// HTML-doc chrome: values are escaped unless the var is an HTML passthrough, as in templates.
+			if (! htmlDocEncode || r == null || r instanceof Number || r instanceof Boolean)
+				return r;
+			return applyHtmlDocChromeEncoding(prefix, r instanceof String s2 ? s2 : String.valueOf(r));
+		} catch (VarResolverException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new VarResolverException(e, "Problem occurred resolving variable '%s': %s", prefix, e.getMessage());
+		}
+	}
+
+	/**
+	 * Overrides the value formatter for this session.
+	 *
+	 * <p>
+	 * The override <em>replaces</em> the resolver's formatter and also formats {@link Structure} values.
+	 *
+	 * @param value The formatter.  <jk>null</jk> reverts to the resolver's formatter.
+	 * @return This object.
+	 */
+	public VarResolverSession valueFormatter(Function<Object,String> value) {
+		this.valueFormatter = value;
+		return this;
+	}
+
+	/**
+	 * Formats the typed result of an expression as text.
+	 *
+	 * @param value The value.  May be <jk>null</jk>.
+	 * @return The text; never <jk>null</jk>.
+	 */
+	public String formatValue(Object value) {
+		String r;
+		if (valueFormatter != null)
+			r = valueFormatter.apply(value);
+		else if (value instanceof Structure)
+			r = value.toString();
+		else
+			r = context.valueFormatter.apply(value);
+		return r == null ? "" : r;
+	}
+
+	/** @return The maximum collection size for expressions. */
+	int maxCollectionSize() { return context.maxCollectionSize; }
+
+	/** @return The maximum expression nesting depth. */
+	int maxExprDepth() { return context.maxExprDepth; }
+
+	/**
+	 * Enters a {@code ${...}} reference inside {@code #{...}}.
+	 *
+	 * <p>
+	 * Such references compile their body lazily, so a deep {@code #{${...#{${...}}...}}} chain would recurse at
+	 * evaluation time.  The chain is capped at {@code maxExprDepth}; every successful call must be paired with
+	 * {@link #exitExprVar()}.
+	 *
+	 * @return <jk>false</jk> (and no depth change) if the cap is reached.
+	 */
+	boolean enterExprVar() {
+		if (exprVarDepth >= context.maxExprDepth)
+			return false;
+		exprVarDepth++;
+		return true;
+	}
+
+	/** Leaves a reference entered with {@link #enterExprVar()}. */
+	void exitExprVar() {
+		exprVarDepth--;
+	}
+
+	/**
+	 * Returns whether the owning resolver is in strict mode.
+	 *
+	 * @return <jk>true</jk> if strict.
+	 */
+	public boolean isStrict() { return context.strict; }
 
 	/**
 	 * Adds a bean to this session.
@@ -156,6 +287,25 @@ public class VarResolverSession {
 		if (s.isEmpty())
 			return s;
 		return context.compile(s).resolve(this);
+	}
+
+	/**
+	 * Re-resolves a var's output, enforcing the resolver's maximum recursion depth.
+	 *
+	 * @param s The string to resolve.
+	 * @return The resolved string.
+	 * @throws VarResolverException If the maximum recursion depth is exceeded.
+	 */
+	String resolveRecursive(String s) {
+		if (++recursionDepth > context.maxRecursionDepth) {
+			recursionDepth--;
+			throw new VarResolverException("Maximum variable recursion depth (%s) exceeded while resolving '%s'", context.maxRecursionDepth, s.length() > 80 ? s.substring(0, 80) + "..." : s);
+		}
+		try {
+			return resolve(s);
+		} finally {
+			recursionDepth--;
+		}
 	}
 
 	/**

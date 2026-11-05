@@ -45,7 +45,7 @@ class VarResolverSession_Test extends TestBase {
 	// Fixtures
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/** Echoes the var argument with surrounding brackets ($E{x} -> [x]). */
+	/** Echoes the var argument with surrounding brackets (${E:x} -> [x]). */
 	public static class EchoVar extends SimpleVar {
 		public EchoVar() { super("E"); }
 		@Override public String resolve(VarResolverSession session, String arg) { return "[" + arg + "]"; }
@@ -100,7 +100,7 @@ class VarResolverSession_Test extends TestBase {
 	}
 
 	@Test void a04_resolve_var() {
-		assertEquals("[x]", session().resolve("$E{x}"));
+		assertEquals("[x]", session().resolve("${E:x}"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void b01_resolveArray_simple() {
 		var s = session();
-		var out = s.resolve(new String[]{"$E{a}", "literal", "$E{b}"});
+		var out = s.resolve(new String[]{"${E:a}", "literal", "${E:b}"});
 		assertArrayEquals(new String[]{"[a]", "literal", "[b]"}, out);
 	}
 
@@ -121,7 +121,7 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void b03_resolveArray_withNullElement() {
 		var s = session();
-		var out = s.resolve(new String[]{"$E{a}", null, ""});
+		var out = s.resolve(new String[]{"${E:a}", null, ""});
 		assertArrayEquals(new String[]{"[a]", null, ""}, out);
 	}
 
@@ -134,13 +134,13 @@ class VarResolverSession_Test extends TestBase {
 	}
 
 	@Test void c02_resolveObject_charSequence() {
-		var r = session().resolve((Object) "$E{x}");
+		var r = session().resolve((Object) "${E:x}");
 		assertEquals("[x]", r);
 	}
 
 	@Test void c03_resolveObject_charSequence_StringBuilder() {
 		// StringBuilder is a CharSequence — should be resolved to String.
-		var r = session().resolve((Object) new StringBuilder("$E{x}"));
+		var r = session().resolve((Object) new StringBuilder("${E:x}"));
 		assertEquals("[x]", r);
 	}
 
@@ -150,7 +150,7 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void d01_resolveArrayObject_withVars() {
 		var s = session();
-		var in = new String[]{"$E{a}", "$E{b}"};
+		var in = new String[]{"${E:a}", "${E:b}"};
 		var out = s.resolve((Object) in);
 		assertTrue(out instanceof String[]);
 		assertArrayEquals(new String[]{"[a]", "[b]"}, (String[]) out);
@@ -185,7 +185,7 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void e01_resolveSet_withVars() {
 		var s = session();
-		var in = new LinkedHashSet<>(Arrays.asList("$E{a}", "$E{b}"));
+		var in = new LinkedHashSet<>(Arrays.asList("${E:a}", "${E:b}"));
 		var out = (Set<?>) s.resolve((Object) in);
 		assertTrue(out.contains("[a]"));
 		assertTrue(out.contains("[b]"));
@@ -203,7 +203,7 @@ class VarResolverSession_Test extends TestBase {
 		// Custom Set with public no-arg ctor → reflection branch picks our class.
 		var s = session();
 		var in = new MySet<String>();
-		in.add("$E{a}");
+		in.add("${E:a}");
 		var out = s.resolve((Object) in);
 		assertTrue(out instanceof MySet);
 		assertTrue(((Set<?>) out).contains("[a]"));
@@ -212,7 +212,7 @@ class VarResolverSession_Test extends TestBase {
 	@Test void e04_resolveSet_noPublicCtor_fallsBackToLinkedHashSet() {
 		var s = session();
 		var in = new NoCtorSet<String>(4);
-		in.add("$E{a}");
+		in.add("${E:a}");
 		var out = s.resolve((Object) in);
 		assertTrue(out instanceof Set);
 		assertTrue(((Set<?>) out).contains("[a]"));
@@ -231,7 +231,7 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void f01_resolveList_withVars() {
 		var s = session();
-		var in = list("$E{a}", "$E{b}");
+		var in = list("${E:a}", "${E:b}");
 		var out = (List<?>) s.resolve((Object) in);
 		assertEquals(Arrays.asList("[a]", "[b]"), out);
 	}
@@ -246,7 +246,7 @@ class VarResolverSession_Test extends TestBase {
 	@Test void f03_resolveList_customClass_preservesType() {
 		var s = session();
 		var in = new MyList<String>();
-		in.add("$E{a}");
+		in.add("${E:a}");
 		var out = s.resolve((Object) in);
 		assertTrue(out instanceof MyList);
 		assertEquals("[a]", ((List<?>) out).get(0));
@@ -266,7 +266,7 @@ class VarResolverSession_Test extends TestBase {
 	@Test void g01_resolveMap_withVars() {
 		var s = session();
 		var in = new LinkedHashMap<String,String>();
-		in.put("a", "$E{x}");
+		in.put("a", "${E:x}");
 		in.put("b", "literal");
 		var out = (Map<?,?>) s.resolve((Object) in);
 		assertEquals("[x]", out.get("a"));
@@ -284,7 +284,7 @@ class VarResolverSession_Test extends TestBase {
 	@Test void g03_resolveMap_customClass_preservesType() {
 		var s = session();
 		var in = new MyMap<String,String>();
-		in.put("k", "$E{v}");
+		in.put("k", "${E:v}");
 		var out = s.resolve((Object) in);
 		assertTrue(out instanceof MyMap);
 		assertEquals("[v]", ((Map<?,?>) out).get("k"));
@@ -333,7 +333,7 @@ class VarResolverSession_Test extends TestBase {
 	@Test void i03_resolveTo_var() throws IOException {
 		var s = session();
 		var w = new StringWriter();
-		s.resolveTo("$E{x}", w);
+		s.resolveTo("${E:x}", w);
 		assertEquals("[x]", w.toString());
 	}
 
@@ -350,13 +350,13 @@ class VarResolverSession_Test extends TestBase {
 
 	@Test void j01_compile() {
 		var s = session();
-		var t = s.compile("$E{x}");
+		var t = s.compile("${E:x}");
 		assertEquals("[x]", t.resolve(s));
 	}
 
 	@Test void j02_resolveSupplier() {
 		var s = session();
-		var sup = s.resolveSupplier("$E{x}");
+		var sup = s.resolveSupplier("${E:x}");
 		assertEquals("[x]", sup.get());
 		// Supplier can be reused.
 		assertEquals("[x]", sup.get());

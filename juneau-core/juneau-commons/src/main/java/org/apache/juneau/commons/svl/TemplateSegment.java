@@ -26,9 +26,9 @@ import java.io.*;
  * tokenizer in {@link VarTemplateCompiler}:
  * <ul>
  * 	<li>{@link LiteralSegment} — fixed text appended verbatim.
- * 	<li>{@link VarRefSegment} — a {@code ${...}} or {@code $X{...}} reference; resolves the
+ * 	<li>{@link VarRefSegment} — a {@code ${...}} reference; resolves the
  * 		captured {@link Var} (cached at compile time) against the session.
- * 	<li>{@link ScriptSegment} — a {@code #{name(args...)}} function call. Function dispatch
+ * 	<li>{@link ExprSegment} — a {@code #{expression}}. Function dispatch
  * 		is wired by {@link VarTemplate}; bare segments are constructed by the compiler.
  * </ul>
  *
@@ -36,7 +36,7 @@ import java.io.*;
  * Segments are immutable and threadsafe. The compile-binding contract documented on
  * {@link VarTemplate} applies to the captured {@link Var} references in {@link VarRefSegment}.
  */
-abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, ScriptSegment {
+abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, ExprSegment {
 
 	/**
 	 * Resolves this segment and appends the result to {@code out}.
@@ -76,12 +76,12 @@ abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, Scr
 	boolean isLiteral() { return false; }
 
 	/**
-	 * Helper used by {@link VarRefSegment} and {@link ScriptSegment} to wrap arbitrary
+	 * Helper used by {@link VarRefSegment} and {@link ExprSegment} to wrap arbitrary
 	 * checked exceptions raised during dispatch in a {@link VarResolverException} carrying
 	 * the failing var/function name and the surrounding template source for diagnostics.
 	 *
 	 * @param e The original exception.
-	 * @param sourceFragment A short representation of the failing token (e.g. {@code "$X{...}"}).
+	 * @param sourceFragment A short representation of the failing token (e.g. {@code "${X:...}"}).
 	 * @param identifier The var prefix or function name.
 	 * @return The wrapped exception (never returns; always throws).
 	 */

@@ -44,7 +44,7 @@ public final class ConditionalFunctions {
 	};
 
 	/**
-	 * {@code #{if(cond, then, else)}} — replacement for the legacy {@code $IF{...}}.
+	 * {@code #{if(cond, then, else)}} — replacement for the legacy {@code IF} variable.
 	 *
 	 * <p>
 	 * Returns {@code then} if {@code cond} is truthy, {@code else} otherwise. Truthiness is
@@ -61,7 +61,7 @@ public final class ConditionalFunctions {
 
 	/**
 	 * {@code #{switch(value, case1, val1, case2, val2, ..., default)}} — replacement for the
-	 * legacy {@code $SW{...}}.
+	 * legacy {@code SW} variable.
 	 *
 	 * <p>
 	 * Compares {@code value} against each {@code caseN} <i>glob pattern</i> and returns the
@@ -120,7 +120,7 @@ public final class ConditionalFunctions {
 	}
 
 	/**
-	 * {@code #{coalesce(a, b, ...)}} — replacement for the legacy {@code $CO{...}}.
+	 * {@code #{coalesce(a, b, ...)}} — replacement for the legacy {@code CO} variable.
 	 *
 	 * <p>
 	 * Returns the first non-empty arg, or {@code ""} if all args are empty.
@@ -135,7 +135,7 @@ public final class ConditionalFunctions {
 	}
 
 	/**
-	 * {@code #{notEmpty(s)}} — replacement for the legacy {@code $NE{...}}.
+	 * {@code #{notEmpty(s)}} — replacement for the legacy {@code NE} variable.
 	 *
 	 * <p>
 	 * Returns {@code "true"} if {@code s} is non-{@code null} and non-empty, {@code "false"}

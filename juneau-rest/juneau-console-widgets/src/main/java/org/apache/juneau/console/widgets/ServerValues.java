@@ -30,8 +30,8 @@ import org.apache.juneau.commons.svl.*;
  * This is a thin, typed facade over the existing {@link VarResolver} engine &mdash; <b>not</b> a second
  * templating language.  An author declares named scalar value providers (for example {@code failedCount} or
  * {@code lookbackReadable}); a widget emitter publishes them into a per-render registry and interpolates their
- * resolved values into widget <i>chrome</i> text (titles / labels) as <js>"$FV{name}"</js> /
- * <js>"$FV{name,default}"</js> at serve time.
+ * resolved values into widget <i>chrome</i> text (titles / labels) as <js>"${FV:name}"</js> /
+ * <js>"${FV:name:default}"</js> at serve time.
  *
  * <p>
  * <b>Not {@code $W}.</b>  {@code $FV} resolves declared scalar values as plain text (serializer-encoded); it is
@@ -48,7 +48,7 @@ import org.apache.juneau.commons.svl.*;
  * 	ServerValues <jv>sv</jv> = ServerValues.<jsm>create</jsm>()
  * 		.value(<js>"failedCount"</js>, <jv>session</jv> -&gt; <jv>metrics</jv>.failed())
  * 		.value(<js>"env"</js>, <jv>session</jv> -&gt; <js>"prod"</js>);
- * 	<jc>// Chrome: column title "Failures ($FV{failedCount})" resolves at serve time.</jc>
+ * 	<jc>// Chrome: column title "Failures (${FV:failedCount})" resolves at serve time.</jc>
  * </p>
  *
  * @since 10.0.0
@@ -83,7 +83,7 @@ public class ServerValues implements Widget {
 	/**
 	 * Declares a named scalar value provider.
 	 *
-	 * @param name The interpolation name (the {@code x} in <js>"$FV{x}"</js>).  Must not be <jk>null</jk> or blank.
+	 * @param name The interpolation name (the {@code x} in <js>"${FV:x}"</js>).  Must not be <jk>null</jk> or blank.
 	 * @param provider The session-aware scalar provider.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */

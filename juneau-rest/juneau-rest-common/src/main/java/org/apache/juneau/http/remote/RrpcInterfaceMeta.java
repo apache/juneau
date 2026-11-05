@@ -221,7 +221,7 @@ public final class RrpcInterfaceMeta {
 	 *
 	 * <p>
 	 * Each {@code headers()} entry is a {@code "Name: value"} string (the colon-separated form), resolved through
-	 * {@link VarResolver#DEFAULT} so values such as {@code "$S{sysprop}"} expand.  A non-empty {@code version()}
+	 * {@link VarResolver#DEFAULT} so values such as {@code "${S:sysprop}"} expand.  A non-empty {@code version()}
 	 * appends a {@code Client-Version} header (or the name given by {@code versionHeader()}).
 	 *
 	 * <p>
@@ -245,7 +245,7 @@ public final class RrpcInterfaceMeta {
 	 * Parses an array of constant {@code "name<delim>value"} strings into resolved name/value entries.
 	 *
 	 * <p>
-	 * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "$S{sysprop}"} expand), then
+	 * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "${S:sysprop}"} expand), then
 	 * split on the first occurrence of {@code delim} ({@code ':'} for the {@code "Name: value"} header form, {@code '='}
 	 * for the {@code "name=value"} query/form-data form).  Entries with no delimiter are skipped.  Both the name and the
 	 * value are trimmed.

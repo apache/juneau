@@ -21,7 +21,7 @@ package org.apache.juneau.commons.svl;
  *
  * <p>
  * For example, to resolve the system property <js>"myProperty"</js> but resolve to <js>"not found"</js> if the
- * property doesn't exist: <js>"$S{myProperty,not found}"</js>
+ * property doesn't exist: <js>"${S:myProperty:not found}"</js>
  *
  * <p>
  * Subclasses must implement the following method:
@@ -48,10 +48,23 @@ public abstract class DefaultingVar extends SimpleVar {
 	public String doResolve(VarResolverSession session, String s) throws Exception {
 		var i = s.indexOf(',');
 		if (i == -1)
-			return resolve(session, s.trim());
-		var s1 = s.substring(0, i);
-		var s2 = s.length() == i ? null : s.substring(i + 1);
+			return resolve(session, VarSplit.restoreCommas(s.trim()));
+		var s1 = VarSplit.restoreCommas(s.substring(0, i));
+		var s2 = s.length() == i ? null : VarSplit.restoreCommas(s.substring(i + 1));
 		var v = resolve(session, s1);
+		if (v == null)
+			v = s2;
+		return v;
+	}
+
+	@Override /* Overridden from Var */
+	Object doResolveValue(VarResolverSession session, String s) throws Exception {
+		var i = s.indexOf(',');
+		if (i == -1)
+			return resolveValue(session, VarSplit.restoreCommas(s.trim()));
+		var s1 = VarSplit.restoreCommas(s.substring(0, i));
+		var s2 = VarSplit.restoreCommas(s.substring(i + 1));
+		var v = resolveValue(session, s1);
 		if (v == null)
 			v = s2;
 		return v;

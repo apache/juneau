@@ -32,7 +32,7 @@ class Nls_Test extends TestBase {
 
 	@Rest(
 		serializers={A1.class},
-		defaultRequestAttributes={"TestProperty:$L{key1}"},
+		defaultRequestAttributes={"TestProperty:${L:key1}"},
 		messages="NlsTest"
 	)
 	public static class A {
@@ -41,7 +41,7 @@ class Nls_Test extends TestBase {
 			return null;
 		}
 		@RestGet(
-			defaultRequestAttributes={"TestProperty:$L{key2}"}
+			defaultRequestAttributes={"TestProperty:${L:key2}"}
 		)
 		public String b() {
 			return null;

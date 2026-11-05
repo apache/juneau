@@ -38,16 +38,16 @@ class ResolvingMarshalledMapTest extends TestBase {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		var m = new ResolvingMarshalledMap(vr.createSession());
 
-		m.put("foo", "$X{a}");
+		m.put("foo", "${X:a}");
 		assertEquals("1", m.get("foo"));
 
-		m.put("foo", a("$X{a}"));
+		m.put("foo", a("${X:a}"));
 		assertList(m.get("foo"), "1");
 
-		m.put("foo", list("$X{a}"));
+		m.put("foo", list("${X:a}"));
 		assertList(m.get("foo"), "1");
 
-		m.put("foo", m("k1","$X{a}"));
+		m.put("foo", m("k1","${X:a}"));
 		assertBean(m, "foo{k1}", "{1}");
 	}
 
@@ -111,16 +111,16 @@ class ResolvingMarshalledMapTest extends TestBase {
 		m.inner(m2);
 		m2.inner(m3);
 
-		m3.put("foo", "$X{a}");
+		m3.put("foo", "${X:a}");
 		assertEquals("1", m.get("foo"));
 
-		m3.put("foo", a("$X{a}"));
+		m3.put("foo", a("${X:a}"));
 		assertList(m.get("foo"), "1");
 
-		m3.put("foo", l("$X{a}"));
+		m3.put("foo", l("${X:a}"));
 		assertList(m.get("foo"), "1");
 
-		m3.put("foo", m("k1","$X{a}"));
+		m3.put("foo", m("k1","${X:a}"));
 		assertBean(m, "foo{k1}", "{1}");
 	}
 
@@ -133,7 +133,7 @@ class ResolvingMarshalledMapTest extends TestBase {
 
 		// Test inner() returns same instance for fluent chaining
 		var innerMap = new HashMap<String,Object>();
-		innerMap.put("test", "$X{a}");
+		innerMap.put("test", "${X:a}");
 		assertSame(m, m.inner(innerMap));
 		assertEquals("1", m.get("test"));
 
@@ -142,12 +142,12 @@ class ResolvingMarshalledMapTest extends TestBase {
 		assertSame(m, m.session(session));
 
 		// Test append(String, Object) returns same instance
-		assertSame(m, m.append("key1", "$X{b}"));
+		assertSame(m, m.append("key1", "${X:b}"));
 		assertEquals("2", m.get("key1"));
 
 		// Test append(Map) returns same instance
 		var appendMap = new HashMap<String,Object>();
-		appendMap.put("key2", "$X{c}");
+		appendMap.put("key2", "${X:c}");
 		assertSame(m, m.append(appendMap));
 		assertEquals("3", m.get("key2"));
 
@@ -177,9 +177,9 @@ class ResolvingMarshalledMapTest extends TestBase {
 		var vr = VarResolver.create().defaultVars().vars(XVar.class).build();
 		// Test multiple fluent calls can be chained
 		var m = new ResolvingMarshalledMap(vr.createSession())
-			.append("key1", "$X{a}")
-			.append("key2", "$X{b}")
-			.appendIf(true, "key3", "$X{c}");
+			.append("key1", "${X:a}")
+			.append("key2", "${X:b}")
+			.appendIf(true, "key3", "${X:c}");
 
 		assertEquals("1", m.get("key1"));
 		assertEquals("2", m.get("key2"));

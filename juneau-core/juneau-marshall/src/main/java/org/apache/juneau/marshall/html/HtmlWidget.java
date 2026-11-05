@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.html;
 import org.apache.juneau.commons.svl.*;
 
 /**
- * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.
+ * Defines an interface for resolvers of <js>"${W:...}"</js> string variables.
  *
  * <p>
  * Widgets must provide one of the following public constructors:

@@ -37,10 +37,10 @@ class BooleanFunctions_Test extends TestBase {
 	@Test void a07_xor_diff() { assertEquals("true", vr.resolve("#{xor(true, false)}")); }
 	@Test void a08_xor_same() { assertEquals("false", vr.resolve("#{xor(true, true)}")); }
 
-	@Test void a09_eq_true() { assertEquals("true", vr.resolve("#{eq(hello, hello)}")); }
-	@Test void a10_eq_false() { assertEquals("false", vr.resolve("#{eq(hello, world)}")); }
-	@Test void a11_neq_true() { assertEquals("true", vr.resolve("#{neq(hello, world)}")); }
-	@Test void a12_neq_false() { assertEquals("false", vr.resolve("#{neq(hello, hello)}")); }
+	@Test void a09_eq_true() { assertEquals("true", vr.resolve("#{eq('hello', 'hello')}")); }
+	@Test void a10_eq_false() { assertEquals("false", vr.resolve("#{eq('hello', 'world')}")); }
+	@Test void a11_neq_true() { assertEquals("true", vr.resolve("#{neq('hello', 'world')}")); }
+	@Test void a12_neq_false() { assertEquals("false", vr.resolve("#{neq('hello', 'hello')}")); }
 
 	@Test void a13_lt() { assertEquals("true", vr.resolve("#{lt(2, 5)}")); }
 	@Test void a14_lte_eq() { assertEquals("true", vr.resolve("#{lte(5, 5)}")); }

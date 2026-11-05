@@ -23,7 +23,7 @@ import org.apache.juneau.rest.server.*;
  * Widget that places a powered-by-Juneau message on the page.
  *
  * <p>
- * The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
+ * The variable it resolves is <js>"${W:PoweredByJuneau}"</js>.
  *
  * <h2 class='section'>See Also:</h2><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlPredefinedWidgets">Predefined Widgets</a>

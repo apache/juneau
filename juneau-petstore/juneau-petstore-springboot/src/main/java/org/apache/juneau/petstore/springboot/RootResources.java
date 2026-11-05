@@ -68,8 +68,8 @@ import org.apache.juneau.rest.server.widget.*;
 	navlinks={
 		"api: servlet:/api",
 		"stats: servlet:/stats",
-		"$W{ContentTypeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/petstore/springboot/RootResources.java"
+		"${W:ContentTypeMenuItem}",
+		"source: ${C:Source/gitHub}/org/apache/juneau/petstore/springboot/RootResources.java"
 	},
 	aside={
 		"<div class='text'>",

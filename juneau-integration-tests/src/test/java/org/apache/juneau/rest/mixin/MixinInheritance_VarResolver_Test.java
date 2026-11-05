@@ -26,12 +26,12 @@ import org.junit.jupiter.api.*;
 
 /**
  * Verifies that a mixin sub-context's var resolver reaches the host's Messages bundle
- * for {@code $L{key}}-style lookups.
+ * for {@code ${L:key}}-style lookups.
  *
  * <p>
  * The mixin's {@link RestContext#getVarResolver() var resolver} is built from the bootstrap resolver plus the
  * mixin's own {@link org.apache.juneau.marshall.cp.Messages} bean.  Because the mixin's Messages bundle is now chained
- * to the host's via {@code Messages.chain(...)}, {@code $L{host.key}} resolves through the inherited host
+ * to the host's via {@code Messages.chain(...)}, {@code ${L:host.key}} resolves through the inherited host
  * bundle from the mixin context.  This test is a smoke check on that end-to-end seam &mdash; the deeper
  * acceptance criteria are covered by {@code MixinInheritance_Messages_Test}.
  */
@@ -54,9 +54,9 @@ class MixinInheritance_VarResolver_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoMessages.class);
 		assertNotNull(mixinCtx);
 
-		assertEquals("host-value", hostCtx.getVarResolver().resolve("$L{host.key}"),
-			"Host var resolver must resolve $L{host.key} from its own bundle");
-		assertEquals("host-value", mixinCtx.getVarResolver().resolve("$L{host.key}"),
-			"Mixin var resolver must resolve $L{host.key} via the inherited host Messages chain");
+		assertEquals("host-value", hostCtx.getVarResolver().resolve("${L:host.key}"),
+			"Host var resolver must resolve ${L:host.key} from its own bundle");
+		assertEquals("host-value", mixinCtx.getVarResolver().resolve("${L:host.key}"),
+			"Mixin var resolver must resolve ${L:host.key} via the inherited host Messages chain");
 	}
 }

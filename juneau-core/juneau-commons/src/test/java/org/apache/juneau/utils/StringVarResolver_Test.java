@@ -44,25 +44,25 @@ class StringVarResolver_Test extends TestBase {
 		t = "foo";
 		assertEquals("foo", vr.resolve(t));
 
-		t = "$X{y}";
+		t = "${X:y}";
 		assertEquals("xyx", vr.resolve(t));
 
-		t = "$X{y}x";
+		t = "${X:y}x";
 		assertEquals("xyxx", vr.resolve(t));
 
-		t = "x$X{y}";
+		t = "x${X:y}";
 		assertEquals("xxyx", vr.resolve(t));
 
-		t = "$X{y}$X{y}";
+		t = "${X:y}${X:y}";
 		assertEquals("xyxxyx", vr.resolve(t));
 
-		t = "z$X{y}z$X{y}z";
+		t = "z${X:y}z${X:y}z";
 		assertEquals("zxyxzxyxz", vr.resolve(t));
 
-		t = "$X{$X{y}}";
+		t = "${X:${X:y}}";
 		assertEquals("xxyxx", vr.resolve(t));
 
-		t = "$X{z$X{y}z}";
+		t = "${X:z${X:y}z}";
 		assertEquals("xzxyxzx", vr.resolve(t));
 
 		t = "$X.{y}";
@@ -75,14 +75,14 @@ class StringVarResolver_Test extends TestBase {
 		assertEquals("z$X.{$X.{z}}z", vr.resolve(t));
 
 		// Non-existent vars
-		t = "$Y{y}";
-		assertEquals("$Y{y}", vr.resolve(t));
+		t = "${Y:y}";
+		assertEquals("${Y:y}", vr.resolve(t));
 
-		t = "$Y{y}x";
-		assertEquals("$Y{y}x", vr.resolve(t));
+		t = "${Y:y}x";
+		assertEquals("${Y:y}x", vr.resolve(t));
 
-		t = "x$Y{y}";
-		assertEquals("x$Y{y}", vr.resolve(t));
+		t = "x${Y:y}";
+		assertEquals("x${Y:y}", vr.resolve(t));
 	}
 
 	public static class XVar extends SimpleVar {
@@ -116,7 +116,7 @@ class StringVarResolver_Test extends TestBase {
 
 	public static class BlankVar extends SimpleVar {
 		public BlankVar() {
-			super("");
+			super("P");
 		}
 		@Override
 		public String resolve(VarResolverSession session, String arg) {
@@ -150,19 +150,33 @@ class StringVarResolver_Test extends TestBase {
 		assertEquals("A|A".replace('|',b), vr.resolve(t));
 		t = "A||A".replace('|',b);
 		assertEquals("A|A".replace('|',b), vr.resolve(t));
-		t = "A|A$X{B}".replace('|',b);
+		t = "A|A${X:B}".replace('|',b);
 		assertEquals("A|AxBx".replace('|',b), vr.resolve(t));
-		t = "A||A$X{B}".replace('|',b);
+		t = "A||A${X:B}".replace('|',b);
 		assertEquals("A|AxBx".replace('|',b), vr.resolve(t));
-		t = "A|$X{B}".replace('|',b);
-		assertEquals("A$X{B}".replace('|',b), vr.resolve(t));
-		t = "A||$X{B}".replace('|',b);
+		t = "A|${X:B}".replace('|',b);
+		assertEquals("A${X:B}".replace('|',b), vr.resolve(t));
+		t = "A||${X:B}".replace('|',b);
 		assertEquals("A|xBx".replace('|',b), vr.resolve(t));
+		// The escape for a literal "${" is a backslash before the '$' ("\\${S:x}" yields the text "${S:x}").
+		System.setProperty("StringVarResolver_Test.a03", "v");
+		try {
+			var d = VarResolver.create().defaultVars().build();
+			assertEquals("${S:StringVarResolver_Test.a03}", d.resolve("\\${S:StringVarResolver_Test.a03}"));
+			assertEquals("v", d.resolve("${S:StringVarResolver_Test.a03}"));
+			// Escaped backslash then a real reference.
+			assertEquals("\\v", d.resolve("\\\\${S:StringVarResolver_Test.a03}"));
+		} finally {
+			System.clearProperty("StringVarResolver_Test.a03");
+		}
+		// "$\{" is not an escape form in the new grammar; the text is left unchanged (as is the legacy "$X\{B}").
 		t = "A$X|{B}".replace('|',b);
-		assertEquals("A$X{B}".replace('|',b), vr.resolve(t));
-		t = "A$X{B|}".replace('|',b);
-		assertEquals("A$X{B}".replace('|',b), vr.resolve(t));
-		t = "A$X{B}|".replace('|',b);
+		assertEquals("A$X|{B}".replace('|',b), vr.resolve(t));
+		t = "A$|{X:B}".replace('|',b);
+		assertEquals("A$|{X:B}".replace('|',b), vr.resolve(t));
+		t = "A${X:B|}".replace('|',b);
+		assertEquals("A${X:B}".replace('|',b), vr.resolve(t));
+		t = "A${X:B}|".replace('|',b);
 		assertEquals("AxBx|".replace('|',b), vr.resolve(t));
 	}
 
@@ -170,7 +184,7 @@ class StringVarResolver_Test extends TestBase {
 	// Test $E variables
 	//====================================================================================================
 	@Test void a07_test$E() {
-		var t = "$E{PATH}";
+		var t = "${E:PATH}";
 
 		assertFalse(Shorts.ie(VarResolver.DEFAULT.resolve(t)));  // NOAI
 	}
@@ -183,9 +197,9 @@ class StringVarResolver_Test extends TestBase {
 		System.setProperty("a", "a1");
 		System.setProperty("b", "b1");
 
-		var t = "$X{$S{a},$S{b}}";
+		var t = "${X:${S:a}:${S:b}}";
 		assertEquals("a1+b1", vr.resolve(t));
-		t = "$X{$S{a}}";
+		t = "${X:${S:a}}";
 		assertEquals("a1", vr.resolve(t));
 	}
 
@@ -234,23 +248,23 @@ class StringVarResolver_Test extends TestBase {
 		in = "$S";
 		assertEquals(in, vr.resolve(in));
 
-		in = "$S{";
+		in = "${S:";
 		assertEquals(in, vr.resolve(in));
 
-		in = "$S{foobar";
+		in = "${S:foobar";
 
 		assertEquals(in, vr.resolve(in));
-		in = "$S{foobar}$";
+		in = "${S:foobar}$";
 		assertEquals("baz$", vr.resolve(in));
 
-		in = "$S{foobar}$S";
+		in = "${S:foobar}$S";
 		assertEquals("baz$S", vr.resolve(in));
 
-		in = "$S{foobar}$S{";
-		assertEquals("baz$S{", vr.resolve(in));
+		in = "${S:foobar}${S:";
+		assertEquals("baz${S:", vr.resolve(in));
 
-		in = "$S{foobar}$S{foobar";
-		assertEquals("baz$S{foobar", vr.resolve(in));
+		in = "${S:foobar}${S:foobar";
+		assertEquals("baz${S:foobar", vr.resolve(in));
 
 		System.clearProperty("foobar");
 
@@ -260,11 +274,11 @@ class StringVarResolver_Test extends TestBase {
 
 		vr = vrb.build();
 
-		in = "$A{xxx}";
+		in = "${A:xxx}";
 		assertEquals("", vr.resolve(in));
-		in = "x$A{xxx}";
+		in = "x${A:xxx}";
 		assertEquals("x", vr.resolve(in));
-		in = "$A{xxx}x";
+		in = "${A:xxx}x";
 		assertEquals("x", vr.resolve(in));
 	}
 

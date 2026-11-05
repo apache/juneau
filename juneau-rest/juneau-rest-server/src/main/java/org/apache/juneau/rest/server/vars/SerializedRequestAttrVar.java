@@ -30,7 +30,10 @@ import org.apache.juneau.rest.server.*;
  * Serialized request attribute variable resolver.
  *
  * <p>
- * The format for this var is <js>"$SA{contentType,key[,defaultValue]}"</js>.
+ * The format for this var is <js>"${SA:contentType,key[,defaultValue]}"</js>.
+ * The comma separates the content type, the attribute name and the optional default (which is written when the attribute is not set).
+ * This var is not a multipart var, so the body reaches it whole: the commas are part of its own syntax and are not subject
+ * to the one-comma-per-key restriction of defaulting and multipart vars.
  *
  * <p>
  * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
@@ -64,12 +67,13 @@ public class SerializedRequestAttrVar extends StreamedVar {
 	public void resolveTo(VarResolverSession session, Writer w, String key) throws Exception {
 		var i = key.indexOf(',');
 		if (i == -1)
-			throw iaex("Invalid format for $SA var. Must be of the format $SA{contentType,key[,defaultValue]}");
-		var s2 = splita(key);
+			throw iaex("Invalid format for $SA var. Must be of the format ${SA:contentType,key[,defaultValue]}");
+		var s2 = splita(key, ',', 3);
 		var req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-		var o = req.getAttribute(key).orElse(key);
+		var dflt = s2.length > 2 ? s2[2] : null;
+		var o = req.getAttribute(s2[1]).orElse(dflt);
 		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]).orElse(null);
-		if (nn(s))
+		if (nn(s) && nn(o))
 			s.write(o, w);
 	}
 

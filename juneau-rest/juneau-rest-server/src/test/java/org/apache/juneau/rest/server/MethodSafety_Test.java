@@ -449,7 +449,7 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 
 	@Rest(eagerInit = "true")
 	static class Fix_ReadSvl {
-		@RestOp(method = "$S{MethodSafety_Test.r08}", path = "/x", read = true)
+		@RestOp(method = "${S:MethodSafety_Test.r08}", path = "/x", read = true)
 		public String op() { return "x"; }
 	}
 
@@ -500,7 +500,7 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 	@Rest(eagerInit = "true")
 	static class Fix_ReadSvlEmpty extends Fix_ReadParent {
 		@Override
-		@RestOp(method = "$S{MethodSafety_Test.r13.unset}", path = "/x")
+		@RestOp(method = "${S:MethodSafety_Test.r13.unset}", path = "/x")
 		public String view() { return "x"; }
 	}
 

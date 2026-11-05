@@ -86,9 +86,9 @@ class HeaderList_Test extends TestBase {
 		System.setProperty(pname, "y");
 
 		x.append("X1","bar");
-		x.append("X2","$S{"+pname+"}");
+		x.append("X2","${S:"+pname+"}");
 		x.append("X3","bar");
-		x.append("X4",()->"$S{"+pname+"}");
+		x.append("X4",()->"${S:"+pname+"}");
 		x.append(SerializedHeader.of("X5","bar",openApiSession(),null,false));
 
 		assertList(x, "X1: bar", "X2: y", "X3: bar", "X4: y", "X5: bar");

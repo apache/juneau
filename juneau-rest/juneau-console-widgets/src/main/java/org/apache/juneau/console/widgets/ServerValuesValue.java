@@ -24,7 +24,7 @@ import org.apache.juneau.commons.svl.*;
  * An immutable named server-side scalar value declaration held by a {@link ServerValues} bean.
  *
  * <p>
- * Each value pairs a stable {@code name} (the key an author interpolates as <js>"$FV{name}"</js>) with a
+ * Each value pairs a stable {@code name} (the key an author interpolates as <js>"${FV:name}"</js>) with a
  * session-aware {@code provider}.  The provider is invoked at serve time against a per-render
  * {@link VarResolverSession} and must return a scalar ({@link String} / {@link Number} / {@link Boolean}) or
  * <jk>null</jk>; non-scalar results are rejected at resolve time rather than {@code toString()}-ed.
@@ -37,7 +37,7 @@ import org.apache.juneau.commons.svl.*;
  */
 public final class ServerValuesValue {
 
-	/** The interpolation name (the {@code x} in <js>"$FV{x}"</js>).  Must not be null or blank. */
+	/** The interpolation name (the {@code x} in <js>"${FV:x}"</js>).  Must not be null or blank. */
 	public final String name;
 
 	/** The session-aware scalar provider.  Must not be null. */

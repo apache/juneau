@@ -77,7 +77,7 @@ class VarFunction_Test extends TestBase {
 
 	@Test void a01_typedFunctionSingleArg() {
 		var vr = VarResolver.create().functions(new Upper()).build();
-		assertEquals("HELLO", vr.resolve("#{upper(hello)}"));
+		assertEquals("HELLO", vr.resolve("#{upper('hello')}"));
 	}
 
 	@Test void a02_typedFunctionMultiArgIntCoercion() {
@@ -87,44 +87,46 @@ class VarFunction_Test extends TestBase {
 
 	@Test void a03_typedFunctionVariadicStringArray() {
 		var vr = VarResolver.create().functions(new Concat()).build();
-		assertEquals("abc", vr.resolve("#{concat(a, b, c)}"));
+		assertEquals("abc", vr.resolve("#{concat('a', 'b', 'c')}"));
 	}
 
 	@Test void a04_typedFunctionWithSessionArg() {
 		var vr = VarResolver.create().functions(new Echo()).build();
-		assertEquals("hello", vr.resolve("#{echo(hello)}"));
+		assertEquals("hello", vr.resolve("#{echo('hello')}"));
 	}
 
 	@Test void a05_directVarFunctionPassthrough() {
 		var vr = VarResolver.create().functions(new DirectFn()).build();
-		assertEquals("got=hello", vr.resolve("#{direct(hello)}"));
+		assertEquals("got=hello", vr.resolve("#{direct('hello')}"));
 	}
 
-	@Test void a06_unknownFunctionLazyFail() {
+	@Test void a06_unknownFunction() {
+		// Lenient: compile succeeds and the unknown call is kept as literal text.
 		var vr = VarResolver.create().build();
-		// Compile succeeds (lazy-fail)…
 		var tpl = vr.compile("hello #{nope()} world");
 		assertNotNull(tpl);
-		// …but resolve throws.
-		var ex = assertThrows(IllegalArgumentException.class, () -> tpl.resolve(vr.createSession()));
-		assertTrue(ex.getMessage().contains("No such function 'nope'"), ex.getMessage());
+		assertEquals("hello #{nope()} world", tpl.resolve(vr.createSession()));
+		// Strict: fails at compile time with the function name.
+		var strict = VarResolver.create().strict(true).build();
+		var ex = assertThrows(ExprException.class, () -> strict.compile("hello #{nope()} world"));
+		assertTrue(ex.getMessage().contains("unknown function 'nope'"), ex.getMessage());
 	}
 
 	@Test void a07_arityCheckingTooFewArgs() {
 		var vr = VarResolver.create().functions(new Sub()).build();
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{sub(1)}"));
-		assertTrue(ex.getMessage().contains("Function 'sub' expected"), ex.getMessage());
+		var ex = assertThrows(ExprException.class, () -> vr.resolve("#{sub(1)}"));
+		assertTrue(ex.getMessage().contains("function 'sub' expected"), ex.getMessage());
 	}
 
 	@Test void a08_arityCheckingTooManyArgs() {
 		var vr = VarResolver.create().functions(new Sub()).build();
-		var ex = assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{sub(1, 2, 3)}"));
-		assertTrue(ex.getMessage().contains("Function 'sub' expected"), ex.getMessage());
+		var ex = assertThrows(ExprException.class, () -> vr.resolve("#{sub(1, 2, 3)}"));
+		assertTrue(ex.getMessage().contains("function 'sub' expected"), ex.getMessage());
 	}
 
 	@Test void a09_typedFunctionByClass() {
 		var vr = VarResolver.create().functions(Upper.class).build();
-		assertEquals("HELLO", vr.resolve("#{upper(hello)}"));
+		assertEquals("HELLO", vr.resolve("#{upper('hello')}"));
 	}
 
 	@Test void a10_collisionLastRegisteredWins() {
@@ -136,7 +138,7 @@ class VarFunction_Test extends TestBase {
 			@Override public String invoke(VarResolverSession s, List<Object> a) { return "stub"; }
 		};
 		var vr = VarResolver.create().functions(stub).functions(new Upper()).build();
-		assertEquals("HELLO", vr.resolve("#{upper(hello)}"));
+		assertEquals("HELLO", vr.resolve("#{upper('hello')}"));
 	}
 
 	@Test void a11_compositionWithVarLookup() {
@@ -146,7 +148,7 @@ class VarFunction_Test extends TestBase {
 				.vars(org.apache.juneau.commons.svl.vars.SystemPropertiesVar.class)
 				.functions(new Upper())
 				.build();
-			assertEquals("FRED", vr.resolve("#{upper($S{VarFunction_Test.composition})}"));
+			assertEquals("FRED", vr.resolve("#{upper(${S:VarFunction_Test.composition})}"));
 		} finally {
 			System.clearProperty("VarFunction_Test.composition");
 		}
@@ -154,6 +156,6 @@ class VarFunction_Test extends TestBase {
 
 	@Test void a12_nestedScriptCalls() {
 		var vr = VarResolver.create().functions(new Upper(), new Concat()).build();
-		assertEquals("ABC", vr.resolve("#{upper(#{concat(a, b, c)})}"));
+		assertEquals("ABC", vr.resolve("#{upper(concat('a', 'b', 'c'))}"));
 	}
 }

@@ -25,7 +25,7 @@ import org.apache.juneau.commons.svl.*;
  * Dotenv file variable resolver.
  *
  * <p>
- * The format for this var is <js>"$DE{key[,default]}"</js>.
+ * The format for this var is <js>"${DE:key[:default]}"</js>.
  *
  * <p>
  * Values are resolved from {@link DotenvPropertySource} using either:

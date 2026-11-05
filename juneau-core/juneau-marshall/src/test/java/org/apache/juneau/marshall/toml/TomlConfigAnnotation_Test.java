@@ -90,7 +90,7 @@ class TomlConfigAnnotation_Test extends TestBase {
 		assertTrue(TomlSerializer.create().build().write(new Outer()).contains("inner = {"));
 	}
 
-	@TomlConfig(nullValue="$X{~}", sortKeys="$X{true}", useInlineTables="$X{false}", inlineTableThreshold="$X{1}")
+	@TomlConfig(nullValue="${X:~}", sortKeys="${X:true}", useInlineTables="${X:false}", inlineTableThreshold="${X:1}")
 	static class D {}
 
 	@Test void c01_varResolved() throws Exception {

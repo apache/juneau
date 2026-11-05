@@ -25,12 +25,12 @@ import org.apache.juneau.rest.server.converter.*;
  * {@link org.apache.juneau.http.BeanQueryRequest}).
  *
  * <p>
- * The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
+ * The variable it resolves is <js>"${W:QueryMenuItem}"</js>.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(widgets=QueryMenuItem.<jk>class</jk>)
- * 	<ja>@HtmlDocConfig</ja>(navlinks={<js>"$W{QueryMenuItem}"</js>})
+ * 	<ja>@HtmlDocConfig</ja>(navlinks={<js>"${W:QueryMenuItem}"</js>})
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {}
  * </p>
  *

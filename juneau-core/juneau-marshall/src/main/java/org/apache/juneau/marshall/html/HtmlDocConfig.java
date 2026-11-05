@@ -64,7 +64,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -119,7 +119,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
@@ -153,7 +153,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -185,7 +185,7 @@ public @interface HtmlDocConfig {
 	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		head={
-	 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
+	 * 			<js>"&lt;link rel='icon' href='${U:servlet:/htdocs/mypageicon.ico}'&gt;"</js>
 	 * 		}
 	 * 	)
 	 * </p>
@@ -194,7 +194,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		Format: HTML
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -238,7 +238,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
 	 * 	<li class='note'>
@@ -278,7 +278,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -339,7 +339,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -382,7 +382,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -406,7 +406,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -437,7 +437,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <h4 class='section'>See Also:</h4><ul>
@@ -467,7 +467,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		Format: Javascript
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -509,7 +509,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		Format: CSS
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
 	 * 	<li class='note'>
@@ -544,7 +544,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='note'>
 	 * 		Format: URL
 	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
 	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
 	 * 	<li class='note'>
@@ -597,7 +597,7 @@ public @interface HtmlDocConfig {
 	 * HTML Widgets.
 	 *
 	 * <p>
-	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+	 * Defines widgets that can be used in conjunction with string variables of the form <js>"${W:name}"</js>to quickly
 	 * generate arbitrary replacement text.
 	 *
 	 * <p>
@@ -605,7 +605,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(org.apache.juneau.commons.svl.VarResolverSession)}.
+	 * 		<js>"${W:name}"</js> - Contents returned by {@link HtmlWidget#getHtml(org.apache.juneau.commons.svl.VarResolverSession)}.
 	 * </ul>
 	 *
 	 * <p>
@@ -618,10 +618,10 @@ public @interface HtmlDocConfig {
 	 * 			MyWidget.<jk>class</jk>
 	 * 		}
 	 * 		navlinks={
-	 * 			<js>"$W{MyWidget}"</js>
+	 * 			<js>"${W:MyWidget}"</js>
 	 * 		},
 	 * 		aside={
-	 * 			<js>"Check out this widget:  $W{MyWidget}"</js>
+	 * 			<js>"Check out this widget:  ${W:MyWidget}"</js>
 	 * 		}
 	 * 	)
 	 * </p>

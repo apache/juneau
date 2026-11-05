@@ -45,7 +45,7 @@ class UrlEncodingConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@UrlEncodingConfig(
-		expandedParams="$X{true}"
+		expandedParams="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

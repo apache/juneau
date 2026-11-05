@@ -50,7 +50,7 @@ public class RemoteProxyUtils {
 	 *
 	 * <p>
 	 * Ported from the next-generation engine's {@code RrpcInterfaceMeta.parseConstantParts(...)}.  Each entry is
-	 * resolved through {@link VarResolver#DEFAULT} (so values such as {@code "$S{sysprop}"} expand), then split on the
+	 * resolved through {@link VarResolver#DEFAULT} (so values such as {@code "${S:sysprop}"} expand), then split on the
 	 * first occurrence of {@code delim} ({@code ':'} for the {@code "Name: value"} header form, {@code '='} for the
 	 * {@code "name=value"} query/form-data form).  Entries with no delimiter are skipped.  Both the name and the value
 	 * are trimmed.

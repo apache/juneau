@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
  * URL variable resolver.
  *
  * <p>
- * The format for this var is <js>"$U{uri}"</js>.
+ * The format for this var is <js>"${U:uri}"</js>.
  *
  * <p>
  * The advantage of using this variable is that you can resolve URLs with special protocols such as

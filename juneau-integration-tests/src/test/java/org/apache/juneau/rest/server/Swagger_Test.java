@@ -135,8 +135,8 @@ class Swagger_Test extends TestBase {
 
 	@Rest(
 		messages="BasicRestInfoProviderTest",
-		title="$L{foo}",
-		description="$L{foo}"
+		title="${L:foo}",
+		description="${L:foo}"
 	)
 	public static class B2 {}
 
@@ -184,7 +184,7 @@ class Swagger_Test extends TestBase {
 		messages="BasicRestInfoProviderTest",
 		title="a-title",
 		description="a-description",
-		swagger=@Swagger("{info:{title:'$L{bar}',description:'$L{bar}'}}")
+		swagger=@Swagger("{info:{title:'${L:bar}',description:'${L:bar}'}}")
 	)
 	public static class B4 {}
 
@@ -248,12 +248,12 @@ class Swagger_Test extends TestBase {
 					"license:{name:'a-name',url:'a-url'}",
 				"}"
 			},
-			title="$L{baz}",
-			description="$L{baz}",
-			version="$L{foo}",
-			termsOfService="$L{foo}",
-			contact=@Contact(name="$L{foo}",url="$L{bar}",email="$L{baz}"),
-			license=@License(name="$L{foo}",url="$L{bar}")
+			title="${L:baz}",
+			description="${L:baz}",
+			version="${L:foo}",
+			termsOfService="${L:foo}",
+			contact=@Contact(name="${L:foo}",url="${L:bar}",email="${L:baz}"),
+			license=@License(name="${L:foo}",url="${L:bar}")
 		),
 		messages="BasicRestInfoProviderTest"
 	)
@@ -435,8 +435,8 @@ class Swagger_Test extends TestBase {
 
 	@Rest(
 		swagger=@Swagger(
-			value="{tags:[{name:'$L{foo}',description:'$L{foo}',externalDocs:{description:'$L{foo}',url:'$L{foo}'}}]}",
-			tags=@Tag(name="$L{foo}",description="$L{foo}",externalDocs=@ExternalDocs(description="$L{foo}",url="$L{foo}"))
+			value="{tags:[{name:'${L:foo}',description:'${L:foo}',externalDocs:{description:'${L:foo}',url:'${L:foo}'}}]}",
+			tags=@Tag(name="${L:foo}",description="${L:foo}",externalDocs=@ExternalDocs(description="${L:foo}",url="${L:foo}"))
 		),
 		messages="BasicRestInfoProviderTest"
 	)
@@ -519,7 +519,7 @@ class Swagger_Test extends TestBase {
 	// JsonList localized
 	@Rest(messages="BasicRestInfoProviderTest")
 	public static class C11 {
-		@RestGet(swagger=@OpSwagger(tags="['$L{foo}', '$L{bar}']"))
+		@RestGet(swagger=@OpSwagger(tags="['${L:foo}', '${L:bar}']"))
 		public void a() {/* no-op */}
 	}
 
@@ -539,7 +539,7 @@ class Swagger_Test extends TestBase {
 	// Comma-delimited list localized
 	@Rest(messages="BasicRestInfoProviderTest")
 	public static class C12 {
-		@RestGet(swagger=@OpSwagger(tags=" $L{foo}, $L{bar} "))
+		@RestGet(swagger=@OpSwagger(tags=" ${L:foo}, ${L:bar} "))
 		public void a() {/* no-op */}
 	}
 
@@ -617,7 +617,7 @@ class Swagger_Test extends TestBase {
 	@Rest(
 		swagger=@Swagger(
 			value="{externalDocs:{description:'a-description',url:'a-url'}}",
-			externalDocs=@ExternalDocs(description="$L{foo}",url="$L{bar}")
+			externalDocs=@ExternalDocs(description="${L:foo}",url="${L:bar}")
 		),
 		messages="BasicRestInfoProviderTest"
 	)
@@ -730,11 +730,11 @@ class Swagger_Test extends TestBase {
 	public static class E5 {
 		@RestGet(path="/path/{foo}",
 			swagger=@OpSwagger(
-				summary="$L{foo}",
-				operationId="$L{foo}",
-				description="$L{foo}",
-				deprecated="$L{false}",
-				schemes="$L{foo}"
+				summary="${L:foo}",
+				operationId="${L:foo}",
+				description="${L:foo}",
+				deprecated="${L:false}",
+				schemes="${L:foo}"
 			)
 		)
 		public X a() {
@@ -865,7 +865,7 @@ class Swagger_Test extends TestBase {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{tags:'a-tags'}}}"))
 	public static class F6 {
-		@RestGet(path="/path/{foo}",swagger=@OpSwagger(tags="$L{foo}"))
+		@RestGet(path="/path/{foo}",swagger=@OpSwagger(tags="${L:foo}"))
 		public X a() {
 			return null;
 		}
@@ -948,7 +948,7 @@ class Swagger_Test extends TestBase {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{externalDocs:{description:'a-description',url:'a-url'}}}}"))
 	public static class G6 {
-		@RestGet(path="/path/{foo}",swagger=@OpSwagger(externalDocs=@ExternalDocs(description="$L{foo}",url="$L{foo}")))
+		@RestGet(path="/path/{foo}",swagger=@OpSwagger(externalDocs=@ExternalDocs(description="${L:foo}",url="${L:foo}")))
 		public X a() {
 			return null;
 		}
@@ -1031,7 +1031,7 @@ class Swagger_Test extends TestBase {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{consumes:['a-consumes']}}}"))
 	public static class H6 {
-		@RestGet(path="/path/{foo}",swagger=@OpSwagger(consumes="['$L{foo}']"))
+		@RestGet(path="/path/{foo}",swagger=@OpSwagger(consumes="['${L:foo}']"))
 		public X a() {
 			return null;
 		}
@@ -1157,7 +1157,7 @@ class Swagger_Test extends TestBase {
 
 	@Rest(messages="BasicRestInfoProviderTest", swagger=@Swagger("paths:{'/path/{foo}':{get:{produces:['a-produces']}}}"))
 	public static class I6 {
-		@RestGet(path="/path/{foo}",swagger=@OpSwagger(produces="['$L{foo}']"))
+		@RestGet(path="/path/{foo}",swagger=@OpSwagger(produces="['${L:foo}']"))
 		public X a() {
 			return null;
 		}
@@ -1533,7 +1533,7 @@ class Swagger_Test extends TestBase {
 		@RestGet(path="/path/{foo}/responses/100")
 		public O5c a() {return null;}
 	}
-	@Response @StatusCode(100) @Schema(description="$L{foo}")
+	@Response @StatusCode(100) @Schema(description="${L:foo}")
 	public static class O5c {}
 
 	@Test void o05a_response_100_description_swaggerOnAnnotation_localized() throws Exception {
@@ -1631,7 +1631,7 @@ class Swagger_Test extends TestBase {
 		@RestGet(path="/path/{foo}/responses/100")
 		public P5c a() {return null;}
 	}
-	@Response(headers=@Header(name="X-Foo",schema=@Schema(description="$L{foo}",type="integer",format="int32"))) @StatusCode(100)
+	@Response(headers=@Header(name="X-Foo",schema=@Schema(description="${L:foo}",type="integer",format="int32"))) @StatusCode(100)
 	public static class P5c {}
 
 	@Test void p05a_response_100_headers_swaggerOnAnnotation_localized() throws Exception {
@@ -1725,7 +1725,7 @@ class Swagger_Test extends TestBase {
 		@RestGet(path="/path/{foo}/responses/100")
 		public R5c a() {return null;}
 	}
-	@Response(examples="{foo:{bar:'$L{foo}'}}") @StatusCode(100)
+	@Response(examples="{foo:{bar:'${L:foo}'}}") @StatusCode(100)
 	public static class R5c {}
 
 	@Test void r05a_response_100_examples_swaggerOnAnnotation_lodalized() throws Exception {

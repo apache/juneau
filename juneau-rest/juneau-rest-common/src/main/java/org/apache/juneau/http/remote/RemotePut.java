@@ -141,7 +141,7 @@ public @interface RemotePut {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Only <c>http</c>/<c>https</c> schemes are permitted when the override yields an absolute URL; other schemes
 	 * 		are rejected (SSRF guardrail).
@@ -225,7 +225,7 @@ public @interface RemotePut {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -248,7 +248,7 @@ public @interface RemotePut {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).
@@ -271,7 +271,7 @@ public @interface RemotePut {
 	 * <h4 class='section'>Notes:</h4><ul>
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a>
-	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
+	 * 		(e.g. <js>"${S:mySystemProperty}"</js>).
 	 * 	<li class='note'>
 	 * 		Honored by both the next-generation engine (<c>RestClient.remote(...)</c>) and the classic engine
 	 * 		(<c>RestClient.getRemote(...)</c>).

@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.servlet.*;
  *
  * <p>
  * <b>Path prefix:</b> defaults to {@code /actuator} and is configurable via the {@code juneau.actuator.path}
- * system property (resolved through the standard {@code $S{...}} SVL var).  Mount the group at a custom prefix
+ * system property (resolved through the standard {@code ${S:...}} SVL var).  Mount the group at a custom prefix
  * either by setting that property or by subclassing with your own {@link Rest#path() @Rest(path=...)}.
  *
  * <p>
@@ -71,7 +71,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * @since 10.0.0
  */
 @Rest(
-	path="$S{juneau.actuator.path,/actuator}",
+	path="${S:juneau.actuator.path:/actuator}",
 	title="Management",
 	description="Actuator-style management surface.",
 	mixins={

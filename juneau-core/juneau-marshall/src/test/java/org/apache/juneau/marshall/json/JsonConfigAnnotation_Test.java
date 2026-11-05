@@ -45,9 +45,9 @@ class JsonConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@JsonConfig(
-		addBeanTypes="$X{true}",
-		escapeSolidus="$X{true}",
-		validateEnd="$X{true}"
+		addBeanTypes="${X:true}",
+		escapeSolidus="${X:true}",
+		validateEnd="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

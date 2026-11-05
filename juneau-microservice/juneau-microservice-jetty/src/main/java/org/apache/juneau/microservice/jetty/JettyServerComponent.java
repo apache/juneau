@@ -183,8 +183,8 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * mount time. The programmatic Builder rung is N/A for Jetty auto-discovery (the {@code RestContext} does
 	 * not exist yet at this point in the lifecycle); users can substitute by overriding {@code getPaths()} on
 	 * the resource class, or by leaning on SVL inside {@code @Rest(paths=...)} elements (e.g.
-	 * {@code paths={"$C{health.paths}"}}) so each element is resolved through {@code Config} /
-	 * {@code $E{...}} / {@code $S{...}} before being comma-split.
+	 * {@code paths={"${C:health.paths}"}}) so each element is resolved through {@code Config} /
+	 * {@code ${E:...}} / {@code ${S:...}} before being comma-split.
 	 *
 	 * @return The normalized exact-match path-specs (for multi-mount), or the singular {@code @Rest(path)}-style
 	 * 	{@code "/...&#47;*"} pathspec when no {@code paths} are resolved.
@@ -233,7 +233,7 @@ public class JettyServerComponent implements MicroserviceListener {
 
 			if (availablePortEnv.isEmpty())
 				// Intentional real-JVM-property publish: the bundled jetty.xml binds its connector to
-				// $S{availablePort,10000}, and the $S{...} SVL var resolves via raw System.getProperty (bypassing
+				// ${S:availablePort:10000}, and the ${S:...} SVL var resolves via raw System.getProperty (bypassing
 				// the Settings override chain).  A Settings-based write would be invisible to jetty.xml, so the
 				// bound port MUST be published as a real system property here.  The @Value-injected availablePortEnv
 				// read side is already Settings-abstracted; only this publish must stay raw.
@@ -359,7 +359,7 @@ public class JettyServerComponent implements MicroserviceListener {
 
 			if (serverPortEnv.isEmpty())
 				// Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external
-				// publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A
+				// publication of the bound port, consumed via raw System.getProperty (and ${S:...} SVL).  A
 				// Settings-based write would not be visible to those raw readers, so this is kept.  The
 				// @Value-injected serverPortEnv read side is already Settings-abstracted.
 				System.setProperty("juneau.serverPort", String.valueOf(availablePort));

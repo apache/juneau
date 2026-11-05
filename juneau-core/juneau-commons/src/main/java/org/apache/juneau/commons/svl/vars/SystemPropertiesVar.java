@@ -23,15 +23,15 @@ import org.apache.juneau.commons.svl.*;
  * System property variable resolver.
  *
  * <p>
- * The format for this var is <js>"$S{systemProperty[,defaultValue]}"</js>
+ * The format for this var is <js>"${S:systemProperty[:defaultValue]}"</js>
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- * 	<jc>// Create a variable resolver that resolves system properties (e.g. "$S{java.home}")</jc>
+ * 	<jc>// Create a variable resolver that resolves system properties (e.g. "${S:java.home}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(SystemPropertiesVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to $S{java.home}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to ${S:java.home}"</js>));
  * </p>
  *
  * <p>

@@ -26,9 +26,9 @@ import org.apache.juneau.marshall.html.*;
 
 	// Default page header contents.
 	header={
-		"<h1>$RS{title}</h1>",  // Use @Rest(title)
-		"<h2>$RS{operationSummary,description}</h2>", // Use either @RestOp(summary) or @Rest(description)
-		"$C{REST/header}"  // Extra header HTML defined in external config file.
+		"<h1>${RS:title}</h1>",  // Use @Rest(title)
+		"<h2>${RS:operationSummary:description}</h2>", // Use either @RestOp(summary) or @Rest(description)
+		"${C:REST/header}"  // Extra header HTML defined in external config file.
 	},
 
 	// Basic page navigation links.
@@ -39,15 +39,15 @@ import org.apache.juneau.marshall.html.*;
 	// Default stylesheet to use for the page.
 	// Can be overridden from external config file.
 	// Default is DevOps look-and-feel (aka Depression look-and-feel).
-	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
+	stylesheet="${C:REST/theme:servlet:/htdocs/themes/devops.css}",
 
 	// Default contents to add to the <head> section of the HTML page.
 	// Use it to add a favicon link to the page.
-	head="$C{REST/head}",
+	head="${C:REST/head}",
 
 	// No default page footer contents.
 	// Can be overridden from external config file.
-	footer="$C{REST/footer}",
+	footer="${C:REST/footer}",
 
 	// By default, table cell contents should not wrap.
 	nowrap="true"

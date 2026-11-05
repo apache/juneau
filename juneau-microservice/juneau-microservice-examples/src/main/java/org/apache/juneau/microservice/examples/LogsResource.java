@@ -320,7 +320,7 @@ public class LogsResource extends BasicRestServlet {
 		description="Returns information about the specified file or directory."
 	)
 	@HtmlDocConfig(
-		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
+		nav={"<h5>Folder:  ${RA:fullPath}</h5>"}
 	)
 	@SuppressWarnings({
 		"java:S112" // throws Exception intentional - callback/lifecycle method
@@ -456,7 +456,7 @@ public class LogsResource extends BasicRestServlet {
 		)
 	)
 	@HtmlDocConfig(
-		nav={"<h5>Folder:  $RA{fullPath}</h5>"}
+		nav={"<h5>Folder:  ${RA:fullPath}</h5>"}
 	)
 	public LogParser viewParsedEntries(
 			RestRequest req,

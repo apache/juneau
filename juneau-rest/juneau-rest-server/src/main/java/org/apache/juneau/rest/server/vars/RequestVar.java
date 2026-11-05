@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.*;
  * Request attribute variable resolver.
  *
  * <p>
- * The format for this var is <js>"$R{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${R:key1[:key2...]}"</js>.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <p>
@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>
- * 	String <jv>servletClass</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$R{servletClass}"</js>);
+ * 	String <jv>servletClass</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"${R:servletClass}"</js>);
  * </p>
  *
  * <h2 class='section'>Notes:</h2><ul>

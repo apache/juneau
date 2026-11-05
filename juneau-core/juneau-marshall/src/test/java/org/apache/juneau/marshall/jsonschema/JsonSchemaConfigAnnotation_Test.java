@@ -57,13 +57,13 @@ class JsonSchemaConfigAnnotation_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@JsonSchemaConfig(
-		addDescriptionsTo="$X{BEAN}",
-		addExamplesTo="$X{BEAN}",
-		allowNestedDescriptions="$X{true}",
-		allowNestedExamples="$X{true}",
+		addDescriptionsTo="${X:BEAN}",
+		addExamplesTo="${X:BEAN}",
+		allowNestedDescriptions="${X:true}",
+		allowNestedExamples="${X:true}",
 		beanDefMapper=BasicBeanDefMapper.class,
-		ignoreTypes="$X{foo}",
-		useBeanDefs="$X{true}"
+		ignoreTypes="${X:foo}",
+		useBeanDefs="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

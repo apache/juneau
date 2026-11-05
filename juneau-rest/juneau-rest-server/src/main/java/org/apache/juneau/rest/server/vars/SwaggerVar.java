@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
  * Swagger attribute variable resolver.
  *
  * <p>
- * The format for this var is <js>"$SS{key1[,key2...]}"</js>.
+ * The format for this var is <js>"${SS:key1[:key2...]}"</js>.
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <p>

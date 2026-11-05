@@ -135,7 +135,7 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 	@Rest(paths = {"/x,/y"})
 	static class Fix_PathsAnnotation {}
 
-	@Rest(paths = {"$Boom{oops},/fallback"})
+	@Rest(paths = {"${Boom:oops},/fallback"})
 	static class Fix_PathsAnnotationSvlThrows {}
 
 	/** A custom SVL var whose resolution always throws, to exercise the applySvl catch-and-fallback branch. */
@@ -157,9 +157,9 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 		store.addBean(VarResolver.class, vr);
 		try (store) {
 			var r = RestContext.resolveTopLevelPaths(Fix_PathsAnnotationSvlThrows.class, null, store);
-			// The "$Boom{oops},/fallback" literal has no comma-split applied to the (unresolved) raw element on
+			// The "${Boom:oops},/fallback" literal has no comma-split applied to the (unresolved) raw element on
 			// SVL failure -- applySvl returns the whole literal unchanged, which is then comma-split downstream.
-			assertEquals(List.of("$Boom{oops}", "/fallback"), Arrays.asList(r));
+			assertEquals(List.of("${Boom:oops}", "/fallback"), Arrays.asList(r));
 		}
 	}
 

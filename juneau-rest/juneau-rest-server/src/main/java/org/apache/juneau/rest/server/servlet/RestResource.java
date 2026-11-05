@@ -195,8 +195,8 @@ public abstract class RestResource {
 	 * Non-{@link String} leaves are coerced via {@link String#valueOf(Object)}.  Each leaf string then runs
 	 * through the same per-element pipeline used for {@code @Rest(paths=...)} annotation elements: SVL is
 	 * applied via the bean-store-backed {@link org.apache.juneau.commons.svl.VarResolverSession VarResolverSession}
-	 * (so {@code $C{key}} consults the live {@link org.apache.juneau.config.Config Config}, {@code $E{NAME,default}}
-	 * and {@code $S{prop,default}} resolve through the bootstrap variable catalog), and the post-SVL value is
+	 * (so {@code ${C:key}} consults the live {@link org.apache.juneau.config.Config Config}, {@code ${E:NAME:default}}
+	 * and {@code ${S:prop:default}} resolve through the bootstrap variable catalog), and the post-SVL value is
 	 * comma-split with each piece trimmed and empty pieces dropped.
 	 *
 	 * <h4 class='section'>Notes:</h4><ul>

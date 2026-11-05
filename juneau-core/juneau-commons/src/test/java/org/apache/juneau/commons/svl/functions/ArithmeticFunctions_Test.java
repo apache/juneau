@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /** Tests for {@link ArithmeticFunctions}. */
 class ArithmeticFunctions_Test extends TestBase {
 
-	private final VarResolver vr = VarResolver.create().functions(ArithmeticFunctions.ALL).build();
+	private final VarResolver vr = VarResolver.create().defaultFunctions().build();
 
 	@Test void a01_add_int() { assertEquals("5", vr.resolve("#{add(2, 3)}")); }
 	@Test void a02_add_float() { assertEquals("5.5", vr.resolve("#{add(2.0, 3.5)}")); }

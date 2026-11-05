@@ -52,7 +52,7 @@ class RandomFunctions_Test extends TestBase {
 	}
 
 	@Test void a04_randInt_invalidMaxThrows() {
-		assertThrows(IllegalArgumentException.class, () -> vr.resolve("#{randInt(0)}"));
+		assertThrows(ExprException.class, () -> vr.resolve("#{randInt(0)}"));
 	}
 
 	@Test void a05_randLong_inRange() {
@@ -70,7 +70,7 @@ class RandomFunctions_Test extends TestBase {
 	}
 
 	@Test void a07_randString_charset() {
-		var s = vr.resolve("#{randString(8, abc)}");
+		var s = vr.resolve("#{randString(8, 'abc')}");
 		assertEquals(8, s.length());
 		for (var c : s.toCharArray())
 			assertTrue(c == 'a' || c == 'b' || c == 'c');
@@ -79,7 +79,7 @@ class RandomFunctions_Test extends TestBase {
 	@Test void a08_randChoice() {
 		var seen = new HashSet<String>();
 		for (var i = 0; i < 50; i++)
-			seen.add(vr.resolve("#{randChoice(red, green, blue)}"));
+			seen.add(vr.resolve("#{randChoice('red', 'green', 'blue')}"));
 		// With 50 picks of a 3-option choice, we should observe all three with very high probability.
 		assertFalse(seen.isEmpty());
 		assertTrue(seen.size() <= 3);

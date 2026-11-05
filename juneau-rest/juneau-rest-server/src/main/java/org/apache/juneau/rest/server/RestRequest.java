@@ -1744,7 +1744,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 		VarResolverSession <jv>session</jv> = getVarResolverSession();
 	 *
 	 * 		<jc>// Use it to construct a customized message from a query parameter.</jc>
-	 * 		<jk>return</jk> <jv>session</jv>.resolve(<js>"Hello $RQ{user}!"</js>);
+	 * 		<jk>return</jk> <jv>session</jv>.resolve(<js>"Hello ${RQ:user}!"</js>);
 	 * 	}
 	 * </p>
 	 *

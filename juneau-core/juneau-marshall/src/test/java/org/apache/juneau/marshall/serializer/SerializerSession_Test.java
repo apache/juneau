@@ -703,7 +703,7 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void j01_resolve_systemProperty() {
 		var s = (SerializerSession) JsonSerializer.DEFAULT.createSession().build();
-		// VarResolver.DEFAULT supports $S{name,default}; we pass a literal that won't expand.
+		// VarResolver.DEFAULT supports ${S:name:default}; we pass a literal that won't expand.
 		assertEquals("plain text", s.resolve("plain text"));
 	}
 

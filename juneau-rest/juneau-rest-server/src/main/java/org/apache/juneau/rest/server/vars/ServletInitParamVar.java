@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * Servlet init parameter variable resolver.
  *
  * <p>
- * The format for this var is <js>"$I{key[,defaultValue]}"</js>.
+ * The format for this var is <js>"${I:key[:defaultValue]}"</js>.
  *
  * <p>
  * This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.

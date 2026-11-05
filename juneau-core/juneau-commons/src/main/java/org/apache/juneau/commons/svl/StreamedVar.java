@@ -42,10 +42,17 @@ public abstract class StreamedVar extends Var {
 	/**
 	 * Constructor.
 	 *
-	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"$C{...}"</js>).  Must not be <jk>null</jk>.
+	 * @param name The variable name (e.g. <js>"C"</js> for variables of the form <js>"${C:...}"</js>).  Must not be <jk>null</jk>.
 	 */
 	protected StreamedVar(String name) {
 		super(name, true);
+	}
+
+	@Override /* Overridden from Var */
+	protected Object resolveValue(VarResolverSession session, String arg) throws Exception {
+		var w = new java.io.StringWriter();
+		resolveTo(session, w, arg);
+		return w.toString();
 	}
 
 	@Override /* Overridden from Var */

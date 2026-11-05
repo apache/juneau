@@ -207,7 +207,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// Lenient enum resolution for uriRelativity / uriResolution: blank, invalid, mis-cased, whitespace-padded, and
-	// SVL ($S{...}) values all fall back to the hard default rather than throwing, and a valid value (with SVL and
+	// SVL (${S:...}) values all fall back to the hard default rather than throwing, and a valid value (with SVL and
 	// surrounding whitespace tolerated) resolves to its enum constant. The RestContext.* env value is applied through
 	// the resource's var resolver in RestContext#getUriRelativity() / #getUriResolution().
 	// -----------------------------------------------------------------------------------------------------------------
@@ -267,7 +267,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
 	@Test void d06_uriRelativity_svlValueResolves() throws Exception {
 		System.setProperty("rcpo.uriRelativity", "PATH_INFO");
-		System.setProperty("RestContext.uriRelativity", "$S{rcpo.uriRelativity}");
+		System.setProperty("RestContext.uriRelativity", "${S:rcpo.uriRelativity}");
 		try {
 			var ctx = build(D01.class, new D01());
 			assertEquals(UriRelativity.PATH_INFO, ctx.getUriRelativity());
@@ -332,7 +332,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
 	@Test void e06_uriResolution_svlValueResolves() throws Exception {
 		System.setProperty("rcpo.uriResolution", "ABSOLUTE");
-		System.setProperty("RestContext.uriResolution", "$S{rcpo.uriResolution}");
+		System.setProperty("RestContext.uriResolution", "${S:rcpo.uriResolution}");
 		try {
 			var ctx = build(E01.class, new E01());
 			assertEquals(UriResolution.ABSOLUTE, ctx.getUriResolution());
@@ -352,13 +352,13 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
 	@Test void f01_beanCarriesRawStringVerbatim() throws Exception {
 		System.setProperty("RestContext.uriRelativity", " path_info ");
-		System.setProperty("RestContext.uriResolution", "$S{rcpo.absent}");
+		System.setProperty("RestContext.uriResolution", "${S:rcpo.absent}");
 		try {
 			var ctx = build(F01.class, new F01());
 			var p = ctx.getRestContextProperties();
 			// Raw strings are stored verbatim (no trim, no SVL, no enum conversion).
 			assertEquals(" path_info ", p.getUriRelativityRaw());
-			assertEquals("$S{rcpo.absent}", p.getUriResolutionRaw());
+			assertEquals("${S:rcpo.absent}", p.getUriResolutionRaw());
 		} finally {
 			System.clearProperty("RestContext.uriRelativity");
 			System.clearProperty("RestContext.uriResolution");
@@ -433,7 +433,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// Boolean settings resolve SVL ($S{...}) in the RestContext.* env default the same as the enum settings do: the
+	// Boolean settings resolve SVL (${S:...}) in the RestContext.* env default the same as the enum settings do: the
 	// raw seed is resolved recursively through the resource var resolver before being parsed to boolean. Covers both
 	// a merge-path boolean (virtualThreads / eagerInit) and a direct-read boolean (responseTraceparent), with literal,
 	// blank, and absent inputs asserted alongside to pin the full behavior surface. These settings are intentionally
@@ -463,7 +463,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
 	@Test void i03_virtualThreads_svlValueResolves() throws Exception {
 		System.setProperty("rcpo.virtualThreads", "true");
-		System.setProperty("RestContext.virtualThreads", "$S{rcpo.virtualThreads}");
+		System.setProperty("RestContext.virtualThreads", "${S:rcpo.virtualThreads}");
 		try {
 			assertTrue(build(I01.class, new I01()).isVirtualThreadsEnabled());
 		} finally {
@@ -487,7 +487,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 
 	@Test void i06_eagerInit_svlValueResolves() throws Exception {
 		System.setProperty("rcpo.eagerInit", "true");
-		System.setProperty("RestContext.eagerInit", "$S{rcpo.eagerInit}");
+		System.setProperty("RestContext.eagerInit", "${S:rcpo.eagerInit}");
 		try {
 			assertTrue(build(I01.class, new I01()).isEagerInit());
 		} finally {
@@ -499,7 +499,7 @@ class RestContext_ConfigPropertiesOverride_Test extends TestBase {
 	@Test void i07_responseTraceparent_svlValueResolves() throws Exception {
 		// Default is true; assert an SVL value resolves recursively (would parse false under a literal-only bug).
 		System.setProperty("rcpo.responseTraceparent", "true");
-		System.setProperty("RestContext.responseTraceparent", "$S{rcpo.responseTraceparent}");
+		System.setProperty("RestContext.responseTraceparent", "${S:rcpo.responseTraceparent}");
 		try {
 			assertTrue(build(I01.class, new I01()).isResponseTraceparent());
 		} finally {

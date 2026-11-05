@@ -28,14 +28,14 @@ import org.junit.jupiter.api.*;
 class RestVars_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// a - RequestHeaderVar ($RH{key})
+	// a - RequestHeaderVar (${RH:key})
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class A {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RH{X-Test}");
+			return req.getVarResolverSession().resolve("${RH:X-Test}");
 		}
 	}
 
@@ -57,14 +57,14 @@ class RestVars_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// b - RequestQueryVar ($RQ{key})
+	// b - RequestQueryVar (${RQ:key})
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class B {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RQ{foo}");
+			return req.getVarResolverSession().resolve("${RQ:foo}");
 		}
 	}
 
@@ -85,7 +85,7 @@ class RestVars_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// c - RequestAttributeVar ($RA{key})
+	// c - RequestAttributeVar (${RA:key})
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
@@ -93,7 +93,7 @@ class RestVars_Test extends TestBase {
 		@RestGet
 		public String get(RestRequest req) {
 			req.setAttribute("myAttr", "attrValue");
-			return req.getVarResolverSession().resolve("$RA{myAttr}");
+			return req.getVarResolverSession().resolve("${RA:myAttr}");
 		}
 	}
 
@@ -109,7 +109,7 @@ class RestVars_Test extends TestBase {
 	public static class C2 {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RA{noSuchAttr}");
+			return req.getVarResolverSession().resolve("${RA:noSuchAttr}");
 		}
 	}
 
@@ -122,14 +122,14 @@ class RestVars_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// d - RequestVar ($R{key}) - request properties
+	// d - RequestVar (${R:key}) - request properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class D {
 		@RestGet
 		public String method(RestRequest req) {
-			return req.getVarResolverSession().resolve("$R{method}");
+			return req.getVarResolverSession().resolve("${R:method}");
 		}
 	}
 
@@ -145,7 +145,7 @@ class RestVars_Test extends TestBase {
 	public static class D2 {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$R{servletPath}");
+			return req.getVarResolverSession().resolve("${R:servletPath}");
 		}
 	}
 
@@ -161,7 +161,7 @@ class RestVars_Test extends TestBase {
 	public static class D3 {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$R{requestURI}");
+			return req.getVarResolverSession().resolve("${R:requestURI}");
 		}
 	}
 
@@ -178,7 +178,7 @@ class RestVars_Test extends TestBase {
 		@RestGet
 		public String get(RestRequest req) {
 			// Unknown key falls back to request attributes
-			return req.getVarResolverSession().resolve("$R{unknownKey}");
+			return req.getVarResolverSession().resolve("${R:unknownKey}");
 		}
 	}
 
@@ -191,14 +191,14 @@ class RestVars_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// e - UrlVar ($U{uri})
+	// e - UrlVar (${U:uri})
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class E {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$U{servlet:/foo}");
+			return req.getVarResolverSession().resolve("${U:servlet:/foo}");
 		}
 	}
 
@@ -214,7 +214,7 @@ class RestVars_Test extends TestBase {
 	public static class E2 {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$U{http://example.com/bar}");
+			return req.getVarResolverSession().resolve("${U:http://example.com/bar}");
 		}
 	}
 
@@ -227,14 +227,14 @@ class RestVars_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// f - RequestHeaderVar multipart ($RH{key1,key2}) - first non-null wins
+	// f - RequestHeaderVar multipart (${RH:key1:key2}) - first non-null wins
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class F {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RH{X-Missing,X-Fallback}");
+			return req.getVarResolverSession().resolve("${RH:X-Missing:X-Fallback}");
 		}
 	}
 
@@ -258,14 +258,14 @@ class RestVars_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// g - RequestQueryVar multipart ($RQ{key1,key2}) - first non-null wins
+	// g - RequestQueryVar multipart (${RQ:key1:key2}) - first non-null wins
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
 	public static class G {
 		@RestGet
 		public String get(RestRequest req) {
-			return req.getVarResolverSession().resolve("$RQ{a,b}");
+			return req.getVarResolverSession().resolve("${RQ:a:b}");
 		}
 	}
 

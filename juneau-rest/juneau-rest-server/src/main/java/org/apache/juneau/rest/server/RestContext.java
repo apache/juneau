@@ -143,7 +143,7 @@ import jakarta.servlet.http.*;
  */
 @SuppressWarnings({
 	"java:S112", // RuntimeException used in memoizer lambdas to re-wrap checked exceptions (ServletException/Exception) that Supplier<T> cannot declare
-	"java:S125", // Explanatory comments reference SVL ($C{...}/$E{...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code
+	"java:S125", // Explanatory comments reference SVL (${C:...}/${E:...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code
 	"java:S1141", // Nested try/catch blocks required for granular error reporting during initialization.
 	"java:S1192", // Duplicate string literals are property key names and REST annotation attribute values; intentional
 	"java:S1200", // Class has many dependencies; acceptable for this core context class
@@ -685,7 +685,7 @@ public class RestContext extends Context {
 	 * 	<li>The resource's {@code getPaths()} getter (when non-{@code null}).
 	 * 	<li>{@link Rest#paths() @Rest(paths)} annotation default, walked top-down with the most-derived non-empty
 	 * 		array winning.  Each element is SVL-resolved against a session of {@code vr} backed by
-	 * 		{@code beanStore} (so {@code $C{key}} consults whatever {@link Config} is registered), then
+	 * 		{@code beanStore} (so {@code ${C:key}} consults whatever {@link Config} is registered), then
 	 * 		comma-split.
 	 * </ol>
 	 *
@@ -712,13 +712,13 @@ public class RestContext extends Context {
 	 * 		{@code RestResource}). {@code null} return falls through; non-{@code null} (including empty array) wins.
 	 * 	<li>{@link Rest#paths() @Rest(paths)} annotation default on the most-derived class, SVL-resolved per
 	 * 		element and comma-split.  A {@code VarResolver} is looked up on {@code store} (when present); SVL
-	 * 		variables like {@code $C{key}} resolve against beans visible to the bean store.
+	 * 		variables like {@code ${C:key}} resolve against beans visible to the bean store.
 	 * </ol>
 	 *
 	 * @param resourceClass The {@code @Rest}-annotated resource class. Must not be {@code null}.
 	 * @param resource The resource instance. May be {@code null} (in which case the getter rung is skipped).
 	 * @param store The bean store used to look up the {@link VarResolver} for SVL substitution on annotation
-	 * 	elements, and to back the resolver session for bean-driven SVL vars like {@code $C{key}}. May be
+	 * 	elements, and to back the resolver session for bean-driven SVL vars like {@code ${C:key}}. May be
 	 * 	{@code null} (SVL is then skipped; literals pass through unchanged).
 	 * @return The resolved paths array (never {@code null}; possibly empty).
 	 * @since 10.0.0
@@ -762,10 +762,10 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Each input element is SVL-resolved (via a session of the bootstrap {@link VarResolver} that's backed
-	 * by {@code beanStore} when one is available, so bean-driven vars like {@code $C{key}} can find the
+	 * by {@code beanStore} when one is available, so bean-driven vars like {@code ${C:key}} can find the
 	 * registered {@link Config}), then split on {@code ,}; each piece is trimmed and empty pieces are
-	 * dropped.  This lets a single element like {@code "$C{health.paths}"} or
-	 * {@code "$E{HEALTH_PATHS,/healthz,/readyz}"} expand to multiple mount paths.
+	 * dropped.  This lets a single element like {@code "${C:health.paths}"} or
+	 * {@code "${E:HEALTH_PATHS:/healthz,/readyz}"} expand to multiple mount paths.
 	 */
 	private static String[] expandPathsElements(String[] elements, VarResolver vr, WritableBeanStore beanStore) {
 		// Open a single session for the whole array — reusing it across elements avoids re-walking the
@@ -813,7 +813,7 @@ public class RestContext extends Context {
 	 * preserves traversal order; {@code null} leaves are dropped.  Comma-split + SVL resolution are
 	 * intentionally <i>not</i> applied here &mdash; they happen downstream in
 	 * {@link #expandPathsElements(String[], VarResolver, WritableBeanStore)} so SVL substitution sees the
-	 * raw element (preserving {@code $E{NAME,defaultWithCommas}}-style defaults) before the post-SVL
+	 * raw element (preserving {@code ${E:NAME:defaultWithCommas}}-style defaults) before the post-SVL
 	 * comma-split fires.
 	 */
 	private static List<String> normalizePaths(Object o) {
@@ -1254,9 +1254,9 @@ public class RestContext extends Context {
 		if (v.isEmpty() && eq(cf, "SYSTEM_DEFAULT"))
 			v.set(Config.getSystemDefault());
 		if (v.isEmpty() && cf.isEmpty() && isMixinContextField() && getParentContext() != null)
-			// Mixin sub-contexts with no own @Rest(config) inherit the host's raw Config, so that $C{...}
+			// Mixin sub-contexts with no own @Rest(config) inherit the host's raw Config, so that ${C:...}
 			// SVL variables embedded in inherited class-level config (e.g. the @HtmlDocConfig theme/header/
-			// footer declared via $C{REST/...} on BasicRestConfig) resolve against the host's loaded config
+			// footer declared via ${C:REST/...} on BasicRestConfig) resolve against the host's loaded config
 			// rather than an empty one.  This mirrors the way messages and varResolver tokens already inherit
 			// from the host for mixin sub-contexts.
 			v.set(getParentContext().rawConfig.get());
@@ -2787,8 +2787,8 @@ public class RestContext extends Context {
 			// the resolved array is what hosting runtimes (Jetty auto-discovery, Spring Boot ServletRegistrationBean)
 			// should consume rather than reading the raw @Rest(paths) annotation directly.  Each @Rest(paths)
 			// element is SVL-resolved through a VarResolver session backed by the live bean store — so
-			// $C{key} consults whatever Config is currently registered (test overlay, @Bean factory, or the
-			// framework's runtime Config) and $E{NAME,default} / $S{prop,default} use the bootstrap variable
+			// ${C:key} consults whatever Config is currently registered (test overlay, @Bean factory, or the
+			// framework's runtime Config) and ${E:NAME:default} / ${S:prop:default} use the bootstrap variable
 			// catalog without needing any beans.  The session-with-beanstore form is what makes test-time
 			// Config injection visible to SVL without firing the full runtime VarResolver memoizer.
 			paths = resolveMountPaths(builder, resource.get(), getBootstrapVarResolver(), beanStore, getRestAnnotations());
@@ -3193,7 +3193,7 @@ public class RestContext extends Context {
 	}
 
 	// Resolves a raw RestContext.* boolean default carried on RestContextProperties: SVL variables in the raw seed
-	// are resolved recursively through the resource var resolver (so a value such as $S{flag} or $C{...} resolves to
+	// are resolved recursively through the resource var resolver (so a value such as ${S:flag} or ${C:...} resolves to
 	// its target) before parsing to a boolean.  A blank or unresolved value parses to false.  This mirrors the enum
 	// treatment (getUriRelativityRaw()/getUriResolutionRaw()) — the bean carries the raw string and RestContext owns
 	// all SVL resolution and typing, since only RestContext holds the var resolver.
@@ -4288,7 +4288,7 @@ public class RestContext extends Context {
 	 * 		hierarchy with the most-derived non-empty value winning. Each element is
 	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a>-resolved
 	 * 		against the bootstrap {@link VarResolver VarResolver}, then comma-split (trim
-	 * 		each piece, drop empties).  A single element like {@code "$C{health.paths}"} can therefore expand
+	 * 		each piece, drop empties).  A single element like {@code "${C:health.paths}"} can therefore expand
 	 * 		to multiple mount paths.
 	 * </ol>
 	 *
@@ -4655,12 +4655,12 @@ public class RestContext extends Context {
 	 * 	<ja>@Rest</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
 	 * 		properties={
-	 * 			<ja>@Property</ja>(name=<js>"title"</js>,value=<js>"$L{title}"</js>),  <jc>// Localized variable in Messages.properties</jc>
-	 * 			<ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"$S{java.vendor,Oracle}"</js>),  <jc>// System property with default value</jc>
+	 * 			<ja>@Property</ja>(name=<js>"title"</js>,value=<js>"${L:title}"</js>),  <jc>// Localized variable in Messages.properties</jc>
+	 * 			<ja>@Property</ja>(name=<js>"javaVendor"</js>,value=<js>"${S:java.vendor:Oracle}"</js>),  <jc>// System property with default value</jc>
 	 * 			<ja>@Property</ja>(name=<js>"foo"</js>,value=<js>"bar"</js>),
 	 * 			<ja>@Property</ja>(name=<js>"bar"</js>,value=<js>"baz"</js>),
-	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo}"</js>),  <jc>// Request variable.  value="bar"</jc>
-	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo,bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
+	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"${R:foo}"</js>),  <jc>// Request variable.  value="bar"</jc>
+	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"${R:foo:bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
 	 * 		}
 	 * 	)
 	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet {
@@ -4672,16 +4672,16 @@ public class RestContext extends Context {
 	 * 	<ja>@RestGet</ja>(<js>"/{name}/*"</js>)
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={
-	 * 			<js>"up: $R{requestParentURI}"</js>,
+	 * 			<js>"up: ${R:requestParentURI}"</js>,
 	 * 			<js>"api: servlet:/api"</js>,
 	 * 			<js>"stats: servlet:/stats"</js>,
-	 * 			<js>"editLevel: servlet:/editLevel?logger=$A{attribute.name, OFF}"</js>
+	 * 			<js>"editLevel: servlet:/editLevel?logger=${A:attribute.name: OFF}"</js>
 	 * 		}
 	 * 		header={
-	 * 			<js>"&lt;h1&gt;$L{MyLocalizedPageTitle}&lt;/h1&gt;"</js>
+	 * 			<js>"&lt;h1&gt;${L:MyLocalizedPageTitle}&lt;/h1&gt;"</js>
 	 * 		},
 	 * 		aside={
-	 * 			<js>"$F{resources/AsideText.html}"</js>
+	 * 			<js>"${F:resources/AsideText.html}"</js>
 	 * 		}
 	 * 	)
 	 * 	<jk>public</jk> LoggerEntry getLogger(RestRequest <jv>req</jv>, <ja>@Path</ja> String <jv>name</jv>) <jk>throws</jk> Exception {

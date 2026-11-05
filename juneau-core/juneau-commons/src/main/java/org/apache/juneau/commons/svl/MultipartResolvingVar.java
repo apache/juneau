@@ -24,7 +24,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
  *
  * <p>
  * For example, to resolve the system property <js>"myProperty"</js> but then resolve <js>"myProperty2"</js> if the
- * property doesn't exist: <js>"$S{myProperty1,myProperty2}"</js>
+ * property doesn't exist: <js>"${S:myProperty1:myProperty2}"</js>
  *
  * <p>
  * Subclasses must implement the following method:
@@ -51,9 +51,22 @@ public abstract class MultipartResolvingVar extends SimpleVar {
 	public String doResolve(VarResolverSession session, String s) throws Exception {
 		var i = s.indexOf(',');
 		if (i == -1)
-			return resolve(session, s.trim());
+			return resolve(session, VarSplit.restoreCommas(s.trim()));
 		for (var s2 : splita(s)) {
-			var v = resolve(session, s2);
+			var v = resolve(session, VarSplit.restoreCommas(s2));
+			if (nn(v))
+				return v;
+		}
+		return null;
+	}
+
+	@Override /* Overridden from Var */
+	Object doResolveValue(VarResolverSession session, String s) throws Exception {
+		var i = s.indexOf(',');
+		if (i == -1)
+			return resolveValue(session, VarSplit.restoreCommas(s.trim()));
+		for (var s2 : splita(s)) {
+			var v = resolveValue(session, VarSplit.restoreCommas(s2));
 			if (nn(v))
 				return v;
 		}

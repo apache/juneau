@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.*;
  * Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
  *
  * <p>
- * The variable it resolves is <js>"$W{ContentTypeMenuItem}"</js>.
+ * The variable it resolves is <js>"${W:ContentTypeMenuItem}"</js>.
  *
  * <p>
  * An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
@@ -44,8 +44,8 @@ import org.apache.juneau.rest.server.*;
  * 		navlinks={
  * 			<js>"up: ..."</js>,
  * 			<js>"options: ..."</js>,
- * 			<js>"$W{QueryMenuItem}"</js>,
- * 			<js>"$W{ContentTypeMenuItem}"</js>,
+ * 			<js>"${W:QueryMenuItem}"</js>,
+ * 			<js>"${W:ContentTypeMenuItem}"</js>,
  * 			<js>"source: ..."</js>
  * 		}
  * 	)

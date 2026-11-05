@@ -26,10 +26,10 @@ import org.apache.juneau.commons.svl.*;
  * JVM args variable resolver.
  *
  * <p>
- * The format for this var is <js>"$A{arg[,default]}"</js>.
+ * The format for this var is <js>"${A:arg[:default]}"</js>.
  *
  * <p>
- * The argument can be either a positional index (e.g. <js>"$A{0}"</js>) or a named option (e.g. <js>"$A{port}"</js>).
+ * The argument can be either a positional index (e.g. <js>"${A:0}"</js>) or a named option (e.g. <js>"${A:port}"</js>).
  *
  * <p>
  * This variable resolver requires that the command-line arguments be made available through any of the following:
@@ -44,11 +44,11 @@ import org.apache.juneau.commons.svl.*;
  * 	<jc>// Create an args object from the main(String[]) method.</jc>
  * 	Args <jv>args</jv> = <jk>new</jk> Args(<jv>argv</jv>);
  *
- * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$A{1}")</jc>
+ * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "${A:1}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ArgsVar.<jsm>create</jsm>(() -&gt; <jv>args</jv>)).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Arg #1 is set to $A{1}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Arg #1 is set to ${A:1}"</js>));
  * </p>
  *
  * <p>

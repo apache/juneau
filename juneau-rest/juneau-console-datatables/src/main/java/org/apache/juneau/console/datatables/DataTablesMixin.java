@@ -66,10 +66,10 @@ import org.apache.juneau.rest.server.*;
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(path=<js>"/releases"</js>, mixins=DataTablesMixin.<jk>class</jk>)
  * 	<ja>@HtmlDocConfig</ja>(
- * 		stylesheet=<js>"$S{juneau.datatables.cssUrl:https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css}"</js>,
+ * 		stylesheet=<js>"${S:juneau.datatables.cssUrl\:https\://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css}"</js>,
  * 		head={
- * 			<js>"&lt;script src='$S{juneau.datatables.jqueryUrl:https://code.jquery.com/jquery-3.7.1.min.js}'&gt;&lt;/script&gt;"</js>,
- * 			<js>"&lt;script src='$S{juneau.datatables.jsUrl:https://cdn.datatables.net/2.1.8/js/dataTables.min.js}'&gt;&lt;/script&gt;"</js>,
+ * 			<js>"&lt;script src='${S:juneau.datatables.jqueryUrl\:https\://code.jquery.com/jquery-3.7.1.min.js}'&gt;&lt;/script&gt;"</js>,
+ * 			<js>"&lt;script src='${S:juneau.datatables.jsUrl\:https\://cdn.datatables.net/2.1.8/js/dataTables.min.js}'&gt;&lt;/script&gt;"</js>,
  * 			<js>"&lt;script src='servlet:/juneau-datatables.js'&gt;&lt;/script&gt;"</js>
  * 		}
  * 	)

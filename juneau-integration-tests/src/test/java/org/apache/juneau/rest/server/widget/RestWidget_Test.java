@@ -94,7 +94,7 @@ class RestWidget_Test extends TestBase {
 	@Rest
 	@HtmlDocConfig(
 		widgets={PoweredByApache.class},
-		footer="$W{PoweredByApache}"
+		footer="${W:PoweredByApache}"
 	)
 	public static class C extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
@@ -115,7 +115,7 @@ class RestWidget_Test extends TestBase {
 	@Rest
 	@HtmlDocConfig(
 		widgets={PoweredByJuneau.class},
-		footer="$W{PoweredByJuneau}"
+		footer="${W:PoweredByJuneau}"
 	)
 	public static class D extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
@@ -136,7 +136,7 @@ class RestWidget_Test extends TestBase {
 	@Rest
 	@HtmlDocConfig(
 		widgets={ContentTypeMenuItem.class},
-		navlinks={"$W{ContentTypeMenuItem}"}
+		navlinks={"${W:ContentTypeMenuItem}"}
 	)
 	public static class F extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")
@@ -156,7 +156,7 @@ class RestWidget_Test extends TestBase {
 	@Rest
 	@HtmlDocConfig(
 		widgets={QueryMenuItem.class},
-		navlinks={"$W{QueryMenuItem}"}
+		navlinks={"${W:QueryMenuItem}"}
 	)
 	public static class G extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet("/")

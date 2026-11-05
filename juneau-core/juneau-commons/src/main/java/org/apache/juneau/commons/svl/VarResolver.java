@@ -29,10 +29,10 @@ import org.apache.juneau.commons.svl.functions.*;
 import org.apache.juneau.commons.svl.vars.*;
 
 /**
- * Utility class for resolving variables of the form <js>"$X{key}"</js> in strings.
+ * Utility class for resolving variables of the form <js>"${X:key}"</js> in strings.
  *
  * <p>
- * Variables are of the form <c>$X{key}</c>, where <c>X</c> can consist of zero or more ASCII characters.
+ * Variables are of the form <c>${X:key}</c>, where <c>X</c> can consist of zero or more ASCII characters.
  * <br>The variable key can contain anything, even nested variables that get recursively resolved.
  *
  * <p>
@@ -56,11 +56,11 @@ import org.apache.juneau.commons.svl.vars.*;
  * 		}
  * 	}
  *
- * 	<jc>// Create a variable resolver that resolves system properties (e.g. "$S{java.home}")</jc>
+ * 	<jc>// Create a variable resolver that resolves system properties (e.g. "${S:java.home}")</jc>
  * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(SystemPropertiesVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to $S{java.home}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to ${S:java.home}"</js>));
  * </p>
  *
  * <h2 class='section'>See Also:</h2><ul>
@@ -83,6 +83,12 @@ public class VarResolver {
 		final VarList vars;
 		final LinkedHashMap<Class<?>,Object> userBeans;
 		final List<VarFunction> functions;
+		private int maxRecursionDepth = DEFAULT_MAX_RECURSION_DEPTH;
+		private boolean strict;
+		private int maxCollectionSize = DEFAULT_MAX_COLLECTION_SIZE;
+		private int maxExprDepth = DEFAULT_MAX_EXPR_DEPTH;
+		private List<String> allowedFunctions;   // null = allow all
+		private Function<Object,String> valueFormatter;   // null = default JsonValueFormatter
 
 		/**
 		 * Constructor.
@@ -103,7 +109,96 @@ public class VarResolver {
 			this.beanStore = copyFrom.beanStore;
 			vars = VarList.of(copyFrom.vars);
 			userBeans = new LinkedHashMap<>();
-			functions = list(copyFrom.functions);
+			functions = list(copyFrom.allFunctions);
+			allowedFunctions = copyFrom.allowedFunctions == null ? null : new ArrayList<>(copyFrom.allowedFunctions);
+			maxRecursionDepth = copyFrom.maxRecursionDepth;
+			strict = copyFrom.strict;
+			maxCollectionSize = copyFrom.maxCollectionSize;
+			maxExprDepth = copyFrom.maxExprDepth;
+			valueFormatter = copyFrom.customValueFormatter;
+		}
+
+		/**
+		 * Sets the maximum depth for re-resolving a var's output.
+		 *
+		 * <p>
+		 * Default is {@link VarResolver#DEFAULT_MAX_RECURSION_DEPTH} (32).  Must be positive.
+		 *
+		 * @param value The maximum recursion depth.  Must be at least 1.
+		 * @return This object.
+		 */
+		public Builder maxRecursionDepth(int value) {
+			if (value < 1)
+				throw iaex("maxRecursionDepth must be positive: %s", value);
+			maxRecursionDepth = value;
+			return this;
+		}
+
+		/**
+		 * Enables or disables strict expression evaluation.
+		 *
+		 * <p>
+		 * Default is <jk>false</jk> (lenient).
+		 *
+		 * @param value <jk>true</jk> to enable strict mode.
+		 * @return This object.
+		 */
+		public Builder strict(boolean value) {
+			strict = value;
+			return this;
+		}
+
+		/**
+		 * Sets the maximum number of elements allowed in a collection built by an expression.
+		 *
+		 * <p>
+		 * Default is {@link VarResolver#DEFAULT_MAX_COLLECTION_SIZE} (1000).  Must be positive.
+		 *
+		 * @param value The maximum collection size.  Must be at least 1.
+		 * @return This object.
+		 */
+		public Builder maxCollectionSize(int value) {
+			if (value < 1)
+				throw iaex("maxCollectionSize must be positive: %s", value);
+			maxCollectionSize = value;
+			return this;
+		}
+
+		/**
+		 * Sets the formatter that converts the typed result of a {@code #{...}} expression to text.
+		 *
+		 * <p>
+		 * Default is a {@link JsonValueFormatter} honouring {@link #maxCollectionSize(int)} and strict mode.  A
+		 * session can replace it per render with {@link VarResolverSession#valueFormatter(Function)}.
+		 * A <jk>null</jk> result from the formatter is treated as the empty string.
+		 *
+		 * <p>
+		 * A custom formatter <em>replaces</em> the default, so it does not get the default's depth, size, node and
+		 * cycle limits (it must guard itself).  It is also bypassed for {@link Structure} values, which use
+		 * {@link Structure#toString()} unless a session formatter is set.
+		 *
+		 * @param value The formatter.  <jk>null</jk> restores the default.
+		 * @return This object.
+		 */
+		public Builder valueFormatter(Function<Object,String> value) {
+			valueFormatter = value;
+			return this;
+		}
+
+		/**
+		 * Sets the maximum expression nesting depth accepted by the parser.
+		 *
+		 * <p>
+		 * Default is {@link VarResolver#DEFAULT_MAX_EXPR_DEPTH} (32).  Must be positive.
+		 *
+		 * @param value The maximum expression depth.  Must be at least 1.
+		 * @return This object.
+		 */
+		public Builder maxExprDepth(int value) {
+			if (value < 1)
+				throw iaex("maxExprDepth must be positive: %s", value);
+			maxExprDepth = value;
+			return this;
 		}
 
 		/**
@@ -204,6 +299,37 @@ public class VarResolver {
 		}
 
 		/**
+		 * Restricts which functions (including the reserved <c>$op.*</c> operator functions) the resolver exposes.
+		 *
+		 * <p>
+		 * Each pattern is a glob over function names: <c>*</c> matches any run of characters, anything else matches
+		 * exactly.  A function is permitted if its name matches at least one pattern.  Operators dispatch to
+		 * <c>$op.*</c> functions (<c>$op.add</c>, <c>$op.ternary</c>, <c>$op.select</c>, ...), so they are denied by
+		 * the allowlist too; use <c>allowFunctions("$op.*", ...)</c> to keep them.
+		 *
+		 * <p>
+		 * If this method is never called, every function is permitted.  Calling it with no patterns denies everything,
+		 * operators included.  Repeated calls are additive, including after {@link VarResolver#copy()}: a copy can widen the allowlist but cannot narrow it.  The filter is applied to the final function set at
+		 * {@link #build()} time, and is preserved by {@link VarResolver#copy()}.
+		 *
+		 * <p>
+		 * A denied function or operator is treated like an unknown one (strict mode: {@link ExprException} saying it
+		 * is "not permitted"; lenient mode: the expression is emitted verbatim).
+		 *
+		 * @param patterns The glob patterns.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+		 * @return This builder.
+		 */
+		public Builder allowFunctions(String...patterns) {
+			Objects.requireNonNull(patterns, "patterns must not be null");
+			for (var p : patterns)
+				Objects.requireNonNull(p, "allowFunctions pattern must not be null");
+			if (allowedFunctions == null)
+				allowedFunctions = new ArrayList<>();
+			Collections.addAll(allowedFunctions, patterns);
+			return this;
+		}
+
+		/**
 		 * Register one or more {@link VarFunction} instances on this builder.
 		 *
 		 * <p>
@@ -291,7 +417,9 @@ public class VarResolver {
 		EncodingFunctions.ALL,
 		DateFunctions.ALL,
 		RandomFunctions.ALL,
-		JsonFunctions.ALL
+		JsonFunctions.ALL,
+		OpFunctions.ALL,
+		StructureFunctions.ALL
 	);
 
 	@SafeVarargs
@@ -313,12 +441,12 @@ public class VarResolver {
 	 *
 	 * <h4 class='section'>Built-in {@link Var} bindings:</h4>
 	 * <ul>
-	 * 	<li><c>$S{key[,default]}</c> - {@link SystemPropertiesVar}
-	 * 	<li><c>$E{key[,default]}</c> - {@link EnvVariablesVar}
-	 * 	<li><c>$EF{key[,default]}</c> - {@link EnvFileVar}
-	 * 	<li><c>$DE{key[,default]}</c> - {@link DotenvVar}
-	 * 	<li><c>$A{key[,default]}</c> - {@link ArgsVar}
-	 * 	<li><c>$MF{key[,default]}</c> - {@link ManifestFileVar}
+	 * 	<li><c>${S:key[:default]}</c> - {@link SystemPropertiesVar}
+	 * 	<li><c>${E:key[:default]}</c> - {@link EnvVariablesVar}
+	 * 	<li><c>${EF:key[:default]}</c> - {@link EnvFileVar}
+	 * 	<li><c>${DE:key[:default]}</c> - {@link DotenvVar}
+	 * 	<li><c>${A:key[:default]}</c> - {@link ArgsVar}
+	 * 	<li><c>${MF:key[:default]}</c> - {@link ManifestFileVar}
 	 * </ul>
 	 *
 	 * <h4 class='section'>Built-in {@link VarFunction} catalog:</h4>
@@ -354,11 +482,29 @@ public class VarResolver {
 		return (Var)o;
 	}
 
+	/** Default maximum depth for re-resolving a var's output. */
+	public static final int DEFAULT_MAX_RECURSION_DEPTH = 32;
+
+	/** Default maximum number of elements in an expression-built collection. */
+	public static final int DEFAULT_MAX_COLLECTION_SIZE = 1000;
+
+	/** Default maximum expression nesting depth accepted by the parser. */
+	public static final int DEFAULT_MAX_EXPR_DEPTH = 32;
+
+	final int maxRecursionDepth;
+	final boolean strict;
+	final int maxCollectionSize;
+	final int maxExprDepth;
+	final Function<Object,String> valueFormatter;         // effective
+	final Function<Object,String> customValueFormatter;   // as set on the builder; null = default
 	final Var[] vars;
 	private final Map<String,Var> varMap;
 
-	final VarFunction[] functions;
+	final VarFunction[] functions;         // after allowlist filtering
+	final VarFunction[] allFunctions;      // before allowlist filtering (used by copy())
+	final List<String> allowedFunctions;   // null = allow all
 	private final Map<String,VarFunction> functionMap;
+	private final Set<String> deniedNames;
 
 	final WritableBeanStore beanStore;
 
@@ -371,6 +517,12 @@ public class VarResolver {
 		"rawtypes" // Same reason — Builder.bean(Class<T>, T) ensures Class/value pairing
 	})
 	protected VarResolver(Builder builder) {
+		this.maxRecursionDepth = builder.maxRecursionDepth;
+		this.strict = builder.strict;
+		this.maxCollectionSize = builder.maxCollectionSize;
+		this.maxExprDepth = builder.maxExprDepth;
+		this.customValueFormatter = builder.valueFormatter;
+		this.valueFormatter = builder.valueFormatter != null ? builder.valueFormatter : new JsonValueFormatter(builder.maxCollectionSize, builder.strict);
 		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(), x)).toArray(Var[]::new);
 
 		var m = new ConcurrentSkipListMap<String,Var>();
@@ -378,12 +530,23 @@ public class VarResolver {
 			m.put(v.getName(), v);
 
 		this.varMap = u(m);
-		this.functions = builder.functions.toArray(new VarFunction[0]);
+		this.allFunctions = builder.functions.toArray(new VarFunction[0]);
+		this.allowedFunctions = builder.allowedFunctions == null ? null : u(new ArrayList<>(builder.allowedFunctions));
 
 		var fm = new ConcurrentSkipListMap<String,VarFunction>();
-		for (var f : functions)
-			fm.put(f.name(), f);
+		var denied = new TreeSet<String>();
+		for (var f : allFunctions) {
+			if (isAllowed(f.name())) {
+				fm.put(f.name(), f);
+				denied.remove(f.name());
+			} else {
+				fm.remove(f.name());
+				denied.add(f.name());
+			}
+		}
+		this.functions = fm.values().toArray(new VarFunction[0]);
 		this.functionMap = u(fm);
+		this.deniedNames = u(denied);
 
 		var bs = new BasicBeanStore(builder.beanStore());
 		builder.userBeans.forEach((c, v) -> bs.addBean((Class) c, v));
@@ -552,4 +715,58 @@ public class VarResolver {
 	 *	 {@link VarFunction} instances.
 	 */
 	protected Map<String,VarFunction> getFunctionMap() { return functionMap; }
+
+	/**
+	 * Looks up a registered function by exact name.
+	 *
+	 * @param name The function name (e.g. <js>"upper"</js> or <js>"$op.add"</js>).
+	 * @return The function, or <jk>null</jk> if no function with that name is registered.
+	 */
+	VarFunction findFunction(String name) { return functionMap.get(name); }
+
+	/**
+	 * Returns <jk>true</jk> if a function with this name is registered but excluded by the
+	 * {@link Builder#allowFunctions(String...) allowlist}.
+	 *
+	 * @param name The function name.
+	 * @return <jk>true</jk> if the function was registered and denied.
+	 */
+	boolean isDenied(String name) { return deniedNames.contains(name); }
+
+	/**
+	 * Returns <jk>true</jk> if the allowlist (if any) permits the given function name.
+	 *
+	 * <p>
+	 * Also applies to names with no registered function, so an operator can be reported as denied even when its
+	 * function is not registered.
+	 *
+	 * @param name The function name.
+	 * @return <jk>true</jk> if permitted.
+	 */
+	boolean isAllowed(String name) {
+		if (allowedFunctions == null)
+			return true;
+		for (var pat : allowedFunctions)
+			if (globMatches(pat, name))
+				return true;
+		return false;
+	}
+
+	private static boolean globMatches(String pattern, String name) {
+		if (pattern.indexOf('*') < 0)
+			return pattern.equals(name);
+		var parts = pattern.split("\\*", -1);
+		var pos = 0;
+		if (! name.startsWith(parts[0]))
+			return false;
+		pos = parts[0].length();
+		for (var i = 1; i < parts.length - 1; i++) {
+			var idx = name.indexOf(parts[i], pos);
+			if (idx < 0)
+				return false;
+			pos = idx + parts[i].length();
+		}
+		var last = parts[parts.length - 1];
+		return name.length() - pos >= last.length() && name.endsWith(last);
+	}
 }

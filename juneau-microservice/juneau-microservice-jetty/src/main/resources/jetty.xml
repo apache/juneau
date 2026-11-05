@@ -20,7 +20,7 @@
 <!--
   Default jetty.xml shipped by juneau-microservice-jetty.
 
-  - Plain HTTP localhost dev default; one ServerConnector on $S{availablePort,10000} (the value resolves
+  - Plain HTTP localhost dev default; one ServerConnector on ${S:availablePort:10000} (the value resolves
     from the [Jetty] section of the bundled juneau.cfg, which defaults to 10000).
   - No resourceBase / ResourceHandler / WebAppContext filesystem mount: no static-file serving by
     default (path-traversal-safe by construction).  Servlets are auto-mounted from @Bean Servlet
@@ -42,7 +42,7 @@
 					<Arg>
 						<Ref refid="JuneauJettyServer" />
 					</Arg>
-					<Set name="port">$S{availablePort,10000}</Set>
+					<Set name="port">${S:availablePort:10000}</Set>
 				</New>
 			</Item>
 		</Array>
@@ -86,7 +86,7 @@
 			<Arg>
 				<New class="org.eclipse.jetty.server.RequestLogWriter">
 					<Set name="append">false</Set>
-					<Set name="filename"><Property name="jetty.logs" default="$C{Logging/logDir,logs}" />/jetty-requests.log</Set>
+					<Set name="filename"><Property name="jetty.logs" default="${C:Logging/logDir:logs}" />/jetty-requests.log</Set>
 					<Set name="filenameDateFormat">yyyy_MM_dd</Set>
 					<Set name="retainDays">90</Set>
 					<Set name="timeZone">GMT</Set>

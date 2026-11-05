@@ -19,12 +19,12 @@ package org.apache.juneau.commons.svl;
 import java.io.*;
 
 /**
- * A {@link TemplateSegment} that resolves a {@code ${...}} or {@code $X{...}} reference.
+ * A {@link TemplateSegment} that resolves a {@code ${...}} reference.
  *
  * <p>
  * The captured {@link Var} reference is resolved at compile time against the bound
  * {@link VarResolver}'s var registry — one map lookup per compiled template, zero per resolve.
- * The body is itself a {@link VarTemplate}, so nested {@code ${...}} / {@code $X{...}} /
+ * The body is itself a {@link VarTemplate}, so nested {@code ${...}} /
  * {@code #{...}} markers compose naturally.
  *
  * <h5 class='section'>Resolve-time behavior:</h5>
@@ -55,7 +55,7 @@ final class VarRefSegment extends TemplateSegment {
 	 */
 	private final Var cachedVar;
 
-	/** The raw prefix from the source (e.g. {@code "X"} for {@code $X{...}}, {@code ""} for {@code ${...}}). */
+	/** The raw prefix from the source (e.g. {@code "X"} for {@code ${X:...}}, {@code ""} for {@code ${...}}). */
 	private final String prefix;
 
 	/** The compiled body (nested markers pre-tokenized). */
@@ -72,7 +72,7 @@ final class VarRefSegment extends TemplateSegment {
 	private final boolean hasInternalVar;
 
 	/**
-	 * Pre-computed fallthrough text — the verbatim {@code $X{...}} fragment, with inner
+	 * Pre-computed fallthrough text — the verbatim {@code ${X:...}} fragment, with inner
 	 * {@code \\}, {@code \$}, {@code \{}, {@code \}} escapes already unescaped. Used when the
 	 * cached var is {@code null} or {@link Var#canResolve(VarResolverSession)} returns false.
 	 */
@@ -146,7 +146,7 @@ final class VarRefSegment extends TemplateSegment {
 			if (replacement == null)
 				replacement = "";
 			if (replacement.indexOf('$') != -1 && v.allowRecurse())
-				replacement = session.resolve(replacement);
+				replacement = session.resolveRecursive(replacement);
 		}
 		return session.applyHtmlDocChromeEncoding(prefix, replacement);
 	}
@@ -167,8 +167,8 @@ final class VarRefSegment extends TemplateSegment {
 		return v.canResolve(session) ? v : null;
 	}
 
-	/** Approximation of the original source fragment for diagnostic messages. */
+	/** The original {@code ${...}} source fragment (escapes removed) for diagnostic messages. */
 	private String sourceFragment() {
-		return "$" + prefix + "{" + body.getSource() + "}";
+		return fallthrough;
 	}
 }

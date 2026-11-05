@@ -24,7 +24,7 @@ import java.io.*;
  * <p>
  * Produced by {@link VarTemplateCompiler} for any portion of the template input that contains
  * no variable references. Used both for plain text between markers and as the fallthrough
- * representation of unknown {@code $X{...}} prefixes.
+ * representation of unknown {@code ${X:...}} prefixes.
  *
  * <p>
  * Compile-time stable-value folding may also produce literal segments by eagerly resolving

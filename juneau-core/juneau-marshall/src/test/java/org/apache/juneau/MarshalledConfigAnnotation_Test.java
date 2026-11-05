@@ -129,17 +129,17 @@ class MarshalledConfigAnnotation_Test extends TestBase {
 		dictionary_replace={A1.class,A2.class,A3.class},
 		durationFormat=DurationFormat.MILLIS,
 		enumFormat=EnumFormat.NAME,
-		typePropertyName="$X{foo}",
-		debug="$X{true}",
+		typePropertyName="${X:foo}",
+		debug="${X:true}",
 		localeFormat=LocaleFormat.UNDERSCORE,
-		locale="$X{en-US}",
-		mediaType="$X{text/foo}",
+		locale="${X:en-US}",
+		mediaType="${X:text/foo}",
 		periodFormat=PeriodFormat.DAYS,
 		swaps={AB1.class,AB2.class},
 		swaps_replace={AB1.class,AB2.class,AB3.class},
 		temporalFormat=TemporalFormat.ISO_INSTANT,
 		timeZoneFormat=TimeZoneFormat.OFFSET,
-		timeZone="$X{z}"
+		timeZone="${X:z}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

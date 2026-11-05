@@ -55,13 +55,13 @@ class ParserConfigAnnotation_Test extends TestBase {
 	public static class AA extends ParserListener {}
 
 	@ParserConfig(
-		autoCloseStreams="$X{true}",
-		binaryFormat="$X{HEX}",
-		debugOutputLines="$X{1}",
-		streamCharset="$X{US-ASCII}",
+		autoCloseStreams="${X:true}",
+		binaryFormat="${X:HEX}",
+		debugOutputLines="${X:1}",
+		streamCharset="${X:US-ASCII}",
 		listener=AA.class,
-		trimStrings="$X{true}",
-		unbuffered="$X{true}"
+		trimStrings="${X:true}",
+		unbuffered="${X:true}"
 	)
 	static class A {}
 	static ClassInfo a = ClassInfo.of(A.class);

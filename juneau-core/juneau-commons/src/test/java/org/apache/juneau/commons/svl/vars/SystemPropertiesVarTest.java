@@ -33,13 +33,13 @@ class SystemPropertiesVarTest extends TestBase {
 		var vr = VarResolver.create().vars(SystemPropertiesVar.class).build();
 
 		System.setProperty("SystemPropertiesVar.x", "foo");
-		assertEquals("foo", vr.resolve("$S{SystemPropertiesVar.x}"));
-		assertEquals("foo", vr.resolve("$S{SystemPropertiesVar.x,bar}"));
-		assertEquals("", vr.resolve("$S{SystemPropertiesVar.y}"));
-		assertEquals("bar", vr.resolve("$S{SystemPropertiesVar.y,bar}"));
-		assertEquals("bar,bar", vr.resolve("$S{SystemPropertiesVar.y,bar,bar}"));
-		assertEquals(" bar ", vr.resolve("$S{ SystemPropertiesVar.y , bar }"));
-		assertEquals(" bar,bar ", vr.resolve("$S{ SystemPropertiesVar.y , bar,bar }"));
-		assertEquals("", vr.resolve("$S{SystemPropertiesVar.y,}"));
+		assertEquals("foo", vr.resolve("${S:SystemPropertiesVar.x}"));
+		assertEquals("foo", vr.resolve("${S:SystemPropertiesVar.x:bar}"));
+		assertEquals("", vr.resolve("${S:SystemPropertiesVar.y}"));
+		assertEquals("bar", vr.resolve("${S:SystemPropertiesVar.y:bar}"));
+		assertEquals("bar,bar", vr.resolve("${S:SystemPropertiesVar.y:bar,bar}"));
+		assertEquals(" bar ", vr.resolve("${S: SystemPropertiesVar.y : bar }"));
+		assertEquals(" bar,bar ", vr.resolve("${S: SystemPropertiesVar.y : bar,bar }"));
+		assertEquals("", vr.resolve("${S:SystemPropertiesVar.y:}"));
 	}
 }

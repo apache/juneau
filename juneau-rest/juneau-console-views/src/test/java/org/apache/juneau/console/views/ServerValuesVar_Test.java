@@ -44,37 +44,37 @@ class ServerValuesVar_Test extends TestBase {
 
 	@Test void a01_resolvesSessionAwareScalar() {
 		var s = session(ServerValues.create().value("failedCount", sess -> 7));
-		assertEquals("Failures (7)", s.resolve("Failures ($FV{failedCount})"));
+		assertEquals("Failures (7)", s.resolve("Failures (${FV:failedCount})"));
 	}
 
 	@Test void a02_missingName_resolvesEmpty() {
 		var s = session(ServerValues.create().value("x", sess -> "y"));
-		assertEquals("", s.resolve("$FV{missing}"));
+		assertEquals("", s.resolve("${FV:missing}"));
 	}
 
 	@Test void a03_missingName_usesDefault() {
 		var s = session(ServerValues.create().value("x", sess -> "y"));
-		assertEquals("fallback", s.resolve("$FV{missing,fallback}"));
+		assertEquals("fallback", s.resolve("${FV:missing:fallback}"));
 	}
 
 	@Test void a04_presentName_ignoresDefault() {
 		var s = session(ServerValues.create().value("x", sess -> "real"));
-		assertEquals("real", s.resolve("$FV{x,fallback}"));
+		assertEquals("real", s.resolve("${FV:x:fallback}"));
 	}
 
 	@Test void a05_allowRecurse_false_returnsProviderStringLiterally() {
-		var s = session(ServerValues.create().value("x", sess -> "$S{java.version}"));
-		assertEquals("$S{java.version}", s.resolve("$FV{x}"));
+		var s = session(ServerValues.create().value("x", sess -> "${S:java.version}"));
+		assertEquals("${S:java.version}", s.resolve("${FV:x}"));
 	}
 
 	@Test void a06_nonScalar_rejected() {
 		var s = session(ServerValues.create().value("list", sess -> List.of("a", "b")));
-		assertThrows(RuntimeException.class, () -> s.resolve("$FV{list}"));
+		assertThrows(RuntimeException.class, () -> s.resolve("${FV:list}"));
 	}
 
 	@Test void a07_noRegistry_tokenLeftLiteral() {
 		var s = resolver().createSession();
-		assertEquals("$FV{x}", s.resolve("$FV{x}"));
+		assertEquals("${FV:x}", s.resolve("${FV:x}"));
 	}
 
 	@Test void a08_allowRecurse_isFalse() {
