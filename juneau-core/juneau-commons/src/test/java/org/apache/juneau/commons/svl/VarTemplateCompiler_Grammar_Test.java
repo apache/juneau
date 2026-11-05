@@ -417,7 +417,8 @@ class VarTemplateCompiler_Grammar_Test extends TestBase {
 		assertEquals("EMPTY", r("${C:}"));
 		assertEquals("v1", r("${C:k1}"));
 		assertEquals("y:z", r("${x:y:z}"));
-		assertEquals("b", r("${P:a:b}"));
+		// Unique key: a shared name like "a" is set globally by other tests (CI saw "a1").
+		assertEquals("b", r("${P:j01.unsetProp:b}"));
 	}
 
 	//====================================================================================================
