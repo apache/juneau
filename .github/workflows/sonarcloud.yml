@@ -78,5 +78,5 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        # Force to fail step after specific time
-        on-failure: continue
+        # Do not fail the job if the quality gate step fails or times out
+        continue-on-error: true
