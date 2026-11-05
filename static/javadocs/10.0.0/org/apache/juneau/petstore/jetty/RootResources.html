@@ -105,9 +105,9 @@ loadScripts(document, 'script');</script>
 
  <p>
  Also showcases the Config API + SVL variable resolver: the root page's header is driven by
- <code>$C{Petstore/appName}</code>, which resolves against the <code>[Petstore]</code> section of
- <code>juneau-petstore-jetty.cfg</code> (the same <code>$C{...}</code> pattern already used by the <code>source</code> navlink
- below, which resolves <code>$C{Source/gitHub}</code>).  Jetty-only — Spring Boot's embedded container has no
+ <code>${C:Petstore/appName}</code>, which resolves against the <code>[Petstore]</code> section of
+ <code>juneau-petstore-jetty.cfg</code> (the same <code>${C:...}</code> pattern already used by the <code>source</code> navlink
+ below, which resolves <code>${C:Source/gitHub}</code>).  Jetty-only — Spring Boot's embedded container has no
  <code>.cfg</code>/<code>Config</code> equivalent.
 
  <p>

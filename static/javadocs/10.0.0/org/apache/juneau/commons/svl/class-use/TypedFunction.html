@@ -165,23 +165,23 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../functions/ConditionalFunctions.Coalesce.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Coalesce</a></code></div>
 <div class="col-last even-row-color">
-<div class="block"><code>#{coalesce(a, b, ...)}</code> — replacement for the legacy <code>$CO{...}</code>.</div>
+<div class="block"><code>#{coalesce(a, b, ...)}</code> — replacement for the legacy <code>CO</code> variable.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../functions/ConditionalFunctions.If.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.If</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block"><code>#{if(cond, then, else)}</code> — replacement for the legacy <code>$IF{...}</code>.</div>
+<div class="block"><code>#{if(cond, then, else)}</code> — replacement for the legacy <code>IF</code> variable.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../functions/ConditionalFunctions.NotEmpty.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.NotEmpty</a></code></div>
 <div class="col-last even-row-color">
-<div class="block"><code>#{notEmpty(s)}</code> — replacement for the legacy <code>$NE{...}</code>.</div>
+<div class="block"><code>#{notEmpty(s)}</code> — replacement for the legacy <code>NE</code> variable.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../functions/ConditionalFunctions.Switch.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Switch</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block"><code>#{switch(value, case1, val1, case2, val2, ..., default)}</code> — replacement for the
- legacy <code>$SW{...}</code>.</div>
+ legacy <code>SW</code> variable.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../functions/DateFunctions.FormatDate.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.FormatDate</a></code></div>
@@ -293,17 +293,17 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="../functions/RegexFunctions.Extract.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.Extract</a></code></div>
 <div class="col-last even-row-color">
 <div class="block"><code>#{extract(s, regex)}</code> / <code>#{extract(s, regex, group)}</code> — replacement for the
- legacy <code>$PE{...}</code>.</div>
+ legacy <code>PE</code> variable.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../functions/RegexFunctions.Match.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.Match</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block"><code>#{match(s, regex)}</code> — replacement for the legacy <code>$PM{...}</code>.</div>
+<div class="block"><code>#{match(s, regex)}</code> — replacement for the legacy <code>PM</code> variable.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="../functions/RegexFunctions.ReplaceRegex.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.ReplaceRegex</a></code></div>
 <div class="col-last even-row-color">
-<div class="block"><code>#{replaceRegex(s, regex, replacement)}</code> — replacement for the legacy <code>$PR{...}</code>.</div>
+<div class="block"><code>#{replaceRegex(s, regex, replacement)}</code> — replacement for the legacy <code>PR</code> variable.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Concat.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Concat</a></code></div>
@@ -327,103 +327,97 @@ loadScripts(document, 'script');</script>
  formatting</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Join.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Join</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Len.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Len</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block"><code>#{join(separator, parts...)}</code> — concatenates <code>parts</code> with <code>separator</code>
- between each pair.</div>
+<div class="block"><code>#{len(s)}</code> / <code>#{len(s, delimiter)}</code> — replacement for the legacy
+ <code>LN</code> variable.</div>
 </div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Len.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Len</a></code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Lower.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Lower</a></code></div>
 <div class="col-last even-row-color">
-<div class="block"><code>#{len(s)}</code> / <code>#{len(s, delimiter)}</code> — replacement for the legacy
- <code>$LN{...}</code>.</div>
+<div class="block"><code>#{lower(s)}</code> — replacement for the legacy <code>LC</code> variable.</div>
 </div>
 <div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Lower.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Lower</a></code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.PathToken.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.PathToken</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block"><code>#{lower(s)}</code> — replacement for the legacy <code>$LC{...}</code>.</div>
-</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.PathToken.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.PathToken</a></code></div>
-<div class="col-last even-row-color">
 <div class="block"><code>#{pathToken(s)}</code> — normalize a user-supplied path token for safe interpolation
  into a <code>path=</code> template.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Repeat.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Repeat</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Repeat.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Repeat</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><code>#{repeat(s, n)}</code> — repeats <code>s</code> <code>n</code> times.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Replace.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Replace</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Replace.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Replace</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{replace(s, target, replacement)}</code> — literal (non-regex) string replacement.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Reverse.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Reverse</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Reverse.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Reverse</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><code>#{reverse(s)}</code> — reverses the characters of <code>s</code>.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Split.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Split</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Split.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Split</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{split(s, separator)}</code> — splits <code>s</code> on the literal <code>separator</code>
  substring.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.StartsWith.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StartsWith</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.StartsWith.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StartsWith</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><code>#{startsWith(s, prefix)}</code> — returns <code>"true"</code> or <code>"false"</code>.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.StripLeading.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripLeading</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.StripLeading.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripLeading</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{stripLeading(s)}</code> — strips leading whitespace.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.StripSlashes.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripSlashes</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.StripSlashes.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripSlashes</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><code>#{stripSlashes(s)}</code> — strips leading and trailing <code>/</code> characters.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.StripTrailing.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripTrailing</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.StripTrailing.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripTrailing</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{stripTrailing(s)}</code> — strips trailing whitespace.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Substring.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Substring</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block"><code>#{substring(s, start)}</code> / <code>#{substring(s, start, end)}</code> — replacement for the
- legacy <code>$ST{...}</code> <code>SubstringVar</code>.</div>
-</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Trim.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Trim</a></code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Substring.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Substring</a></code></div>
 <div class="col-last even-row-color">
+<div class="block"><code>#{substring(s, start)}</code> / <code>#{substring(s, start, end)}</code> — replacement for the
+ legacy <code>ST</code> <code>SubstringVar</code>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Trim.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Trim</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{trim(s)}</code> — strips leading and trailing whitespace.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/StringFunctions.Upper.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Upper</a></code></div>
-<div class="col-last odd-row-color">
-<div class="block"><code>#{upper(s)}</code> — replacement for the legacy <code>$UC{...}</code>.</div>
-</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/TypeConversionFunctions.ToBool.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToBool</a></code></div>
+<div class="col-second even-row-color"><code><a href="../functions/StringFunctions.Upper.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Upper</a></code></div>
 <div class="col-last even-row-color">
+<div class="block"><code>#{upper(s)}</code> — replacement for the legacy <code>UC</code> variable.</div>
+</div>
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/TypeConversionFunctions.ToBool.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToBool</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{toBool(s)}</code> — coerces <code>s</code> to <code>boolean</code> and renders as a String.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/TypeConversionFunctions.ToDouble.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToDouble</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../functions/TypeConversionFunctions.ToDouble.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToDouble</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><code>#{toDouble(s)}</code> — coerces <code>s</code> to <code>double</code> and renders as a String.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../functions/TypeConversionFunctions.ToInt.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToInt</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="../functions/TypeConversionFunctions.ToInt.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToInt</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block"><code>#{toInt(s)}</code> — coerces <code>s</code> to <code>int</code> and renders as a String.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="../functions/TypeConversionFunctions.ToLong.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToLong</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="../functions/TypeConversionFunctions.ToLong.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToLong</a></code></div>
+<div class="col-last even-row-color">
 <div class="block"><code>#{toLong(s)}</code> — coerces <code>s</code> to <code>long</code> and renders as a String.</div>
 </div>
 </div>

@@ -33,11 +33,11 @@
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * Interface for the resolution of vars that consist of a comma-delimited list.</span>
+<span class="source-line-no">023</span><span id="line-23"> * Interface for the resolution of vars that consist of a colon-delimited list.</span>
 <span class="source-line-no">024</span><span id="line-24"> *</span>
 <span class="source-line-no">025</span><span id="line-25"> * &lt;h2 class='figure'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> *    &lt;js&gt;"$X{foo, bar, baz}"&lt;/js&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> *    &lt;js&gt;"${X:foo:bar:baz}"&lt;/js&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;/p&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;See Also:&lt;/h2&gt;&lt;ul&gt;</span>
@@ -58,18 +58,20 @@
 <span class="source-line-no">045</span><span id="line-45">   @Override /* Overridden from Var */</span>
 <span class="source-line-no">046</span><span id="line-46">   public String resolve(VarResolverSession session, String s) {</span>
 <span class="source-line-no">047</span><span id="line-47">      String[] s2 = s.indexOf(',') == -1 ? a(s.trim()) : splita(s);</span>
-<span class="source-line-no">048</span><span id="line-48">      return resolve(session, s2);</span>
-<span class="source-line-no">049</span><span id="line-49">   }</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">   /**</span>
-<span class="source-line-no">052</span><span id="line-52">    * The interface that needs to be implemented for this interface.</span>
-<span class="source-line-no">053</span><span id="line-53">    *</span>
-<span class="source-line-no">054</span><span id="line-54">    * @param session The session object used for a single instance of a string resolution.</span>
-<span class="source-line-no">055</span><span id="line-55">    * @param args The arguments inside the variable.</span>
-<span class="source-line-no">056</span><span id="line-56">    * @return The resolved variable.</span>
-<span class="source-line-no">057</span><span id="line-57">    */</span>
-<span class="source-line-no">058</span><span id="line-58">   public abstract String resolve(VarResolverSession session, String[] args);</span>
-<span class="source-line-no">059</span><span id="line-59">}</span>
+<span class="source-line-no">048</span><span id="line-48">      for (var k = 0; k &lt; s2.length; k++)</span>
+<span class="source-line-no">049</span><span id="line-49">         s2[k] = VarSplit.restoreCommas(s2[k]);</span>
+<span class="source-line-no">050</span><span id="line-50">      return resolve(session, s2);</span>
+<span class="source-line-no">051</span><span id="line-51">   }</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   /**</span>
+<span class="source-line-no">054</span><span id="line-54">    * The interface that needs to be implemented for this interface.</span>
+<span class="source-line-no">055</span><span id="line-55">    *</span>
+<span class="source-line-no">056</span><span id="line-56">    * @param session The session object used for a single instance of a string resolution.</span>
+<span class="source-line-no">057</span><span id="line-57">    * @param args The arguments inside the variable.</span>
+<span class="source-line-no">058</span><span id="line-58">    * @return The resolved variable.</span>
+<span class="source-line-no">059</span><span id="line-59">    */</span>
+<span class="source-line-no">060</span><span id="line-60">   public abstract String resolve(VarResolverSession session, String[] args);</span>
+<span class="source-line-no">061</span><span id="line-61">}</span>
 
 
 

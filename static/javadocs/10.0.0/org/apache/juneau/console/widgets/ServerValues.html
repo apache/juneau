@@ -91,8 +91,8 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
  This is a thin, typed facade over the existing <a href="../../commons/svl/VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> engine &mdash; <b>not</b> a second
  templating language.  An author declares named scalar value providers (for example <code>failedCount</code> or
  <code>lookbackReadable</code>); a widget emitter publishes them into a per-render registry and interpolates their
- resolved values into widget <i>chrome</i> text (titles / labels) as <js>"$FV{name}"</js> /
- <js>"$FV{name,default}"</js> at serve time.
+ resolved values into widget <i>chrome</i> text (titles / labels) as <js>"${FV:name}"</js> /
+ <js>"${FV:name:default}"</js> at serve time.
 
  <p>
  <b>Not <code>$W</code>.</b>  <code>$FV</code> resolves declared scalar values as plain text (serializer-encoded); it is
@@ -109,7 +109,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
    ServerValues <jv>sv</jv> = ServerValues.<jsm>create</jsm>()
       .value(<js>"failedCount"</js>, <jv>session</jv> -&gt; <jv>metrics</jv>.failed())
       .value(<js>"env"</js>, <jv>session</jv> -&gt; <js>"prod"</js>);
-   <jc>// Chrome: column title "Failures ($FV{failedCount})" resolves at serve time.</jc>
+   <jc>// Chrome: column title "Failures (${FV:failedCount})" resolves at serve time.</jc>
  </p></div>
 <dl class="notes">
 <dt>Since:</dt>
@@ -270,7 +270,7 @@ implements <a href="Widget.html" title="interface in org.apache.juneau.console.w
 <div class="block">Declares a named scalar value provider.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>name</code> - The interpolation name (the <code>x</code> in <js>"$FV{x}"</js>).  Must not be <jk>null</jk> or blank.</dd>
+<dd><code>name</code> - The interpolation name (the <code>x</code> in <js>"${FV:x}"</js>).  Must not be <jk>null</jk> or blank.</dd>
 <dd><code>provider</code> - The session-aware scalar provider.  Must not be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>

@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39">   // User-supplied regexes are compiled once and reused.  Bounded (entire cache cleared past maxSize) to guard</span>
 <span class="source-line-no">040</span><span id="line-40">   // against unbounded growth from arbitrary user input.  Pattern is immutable/thread-safe; a fresh Matcher is</span>
 <span class="source-line-no">041</span><span id="line-41">   // created per invocation, so behavior is identical to compiling on every call.</span>
-<span class="source-line-no">042</span><span id="line-42">   private static final Cache&lt;String,Pattern&gt; PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();</span>
+<span class="source-line-no">042</span><span id="line-42">   static final Cache&lt;String,Pattern&gt; PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();</span>
 <span class="source-line-no">043</span><span id="line-43"></span>
 <span class="source-line-no">044</span><span id="line-44">   /** All function classes in this category. */</span>
 <span class="source-line-no">045</span><span id="line-45">   @SuppressWarnings({</span>
@@ -63,7 +63,7 @@
 <span class="source-line-no">050</span><span id="line-50">      Match.class, Extract.class, ReplaceRegex.class</span>
 <span class="source-line-no">051</span><span id="line-51">   };</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
-<span class="source-line-no">053</span><span id="line-53">   /** {@code #{match(s, regex)}} — replacement for the legacy {@code $PM{...}}. Returns {@code "true"} or {@code "false"}. */</span>
+<span class="source-line-no">053</span><span id="line-53">   /** {@code #{match(s, regex)}} — replacement for the legacy {@code PM} variable. Returns {@code "true"} or {@code "false"}. */</span>
 <span class="source-line-no">054</span><span id="line-54">   public static class Match extends TypedFunction {</span>
 <span class="source-line-no">055</span><span id="line-55">      @Override public String name() { return "match"; }</span>
 <span class="source-line-no">056</span><span id="line-56">      public String invoke(String s, String regex) {</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61"></span>
 <span class="source-line-no">062</span><span id="line-62">   /**</span>
 <span class="source-line-no">063</span><span id="line-63">    * {@code #{extract(s, regex)}} / {@code #{extract(s, regex, group)}} — replacement for the</span>
-<span class="source-line-no">064</span><span id="line-64">    * legacy {@code $PE{...}}. Returns the first match; if {@code group} is supplied, returns</span>
+<span class="source-line-no">064</span><span id="line-64">    * legacy {@code PE} variable. Returns the first match; if {@code group} is supplied, returns</span>
 <span class="source-line-no">065</span><span id="line-65">    * that capture group from the first match.</span>
 <span class="source-line-no">066</span><span id="line-66">    */</span>
 <span class="source-line-no">067</span><span id="line-67">   public static class Extract extends TypedFunction {</span>
@@ -90,7 +90,7 @@
 <span class="source-line-no">077</span><span id="line-77">      }</span>
 <span class="source-line-no">078</span><span id="line-78">   }</span>
 <span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /** {@code #{replaceRegex(s, regex, replacement)}} — replacement for the legacy {@code $PR{...}}. */</span>
+<span class="source-line-no">080</span><span id="line-80">   /** {@code #{replaceRegex(s, regex, replacement)}} — replacement for the legacy {@code PR} variable. */</span>
 <span class="source-line-no">081</span><span id="line-81">   public static class ReplaceRegex extends TypedFunction {</span>
 <span class="source-line-no">082</span><span id="line-82">      @Override public String name() { return "replaceRegex"; }</span>
 <span class="source-line-no">083</span><span id="line-83">      public String invoke(String s, String regex, String replacement) {</span>

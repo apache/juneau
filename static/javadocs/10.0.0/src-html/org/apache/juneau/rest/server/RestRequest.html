@@ -1757,7 +1757,7 @@
 <span class="source-line-no">1744</span><span id="line-1744">    *       VarResolverSession &lt;jv&gt;session&lt;/jv&gt; = getVarResolverSession();</span>
 <span class="source-line-no">1745</span><span id="line-1745">    *</span>
 <span class="source-line-no">1746</span><span id="line-1746">    *       &lt;jc&gt;// Use it to construct a customized message from a query parameter.&lt;/jc&gt;</span>
-<span class="source-line-no">1747</span><span id="line-1747">    *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;session&lt;/jv&gt;.resolve(&lt;js&gt;"Hello $RQ{user}!"&lt;/js&gt;);</span>
+<span class="source-line-no">1747</span><span id="line-1747">    *       &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;session&lt;/jv&gt;.resolve(&lt;js&gt;"Hello ${RQ:user}!"&lt;/js&gt;);</span>
 <span class="source-line-no">1748</span><span id="line-1748">    *    }</span>
 <span class="source-line-no">1749</span><span id="line-1749">    * &lt;/p&gt;</span>
 <span class="source-line-no">1750</span><span id="line-1750">    *</span>

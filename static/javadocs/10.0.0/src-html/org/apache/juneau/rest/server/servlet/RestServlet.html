@@ -243,8 +243,8 @@
 <span class="source-line-no">230</span><span id="line-230">    * Non-{@link String} leaves are coerced via {@link String#valueOf(Object)}.  Each leaf string then runs</span>
 <span class="source-line-no">231</span><span id="line-231">    * through the same per-element pipeline used for {@code @Rest(paths=...)} annotation elements: SVL is</span>
 <span class="source-line-no">232</span><span id="line-232">    * applied via the bean-store-backed {@link org.apache.juneau.commons.svl.VarResolverSession VarResolverSession}</span>
-<span class="source-line-no">233</span><span id="line-233">    * (so {@code $C{key}} consults the live {@link org.apache.juneau.config.Config Config}, {@code $E{NAME,default}}</span>
-<span class="source-line-no">234</span><span id="line-234">    * and {@code $S{prop,default}} resolve through the bootstrap variable catalog), and the post-SVL value is</span>
+<span class="source-line-no">233</span><span id="line-233">    * (so {@code ${C:key}} consults the live {@link org.apache.juneau.config.Config Config}, {@code ${E:NAME:default}}</span>
+<span class="source-line-no">234</span><span id="line-234">    * and {@code ${S:prop:default}} resolve through the bootstrap variable catalog), and the post-SVL value is</span>
 <span class="source-line-no">235</span><span id="line-235">    * comma-split with each piece trimmed and empty pieces dropped.</span>
 <span class="source-line-no">236</span><span id="line-236">    *</span>
 <span class="source-line-no">237</span><span id="line-237">    * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>

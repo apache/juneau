@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Abstract superclass of all Simple Var Language variables.
 
  <p>
- Vars are used to convert simple variables of the form <js>"$varName{varKey}"</js> into something else by the
+ Vars are used to convert simple variables of the form <js>"${varName:varKey}"</js> into something else by the
  <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a> class.
 
  <p>
@@ -190,6 +190,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">The interface that needs to be implemented for subclasses of <a href="StreamedVar.html" title="class in org.apache.juneau.commons.svl"><code>StreamedVar</code></a>.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)" class="member-name-link">resolveValue</a><wbr>(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Resolves this var to a typed value for use inside <c>#{...}</c> expressions.</div>
+</div>
 </div>
 </div>
 </div>
@@ -273,7 +279,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns whether nested variables are supported by this variable.
 
  <p>
- For example, in <js>"$X{$Y{xxx}}"</js>, $Y is a nested variable that will be resolved if this method returns
+ For example, in <js>"${X:${Y:xxx}}"</js>, $Y is a nested variable that will be resolved if this method returns
  <jk>true</jk>.
 
  <p>
@@ -292,7 +298,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns whether variables in the resolved contents of this variable should also be resolved.
 
  <p>
- For example, if <js>"$X{xxx}"</js> resolves to <js>"$Y{xxx}"</js>, then the $Y variable will be recursively
+ For example, if <js>"${X:xxx}"</js> resolves to <js>"${Y:xxx}"</js>, then the $Y variable will be recursively
  resolved if this method returns <jk>true</jk>.
 
  <p>
@@ -376,9 +382,32 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">
+<h3>resolveValue</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/Var.html#line-218">resolveValue</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</span>
+                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Resolves this var to a typed value for use inside <c>#{...}</c> expressions.
+
+ <p>
+ The default delegates to <a href="#resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)"><code>resolve(VarResolverSession, String)</code></a> (or, for a streamed var, buffers
+ <a href="#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)"><code>resolveTo(VarResolverSession, java.io.Writer, String)</code></a>).  A <jk>null</jk> return means "absent", which is
+ what the <c>:default</c> and <c>?:</c> operators test for.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>session</code> - The session.</dd>
+<dd><code>arg</code> - The var body.</dd>
+<dt>Returns:</dt>
+<dd>The value, or <jk>null</jk> if absent.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - Var-specific failure.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="doResolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)">
 <h3>doResolve</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/Var.html#line-217">doResolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/Var.html#line-250">doResolve</a></span><wbr><span class="parameters">(<a href="VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <div class="block">The method called from <a href="VarResolver.html" title="class in org.apache.juneau.commons.svl"><code>VarResolver</code></a>.
@@ -400,12 +429,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getName()">
 <h3>getName</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/Var.html#line-230">getName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/svl/Var.html#line-263">getName</a></span>()</div>
 <div class="block">Return the name of this variable.
 
  <p>
  For example, the system property variable returns <js>"S"</js> since the format of the variable is
- <js>"$S{system.property}"</js>.</div>
+ <js>"${S:system.property}"</js>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The name of this variable.</dd>

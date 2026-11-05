@@ -214,7 +214,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       Format: HTML
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -277,7 +277,7 @@ loadScripts(document, 'script');</script>
 
  <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
       On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
@@ -319,7 +319,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       Format: HTML
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -359,7 +359,7 @@ loadScripts(document, 'script');</script>
  <p class='bjava'>
    <ja>@HtmlDocConfig</ja>(
       head={
-         <js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
+         <js>"&lt;link rel='icon' href='${U:servlet:/htdocs/mypageicon.ico}'&gt;"</js>
       }
    )
  </p>
@@ -368,7 +368,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       Format: HTML
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -420,7 +420,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       Multiple values are combined with newlines into a single string.
    <li class='note'>
@@ -468,7 +468,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       When <a href="#navlinks()"><code>navlinks()</code></a> is also specified, this content is placed AFTER the navigation links.
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -537,7 +537,7 @@ loadScripts(document, 'script');</script>
 
  <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -588,7 +588,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
  </ul>
 
  <h4 class='section'>See Also:</h4><ul>
@@ -620,7 +620,7 @@ loadScripts(document, 'script');</script>
 
  <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
  </ul>
 
  <h4 class='section'>See Also:</h4><ul>
@@ -667,7 +667,7 @@ loadScripts(document, 'script');</script>
 
  <h4 class='section'>Notes:</h4><ul>
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
  </ul>
 
  <h4 class='section'>See Also:</h4><ul>
@@ -705,7 +705,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       Format: Javascript
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -755,7 +755,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       Format: CSS
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       A value of <js>"NONE"</js> can be used to force no value.
    <li class='note'>
@@ -798,7 +798,7 @@ loadScripts(document, 'script');</script>
    <li class='note'>
       Format: URL
    <li class='note'>
-      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"$L{my.localized.variable}"</js>).
+      Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">REST Server SVL Variables</a> (e.g. <js>"${L:my.localized.variable}"</js>).
    <li class='note'>
       On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
    <li class='note'>
@@ -867,7 +867,7 @@ loadScripts(document, 'script');</script>
 <div class="block">HTML Widgets.
 
  <p>
- Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
+ Defines widgets that can be used in conjunction with string variables of the form <js>"${W:name}"</js>to quickly
  generate arbitrary replacement text.
 
  <p>
@@ -875,7 +875,7 @@ loadScripts(document, 'script');</script>
 
  <ul class='spaced-list'>
    <li>
-      <js>"$W{name}"</js> - Contents returned by <a href="HtmlWidget.html#getHtml(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getHtml(org.apache.juneau.commons.svl.VarResolverSession)</code></a>.
+      <js>"${W:name}"</js> - Contents returned by <a href="HtmlWidget.html#getHtml(org.apache.juneau.commons.svl.VarResolverSession)"><code>HtmlWidget.getHtml(org.apache.juneau.commons.svl.VarResolverSession)</code></a>.
  </ul>
 
  <p>
@@ -888,10 +888,10 @@ loadScripts(document, 'script');</script>
          MyWidget.<jk>class</jk>
       }
       navlinks={
-         <js>"$W{MyWidget}"</js>
+         <js>"${W:MyWidget}"</js>
       },
       aside={
-         <js>"Check out this widget:  $W{MyWidget}"</js>
+         <js>"Check out this widget:  ${W:MyWidget}"</js>
       }
    )
  </p>

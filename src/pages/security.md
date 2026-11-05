@@ -19,6 +19,26 @@ Apache Juneau takes security seriously and uses automated tools to help identify
 
 For how Juneau's serializers, parsers, SVL and REST layers handle untrusted input, see the [Security chapter](/docs/topics/Security) of the documentation.
 
+## Security Advisories
+
+### Apache Juneau 9.2.1 (2026-11-03)
+
+Apache Juneau 9.2.1 fixes the following vulnerabilities, which affect Apache Juneau through 9.2.0. Users are recommended to upgrade to version 9.2.1. The [advisory](https://lists.apache.org/thread/hhn0377kyqb48b1hgr6mlfb4mp8p04d7) gives the affected modules, mitigations and credits for each issue.
+
+| CVE | Severity | Summary |
+|-----|----------|---------|
+| [CVE-2026-73095](https://www.cve.org/CVERecord?id=CVE-2026-73095) | Important | Denial of service via unbounded memory allocation in parsers and REST request handling |
+| [CVE-2026-73099](https://www.cve.org/CVERecord?id=CVE-2026-73099) | Important | Cross-site request forgery via default-enabled content query-parameter body override |
+| [CVE-2026-73100](https://www.cve.org/CVERecord?id=CVE-2026-73100) | Important | Sensitive request headers logged in cleartext by the default request logger on server errors |
+| [CVE-2026-73116](https://www.cve.org/CVERecord?id=CVE-2026-73116) | Important | REST client forwards credentials to a different origin when following HTTP redirects |
+| [CVE-2026-121489](https://www.cve.org/CVERecord?id=CVE-2026-121489) | Moderate | Path traversal in DirectoryResource allows reading files outside the configured root directory |
+| [CVE-2026-96677](https://www.cve.org/CVERecord?id=CVE-2026-96677) | Moderate | Cross-site scripting via unescaped request variables in HTML-doc chrome |
+| [CVE-2026-73101](https://www.cve.org/CVERecord?id=CVE-2026-73101) | Moderate | Internal exception class and message disclosed via error response header and body |
+| [CVE-2026-73098](https://www.cve.org/CVERecord?id=CVE-2026-73098) | Moderate | Unsafe reflection allows attacker-controlled class initialization during parsing |
+| [CVE-2026-73117](https://www.cve.org/CVERecord?id=CVE-2026-73117) | Low | Response header CRLF injection and open redirect when applications set headers or redirect targets from request data |
+
+Upgrading changes some defaults: request bodies over 1 MB need a larger `@Rest(maxInput)`, error responses no longer carry internal exception detail unless `renderResponseStackTraces` is on, and the `content` query parameter is honored only on PUT and POST. See the [9.2.1 release notes](/docs/release-notes/9.2.1) for details.
+
 ## About Our Analysis Tools
 
 ### GitHub CodeQL

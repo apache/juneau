@@ -60,9 +60,9 @@
 <span class="source-line-no">047</span><span id="line-47"> *</span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> * The resolver intentionally uses {@link VarResolver#DEFAULT}, which already includes</span>
-<span class="source-line-no">050</span><span id="line-50"> * {@code PropertyVar} (the {@code $P{key[,default]}} variable that reads from {@link Settings}).</span>
+<span class="source-line-no">050</span><span id="line-50"> * {@code PropertyVar} (the {@code ${P:key[:default]}} variable that reads from {@link Settings}).</span>
 <span class="source-line-no">051</span><span id="line-51"> * After the property-variable unification, the {@code ${key}} shortcut routes through that same {@code PropertyVar},</span>
-<span class="source-line-no">052</span><span id="line-52"> * so {@code @Value("${db.url}")} and {@code @Value("$P{db.url}")} are equivalent.</span>
+<span class="source-line-no">052</span><span id="line-52"> * so {@code @Value("${db.url}")} and {@code @Value("${P:db.url}")} are equivalent.</span>
 <span class="source-line-no">053</span><span id="line-53"> */</span>
 <span class="source-line-no">054</span><span id="line-54">public final class ValueResolver {</span>
 <span class="source-line-no">055</span><span id="line-55"></span>

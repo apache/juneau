@@ -98,9 +98,9 @@ loadScripts(document, 'script');</script>
 
  <p>
  The resolver intentionally uses <a href="../svl/VarResolver.html#DEFAULT"><code>VarResolver.DEFAULT</code></a>, which already includes
- <code>PropertyVar</code> (the <code>$P{key[,default]}</code> variable that reads from <a href="../settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>).
+ <code>PropertyVar</code> (the <code>${P:key[:default]}</code> variable that reads from <a href="../settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>).
  After the property-variable unification, the <code>${key}</code> shortcut routes through that same <code>PropertyVar</code>,
- so <code>@Value("${db.url}")</code> and <code>@Value("$P{db.url}")</code> are equivalent.</div>
+ so <code>@Value("${db.url}")</code> and <code>@Value("${P:db.url}")</code> are equivalent.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">

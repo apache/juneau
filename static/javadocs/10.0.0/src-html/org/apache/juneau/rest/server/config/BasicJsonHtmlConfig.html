@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48"> *             &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *          &lt;/li&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> *          &lt;li class='jma'&gt;{@link Rest#defaultAccept() defaultAccept}:  &lt;js&gt;"text/json"&lt;/js&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *          &lt;li class='jma'&gt;{@link Rest#config() config}:  &lt;js&gt;"$S{juneau.configFile,SYSTEM_DEFAULT}"&lt;/js&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *          &lt;li class='jma'&gt;{@link Rest#config() config}:  &lt;js&gt;"${S:juneau.configFile:SYSTEM_DEFAULT}"&lt;/js&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;/ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/li&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *    &lt;li class='ja'&gt;{@link MarshalledConfig}:</span>
@@ -76,11 +76,11 @@
 <span class="source-line-no">063</span><span id="line-63"> *    &lt;/li&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='ja'&gt;{@link HtmlDocConfig}:</span>
 <span class="source-line-no">065</span><span id="line-65"> *       &lt;ul&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#header() header}:  &lt;js&gt;"&amp;lt;h1&amp;gt;$RS{title}&amp;lt;/h&amp;gt;&amp;lt;h2&amp;gt;$RS{operationSummary,description}&amp;lt;/h2&amp;gt;$C{REST/header}"&lt;/js&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#header() header}:  &lt;js&gt;"&amp;lt;h1&amp;gt;${RS:title}&amp;lt;/h&amp;gt;&amp;lt;h2&amp;gt;${RS:operationSummary:description}&amp;lt;/h2&amp;gt;${C:REST/header}"&lt;/js&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#navlinks() navlinks}:  &lt;js&gt;"up: request:/.."&lt;/js&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#stylesheet() stylesheet}:  &lt;js&gt;"$C{REST/theme,servlet:/htdocs/themes/devops.css}"&lt;/js&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#head() head}:  &lt;js&gt;"$C{REST/head}"&lt;/js&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#footer() footer}:  &lt;js&gt;"$C{REST/footer}"&lt;/js&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#stylesheet() stylesheet}:  &lt;js&gt;"${C:REST/theme:servlet:/htdocs/themes/devops.css}"&lt;/js&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#head() head}:  &lt;js&gt;"${C:REST/head}"&lt;/js&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#footer() footer}:  &lt;js&gt;"${C:REST/footer}"&lt;/js&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> *          &lt;li class='jma'&gt;{@link HtmlDocConfig#nowrap() nowrap}:  &lt;js&gt;"true"&lt;/js&gt;</span>
 <span class="source-line-no">072</span><span id="line-72"> *       &lt;/ul&gt;</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;/li&gt;</span>

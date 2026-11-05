@@ -79,10 +79,10 @@
 <span class="source-line-no">066</span><span id="line-66"> * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *    &lt;ja&gt;@Rest&lt;/ja&gt;(path=&lt;js&gt;"/releases"&lt;/js&gt;, mixins=DataTablesMixin.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">068</span><span id="line-68"> *    &lt;ja&gt;@HtmlDocConfig&lt;/ja&gt;(</span>
-<span class="source-line-no">069</span><span id="line-69"> *       stylesheet=&lt;js&gt;"$S{juneau.datatables.cssUrl:https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css}"&lt;/js&gt;,</span>
+<span class="source-line-no">069</span><span id="line-69"> *       stylesheet=&lt;js&gt;"${S:juneau.datatables.cssUrl\:https\://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css}"&lt;/js&gt;,</span>
 <span class="source-line-no">070</span><span id="line-70"> *       head={</span>
-<span class="source-line-no">071</span><span id="line-71"> *          &lt;js&gt;"&amp;lt;script src='$S{juneau.datatables.jqueryUrl:https://code.jquery.com/jquery-3.7.1.min.js}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</span>
-<span class="source-line-no">072</span><span id="line-72"> *          &lt;js&gt;"&amp;lt;script src='$S{juneau.datatables.jsUrl:https://cdn.datatables.net/2.1.8/js/dataTables.min.js}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</span>
+<span class="source-line-no">071</span><span id="line-71"> *          &lt;js&gt;"&amp;lt;script src='${S:juneau.datatables.jqueryUrl\:https\://code.jquery.com/jquery-3.7.1.min.js}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</span>
+<span class="source-line-no">072</span><span id="line-72"> *          &lt;js&gt;"&amp;lt;script src='${S:juneau.datatables.jsUrl\:https\://cdn.datatables.net/2.1.8/js/dataTables.min.js}'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;,</span>
 <span class="source-line-no">073</span><span id="line-73"> *          &lt;js&gt;"&amp;lt;script src='servlet:/juneau-datatables.js'&amp;gt;&amp;lt;/script&amp;gt;"&lt;/js&gt;</span>
 <span class="source-line-no">074</span><span id="line-74"> *       }</span>
 <span class="source-line-no">075</span><span id="line-75"> *    )</span>

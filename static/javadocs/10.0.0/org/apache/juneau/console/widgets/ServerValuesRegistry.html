@@ -85,7 +85,7 @@ loadScripts(document, 'script');</script>
  <p>
  A registry is added to a <b>sibling</b> <a href="../../commons/svl/VarResolverSession.html" title="class in org.apache.juneau.commons.svl"><code>VarResolverSession</code></a> bean store so provider values never leak
  across requests.  <code>ServerValuesVar</code> (<code>$FV</code>) looks this bean up in the session and delegates each
- <js>"$FV{name}"</js> resolution to <a href="#resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)"><code>resolve(VarResolverSession, String)</code></a>.
+ <js>"${FV:name}"</js> resolution to <a href="#resolve(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)"><code>resolve(VarResolverSession, String)</code></a>.
 
  <p>
  Resolution rejects non-scalar provider results (no <code>List.toString()</code> join) and memoizes only entries

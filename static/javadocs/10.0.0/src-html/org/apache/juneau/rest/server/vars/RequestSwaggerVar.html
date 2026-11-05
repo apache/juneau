@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * Rest info variable resolver.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> * The format for this var is &lt;js&gt;"$RS{key1[,key2...]}"&lt;/js&gt;.</span>
+<span class="source-line-no">036</span><span id="line-36"> * The format for this var is &lt;js&gt;"${RS:key1[:key2...]}"&lt;/js&gt;.</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
 <span class="source-line-no">039</span><span id="line-39"> * Used to resolve values returned by {@link RestRequest#getSwagger()}.</span>
@@ -70,8 +70,8 @@
 <span class="source-line-no">057</span><span id="line-57"> *</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *    String &lt;jv&gt;title&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$RS{title}"&lt;/js&gt;);</span>
-<span class="source-line-no">061</span><span id="line-61"> *    String &lt;jv&gt;titleOrDescription&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$RS{title,description}"&lt;/js&gt;);</span>
+<span class="source-line-no">060</span><span id="line-60"> *    String &lt;jv&gt;title&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${RS:title}"&lt;/js&gt;);</span>
+<span class="source-line-no">061</span><span id="line-61"> *    String &lt;jv&gt;titleOrDescription&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${RS:title:description}"&lt;/js&gt;);</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;/p&gt;</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>

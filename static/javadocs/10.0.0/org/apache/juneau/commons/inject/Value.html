@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  The <code>value()</code> string is passed through Juneau's <code>VarResolver</code> (so
- <code>${...}</code> / <code>$P{...}</code> placeholders are expanded against
+ <code>${...}</code> / <code>${P:...}</code> placeholders are expanded against
  <a href="../settings/Settings.html#get()"><code>Settings.get()</code></a>), then coerced to the
  target Java type via <a href="../settings/Settings.html#toType(java.lang.String,java.lang.Class)"><code>Settings.toType(String, Class)</code></a>.
 

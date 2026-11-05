@@ -1029,28 +1029,28 @@
 <span class="source-line-no">1016</span><span id="line-1016">    *    &lt;ck&gt;aBean&lt;/ck&gt; = {foo:'bar',baz:123}</span>
 <span class="source-line-no">1017</span><span id="line-1017">    *</span>
 <span class="source-line-no">1018</span><span id="line-1018">    *    &lt;cc&gt;# A system property&lt;/cc&gt;</span>
-<span class="source-line-no">1019</span><span id="line-1019">    *    &lt;ck&gt;locale&lt;/ck&gt; = $S{java.locale, en_US}</span>
+<span class="source-line-no">1019</span><span id="line-1019">    *    &lt;ck&gt;locale&lt;/ck&gt; = ${S:java.locale: en_US}</span>
 <span class="source-line-no">1020</span><span id="line-1020">    *</span>
 <span class="source-line-no">1021</span><span id="line-1021">    *    &lt;cc&gt;# An environment variable&lt;/cc&gt;</span>
-<span class="source-line-no">1022</span><span id="line-1022">    *    &lt;ck&gt;path&lt;/ck&gt; = $E{PATH, unknown}</span>
+<span class="source-line-no">1022</span><span id="line-1022">    *    &lt;ck&gt;path&lt;/ck&gt; = ${E:PATH: unknown}</span>
 <span class="source-line-no">1023</span><span id="line-1023">    *</span>
 <span class="source-line-no">1024</span><span id="line-1024">    *    &lt;cc&gt;# A manifest file entry&lt;/cc&gt;</span>
-<span class="source-line-no">1025</span><span id="line-1025">    *    &lt;ck&gt;mainClass&lt;/ck&gt; = $MF{Main-Class}</span>
+<span class="source-line-no">1025</span><span id="line-1025">    *    &lt;ck&gt;mainClass&lt;/ck&gt; = ${MF:Main-Class}</span>
 <span class="source-line-no">1026</span><span id="line-1026">    *</span>
 <span class="source-line-no">1027</span><span id="line-1027">    *    &lt;cc&gt;# Another value in this config file&lt;/cc&gt;</span>
-<span class="source-line-no">1028</span><span id="line-1028">    *    &lt;ck&gt;sameAsAnInt&lt;/ck&gt; = $C{MySection/anInt}</span>
+<span class="source-line-no">1028</span><span id="line-1028">    *    &lt;ck&gt;sameAsAnInt&lt;/ck&gt; = ${C:MySection/anInt}</span>
 <span class="source-line-no">1029</span><span id="line-1029">    *</span>
 <span class="source-line-no">1030</span><span id="line-1030">    *    &lt;cc&gt;# A command-line argument in the form "myarg=foo"&lt;/cc&gt;</span>
-<span class="source-line-no">1031</span><span id="line-1031">    *    &lt;ck&gt;myArg&lt;/ck&gt; = $A{myarg}</span>
+<span class="source-line-no">1031</span><span id="line-1031">    *    &lt;ck&gt;myArg&lt;/ck&gt; = ${A:myarg}</span>
 <span class="source-line-no">1032</span><span id="line-1032">    *</span>
 <span class="source-line-no">1033</span><span id="line-1033">    *    &lt;cc&gt;# The first command-line argument&lt;/cc&gt;</span>
-<span class="source-line-no">1034</span><span id="line-1034">    *    &lt;ck&gt;firstArg&lt;/ck&gt; = $A{0}</span>
+<span class="source-line-no">1034</span><span id="line-1034">    *    &lt;ck&gt;firstArg&lt;/ck&gt; = ${A:0}</span>
 <span class="source-line-no">1035</span><span id="line-1035">    *</span>
 <span class="source-line-no">1036</span><span id="line-1036">    *    &lt;cc&gt;# Look for system property, or env var if that doesn't exist, or command-line arg if that doesn't exist.&lt;/cc&gt;</span>
-<span class="source-line-no">1037</span><span id="line-1037">    *    &lt;ck&gt;nested&lt;/ck&gt; = $S{mySystemProperty,$E{MY_ENV_VAR,$A{0}}}</span>
+<span class="source-line-no">1037</span><span id="line-1037">    *    &lt;ck&gt;nested&lt;/ck&gt; = ${S:mySystemProperty:${E:MY_ENV_VAR:${A:0}}}</span>
 <span class="source-line-no">1038</span><span id="line-1038">    *</span>
 <span class="source-line-no">1039</span><span id="line-1039">    *    &lt;cc&gt;# A POJO with embedded variables&lt;/cc&gt;</span>
-<span class="source-line-no">1040</span><span id="line-1040">    *    &lt;ck&gt;aBean2&lt;/ck&gt; = {foo:'$A{0}',baz:$C{MySection/anInt}}</span>
+<span class="source-line-no">1040</span><span id="line-1040">    *    &lt;ck&gt;aBean2&lt;/ck&gt; = {foo:'${A:0}',baz:${C:MySection/anInt}}</span>
 <span class="source-line-no">1041</span><span id="line-1041">    * &lt;/p&gt;</span>
 <span class="source-line-no">1042</span><span id="line-1042">    *</span>
 <span class="source-line-no">1043</span><span id="line-1043">    * &lt;p class='bjava'&gt;</span>

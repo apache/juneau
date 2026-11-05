@@ -41,7 +41,7 @@
 <span class="source-line-no">028</span><span id="line-28"> * Request attribute variable resolver.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> * The format for this var is &lt;js&gt;"$R{key1[,key2...]}"&lt;/js&gt;.</span>
+<span class="source-line-no">031</span><span id="line-31"> * The format for this var is &lt;js&gt;"${R:key1[:key2...]}"&lt;/js&gt;.</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;br&gt;When multiple keys are used, returns the first non-null/empty value.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *    String &lt;jv&gt;servletClass&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"$R{servletClass}"&lt;/js&gt;);</span>
+<span class="source-line-no">052</span><span id="line-52"> *    String &lt;jv&gt;servletClass&lt;/jv&gt; = &lt;jv&gt;restRequest&lt;/jv&gt;.getVarResolver().resolve(&lt;js&gt;"${R:servletClass}"&lt;/js&gt;);</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/p&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> *</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;h2 class='section'&gt;Notes:&lt;/h2&gt;&lt;ul&gt;</span>

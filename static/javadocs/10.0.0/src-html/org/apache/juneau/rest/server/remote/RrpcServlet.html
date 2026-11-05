@@ -114,8 +114,8 @@
 <span class="source-line-no">101</span><span id="line-101">   )</span>
 <span class="source-line-no">102</span><span id="line-102">   @HtmlDocConfig(</span>
 <span class="source-line-no">103</span><span id="line-103">      nav= {</span>
-<span class="source-line-no">104</span><span id="line-104">         "&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;",</span>
-<span class="source-line-no">105</span><span id="line-105">         "&lt;h5&gt;Method:  $RP{javaMethod}&lt;/h5&gt;"</span>
+<span class="source-line-no">104</span><span id="line-104">         "&lt;h5&gt;Interface:  ${RP:javaInterface}&lt;/h5&gt;",</span>
+<span class="source-line-no">105</span><span id="line-105">         "&lt;h5&gt;Method:  ${RP:javaMethod}&lt;/h5&gt;"</span>
 <span class="source-line-no">106</span><span id="line-106">      }</span>
 <span class="source-line-no">107</span><span id="line-107">   )</span>
 <span class="source-line-no">108</span><span id="line-108">   public Object invoke(</span>
@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142">      description="Shows a list of all the exposed methods on an interface."</span>
 <span class="source-line-no">143</span><span id="line-143">   )</span>
 <span class="source-line-no">144</span><span id="line-144">   @HtmlDocConfig(</span>
-<span class="source-line-no">145</span><span id="line-145">      nav="&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;"</span>
+<span class="source-line-no">145</span><span id="line-145">      nav="&lt;h5&gt;Interface:  ${RP:javaInterface}&lt;/h5&gt;"</span>
 <span class="source-line-no">146</span><span id="line-146">   )</span>
 <span class="source-line-no">147</span><span id="line-147">   // @formatter:on</span>
 <span class="source-line-no">148</span><span id="line-148">   public Collection&lt;LinkString&gt; listMethods(@Path("javaInterface") @Schema(description = "Java interface name") String javaInterface) throws Exception {</span>
@@ -173,8 +173,8 @@
 <span class="source-line-no">160</span><span id="line-160">   )</span>
 <span class="source-line-no">161</span><span id="line-161">   @HtmlDocConfig(</span>
 <span class="source-line-no">162</span><span id="line-162">      nav={</span>
-<span class="source-line-no">163</span><span id="line-163">         "&lt;h5&gt;Interface:  $RP{javaInterface}&lt;/h5&gt;",</span>
-<span class="source-line-no">164</span><span id="line-164">         "&lt;h5&gt;Method:  $RP{javaMethod}&lt;/h5&gt;"</span>
+<span class="source-line-no">163</span><span id="line-163">         "&lt;h5&gt;Interface:  ${RP:javaInterface}&lt;/h5&gt;",</span>
+<span class="source-line-no">164</span><span id="line-164">         "&lt;h5&gt;Method:  ${RP:javaMethod}&lt;/h5&gt;"</span>
 <span class="source-line-no">165</span><span id="line-165">      }</span>
 <span class="source-line-no">166</span><span id="line-166">   )</span>
 <span class="source-line-no">167</span><span id="line-167">   public Div showEntryForm(</span>
