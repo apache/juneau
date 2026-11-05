@@ -40,8 +40,8 @@
 		<juneau.compare.version>9.0.1</juneau.compare.version>
 		<junit.version>5.13.4</junit.version>
 		<javadoc.plugin.version>3.11.3</javadoc.plugin.version>
-		<jacoco.plugin.version>0.8.15</jacoco.plugin.version>
-		<jetty.version>12.1.13</jetty.version>
+		<jacoco.plugin.version>0.8.16</jacoco.plugin.version>
+		<jetty.version>12.1.14</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<spring.version>4.0.1</spring.version>
 	</properties>
