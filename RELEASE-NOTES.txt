@@ -11,6 +11,14 @@
 * specific language governing permissions and limitations under the License.                                              *
 ***************************************************************************************************************************
 
+Release Notes - Juneau - Version 9.2.2
+
+** Bug
+
+    * ClassMeta is now added to the class-meta cache only after it is fully constructed.
+        Previously a concurrent getClassMeta() call, or a Map/Collection class meta copied from a half-built one, could see a null "swaps"
+        and fail serialization with: Cannot invoke "java.util.function.Supplier.get()" because "this.swaps" is null.
+
 Release Notes - Juneau - Version 9.2.1
 
 ** Security
