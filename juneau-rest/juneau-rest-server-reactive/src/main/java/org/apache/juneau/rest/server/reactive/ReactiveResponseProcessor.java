@@ -27,6 +27,7 @@ import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.http.MediaRanges;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
@@ -84,7 +85,9 @@ import jakarta.servlet.http.*;
  * 	<li><b>Buffer</b> (default, any other media type) &mdash; all elements are collected into a
  * 		{@link List List} and serialized through the normal serializer chain (e.g. a JSON
  * 		array). The collection is wrapped in a {@link CompletableFuture} and handed to the async path,
- * 		so a slow producer never blocks the request thread.
+ * 		so a slow producer never blocks the request thread. The collection is bounded by
+ * 		{@link ReactiveResponseProperties#getMaxBufferedElements() ReactiveResponse.maxBufferedElements}
+ * 		(default 10,000 elements).
  * </ul>
  *
  * <h2 class='topic'>Backpressure</h2>
@@ -93,7 +96,11 @@ import jakarta.servlet.http.*;
  * each frame is written and flushed). Because writing to the servlet output stream blocks until the
  * socket accepts the bytes, this gives natural backpressure &mdash; the producer is paced by the
  * client's drain rate and the server-side buffer does not grow without bound. Buffer-shape subscribers
- * request {@link Long#MAX_VALUE} since the collection is bounded by the publisher's own completion.
+ * request at most one element more than the configured limit
+ * ({@link ReactiveResponseProperties#getMaxBufferedElements() ReactiveResponse.maxBufferedElements}, default
+ * 10,000). If the publisher emits more elements than the limit, the subscription is cancelled and the request
+ * fails with a {@code 500} response whose message names the limit; the response is never silently truncated.
+ * The subscription is likewise cancelled when the buffered response times out or is otherwise abandoned.
  *
  * <h2 class='topic'>Threading, executors, and MDC</h2>
  * <p>
@@ -207,7 +214,14 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 
 	private int handleBuffer(RestOpSession opSession, Flow.Publisher<?> pub) {
 		var cf = new CompletableFuture<List<Object>>();
-		pub.subscribe(new CollectingSubscriber(cf));
+		var subscriber = new CollectingSubscriber(cf, maxBufferedElements(opSession));
+		// Release the subscription whenever the future ends without the subscriber's own terminal signal
+		// (async timeout, client abort, or an overflow failure).
+		cf.whenComplete((v, t) -> {
+			if (t != null)
+				subscriber.cancel();
+		});
+		pub.subscribe(subscriber);
 		opSession.getResponse().setContent(cf);
 		return RESTART;
 	}
@@ -427,6 +441,14 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		return Shape.BUFFER;
 	}
 
+	private static int maxBufferedElements(RestOpSession opSession) {
+		var bs = opSession.getRestContext().getBeanStore();
+		var props = bs.getBean(ReactiveResponseProperties.class).orElse(null);
+		if (props == null)
+			props = BeanInstantiator.of(ReactiveResponseProperties.class, bs).run();
+		return props.getMaxBufferedElements();
+	}
+
 	private static long syncTimeoutMillis(RestOpSession opSession) {
 		var t = opSession.getContext().getAsyncTimeoutMillis();
 		if (t <= 0)
@@ -476,19 +498,62 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	// Subscribers.
 	// -----------------------------------------------------------------------------------------------------------------
 
-	/** Collects all emitted elements into a list and completes the supplied future (buffer shape). */
+	/**
+	 * Collects emitted elements into a list and completes the supplied future (buffer shape).
+	 *
+	 * <p>
+	 * Demand is bounded at one element more than the limit, so a compliant publisher can never deliver more than
+	 * that; receiving the extra element means the stream exceeds the limit.
+	 */
 	private static final class CollectingSubscriber implements Flow.Subscriber<Object> {
 		private final CompletableFuture<List<Object>> cf;
+		private final int max;
 		private final List<Object> items = l();
+		private final AtomicReference<Flow.Subscription> subscription = new AtomicReference<>();
+		private volatile boolean done;
 
-		CollectingSubscriber(CompletableFuture<List<Object>> cf) {
+		CollectingSubscriber(CompletableFuture<List<Object>> cf, int max) {
 			this.cf = cf;
+			this.max = max;
 		}
 
-		@Override public void onSubscribe(Flow.Subscription s) { s.request(Long.MAX_VALUE); }
-		@Override public void onNext(Object item) { items.add(item); }
-		@Override public void onError(Throwable t) { cf.completeExceptionally(t); }
-		@Override public void onComplete() { cf.complete(items); }
+		@Override public void onSubscribe(Flow.Subscription s) {
+			subscription.set(s);
+			if (done)
+				s.cancel();
+			else
+				s.request((long)max + 1);
+		}
+
+		@Override public void onNext(Object item) {
+			if (done)
+				return;
+			if (items.size() >= max) {
+				done = true;
+				cancel();
+				cf.completeExceptionally(new InternalServerError("Reactive response exceeded the limit of %s buffered elements.", max));
+				return;
+			}
+			items.add(item);
+		}
+
+		@Override public void onError(Throwable t) {
+			done = true;
+			cf.completeExceptionally(t);
+		}
+
+		@Override public void onComplete() {
+			done = true;
+			cf.complete(items);
+		}
+
+		/** Cancels the upstream subscription (if any) and ignores any further signals. */
+		void cancel() {
+			done = true;
+			var s = subscription.get();
+			if (s != null)
+				s.cancel();
+		}
 	}
 
 	/** Writes each emitted element as a wire frame (SSE / NDJSON), one element at a time (bounded backpressure). */
