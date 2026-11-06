@@ -911,157 +911,178 @@
 <a class="jxr_linenumber" name="L903" href="#L903">903</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Failed to register @Bean field: "</span> + field, e);
 <a class="jxr_linenumber" name="L904" href="#L904">904</a> 				}
 <a class="jxr_linenumber" name="L905" href="#L905">905</a> 			}
-<a class="jxr_linenumber" name="L906" href="#L906">906</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> method : c.getDeclaredMethods()) {
-<a class="jxr_linenumber" name="L907" href="#L907">907</a> 				<strong class="jxr_keyword">var</strong> beanAnn = method.getAnnotation(Bean.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L908" href="#L908">908</a> 				<strong class="jxr_keyword">if</strong> (beanAnn == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L909" href="#L909">909</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L910" href="#L910">910</a> 				<strong class="jxr_keyword">if</strong> (!matchesConditions(method))
-<a class="jxr_linenumber" name="L911" href="#L911">911</a> 					<strong class="jxr_keyword">continue</strong>;
-<a class="jxr_linenumber" name="L912" href="#L912">912</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L913" href="#L913">913</a> 					<strong class="jxr_keyword">if</strong> (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) &amp;&amp; instance == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L914" href="#L914">914</a> 						instance = BeanInstantiator.of(configType, <strong class="jxr_keyword">this</strong>).run();
-<a class="jxr_linenumber" name="L915" href="#L915">915</a> 					method.setAccessible(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L916" href="#L916">916</a> 					<strong class="jxr_keyword">var</strong> value = MethodInfo.of(method).inject(<strong class="jxr_keyword">this</strong>, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? <strong class="jxr_keyword">null</strong> : instance);
-<a class="jxr_linenumber" name="L917" href="#L917">917</a> 					addBeanWithMeta((Class&lt;Object&gt;)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));
-<a class="jxr_linenumber" name="L918" href="#L918">918</a> 				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L919" href="#L919">919</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Failed to register @Bean method: "</span> + method, e);
-<a class="jxr_linenumber" name="L920" href="#L920">920</a> 				}
-<a class="jxr_linenumber" name="L921" href="#L921">921</a> 			}
-<a class="jxr_linenumber" name="L922" href="#L922">922</a> 		}
-<a class="jxr_linenumber" name="L923" href="#L923">923</a> 	}
-<a class="jxr_linenumber" name="L924" href="#L924">924</a> 
-<a class="jxr_linenumber" name="L925" href="#L925">925</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> matchesConditions(java.lang.reflect.AnnotatedElement element) {
-<a class="jxr_linenumber" name="L926" href="#L926">926</a> 		<strong class="jxr_keyword">var</strong> classLoader = element instanceof Class&lt;?&gt; element2 ? element2.getClassLoader() : element.getClass().getClassLoader();
-<a class="jxr_linenumber" name="L927" href="#L927">927</a> 		<strong class="jxr_keyword">var</strong> ctx = <strong class="jxr_keyword">new</strong> <a name="ConditionContext" href="../../../../../org/apache/juneau/commons/inject/ConditionContext.html#ConditionContext">ConditionContext</a>(<strong class="jxr_keyword">this</strong>, Settings.get(), classLoader, element);
-<a class="jxr_linenumber" name="L928" href="#L928">928</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(Conditional.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L929" href="#L929">929</a> 			<strong class="jxr_keyword">if</strong> (!BeanInstantiator.of(c.value(), <strong class="jxr_keyword">this</strong>).run().matches(ctx)) {
-<a class="jxr_linenumber" name="L930" href="#L930">930</a> 				LOGGER.fine(() -&gt; <span class="jxr_string">"Skipping conditional element due to @Conditional: "</span> + element);
-<a class="jxr_linenumber" name="L931" href="#L931">931</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L932" href="#L932">932</a> 			}
-<a class="jxr_linenumber" name="L933" href="#L933">933</a> 		}
-<a class="jxr_linenumber" name="L934" href="#L934">934</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(ConditionalOnClass.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L935" href="#L935">935</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L936" href="#L936">936</a> 				Class.forName(c.value(), false, classLoader);
-<a class="jxr_linenumber" name="L937" href="#L937">937</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ClassNotFoundException e) {
-<a class="jxr_linenumber" name="L938" href="#L938">938</a> 				LOGGER.fine(() -&gt; <span class="jxr_string">"Skipping conditional element due to missing class "</span> + c.value() + <span class="jxr_string">": "</span> + element);
-<a class="jxr_linenumber" name="L939" href="#L939">939</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L940" href="#L940">940</a> 			}
-<a class="jxr_linenumber" name="L941" href="#L941">941</a> 		}
-<a class="jxr_linenumber" name="L942" href="#L942">942</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(ConditionalOnMissingBean.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L943" href="#L943">943</a> 			<strong class="jxr_keyword">var</strong> type = c.value();
-<a class="jxr_linenumber" name="L944" href="#L944">944</a> 			<strong class="jxr_keyword">var</strong> name = c.name().isEmpty() ? <strong class="jxr_keyword">null</strong> : c.name();
-<a class="jxr_linenumber" name="L945" href="#L945">945</a> 			<strong class="jxr_keyword">if</strong> (type == Object.<strong class="jxr_keyword">class</strong>) {
-<a class="jxr_linenumber" name="L946" href="#L946">946</a> 				<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; anyLocalBeanNamed(name))
-<a class="jxr_linenumber" name="L947" href="#L947">947</a> 					<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L948" href="#L948">948</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (hasBean(type, name)) {
-<a class="jxr_linenumber" name="L949" href="#L949">949</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L950" href="#L950">950</a> 			}
-<a class="jxr_linenumber" name="L951" href="#L951">951</a> 		}
-<a class="jxr_linenumber" name="L952" href="#L952">952</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(ConditionalOnProperty.<strong class="jxr_keyword">class</strong>)) {
-<a class="jxr_linenumber" name="L953" href="#L953">953</a> 			<strong class="jxr_keyword">var</strong> value = Settings.get().get(c.name()).orElse(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L954" href="#L954">954</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> &amp;&amp; !c.matchIfMissing())
-<a class="jxr_linenumber" name="L955" href="#L955">955</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L956" href="#L956">956</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong> &amp;&amp; !c.havingValue().isEmpty() &amp;&amp; !c.havingValue().equals(value))
-<a class="jxr_linenumber" name="L957" href="#L957">957</a> 				<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L958" href="#L958">958</a> 		}
-<a class="jxr_linenumber" name="L959" href="#L959">959</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L960" href="#L960">960</a> 	}
-<a class="jxr_linenumber" name="L961" href="#L961">961</a> 
-<a class="jxr_linenumber" name="L962" href="#L962">962</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> anyLocalBeanNamed(String name) {
-<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(name);
-<a class="jxr_linenumber" name="L964" href="#L964">964</a> 		<strong class="jxr_keyword">var</strong> x = extras;
-<a class="jxr_linenumber" name="L965" href="#L965">965</a> 		<strong class="jxr_keyword">return</strong> entries.values().stream().anyMatch(m -&gt; m.containsKey(key))
-<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			|| (x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.defaults.values().stream().anyMatch(m -&gt; m.containsKey(key)));
-<a class="jxr_linenumber" name="L967" href="#L967">967</a> 	}
-<a class="jxr_linenumber" name="L968" href="#L968">968</a> 
-<a class="jxr_linenumber" name="L969" href="#L969">969</a> 	<strong class="jxr_keyword">private</strong> String beanName(Bean bean) {
-<a class="jxr_linenumber" name="L970" href="#L970">970</a> 		<strong class="jxr_keyword">return</strong> bean.name().isEmpty() ? bean.value() : bean.name();
-<a class="jxr_linenumber" name="L971" href="#L971">971</a> 	}
-<a class="jxr_linenumber" name="L972" href="#L972">972</a> 
-<a class="jxr_linenumber" name="L973" href="#L973">973</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> addBeanWithMeta(Class&lt;T&gt; beanType, T bean, String name, BeanSourceMeta meta) {
-<a class="jxr_linenumber" name="L974" href="#L974">974</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(name);
-<a class="jxr_linenumber" name="L975" href="#L975">975</a> 		<em class="jxr_comment">// Duplicate-check against LOCAL entries only.  Beans present via the overridingParent or parent</em>
-<a class="jxr_linenumber" name="L976" href="#L976">976</a> 		<em class="jxr_comment">// chain are allowed to coexist with a local registration here — the resolution order</em>
-<a class="jxr_linenumber" name="L977" href="#L977">977</a> 		<em class="jxr_comment">// (overridingParent &gt; local &gt; parent &gt; defaults) ensures the right entry wins at lookup time.</em>
-<a class="jxr_linenumber" name="L978" href="#L978">978</a> 		<em class="jxr_comment">// This is what lets a test-time overlay installed in the overridingParent slot coexist with a</em>
-<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		<em class="jxr_comment">// local @Bean factory of the same (type, name) declared on a @Configuration class without</em>
-<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		<em class="jxr_comment">// triggering a spurious duplicate-bean error.</em>
-<a class="jxr_linenumber" name="L981" href="#L981">981</a> 		<strong class="jxr_keyword">var</strong> typeMap = entries.computeIfAbsent(beanType, k -&gt; <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;());
-<a class="jxr_linenumber" name="L982" href="#L982">982</a> 		<strong class="jxr_keyword">if</strong> (typeMap.containsKey(key))
-<a class="jxr_linenumber" name="L983" href="#L983">983</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Duplicate bean: type="</span> + beanType.getName() + <span class="jxr_string">", name="</span> + key);
-<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		typeMap.put(key, () -&gt; bean);
-<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		putEntryMeta(beanType, key, meta);
-<a class="jxr_linenumber" name="L986" href="#L986">986</a> 	}
-<a class="jxr_linenumber" name="L987" href="#L987">987</a> 
-<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T trackResolved(T bean) {
-<a class="jxr_linenumber" name="L989" href="#L989">989</a> 		<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L990" href="#L990">990</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">var</strong> t = tracking;
-<a class="jxr_linenumber" name="L992" href="#L992">992</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L993" href="#L993">993</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
-<a class="jxr_linenumber" name="L994" href="#L994">994</a> 				t = tracking;
-<a class="jxr_linenumber" name="L995" href="#L995">995</a> 				<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L996" href="#L996">996</a> 					t = <strong class="jxr_keyword">new</strong> Tracking();
-<a class="jxr_linenumber" name="L997" href="#L997">997</a> 					tracking = t;
-<a class="jxr_linenumber" name="L998" href="#L998">998</a> 				}
-<a class="jxr_linenumber" name="L999" href="#L999">999</a> 			}
-<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		}
-<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<strong class="jxr_keyword">synchronized</strong> (t) {
-<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 			<strong class="jxr_keyword">if</strong> (t.identities.add(bean))
-<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 				t.beans.add(bean);
-<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 		}
-<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		<strong class="jxr_keyword">return</strong> bean;
-<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 	}
-<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 
-<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; Optional&lt;T&gt; selectPrimary(Class&lt;T&gt; beanType) {
-<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 		<em class="jxr_comment">// @Primary is a local-entry-only signal.  Default suppliers added via addDefaultSupplier()</em>
-<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<em class="jxr_comment">// always carry BeanSourceMeta.DEFAULT (primary = false), so default suppliers never</em>
-<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 		<em class="jxr_comment">// contributes a primary candidate — only entryMetadata is consulted here.  Parent and</em>
-<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<em class="jxr_comment">// overridingParent stores (including Spring-backed delegates) are similarly excluded because</em>
-<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<em class="jxr_comment">// @Primary metadata only exists on beans this store registered itself.</em>
-<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 		Set&lt;String&gt; primaryNames = st();
-<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 		<strong class="jxr_keyword">var</strong> x = extras;
-<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 		<strong class="jxr_keyword">var</strong> em = x == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : x.entryMetadata.get(beanType);
-<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 		<strong class="jxr_keyword">if</strong> (nn(em))
-<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 			em.forEach((name, meta) -&gt; { <strong class="jxr_keyword">if</strong> (meta.primary()) primaryNames.add(name); });
-<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 		<strong class="jxr_keyword">if</strong> (primaryNames.isEmpty())
-<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 			<strong class="jxr_keyword">return</strong> oe();
-<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		<strong class="jxr_keyword">if</strong> (primaryNames.size() &gt; 1)
-<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Multiple @Primary candidates of type "</span> + beanType.getName());
-<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 		<strong class="jxr_keyword">var</strong> primaryName = primaryNames.iterator().next();
-<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 		<strong class="jxr_keyword">return</strong> resolve(beanType, primaryName).map(Supplier::get);
-<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 	}
-<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 
-<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> beanOrder(Class&lt;?&gt; type, String name) {
-<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 		<em class="jxr_comment">// @Order / priority is sourced from registered entries only.  Default suppliers always carry</em>
-<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 		<em class="jxr_comment">// BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to</em>
-<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<em class="jxr_comment">// the same constant rather than tracking default-supplier metadata.</em>
-<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(name);
-<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 		<strong class="jxr_keyword">var</strong> x = extras;
-<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<strong class="jxr_keyword">var</strong> m = x == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : x.entryMetadata.get(type);
-<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		<strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 			<strong class="jxr_keyword">return</strong> m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();
-<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		<strong class="jxr_keyword">return</strong> Integer.MAX_VALUE / 2;
-<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 	}
-<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 
-<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkOpen() {
-<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<strong class="jxr_keyword">if</strong> (closed)
-<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"BeanStore has been closed."</span>);
-<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 	}
-<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 
-<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 	<strong class="jxr_keyword">private</strong> record BeanSourceMeta(<strong class="jxr_keyword">boolean</strong> primary, Integer order, <strong class="jxr_keyword">int</strong> priority) {
-<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanSourceMeta DEFAULT = <strong class="jxr_keyword">new</strong> BeanSourceMeta(false, <strong class="jxr_keyword">null</strong>, Integer.MAX_VALUE / 2);
-<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 
-<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 		<strong class="jxr_keyword">int</strong> orderValue() {
-<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 			<strong class="jxr_keyword">return</strong> order == <strong class="jxr_keyword">null</strong> ? priority : order.intValue();
-<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		}
-<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 
-<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		<strong class="jxr_keyword">static</strong> BeanSourceMeta from(java.lang.reflect.AnnotatedElement element, Bean bean) {
-<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 			<strong class="jxr_keyword">var</strong> order = element.getAnnotation(Order.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanSourceMeta(element.getAnnotation(Primary.<strong class="jxr_keyword">class</strong>) != <strong class="jxr_keyword">null</strong>, order == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : order.value(), bean.priority());
-<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		}
-<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 	}
-<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> }
+<a class="jxr_linenumber" name="L906" href="#L906">906</a> 			<em class="jxr_comment">// Class.getDeclaredMethods() has no defined order, so a @Bean method that depends on a bean produced by</em>
+<a class="jxr_linenumber" name="L907" href="#L907">907</a> 			<em class="jxr_comment">// another @Bean method of the same class may be reached first.  Methods whose parameters cannot be</em>
+<a class="jxr_linenumber" name="L908" href="#L908">908</a> 			<em class="jxr_comment">// resolved yet are deferred and retried until a pass makes no progress.</em>
+<a class="jxr_linenumber" name="L909" href="#L909">909</a> 			<strong class="jxr_keyword">var</strong> pending = <strong class="jxr_keyword">new</strong> ArrayList&lt;java.lang.reflect.Method&gt;();
+<a class="jxr_linenumber" name="L910" href="#L910">910</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> method : c.getDeclaredMethods()) {
+<a class="jxr_linenumber" name="L911" href="#L911">911</a> 				<strong class="jxr_keyword">var</strong> beanAnn = method.getAnnotation(Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L912" href="#L912">912</a> 				<strong class="jxr_keyword">if</strong> (beanAnn == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L913" href="#L913">913</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L914" href="#L914">914</a> 				<strong class="jxr_keyword">if</strong> (!matchesConditions(method))
+<a class="jxr_linenumber" name="L915" href="#L915">915</a> 					<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L916" href="#L916">916</a> 				pending.add(method);
+<a class="jxr_linenumber" name="L917" href="#L917">917</a> 			}
+<a class="jxr_linenumber" name="L918" href="#L918">918</a> 			<strong class="jxr_keyword">while</strong> (! pending.isEmpty()) {
+<a class="jxr_linenumber" name="L919" href="#L919">919</a> 				<strong class="jxr_keyword">var</strong> deferred = <strong class="jxr_keyword">new</strong> ArrayList&lt;java.lang.reflect.Method&gt;();
+<a class="jxr_linenumber" name="L920" href="#L920">920</a> 				Exception firstUnresolved = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L921" href="#L921">921</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> method : pending) {
+<a class="jxr_linenumber" name="L922" href="#L922">922</a> 					<strong class="jxr_keyword">var</strong> beanAnn = method.getAnnotation(Bean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L923" href="#L923">923</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L924" href="#L924">924</a> 						<strong class="jxr_keyword">if</strong> (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) &amp;&amp; instance == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L925" href="#L925">925</a> 							instance = BeanInstantiator.of(configType, <strong class="jxr_keyword">this</strong>).run();
+<a class="jxr_linenumber" name="L926" href="#L926">926</a> 						method.setAccessible(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L927" href="#L927">927</a> 						<strong class="jxr_keyword">var</strong> value = MethodInfo.of(method).inject(<strong class="jxr_keyword">this</strong>, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? <strong class="jxr_keyword">null</strong> : instance);
+<a class="jxr_linenumber" name="L928" href="#L928">928</a> 						addBeanWithMeta((Class&lt;Object&gt;)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));
+<a class="jxr_linenumber" name="L929" href="#L929">929</a> 					} <strong class="jxr_keyword">catch</strong> (<a name="ExecutableException" href="../../../../../org/apache/juneau/commons/reflect/ExecutableException.html#ExecutableException">ExecutableException</a> e) {
+<a class="jxr_linenumber" name="L930" href="#L930">930</a> 						<strong class="jxr_keyword">if</strong> (e.getCause() != <strong class="jxr_keyword">null</strong> || e.getMessage() == <strong class="jxr_keyword">null</strong> || ! e.getMessage().startsWith(<span class="jxr_string">"Could not resolve value for parameter"</span>))
+<a class="jxr_linenumber" name="L931" href="#L931">931</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Failed to register @Bean method: "</span> + method, e);
+<a class="jxr_linenumber" name="L932" href="#L932">932</a> 						<strong class="jxr_keyword">if</strong> (firstUnresolved == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L933" href="#L933">933</a> 							firstUnresolved = <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Failed to register @Bean method: "</span> + method, e);
+<a class="jxr_linenumber" name="L934" href="#L934">934</a> 						deferred.add(method);
+<a class="jxr_linenumber" name="L935" href="#L935">935</a> 					} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L936" href="#L936">936</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Failed to register @Bean method: "</span> + method, e);
+<a class="jxr_linenumber" name="L937" href="#L937">937</a> 					}
+<a class="jxr_linenumber" name="L938" href="#L938">938</a> 				}
+<a class="jxr_linenumber" name="L939" href="#L939">939</a> 				<strong class="jxr_keyword">if</strong> (deferred.size() == pending.size())
+<a class="jxr_linenumber" name="L940" href="#L940">940</a> 					<strong class="jxr_keyword">throw</strong> (<a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>)firstUnresolved;
+<a class="jxr_linenumber" name="L941" href="#L941">941</a> 				pending = deferred;
+<a class="jxr_linenumber" name="L942" href="#L942">942</a> 			}
+<a class="jxr_linenumber" name="L943" href="#L943">943</a> 		}
+<a class="jxr_linenumber" name="L944" href="#L944">944</a> 	}
+<a class="jxr_linenumber" name="L945" href="#L945">945</a> 
+<a class="jxr_linenumber" name="L946" href="#L946">946</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> matchesConditions(java.lang.reflect.AnnotatedElement element) {
+<a class="jxr_linenumber" name="L947" href="#L947">947</a> 		<strong class="jxr_keyword">var</strong> classLoader = element instanceof Class&lt;?&gt; element2 ? element2.getClassLoader() : element.getClass().getClassLoader();
+<a class="jxr_linenumber" name="L948" href="#L948">948</a> 		<strong class="jxr_keyword">var</strong> ctx = <strong class="jxr_keyword">new</strong> <a name="ConditionContext" href="../../../../../org/apache/juneau/commons/inject/ConditionContext.html#ConditionContext">ConditionContext</a>(<strong class="jxr_keyword">this</strong>, Settings.get(), classLoader, element);
+<a class="jxr_linenumber" name="L949" href="#L949">949</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(Conditional.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L950" href="#L950">950</a> 			<strong class="jxr_keyword">if</strong> (!BeanInstantiator.of(c.value(), <strong class="jxr_keyword">this</strong>).run().matches(ctx)) {
+<a class="jxr_linenumber" name="L951" href="#L951">951</a> 				LOGGER.fine(() -&gt; <span class="jxr_string">"Skipping conditional element due to @Conditional: "</span> + element);
+<a class="jxr_linenumber" name="L952" href="#L952">952</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L953" href="#L953">953</a> 			}
+<a class="jxr_linenumber" name="L954" href="#L954">954</a> 		}
+<a class="jxr_linenumber" name="L955" href="#L955">955</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(ConditionalOnClass.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L956" href="#L956">956</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L957" href="#L957">957</a> 				Class.forName(c.value(), false, classLoader);
+<a class="jxr_linenumber" name="L958" href="#L958">958</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) ClassNotFoundException e) {
+<a class="jxr_linenumber" name="L959" href="#L959">959</a> 				LOGGER.fine(() -&gt; <span class="jxr_string">"Skipping conditional element due to missing class "</span> + c.value() + <span class="jxr_string">": "</span> + element);
+<a class="jxr_linenumber" name="L960" href="#L960">960</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L961" href="#L961">961</a> 			}
+<a class="jxr_linenumber" name="L962" href="#L962">962</a> 		}
+<a class="jxr_linenumber" name="L963" href="#L963">963</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(ConditionalOnMissingBean.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L964" href="#L964">964</a> 			<strong class="jxr_keyword">var</strong> type = c.value();
+<a class="jxr_linenumber" name="L965" href="#L965">965</a> 			<strong class="jxr_keyword">var</strong> name = c.name().isEmpty() ? <strong class="jxr_keyword">null</strong> : c.name();
+<a class="jxr_linenumber" name="L966" href="#L966">966</a> 			<strong class="jxr_keyword">if</strong> (type == Object.<strong class="jxr_keyword">class</strong>) {
+<a class="jxr_linenumber" name="L967" href="#L967">967</a> 				<strong class="jxr_keyword">if</strong> (name != <strong class="jxr_keyword">null</strong> &amp;&amp; anyLocalBeanNamed(name))
+<a class="jxr_linenumber" name="L968" href="#L968">968</a> 					<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L969" href="#L969">969</a> 			} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (hasBean(type, name)) {
+<a class="jxr_linenumber" name="L970" href="#L970">970</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L971" href="#L971">971</a> 			}
+<a class="jxr_linenumber" name="L972" href="#L972">972</a> 		}
+<a class="jxr_linenumber" name="L973" href="#L973">973</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : element.getAnnotationsByType(ConditionalOnProperty.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L974" href="#L974">974</a> 			<strong class="jxr_keyword">var</strong> value = Settings.get().get(c.name()).orElse(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L975" href="#L975">975</a> 			<strong class="jxr_keyword">if</strong> (value == <strong class="jxr_keyword">null</strong> &amp;&amp; !c.matchIfMissing())
+<a class="jxr_linenumber" name="L976" href="#L976">976</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L977" href="#L977">977</a> 			<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong> &amp;&amp; !c.havingValue().isEmpty() &amp;&amp; !c.havingValue().equals(value))
+<a class="jxr_linenumber" name="L978" href="#L978">978</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L979" href="#L979">979</a> 		}
+<a class="jxr_linenumber" name="L980" href="#L980">980</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L981" href="#L981">981</a> 	}
+<a class="jxr_linenumber" name="L982" href="#L982">982</a> 
+<a class="jxr_linenumber" name="L983" href="#L983">983</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> anyLocalBeanNamed(String name) {
+<a class="jxr_linenumber" name="L984" href="#L984">984</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(name);
+<a class="jxr_linenumber" name="L985" href="#L985">985</a> 		<strong class="jxr_keyword">var</strong> x = extras;
+<a class="jxr_linenumber" name="L986" href="#L986">986</a> 		<strong class="jxr_keyword">return</strong> entries.values().stream().anyMatch(m -&gt; m.containsKey(key))
+<a class="jxr_linenumber" name="L987" href="#L987">987</a> 			|| (x != <strong class="jxr_keyword">null</strong> &amp;&amp; x.defaults.values().stream().anyMatch(m -&gt; m.containsKey(key)));
+<a class="jxr_linenumber" name="L988" href="#L988">988</a> 	}
+<a class="jxr_linenumber" name="L989" href="#L989">989</a> 
+<a class="jxr_linenumber" name="L990" href="#L990">990</a> 	<strong class="jxr_keyword">private</strong> String beanName(Bean bean) {
+<a class="jxr_linenumber" name="L991" href="#L991">991</a> 		<strong class="jxr_keyword">return</strong> bean.name().isEmpty() ? bean.value() : bean.name();
+<a class="jxr_linenumber" name="L992" href="#L992">992</a> 	}
+<a class="jxr_linenumber" name="L993" href="#L993">993</a> 
+<a class="jxr_linenumber" name="L994" href="#L994">994</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; <strong class="jxr_keyword">void</strong> addBeanWithMeta(Class&lt;T&gt; beanType, T bean, String name, BeanSourceMeta meta) {
+<a class="jxr_linenumber" name="L995" href="#L995">995</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(name);
+<a class="jxr_linenumber" name="L996" href="#L996">996</a> 		<em class="jxr_comment">// Duplicate-check against LOCAL entries only.  Beans present via the overridingParent or parent</em>
+<a class="jxr_linenumber" name="L997" href="#L997">997</a> 		<em class="jxr_comment">// chain are allowed to coexist with a local registration here — the resolution order</em>
+<a class="jxr_linenumber" name="L998" href="#L998">998</a> 		<em class="jxr_comment">// (overridingParent &gt; local &gt; parent &gt; defaults) ensures the right entry wins at lookup time.</em>
+<a class="jxr_linenumber" name="L999" href="#L999">999</a> 		<em class="jxr_comment">// This is what lets a test-time overlay installed in the overridingParent slot coexist with a</em>
+<a class="jxr_linenumber" name="L1000" href="#L1000">1000</a> 		<em class="jxr_comment">// local @Bean factory of the same (type, name) declared on a @Configuration class without</em>
+<a class="jxr_linenumber" name="L1001" href="#L1001">1001</a> 		<em class="jxr_comment">// triggering a spurious duplicate-bean error.</em>
+<a class="jxr_linenumber" name="L1002" href="#L1002">1002</a> 		<strong class="jxr_keyword">var</strong> typeMap = entries.computeIfAbsent(beanType, k -&gt; <strong class="jxr_keyword">new</strong> ConcurrentHashMap&lt;&gt;());
+<a class="jxr_linenumber" name="L1003" href="#L1003">1003</a> 		<strong class="jxr_keyword">if</strong> (typeMap.containsKey(key))
+<a class="jxr_linenumber" name="L1004" href="#L1004">1004</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Duplicate bean: type="</span> + beanType.getName() + <span class="jxr_string">", name="</span> + key);
+<a class="jxr_linenumber" name="L1005" href="#L1005">1005</a> 		typeMap.put(key, () -&gt; bean);
+<a class="jxr_linenumber" name="L1006" href="#L1006">1006</a> 		putEntryMeta(beanType, key, meta);
+<a class="jxr_linenumber" name="L1007" href="#L1007">1007</a> 	}
+<a class="jxr_linenumber" name="L1008" href="#L1008">1008</a> 
+<a class="jxr_linenumber" name="L1009" href="#L1009">1009</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T trackResolved(T bean) {
+<a class="jxr_linenumber" name="L1010" href="#L1010">1010</a> 		<strong class="jxr_keyword">if</strong> (bean == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1011" href="#L1011">1011</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L1012" href="#L1012">1012</a> 		<strong class="jxr_keyword">var</strong> t = tracking;
+<a class="jxr_linenumber" name="L1013" href="#L1013">1013</a> 		<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1014" href="#L1014">1014</a> 			<strong class="jxr_keyword">synchronized</strong> (<strong class="jxr_keyword">this</strong>) {
+<a class="jxr_linenumber" name="L1015" href="#L1015">1015</a> 				t = tracking;
+<a class="jxr_linenumber" name="L1016" href="#L1016">1016</a> 				<strong class="jxr_keyword">if</strong> (t == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L1017" href="#L1017">1017</a> 					t = <strong class="jxr_keyword">new</strong> Tracking();
+<a class="jxr_linenumber" name="L1018" href="#L1018">1018</a> 					tracking = t;
+<a class="jxr_linenumber" name="L1019" href="#L1019">1019</a> 				}
+<a class="jxr_linenumber" name="L1020" href="#L1020">1020</a> 			}
+<a class="jxr_linenumber" name="L1021" href="#L1021">1021</a> 		}
+<a class="jxr_linenumber" name="L1022" href="#L1022">1022</a> 		<strong class="jxr_keyword">synchronized</strong> (t) {
+<a class="jxr_linenumber" name="L1023" href="#L1023">1023</a> 			<strong class="jxr_keyword">if</strong> (t.identities.add(bean))
+<a class="jxr_linenumber" name="L1024" href="#L1024">1024</a> 				t.beans.add(bean);
+<a class="jxr_linenumber" name="L1025" href="#L1025">1025</a> 		}
+<a class="jxr_linenumber" name="L1026" href="#L1026">1026</a> 		<strong class="jxr_keyword">return</strong> bean;
+<a class="jxr_linenumber" name="L1027" href="#L1027">1027</a> 	}
+<a class="jxr_linenumber" name="L1028" href="#L1028">1028</a> 
+<a class="jxr_linenumber" name="L1029" href="#L1029">1029</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; Optional&lt;T&gt; selectPrimary(Class&lt;T&gt; beanType) {
+<a class="jxr_linenumber" name="L1030" href="#L1030">1030</a> 		<em class="jxr_comment">// @Primary is a local-entry-only signal.  Default suppliers added via addDefaultSupplier()</em>
+<a class="jxr_linenumber" name="L1031" href="#L1031">1031</a> 		<em class="jxr_comment">// always carry BeanSourceMeta.DEFAULT (primary = false), so default suppliers never</em>
+<a class="jxr_linenumber" name="L1032" href="#L1032">1032</a> 		<em class="jxr_comment">// contributes a primary candidate — only entryMetadata is consulted here.  Parent and</em>
+<a class="jxr_linenumber" name="L1033" href="#L1033">1033</a> 		<em class="jxr_comment">// overridingParent stores (including Spring-backed delegates) are similarly excluded because</em>
+<a class="jxr_linenumber" name="L1034" href="#L1034">1034</a> 		<em class="jxr_comment">// @Primary metadata only exists on beans this store registered itself.</em>
+<a class="jxr_linenumber" name="L1035" href="#L1035">1035</a> 		Set&lt;String&gt; primaryNames = st();
+<a class="jxr_linenumber" name="L1036" href="#L1036">1036</a> 		<strong class="jxr_keyword">var</strong> x = extras;
+<a class="jxr_linenumber" name="L1037" href="#L1037">1037</a> 		<strong class="jxr_keyword">var</strong> em = x == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : x.entryMetadata.get(beanType);
+<a class="jxr_linenumber" name="L1038" href="#L1038">1038</a> 		<strong class="jxr_keyword">if</strong> (nn(em))
+<a class="jxr_linenumber" name="L1039" href="#L1039">1039</a> 			em.forEach((name, meta) -&gt; { <strong class="jxr_keyword">if</strong> (meta.primary()) primaryNames.add(name); });
+<a class="jxr_linenumber" name="L1040" href="#L1040">1040</a> 		<strong class="jxr_keyword">if</strong> (primaryNames.isEmpty())
+<a class="jxr_linenumber" name="L1041" href="#L1041">1041</a> 			<strong class="jxr_keyword">return</strong> oe();
+<a class="jxr_linenumber" name="L1042" href="#L1042">1042</a> 		<strong class="jxr_keyword">if</strong> (primaryNames.size() &gt; 1)
+<a class="jxr_linenumber" name="L1043" href="#L1043">1043</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="BeanCreationException" href="../../../../../org/apache/juneau/commons/inject/BeanCreationException.html#BeanCreationException">BeanCreationException</a>(<span class="jxr_string">"Multiple @Primary candidates of type "</span> + beanType.getName());
+<a class="jxr_linenumber" name="L1044" href="#L1044">1044</a> 		<strong class="jxr_keyword">var</strong> primaryName = primaryNames.iterator().next();
+<a class="jxr_linenumber" name="L1045" href="#L1045">1045</a> 		<strong class="jxr_keyword">return</strong> resolve(beanType, primaryName).map(Supplier::get);
+<a class="jxr_linenumber" name="L1046" href="#L1046">1046</a> 	}
+<a class="jxr_linenumber" name="L1047" href="#L1047">1047</a> 
+<a class="jxr_linenumber" name="L1048" href="#L1048">1048</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> beanOrder(Class&lt;?&gt; type, String name) {
+<a class="jxr_linenumber" name="L1049" href="#L1049">1049</a> 		<em class="jxr_comment">// @Order / priority is sourced from registered entries only.  Default suppliers always carry</em>
+<a class="jxr_linenumber" name="L1050" href="#L1050">1050</a> 		<em class="jxr_comment">// BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to</em>
+<a class="jxr_linenumber" name="L1051" href="#L1051">1051</a> 		<em class="jxr_comment">// the same constant rather than tracking default-supplier metadata.</em>
+<a class="jxr_linenumber" name="L1052" href="#L1052">1052</a> 		<strong class="jxr_keyword">var</strong> key = emptyIfNull(name);
+<a class="jxr_linenumber" name="L1053" href="#L1053">1053</a> 		<strong class="jxr_keyword">var</strong> x = extras;
+<a class="jxr_linenumber" name="L1054" href="#L1054">1054</a> 		<strong class="jxr_keyword">var</strong> m = x == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : x.entryMetadata.get(type);
+<a class="jxr_linenumber" name="L1055" href="#L1055">1055</a> 		<strong class="jxr_keyword">if</strong> (m != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L1056" href="#L1056">1056</a> 			<strong class="jxr_keyword">return</strong> m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();
+<a class="jxr_linenumber" name="L1057" href="#L1057">1057</a> 		<strong class="jxr_keyword">return</strong> Integer.MAX_VALUE / 2;
+<a class="jxr_linenumber" name="L1058" href="#L1058">1058</a> 	}
+<a class="jxr_linenumber" name="L1059" href="#L1059">1059</a> 
+<a class="jxr_linenumber" name="L1060" href="#L1060">1060</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> checkOpen() {
+<a class="jxr_linenumber" name="L1061" href="#L1061">1061</a> 		<strong class="jxr_keyword">if</strong> (closed)
+<a class="jxr_linenumber" name="L1062" href="#L1062">1062</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"BeanStore has been closed."</span>);
+<a class="jxr_linenumber" name="L1063" href="#L1063">1063</a> 	}
+<a class="jxr_linenumber" name="L1064" href="#L1064">1064</a> 
+<a class="jxr_linenumber" name="L1065" href="#L1065">1065</a> 	<strong class="jxr_keyword">private</strong> record BeanSourceMeta(<strong class="jxr_keyword">boolean</strong> primary, Integer order, <strong class="jxr_keyword">int</strong> priority) {
+<a class="jxr_linenumber" name="L1066" href="#L1066">1066</a> 		<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> BeanSourceMeta DEFAULT = <strong class="jxr_keyword">new</strong> BeanSourceMeta(false, <strong class="jxr_keyword">null</strong>, Integer.MAX_VALUE / 2);
+<a class="jxr_linenumber" name="L1067" href="#L1067">1067</a> 
+<a class="jxr_linenumber" name="L1068" href="#L1068">1068</a> 		<strong class="jxr_keyword">int</strong> orderValue() {
+<a class="jxr_linenumber" name="L1069" href="#L1069">1069</a> 			<strong class="jxr_keyword">return</strong> order == <strong class="jxr_keyword">null</strong> ? priority : order.intValue();
+<a class="jxr_linenumber" name="L1070" href="#L1070">1070</a> 		}
+<a class="jxr_linenumber" name="L1071" href="#L1071">1071</a> 
+<a class="jxr_linenumber" name="L1072" href="#L1072">1072</a> 		<strong class="jxr_keyword">static</strong> BeanSourceMeta from(java.lang.reflect.AnnotatedElement element, Bean bean) {
+<a class="jxr_linenumber" name="L1073" href="#L1073">1073</a> 			<strong class="jxr_keyword">var</strong> order = element.getAnnotation(Order.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1074" href="#L1074">1074</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BeanSourceMeta(element.getAnnotation(Primary.<strong class="jxr_keyword">class</strong>) != <strong class="jxr_keyword">null</strong>, order == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : order.value(), bean.priority());
+<a class="jxr_linenumber" name="L1075" href="#L1075">1075</a> 		}
+<a class="jxr_linenumber" name="L1076" href="#L1076">1076</a> 	}
+<a class="jxr_linenumber" name="L1077" href="#L1077">1077</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

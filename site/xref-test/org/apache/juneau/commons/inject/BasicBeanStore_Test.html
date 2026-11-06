@@ -1641,7 +1641,46 @@
 <a class="jxr_linenumber" name="L1633" href="#L1633">1633</a> 		assertTrue(ex.getCause().getMessage().contains(<span class="jxr_string">"Duplicate bean"</span>),
 <a class="jxr_linenumber" name="L1634" href="#L1634">1634</a> 			<span class="jxr_string">"Cause must reference the duplicate-bean condition; got: "</span> + ex.getCause().getMessage());
 <a class="jxr_linenumber" name="L1635" href="#L1635">1635</a> 	}
-<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> }
+<a class="jxr_linenumber" name="L1636" href="#L1636">1636</a> 
+<a class="jxr_linenumber" name="L1637" href="#L1637">1637</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Chain1 { }
+<a class="jxr_linenumber" name="L1638" href="#L1638">1638</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Chain2 { Chain1 c1; Chain2(Chain1 c1) { <strong class="jxr_keyword">this</strong>.c1 = c1; } }
+<a class="jxr_linenumber" name="L1639" href="#L1639">1639</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Chain3 { Chain2 c2; Chain3(Chain2 c2) { <strong class="jxr_keyword">this</strong>.c2 = c2; } }
+<a class="jxr_linenumber" name="L1640" href="#L1640">1640</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Chain4 { Chain3 c3; Chain4(Chain3 c3) { <strong class="jxr_keyword">this</strong>.c3 = c3; } }
+<a class="jxr_linenumber" name="L1641" href="#L1641">1641</a> 
+<a class="jxr_linenumber" name="L1642" href="#L1642">1642</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L1643" href="#L1643">1643</a> <em class="jxr_javadoccomment">	 * {@code Class.getDeclaredMethods()} has no defined order, so {@code @Bean} methods that depend on beans</em>
+<a class="jxr_linenumber" name="L1644" href="#L1644">1644</a> <em class="jxr_javadoccomment">	 * produced by other {@code @Bean} methods of the same class are declared here in reverse dependency order.</em>
+<a class="jxr_linenumber" name="L1645" href="#L1645">1645</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L1646" href="#L1646">1646</a> 	@Configuration
+<a class="jxr_linenumber" name="L1647" href="#L1647">1647</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Z05_ChainConfig {
+<a class="jxr_linenumber" name="L1648" href="#L1648">1648</a> 		<strong class="jxr_keyword">public</strong> Z05_ChainConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L1649" href="#L1649">1649</a> 		@Bean <strong class="jxr_keyword">public</strong> Chain4 chain4(Chain3 c3) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Chain4(c3); }
+<a class="jxr_linenumber" name="L1650" href="#L1650">1650</a> 		@Bean <strong class="jxr_keyword">public</strong> Chain3 chain3(Chain2 c2) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Chain3(c2); }
+<a class="jxr_linenumber" name="L1651" href="#L1651">1651</a> 		@Bean <strong class="jxr_keyword">public</strong> Chain2 chain2(Chain1 c1) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Chain2(c1); }
+<a class="jxr_linenumber" name="L1652" href="#L1652">1652</a> 		@Bean <strong class="jxr_keyword">public</strong> Chain1 chain1() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Chain1(); }
+<a class="jxr_linenumber" name="L1653" href="#L1653">1653</a> 	}
+<a class="jxr_linenumber" name="L1654" href="#L1654">1654</a> 
+<a class="jxr_linenumber" name="L1655" href="#L1655">1655</a> 	@Test
+<a class="jxr_linenumber" name="L1656" href="#L1656">1656</a> 	<strong class="jxr_keyword">void</strong> z05_beanMethodsDependingOnSiblings_registerRegardlessOfReflectionOrder() {
+<a class="jxr_linenumber" name="L1657" href="#L1657">1657</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1658" href="#L1658">1658</a> 		store.registerConfiguration(Z05_ChainConfig.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L1659" href="#L1659">1659</a> 		<strong class="jxr_keyword">var</strong> c4 = store.getBean(Chain4.<strong class="jxr_keyword">class</strong>).orElseThrow();
+<a class="jxr_linenumber" name="L1660" href="#L1660">1660</a> 		assertSame(store.getBean(Chain1.<strong class="jxr_keyword">class</strong>).orElseThrow(), c4.c3.c2.c1);
+<a class="jxr_linenumber" name="L1661" href="#L1661">1661</a> 	}
+<a class="jxr_linenumber" name="L1662" href="#L1662">1662</a> 
+<a class="jxr_linenumber" name="L1663" href="#L1663">1663</a> 	@Configuration
+<a class="jxr_linenumber" name="L1664" href="#L1664">1664</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Z06_UnresolvableConfig {
+<a class="jxr_linenumber" name="L1665" href="#L1665">1665</a> 		<strong class="jxr_keyword">public</strong> Z06_UnresolvableConfig() { <em class="jxr_comment">/* intentionally empty */</em> }
+<a class="jxr_linenumber" name="L1666" href="#L1666">1666</a> 		@Bean <strong class="jxr_keyword">public</strong> Chain2 chain2(Chain1 c1) { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Chain2(c1); }
+<a class="jxr_linenumber" name="L1667" href="#L1667">1667</a> 	}
+<a class="jxr_linenumber" name="L1668" href="#L1668">1668</a> 
+<a class="jxr_linenumber" name="L1669" href="#L1669">1669</a> 	@Test
+<a class="jxr_linenumber" name="L1670" href="#L1670">1670</a> 	<strong class="jxr_keyword">void</strong> z06_beanMethodWithUnresolvableParameter_stillFails() {
+<a class="jxr_linenumber" name="L1671" href="#L1671">1671</a> 		<strong class="jxr_keyword">var</strong> store = <strong class="jxr_keyword">new</strong> BasicBeanStore(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L1672" href="#L1672">1672</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(BeanCreationException.<strong class="jxr_keyword">class</strong>, () -&gt; store.registerConfiguration(Z06_UnresolvableConfig.<strong class="jxr_keyword">class</strong>));
+<a class="jxr_linenumber" name="L1673" href="#L1673">1673</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"Failed to register @Bean method"</span>), ex.getMessage());
+<a class="jxr_linenumber" name="L1674" href="#L1674">1674</a> 	}
+<a class="jxr_linenumber" name="L1675" href="#L1675">1675</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
