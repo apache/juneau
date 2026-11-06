@@ -35,7 +35,7 @@
     "@docusaurus/types": "3.10.2",
     "@easyops-cn/docusaurus-search-local": "^0.55.3",
     "@playwright/test": "1.64.1",
-    "baseline-browser-mapping": "^2.11.27",
+    "baseline-browser-mapping": "^2.11.35",
     "string-replace-loader": "^3.3.0",
     "typescript": "~7.0.2",
     "unist-util-visit": "^5.2.0"
