@@ -903,21 +903,42 @@ public class BasicBeanStore implements WritableBeanStore {
 					throw new BeanCreationException("Failed to register @Bean field: " + field, e);
 				}
 			}
+			// Class.getDeclaredMethods() has no defined order, so a @Bean method that depends on a bean produced by
+			// another @Bean method of the same class may be reached first.  Methods whose parameters cannot be
+			// resolved yet are deferred and retried until a pass makes no progress.
+			var pending = new ArrayList<java.lang.reflect.Method>();
 			for (var method : c.getDeclaredMethods()) {
 				var beanAnn = method.getAnnotation(Bean.class);
 				if (beanAnn == null)
 					continue;
 				if (!matchesConditions(method))
 					continue;
-				try {
-					if (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) && instance == null)
-						instance = BeanInstantiator.of(configType, this).run();
-					method.setAccessible(true);
-					var value = MethodInfo.of(method).inject(this, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? null : instance);
-					addBeanWithMeta((Class<Object>)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));
-				} catch (Exception e) {
-					throw new BeanCreationException("Failed to register @Bean method: " + method, e);
+				pending.add(method);
+			}
+			while (! pending.isEmpty()) {
+				var deferred = new ArrayList<java.lang.reflect.Method>();
+				Exception firstUnresolved = null;
+				for (var method : pending) {
+					var beanAnn = method.getAnnotation(Bean.class);
+					try {
+						if (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) && instance == null)
+							instance = BeanInstantiator.of(configType, this).run();
+						method.setAccessible(true);
+						var value = MethodInfo.of(method).inject(this, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? null : instance);
+						addBeanWithMeta((Class<Object>)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));
+					} catch (ExecutableException e) {
+						if (e.getCause() != null || e.getMessage() == null || ! e.getMessage().startsWith("Could not resolve value for parameter"))
+							throw new BeanCreationException("Failed to register @Bean method: " + method, e);
+						if (firstUnresolved == null)
+							firstUnresolved = new BeanCreationException("Failed to register @Bean method: " + method, e);
+						deferred.add(method);
+					} catch (Exception e) {
+						throw new BeanCreationException("Failed to register @Bean method: " + method, e);
+					}
 				}
+				if (deferred.size() == pending.size())
+					throw (BeanCreationException)firstUnresolved;
+				pending = deferred;
 			}
 		}
 	}

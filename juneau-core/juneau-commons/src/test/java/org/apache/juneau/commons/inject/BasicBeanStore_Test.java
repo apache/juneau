@@ -1633,4 +1633,43 @@ class BasicBeanStore_Test extends TestBase {
 		assertTrue(ex.getCause().getMessage().contains("Duplicate bean"),
 			"Cause must reference the duplicate-bean condition; got: " + ex.getCause().getMessage());
 	}
+
+	static class Chain1 { }
+	static class Chain2 { Chain1 c1; Chain2(Chain1 c1) { this.c1 = c1; } }
+	static class Chain3 { Chain2 c2; Chain3(Chain2 c2) { this.c2 = c2; } }
+	static class Chain4 { Chain3 c3; Chain4(Chain3 c3) { this.c3 = c3; } }
+
+	/**
+	 * {@code Class.getDeclaredMethods()} has no defined order, so {@code @Bean} methods that depend on beans
+	 * produced by other {@code @Bean} methods of the same class are declared here in reverse dependency order.
+	 */
+	@Configuration
+	public static class Z05_ChainConfig {
+		public Z05_ChainConfig() { /* intentionally empty */ }
+		@Bean public Chain4 chain4(Chain3 c3) { return new Chain4(c3); }
+		@Bean public Chain3 chain3(Chain2 c2) { return new Chain3(c2); }
+		@Bean public Chain2 chain2(Chain1 c1) { return new Chain2(c1); }
+		@Bean public Chain1 chain1() { return new Chain1(); }
+	}
+
+	@Test
+	void z05_beanMethodsDependingOnSiblings_registerRegardlessOfReflectionOrder() {
+		var store = new BasicBeanStore(null);
+		store.registerConfiguration(Z05_ChainConfig.class);
+		var c4 = store.getBean(Chain4.class).orElseThrow();
+		assertSame(store.getBean(Chain1.class).orElseThrow(), c4.c3.c2.c1);
+	}
+
+	@Configuration
+	public static class Z06_UnresolvableConfig {
+		public Z06_UnresolvableConfig() { /* intentionally empty */ }
+		@Bean public Chain2 chain2(Chain1 c1) { return new Chain2(c1); }
+	}
+
+	@Test
+	void z06_beanMethodWithUnresolvableParameter_stillFails() {
+		var store = new BasicBeanStore(null);
+		var ex = assertThrows(BeanCreationException.class, () -> store.registerConfiguration(Z06_UnresolvableConfig.class));
+		assertTrue(ex.getMessage().contains("Failed to register @Bean method"), ex.getMessage());
+	}
 }
