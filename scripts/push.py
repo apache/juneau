@@ -42,6 +42,7 @@ if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.append(str(Path(__file__).resolve().parent))
 import _juneau  # noqa: E402
 import jdk  # noqa: E402
+import jdk_passes  # noqa: E402
 import mvn_lock  # noqa: E402
 
 
@@ -1307,6 +1308,8 @@ def _push_steps_locked(s, args, run, console, script_dir, juneau_root, maven_loc
     maven_lock.release()  # the Maven span is over; the commit and push need no lock
 
     if args.test_only:
+        if not args.skip_tests:
+            jdk_passes.record_head(juneau_root, "test", require_clean=True)  # only a clean tree is exactly HEAD
         run.note("info", "Test-only run: nothing was committed or pushed")
         if not console:
             print("\n" + "=" * 70)
@@ -1321,6 +1324,8 @@ def _push_steps_locked(s, args, run, console, script_dir, juneau_root, maven_loc
     push_status, step_num = commit_and_push(juneau_root, args.message, step_num)
     if push_status == "error":
         return 1
+    if not args.skip_tests:
+        jdk_passes.record_head(juneau_root, "push")  # the pushed commit passed the gate on this JDK
     # juneau-docs has its own push.py; point at it when it has something to push.
     say_docs_hint(juneau_root)
 

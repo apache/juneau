@@ -107,6 +107,7 @@ if str(Path(__file__).resolve().parent) not in sys.path:
 	sys.path.append(str(Path(__file__).resolve().parent))
 import _juneau  # noqa: E402
 import jdk  # noqa: E402
+import jdk_passes  # noqa: E402
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -1123,7 +1124,10 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		if js_exit != 0:
 			return js_exit
 		full_run = not (args.no_container or args.no_js_tests or _js_skipped)
-		return run_trace_guard(since, args.warn_traces, full_run)
+		trace_exit = run_trace_guard(since, args.warn_traces, full_run)
+		if trace_exit == 0 and full and not owned_by_enclosing_run():
+			jdk_passes.record_head(REPO_ROOT, "test", require_clean=True)  # only a clean tree is exactly HEAD
+		return trace_exit
 	return exit_code
 
 

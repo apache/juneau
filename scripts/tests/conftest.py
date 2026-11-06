@@ -53,6 +53,12 @@ def _no_real_run_history():
 
 
 @pytest.fixture(autouse=True)
+def _no_real_jdk_passes(monkeypatch, tmp_path):
+    """push.py and test.py record green gates in ~/.cache/juneau-terminal/jdk-passes.json; point it at a scratch file."""
+    monkeypatch.setenv("JUNEAU_JDK_PASSES", str(tmp_path / "jdk-passes.json"))
+
+
+@pytest.fixture(autouse=True)
 def _full_console(monkeypatch):
     """push.main() exports the board console default into os.environ; pin the full console for every test (set,
     not unset, so teardown restores it) so that export cannot leak into later tests.  Tests of the default or of
