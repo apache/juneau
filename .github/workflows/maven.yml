@@ -44,11 +44,11 @@ jobs:
     continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        java: [ 17, 21, 25 ]
+        java: [ 17, 21, 25, 27 ]
         experimental: [false]
-#        include:
-#          - java: 26-ea
-#            experimental: true
+        include:
+          - java: 28-ea
+            experimental: true
 
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

@@ -40,6 +40,8 @@ Options:
                              juneau-console-views, juneau-petstore-core and juneau-terminal-region).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
     --warn-traces            Report stack traces in the test output as a warning instead of failing (see "Trace guard" below)
+    --jdk <N|path>           Run Maven on this JDK: a number (28 means ~/jdk/jdk-28, else the only ~/jdk/*28* entry) or a
+                             JDK home path; sets JAVA_HOME and puts its bin first on PATH
     --console <mode>         Maven output on the console: full (default), board or none
     --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_TERMINAL_DETAIL)
     --full-log <path>        Also write every byte Maven prints to this file (appended)
@@ -104,6 +106,7 @@ from pathlib import Path
 if str(Path(__file__).resolve().parent) not in sys.path:
 	sys.path.append(str(Path(__file__).resolve().parent))
 import _juneau  # noqa: E402
+import jdk  # noqa: E402
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -1021,6 +1024,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
 	parser.add_argument("--warn-traces", action="store_true", dest="warn_traces")
 	parser.add_argument("--profile")
+	parser.add_argument("--jdk")
 	parser.add_argument("--console", choices=("full", "board", "none"))
 	parser.add_argument("--detail")
 	parser.add_argument("--full-log")
@@ -1055,6 +1059,14 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	full = args.full or not (build_only or test_only or args.profile)
 	require_packaging_tools(args.full)
 
+	if args.jdk:
+		try:
+			jdk_home = jdk.resolve(args.jdk)
+		except jdk.JdkError as e:
+			print(e)
+			return 2
+		jdk.apply(jdk_home)
+		say(f"JDK: {jdk_home} ({jdk.version_line(jdk_home)})")
 	if args.profile:
 		exit_code, _ = profile(args.profile)
 		return exit_code

@@ -101,6 +101,9 @@ final class VarTemplateCompiler {
 	/** Number of {@code ${...}} bodies enclosing the text being compiled. */
 	private final int depth;
 
+	/** References found so far, in source order. */
+	private final List<TemplateReference> refs = new ArrayList<>();
+
 	private VarTemplateCompiler(VarResolver resolver, int depth) {
 		this.resolver = resolver;
 		this.depth = depth;
@@ -158,7 +161,7 @@ final class VarTemplateCompiler {
 			}
 		}
 		flushLiteral(segments, literal);
-		return new VarTemplate(resolver, input, segments.toArray(new TemplateSegment[0]));
+		return new VarTemplate(resolver, input, segments.toArray(new TemplateSegment[0]), List.copyOf(refs));
 	}
 
 	/** Handles a {@code $} at {@code start}; returns the index to continue scanning from. */
@@ -178,12 +181,14 @@ final class VarTemplateCompiler {
 			if (resolver.strict)
 				throw new ExprException(LEGACY_SYNTAX_MSG, input, start);
 			var end = close < 0 ? n : close + 1;
+			syntax(LEGACY_SYNTAX_MSG, start, end);
 			literal.append(unescapeChars(input.substring(start, end), AS2));
 			return end;
 		}
 		if (close < 0) {
 			if (resolver.strict)
 				throw new ExprException("Unterminated ${", input, start);
+			syntax("Unterminated ${", start, n);
 			literal.append("${").append(unescapeChars(input.substring(j + 1), AS2));
 			return n;
 		}
@@ -192,6 +197,7 @@ final class VarTemplateCompiler {
 		if (depth >= resolver.maxExprDepth) {
 			if (resolver.strict)
 				throw new ExprException("Variable nested too deeply (max " + resolver.maxExprDepth + ")", input, start);
+			syntax("Variable nested too deeply (max " + resolver.maxExprDepth + ")", start, close + 1);
 			literal.append(fallthrough);
 			return close + 1;
 		}
@@ -199,6 +205,7 @@ final class VarTemplateCompiler {
 		if (call.error() != null) {
 			if (resolver.strict)
 				throw new ExprException(call.error(), input, start);
+			syntax(call.error(), start, close + 1);
 			literal.append(fallthrough);
 			return close + 1;
 		}
@@ -206,8 +213,12 @@ final class VarTemplateCompiler {
 		var hasInternalVar = call.body().indexOf('{') != -1;
 		var folded = tryFoldStableVar(call.var(), body, hasInternalVar);
 		if (folded != null) {
-			literal.append(folded);
+			// A folded var is a value, not author text: keep it a separate segment so a value encoder still sees it.
+			flushLiteral(segments, literal);
+			segments.add(new LiteralSegment(folded, true));
 		} else {
+			refs.add(new TemplateReference(TemplateReference.Kind.VAR, call.prefix().isEmpty() ? DOLLAR_BRACE_VAR : call.prefix(), call.var() != null, null, start, close + 1));
+			addKeyRef(call, inner, start + 2);
 			flushLiteral(segments, literal);
 			segments.add(new VarRefSegment(call.var(), call.prefix(), body, hasInternalVar, fallthrough));
 		}
@@ -221,6 +232,7 @@ final class VarTemplateCompiler {
 		if (close < 0) {
 			if (resolver.strict)
 				throw new ExprException("Unterminated #{", input, start);
+			syntax("Unterminated #{", start, n);
 			literal.append("#{").append(unescapeChars(input.substring(start + 2), AS2));
 			return n;
 		}
@@ -237,27 +249,100 @@ final class VarTemplateCompiler {
 		} catch (StackOverflowError e) {
 			if (resolver.strict)
 				throw new ExprException("expression too complex", input, start + 2, e);
+			syntax("expression too complex", start, close + 1);
 			literal.append(unescapeChars(input.substring(start, close + 1), AS2));
 			return close + 1;
 		} catch (ExprException e) {
 			if (resolver.strict)
 				throw new ExprException(e.getBaseMessage(), input, start + 2 + e.getPos(), e);
+			syntax(e.getBaseMessage(), start, close + 1);
 			literal.append(unescapeChars(input.substring(start, close + 1), AS2));
 			return close + 1;
 		}
 		if (unknown != null) {
 			if (resolver.strict)
 				throw new ExprException(unavailableMessage(unknown), input, start + 2 + unknown.pos());
+			collectRefs(ast, start + 2);
 			literal.append(unescapeChars(input.substring(start, close + 1), AS2));
 			return close + 1;
 		}
 		if (folded != null) {
-			literal.append(folded.text);
+			if (folded.value) {
+				flushLiteral(segments, literal);
+				segments.add(folded);
+			} else
+				literal.append(folded.text);
 		} else {
+			collectRefs(ast, start + 2);
 			flushLiteral(segments, literal);
 			segments.add(seg);
 		}
 		return close + 1;
+	}
+
+	/**
+	 * Records the lookup key of a {@code P} reference ({@code ${name}}, {@code ${name:default}}) as an identifier, since
+	 * the shortcut reads a named value.  The default is not a reference.  A key containing {@code ${} is reported as
+	 * written.
+	 */
+	private void addKeyRef(VarCall call, String inner, int innerStart) {
+		if (! (call.var() instanceof DefaultingVar) || ! DOLLAR_BRACE_VAR.equals(call.prefix()))
+			return;
+		var rest = inner.substring(call.restStart());
+		var j = VarSplit.firstTopLevel(rest, ':');
+		var len = j < 0 ? rest.length() : j;
+		var body = call.body();
+		var comma = body.indexOf(',');
+		var key = comma < 0 ? body : body.substring(0, comma);
+		var from = innerStart + call.restStart();
+		refs.add(new TemplateReference(TemplateReference.Kind.IDENT, key, true, null, from, from + len));
+	}
+
+	private void syntax(String message, int start, int end) {
+		refs.add(new TemplateReference(TemplateReference.Kind.SYNTAX, message, false, null, start, end));
+	}
+
+	/** Walks an expression, recording vars, calls and identifiers.  {@code base} is the source offset of the expression text. */
+	private void collectRefs(Expr root, int base) {
+		walk(root, base, ROOT);
+	}
+
+	/** Identifier scope: top level, a row of a named list, or a body whose target cannot be named. */
+	private static final String ROOT = new String("<root>"), OPAQUE = new String("<opaque>");
+
+	private void walk(Expr e, int base, String scope) {
+		if (e instanceof Expr.Ident x) {
+			if (scope != OPAQUE)
+				refs.add(new TemplateReference(TemplateReference.Kind.IDENT, x.name(), true, scope == ROOT ? null : scope, base + x.pos(), base + x.pos() + x.name().length()));
+		} else if (e instanceof Expr.VarRef x) {
+			var raw = x.raw();
+			var call = translate(resolver.getVarMap()::get, raw.substring(2, raw.length() - 1));
+			var name = call.error() != null ? raw : (call.prefix().isEmpty() ? DOLLAR_BRACE_VAR : call.prefix());
+			refs.add(new TemplateReference(TemplateReference.Kind.VAR, name, call.error() == null && call.var() != null, null, base + x.pos(), base + x.pos() + raw.length()));
+			if (call.error() == null)
+				addKeyRef(call, raw.substring(2, raw.length() - 1), base + x.pos() + 2);
+		} else if (e instanceof Expr.Call x) {
+			var bound = ! isDenied(x.fn()) && (resolver.getFunctionMap().containsKey(x.fn()) || x.fn().startsWith("$op."));
+			refs.add(new TemplateReference(TemplateReference.Kind.FUNCTION, x.fn(), bound, null, base + x.pos(), base + x.pos() + x.fn().length()));
+			x.args().forEach(a -> walk(a, base, scope));
+		} else {
+			var op = opName(e);
+			if (op != null && ! resolver.isAllowed(op))
+				refs.add(new TemplateReference(TemplateReference.Kind.FUNCTION, op, false, null, base + e.pos(), base + e.pos() + 1));
+			if (e instanceof Expr.Unary x) walk(x.e(), base, scope);
+			else if (e instanceof Expr.Binary x) { walk(x.l(), base, scope); walk(x.r(), base, scope); }
+			else if (e instanceof Expr.Ternary x) { walk(x.c(), base, scope); walk(x.a(), base, scope); walk(x.b(), base, scope); }
+			else if (e instanceof Expr.Elvis x) { walk(x.l(), base, scope); walk(x.r(), base, scope); }
+			else if (e instanceof Expr.Path x) walk(x.target(), base, scope);
+			else if (e instanceof Expr.Index x) { walk(x.target(), base, scope); walk(x.idx(), base, scope); }
+			else if (e instanceof Expr.Select x) { walk(x.target(), base, scope); walk(x.pred(), base, bodyScope(x.target(), scope)); }
+			else if (e instanceof Expr.Project x) { walk(x.target(), base, scope); walk(x.map(), base, bodyScope(x.target(), scope)); }
+		}
+	}
+
+	/** The identifier scope of a select/project body: the list name when the target is a top-level identifier. */
+	private static String bodyScope(Expr target, String scope) {
+		return target instanceof Expr.Ident x && scope == ROOT ? x.name() : OPAQUE;
 	}
 
 	private String unavailableMessage(Expr e) {

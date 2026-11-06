@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl;
 
 import java.io.*;
+import java.util.function.*;
 
 /**
  * A {@link TemplateSegment} that resolves a {@code ${...}} reference.
@@ -104,6 +105,20 @@ final class VarRefSegment extends TemplateSegment {
 		}
 		try {
 			out.append(resolveReplacement(session, v));
+		} catch (Exception e) {
+			throw wrapDispatchFailure(e, prefix, sourceFragment());
+		}
+	}
+
+	@Override
+	void resolve(VarResolverSession session, StringBuilder out, UnaryOperator<String> encoder) {
+		var v = effectiveVar(session);
+		if (v == null || session.isScriptStyleRefused(prefix)) {
+			out.append(fallthrough);
+			return;
+		}
+		try {
+			out.append(encoder.apply(resolveReplacement(session, v)));
 		} catch (Exception e) {
 			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		}

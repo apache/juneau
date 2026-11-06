@@ -41,6 +41,7 @@ from pathlib import Path
 if str(Path(__file__).resolve().parent) not in sys.path:
     sys.path.append(str(Path(__file__).resolve().parent))
 import _juneau  # noqa: E402
+import jdk  # noqa: E402
 import mvn_lock  # noqa: E402
 
 
@@ -907,9 +908,25 @@ def session_header(project, branch):
     return [project, branch]
 
 
-def session_lines(message):
-    """The session's header lines under the title: the commit message when there is one (none with --test-only)."""
-    return [f"Commit Message: {message}"] if message else []
+def session_lines(message, jdk_line=None):
+    """The session's header lines under the title: the commit message when there is one (none with --test-only), then
+    the JDK line when --jdk was given."""
+    lines = [f"Commit Message: {message}"] if message else []
+    if jdk_line:
+        lines.append(f"JDK: {jdk_line}")
+    return lines
+
+
+def apply_jdk(args):
+    """
+    With --jdk, put the JDK first in this process's environment, so every mvn, javadoc and test.py subprocess inherits
+    JAVA_HOME and PATH (javadoc_html_command reads $JAVA_HOME too).  Returns the "<home> (<java -version line>)" text
+    for the header and log, or None without --jdk.
+    """
+    if not args.jdk_home:
+        return None
+    jdk.apply(args.jdk_home)
+    return f"{args.jdk_home} ({jdk.version_line(args.jdk_home)})"
 
 
 def _in_session(title, body, *, header, lines=(), mode, repo, plan):
@@ -1023,11 +1040,27 @@ Examples:
         help="Console detail: summary, actionable (default), modules or all (also JUNEAU_TERMINAL_DETAIL)."
     )
 
+    parser.add_argument(
+        "--jdk",
+        metavar="N|PATH",
+        help=(
+            "Run the Maven and javadoc steps on this JDK: a number (28 means ~/jdk/jdk-28, else the only ~/jdk/*28* "
+            "entry) or a JDK home path. Sets JAVA_HOME and puts its bin first on PATH."
+        )
+    )
+
     args = parser.parse_args(argv)
     if args.js_tests and args.no_js_tests:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
     if args.test_only and (args.tracker_audit or args.skip_tests):
         parser.error("--test-only cannot be combined with --tracker-audit or --skip-tests")
+    args.jdk_home = None
+    if args.jdk:
+        try:
+            args.jdk_home = jdk.resolve(args.jdk)
+        except jdk.JdkError as e:
+            print(e, file=sys.stderr)
+            raise SystemExit(2)
     toolkit("run").export_console(args.console)    # precedence: flag > environment > board
     try:
         _juneau.load()[0].export_detail(args.detail)
@@ -1047,6 +1080,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
     juneau_root = script_dir.parent
 
     console = not run.Sinks().is_default
+    jdk_line = apply_jdk(args)
 
     if not console or args.dry_run:
         print("=" * 70)
@@ -1059,6 +1093,8 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             print(f"Commit message: '{args.message}'")
         if args.skip_tests:
             print("⚠ Tests will be SKIPPED")
+        if jdk_line:
+            print(f"☕ JDK: {jdk_line} (--jdk)")
         if args.tracker_audit:
             print("📋 Tracker audit gate ENABLED (--tracker-audit)")
         if args.js_tests:
@@ -1112,7 +1148,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
     return _in_session("Test" if args.test_only else "Push",
                        lambda s: _push_steps(s, args, run, console, script_dir, juneau_root),
                        header=session_header("Juneau", current_branch(juneau_root)),
-                       lines=session_lines(None if args.test_only else args.message),
+                       lines=session_lines(None if args.test_only else args.message, jdk_line),
                        mode="test" if args.test_only else "push", repo=juneau_root,
                        plan=push_plan(args, script_dir, juneau_root, console))
 

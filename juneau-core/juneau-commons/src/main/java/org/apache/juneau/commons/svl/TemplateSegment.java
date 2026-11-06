@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl;
 
 import java.io.*;
+import java.util.function.*;
 
 /**
  * Compiled element of a {@link VarTemplate}.
@@ -51,6 +52,20 @@ abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, Exp
 	 * @param out The buffer to append to. Must not be {@code null}.
 	 */
 	abstract void resolve(VarResolverSession session, StringBuilder out);
+
+	/**
+	 * Resolves this segment, passing value-bearing output through {@code encoder}.
+	 *
+	 * <p>
+	 * Author text (literals, fall-through text) is appended unencoded.  The default implementation ignores the encoder.
+	 *
+	 * @param session The session to resolve against. Must not be {@code null}.
+	 * @param out The buffer to append to. Must not be {@code null}.
+	 * @param encoder The value encoder. Must not be {@code null}.
+	 */
+	void resolve(VarResolverSession session, StringBuilder out, UnaryOperator<String> encoder) {
+		resolve(session, out);
+	}
 
 	/**
 	 * Resolves this segment and writes the result directly to {@code w}.

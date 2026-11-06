@@ -433,7 +433,7 @@ def test_sigterm_ends_the_run_as_cancelled_and_leaves_no_orphan(script, tmp_path
     # (container tags, BOM) have nothing to run and nothing real is built.
     root = tmp_path / "tree"
     (root / "scripts").mkdir(parents=True)
-    for name in ("push.py", "test.py", "_juneau.py", "mvn_lock.py"):
+    for name in ("push.py", "test.py", "_juneau.py", "mvn_lock.py", "jdk.py"):
         shutil.copy(SCRIPTS_DIR / name, root / "scripts" / name)
     (root / "juneau-terminal").symlink_to(SCRIPTS_DIR.parent / "juneau-terminal")
     args = [sys.executable, "-B", str(root / "scripts" / script)] + (["--test-only", "--no-js-tests"] if script == "push.py"

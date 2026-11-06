@@ -14,6 +14,7 @@
 
 . ~/.profile
 
+
 . juneau-release-env.sh
 export PATH=${X_JAVA_HOME}/bin:$PATH
 echo PATH=$PATH

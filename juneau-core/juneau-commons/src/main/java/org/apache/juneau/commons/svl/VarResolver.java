@@ -419,7 +419,8 @@ public class VarResolver {
 		RandomFunctions.ALL,
 		JsonFunctions.ALL,
 		OpFunctions.ALL,
-		StructureFunctions.ALL
+		StructureFunctions.ALL,
+		CollectionFunctions.ALL
 	);
 
 	@SafeVarargs

@@ -1489,3 +1489,127 @@ class TestDocsPendingHint:
     def test_dirty_docs_alone_gives_no_hint(self, push_module, docs_repo):
         (docs_repo / "README.md").write_text("mid-edit\n", encoding="utf-8")
         assert push_module.docs_pending(docs_repo) is None
+
+
+# ---------------------------------------------------------------------------------------
+# --jdk: resolution (scripts/jdk.py) and propagation into push.py's environment.
+# ---------------------------------------------------------------------------------------
+def _fake_jdk(path: Path, bundle: bool = False, version: str = 'openjdk version "28-ea"') -> Path:
+    """A fake JDK at path (its bin/java prints version on stderr); with bundle, the home is path/Contents/Home."""
+    home = path / "Contents" / "Home" if bundle else path
+    (home / "bin").mkdir(parents=True)
+    java = home / "bin" / "java"
+    java.write_text(f"#!/bin/sh\necho '{version}' >&2\n", encoding="utf-8")
+    java.chmod(0o755)
+    return home
+
+
+@pytest.fixture
+def jdk_module():
+    spec = importlib.util.spec_from_file_location("_undertest_jdk", SCRIPTS_DIR / "jdk.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+class TestJdkResolve:
+    def test_number_prefers_the_exact_jdk_n_entry(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "jdk-28")
+        _fake_jdk(tmp_path / "jdk-28-ea")
+        assert jdk_module.resolve("28", jdk_dir=tmp_path) == home
+
+    def test_number_falls_back_to_the_single_match(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "openjdk_17.0.18")
+        _fake_jdk(tmp_path / "other-25")
+        assert jdk_module.resolve("17", jdk_dir=tmp_path) == home
+
+    def test_number_ambiguous_names_the_candidates(self, jdk_module, tmp_path):
+        _fake_jdk(tmp_path / "jdk-28-ea")
+        _fake_jdk(tmp_path / "jdk-28-ea-dl")
+        with pytest.raises(jdk_module.JdkError, match="ambiguous.*jdk-28-ea"):
+            jdk_module.resolve("28", jdk_dir=tmp_path)
+
+    def test_number_missing(self, jdk_module, tmp_path):
+        with pytest.raises(jdk_module.JdkError, match="no JDK"):
+            jdk_module.resolve("99", jdk_dir=tmp_path)
+
+    def test_missing_jdk_dir(self, jdk_module, tmp_path):
+        with pytest.raises(jdk_module.JdkError, match="no JDK"):
+            jdk_module.resolve("28", jdk_dir=tmp_path / "nope")
+
+    def test_path_is_used_as_given(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "myjdk")
+        assert jdk_module.resolve(str(home)) == home
+
+    def test_bundle_normalises_to_contents_home(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "zulu-25.jdk", bundle=True)
+        assert jdk_module.resolve(str(tmp_path / "zulu-25.jdk")) == home
+
+    def test_numbered_bundle_normalises(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "zulu-25.jdk", bundle=True)
+        assert jdk_module.resolve("25", jdk_dir=tmp_path) == home
+
+    def test_path_without_bin_java_is_an_error(self, jdk_module, tmp_path):
+        (tmp_path / "empty").mkdir()
+        with pytest.raises(jdk_module.JdkError, match="no bin/java"):
+            jdk_module.resolve(str(tmp_path / "empty"))
+
+    def test_version_line_is_the_first_line(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "j", version='openjdk version "27"')
+        assert jdk_module.version_line(home) == 'openjdk version "27"'
+
+    def test_apply_puts_the_jdk_first(self, jdk_module, tmp_path):
+        home = _fake_jdk(tmp_path / "j")
+        env = {"PATH": "/usr/bin"}
+        jdk_module.apply(home, env)
+        assert env["JAVA_HOME"] == str(home)
+        assert env["PATH"] == f"{home}/bin{os.pathsep}/usr/bin"
+
+
+class TestJdkOption:
+    def test_default_is_none(self, push_module):
+        assert push_module.parse_args(["msg"]).jdk_home is None
+
+    def test_path_resolves_into_args(self, push_module, tmp_path):
+        home = _fake_jdk(tmp_path / "j")
+        args = push_module.parse_args(["msg", "--jdk", str(home)])
+        assert args.jdk_home == home
+
+    def test_bad_jdk_exits_2(self, push_module, tmp_path, capsys):
+        with pytest.raises(SystemExit) as e:
+            push_module.parse_args(["msg", "--jdk", str(tmp_path / "missing")])
+        assert e.value.code == 2
+        assert "no bin/java" in capsys.readouterr().err
+
+    def test_apply_jdk_sets_the_environment_and_reports(self, push_module, tmp_path, monkeypatch):
+        home = _fake_jdk(tmp_path / "j", version='openjdk version "28-ea"')
+        monkeypatch.setenv("PATH", "/usr/bin")
+        monkeypatch.setenv("JAVA_HOME", "/old")
+        args = push_module.parse_args(["msg", "--jdk", str(home)])
+        line = push_module.apply_jdk(args)
+        assert line == f'{home} (openjdk version "28-ea")'
+        assert os.environ["JAVA_HOME"] == str(home)
+        assert os.environ["PATH"].startswith(f"{home}/bin{os.pathsep}")
+
+    def test_apply_jdk_without_the_option_leaves_the_environment(self, push_module, monkeypatch):
+        monkeypatch.setenv("JAVA_HOME", "/old")
+        assert push_module.apply_jdk(push_module.parse_args(["msg"])) is None
+        assert os.environ["JAVA_HOME"] == "/old"
+
+    def test_javadoc_command_and_mvn_children_inherit_the_jdk(self, push_module, tmp_path, monkeypatch):
+        home = _fake_jdk(tmp_path / "j")
+        (home / "bin" / "javadoc").write_text("", encoding="utf-8")
+        args = push_module.parse_args(["msg", "--jdk", str(home)])
+        monkeypatch.setenv("JAVA_HOME", "/old")
+        push_module.apply_jdk(args)
+        assert push_module.javadoc_html_command(Path("x.py"))[-2:] == ["--java-home", str(home)]
+        seen = {}
+        monkeypatch.setattr(push_module.subprocess, "run",
+                            lambda cmd, **kw: seen.update(env=dict(os.environ)) or subprocess.CompletedProcess(cmd, 0))
+        push_module.run_command(["mvn", "-v"], "mvn", cwd=tmp_path)
+        assert seen["env"]["JAVA_HOME"] == str(home)
+        assert seen["env"]["PATH"].startswith(str(home / "bin"))
+
+    def test_session_lines_include_the_jdk(self, push_module):
+        assert push_module.session_lines("m", "/j (v)") == ["Commit Message: m", "JDK: /j (v)"]
+        assert push_module.session_lines(None, "/j (v)") == ["JDK: /j (v)"]

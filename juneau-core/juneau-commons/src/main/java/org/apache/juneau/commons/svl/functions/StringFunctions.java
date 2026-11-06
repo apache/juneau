@@ -339,7 +339,7 @@ public final class StringFunctions {
 		@Override public String invoke(VarResolverSession session, List<Object> args) {
 			var sep = args.get(0) == null ? "" : args.get(0).toString();
 			// A single collection argument supplies the parts.
-			List<?> parts = args.size() == 2 && args.get(1) instanceof Collection<?> c ? new ArrayList<>(c) : args.subList(1, args.size());
+			List<?> parts = args.size() == 2 && args.get(1) instanceof Collection<?> c ? CollectionFunctions.bounded(session, "join", c) : args.subList(1, args.size());
 			var sb = new StringBuilder();
 			for (var i = 0; i < parts.size(); i++) {
 				if (i > 0) sb.append(sep);

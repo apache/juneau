@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl;
 
 import java.io.*;
+import java.util.function.*;
 
 /**
  * A {@link TemplateSegment} that contributes fixed (already-resolved) text.
@@ -29,15 +30,31 @@ import java.io.*;
  * <p>
  * Compile-time stable-value folding may also produce literal segments by eagerly resolving
  * opt-in stable {@link Var}s at compile time and replacing the {@link VarRefSegment} with
- * the resolved string.
+ * the resolved string.  Such literals carry the {@link #value} flag so a value encoder still sees them.
  */
 final class LiteralSegment extends TemplateSegment {
 
 	/** The fixed text contributed by this segment. Captured verbatim from the source. */
 	final String text;
 
+	/**
+	 * {@code true} if the text is a folded <em>value</em> (a stable var's output) rather than author text.
+	 * Only value literals are passed through a value encoder.
+	 */
+	final boolean value;
+
 	LiteralSegment(String text) {
+		this(text, false);
+	}
+
+	LiteralSegment(String text, boolean value) {
 		this.text = text;
+		this.value = value;
+	}
+
+	@Override
+	void resolve(VarResolverSession session, StringBuilder out, UnaryOperator<String> encoder) {
+		out.append(value ? encoder.apply(text) : text);
 	}
 
 	@Override

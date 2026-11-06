@@ -37,6 +37,7 @@ python3 scripts/test.py --rebaseline --window 20 --min-runs 5
 | `--min-runs` | N (integer) | 5 | With `--rebaseline`: skip keys with fewer runs. |
 | `--js-tests` | none | auto | Also run the headless-browser tests (`mvn -Pjs-tests`). Fails if Node or npm are missing. |
 | `--no-js-tests` | none | off | Never run the browser tests. Cannot be combined with `--js-tests`. |
+| `--jdk` | `N` or path | current `JAVA_HOME` | Run Maven on this JDK (resolution as in `push.md`; none or several matches exit 2). Sets `JAVA_HOME` and puts its `bin` first on `PATH`. |
 | `--warn-traces` | none | off | Report stack traces in the test output as a warning instead of failing the Traces row. Allowlist errors still fail. |
 | `--console` | `full`, `board` or `none` | `full` | How Maven output appears on the console. |
 | `--detail` | `summary`, `actionable`, `modules` or `all` | `actionable` | Console detail level. |

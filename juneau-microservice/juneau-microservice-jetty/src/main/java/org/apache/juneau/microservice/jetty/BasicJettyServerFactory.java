@@ -35,6 +35,20 @@ import org.eclipse.jetty.xml.*;
  */
 public class BasicJettyServerFactory implements JettyServerFactory {
 
+	private static final String VALIDATING_PROPERTY = "org.eclipse.jetty.xml.XmlParser.Validating";
+
+	/**
+	 * Jetty turns on DTD/schema validation of <c>jetty.xml</c> whenever the JDK's built-in Xerces parser is in use, which
+	 * requires fetching the DTD over the network.  Newer JDKs (28+) block that fetch, so the configuration fails to load.
+	 * Validation adds nothing for our shipped files, so default it off, unless the user has set the property explicitly.
+	 * Jetty reads this property when its (pooled) parser is created, so it must be set before the first
+	 * {@link XmlConfiguration} is constructed.
+	 */
+	private static void disableXmlValidationByDefault() {
+		if (System.getProperty(VALIDATING_PROPERTY) == null)
+			System.setProperty(VALIDATING_PROPERTY, "false");
+	}
+
 	@Override
 	public Server create(String jettyXml) throws Exception {
 		Objects.requireNonNull(jettyXml,
@@ -44,6 +58,7 @@ public class BasicJettyServerFactory implements JettyServerFactory {
 			pipe(r, w);
 			w.flush();
 		}
+		disableXmlValidationByDefault();
 		var xmlConfiguration = new XmlConfiguration(new PathResourceFactory().newResource(f.toPath()));
 		return (Server)xmlConfiguration.configure();
 	}

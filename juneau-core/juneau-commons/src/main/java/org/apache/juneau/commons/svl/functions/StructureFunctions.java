@@ -30,6 +30,10 @@ import org.apache.juneau.commons.svl.*;
  * list in another list.
  *
  * <p>
+ * A collection longer than the session's {@code maxCollectionSize} (items of {@code ul}/{@code ol}, header, rows and each
+ * row of {@code table}) is cut to its first {@code maxCollectionSize} elements in lenient mode and throws in strict mode.
+ *
+ * <p>
  * {@code table(header, rows)} requires every row to have exactly as many cells as the header has columns, and no
  * null header element; otherwise a {@link VarResolverException} is thrown.
  */
@@ -70,17 +74,15 @@ public final class StructureFunctions {
 		public abstract Object invokeValue(VarResolverSession session, List<Object> args);
 	}
 
-	private static List<?> itemsOf(List<Object> args) {
+	private static List<?> itemsOf(VarResolverSession session, String fn, List<Object> args) {
 		if (args.size() == 1 && args.get(0) instanceof Collection<?> c)
-			return new ArrayList<>(c);
-		return new ArrayList<>(args);
+			return CollectionFunctions.bounded(session, fn, c);
+		return CollectionFunctions.bounded(session, fn, args);
 	}
 
-	private static List<?> listArg(String fn, int idx, Object o) {
-		if (o instanceof List<?> l)
-			return l;
+	private static List<?> listArg(VarResolverSession session, String fn, int idx, Object o) {
 		if (o instanceof Collection<?> c)
-			return new ArrayList<>(c);
+			return CollectionFunctions.bounded(session, fn, c);
 		throw new VarResolverException("Function '%s' argument %s must be a list but got %s", fn, idx + 1, o == null ? "null" : o.getClass().getSimpleName());
 	}
 
@@ -88,14 +90,14 @@ public final class StructureFunctions {
 	public static class Ul extends Base {
 		/** Constructor. */
 		public Ul() { super("ul", 1, Integer.MAX_VALUE); }
-		@Override public Object invokeValue(VarResolverSession session, List<Object> args) { return Structure.ul(itemsOf(args)); }
+		@Override public Object invokeValue(VarResolverSession session, List<Object> args) { return Structure.ul(itemsOf(session, "ul", args)); }
 	}
 
 	/** {@code #{ol(items...)}} or {@code #{ol(list)}}. */
 	public static class Ol extends Base {
 		/** Constructor. */
 		public Ol() { super("ol", 1, Integer.MAX_VALUE); }
-		@Override public Object invokeValue(VarResolverSession session, List<Object> args) { return Structure.ol(itemsOf(args)); }
+		@Override public Object invokeValue(VarResolverSession session, List<Object> args) { return Structure.ol(itemsOf(session, "ol", args)); }
 	}
 
 	/** {@code #{block(x)}}. */
@@ -111,15 +113,15 @@ public final class StructureFunctions {
 		public Table() { super("table", 2, 2); }
 		@Override public Object invokeValue(VarResolverSession session, List<Object> args) {
 			var cols = new ArrayList<String>();
-			for (var o : listArg("table", 0, args.get(0))) {
+			for (var o : listArg(session, "table", 0, args.get(0))) {
 				if (o == null)
 					throw new VarResolverException("Function 'table' header must not contain null");
 				cols.add(String.valueOf(o));
 			}
 			var rows = new ArrayList<List<?>>();
 			int n = 0;
-			for (var r : listArg("table", 1, args.get(1))) {
-				var row = listArg("table", 1, r);
+			for (var r : listArg(session, "table", 1, args.get(1))) {
+				var row = listArg(session, "table", 1, r);
 				if (row.size() != cols.size())
 					throw new VarResolverException("Function 'table' row %s has %s cells but the header has %s columns", n, row.size(), cols.size());
 				rows.add(row);

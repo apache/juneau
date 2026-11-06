@@ -140,18 +140,25 @@ public final class JsonFunctions {
 	}
 
 	/**
-	 * {@code #{size(json)}} — returns the count: object key count, array length, string
-	 * length, or {@code 0} for null/primitives.
+	 * {@code #{size(x)}} — returns the count as a number: element count of a collection or map value, otherwise (for
+	 * JSON text) object key count, array length, string length, or {@code 0} for null/primitives.
 	 */
-	public static class Size extends TypedFunction {
+	public static class Size implements VarFunction {
 		@Override public String name() { return "size"; }
-		public String invoke(String json) {
-			var v = MiniJson.parse(json);
-			if (v == null) return "0";
-			if (v instanceof Map<?,?> v2) return String.valueOf(v2.size());
-			if (v instanceof List<?> v3) return String.valueOf(v3.size());
-			if (v instanceof String v4) return String.valueOf(v4.length());
-			return "0";
+		@Override public int minArity() { return 1; }
+		@Override public int maxArity() { return 1; }
+		@Override public String invoke(VarResolverSession session, List<Object> args) { return String.valueOf(invokeValue(session, args)); }
+		@Override public Object invokeValue(VarResolverSession session, List<Object> args) {
+			var o = args.get(0);
+			if (o == null) return 0L;
+			if (o instanceof Collection<?> c) return (long)c.size();
+			if (o instanceof Map<?,?> m) return (long)m.size();
+			var v = MiniJson.parse(o.toString());
+			if (v == null) return 0L;
+			if (v instanceof Map<?,?> v2) return (long)v2.size();
+			if (v instanceof List<?> v3) return (long)v3.size();
+			if (v instanceof String v4) return (long)v4.length();
+			return 0L;
 		}
 	}
 }

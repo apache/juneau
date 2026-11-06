@@ -19,6 +19,7 @@ package org.apache.juneau.commons.svl;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
+import java.util.*;
 import java.util.function.*;
 
 /**
@@ -114,6 +115,12 @@ public final class VarTemplate {
 	 */
 	private final String literalText;
 
+	/** References found at compile time, in source order. */
+	private final List<TemplateReference> references;
+
+	/** {@code true} if any segment is a folded value literal (see {@link LiteralSegment#value}). */
+	private final boolean hasValueLiteral;
+
 	/**
 	 * Package-private constructor — instances are created exclusively via
 	 * {@link VarTemplateCompiler#compile(VarResolver, String)} (which is invoked by
@@ -124,10 +131,29 @@ public final class VarTemplate {
 	 * @param segments The compiled segments.
 	 */
 	VarTemplate(VarResolver resolver, String input, TemplateSegment[] segments) {
+		this(resolver, input, segments, List.of());
+	}
+
+	/**
+	 * Package-private constructor with the references collected by the compiler.
+	 *
+	 * @param resolver The resolver this template is bound to.
+	 * @param input The raw template string.
+	 * @param segments The compiled segments.
+	 * @param references The references found while compiling.
+	 */
+	VarTemplate(VarResolver resolver, String input, TemplateSegment[] segments, List<TemplateReference> references) {
+		this.references = references;
 		this.resolver = resolver;
 		this.input = input;
 		this.segments = segments;
 		this.literal = computeIsLiteral(segments);
+		var hv = false;
+		if (segments != null)
+			for (var seg : segments)
+				if (seg instanceof LiteralSegment ls && ls.value)
+					hv = true;
+		this.hasValueLiteral = hv;
 		// For literal-only templates, pre-compute the resolved text. For null source we keep
 		// literalText null so resolve() returns null (matching VarResolverSession.resolve(null)).
 		if (literal && input != null)
@@ -158,6 +184,28 @@ public final class VarTemplate {
 		var sb = new StringBuilder(input.length() * 2);
 		for (var seg : segments)
 			seg.resolve(session, sb);
+		return sb.toString();
+	}
+
+	/**
+	 * Resolves this template, passing each resolved <em>value</em> through {@code valueEncoder}.
+	 *
+	 * <p>
+	 * Literal template text is appended unencoded.  Each top-level {@code ${...}} or {@code #{...}} segment is encoded
+	 * once, on its final text and after any function inside it has run, so a nested {@code ${...}} is not encoded twice.
+	 * A stable var folded at compile time is still encoded.  A {@link Structure} result of an expression is not encoded
+	 * here; the session's value formatter renders it and owns the encoding of its items.
+	 *
+	 * @param session The session to resolve against.  Must not be {@code null}.
+	 * @param valueEncoder The encoder applied to resolved values.  <jk>null</jk> behaves like {@link #resolve(VarResolverSession)}.
+	 * @return The resolved string, or {@code null} if this template was compiled from a {@code null} source.
+	 */
+	public String resolve(VarResolverSession session, UnaryOperator<String> valueEncoder) {
+		if (valueEncoder == null || (literal && ! hasValueLiteral))
+			return resolve(session);
+		var sb = new StringBuilder(input.length() * 2);
+		for (var seg : segments)
+			seg.resolve(session, sb, valueEncoder);
 		return sb.toString();
 	}
 
@@ -244,6 +292,19 @@ public final class VarTemplate {
 	 */
 	public boolean isLiteral() {
 		return literal;
+	}
+
+	/**
+	 * Returns the vars, functions and identifiers this template reads, in source order.
+	 *
+	 * <p>
+	 * Computed once at compile time; calling this does no work.  See {@link TemplateReference} for what is and is not
+	 * listed.
+	 *
+	 * @return An unmodifiable list.  Never <jk>null</jk>.
+	 */
+	public List<TemplateReference> references() {
+		return references;
 	}
 
 	/**

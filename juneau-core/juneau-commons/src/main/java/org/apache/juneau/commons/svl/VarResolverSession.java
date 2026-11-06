@@ -104,6 +104,7 @@ public class VarResolverSession {
 	private boolean scriptStyleRefuse;
 
 	private Function<Object,String> valueFormatter;
+	private Function<String,Object> scope;
 
 	/**
 	 * Constructor.
@@ -192,6 +193,33 @@ public class VarResolverSession {
 	}
 
 	/**
+	 * Sets the render scope for this session.
+	 *
+	 * <p>
+	 * Bare identifiers inside <c>#{...}</c> expressions (outside any <c>.?[...]</c> / <c>.![...]</c> element) are looked
+	 * up through this function.  A <jk>null</jk> result means the name is absent.  Inside a projection the element is the
+	 * innermost scope and this function is the fallback for names the element lacks.
+	 *
+	 * <p>
+	 * Expressions that contain identifiers are never folded at compile time, so a scope can differ per session.
+	 * core <c>${...}</c> references do not read this scope; a resolver can register a var (such as the template layer's <c>P</c> var) that does.
+	 *
+	 * @param value The scope lookup.  <jk>null</jk> clears the scope (every identifier is absent).
+	 * @return This object.
+	 */
+	public VarResolverSession scope(Function<String,Object> value) {
+		this.scope = value;
+		return this;
+	}
+
+	/**
+	 * Returns the render scope.
+	 *
+	 * @return The render scope, or an always-absent scope if none was set.  Never <jk>null</jk>.
+	 */
+	public Function<String,Object> scope() { return scope == null ? ExprSegment.EMPTY_SCOPE : scope; }
+
+	/**
 	 * Formats the typed result of an expression as text.
 	 *
 	 * @param value The value.  May be <jk>null</jk>.
@@ -208,8 +236,8 @@ public class VarResolverSession {
 		return r == null ? "" : r;
 	}
 
-	/** @return The maximum collection size for expressions. */
-	int maxCollectionSize() { return context.maxCollectionSize; }
+	/** @return The maximum collection size for expressions, and for the functions that build lists, tables and joins. */
+	public int maxCollectionSize() { return context.maxCollectionSize; }
 
 	/** @return The maximum expression nesting depth. */
 	int maxExprDepth() { return context.maxExprDepth; }

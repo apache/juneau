@@ -16,6 +16,7 @@ python3 scripts/push.py "Fixed bug in RestClient"
 python3 scripts/push.py --test-only
 python3 scripts/push.py "Fix a test" --warn-traces
 python3 scripts/push.py "Quick fix" --skip-tests --dry-run
+python3 scripts/push.py --test-only --jdk 28
 ```
 
 The commit message is optional on the command line. It is prompted for when omitted, except with `--test-only`.
@@ -32,6 +33,7 @@ The commit message is optional on the command line. It is prompted for when omit
 | `--js-tests` | none | auto | Force the headless-browser JS harness. Fails if Node or npm is missing. Mutually exclusive with `--no-js-tests`. |
 | `--no-js-tests` | none | off | Never run the JS harness, even when JS, CSS or FTL files changed. |
 | `--warn-traces` | none | off | Report stack traces in the test output as a warning instead of failing the Traces row. Allowlist errors still fail. |
+| `--jdk` | `N` or path | current `JAVA_HOME` | Run the Maven, javadoc and `test.py` steps on this JDK. A number resolves to `~/jdk/jdk-<N>`, else the single `~/jdk/*<N>*` entry (none or several: exit 2); anything else is a JDK home path. A macOS bundle resolves to its `Contents/Home`. The home must have `bin/java` (else exit 2). Sets `JAVA_HOME` and puts `<home>/bin` first on `PATH`; works with `--dry-run` and `--test-only`. The resolved home and first `java -version` line show in the session header. |
 | `--console` | `full`, `board`, `none` | `board` | Maven output on the console. Also `JUNEAU_TERMINAL_CONSOLE`; the flag wins. |
 | `--detail` | `summary`, `actionable`, `modules`, `all` | `actionable` | Console detail. Also `JUNEAU_TERMINAL_DETAIL`. |
 
@@ -54,7 +56,7 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 |---|---|
 | 0 | Pushed, nothing to push, `--dry-run` or `--test-only` passed. |
 | 1 | A gate failed, the prechecks refused (including invalid workflow YAML or PyYAML missing), or no commit message was given. |
-| 2 | Invalid argument combination. |
+| 2 | Invalid argument combination, or a `--jdk` value that names no single usable JDK. |
 | 130 | Cancelled with Ctrl-C or, with run markers on, SIGTERM. |
 
 ## Gotchas
@@ -63,6 +65,7 @@ The commit and push steps run under a PTY with a 20-second watchdog. If git goes
 - It never stages for you. Anything unstaged or untracked-and-not-ignored makes the prechecks refuse, and the check repeats just before the commit.
 - The workflow-YAML guard needs PyYAML whenever the repo has workflow files, and fails closed without it: `pip install pyyaml`, or run the script with `uv run --with pyyaml`. The check repeats just before the commit, and also for a push-only run.
 - The commit takes the index exactly as it finds it, so stage the whole set you want pushed.
+- `--jdk` resolution lives in `jdk.py` (shared with `test.py --jdk`). The JDK is applied to push.py's own environment, so every child (Maven, `check-javadoc-html.py` via `$JAVA_HOME`, `test.py`) inherits it. `~/jdk/*<N>*` can match more than one entry (for example `jdk-28-ea` and `jdk-28-ea-dl` for `28`, when no `jdk-28` exists): pass a path, or make a `jdk-<N>` link, when it is ambiguous. A JDK outside `~/jdk` (such as one under `/Library/Java/JavaVirtualMachines`) needs a path.
 - `JUNEAU_PUSH_NO_SOUND` silences the completion sound.
 - `--test-only` here means "gates without a commit or push". `test.py --test-only` means "tests without the build".
 - The upstream check does a `git fetch`, so it needs the network. A failed fetch fails closed.

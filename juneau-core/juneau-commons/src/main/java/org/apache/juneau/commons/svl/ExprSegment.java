@@ -27,9 +27,9 @@ import java.util.function.*;
  * independent per render.
  *
  * <p>
- * <b>Root scope:</b> the session exposes no general named-value scope to expressions, so identifiers resolve against an
- * empty scope (every {@link Expr.Ident} other than {@code this} yields <jk>null</jk>) until a render-scope hook exists.  Values are reached through
- * {@code ${...}} var references.  A render-scope hook can replace {@link #EMPTY_SCOPE} later.
+ * <b>Root scope:</b> identifiers resolve against the session's render scope
+ * ({@link VarResolverSession#scope(Function)}); when none is set every {@link Expr.Ident} other than {@code this}
+ * yields <jk>null</jk>.  Values can also be reached through {@code ${...}} var references.
  *
  * <p>
  * <b>Output is never re-parsed.</b>  The result is stringified and appended; it does not go through
@@ -42,7 +42,7 @@ import java.util.function.*;
  */
 final class ExprSegment extends TemplateSegment {
 
-	/** Render scope used for identifier lookups: always absent. */
+	/** Render scope used for identifier lookups when the session sets none: always absent. */
 	static final Function<String,Object> EMPTY_SCOPE = n -> null;
 
 	private final Expr ast;
@@ -64,6 +64,24 @@ final class ExprSegment extends TemplateSegment {
 		out.append(render(session));
 	}
 
+	/**
+	 * Resolves with a value encoder.
+	 *
+	 * <p>
+	 * The encoder runs on the formatted result.  A {@link Structure} result is not encoded here: it is formatted by the
+	 * session formatter, which owns the encoding of its own items.  Fall-through text is author text and stays unencoded.
+	 */
+	@Override
+	void resolve(VarResolverSession session, StringBuilder out, UnaryOperator<String> encoder) {
+		try {
+			var v = evaluate(session);
+			var text = format(session, v);
+			out.append(v instanceof Structure ? text : encoder.apply(text));
+		} catch (@SuppressWarnings("unused") ExprEvaluator.FallThrough e) {
+			out.append("#{").append(source).append('}');
+		}
+	}
+
 	private String render(VarResolverSession session) {
 		try {
 			return format(session, evaluate(session));
@@ -74,7 +92,7 @@ final class ExprSegment extends TemplateSegment {
 
 	/** Evaluates with a fresh context; may throw {@link ExprEvaluator.FallThrough} or {@link ExprException}. */
 	private Object evaluate(VarResolverSession session) {
-		return ExprEvaluator.eval(ast, new ExprContext(session, EMPTY_SCOPE, null, source));
+		return ExprEvaluator.eval(ast, new ExprContext(session, session.scope(), null, source));
 	}
 
 	/**
@@ -123,7 +141,19 @@ final class ExprSegment extends TemplateSegment {
 		var v = evaluate(s);
 		if (v != null && ! (v instanceof CharSequence || v instanceof Number || v instanceof Boolean))
 			return null;
-		return new LiteralSegment(format(s, v));
+		// An expression that reads a var carries data, so its folded text is a value; a pure-literal fold is author text.
+		return new LiteralSegment(format(s, v), hasVarRef(ast));
+	}
+
+	private static boolean hasVarRef(Expr e) {
+		if (e instanceof Expr.VarRef) return true;
+		if (e instanceof Expr.Unary x) return hasVarRef(x.e());
+		if (e instanceof Expr.Binary x) return hasVarRef(x.l()) || hasVarRef(x.r());
+		if (e instanceof Expr.Ternary x) return hasVarRef(x.c()) || hasVarRef(x.a()) || hasVarRef(x.b());
+		if (e instanceof Expr.Elvis x) return hasVarRef(x.l()) || hasVarRef(x.r());
+		if (e instanceof Expr.Path x) return hasVarRef(x.target());
+		if (e instanceof Expr.Index x) return hasVarRef(x.target()) || hasVarRef(x.idx());
+		return false;
 	}
 
 	private static boolean stable(Expr e, VarResolver r) {
