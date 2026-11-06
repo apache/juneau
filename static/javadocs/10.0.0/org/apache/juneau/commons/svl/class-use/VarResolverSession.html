@@ -273,8 +273,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Same as <a href="../VarResolver.html#createSession()"><code>VarResolver.createSession()</code></a> except allows you to specify a bean store for resolving beans.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">VarResolverSession.</span><code><a href="../VarResolverSession.html#valueFormatter(java.util.function.Function)" class="member-name-link">valueFormatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarResolverSession.</span><code><a href="../VarResolverSession.html#scope(java.util.function.Function)" class="member-name-link">scope</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets the render scope for this session.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarResolverSession.</span><code><a href="../VarResolverSession.html#valueFormatter(java.util.function.Function)" class="member-name-link">valueFormatter</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Overrides the value formatter for this session.</div>
 </div>
 </div>
@@ -357,40 +362,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Resolves this template against the given session.</div>
 </div>
-<div class="col-first odd-row-color"><code>void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">SimpleVar.</span><code><a href="../SimpleVar.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)" class="member-name-link">resolveTo</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarTemplate.</span><code><a href="../VarTemplate.html#resolve(org.apache.juneau.commons.svl.VarResolverSession,java.util.function.UnaryOperator)" class="member-name-link">resolve</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;valueEncoder)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Resolves this template, passing each resolved <em>value</em> through <code>valueEncoder</code>.</div>
+</div>
+<div class="col-first even-row-color"><code>void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SimpleVar.</span><code><a href="../SimpleVar.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)" class="member-name-link">resolveTo</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>abstract void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Var.</span><code><a href="../Var.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)" class="member-name-link">resolveTo</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>abstract void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Var.</span><code><a href="../Var.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer,java.lang.String)" class="member-name-link">resolveTo</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;w,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">The interface that needs to be implemented for subclasses of <a href="../StreamedVar.html" title="class in org.apache.juneau.commons.svl"><code>StreamedVar</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">VarTemplate.</span><code><a href="../VarTemplate.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)" class="member-name-link">resolveTo</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">VarTemplate.</span><code><a href="../VarTemplate.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)" class="member-name-link">resolveTo</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Resolves this template against the given session and writes the result directly to
  <code>out</code>.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">VarTemplate.</span><code><a href="../VarTemplate.html#resolveToUnchecked(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)" class="member-name-link">resolveToUnchecked</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">VarTemplate.</span><code><a href="../VarTemplate.html#resolveToUnchecked(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)" class="member-name-link">resolveToUnchecked</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last odd-row-color">
 <div class="block">Convenience helper for callers that need to <a href="../VarTemplate.html#resolveTo(org.apache.juneau.commons.svl.VarResolverSession,java.io.Writer)"><code>VarTemplate.resolveTo(VarResolverSession, Writer)</code></a>
  but don't want to handle <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StreamedVar.</span><code><a href="../StreamedVar.html#resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)" class="member-name-link">resolveValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Var.</span><code><a href="../Var.html#resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)" class="member-name-link">resolveValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">StreamedVar.</span><code><a href="../StreamedVar.html#resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)" class="member-name-link">resolveValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</code></div>
-<div class="col-last even-row-color">
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Var.</span><code><a href="../Var.html#resolveValue(org.apache.juneau.commons.svl.VarResolverSession,java.lang.String)" class="member-name-link">resolveValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;arg)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Resolves this var to a typed value for use inside <c>#{...}</c> expressions.</div>
 </div>
 </div>
@@ -405,7 +416,31 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StringFunctions.Join.</span><code><a href="../functions/StringFunctions.Join.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invoke</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+<div class="col-second even-row-color"><span class="type-name-label">CollectionFunctions.ListFn.</span><code><a href="../functions/CollectionFunctions.ListFn.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invoke</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CollectionFunctions.Take.</span><code><a href="../functions/CollectionFunctions.Take.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invoke</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonFunctions.Size.</span><code><a href="../functions/JsonFunctions.Size.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invoke</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">StringFunctions.Join.</span><code><a href="../functions/StringFunctions.Join.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invoke</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">CollectionFunctions.ListFn.</span><code><a href="../functions/CollectionFunctions.ListFn.html#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invokeValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">CollectionFunctions.Take.</span><code><a href="../functions/CollectionFunctions.Take.html#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invokeValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">JsonFunctions.Size.</span><code><a href="../functions/JsonFunctions.Size.html#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invokeValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>

@@ -40,6 +40,7 @@ org.apache.juneau.commons.settings
 org.apache.juneau.commons.svl
 org.apache.juneau.commons.svl.functions
 org.apache.juneau.commons.svl.vars
+org.apache.juneau.commons.template
 org.apache.juneau.commons.time
 org.apache.juneau.commons.utils
 org.apache.juneau.config
