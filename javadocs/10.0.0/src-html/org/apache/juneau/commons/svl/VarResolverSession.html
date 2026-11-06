@@ -117,465 +117,493 @@
 <span class="source-line-no">104</span><span id="line-104">   private boolean scriptStyleRefuse;</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
 <span class="source-line-no">106</span><span id="line-106">   private Function&lt;Object,String&gt; valueFormatter;</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   /**</span>
-<span class="source-line-no">109</span><span id="line-109">    * Constructor.</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * @param context</span>
-<span class="source-line-no">112</span><span id="line-112">    *    The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with</span>
-<span class="source-line-no">113</span><span id="line-113">    *    that resolver.</span>
-<span class="source-line-no">114</span><span id="line-114">    * @param beanStore The bean store to use for resolving beans needed by vars.  Can be &lt;jk&gt;null&lt;/jk&gt; (this session will then have no parent bean store, and only beans explicitly added via {@link #bean(Class, Object)} will be resolvable).</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    */</span>
-<span class="source-line-no">117</span><span id="line-117">   public VarResolverSession(VarResolver context, WritableBeanStore beanStore) {</span>
-<span class="source-line-no">118</span><span id="line-118">      this.context = context;</span>
-<span class="source-line-no">119</span><span id="line-119">      this.beanStore = new BasicBeanStore(beanStore);</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /**</span>
-<span class="source-line-no">123</span><span id="line-123">    * Looks up a registered function by exact name.</span>
-<span class="source-line-no">124</span><span id="line-124">    *</span>
-<span class="source-line-no">125</span><span id="line-125">    * &lt;p&gt;</span>
-<span class="source-line-no">126</span><span id="line-126">    * Functions excluded by {@link VarResolver.Builder#allowFunctions(String...)} are not returned, so a</span>
-<span class="source-line-no">127</span><span id="line-127">    * &lt;jk&gt;null&lt;/jk&gt; result means absent &lt;i&gt;or denied&lt;/i&gt;; use {@link #isFunctionDenied(String)} to tell them apart.</span>
-<span class="source-line-no">128</span><span id="line-128">    *</span>
-<span class="source-line-no">129</span><span id="line-129">    * @param name The function name.</span>
-<span class="source-line-no">130</span><span id="line-130">    * @return The function, or &lt;jk&gt;null&lt;/jk&gt; if none is registered under that name (or it is not allowed).</span>
-<span class="source-line-no">131</span><span id="line-131">    */</span>
-<span class="source-line-no">132</span><span id="line-132">   public VarFunction findFunction(String name) { return context.findFunction(name); }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   /**</span>
-<span class="source-line-no">135</span><span id="line-135">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the named function (or operator) is excluded by the resolver's allowlist.</span>
-<span class="source-line-no">136</span><span id="line-136">    *</span>
-<span class="source-line-no">137</span><span id="line-137">    * @param name The function name (e.g. &lt;js&gt;"upper"&lt;/js&gt; or &lt;js&gt;"$op.add"&lt;/js&gt;).</span>
-<span class="source-line-no">138</span><span id="line-138">    * @return &lt;jk&gt;true&lt;/jk&gt; if the name was registered and filtered out by the allowlist, or is an &lt;c&gt;$op.*&lt;/c&gt; name the allowlist does not permit.</span>
-<span class="source-line-no">139</span><span id="line-139">    */</span>
-<span class="source-line-no">140</span><span id="line-140">   public boolean isFunctionDenied(String name) { return context.isDenied(name) || (name.startsWith("$op.") &amp;&amp; ! context.isAllowed(name)); }</span>
-<span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   /**</span>
-<span class="source-line-no">143</span><span id="line-143">    * Resolves a &lt;c&gt;${Type:body}&lt;/c&gt; reference to a typed value for the expression evaluator.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * &lt;p&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">    * Finds the var by prefix and returns &lt;c&gt;var.doResolveValue(session, body)&lt;/c&gt;, so defaults ({@link DefaultingVar})</span>
-<span class="source-line-no">147</span><span id="line-147">    * and multipart keys are honoured.  The body is resolved with the existing nested-marker machinery first when the</span>
-<span class="source-line-no">148</span><span id="line-148">    * var allows nesting and the body contains a &lt;c&gt;$&lt;/c&gt;.  The {@link #resolveScriptStyle(String)} refusal and the</span>
-<span class="source-line-no">149</span><span id="line-149">    * {@link #resolveHtmlDoc(String)} encoding apply exactly as they do to template &lt;c&gt;${...}&lt;/c&gt; references: under</span>
-<span class="source-line-no">150</span><span id="line-150">    * HTML-doc encoding a value from a non-passthrough var is escaped, and a non-&lt;c&gt;String&lt;/c&gt; value other than a</span>
-<span class="source-line-no">151</span><span id="line-151">    * &lt;c&gt;Number&lt;/c&gt; or &lt;c&gt;Boolean&lt;/c&gt; is first converted with &lt;c&gt;String.valueOf&lt;/c&gt; (as the template path does), so</span>
-<span class="source-line-no">152</span><span id="line-152">    * markup inside a collection or bean cannot bypass the escaping.</span>
-<span class="source-line-no">153</span><span id="line-153">    *</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param prefix The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).</span>
-<span class="source-line-no">155</span><span id="line-155">    * @param body The var body (already in the var's own syntax, e.g. &lt;js&gt;"key,default"&lt;/js&gt;).</span>
-<span class="source-line-no">156</span><span id="line-156">    * @return The value, or &lt;jk&gt;null&lt;/jk&gt; if absent or (lenient mode) the var is unknown.</span>
-<span class="source-line-no">157</span><span id="line-157">    * @throws VarResolverException If the var is unknown and the resolver is strict, or the var fails.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   Object resolveValue(String prefix, String body) {</span>
-<span class="source-line-no">160</span><span id="line-160">      var v = isScriptStyleRefused(prefix) ? null : getVar(prefix);</span>
-<span class="source-line-no">161</span><span id="line-161">      if (v == null) {</span>
-<span class="source-line-no">162</span><span id="line-162">         if (context.strict)</span>
-<span class="source-line-no">163</span><span id="line-163">            throw new VarResolverException("Unknown or unavailable variable '%s'", prefix);</span>
-<span class="source-line-no">164</span><span id="line-164">         return null;</span>
-<span class="source-line-no">165</span><span id="line-165">      }</span>
-<span class="source-line-no">166</span><span id="line-166">      try {</span>
-<span class="source-line-no">167</span><span id="line-167">         var b = (v.allowNested() &amp;&amp; body.indexOf('$') != -1) ? resolve(body) : body;</span>
-<span class="source-line-no">168</span><span id="line-168">         var r = v.doResolveValue(this, b);</span>
-<span class="source-line-no">169</span><span id="line-169">         // HTML-doc chrome: values are escaped unless the var is an HTML passthrough, as in templates.</span>
-<span class="source-line-no">170</span><span id="line-170">         if (! htmlDocEncode || r == null || r instanceof Number || r instanceof Boolean)</span>
-<span class="source-line-no">171</span><span id="line-171">            return r;</span>
-<span class="source-line-no">172</span><span id="line-172">         return applyHtmlDocChromeEncoding(prefix, r instanceof String s2 ? s2 : String.valueOf(r));</span>
-<span class="source-line-no">173</span><span id="line-173">      } catch (VarResolverException e) {</span>
-<span class="source-line-no">174</span><span id="line-174">         throw e;</span>
-<span class="source-line-no">175</span><span id="line-175">      } catch (Exception e) {</span>
-<span class="source-line-no">176</span><span id="line-176">         throw new VarResolverException(e, "Problem occurred resolving variable '%s': %s", prefix, e.getMessage());</span>
-<span class="source-line-no">177</span><span id="line-177">      }</span>
-<span class="source-line-no">178</span><span id="line-178">   }</span>
-<span class="source-line-no">179</span><span id="line-179"></span>
-<span class="source-line-no">180</span><span id="line-180">   /**</span>
-<span class="source-line-no">181</span><span id="line-181">    * Overrides the value formatter for this session.</span>
-<span class="source-line-no">182</span><span id="line-182">    *</span>
-<span class="source-line-no">183</span><span id="line-183">    * &lt;p&gt;</span>
-<span class="source-line-no">184</span><span id="line-184">    * The override &lt;em&gt;replaces&lt;/em&gt; the resolver's formatter and also formats {@link Structure} values.</span>
-<span class="source-line-no">185</span><span id="line-185">    *</span>
-<span class="source-line-no">186</span><span id="line-186">    * @param value The formatter.  &lt;jk&gt;null&lt;/jk&gt; reverts to the resolver's formatter.</span>
-<span class="source-line-no">187</span><span id="line-187">    * @return This object.</span>
-<span class="source-line-no">188</span><span id="line-188">    */</span>
-<span class="source-line-no">189</span><span id="line-189">   public VarResolverSession valueFormatter(Function&lt;Object,String&gt; value) {</span>
-<span class="source-line-no">190</span><span id="line-190">      this.valueFormatter = value;</span>
-<span class="source-line-no">191</span><span id="line-191">      return this;</span>
-<span class="source-line-no">192</span><span id="line-192">   }</span>
-<span class="source-line-no">193</span><span id="line-193"></span>
-<span class="source-line-no">194</span><span id="line-194">   /**</span>
-<span class="source-line-no">195</span><span id="line-195">    * Formats the typed result of an expression as text.</span>
-<span class="source-line-no">196</span><span id="line-196">    *</span>
-<span class="source-line-no">197</span><span id="line-197">    * @param value The value.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">198</span><span id="line-198">    * @return The text; never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">199</span><span id="line-199">    */</span>
-<span class="source-line-no">200</span><span id="line-200">   public String formatValue(Object value) {</span>
-<span class="source-line-no">201</span><span id="line-201">      String r;</span>
-<span class="source-line-no">202</span><span id="line-202">      if (valueFormatter != null)</span>
-<span class="source-line-no">203</span><span id="line-203">         r = valueFormatter.apply(value);</span>
-<span class="source-line-no">204</span><span id="line-204">      else if (value instanceof Structure)</span>
-<span class="source-line-no">205</span><span id="line-205">         r = value.toString();</span>
-<span class="source-line-no">206</span><span id="line-206">      else</span>
-<span class="source-line-no">207</span><span id="line-207">         r = context.valueFormatter.apply(value);</span>
-<span class="source-line-no">208</span><span id="line-208">      return r == null ? "" : r;</span>
-<span class="source-line-no">209</span><span id="line-209">   }</span>
-<span class="source-line-no">210</span><span id="line-210"></span>
-<span class="source-line-no">211</span><span id="line-211">   /** @return The maximum collection size for expressions. */</span>
-<span class="source-line-no">212</span><span id="line-212">   int maxCollectionSize() { return context.maxCollectionSize; }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   /** @return The maximum expression nesting depth. */</span>
-<span class="source-line-no">215</span><span id="line-215">   int maxExprDepth() { return context.maxExprDepth; }</span>
-<span class="source-line-no">216</span><span id="line-216"></span>
-<span class="source-line-no">217</span><span id="line-217">   /**</span>
-<span class="source-line-no">218</span><span id="line-218">    * Enters a {@code ${...}} reference inside {@code #{...}}.</span>
-<span class="source-line-no">219</span><span id="line-219">    *</span>
-<span class="source-line-no">220</span><span id="line-220">    * &lt;p&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">    * Such references compile their body lazily, so a deep {@code #{${...#{${...}}...}}} chain would recurse at</span>
-<span class="source-line-no">222</span><span id="line-222">    * evaluation time.  The chain is capped at {@code maxExprDepth}; every successful call must be paired with</span>
-<span class="source-line-no">223</span><span id="line-223">    * {@link #exitExprVar()}.</span>
+<span class="source-line-no">107</span><span id="line-107">   private Function&lt;String,Object&gt; scope;</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   /**</span>
+<span class="source-line-no">110</span><span id="line-110">    * Constructor.</span>
+<span class="source-line-no">111</span><span id="line-111">    *</span>
+<span class="source-line-no">112</span><span id="line-112">    * @param context</span>
+<span class="source-line-no">113</span><span id="line-113">    *    The {@link VarResolver} context object that contains the {@link Var Vars} and context objects associated with</span>
+<span class="source-line-no">114</span><span id="line-114">    *    that resolver.</span>
+<span class="source-line-no">115</span><span id="line-115">    * @param beanStore The bean store to use for resolving beans needed by vars.  Can be &lt;jk&gt;null&lt;/jk&gt; (this session will then have no parent bean store, and only beans explicitly added via {@link #bean(Class, Object)} will be resolvable).</span>
+<span class="source-line-no">116</span><span id="line-116">    *</span>
+<span class="source-line-no">117</span><span id="line-117">    */</span>
+<span class="source-line-no">118</span><span id="line-118">   public VarResolverSession(VarResolver context, WritableBeanStore beanStore) {</span>
+<span class="source-line-no">119</span><span id="line-119">      this.context = context;</span>
+<span class="source-line-no">120</span><span id="line-120">      this.beanStore = new BasicBeanStore(beanStore);</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   /**</span>
+<span class="source-line-no">124</span><span id="line-124">    * Looks up a registered function by exact name.</span>
+<span class="source-line-no">125</span><span id="line-125">    *</span>
+<span class="source-line-no">126</span><span id="line-126">    * &lt;p&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    * Functions excluded by {@link VarResolver.Builder#allowFunctions(String...)} are not returned, so a</span>
+<span class="source-line-no">128</span><span id="line-128">    * &lt;jk&gt;null&lt;/jk&gt; result means absent &lt;i&gt;or denied&lt;/i&gt;; use {@link #isFunctionDenied(String)} to tell them apart.</span>
+<span class="source-line-no">129</span><span id="line-129">    *</span>
+<span class="source-line-no">130</span><span id="line-130">    * @param name The function name.</span>
+<span class="source-line-no">131</span><span id="line-131">    * @return The function, or &lt;jk&gt;null&lt;/jk&gt; if none is registered under that name (or it is not allowed).</span>
+<span class="source-line-no">132</span><span id="line-132">    */</span>
+<span class="source-line-no">133</span><span id="line-133">   public VarFunction findFunction(String name) { return context.findFunction(name); }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   /**</span>
+<span class="source-line-no">136</span><span id="line-136">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the named function (or operator) is excluded by the resolver's allowlist.</span>
+<span class="source-line-no">137</span><span id="line-137">    *</span>
+<span class="source-line-no">138</span><span id="line-138">    * @param name The function name (e.g. &lt;js&gt;"upper"&lt;/js&gt; or &lt;js&gt;"$op.add"&lt;/js&gt;).</span>
+<span class="source-line-no">139</span><span id="line-139">    * @return &lt;jk&gt;true&lt;/jk&gt; if the name was registered and filtered out by the allowlist, or is an &lt;c&gt;$op.*&lt;/c&gt; name the allowlist does not permit.</span>
+<span class="source-line-no">140</span><span id="line-140">    */</span>
+<span class="source-line-no">141</span><span id="line-141">   public boolean isFunctionDenied(String name) { return context.isDenied(name) || (name.startsWith("$op.") &amp;&amp; ! context.isAllowed(name)); }</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">   /**</span>
+<span class="source-line-no">144</span><span id="line-144">    * Resolves a &lt;c&gt;${Type:body}&lt;/c&gt; reference to a typed value for the expression evaluator.</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * &lt;p&gt;</span>
+<span class="source-line-no">147</span><span id="line-147">    * Finds the var by prefix and returns &lt;c&gt;var.doResolveValue(session, body)&lt;/c&gt;, so defaults ({@link DefaultingVar})</span>
+<span class="source-line-no">148</span><span id="line-148">    * and multipart keys are honoured.  The body is resolved with the existing nested-marker machinery first when the</span>
+<span class="source-line-no">149</span><span id="line-149">    * var allows nesting and the body contains a &lt;c&gt;$&lt;/c&gt;.  The {@link #resolveScriptStyle(String)} refusal and the</span>
+<span class="source-line-no">150</span><span id="line-150">    * {@link #resolveHtmlDoc(String)} encoding apply exactly as they do to template &lt;c&gt;${...}&lt;/c&gt; references: under</span>
+<span class="source-line-no">151</span><span id="line-151">    * HTML-doc encoding a value from a non-passthrough var is escaped, and a non-&lt;c&gt;String&lt;/c&gt; value other than a</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;c&gt;Number&lt;/c&gt; or &lt;c&gt;Boolean&lt;/c&gt; is first converted with &lt;c&gt;String.valueOf&lt;/c&gt; (as the template path does), so</span>
+<span class="source-line-no">153</span><span id="line-153">    * markup inside a collection or bean cannot bypass the escaping.</span>
+<span class="source-line-no">154</span><span id="line-154">    *</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param prefix The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param body The var body (already in the var's own syntax, e.g. &lt;js&gt;"key,default"&lt;/js&gt;).</span>
+<span class="source-line-no">157</span><span id="line-157">    * @return The value, or &lt;jk&gt;null&lt;/jk&gt; if absent or (lenient mode) the var is unknown.</span>
+<span class="source-line-no">158</span><span id="line-158">    * @throws VarResolverException If the var is unknown and the resolver is strict, or the var fails.</span>
+<span class="source-line-no">159</span><span id="line-159">    */</span>
+<span class="source-line-no">160</span><span id="line-160">   Object resolveValue(String prefix, String body) {</span>
+<span class="source-line-no">161</span><span id="line-161">      var v = isScriptStyleRefused(prefix) ? null : getVar(prefix);</span>
+<span class="source-line-no">162</span><span id="line-162">      if (v == null) {</span>
+<span class="source-line-no">163</span><span id="line-163">         if (context.strict)</span>
+<span class="source-line-no">164</span><span id="line-164">            throw new VarResolverException("Unknown or unavailable variable '%s'", prefix);</span>
+<span class="source-line-no">165</span><span id="line-165">         return null;</span>
+<span class="source-line-no">166</span><span id="line-166">      }</span>
+<span class="source-line-no">167</span><span id="line-167">      try {</span>
+<span class="source-line-no">168</span><span id="line-168">         var b = (v.allowNested() &amp;&amp; body.indexOf('$') != -1) ? resolve(body) : body;</span>
+<span class="source-line-no">169</span><span id="line-169">         var r = v.doResolveValue(this, b);</span>
+<span class="source-line-no">170</span><span id="line-170">         // HTML-doc chrome: values are escaped unless the var is an HTML passthrough, as in templates.</span>
+<span class="source-line-no">171</span><span id="line-171">         if (! htmlDocEncode || r == null || r instanceof Number || r instanceof Boolean)</span>
+<span class="source-line-no">172</span><span id="line-172">            return r;</span>
+<span class="source-line-no">173</span><span id="line-173">         return applyHtmlDocChromeEncoding(prefix, r instanceof String s2 ? s2 : String.valueOf(r));</span>
+<span class="source-line-no">174</span><span id="line-174">      } catch (VarResolverException e) {</span>
+<span class="source-line-no">175</span><span id="line-175">         throw e;</span>
+<span class="source-line-no">176</span><span id="line-176">      } catch (Exception e) {</span>
+<span class="source-line-no">177</span><span id="line-177">         throw new VarResolverException(e, "Problem occurred resolving variable '%s': %s", prefix, e.getMessage());</span>
+<span class="source-line-no">178</span><span id="line-178">      }</span>
+<span class="source-line-no">179</span><span id="line-179">   }</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * Overrides the value formatter for this session.</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    * &lt;p&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    * The override &lt;em&gt;replaces&lt;/em&gt; the resolver's formatter and also formats {@link Structure} values.</span>
+<span class="source-line-no">186</span><span id="line-186">    *</span>
+<span class="source-line-no">187</span><span id="line-187">    * @param value The formatter.  &lt;jk&gt;null&lt;/jk&gt; reverts to the resolver's formatter.</span>
+<span class="source-line-no">188</span><span id="line-188">    * @return This object.</span>
+<span class="source-line-no">189</span><span id="line-189">    */</span>
+<span class="source-line-no">190</span><span id="line-190">   public VarResolverSession valueFormatter(Function&lt;Object,String&gt; value) {</span>
+<span class="source-line-no">191</span><span id="line-191">      this.valueFormatter = value;</span>
+<span class="source-line-no">192</span><span id="line-192">      return this;</span>
+<span class="source-line-no">193</span><span id="line-193">   }</span>
+<span class="source-line-no">194</span><span id="line-194"></span>
+<span class="source-line-no">195</span><span id="line-195">   /**</span>
+<span class="source-line-no">196</span><span id="line-196">    * Sets the render scope for this session.</span>
+<span class="source-line-no">197</span><span id="line-197">    *</span>
+<span class="source-line-no">198</span><span id="line-198">    * &lt;p&gt;</span>
+<span class="source-line-no">199</span><span id="line-199">    * Bare identifiers inside &lt;c&gt;#{...}&lt;/c&gt; expressions (outside any &lt;c&gt;.?[...]&lt;/c&gt; / &lt;c&gt;.![...]&lt;/c&gt; element) are looked</span>
+<span class="source-line-no">200</span><span id="line-200">    * up through this function.  A &lt;jk&gt;null&lt;/jk&gt; result means the name is absent.  Inside a projection the element is the</span>
+<span class="source-line-no">201</span><span id="line-201">    * innermost scope and this function is the fallback for names the element lacks.</span>
+<span class="source-line-no">202</span><span id="line-202">    *</span>
+<span class="source-line-no">203</span><span id="line-203">    * &lt;p&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">    * Expressions that contain identifiers are never folded at compile time, so a scope can differ per session.</span>
+<span class="source-line-no">205</span><span id="line-205">    * core &lt;c&gt;${...}&lt;/c&gt; references do not read this scope; a resolver can register a var (such as the template layer's &lt;c&gt;P&lt;/c&gt; var) that does.</span>
+<span class="source-line-no">206</span><span id="line-206">    *</span>
+<span class="source-line-no">207</span><span id="line-207">    * @param value The scope lookup.  &lt;jk&gt;null&lt;/jk&gt; clears the scope (every identifier is absent).</span>
+<span class="source-line-no">208</span><span id="line-208">    * @return This object.</span>
+<span class="source-line-no">209</span><span id="line-209">    */</span>
+<span class="source-line-no">210</span><span id="line-210">   public VarResolverSession scope(Function&lt;String,Object&gt; value) {</span>
+<span class="source-line-no">211</span><span id="line-211">      this.scope = value;</span>
+<span class="source-line-no">212</span><span id="line-212">      return this;</span>
+<span class="source-line-no">213</span><span id="line-213">   }</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">   /**</span>
+<span class="source-line-no">216</span><span id="line-216">    * Returns the render scope.</span>
+<span class="source-line-no">217</span><span id="line-217">    *</span>
+<span class="source-line-no">218</span><span id="line-218">    * @return The render scope, or an always-absent scope if none was set.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">219</span><span id="line-219">    */</span>
+<span class="source-line-no">220</span><span id="line-220">   public Function&lt;String,Object&gt; scope() { return scope == null ? ExprSegment.EMPTY_SCOPE : scope; }</span>
+<span class="source-line-no">221</span><span id="line-221"></span>
+<span class="source-line-no">222</span><span id="line-222">   /**</span>
+<span class="source-line-no">223</span><span id="line-223">    * Formats the typed result of an expression as text.</span>
 <span class="source-line-no">224</span><span id="line-224">    *</span>
-<span class="source-line-no">225</span><span id="line-225">    * @return &lt;jk&gt;false&lt;/jk&gt; (and no depth change) if the cap is reached.</span>
-<span class="source-line-no">226</span><span id="line-226">    */</span>
-<span class="source-line-no">227</span><span id="line-227">   boolean enterExprVar() {</span>
-<span class="source-line-no">228</span><span id="line-228">      if (exprVarDepth &gt;= context.maxExprDepth)</span>
-<span class="source-line-no">229</span><span id="line-229">         return false;</span>
-<span class="source-line-no">230</span><span id="line-230">      exprVarDepth++;</span>
-<span class="source-line-no">231</span><span id="line-231">      return true;</span>
-<span class="source-line-no">232</span><span id="line-232">   }</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">   /** Leaves a reference entered with {@link #enterExprVar()}. */</span>
-<span class="source-line-no">235</span><span id="line-235">   void exitExprVar() {</span>
-<span class="source-line-no">236</span><span id="line-236">      exprVarDepth--;</span>
+<span class="source-line-no">225</span><span id="line-225">    * @param value The value.  May be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">226</span><span id="line-226">    * @return The text; never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">227</span><span id="line-227">    */</span>
+<span class="source-line-no">228</span><span id="line-228">   public String formatValue(Object value) {</span>
+<span class="source-line-no">229</span><span id="line-229">      String r;</span>
+<span class="source-line-no">230</span><span id="line-230">      if (valueFormatter != null)</span>
+<span class="source-line-no">231</span><span id="line-231">         r = valueFormatter.apply(value);</span>
+<span class="source-line-no">232</span><span id="line-232">      else if (value instanceof Structure)</span>
+<span class="source-line-no">233</span><span id="line-233">         r = value.toString();</span>
+<span class="source-line-no">234</span><span id="line-234">      else</span>
+<span class="source-line-no">235</span><span id="line-235">         r = context.valueFormatter.apply(value);</span>
+<span class="source-line-no">236</span><span id="line-236">      return r == null ? "" : r;</span>
 <span class="source-line-no">237</span><span id="line-237">   }</span>
 <span class="source-line-no">238</span><span id="line-238"></span>
-<span class="source-line-no">239</span><span id="line-239">   /**</span>
-<span class="source-line-no">240</span><span id="line-240">    * Returns whether the owning resolver is in strict mode.</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * @return &lt;jk&gt;true&lt;/jk&gt; if strict.</span>
-<span class="source-line-no">243</span><span id="line-243">    */</span>
-<span class="source-line-no">244</span><span id="line-244">   public boolean isStrict() { return context.strict; }</span>
-<span class="source-line-no">245</span><span id="line-245"></span>
-<span class="source-line-no">246</span><span id="line-246">   /**</span>
-<span class="source-line-no">247</span><span id="line-247">    * Adds a bean to this session.</span>
-<span class="source-line-no">248</span><span id="line-248">    *</span>
-<span class="source-line-no">249</span><span id="line-249">    * @param &lt;T&gt; The bean type.</span>
-<span class="source-line-no">250</span><span id="line-250">    * @param c The bean type.</span>
-<span class="source-line-no">251</span><span id="line-251">    * @param value The bean.</span>
-<span class="source-line-no">252</span><span id="line-252">    * @return This object.</span>
-<span class="source-line-no">253</span><span id="line-253">    */</span>
-<span class="source-line-no">254</span><span id="line-254">   public &lt;T&gt; VarResolverSession bean(Class&lt;T&gt; c, T value) {</span>
-<span class="source-line-no">255</span><span id="line-255">      beanStore.addBean(c, value);</span>
-<span class="source-line-no">256</span><span id="line-256">      return this;</span>
-<span class="source-line-no">257</span><span id="line-257">   }</span>
-<span class="source-line-no">258</span><span id="line-258"></span>
-<span class="source-line-no">259</span><span id="line-259">   /**</span>
-<span class="source-line-no">260</span><span id="line-260">    * Returns the bean from the registered bean store.</span>
-<span class="source-line-no">261</span><span id="line-261">    *</span>
-<span class="source-line-no">262</span><span id="line-262">    * @param &lt;T&gt; The value type.</span>
-<span class="source-line-no">263</span><span id="line-263">    * @param c The bean type.</span>
-<span class="source-line-no">264</span><span id="line-264">    * @return</span>
-<span class="source-line-no">265</span><span id="line-265">    *    The bean.</span>
-<span class="source-line-no">266</span><span id="line-266">    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">267</span><span id="line-267">    */</span>
-<span class="source-line-no">268</span><span id="line-268">   public &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; c) {</span>
-<span class="source-line-no">269</span><span id="line-269">      Optional&lt;T&gt; t = beanStore.getBean(c);</span>
-<span class="source-line-no">270</span><span id="line-270">      if (! t.isPresent())</span>
-<span class="source-line-no">271</span><span id="line-271">         t = context.beanStore.getBean(c);</span>
-<span class="source-line-no">272</span><span id="line-272">      return t;</span>
-<span class="source-line-no">273</span><span id="line-273">   }</span>
-<span class="source-line-no">274</span><span id="line-274"></span>
-<span class="source-line-no">275</span><span id="line-275">   /**</span>
-<span class="source-line-no">276</span><span id="line-276">    * Resolve all variables in the specified string.</span>
-<span class="source-line-no">277</span><span id="line-277">    *</span>
-<span class="source-line-no">278</span><span id="line-278">    * @param s</span>
-<span class="source-line-no">279</span><span id="line-279">    *    The string to resolve variables in.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
-<span class="source-line-no">280</span><span id="line-280">    * @return</span>
-<span class="source-line-no">281</span><span id="line-281">    *    The new string with all variables resolved, or the same string if no variables were found.</span>
-<span class="source-line-no">282</span><span id="line-282">    *    &lt;br&gt;Returns &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">283</span><span id="line-283">    */</span>
-<span class="source-line-no">284</span><span id="line-284">   public String resolve(String s) {</span>
-<span class="source-line-no">285</span><span id="line-285">      if (s == null)</span>
-<span class="source-line-no">286</span><span id="line-286">         return null;</span>
-<span class="source-line-no">287</span><span id="line-287">      if (s.isEmpty())</span>
-<span class="source-line-no">288</span><span id="line-288">         return s;</span>
-<span class="source-line-no">289</span><span id="line-289">      return context.compile(s).resolve(this);</span>
-<span class="source-line-no">290</span><span id="line-290">   }</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">   /**</span>
-<span class="source-line-no">293</span><span id="line-293">    * Re-resolves a var's output, enforcing the resolver's maximum recursion depth.</span>
-<span class="source-line-no">294</span><span id="line-294">    *</span>
-<span class="source-line-no">295</span><span id="line-295">    * @param s The string to resolve.</span>
-<span class="source-line-no">296</span><span id="line-296">    * @return The resolved string.</span>
-<span class="source-line-no">297</span><span id="line-297">    * @throws VarResolverException If the maximum recursion depth is exceeded.</span>
-<span class="source-line-no">298</span><span id="line-298">    */</span>
-<span class="source-line-no">299</span><span id="line-299">   String resolveRecursive(String s) {</span>
-<span class="source-line-no">300</span><span id="line-300">      if (++recursionDepth &gt; context.maxRecursionDepth) {</span>
-<span class="source-line-no">301</span><span id="line-301">         recursionDepth--;</span>
-<span class="source-line-no">302</span><span id="line-302">         throw new VarResolverException("Maximum variable recursion depth (%s) exceeded while resolving '%s'", context.maxRecursionDepth, s.length() &gt; 80 ? s.substring(0, 80) + "..." : s);</span>
-<span class="source-line-no">303</span><span id="line-303">      }</span>
-<span class="source-line-no">304</span><span id="line-304">      try {</span>
-<span class="source-line-no">305</span><span id="line-305">         return resolve(s);</span>
-<span class="source-line-no">306</span><span id="line-306">      } finally {</span>
-<span class="source-line-no">307</span><span id="line-307">         recursionDepth--;</span>
-<span class="source-line-no">308</span><span id="line-308">      }</span>
-<span class="source-line-no">309</span><span id="line-309">   }</span>
-<span class="source-line-no">310</span><span id="line-310"></span>
-<span class="source-line-no">311</span><span id="line-311">   /**</span>
-<span class="source-line-no">312</span><span id="line-312">    * Resolves SVL variables for HTML-doc chrome fields that write raw HTML.</span>
-<span class="source-line-no">313</span><span id="line-313">    *</span>
-<span class="source-line-no">314</span><span id="line-314">    * &lt;p&gt;</span>
-<span class="source-line-no">315</span><span id="line-315">    * Literal characters from the template (including tags) pass through unchanged. Each SVL</span>
-<span class="source-line-no">316</span><span id="line-316">    * substitution is XML-escaped via {@link StringUtils#escapeXml(String)} before insert, except</span>
-<span class="source-line-no">317</span><span id="line-317">    * the HTML-passthrough vars {@code $W}, {@code $C}, and {@code $RS}.</span>
-<span class="source-line-no">318</span><span id="line-318">    *</span>
-<span class="source-line-no">319</span><span id="line-319">    * &lt;p&gt;</span>
-<span class="source-line-no">320</span><span id="line-320">    * Plain {@link #resolve(String)} is unchanged. Use this only for HTML-doc chrome (aside, header,</span>
-<span class="source-line-no">321</span><span id="line-321">    * footer, nav HTML fragments, head, no-results).</span>
+<span class="source-line-no">239</span><span id="line-239">   /** @return The maximum collection size for expressions, and for the functions that build lists, tables and joins. */</span>
+<span class="source-line-no">240</span><span id="line-240">   public int maxCollectionSize() { return context.maxCollectionSize; }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   /** @return The maximum expression nesting depth. */</span>
+<span class="source-line-no">243</span><span id="line-243">   int maxExprDepth() { return context.maxExprDepth; }</span>
+<span class="source-line-no">244</span><span id="line-244"></span>
+<span class="source-line-no">245</span><span id="line-245">   /**</span>
+<span class="source-line-no">246</span><span id="line-246">    * Enters a {@code ${...}} reference inside {@code #{...}}.</span>
+<span class="source-line-no">247</span><span id="line-247">    *</span>
+<span class="source-line-no">248</span><span id="line-248">    * &lt;p&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">    * Such references compile their body lazily, so a deep {@code #{${...#{${...}}...}}} chain would recurse at</span>
+<span class="source-line-no">250</span><span id="line-250">    * evaluation time.  The chain is capped at {@code maxExprDepth}; every successful call must be paired with</span>
+<span class="source-line-no">251</span><span id="line-251">    * {@link #exitExprVar()}.</span>
+<span class="source-line-no">252</span><span id="line-252">    *</span>
+<span class="source-line-no">253</span><span id="line-253">    * @return &lt;jk&gt;false&lt;/jk&gt; (and no depth change) if the cap is reached.</span>
+<span class="source-line-no">254</span><span id="line-254">    */</span>
+<span class="source-line-no">255</span><span id="line-255">   boolean enterExprVar() {</span>
+<span class="source-line-no">256</span><span id="line-256">      if (exprVarDepth &gt;= context.maxExprDepth)</span>
+<span class="source-line-no">257</span><span id="line-257">         return false;</span>
+<span class="source-line-no">258</span><span id="line-258">      exprVarDepth++;</span>
+<span class="source-line-no">259</span><span id="line-259">      return true;</span>
+<span class="source-line-no">260</span><span id="line-260">   }</span>
+<span class="source-line-no">261</span><span id="line-261"></span>
+<span class="source-line-no">262</span><span id="line-262">   /** Leaves a reference entered with {@link #enterExprVar()}. */</span>
+<span class="source-line-no">263</span><span id="line-263">   void exitExprVar() {</span>
+<span class="source-line-no">264</span><span id="line-264">      exprVarDepth--;</span>
+<span class="source-line-no">265</span><span id="line-265">   }</span>
+<span class="source-line-no">266</span><span id="line-266"></span>
+<span class="source-line-no">267</span><span id="line-267">   /**</span>
+<span class="source-line-no">268</span><span id="line-268">    * Returns whether the owning resolver is in strict mode.</span>
+<span class="source-line-no">269</span><span id="line-269">    *</span>
+<span class="source-line-no">270</span><span id="line-270">    * @return &lt;jk&gt;true&lt;/jk&gt; if strict.</span>
+<span class="source-line-no">271</span><span id="line-271">    */</span>
+<span class="source-line-no">272</span><span id="line-272">   public boolean isStrict() { return context.strict; }</span>
+<span class="source-line-no">273</span><span id="line-273"></span>
+<span class="source-line-no">274</span><span id="line-274">   /**</span>
+<span class="source-line-no">275</span><span id="line-275">    * Adds a bean to this session.</span>
+<span class="source-line-no">276</span><span id="line-276">    *</span>
+<span class="source-line-no">277</span><span id="line-277">    * @param &lt;T&gt; The bean type.</span>
+<span class="source-line-no">278</span><span id="line-278">    * @param c The bean type.</span>
+<span class="source-line-no">279</span><span id="line-279">    * @param value The bean.</span>
+<span class="source-line-no">280</span><span id="line-280">    * @return This object.</span>
+<span class="source-line-no">281</span><span id="line-281">    */</span>
+<span class="source-line-no">282</span><span id="line-282">   public &lt;T&gt; VarResolverSession bean(Class&lt;T&gt; c, T value) {</span>
+<span class="source-line-no">283</span><span id="line-283">      beanStore.addBean(c, value);</span>
+<span class="source-line-no">284</span><span id="line-284">      return this;</span>
+<span class="source-line-no">285</span><span id="line-285">   }</span>
+<span class="source-line-no">286</span><span id="line-286"></span>
+<span class="source-line-no">287</span><span id="line-287">   /**</span>
+<span class="source-line-no">288</span><span id="line-288">    * Returns the bean from the registered bean store.</span>
+<span class="source-line-no">289</span><span id="line-289">    *</span>
+<span class="source-line-no">290</span><span id="line-290">    * @param &lt;T&gt; The value type.</span>
+<span class="source-line-no">291</span><span id="line-291">    * @param c The bean type.</span>
+<span class="source-line-no">292</span><span id="line-292">    * @return</span>
+<span class="source-line-no">293</span><span id="line-293">    *    The bean.</span>
+<span class="source-line-no">294</span><span id="line-294">    *    &lt;br&gt;Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">295</span><span id="line-295">    */</span>
+<span class="source-line-no">296</span><span id="line-296">   public &lt;T&gt; Optional&lt;T&gt; getBean(Class&lt;T&gt; c) {</span>
+<span class="source-line-no">297</span><span id="line-297">      Optional&lt;T&gt; t = beanStore.getBean(c);</span>
+<span class="source-line-no">298</span><span id="line-298">      if (! t.isPresent())</span>
+<span class="source-line-no">299</span><span id="line-299">         t = context.beanStore.getBean(c);</span>
+<span class="source-line-no">300</span><span id="line-300">      return t;</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   /**</span>
+<span class="source-line-no">304</span><span id="line-304">    * Resolve all variables in the specified string.</span>
+<span class="source-line-no">305</span><span id="line-305">    *</span>
+<span class="source-line-no">306</span><span id="line-306">    * @param s</span>
+<span class="source-line-no">307</span><span id="line-307">    *    The string to resolve variables in.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">308</span><span id="line-308">    * @return</span>
+<span class="source-line-no">309</span><span id="line-309">    *    The new string with all variables resolved, or the same string if no variables were found.</span>
+<span class="source-line-no">310</span><span id="line-310">    *    &lt;br&gt;Returns &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">311</span><span id="line-311">    */</span>
+<span class="source-line-no">312</span><span id="line-312">   public String resolve(String s) {</span>
+<span class="source-line-no">313</span><span id="line-313">      if (s == null)</span>
+<span class="source-line-no">314</span><span id="line-314">         return null;</span>
+<span class="source-line-no">315</span><span id="line-315">      if (s.isEmpty())</span>
+<span class="source-line-no">316</span><span id="line-316">         return s;</span>
+<span class="source-line-no">317</span><span id="line-317">      return context.compile(s).resolve(this);</span>
+<span class="source-line-no">318</span><span id="line-318">   }</span>
+<span class="source-line-no">319</span><span id="line-319"></span>
+<span class="source-line-no">320</span><span id="line-320">   /**</span>
+<span class="source-line-no">321</span><span id="line-321">    * Re-resolves a var's output, enforcing the resolver's maximum recursion depth.</span>
 <span class="source-line-no">322</span><span id="line-322">    *</span>
-<span class="source-line-no">323</span><span id="line-323">    * @param s The chrome template. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">324</span><span id="line-324">    * @return The resolved chrome string, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">325</span><span id="line-325">    */</span>
-<span class="source-line-no">326</span><span id="line-326">   public String resolveHtmlDoc(String s) {</span>
-<span class="source-line-no">327</span><span id="line-327">      htmlDocEncode = true;</span>
-<span class="source-line-no">328</span><span id="line-328">      try {</span>
-<span class="source-line-no">329</span><span id="line-329">         return resolve(s);</span>
-<span class="source-line-no">330</span><span id="line-330">      } finally {</span>
-<span class="source-line-no">331</span><span id="line-331">         htmlDocEncode = false;</span>
-<span class="source-line-no">332</span><span id="line-332">      }</span>
-<span class="source-line-no">333</span><span id="line-333">   }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">   /**</span>
-<span class="source-line-no">336</span><span id="line-336">    * Resolves SVL variables for {@code &lt;script&gt;} and {@code &lt;style&gt;} chrome.</span>
-<span class="source-line-no">337</span><span id="line-337">    *</span>
-<span class="source-line-no">338</span><span id="line-338">    * &lt;p&gt;</span>
-<span class="source-line-no">339</span><span id="line-339">    * Request-derived vars ({@code $RQ}, {@code $RH}, {@code $RF}, {@code $RP}, {@code $RA},</span>
-<span class="source-line-no">340</span><span id="line-340">    * {@code $SA}, {@code $R}) are left unresolved (same as an unknown var). Other vars including</span>
-<span class="source-line-no">341</span><span id="line-341">    * {@code $W}, {@code $C}, and {@code $RS} still resolve.</span>
-<span class="source-line-no">342</span><span id="line-342">    *</span>
-<span class="source-line-no">343</span><span id="line-343">    * @param s The script or style template. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @return The resolved string, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">345</span><span id="line-345">    */</span>
-<span class="source-line-no">346</span><span id="line-346">   public String resolveScriptStyle(String s) {</span>
-<span class="source-line-no">347</span><span id="line-347">      scriptStyleRefuse = true;</span>
-<span class="source-line-no">348</span><span id="line-348">      try {</span>
-<span class="source-line-no">349</span><span id="line-349">         return resolve(s);</span>
-<span class="source-line-no">350</span><span id="line-350">      } finally {</span>
-<span class="source-line-no">351</span><span id="line-351">         scriptStyleRefuse = false;</span>
-<span class="source-line-no">352</span><span id="line-352">      }</span>
-<span class="source-line-no">353</span><span id="line-353">   }</span>
-<span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355">   /**</span>
-<span class="source-line-no">356</span><span id="line-356">    * Compiles the given template string into a reusable {@link VarTemplate}.</span>
-<span class="source-line-no">357</span><span id="line-357">    *</span>
-<span class="source-line-no">358</span><span id="line-358">    * &lt;p&gt;</span>
-<span class="source-line-no">359</span><span id="line-359">    * Equivalent to {@link VarResolver#compile(String) this.context.compile(input)}; provided on</span>
-<span class="source-line-no">360</span><span id="line-360">    * the session for symmetry with {@link #resolve(String)}. The returned template is bound to</span>
-<span class="source-line-no">361</span><span id="line-361">    * the underlying {@link VarResolver}, not to this session — see the {@link VarTemplate}</span>
-<span class="source-line-no">362</span><span id="line-362">    * class javadoc for the compile-binding contract.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * @param input The template string. May be {@code null}.</span>
-<span class="source-line-no">365</span><span id="line-365">    * @return A new {@link VarTemplate} bound to the underlying resolver.</span>
-<span class="source-line-no">366</span><span id="line-366">    */</span>
-<span class="source-line-no">367</span><span id="line-367">   public VarTemplate compile(String input) {</span>
-<span class="source-line-no">368</span><span id="line-368">      return context.compile(input);</span>
-<span class="source-line-no">369</span><span id="line-369">   }</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   /**</span>
-<span class="source-line-no">372</span><span id="line-372">    * Returns a session-bound {@link Supplier} that re-resolves the given template against</span>
-<span class="source-line-no">373</span><span id="line-373">    * &lt;i&gt;this&lt;/i&gt; session each time {@link Supplier#get()} is called.</span>
-<span class="source-line-no">374</span><span id="line-374">    *</span>
-<span class="source-line-no">375</span><span id="line-375">    * &lt;p&gt;</span>
-<span class="source-line-no">376</span><span id="line-376">    * Unlike {@link VarResolver#resolveSupplier(String)} — which opens a fresh session per</span>
-<span class="source-line-no">377</span><span id="line-377">    * {@code .get()} and is threadsafe to share — this Supplier captures the existing session</span>
-<span class="source-line-no">378</span><span id="line-378">    * and reuses it. &lt;b&gt;It is therefore not threadsafe&lt;/b&gt;; it inherits the standard</span>
-<span class="source-line-no">379</span><span id="line-379">    * "{@link VarResolverSession} is not guaranteed to be thread safe" contract.</span>
-<span class="source-line-no">380</span><span id="line-380">    *</span>
-<span class="source-line-no">381</span><span id="line-381">    * &lt;p&gt;</span>
-<span class="source-line-no">382</span><span id="line-382">    * Use this variant only when the caller owns the session lifecycle and the perf saving of</span>
-<span class="source-line-no">383</span><span id="line-383">    * skipping per-call session construction matters. For shared / cross-thread use cases,</span>
-<span class="source-line-no">384</span><span id="line-384">    * prefer {@link VarResolver#resolveSupplier(String)}.</span>
+<span class="source-line-no">323</span><span id="line-323">    * @param s The string to resolve.</span>
+<span class="source-line-no">324</span><span id="line-324">    * @return The resolved string.</span>
+<span class="source-line-no">325</span><span id="line-325">    * @throws VarResolverException If the maximum recursion depth is exceeded.</span>
+<span class="source-line-no">326</span><span id="line-326">    */</span>
+<span class="source-line-no">327</span><span id="line-327">   String resolveRecursive(String s) {</span>
+<span class="source-line-no">328</span><span id="line-328">      if (++recursionDepth &gt; context.maxRecursionDepth) {</span>
+<span class="source-line-no">329</span><span id="line-329">         recursionDepth--;</span>
+<span class="source-line-no">330</span><span id="line-330">         throw new VarResolverException("Maximum variable recursion depth (%s) exceeded while resolving '%s'", context.maxRecursionDepth, s.length() &gt; 80 ? s.substring(0, 80) + "..." : s);</span>
+<span class="source-line-no">331</span><span id="line-331">      }</span>
+<span class="source-line-no">332</span><span id="line-332">      try {</span>
+<span class="source-line-no">333</span><span id="line-333">         return resolve(s);</span>
+<span class="source-line-no">334</span><span id="line-334">      } finally {</span>
+<span class="source-line-no">335</span><span id="line-335">         recursionDepth--;</span>
+<span class="source-line-no">336</span><span id="line-336">      }</span>
+<span class="source-line-no">337</span><span id="line-337">   }</span>
+<span class="source-line-no">338</span><span id="line-338"></span>
+<span class="source-line-no">339</span><span id="line-339">   /**</span>
+<span class="source-line-no">340</span><span id="line-340">    * Resolves SVL variables for HTML-doc chrome fields that write raw HTML.</span>
+<span class="source-line-no">341</span><span id="line-341">    *</span>
+<span class="source-line-no">342</span><span id="line-342">    * &lt;p&gt;</span>
+<span class="source-line-no">343</span><span id="line-343">    * Literal characters from the template (including tags) pass through unchanged. Each SVL</span>
+<span class="source-line-no">344</span><span id="line-344">    * substitution is XML-escaped via {@link StringUtils#escapeXml(String)} before insert, except</span>
+<span class="source-line-no">345</span><span id="line-345">    * the HTML-passthrough vars {@code $W}, {@code $C}, and {@code $RS}.</span>
+<span class="source-line-no">346</span><span id="line-346">    *</span>
+<span class="source-line-no">347</span><span id="line-347">    * &lt;p&gt;</span>
+<span class="source-line-no">348</span><span id="line-348">    * Plain {@link #resolve(String)} is unchanged. Use this only for HTML-doc chrome (aside, header,</span>
+<span class="source-line-no">349</span><span id="line-349">    * footer, nav HTML fragments, head, no-results).</span>
+<span class="source-line-no">350</span><span id="line-350">    *</span>
+<span class="source-line-no">351</span><span id="line-351">    * @param s The chrome template. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">352</span><span id="line-352">    * @return The resolved chrome string, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">353</span><span id="line-353">    */</span>
+<span class="source-line-no">354</span><span id="line-354">   public String resolveHtmlDoc(String s) {</span>
+<span class="source-line-no">355</span><span id="line-355">      htmlDocEncode = true;</span>
+<span class="source-line-no">356</span><span id="line-356">      try {</span>
+<span class="source-line-no">357</span><span id="line-357">         return resolve(s);</span>
+<span class="source-line-no">358</span><span id="line-358">      } finally {</span>
+<span class="source-line-no">359</span><span id="line-359">         htmlDocEncode = false;</span>
+<span class="source-line-no">360</span><span id="line-360">      }</span>
+<span class="source-line-no">361</span><span id="line-361">   }</span>
+<span class="source-line-no">362</span><span id="line-362"></span>
+<span class="source-line-no">363</span><span id="line-363">   /**</span>
+<span class="source-line-no">364</span><span id="line-364">    * Resolves SVL variables for {@code &lt;script&gt;} and {@code &lt;style&gt;} chrome.</span>
+<span class="source-line-no">365</span><span id="line-365">    *</span>
+<span class="source-line-no">366</span><span id="line-366">    * &lt;p&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * Request-derived vars ({@code $RQ}, {@code $RH}, {@code $RF}, {@code $RP}, {@code $RA},</span>
+<span class="source-line-no">368</span><span id="line-368">    * {@code $SA}, {@code $R}) are left unresolved (same as an unknown var). Other vars including</span>
+<span class="source-line-no">369</span><span id="line-369">    * {@code $W}, {@code $C}, and {@code $RS} still resolve.</span>
+<span class="source-line-no">370</span><span id="line-370">    *</span>
+<span class="source-line-no">371</span><span id="line-371">    * @param s The script or style template. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">372</span><span id="line-372">    * @return The resolved string, or &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">373</span><span id="line-373">    */</span>
+<span class="source-line-no">374</span><span id="line-374">   public String resolveScriptStyle(String s) {</span>
+<span class="source-line-no">375</span><span id="line-375">      scriptStyleRefuse = true;</span>
+<span class="source-line-no">376</span><span id="line-376">      try {</span>
+<span class="source-line-no">377</span><span id="line-377">         return resolve(s);</span>
+<span class="source-line-no">378</span><span id="line-378">      } finally {</span>
+<span class="source-line-no">379</span><span id="line-379">         scriptStyleRefuse = false;</span>
+<span class="source-line-no">380</span><span id="line-380">      }</span>
+<span class="source-line-no">381</span><span id="line-381">   }</span>
+<span class="source-line-no">382</span><span id="line-382"></span>
+<span class="source-line-no">383</span><span id="line-383">   /**</span>
+<span class="source-line-no">384</span><span id="line-384">    * Compiles the given template string into a reusable {@link VarTemplate}.</span>
 <span class="source-line-no">385</span><span id="line-385">    *</span>
-<span class="source-line-no">386</span><span id="line-386">    * @param input The template string. May be {@code null}.</span>
-<span class="source-line-no">387</span><span id="line-387">    * @return A {@code Supplier&lt;String&gt;} bound to this session.</span>
-<span class="source-line-no">388</span><span id="line-388">    */</span>
-<span class="source-line-no">389</span><span id="line-389">   public Supplier&lt;String&gt; resolveSupplier(String input) {</span>
-<span class="source-line-no">390</span><span id="line-390">      return compile(input).asSupplier(this);</span>
-<span class="source-line-no">391</span><span id="line-391">   }</span>
-<span class="source-line-no">392</span><span id="line-392"></span>
-<span class="source-line-no">393</span><span id="line-393">   /**</span>
-<span class="source-line-no">394</span><span id="line-394">    * Resolves the specified strings in the string array.</span>
-<span class="source-line-no">395</span><span id="line-395">    *</span>
-<span class="source-line-no">396</span><span id="line-396">    * @param in The string array containing variables to resolve.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} is thrown, though individual elements can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">397</span><span id="line-397">    * @return An array with resolved strings.  Elements are &lt;jk&gt;null&lt;/jk&gt; where the corresponding input element was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">398</span><span id="line-398">    */</span>
-<span class="source-line-no">399</span><span id="line-399">   public String[] resolve(String[] in) {</span>
-<span class="source-line-no">400</span><span id="line-400">      var out = new String[in.length];</span>
-<span class="source-line-no">401</span><span id="line-401">      for (var i = 0; i &lt; in.length; i++)</span>
-<span class="source-line-no">402</span><span id="line-402">         out[i] = resolve(in[i]);</span>
-<span class="source-line-no">403</span><span id="line-403">      return out;</span>
-<span class="source-line-no">404</span><span id="line-404">   }</span>
-<span class="source-line-no">405</span><span id="line-405"></span>
-<span class="source-line-no">406</span><span id="line-406">   /**</span>
-<span class="source-line-no">407</span><span id="line-407">    * Convenience method for resolving variables in arbitrary objects.</span>
+<span class="source-line-no">386</span><span id="line-386">    * &lt;p&gt;</span>
+<span class="source-line-no">387</span><span id="line-387">    * Equivalent to {@link VarResolver#compile(String) this.context.compile(input)}; provided on</span>
+<span class="source-line-no">388</span><span id="line-388">    * the session for symmetry with {@link #resolve(String)}. The returned template is bound to</span>
+<span class="source-line-no">389</span><span id="line-389">    * the underlying {@link VarResolver}, not to this session — see the {@link VarTemplate}</span>
+<span class="source-line-no">390</span><span id="line-390">    * class javadoc for the compile-binding contract.</span>
+<span class="source-line-no">391</span><span id="line-391">    *</span>
+<span class="source-line-no">392</span><span id="line-392">    * @param input The template string. May be {@code null}.</span>
+<span class="source-line-no">393</span><span id="line-393">    * @return A new {@link VarTemplate} bound to the underlying resolver.</span>
+<span class="source-line-no">394</span><span id="line-394">    */</span>
+<span class="source-line-no">395</span><span id="line-395">   public VarTemplate compile(String input) {</span>
+<span class="source-line-no">396</span><span id="line-396">      return context.compile(input);</span>
+<span class="source-line-no">397</span><span id="line-397">   }</span>
+<span class="source-line-no">398</span><span id="line-398"></span>
+<span class="source-line-no">399</span><span id="line-399">   /**</span>
+<span class="source-line-no">400</span><span id="line-400">    * Returns a session-bound {@link Supplier} that re-resolves the given template against</span>
+<span class="source-line-no">401</span><span id="line-401">    * &lt;i&gt;this&lt;/i&gt; session each time {@link Supplier#get()} is called.</span>
+<span class="source-line-no">402</span><span id="line-402">    *</span>
+<span class="source-line-no">403</span><span id="line-403">    * &lt;p&gt;</span>
+<span class="source-line-no">404</span><span id="line-404">    * Unlike {@link VarResolver#resolveSupplier(String)} — which opens a fresh session per</span>
+<span class="source-line-no">405</span><span id="line-405">    * {@code .get()} and is threadsafe to share — this Supplier captures the existing session</span>
+<span class="source-line-no">406</span><span id="line-406">    * and reuses it. &lt;b&gt;It is therefore not threadsafe&lt;/b&gt;; it inherits the standard</span>
+<span class="source-line-no">407</span><span id="line-407">    * "{@link VarResolverSession} is not guaranteed to be thread safe" contract.</span>
 <span class="source-line-no">408</span><span id="line-408">    *</span>
 <span class="source-line-no">409</span><span id="line-409">    * &lt;p&gt;</span>
-<span class="source-line-no">410</span><span id="line-410">    * Supports resolving variables in the following object types:</span>
-<span class="source-line-no">411</span><span id="line-411">    * &lt;ul&gt;</span>
-<span class="source-line-no">412</span><span id="line-412">    *    &lt;li&gt;{@link CharSequence}</span>
-<span class="source-line-no">413</span><span id="line-413">    *    &lt;li&gt;Arrays containing values of type {@link CharSequence}.</span>
-<span class="source-line-no">414</span><span id="line-414">    *    &lt;li&gt;Collections containing values of type {@link CharSequence}.</span>
-<span class="source-line-no">415</span><span id="line-415">    *       &lt;br&gt;Collection class must have a no-arg constructor.</span>
-<span class="source-line-no">416</span><span id="line-416">    *    &lt;li&gt;Maps containing values of type {@link CharSequence}.</span>
-<span class="source-line-no">417</span><span id="line-417">    *       &lt;br&gt;Map class must have a no-arg constructor.</span>
-<span class="source-line-no">418</span><span id="line-418">    * &lt;/ul&gt;</span>
-<span class="source-line-no">419</span><span id="line-419">    *</span>
-<span class="source-line-no">420</span><span id="line-420">    * @param &lt;T&gt; The value type.</span>
-<span class="source-line-no">421</span><span id="line-421">    * @param o The object.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
-<span class="source-line-no">422</span><span id="line-422">    * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was</span>
-<span class="source-line-no">423</span><span id="line-423">    * needed.  Returns &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">424</span><span id="line-424">    */</span>
-<span class="source-line-no">425</span><span id="line-425">   @SuppressWarnings({</span>
-<span class="source-line-no">426</span><span id="line-426">      "java:S3776", // Cognitive complexity acceptable for recursive resolution logic</span>
-<span class="source-line-no">427</span><span id="line-427">      "rawtypes", // Raw types necessary for generic resolution</span>
-<span class="source-line-no">428</span><span id="line-428">      "unchecked" // Type erasure requires unchecked operations</span>
-<span class="source-line-no">429</span><span id="line-429">   })</span>
-<span class="source-line-no">430</span><span id="line-430">   public &lt;T&gt; T resolve(T o) {</span>
-<span class="source-line-no">431</span><span id="line-431">      if (o == null)</span>
-<span class="source-line-no">432</span><span id="line-432">         return null;</span>
-<span class="source-line-no">433</span><span id="line-433">      if (o instanceof CharSequence o2)</span>
-<span class="source-line-no">434</span><span id="line-434">         return (T)resolve(o2.toString());</span>
-<span class="source-line-no">435</span><span id="line-435">      if (isArray(o)) {</span>
-<span class="source-line-no">436</span><span id="line-436">         if (! containsVars(o))</span>
-<span class="source-line-no">437</span><span id="line-437">            return o;</span>
-<span class="source-line-no">438</span><span id="line-438">         var o2 = Array.newInstance(o.getClass().getComponentType(), Array.getLength(o));</span>
-<span class="source-line-no">439</span><span id="line-439">         for (var i = 0; i &lt; Array.getLength(o); i++)</span>
-<span class="source-line-no">440</span><span id="line-440">            Array.set(o2, i, resolve(Array.get(o, i)));</span>
-<span class="source-line-no">441</span><span id="line-441">         return (T)o2;</span>
-<span class="source-line-no">442</span><span id="line-442">      }</span>
-<span class="source-line-no">443</span><span id="line-443">      if (o instanceof Set o2) {</span>
-<span class="source-line-no">444</span><span id="line-444">         try {</span>
-<span class="source-line-no">445</span><span id="line-445">            if (! containsVars(o2))</span>
-<span class="source-line-no">446</span><span id="line-446">               return o;</span>
-<span class="source-line-no">447</span><span id="line-447">            Set o3 = info(o).getDeclaredConstructor(x -&gt; x.isPublic() &amp;&amp; x.getParameterCount() == 0).map(ci -&gt; safe(() -&gt; (Set)ci.inner().newInstance())).orElseGet(LinkedHashSet::new);</span>
-<span class="source-line-no">448</span><span id="line-448">            Set o4 = o3;</span>
-<span class="source-line-no">449</span><span id="line-449">            o2.forEach(x -&gt; o4.add(resolve(x)));</span>
-<span class="source-line-no">450</span><span id="line-450">            return (T)o3;</span>
-<span class="source-line-no">451</span><span id="line-451">         } catch (VarResolverException e) {</span>
-<span class="source-line-no">452</span><span id="line-452">            throw e;</span>
-<span class="source-line-no">453</span><span id="line-453">         } catch (Exception e) {</span>
-<span class="source-line-no">454</span><span id="line-454">            throw new VarResolverException(e, "Problem occurred resolving set.");</span>
-<span class="source-line-no">455</span><span id="line-455">         }</span>
-<span class="source-line-no">456</span><span id="line-456">      }</span>
-<span class="source-line-no">457</span><span id="line-457">      if (o instanceof List o2) {</span>
-<span class="source-line-no">458</span><span id="line-458">         try {</span>
-<span class="source-line-no">459</span><span id="line-459">            if (! containsVars(o2))</span>
-<span class="source-line-no">460</span><span id="line-460">               return o;</span>
-<span class="source-line-no">461</span><span id="line-461">            List o3 = info(o).getDeclaredConstructor(x -&gt; x.isPublic() &amp;&amp; x.getParameterCount() == 0).map(ci -&gt; safe(() -&gt; (List)ci.inner().newInstance())).orElseGet(() -&gt; list());</span>
-<span class="source-line-no">462</span><span id="line-462">            List o4 = o3;</span>
-<span class="source-line-no">463</span><span id="line-463">            o2.forEach(x -&gt; o4.add(resolve(x)));</span>
-<span class="source-line-no">464</span><span id="line-464">            return (T)o3;</span>
-<span class="source-line-no">465</span><span id="line-465">         } catch (VarResolverException e) {</span>
-<span class="source-line-no">466</span><span id="line-466">            throw e;</span>
-<span class="source-line-no">467</span><span id="line-467">         } catch (Exception e) {</span>
-<span class="source-line-no">468</span><span id="line-468">            throw new VarResolverException(e, "Problem occurred resolving collection.");</span>
-<span class="source-line-no">469</span><span id="line-469">         }</span>
+<span class="source-line-no">410</span><span id="line-410">    * Use this variant only when the caller owns the session lifecycle and the perf saving of</span>
+<span class="source-line-no">411</span><span id="line-411">    * skipping per-call session construction matters. For shared / cross-thread use cases,</span>
+<span class="source-line-no">412</span><span id="line-412">    * prefer {@link VarResolver#resolveSupplier(String)}.</span>
+<span class="source-line-no">413</span><span id="line-413">    *</span>
+<span class="source-line-no">414</span><span id="line-414">    * @param input The template string. May be {@code null}.</span>
+<span class="source-line-no">415</span><span id="line-415">    * @return A {@code Supplier&lt;String&gt;} bound to this session.</span>
+<span class="source-line-no">416</span><span id="line-416">    */</span>
+<span class="source-line-no">417</span><span id="line-417">   public Supplier&lt;String&gt; resolveSupplier(String input) {</span>
+<span class="source-line-no">418</span><span id="line-418">      return compile(input).asSupplier(this);</span>
+<span class="source-line-no">419</span><span id="line-419">   }</span>
+<span class="source-line-no">420</span><span id="line-420"></span>
+<span class="source-line-no">421</span><span id="line-421">   /**</span>
+<span class="source-line-no">422</span><span id="line-422">    * Resolves the specified strings in the string array.</span>
+<span class="source-line-no">423</span><span id="line-423">    *</span>
+<span class="source-line-no">424</span><span id="line-424">    * @param in The string array containing variables to resolve.  Must not be &lt;jk&gt;null&lt;/jk&gt; or a {@link NullPointerException} is thrown, though individual elements can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">425</span><span id="line-425">    * @return An array with resolved strings.  Elements are &lt;jk&gt;null&lt;/jk&gt; where the corresponding input element was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">426</span><span id="line-426">    */</span>
+<span class="source-line-no">427</span><span id="line-427">   public String[] resolve(String[] in) {</span>
+<span class="source-line-no">428</span><span id="line-428">      var out = new String[in.length];</span>
+<span class="source-line-no">429</span><span id="line-429">      for (var i = 0; i &lt; in.length; i++)</span>
+<span class="source-line-no">430</span><span id="line-430">         out[i] = resolve(in[i]);</span>
+<span class="source-line-no">431</span><span id="line-431">      return out;</span>
+<span class="source-line-no">432</span><span id="line-432">   }</span>
+<span class="source-line-no">433</span><span id="line-433"></span>
+<span class="source-line-no">434</span><span id="line-434">   /**</span>
+<span class="source-line-no">435</span><span id="line-435">    * Convenience method for resolving variables in arbitrary objects.</span>
+<span class="source-line-no">436</span><span id="line-436">    *</span>
+<span class="source-line-no">437</span><span id="line-437">    * &lt;p&gt;</span>
+<span class="source-line-no">438</span><span id="line-438">    * Supports resolving variables in the following object types:</span>
+<span class="source-line-no">439</span><span id="line-439">    * &lt;ul&gt;</span>
+<span class="source-line-no">440</span><span id="line-440">    *    &lt;li&gt;{@link CharSequence}</span>
+<span class="source-line-no">441</span><span id="line-441">    *    &lt;li&gt;Arrays containing values of type {@link CharSequence}.</span>
+<span class="source-line-no">442</span><span id="line-442">    *    &lt;li&gt;Collections containing values of type {@link CharSequence}.</span>
+<span class="source-line-no">443</span><span id="line-443">    *       &lt;br&gt;Collection class must have a no-arg constructor.</span>
+<span class="source-line-no">444</span><span id="line-444">    *    &lt;li&gt;Maps containing values of type {@link CharSequence}.</span>
+<span class="source-line-no">445</span><span id="line-445">    *       &lt;br&gt;Map class must have a no-arg constructor.</span>
+<span class="source-line-no">446</span><span id="line-446">    * &lt;/ul&gt;</span>
+<span class="source-line-no">447</span><span id="line-447">    *</span>
+<span class="source-line-no">448</span><span id="line-448">    * @param &lt;T&gt; The value type.</span>
+<span class="source-line-no">449</span><span id="line-449">    * @param o The object.  Can be &lt;jk&gt;null&lt;/jk&gt; (returns &lt;jk&gt;null&lt;/jk&gt;).</span>
+<span class="source-line-no">450</span><span id="line-450">    * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was</span>
+<span class="source-line-no">451</span><span id="line-451">    * needed.  Returns &lt;jk&gt;null&lt;/jk&gt; if the input was &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">452</span><span id="line-452">    */</span>
+<span class="source-line-no">453</span><span id="line-453">   @SuppressWarnings({</span>
+<span class="source-line-no">454</span><span id="line-454">      "java:S3776", // Cognitive complexity acceptable for recursive resolution logic</span>
+<span class="source-line-no">455</span><span id="line-455">      "rawtypes", // Raw types necessary for generic resolution</span>
+<span class="source-line-no">456</span><span id="line-456">      "unchecked" // Type erasure requires unchecked operations</span>
+<span class="source-line-no">457</span><span id="line-457">   })</span>
+<span class="source-line-no">458</span><span id="line-458">   public &lt;T&gt; T resolve(T o) {</span>
+<span class="source-line-no">459</span><span id="line-459">      if (o == null)</span>
+<span class="source-line-no">460</span><span id="line-460">         return null;</span>
+<span class="source-line-no">461</span><span id="line-461">      if (o instanceof CharSequence o2)</span>
+<span class="source-line-no">462</span><span id="line-462">         return (T)resolve(o2.toString());</span>
+<span class="source-line-no">463</span><span id="line-463">      if (isArray(o)) {</span>
+<span class="source-line-no">464</span><span id="line-464">         if (! containsVars(o))</span>
+<span class="source-line-no">465</span><span id="line-465">            return o;</span>
+<span class="source-line-no">466</span><span id="line-466">         var o2 = Array.newInstance(o.getClass().getComponentType(), Array.getLength(o));</span>
+<span class="source-line-no">467</span><span id="line-467">         for (var i = 0; i &lt; Array.getLength(o); i++)</span>
+<span class="source-line-no">468</span><span id="line-468">            Array.set(o2, i, resolve(Array.get(o, i)));</span>
+<span class="source-line-no">469</span><span id="line-469">         return (T)o2;</span>
 <span class="source-line-no">470</span><span id="line-470">      }</span>
-<span class="source-line-no">471</span><span id="line-471">      if (o instanceof Map o2) {</span>
+<span class="source-line-no">471</span><span id="line-471">      if (o instanceof Set o2) {</span>
 <span class="source-line-no">472</span><span id="line-472">         try {</span>
 <span class="source-line-no">473</span><span id="line-473">            if (! containsVars(o2))</span>
 <span class="source-line-no">474</span><span id="line-474">               return o;</span>
-<span class="source-line-no">475</span><span id="line-475">            Map o3 = info(o).getDeclaredConstructor(x -&gt; x.isPublic() &amp;&amp; x.getParameterCount() == 0).map(ci -&gt; safe(() -&gt; (Map)ci.inner().newInstance())).orElseGet(LinkedHashMap::new);</span>
-<span class="source-line-no">476</span><span id="line-476">            Map o4 = o3;</span>
-<span class="source-line-no">477</span><span id="line-477">            o2.forEach((k, v) -&gt; o4.put(k, resolve(v)));</span>
+<span class="source-line-no">475</span><span id="line-475">            Set o3 = info(o).getDeclaredConstructor(x -&gt; x.isPublic() &amp;&amp; x.getParameterCount() == 0).map(ci -&gt; safe(() -&gt; (Set)ci.inner().newInstance())).orElseGet(LinkedHashSet::new);</span>
+<span class="source-line-no">476</span><span id="line-476">            Set o4 = o3;</span>
+<span class="source-line-no">477</span><span id="line-477">            o2.forEach(x -&gt; o4.add(resolve(x)));</span>
 <span class="source-line-no">478</span><span id="line-478">            return (T)o3;</span>
 <span class="source-line-no">479</span><span id="line-479">         } catch (VarResolverException e) {</span>
 <span class="source-line-no">480</span><span id="line-480">            throw e;</span>
 <span class="source-line-no">481</span><span id="line-481">         } catch (Exception e) {</span>
-<span class="source-line-no">482</span><span id="line-482">            throw new VarResolverException(e, "Problem occurred resolving map.");</span>
+<span class="source-line-no">482</span><span id="line-482">            throw new VarResolverException(e, "Problem occurred resolving set.");</span>
 <span class="source-line-no">483</span><span id="line-483">         }</span>
 <span class="source-line-no">484</span><span id="line-484">      }</span>
-<span class="source-line-no">485</span><span id="line-485">      return o;</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   /**</span>
-<span class="source-line-no">489</span><span id="line-489">    * Resolves variables in the specified string and sends the output to the specified writer.</span>
-<span class="source-line-no">490</span><span id="line-490">    *</span>
-<span class="source-line-no">491</span><span id="line-491">    * &lt;p&gt;</span>
-<span class="source-line-no">492</span><span id="line-492">    * More efficient than first parsing to a string and then serializing to the writer since this method doesn't need</span>
-<span class="source-line-no">493</span><span id="line-493">    * to construct a large string.</span>
-<span class="source-line-no">494</span><span id="line-494">    *</span>
-<span class="source-line-no">495</span><span id="line-495">    * @param s The string to resolve variables in.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the writer is left unchanged.</span>
-<span class="source-line-no">496</span><span id="line-496">    * @param out The writer to write to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">497</span><span id="line-497">    * @return The same writer.</span>
-<span class="source-line-no">498</span><span id="line-498">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">499</span><span id="line-499">    */</span>
-<span class="source-line-no">500</span><span id="line-500">   public Writer resolveTo(String s, Writer out) throws IOException {</span>
-<span class="source-line-no">501</span><span id="line-501">      if (s == null)</span>
-<span class="source-line-no">502</span><span id="line-502">         return out;</span>
-<span class="source-line-no">503</span><span id="line-503">      if (s.isEmpty()) {</span>
-<span class="source-line-no">504</span><span id="line-504">         return out;</span>
-<span class="source-line-no">505</span><span id="line-505">      }</span>
-<span class="source-line-no">506</span><span id="line-506">      return context.compile(s).resolveTo(this, out);</span>
-<span class="source-line-no">507</span><span id="line-507">   }</span>
-<span class="source-line-no">508</span><span id="line-508"></span>
-<span class="source-line-no">509</span><span id="line-509">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">510</span><span id="line-510">      // @formatter:off</span>
-<span class="source-line-no">511</span><span id="line-511">      return filteredBeanPropertyMap()</span>
-<span class="source-line-no">512</span><span id="line-512">         .a("context.beanStore", this.context.beanStore)</span>
-<span class="source-line-no">513</span><span id="line-513">         .a("var", this.context.getVarMap().keySet())</span>
-<span class="source-line-no">514</span><span id="line-514">         .a("session.beanStore", beanStore);</span>
-<span class="source-line-no">515</span><span id="line-515">      // @formatter:on</span>
-<span class="source-line-no">516</span><span id="line-516">   }</span>
-<span class="source-line-no">517</span><span id="line-517"></span>
-<span class="source-line-no">518</span><span id="line-518">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">519</span><span id="line-519">   public String toString() {</span>
-<span class="source-line-no">520</span><span id="line-520">      return r(properties());</span>
-<span class="source-line-no">521</span><span id="line-521">   }</span>
-<span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">   /**</span>
-<span class="source-line-no">524</span><span id="line-524">    * Returns the {@link Var} with the specified name.</span>
-<span class="source-line-no">525</span><span id="line-525">    *</span>
-<span class="source-line-no">526</span><span id="line-526">    * @param name The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">527</span><span id="line-527">    * @return The {@link Var} instance, or &lt;jk&gt;null&lt;/jk&gt; if no &lt;c&gt;Var&lt;/c&gt; is associated with the specified name.</span>
-<span class="source-line-no">528</span><span id="line-528">    */</span>
-<span class="source-line-no">529</span><span id="line-529">   protected Var getVar(String name) {</span>
-<span class="source-line-no">530</span><span id="line-530">      Var v = this.context.getVarMap().get(name);</span>
-<span class="source-line-no">531</span><span id="line-531">      return nn(v) &amp;&amp; v.canResolve(this) ? v : null;</span>
-<span class="source-line-no">532</span><span id="line-532">   }</span>
-<span class="source-line-no">533</span><span id="line-533"></span>
-<span class="source-line-no">534</span><span id="line-534">   /**</span>
-<span class="source-line-no">535</span><span id="line-535">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this session is resolving HTML-doc chrome and substitutions should be XML-escaped.</span>
-<span class="source-line-no">536</span><span id="line-536">    *</span>
-<span class="source-line-no">537</span><span id="line-537">    * @return &lt;jk&gt;true&lt;/jk&gt; if HTML-doc chrome encoding is enabled.</span>
-<span class="source-line-no">538</span><span id="line-538">    */</span>
-<span class="source-line-no">539</span><span id="line-539">   boolean isHtmlDocEncode() {</span>
-<span class="source-line-no">540</span><span id="line-540">      return htmlDocEncode;</span>
-<span class="source-line-no">541</span><span id="line-541">   }</span>
-<span class="source-line-no">542</span><span id="line-542"></span>
-<span class="source-line-no">543</span><span id="line-543">   /**</span>
-<span class="source-line-no">544</span><span id="line-544">    * Returns &lt;jk&gt;true&lt;/jk&gt; if {@code varName} must be left unresolved in script/style chrome.</span>
-<span class="source-line-no">545</span><span id="line-545">    *</span>
-<span class="source-line-no">546</span><span id="line-546">    * @param varName The SVL var prefix (e.g. &lt;js&gt;"RQ"&lt;/js&gt;).</span>
-<span class="source-line-no">547</span><span id="line-547">    * @return &lt;jk&gt;true&lt;/jk&gt; if the var should fall through like an unknown var.</span>
-<span class="source-line-no">548</span><span id="line-548">    */</span>
-<span class="source-line-no">549</span><span id="line-549">   boolean isScriptStyleRefused(String varName) {</span>
-<span class="source-line-no">550</span><span id="line-550">      return scriptStyleRefuse &amp;&amp; SCRIPT_STYLE_REFUSED_VARS.contains(varName);</span>
-<span class="source-line-no">551</span><span id="line-551">   }</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">   /**</span>
-<span class="source-line-no">554</span><span id="line-554">    * XML-escapes an SVL substitution when HTML-doc chrome encoding is enabled and the var is not passthrough.</span>
-<span class="source-line-no">555</span><span id="line-555">    *</span>
-<span class="source-line-no">556</span><span id="line-556">    * @param varName The SVL var prefix.</span>
-<span class="source-line-no">557</span><span id="line-557">    * @param replacement The resolved substitution text.</span>
-<span class="source-line-no">558</span><span id="line-558">    * @return The possibly escaped replacement.</span>
-<span class="source-line-no">559</span><span id="line-559">    */</span>
-<span class="source-line-no">560</span><span id="line-560">   String applyHtmlDocChromeEncoding(String varName, String replacement) {</span>
-<span class="source-line-no">561</span><span id="line-561">      if (! htmlDocEncode || replacement == null || HTML_DOC_PASSTHROUGH_VARS.contains(varName))</span>
-<span class="source-line-no">562</span><span id="line-562">         return replacement;</span>
-<span class="source-line-no">563</span><span id="line-563">      return StringUtils.escapeXml(replacement);</span>
-<span class="source-line-no">564</span><span id="line-564">   }</span>
-<span class="source-line-no">565</span><span id="line-565">}</span>
+<span class="source-line-no">485</span><span id="line-485">      if (o instanceof List o2) {</span>
+<span class="source-line-no">486</span><span id="line-486">         try {</span>
+<span class="source-line-no">487</span><span id="line-487">            if (! containsVars(o2))</span>
+<span class="source-line-no">488</span><span id="line-488">               return o;</span>
+<span class="source-line-no">489</span><span id="line-489">            List o3 = info(o).getDeclaredConstructor(x -&gt; x.isPublic() &amp;&amp; x.getParameterCount() == 0).map(ci -&gt; safe(() -&gt; (List)ci.inner().newInstance())).orElseGet(() -&gt; list());</span>
+<span class="source-line-no">490</span><span id="line-490">            List o4 = o3;</span>
+<span class="source-line-no">491</span><span id="line-491">            o2.forEach(x -&gt; o4.add(resolve(x)));</span>
+<span class="source-line-no">492</span><span id="line-492">            return (T)o3;</span>
+<span class="source-line-no">493</span><span id="line-493">         } catch (VarResolverException e) {</span>
+<span class="source-line-no">494</span><span id="line-494">            throw e;</span>
+<span class="source-line-no">495</span><span id="line-495">         } catch (Exception e) {</span>
+<span class="source-line-no">496</span><span id="line-496">            throw new VarResolverException(e, "Problem occurred resolving collection.");</span>
+<span class="source-line-no">497</span><span id="line-497">         }</span>
+<span class="source-line-no">498</span><span id="line-498">      }</span>
+<span class="source-line-no">499</span><span id="line-499">      if (o instanceof Map o2) {</span>
+<span class="source-line-no">500</span><span id="line-500">         try {</span>
+<span class="source-line-no">501</span><span id="line-501">            if (! containsVars(o2))</span>
+<span class="source-line-no">502</span><span id="line-502">               return o;</span>
+<span class="source-line-no">503</span><span id="line-503">            Map o3 = info(o).getDeclaredConstructor(x -&gt; x.isPublic() &amp;&amp; x.getParameterCount() == 0).map(ci -&gt; safe(() -&gt; (Map)ci.inner().newInstance())).orElseGet(LinkedHashMap::new);</span>
+<span class="source-line-no">504</span><span id="line-504">            Map o4 = o3;</span>
+<span class="source-line-no">505</span><span id="line-505">            o2.forEach((k, v) -&gt; o4.put(k, resolve(v)));</span>
+<span class="source-line-no">506</span><span id="line-506">            return (T)o3;</span>
+<span class="source-line-no">507</span><span id="line-507">         } catch (VarResolverException e) {</span>
+<span class="source-line-no">508</span><span id="line-508">            throw e;</span>
+<span class="source-line-no">509</span><span id="line-509">         } catch (Exception e) {</span>
+<span class="source-line-no">510</span><span id="line-510">            throw new VarResolverException(e, "Problem occurred resolving map.");</span>
+<span class="source-line-no">511</span><span id="line-511">         }</span>
+<span class="source-line-no">512</span><span id="line-512">      }</span>
+<span class="source-line-no">513</span><span id="line-513">      return o;</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   /**</span>
+<span class="source-line-no">517</span><span id="line-517">    * Resolves variables in the specified string and sends the output to the specified writer.</span>
+<span class="source-line-no">518</span><span id="line-518">    *</span>
+<span class="source-line-no">519</span><span id="line-519">    * &lt;p&gt;</span>
+<span class="source-line-no">520</span><span id="line-520">    * More efficient than first parsing to a string and then serializing to the writer since this method doesn't need</span>
+<span class="source-line-no">521</span><span id="line-521">    * to construct a large string.</span>
+<span class="source-line-no">522</span><span id="line-522">    *</span>
+<span class="source-line-no">523</span><span id="line-523">    * @param s The string to resolve variables in.  Can be &lt;jk&gt;null&lt;/jk&gt;, in which case the writer is left unchanged.</span>
+<span class="source-line-no">524</span><span id="line-524">    * @param out The writer to write to.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">525</span><span id="line-525">    * @return The same writer.</span>
+<span class="source-line-no">526</span><span id="line-526">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">527</span><span id="line-527">    */</span>
+<span class="source-line-no">528</span><span id="line-528">   public Writer resolveTo(String s, Writer out) throws IOException {</span>
+<span class="source-line-no">529</span><span id="line-529">      if (s == null)</span>
+<span class="source-line-no">530</span><span id="line-530">         return out;</span>
+<span class="source-line-no">531</span><span id="line-531">      if (s.isEmpty()) {</span>
+<span class="source-line-no">532</span><span id="line-532">         return out;</span>
+<span class="source-line-no">533</span><span id="line-533">      }</span>
+<span class="source-line-no">534</span><span id="line-534">      return context.compile(s).resolveTo(this, out);</span>
+<span class="source-line-no">535</span><span id="line-535">   }</span>
+<span class="source-line-no">536</span><span id="line-536"></span>
+<span class="source-line-no">537</span><span id="line-537">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">538</span><span id="line-538">      // @formatter:off</span>
+<span class="source-line-no">539</span><span id="line-539">      return filteredBeanPropertyMap()</span>
+<span class="source-line-no">540</span><span id="line-540">         .a("context.beanStore", this.context.beanStore)</span>
+<span class="source-line-no">541</span><span id="line-541">         .a("var", this.context.getVarMap().keySet())</span>
+<span class="source-line-no">542</span><span id="line-542">         .a("session.beanStore", beanStore);</span>
+<span class="source-line-no">543</span><span id="line-543">      // @formatter:on</span>
+<span class="source-line-no">544</span><span id="line-544">   }</span>
+<span class="source-line-no">545</span><span id="line-545"></span>
+<span class="source-line-no">546</span><span id="line-546">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">547</span><span id="line-547">   public String toString() {</span>
+<span class="source-line-no">548</span><span id="line-548">      return r(properties());</span>
+<span class="source-line-no">549</span><span id="line-549">   }</span>
+<span class="source-line-no">550</span><span id="line-550"></span>
+<span class="source-line-no">551</span><span id="line-551">   /**</span>
+<span class="source-line-no">552</span><span id="line-552">    * Returns the {@link Var} with the specified name.</span>
+<span class="source-line-no">553</span><span id="line-553">    *</span>
+<span class="source-line-no">554</span><span id="line-554">    * @param name The var name (e.g. &lt;js&gt;"S"&lt;/js&gt;).  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">555</span><span id="line-555">    * @return The {@link Var} instance, or &lt;jk&gt;null&lt;/jk&gt; if no &lt;c&gt;Var&lt;/c&gt; is associated with the specified name.</span>
+<span class="source-line-no">556</span><span id="line-556">    */</span>
+<span class="source-line-no">557</span><span id="line-557">   protected Var getVar(String name) {</span>
+<span class="source-line-no">558</span><span id="line-558">      Var v = this.context.getVarMap().get(name);</span>
+<span class="source-line-no">559</span><span id="line-559">      return nn(v) &amp;&amp; v.canResolve(this) ? v : null;</span>
+<span class="source-line-no">560</span><span id="line-560">   }</span>
+<span class="source-line-no">561</span><span id="line-561"></span>
+<span class="source-line-no">562</span><span id="line-562">   /**</span>
+<span class="source-line-no">563</span><span id="line-563">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this session is resolving HTML-doc chrome and substitutions should be XML-escaped.</span>
+<span class="source-line-no">564</span><span id="line-564">    *</span>
+<span class="source-line-no">565</span><span id="line-565">    * @return &lt;jk&gt;true&lt;/jk&gt; if HTML-doc chrome encoding is enabled.</span>
+<span class="source-line-no">566</span><span id="line-566">    */</span>
+<span class="source-line-no">567</span><span id="line-567">   boolean isHtmlDocEncode() {</span>
+<span class="source-line-no">568</span><span id="line-568">      return htmlDocEncode;</span>
+<span class="source-line-no">569</span><span id="line-569">   }</span>
+<span class="source-line-no">570</span><span id="line-570"></span>
+<span class="source-line-no">571</span><span id="line-571">   /**</span>
+<span class="source-line-no">572</span><span id="line-572">    * Returns &lt;jk&gt;true&lt;/jk&gt; if {@code varName} must be left unresolved in script/style chrome.</span>
+<span class="source-line-no">573</span><span id="line-573">    *</span>
+<span class="source-line-no">574</span><span id="line-574">    * @param varName The SVL var prefix (e.g. &lt;js&gt;"RQ"&lt;/js&gt;).</span>
+<span class="source-line-no">575</span><span id="line-575">    * @return &lt;jk&gt;true&lt;/jk&gt; if the var should fall through like an unknown var.</span>
+<span class="source-line-no">576</span><span id="line-576">    */</span>
+<span class="source-line-no">577</span><span id="line-577">   boolean isScriptStyleRefused(String varName) {</span>
+<span class="source-line-no">578</span><span id="line-578">      return scriptStyleRefuse &amp;&amp; SCRIPT_STYLE_REFUSED_VARS.contains(varName);</span>
+<span class="source-line-no">579</span><span id="line-579">   }</span>
+<span class="source-line-no">580</span><span id="line-580"></span>
+<span class="source-line-no">581</span><span id="line-581">   /**</span>
+<span class="source-line-no">582</span><span id="line-582">    * XML-escapes an SVL substitution when HTML-doc chrome encoding is enabled and the var is not passthrough.</span>
+<span class="source-line-no">583</span><span id="line-583">    *</span>
+<span class="source-line-no">584</span><span id="line-584">    * @param varName The SVL var prefix.</span>
+<span class="source-line-no">585</span><span id="line-585">    * @param replacement The resolved substitution text.</span>
+<span class="source-line-no">586</span><span id="line-586">    * @return The possibly escaped replacement.</span>
+<span class="source-line-no">587</span><span id="line-587">    */</span>
+<span class="source-line-no">588</span><span id="line-588">   String applyHtmlDocChromeEncoding(String varName, String replacement) {</span>
+<span class="source-line-no">589</span><span id="line-589">      if (! htmlDocEncode || replacement == null || HTML_DOC_PASSTHROUGH_VARS.contains(varName))</span>
+<span class="source-line-no">590</span><span id="line-590">         return replacement;</span>
+<span class="source-line-no">591</span><span id="line-591">      return StringUtils.escapeXml(replacement);</span>
+<span class="source-line-no">592</span><span id="line-592">   }</span>
+<span class="source-line-no">593</span><span id="line-593">}</span>
 
 
 

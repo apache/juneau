@@ -148,21 +148,28 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 	}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * {@code #{size(json)}} — returns the count: object key count, array length, string</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * length, or {@code 0} for null/primitives.</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * {@code #{size(x)}} — returns the count as a number: element count of a collection or map value, otherwise (for</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * JSON text) object key count, array length, string length, or {@code 0} for null/primitives.</em>
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Size <strong class="jxr_keyword">extends</strong> TypedFunction {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> Size <strong class="jxr_keyword">implements</strong> <a name="VarFunction" href="../../../../../../org/apache/juneau/commons/svl/VarFunction.html#VarFunction">VarFunction</a> {
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 		@Override <strong class="jxr_keyword">public</strong> String name() { <strong class="jxr_keyword">return</strong> <span class="jxr_string">"size"</span>; }
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">public</strong> String invoke(String json) {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<strong class="jxr_keyword">var</strong> v = MiniJson.parse(json);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> <span class="jxr_string">"0"</span>;
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 			<strong class="jxr_keyword">if</strong> (v instanceof Map&lt;?,?&gt; v2) <strong class="jxr_keyword">return</strong> String.valueOf(v2.size());
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">if</strong> (v instanceof List&lt;?&gt; v3) <strong class="jxr_keyword">return</strong> String.valueOf(v3.size());
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (v instanceof String v4) <strong class="jxr_keyword">return</strong> String.valueOf(v4.length());
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"0"</span>;
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		}
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> }
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> minArity() { <strong class="jxr_keyword">return</strong> 1; }
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		@Override <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> maxArity() { <strong class="jxr_keyword">return</strong> 1; }
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		@Override <strong class="jxr_keyword">public</strong> String invoke(VarResolverSession session, List&lt;Object&gt; args) { <strong class="jxr_keyword">return</strong> String.valueOf(invokeValue(session, args)); }
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		@Override <strong class="jxr_keyword">public</strong> Object invokeValue(VarResolverSession session, List&lt;Object&gt; args) {
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 			<strong class="jxr_keyword">var</strong> o = args.get(0);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> 0L;
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Collection&lt;?&gt; c) <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)c.size();
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			<strong class="jxr_keyword">if</strong> (o instanceof Map&lt;?,?&gt; m) <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)m.size();
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">var</strong> v = MiniJson.parse(o.toString());
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			<strong class="jxr_keyword">if</strong> (v == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> 0L;
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">if</strong> (v instanceof Map&lt;?,?&gt; v2) <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)v2.size();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (v instanceof List&lt;?&gt; v3) <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)v3.size();
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 			<strong class="jxr_keyword">if</strong> (v instanceof String v4) <strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">long</strong>)v4.length();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">return</strong> 0L;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		}
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	}
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

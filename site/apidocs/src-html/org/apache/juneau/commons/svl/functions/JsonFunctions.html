@@ -153,21 +153,28 @@
 <span class="source-line-no">140</span><span id="line-140">   }</span>
 <span class="source-line-no">141</span><span id="line-141"></span>
 <span class="source-line-no">142</span><span id="line-142">   /**</span>
-<span class="source-line-no">143</span><span id="line-143">    * {@code #{size(json)}} — returns the count: object key count, array length, string</span>
-<span class="source-line-no">144</span><span id="line-144">    * length, or {@code 0} for null/primitives.</span>
+<span class="source-line-no">143</span><span id="line-143">    * {@code #{size(x)}} — returns the count as a number: element count of a collection or map value, otherwise (for</span>
+<span class="source-line-no">144</span><span id="line-144">    * JSON text) object key count, array length, string length, or {@code 0} for null/primitives.</span>
 <span class="source-line-no">145</span><span id="line-145">    */</span>
-<span class="source-line-no">146</span><span id="line-146">   public static class Size extends TypedFunction {</span>
+<span class="source-line-no">146</span><span id="line-146">   public static class Size implements VarFunction {</span>
 <span class="source-line-no">147</span><span id="line-147">      @Override public String name() { return "size"; }</span>
-<span class="source-line-no">148</span><span id="line-148">      public String invoke(String json) {</span>
-<span class="source-line-no">149</span><span id="line-149">         var v = MiniJson.parse(json);</span>
-<span class="source-line-no">150</span><span id="line-150">         if (v == null) return "0";</span>
-<span class="source-line-no">151</span><span id="line-151">         if (v instanceof Map&lt;?,?&gt; v2) return String.valueOf(v2.size());</span>
-<span class="source-line-no">152</span><span id="line-152">         if (v instanceof List&lt;?&gt; v3) return String.valueOf(v3.size());</span>
-<span class="source-line-no">153</span><span id="line-153">         if (v instanceof String v4) return String.valueOf(v4.length());</span>
-<span class="source-line-no">154</span><span id="line-154">         return "0";</span>
-<span class="source-line-no">155</span><span id="line-155">      }</span>
-<span class="source-line-no">156</span><span id="line-156">   }</span>
-<span class="source-line-no">157</span><span id="line-157">}</span>
+<span class="source-line-no">148</span><span id="line-148">      @Override public int minArity() { return 1; }</span>
+<span class="source-line-no">149</span><span id="line-149">      @Override public int maxArity() { return 1; }</span>
+<span class="source-line-no">150</span><span id="line-150">      @Override public String invoke(VarResolverSession session, List&lt;Object&gt; args) { return String.valueOf(invokeValue(session, args)); }</span>
+<span class="source-line-no">151</span><span id="line-151">      @Override public Object invokeValue(VarResolverSession session, List&lt;Object&gt; args) {</span>
+<span class="source-line-no">152</span><span id="line-152">         var o = args.get(0);</span>
+<span class="source-line-no">153</span><span id="line-153">         if (o == null) return 0L;</span>
+<span class="source-line-no">154</span><span id="line-154">         if (o instanceof Collection&lt;?&gt; c) return (long)c.size();</span>
+<span class="source-line-no">155</span><span id="line-155">         if (o instanceof Map&lt;?,?&gt; m) return (long)m.size();</span>
+<span class="source-line-no">156</span><span id="line-156">         var v = MiniJson.parse(o.toString());</span>
+<span class="source-line-no">157</span><span id="line-157">         if (v == null) return 0L;</span>
+<span class="source-line-no">158</span><span id="line-158">         if (v instanceof Map&lt;?,?&gt; v2) return (long)v2.size();</span>
+<span class="source-line-no">159</span><span id="line-159">         if (v instanceof List&lt;?&gt; v3) return (long)v3.size();</span>
+<span class="source-line-no">160</span><span id="line-160">         if (v instanceof String v4) return (long)v4.length();</span>
+<span class="source-line-no">161</span><span id="line-161">         return 0L;</span>
+<span class="source-line-no">162</span><span id="line-162">      }</span>
+<span class="source-line-no">163</span><span id="line-163">   }</span>
+<span class="source-line-no">164</span><span id="line-164">}</span>
 
 
 

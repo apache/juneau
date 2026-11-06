@@ -74,9 +74,7 @@ loadScripts(document, 'script');</script>
 <h1 title="Class JsonFunctions.Size" class="title">Class JsonFunctions.Size</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../TypedFunction.html" title="class in org.apache.juneau.commons.svl">org.apache.juneau.commons.svl.TypedFunction</a>
 <div class="inheritance">org.apache.juneau.commons.svl.functions.JsonFunctions.Size</div>
-</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
@@ -89,9 +87,10 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/commons/svl/functions/JsonFunctions.html#line-146">JsonFunctions.Size</a></span>
-<span class="extends-implements">extends <a href="../TypedFunction.html" title="class in org.apache.juneau.commons.svl">TypedFunction</a></span></div>
-<div class="block"><code>#{size(json)}</code> — returns the count: object key count, array length, string
- length, or <code>0</code> for null/primitives.</div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a></span></div>
+<div class="block"><code>#{size(x)}</code> — returns the count as a number: element count of a collection or map value, otherwise (for
+ JSON text) object key count, array length, string length, or <code>0</code> for null/primitives.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -120,20 +119,36 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(java.lang.String)" class="member-name-link">invoke</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#name()" class="member-name-link">name</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invoke</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Invokes this function with already-resolved, type-coerced arguments.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)" class="member-name-link">invokeValue</a><wbr>(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Typed variant of <a href="../VarFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)"><code>VarFunction.invoke(VarResolverSession, List)</code></a> used by <c>#{...}</c> expressions.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#maxArity()" class="member-name-link">maxArity</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Maximum argument count this function accepts.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#minArity()" class="member-name-link">minArity</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Minimum argument count this function accepts.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#name()" class="member-name-link">name</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The function's invocation name as it appears between <code>#{}</code> and the opening
  parenthesis in the template.</div>
 </div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.commons.svl.TypedFunction">Methods inherited from class&nbsp;org.apache.juneau.commons.svl.<a href="../TypedFunction.html" title="class in org.apache.juneau.commons.svl">TypedFunction</a></h3>
-<code><a href="../TypedFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">invoke</a>, <a href="../TypedFunction.html#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">invokeValue</a>, <a href="../TypedFunction.html#maxArity()">maxArity</a>, <a href="../TypedFunction.html#minArity()">minArity</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -171,15 +186,89 @@ loadScripts(document, 'script');</script>
  parenthesis in the template. Must consist of ASCII letters, digits, and underscores; must
  begin with a letter.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../VarFunction.html#name()">name</a></code>&nbsp;in interface&nbsp;<code><a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a></code></dd>
 <dt>Returns:</dt>
 <dd>The invocation name. Never <code>null</code> or empty.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="invoke(java.lang.String)">
+<section class="detail" id="minArity()">
+<h3>minArity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html#line-148">minArity</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../VarFunction.html#minArity()">VarFunction</a></code></span></div>
+<div class="block">Minimum argument count this function accepts.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../VarFunction.html#minArity()">minArity</a></code>&nbsp;in interface&nbsp;<code><a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a></code></dd>
+<dt>Returns:</dt>
+<dd>The minimum number of args. <code>0</code> means the function may be called with no
+    args. Returns <code>-1</code> for "any number of args" — equivalent to declaring
+    <code>minArity == 0 &amp;&amp; maxArity == Integer.MAX_VALUE</code>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="maxArity()">
+<h3>maxArity</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html#line-149">maxArity</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../VarFunction.html#maxArity()">VarFunction</a></code></span></div>
+<div class="block">Maximum argument count this function accepts.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../VarFunction.html#maxArity()">maxArity</a></code>&nbsp;in interface&nbsp;<code><a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a></code></dd>
+<dt>Returns:</dt>
+<dd>The maximum number of args, or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html#MAX_VALUE" title="class or interface in java.lang" class="external-link"><code>Integer.MAX_VALUE</code></a> for unbounded variadic
+    functions.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">
 <h3>invoke</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html#line-148">invoke</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;json)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html#line-150">invoke</a></span><wbr><span class="parameters">(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../VarFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">VarFunction</a></code></span></div>
+<div class="block">Invokes this function with already-resolved, type-coerced arguments.
+
+ <p>
+ The runtime resolves each <code>#{...}</code> arg template against the session, then coerces
+ the resolved string to the target Java type via <code>ArgCoercer</code>. The resulting
+ <code>List&lt;Object&gt;</code> is passed in here.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../VarFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">invoke</a></code>&nbsp;in interface&nbsp;<code><a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>session</code> - The current resolver session. Must not be <code>null</code>.</dd>
+<dd><code>args</code> - The coerced arguments. Size is in <code>[minArity(), maxArity()]</code>. Each
+    element is the type the function expects per its signature; for variadic /
+    <code>Object</code>-typed slots, elements remain <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>The function's result as a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>. May be empty but should not be
+    <code>null</code> (the runtime treats <code>null</code> as the empty string for SVL output).</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">
+<h3>invokeValue</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html#line-151">invokeValue</a></span><wbr><span class="parameters">(<a href="../VarResolverSession.html" title="class in org.apache.juneau.commons.svl">VarResolverSession</a>&nbsp;session,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;args)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../VarFunction.html#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">VarFunction</a></code></span></div>
+<div class="block">Typed variant of <a href="../VarFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)"><code>VarFunction.invoke(VarResolverSession, List)</code></a> used by <c>#{...}</c> expressions.
+
+ <p>
+ The default delegates to <a href="../VarFunction.html#invoke(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)"><code>VarFunction.invoke(VarResolverSession, List)</code></a>.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../VarFunction.html#invokeValue(org.apache.juneau.commons.svl.VarResolverSession,java.util.List)">invokeValue</a></code>&nbsp;in interface&nbsp;<code><a href="../VarFunction.html" title="interface in org.apache.juneau.commons.svl">VarFunction</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>session</code> - The session.</dd>
+<dd><code>args</code> - The already-evaluated arguments (typed values, not necessarily strings).</dd>
+<dt>Returns:</dt>
+<dd>The result; <jk>null</jk> means absent.</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -204,358 +204,370 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{xor(a, b)}</code> — returns <code>a XOR b</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CollectionFunctions.html" title="class in org.apache.juneau.commons.svl.functions">CollectionFunctions</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">Small collection helpers: <code>list</code> and <code>take</code>.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CollectionFunctions.ListFn.html" title="class in org.apache.juneau.commons.svl.functions">CollectionFunctions.ListFn</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block"><code>#{list(a, b, ...)}</code> — a list of the arguments; <code>list()</code> is empty.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CollectionFunctions.Take.html" title="class in org.apache.juneau.commons.svl.functions">CollectionFunctions.Take</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block"><code>#{take(list, n)}</code> — the first <code>n</code> elements of <code>list</code> (all of them if it is shorter).</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Conditional and routing functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.Coalesce.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Coalesce</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.Coalesce.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Coalesce</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{coalesce(a, b, ...)}</code> — replacement for the legacy <code>CO</code> variable.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.If.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.If</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.If.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.If</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{if(cond, then, else)}</code> — replacement for the legacy <code>IF</code> variable.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.NotEmpty.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.NotEmpty</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.NotEmpty.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.NotEmpty</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{notEmpty(s)}</code> — replacement for the legacy <code>NE</code> variable.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.Switch.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Switch</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="ConditionalFunctions.Switch.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Switch</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{switch(value, case1, val1, case2, val2, ..., default)}</code> — replacement for the
  legacy <code>SW</code> variable.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DateFunctions.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DateFunctions.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Date/time functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DateFunctions.FormatDate.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.FormatDate</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DateFunctions.FormatDate.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.FormatDate</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{formatDate(epoch)}</code> — renders <code>epoch</code> as ISO-8601 (<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/Instant.html#toString()" title="class or interface in java.time" class="external-link"><code>Instant.toString()</code></a>).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DateFunctions.Now.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.Now</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DateFunctions.Now.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.Now</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{now()}</code> — current epoch milliseconds (UTC).</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="DateFunctions.ParseDate.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.ParseDate</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="DateFunctions.ParseDate.html" title="class in org.apache.juneau.commons.svl.functions">DateFunctions.ParseDate</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{parseDate(s)}</code> / <code>#{parseDate(s, format)}</code> — parses an ISO-8601 string or
  a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter</code></a>-pattern string to epoch milliseconds.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Encoding / escaping functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.Base64Decode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.Base64Decode</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.Base64Decode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.Base64Decode</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{base64Decode(s)}</code> — Base64-decodes <code>s</code> (UTF-8 result).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.Base64Encode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.Base64Encode</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.Base64Encode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.Base64Encode</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{base64Encode(s)}</code> — Base64-encodes <code>s</code> (UTF-8).</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.HtmlEscape.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.HtmlEscape</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.HtmlEscape.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.HtmlEscape</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{htmlEscape(s)}</code> — escapes <code>&amp;</code>, <code>&lt;</code>, <code>&gt;</code>, <code>"</code>, <code>'</code>
  (the OWASP minimal HTML-injection-safe set).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.HtmlUnescape.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.HtmlUnescape</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.HtmlUnescape.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.HtmlUnescape</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{htmlUnescape(s)}</code> — inverse of <a href="EncodingFunctions.HtmlEscape.html" title="class in org.apache.juneau.commons.svl.functions"><code>EncodingFunctions.HtmlEscape</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.UrlDecode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.UrlDecode</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.UrlDecode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.UrlDecode</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{urlDecode(s)}</code> — URL-form-decodes.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.UrlEncode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.UrlEncode</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="EncodingFunctions.UrlEncode.html" title="class in org.apache.juneau.commons.svl.functions">EncodingFunctions.UrlEncode</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{urlEncode(s)}</code> — URL-form-encodes (i.e.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonFunctions.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonFunctions.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">JSON-navigation functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Get.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Get</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Get.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Get</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{get(json, key)}</code> — extracts <code>json[key]</code> (object) or <code>json[index]</code>
  (array, when <code>key</code> parses as int).</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonFunctions.JsonPath.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.JsonPath</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonFunctions.JsonPath.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.JsonPath</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{jsonPath(json, path)}</code> / <code>#{jsonPath(json, path, default)}</code> — extracts a
  value via a slash-rooted path (e.g.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Keys.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Keys</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Keys.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Keys</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{keys(json)}</code> — returns a JSON-array-shortcut string of an object's keys.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Size.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Size</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block"><code>#{size(json)}</code> — returns the count: object key count, array length, string
- length, or <code>0</code> for null/primitives.</div>
-</div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Values.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Values</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Size.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Size</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="block"><code>#{size(x)}</code> — returns the count as a number: element count of a collection or map value, otherwise (for
+ JSON text) object key count, array length, string length, or <code>0</code> for null/primitives.</div>
+</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="JsonFunctions.Values.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Values</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{values(json)}</code> — returns a JSON-array-shortcut string of an object's values (or array elements).</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Reserved <code>$op.*</code> operator functions targeted by the compiled expression grammar.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Add.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Add</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Add.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Add</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.add</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.And.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.And</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.And.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.And</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.and</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Div.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Div</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Div.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Div</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.div</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Elvis.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Elvis</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Elvis.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Elvis</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.elvis</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Eq.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Eq</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Eq.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Eq</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.eq</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Ge.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Ge</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Ge.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Ge</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.ge</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Gt.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Gt</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Gt.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Gt</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.gt</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Le.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Le</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Le.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Le</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.le</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Lt.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Lt</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Lt.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Lt</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.lt</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Matches.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Matches</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Matches.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Matches</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.matches</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Mod.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Mod</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Mod.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Mod</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.mod</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Mul.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Mul</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Mul.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Mul</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.mul</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Ne.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Ne</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Ne.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Ne</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.ne</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Neg.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Neg</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Neg.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Neg</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.neg</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Not.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Not</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Not.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Not</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.not</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Or.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Or</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Or.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Or</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.or</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Pos.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Pos</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Pos.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Pos</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.pos</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Project.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Project</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Project.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Project</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Registered stub for the evaluator-only <code>$op.project</code> operator.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Select.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Select</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Select.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Select</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Registered stub for the evaluator-only <code>$op.select</code> operator.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Sub.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Sub</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Sub.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Sub</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.sub</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="OpFunctions.Ternary.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Ternary</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="OpFunctions.Ternary.html" title="class in org.apache.juneau.commons.svl.functions">OpFunctions.Ternary</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>$op.ternary</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Random / UUID functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.Rand.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.Rand</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.Rand.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.Rand</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{rand()}</code> — random double in <code>[0.0, 1.0)</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandChoice.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandChoice</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandChoice.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandChoice</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{randChoice(option1, option2, ...)}</code> — variadic.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandInt.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandInt</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandInt.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandInt</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{randInt(max)}</code> — random int in <code>[0, max)</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandLong.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandLong</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandLong.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandLong</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{randLong(min, max)}</code> — random long in <code>[min, max]</code> (inclusive both ends).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandString.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandString</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.RandString.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.RandString</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{randString(length)}</code> — random alphanumeric <code>[A-Za-z0-9]</code> string of
  <code>length</code> characters.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RandomFunctions.Uuid.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.Uuid</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RandomFunctions.Uuid.html" title="class in org.apache.juneau.commons.svl.functions">RandomFunctions.Uuid</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{uuid()}</code> — random UUID via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/UUID.html#randomUUID()" title="class or interface in java.util" class="external-link"><code>UUID.randomUUID()</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RegexFunctions.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RegexFunctions.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Regex functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RegexFunctions.Extract.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.Extract</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RegexFunctions.Extract.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.Extract</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{extract(s, regex)}</code> / <code>#{extract(s, regex, group)}</code> — replacement for the
  legacy <code>PE</code> variable.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RegexFunctions.Match.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.Match</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RegexFunctions.Match.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.Match</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{match(s, regex)}</code> — replacement for the legacy <code>PM</code> variable.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="RegexFunctions.ReplaceRegex.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.ReplaceRegex</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="RegexFunctions.ReplaceRegex.html" title="class in org.apache.juneau.commons.svl.functions">RegexFunctions.ReplaceRegex</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{replaceRegex(s, regex, replacement)}</code> — replacement for the legacy <code>PR</code> variable.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">String-manipulation functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Concat.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Concat</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Concat.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Concat</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{concat(s1, s2, ...)}</code> — variadic string concatenation.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Contains.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Contains</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Contains.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Contains</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{contains(s, substr)}</code> — returns <code>"true"</code> or <code>"false"</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.EndsWith.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.EndsWith</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.EndsWith.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.EndsWith</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{endsWith(s, suffix)}</code> — returns <code>"true"</code> or <code>"false"</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Format.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Format</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Format.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Format</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{format(pattern, args...)}</code> — <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>Java formatter-style
  formatting</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Join.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Join</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Join.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Join</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{join(separator, parts...)}</code> — concatenates <code>parts</code> with <code>separator</code>
  between each pair.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Len.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Len</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Len.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Len</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{len(s)}</code> / <code>#{len(s, delimiter)}</code> — replacement for the legacy
  <code>LN</code> variable.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Lower.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Lower</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Lower.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Lower</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{lower(s)}</code> — replacement for the legacy <code>LC</code> variable.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.PathToken.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.PathToken</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.PathToken.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.PathToken</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{pathToken(s)}</code> — normalize a user-supplied path token for safe interpolation
  into a <code>path=</code> template.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Repeat.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Repeat</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Repeat.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Repeat</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{repeat(s, n)}</code> — repeats <code>s</code> <code>n</code> times.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Replace.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Replace</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Replace.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Replace</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{replace(s, target, replacement)}</code> — literal (non-regex) string replacement.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Reverse.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Reverse</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Reverse.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Reverse</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{reverse(s)}</code> — reverses the characters of <code>s</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Split.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Split</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Split.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Split</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{split(s, separator)}</code> — splits <code>s</code> on the literal <code>separator</code>
  substring.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.StartsWith.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StartsWith</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.StartsWith.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StartsWith</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{startsWith(s, prefix)}</code> — returns <code>"true"</code> or <code>"false"</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.StripLeading.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripLeading</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.StripLeading.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripLeading</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{stripLeading(s)}</code> — strips leading whitespace.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.StripSlashes.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripSlashes</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.StripSlashes.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripSlashes</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{stripSlashes(s)}</code> — strips leading and trailing <code>/</code> characters.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.StripTrailing.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripTrailing</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.StripTrailing.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.StripTrailing</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{stripTrailing(s)}</code> — strips trailing whitespace.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Substring.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Substring</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Substring.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Substring</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{substring(s, start)}</code> / <code>#{substring(s, start, end)}</code> — replacement for the
  legacy <code>ST</code> <code>SubstringVar</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Trim.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Trim</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Trim.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Trim</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{trim(s)}</code> — strips leading and trailing whitespace.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StringFunctions.Upper.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Upper</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StringFunctions.Upper.html" title="class in org.apache.juneau.commons.svl.functions">StringFunctions.Upper</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{upper(s)}</code> — replacement for the legacy <code>UC</code> variable.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StructureFunctions.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StructureFunctions.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block">Structure-producing and collection functions: <code>ul</code>, <code>ol</code>, <code>block</code>, <code>table</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Block.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Block</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Block.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Block</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{block(x)}</code>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Ol.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Ol</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Ol.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Ol</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{ol(items...)}</code> or <code>#{ol(list)}</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Table.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Table</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Table.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Table</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{table(headerList, rowsList)}</code>; each row is a list (or collection).</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Ul.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Ul</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="StructureFunctions.Ul.html" title="class in org.apache.juneau.commons.svl.functions">StructureFunctions.Ul</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{ul(items...)}</code> or <code>#{ul(list)}</code>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Type-conversion functions for the <code>#{...}</code> script catalog.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToBool.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToBool</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToBool.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToBool</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{toBool(s)}</code> — coerces <code>s</code> to <code>boolean</code> and renders as a String.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToDouble.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToDouble</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToDouble.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToDouble</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{toDouble(s)}</code> — coerces <code>s</code> to <code>double</code> and renders as a String.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToInt.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToInt</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToInt.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToInt</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{toInt(s)}</code> — coerces <code>s</code> to <code>int</code> and renders as a String.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToLong.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToLong</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="TypeConversionFunctions.ToLong.html" title="class in org.apache.juneau.commons.svl.functions">TypeConversionFunctions.ToLong</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block"><code>#{toLong(s)}</code> — coerces <code>s</code> to <code>long</code> and renders as a String.</div>
 </div>
 </div>

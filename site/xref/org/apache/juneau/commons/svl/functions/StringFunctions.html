@@ -347,7 +347,7 @@
 <a class="jxr_linenumber" name="L339" href="#L339">339</a> 		@Override <strong class="jxr_keyword">public</strong> String invoke(VarResolverSession session, List&lt;Object&gt; args) {
 <a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">var</strong> sep = args.get(0) == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : args.get(0).toString();
 <a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<em class="jxr_comment">// A single collection argument supplies the parts.</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			List&lt;?&gt; parts = args.size() == 2 &amp;&amp; args.get(1) instanceof Collection&lt;?&gt; c ? <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;(c) : args.subList(1, args.size());
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			List&lt;?&gt; parts = args.size() == 2 &amp;&amp; args.get(1) instanceof Collection&lt;?&gt; c ? CollectionFunctions.bounded(session, <span class="jxr_string">"join"</span>, c) : args.subList(1, args.size());
 <a class="jxr_linenumber" name="L343" href="#L343">343</a> 			<strong class="jxr_keyword">var</strong> sb = <strong class="jxr_keyword">new</strong> StringBuilder();
 <a class="jxr_linenumber" name="L344" href="#L344">344</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; parts.size(); i++) {
 <a class="jxr_linenumber" name="L345" href="#L345">345</a> 				<strong class="jxr_keyword">if</strong> (i &gt; 0) sb.append(sep);

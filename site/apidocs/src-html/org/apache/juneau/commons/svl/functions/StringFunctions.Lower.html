@@ -352,7 +352,7 @@
 <span class="source-line-no">339</span><span id="line-339">      @Override public String invoke(VarResolverSession session, List&lt;Object&gt; args) {</span>
 <span class="source-line-no">340</span><span id="line-340">         var sep = args.get(0) == null ? "" : args.get(0).toString();</span>
 <span class="source-line-no">341</span><span id="line-341">         // A single collection argument supplies the parts.</span>
-<span class="source-line-no">342</span><span id="line-342">         List&lt;?&gt; parts = args.size() == 2 &amp;&amp; args.get(1) instanceof Collection&lt;?&gt; c ? new ArrayList&lt;&gt;(c) : args.subList(1, args.size());</span>
+<span class="source-line-no">342</span><span id="line-342">         List&lt;?&gt; parts = args.size() == 2 &amp;&amp; args.get(1) instanceof Collection&lt;?&gt; c ? CollectionFunctions.bounded(session, "join", c) : args.subList(1, args.size());</span>
 <span class="source-line-no">343</span><span id="line-343">         var sb = new StringBuilder();</span>
 <span class="source-line-no">344</span><span id="line-344">         for (var i = 0; i &lt; parts.size(); i++) {</span>
 <span class="source-line-no">345</span><span id="line-345">            if (i &gt; 0) sb.append(sep);</span>
