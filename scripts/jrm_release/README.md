@@ -8,13 +8,14 @@ The step implementations behind `scripts/release.py`: one module per concern, im
 
 | Module | Role |
 |---|---|
-| `inventory.py` | Constants (repository, Nexus and dist URLs, mailing lists), the table of 27 steps with their phase and whether they are skippable, and version helpers. |
+| `inventory.py` | Constants (repository, Nexus and dist URLs, mailing lists), the table of 28 steps with their phase and whether they are skippable, and version helpers. |
 | `ctx.py` | The `Ctx` object every step receives (arguments, home, runner, Nexus, SVN, run file, credentials) and `StepError`. |
 | `runfile.py` | The `run.json` checkpoint (atomic writes, in-memory under `--dry-run`, refusal to read a corrupt file) and attempt directories. |
 | `runner.py` | The one place a command runs; under `--dry-run` a mutating command is printed, never executed. Masks secrets. |
 | `preflight.py` | The one registry of preconditions (tools, params, secrets present and valid, repo, release notes, remote state), run before a new release, by `--check`, and (tools and secrets only) on `--resume`. Results are `pass`, `fail` or `cant`; the Prerequisites and Release checks rows replay them. |
 | `prereqs.py` | An adapter that shows the preflight `tools` results as the Prerequisites row. |
 | `details.py` | Defaults and validation for the release details (pom defaults, branch default); the form is gone. |
+| `jdks.py` | JDK entry resolution (`~/jdk/jdk-N`, glob, path) and the `jdk-verify` step: `mvn verify` per JDK, results in `run.json`. |
 | `rc.py`, `vote.py`, `promote.py` | The release-candidate, vote and promote phase steps. |
 | `revert.py` | The `--revert` rows. |
 | `diffcheck.py` | A pure checker for the release plugin's two commits; callers pass diff text in. |

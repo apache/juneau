@@ -78,7 +78,8 @@ def test_params_flag_starts_without_any_prompt_and_says_so_first(home, capsys, t
     data = run_json(home)
     assert data["details"] == {"branch": "juneau-9.2.1-branch", "version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT",
                                "rc": 1, "summary": "Security and maintenance release.",
-                               "highlights": "- DirectoryResource hardened.", "knownIssues": "", "acknowledgements": ""}
+                               "highlights": "- DirectoryResource hardened.", "knownIssues": "", "acknowledgements": "",
+                               "jdks": ["17", "21"], "jdksExperimental": ["28"]}
     assert data["identity"] == IDENT
     assert (home / "runs" / "9.2.1" / "params.yml").read_bytes() == p.read_bytes()
     assert data["paramsPath"] == str(p.resolve())            # the live file the vote tally is read from

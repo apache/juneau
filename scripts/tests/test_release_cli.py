@@ -150,7 +150,7 @@ def test_resume_without_run_fails(home, capsys):
 
 def test_resume_after_last(home, capsys):
     seed(home, {"phase": "rc", "last": "workspace", "details": {"version": "9.2.1", "rc": 1, "branch": "b"}})
-    assert release.plan_for(home, resume=True)[0] == "build-verify"
+    assert release.plan_for(home, resume=True)[0] == "jdk-verify"
     assert release.plan_for(home, start="vote-tally")[0] == "vote-tally"
 
 
@@ -287,14 +287,14 @@ def test_attempt_record_has_origin_pid_step_exit(home, capsys, tmp_path, monkeyp
 
 
 def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatch):
-    seed(home, {**ACTIVE, "last": "workspace", "nexusRepoId": None})
+    seed(home, {**ACTIVE, "last": "jdk-verify", "nexusRepoId": None})
     fake, nexus, deps = setup_deps(tmp_path, monkeypatch)
     fake.script("mvn", "-B", ok=False)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
     assert code == 1
     assert "Build verify failed" in out
     assert "--start-step build-verify" in out
-    assert read_run(home)["last"] == "workspace"
+    assert read_run(home)["last"] == "jdk-verify"
     assert read_run(home)["attempts"][-1]["status"] == "failed"
 
 

@@ -155,7 +155,7 @@ apache-juneau-{v}-src.zip:
 apache-juneau-{v}-bin.zip: 
 {f['bin_sha']}
 
-Build the release candidate using:
+{f.get('jdks') + chr(10) + chr(10) if f.get('jdks') else ''}Build the release candidate using:
 
 mvn clean install
 

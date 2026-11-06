@@ -24,7 +24,7 @@ import tempfile
 from collections import namedtuple
 from datetime import datetime
 
-from . import details, gpgkeys, inventory, params, vote
+from . import details, gpgkeys, inventory, jdks, params, vote
 from .nexus import HttpError
 
 PASS, FAIL, CANT = "pass", "fail", "cant"
@@ -328,6 +328,20 @@ def _release_details(ctx):
         return _fail(ctx.pf["details_error"])
     d = _details(ctx)
     return _ok(f"{d['version']} RC{d['rc']} on {d['branch']}, next {d['developmentVersion']}")
+
+
+@check("params", "JDKs resolve")
+def _jdks_resolve(ctx):
+    """Every JDK in `jdks` / `jdks_experimental` resolves to one JDK home (the jdk-verify step needs them)."""
+    found, bad = [], []
+    for label, required in jdks.entries(_details(ctx)):
+        try:
+            found.append(f"{jdks.describe(label, required)} -> {jdks.resolve(label)}")
+        except jdks.JdkError as e:
+            bad.append(f"{jdks.describe(label, required)}: {e}")
+    if bad:
+        return _fail("; ".join(bad))
+    return _ok("; ".join(found) if found else "none listed")
 
 
 @check("params", "vote block")

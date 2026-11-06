@@ -23,7 +23,7 @@ from jrm_release import details, params  # noqa: E402
 pytestmark = pytest.mark.usefixtures("clean_env")
 
 CHECKOUT = os.path.expanduser("~/git/apache/juneau")
-FIELDS_ORDER = ["branch", *details.FIELDS]
+FIELDS_ORDER = ["branch", *details.FIELDS, "jdks", "jdksExperimental"]
 
 GOOD = """\
 # release-9.2.1.yml
@@ -31,6 +31,8 @@ branch: juneau-9.2.1-branch
 version: 9.2.1
 developmentVersion: 9.2.2-SNAPSHOT
 rc: 1
+jdks: [17, 21]
+jdks_experimental: [28]
 apache: {availid: jbognar, email: jamesbognar@apache.org}
 gpg: {keyid: ABCD1234ABCD1234}
 summary: |
@@ -79,11 +81,11 @@ def test_resolve_has_the_details_ask_shape_and_asks_nothing(tmp_path, make_ctx):
     assert list(d) == FIELDS_ORDER
     assert d == {"branch": "juneau-9.2.1-branch", "version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1,
                  "summary": "Security and maintenance release.", "highlights": "- DirectoryResource hardened.",
-                 "knownIssues": "", "acknowledgements": ""}
+                 "knownIssues": "", "acknowledgements": "", "jdks": ["17", "21"], "jdksExperimental": ["28"]}
 
 
 def test_absent_optional_text_fields_default_to_empty(tmp_path, make_ctx):
-    p = write(tmp_path, "version: 9.2.1\nrc: 2\nsummary: s\nbranch: b\napache: {availid: jb}\ngpg: {keyid: A}\n")
+    p = write(tmp_path, "version: 9.2.1\nrc: 2\nsummary: s\njdks: [17]\nbranch: b\napache: {availid: jb}\ngpg: {keyid: A}\n")
     d = params.resolve(make_ctx(), params.load(p), None)
     assert (d["highlights"], d["knownIssues"], d["acknowledgements"], d["rc"]) == ("", "", "", 2)
     assert params.load(p).creds == {"credential.apache.availid": "jb", "credential.gpg.keyid": "A"}
@@ -140,7 +142,7 @@ def test_apache_and_gpg_must_be_mappings(tmp_path):
     ("apache: {availid: jb}\nAPACHE_PASSWORD: x", "APACHE_PASSWORD"),
 ])
 def test_secret_keys_are_rejected_with_the_env_vars(tmp_path, extra, key):
-    base = "version: 9.2.1\nrc: 1\nsummary: s\n"
+    base = "version: 9.2.1\nrc: 1\nsummary: s\njdks: [17]\n"
     msg = load_error(write(tmp_path, base + extra + "\n"))
     assert f"'{key}' is a secret and must not be in the file" in msg
     assert "JRM_APACHE_PASSWORD" in msg and "JRM_GPG_PASSPHRASE" in msg and "JRM_GITHUB_TOKEN" in msg
@@ -161,7 +163,7 @@ def test_version_mismatch_and_match(tmp_path, make_ctx):
 
 def dev_case(tmp_path, make_ctx, version, dev):
     line = "" if dev is None else f"developmentVersion: {dev}\n"
-    p = write(tmp_path, f'version: "{version}"\nrc: 1\nsummary: s\nbranch: b\n{line}apache: {{availid: jb}}\ngpg: {{keyid: A}}\n')
+    p = write(tmp_path, f'version: "{version}"\nrc: 1\nsummary: s\njdks: [17]\nbranch: b\n{line}apache: {{availid: jb}}\ngpg: {{keyid: A}}\n')
     return params.resolve(make_ctx(), params.load(p), None)["developmentVersion"]
 
 
@@ -200,23 +202,23 @@ def test_snapshot_version_is_rejected_by_validate(tmp_path, make_ctx):
 def test_absent_branch_uses_branch_default_and_explicit_wins(tmp_path, make_ctx):
     ctx = make_ctx()
     ctx.fake.script("git", "-C", CHECKOUT, "for-each-ref", out="origin/master\norigin/juneau-9.2.1-branch\n")
-    p = write(tmp_path, "version: 9.2.1\nrc: 1\nsummary: s\napache: {availid: jb}\ngpg: {keyid: A}\n")
+    p = write(tmp_path, "version: 9.2.1\nrc: 1\nsummary: s\njdks: [17]\napache: {availid: jb}\ngpg: {keyid: A}\n")
     assert params.resolve(ctx, params.load(p), None)["branch"] == "juneau-9.2.1-branch"
     assert ctx.fake.ran("git", "-C", CHECKOUT, "for-each-ref")[0]
     assert ctx.fake.calls[0]["quiet"] is True              # read through runner.quiet, as --init-params needs
-    p = write(tmp_path, "version: 9.2.1\nrc: 1\nsummary: s\nbranch: other\napache: {availid: jb}\ngpg: {keyid: A}\n", "b.yml")
+    p = write(tmp_path, "version: 9.2.1\nrc: 1\nsummary: s\njdks: [17]\nbranch: other\napache: {availid: jb}\ngpg: {keyid: A}\n", "b.yml")
     assert params.resolve(ctx, params.load(p), None)["branch"] == "other"
 
 
 def test_branch_default_falls_back_to_master(tmp_path, make_ctx):
-    p = write(tmp_path, "version: 9.2.1\nrc: 1\nsummary: s\napache: {availid: jb}\ngpg: {keyid: A}\n")
+    p = write(tmp_path, "version: 9.2.1\nrc: 1\nsummary: s\njdks: [17]\napache: {availid: jb}\ngpg: {keyid: A}\n")
     assert params.resolve(make_ctx(), params.load(p), None)["branch"] == "master"
 
 
 # 10 ------------------------------------------------------------------------------------------------------------------
 
 def test_yaml_syntax_error_has_file_line_and_column(tmp_path):
-    p = write(tmp_path, "version: 9.2.1\nrc: [1\nsummary: s\n")
+    p = write(tmp_path, "version: 9.2.1\nrc: [1\nsummary: s\njdks: [17]\n")
     msg = load_error(p)
     assert msg.startswith(f"{p}: not valid YAML: ")
     assert "line " in msg and "column " in msg
@@ -494,7 +496,7 @@ def test_require_without_version_names_the_placeholder(tmp_path):
 
 # ---- the vote: block -----------------------------------------------------------------------------------------------
 
-VOTE_BASE = "version: '9.2.1'\nrc: 1\nsummary: s\napache:\n  availid: jb\ngpg:\n  keyid: ABCD1234ABCD1234\n"
+VOTE_BASE = "version: '9.2.1'\nrc: 1\nsummary: s\njdks: [17]\napache:\n  availid: jb\ngpg:\n  keyid: ABCD1234ABCD1234\n"
 
 
 def _vote_file(tmp_path, body):

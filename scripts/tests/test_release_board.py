@@ -24,24 +24,25 @@ from jrm_release.runner import Runner
 pytestmark = pytest.mark.usefixtures("clean_env")
 
 
-def test_row_labels_are_zero_padded_unique_and_cover_all_27_steps():
+def test_row_labels_are_zero_padded_unique_and_cover_all_28_steps():
     labels = [inventory.row_label(s) for s in inventory.STEPS]
-    assert len(labels) == 27 == len(set(labels))
+    assert len(labels) == 28 == len(set(labels))
     assert labels[0] == "01 Prerequisites"
-    assert labels[4] == "05 Build verify"
-    assert labels[15] == "16 Vote wait (72h)"
-    assert labels[26] == "27 Finalize"
+    assert labels[4] == "05 Verify on JDKs"
+    assert labels[5] == "06 Build verify"
+    assert labels[16] == "17 Vote wait (72h)"
+    assert labels[27] == "28 Finalize"
 
 
 def test_longest_label_is_18_characters():
     # The plan and spec say 17 ("23 Announce email"); "08 Deploy snapshot", "11 Release perform", "14 Verify dist/dev"
-    # and "16 Vote wait (72h)" are 18.
+    # and "17 Vote wait (72h)" are 18.
     assert max(len(inventory.row_label(s)) for s in inventory.STEPS) == 18
 
 
 def test_num_of_resolves_names_and_retired_steps():
     assert inventory.num_of("workspace") == 4
-    assert inventory.num_of("test-workspace-verify") == 6        # RETIRED maps to the step before the removed one
+    assert inventory.num_of("test-workspace-verify") == 7        # RETIRED maps to the step before the removed one
     assert inventory.num_of("nope") is None
 
 
@@ -213,7 +214,7 @@ def recorded_session_kwargs(home, monkeypatch, *, features, revert=False, extra_
 def test_new_toolkit_gets_numbered_plan_run_and_dividers(home, monkeypatch):
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"})
     assert kw["plan"][0] == ("prerequisites", "01 Prerequisites")
-    assert len(kw["plan"]) == 27
+    assert len(kw["plan"]) == 28
     assert kw["run"] == 1
     assert [d[0] for d in kw["dividers"]][0] == "compose-propose-email"
     assert "history_alias" not in kw
@@ -239,7 +240,7 @@ def test_revert_plan_is_the_six_rows_with_no_dividers_or_run(home, monkeypatch):
 def test_history_disabled_still_records_the_same_keywords(home, monkeypatch):
     monkeypatch.setenv("JUNEAU_TERMINAL_HISTORY", "0")
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"})
-    assert kw["run"] == 1 and len(kw["plan"]) == 27
+    assert kw["run"] == 1 and len(kw["plan"]) == 28
 
 
 # ---- gated Maven bar, count and history alias ----------------------------------------------------------------------
@@ -363,13 +364,13 @@ class StubRegistry:
         self.step(name, title, label)
 
 
-def test_skip_step_keeps_27_rows_and_27_plan_entries(home, monkeypatch):
+def test_skip_step_keeps_28_rows_and_28_plan_entries(home, monkeypatch):
     deps = release.Deps(run=FakeRunner(), steps=SimpleNamespace(Registry=StubRegistry), lock=None)
     reg = release.registry(deps, release.impl_map())
-    assert len(reg.names) == 27
-    assert reg._labels["build-verify"] == "05 Build verify"
+    assert len(reg.names) == 28
+    assert reg._labels["build-verify"] == "06 Build verify"
     kw = recorded_session_kwargs(home, monkeypatch, features={"dividers"}, extra_argv=["--skip-step", "javadoc-verify"])
-    assert len(kw["plan"]) == 27
+    assert len(kw["plan"]) == 28
 
 
 def test_resume_with_a_vote_email_pending_passes_it_and_stops_at_the_vote_gate():

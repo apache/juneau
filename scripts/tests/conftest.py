@@ -235,6 +235,20 @@ CREDS = {"credential.apache.availid": "jamesbognar", "credential.apache.email": 
 
 
 @pytest.fixture(autouse=True)
+def _fake_jdk_root(monkeypatch, tmp_path_factory):
+    """Resolve params-file JDK entries against a private root with jdk-17, jdk-21 and jdk-28, never the developer's
+    ~/jdk.  Tests about resolution itself re-patch JDK_ROOT."""
+    from jrm_release import jdks
+    root = tmp_path_factory.mktemp("jdk-root")
+    for v in ("17", "21", "28"):
+        java = root / f"jdk-{v}" / "bin" / "java"
+        java.parent.mkdir(parents=True)
+        java.write_text("")
+        java.chmod(0o755)
+    monkeypatch.setattr(jdks, "JDK_ROOT", str(root))
+
+
+@pytest.fixture(autouse=True)
 def _no_open_files(monkeypatch):
     """Nothing in the suite may launch the desktop opener for an email file."""
     monkeypatch.setenv("JRM_NO_OPEN", "1")

@@ -47,7 +47,7 @@ python3 scripts/release.py --params ~/.juneau-release-manager/params/9.2.1.yml
 
 ## Params file
 
-A params file holds the release details and your non-secret identity; it never holds a secret. Keys: `branch`, `version`, `developmentVersion`, `rc`, `summary`, `highlights`, `knownIssues`, `acknowledgements`, `apache.availid`, `apache.email`, `gpg.keyid`, and, after the vote closes, `vote:` (`plus1`, `zero`, `minus1`, `binding`). `--init-params` writes `vote:` as a commented block at the end of the template; leave it commented out until the vote is over. Unknown keys, a key whose name looks like a secret (`password`, `passphrase`, `token`, `secret`, at any depth) and a leftover `TODO` placeholder are errors (exit 2); an invalid file never falls back to the form.
+A params file holds the release details and your non-secret identity; it never holds a secret. Keys: `branch`, `version`, `developmentVersion`, `rc`, `summary`, `highlights`, `knownIssues`, `acknowledgements`, `apache.availid`, `apache.email`, `gpg.keyid`, `jdks` (required list) and `jdks_experimental` (optional list), and, after the vote closes, `vote:` (`plus1`, `zero`, `minus1`, `binding`). `--init-params` writes `vote:` as a commented block at the end of the template; leave it commented out until the vote is over. Unknown keys, a key whose name looks like a secret (`password`, `passphrase`, `token`, `secret`, at any depth) and a leftover `TODO` placeholder are errors (exit 2); an invalid file never falls back to the form.
 
 Secrets come from the environment (`JRM_APACHE_PASSWORD`, `JRM_GPG_PASSPHRASE`, `JRM_GITHUB_TOKEN`; an empty value counts as unset), then on macOS from the keychain (`security find-generic-password -s jrm.apache.password -a <availid> -w`, likewise `jrm.gpg.passphrase`; the GitHub token is `-s jrm.github.token -a default`), then for the GitHub token from `gh auth token`. Nothing is ever asked for: a new release runs the preflight first, and any secret that is missing or rejected is listed together with every other problem before anything is created (exit 2). The Apache email defaults to `<availid>@apache.org`. A dry run skips the secret checks and reads no secret store.
 
@@ -60,7 +60,7 @@ The file is copied to `<home>/runs/<version>/params.yml` as a record (a copy fai
 | Group | Checks |
 |---|---|
 | `tools` | each tool and its minimum version (`git`, `mvn`, `java`, `svn`, `svnmucc`, `gpg`, `gh`, `unzip`), PyYAML, Nexus reachable, dist/dev reachable, gpg-agent cache TTL (`default-cache-ttl` >= 1800 and `max-cache-ttl` >= 7200 from `gpgconf --list-options gpg-agent`, so the passphrase survives from `gpg-unlock` to `release-perform`; `python3 scripts/gpg-agent-ttl.py` fixes a failure) |
-| `params` | the params file loads and validates, `--version` matches it, the details resolve, the `vote:` block (if any) has the right types |
+| `params` | the params file loads and validates, `--version` matches it, the details resolve, every JDK in `jdks` / `jdks_experimental` resolves (FAIL names the entry and why), the `vote:` block (if any) has the right types |
 | `secrets-present` | each secret has a source (env, keychain, `gh`); only the source is reported, never a value |
 | `secrets-valid` | the Apache password is accepted by Nexus (HTTP 401/403 is a failure), the GPG passphrase signs a throwaway blob (passphrase on stdin), the GPG key has not expired, the GitHub token works and has the `repo` scope |
 | `repo` | the branch exists on origin, the RC tag is absent, the branch tip's pom is `<version>-SNAPSHOT`, the GPG key is in the published KEYS file |
@@ -78,7 +78,7 @@ Under `--dry-run` the secret checks report `skipped (dry run)`. The branch tip i
 5. For a new release, reads the params file (`--params`, else `<home>/params/<version>.yml`; none is an error) and runs the whole preflight before anything is created or asked. Every problem is listed together. A resume runs the `tools` and secrets groups. Skipped for `--revert`.
 6. Starts a fresh `run.json` from the resolved details and records the params file.
 7. Takes a non-blocking lock (`.lock` in the run directory) and runs the steps in order, checkpointing `run.json` after each. A second `release.py` on the same release exits 1 with the holder's pid.
-8. The 27 steps fall in three phases: release candidate (prerequisites through `vote-gate`), vote (`vote-tally`, result email) and promote (`nexus-release` through `finalize`). The run never asks a question. Where it needs you it pauses (exit 0), prints what to do and the command to continue, and records the pause in `run.json`; see Pauses.
+8. The 28 steps fall in three phases: release candidate (prerequisites through `vote-gate`), vote (`vote-tally`, result email) and promote (`nexus-release` through `finalize`). The run never asks a question. Where it needs you it pauses (exit 0), prints what to do and the command to continue, and records the pause in `run.json`; see Pauses.
 9. `--revert` runs five rows instead: drop the Nexus staging repository, remove the RC from dist/dev, delete the RC tag, restore the poms the release plugin changed (then verify the root version), record the revert. The command is the confirmation: there is no typed confirmation on the CLI (the Release page still types `RC<n>` before it drops an RC). Each row checks remote state first, so a rerun is harmless.
 
 ## Pauses
@@ -97,6 +97,7 @@ A pause ends the attempt with exit 0 and status `paused`. `run.json` records `pa
 Details:
 
 - A plain `--resume` after an unsent mail records it as sent, so send it first. `--start-step` at an email step writes the mail again.
+- `jdk-verify` (step 5, before `build-verify`) runs `mvn -B clean verify` on the workspace once per JDK in the params file's `jdks:` (required) and `jdks_experimental:` (optional) lists, with `JAVA_HOME` and `PATH` set for that JDK. An entry is a number N (`~/jdk/jdk-N`, else the single `~/jdk/*N*` entry; a macOS bundle is normalised to `Contents/Home`) or a path used as given; a missing or ambiguous entry is an error, so list the path for a JDK outside `~/jdk`. Every JDK runs even after a failure. A required JDK that fails fails the step; an experimental one only adds `WARNING: experimental JDK n failed` to the step result. Each result is kept in `run.json` (`jdkResults`), so `--resume` reruns only the JDKs that did not pass. The passing list goes into the vote email as `Tested on JDKs: 17, 21, 28 (experimental)`.
 - The Javadoc check and the follow-up checklist are files: `javadoc-report.txt` and `followup.md` in the run directory. A release diff that is not clean fails the step (`release-diff.txt` lists it): run `--revert` and bump `rc`.
 - `reporter-release` is a pause, not an API call: reporter.apache.org is behind ASF committer basic auth and has no documented endpoint, so the script opens the page and records the pause (`emailPending: "reporter"`); `--resume` acknowledges it.
 - `dist-cleanup` (after the announce mail) lists `dist/release/juneau`, keeps `KEYS` and the new version, and removes every other entry in one `svnmucc` commit (`Remove old Apache Juneau releases; kept <version>`). It handles the top-level `<version>/` layout and the older `binaries/juneau-x/` + `source/juneau-x/` one, and removes a `binaries/` or `source/` left empty. Every candidate must exist on `archive.apache.org/dist/juneau/` first; one miss aborts with nothing removed. `--dry-run` only lists. `--revert` never undoes it (the archive keeps everything).
@@ -116,7 +117,7 @@ A board view with one row per step. State lives under the home directory: `runs/
 
 ## Board
 
-Each step is a row named `NN Name`, with NN the `--start-step` number zero-padded (`05 Build verify`, `16 Vote wait (72h)`); the Setup row is unnumbered. A command a step runs is a child of that step's row, not a row of its own: a step with one command shows that command as the step row.
+Each step is a row named `NN Name`, with NN the `--start-step` number zero-padded (`06 Build verify`, `17 Vote wait (72h)`); the Setup row is unnumbered. A command a step runs is a child of that step's row, not a row of its own: a step with one command shows that command as the step row.
 
 The steps that pause the run (the four emails, the vote gate, the tally) have a divider after them, such as `send proposal email`. Each divider that is still ahead reads `run N stops here`, counted in plan order: the first is this run's stop (N is the attempt number), the next is run N+1, and so on. The run ends at its divider with exit 0, and `--resume` starts the next run after it. Dividers are drawn passed (`run ended`, no number) once crossed and dim while they are still ahead.
 

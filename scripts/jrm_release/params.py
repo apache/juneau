@@ -32,7 +32,7 @@ SECRET_WORDS = ("password", "passphrase", "token", "secret")
 TEXT = ("branch", "developmentVersion", "highlights", "knownIssues", "acknowledgements")
 VOTE_KEYS = ("plus1", "zero", "minus1", "binding")
 ALLOWED = {None: ("apache", "acknowledgements", "branch", "developmentVersion", "gpg", "highlights", "knownIssues", "rc",
-                  "summary", "version", "vote"),
+                  "summary", "version", "vote", "jdks", "jdks_experimental"),
            "apache": ("availid", "email"), "gpg": ("keyid",), "vote": VOTE_KEYS}
 CREDS = {"apache.availid": "credential.apache.availid", "apache.email": "credential.apache.email",
          "gpg.keyid": "credential.gpg.keyid"}
@@ -101,6 +101,20 @@ def _string(path, doc, key, label=None):
     return v.strip()
 
 
+JDK_KEYS = ("jdks", "jdks_experimental")
+
+
+def _jdk_list(path, doc, key):
+    """doc[key] as a list of non-empty strings (numbers and 28-ea style tokens are stringified); [] when absent."""
+    v = doc.get(key)
+    if v is None:
+        return []
+    if not isinstance(v, list) or not all(isinstance(j, (str, int, float)) and not isinstance(j, bool) and str(j).strip()
+                                          for j in v):
+        raise ParamsError(f"{path}: '{key}' must be a list of JDK versions or paths, for example [17, 21, 25]")
+    return [str(j).strip() for j in v]
+
+
 def load(path):
     """Read and structurally validate a params file; Params.  Raises ParamsError.  Everything the other modules own
     (x.y.z, dev > version, rc >= 1) is checked later by resolve(), through details.validate."""
@@ -120,16 +134,19 @@ def load(path):
                 raise ParamsError(f"{path}: unknown key '{group + '.' if group else ''}{k}' "
                                   f"(allowed: {', '.join(ALLOWED[group])})")
     _vote_types(doc.get("vote"), path)
+    jdk_lists = {key: _jdk_list(path, doc, key) for key in JDK_KEYS}
     apache, gpg = doc.get("apache") or {}, doc.get("gpg") or {}
     values = {"version": doc.get("version"), "rc": doc.get("rc"), "summary": doc.get("summary"),
               "apache.availid": apache.get("availid"), "gpg.keyid": gpg.get("keyid")}
+    values["jdks"] = jdk_lists["jdks"] or None
     missing = [k for k, v in values.items() if v is None or (isinstance(v, str) and not v.strip())]
     if missing:
         raise ParamsError(f"{path}: missing required key(s): {', '.join(missing)}")
     rc = doc["rc"]
     if isinstance(rc, bool) or not isinstance(rc, int):
         raise ParamsError(f"{path}: 'rc' must be a whole number")
-    d = {"version": _string(path, doc, "version"), "rc": rc, "summary": _string(path, doc, "summary")}
+    d = {"version": _string(path, doc, "version"), "rc": rc, "summary": _string(path, doc, "summary"),
+         "jdks": jdk_lists["jdks"], "jdksExperimental": jdk_lists["jdks_experimental"]}
     for key in TEXT:
         d[key] = _string(path, doc, key)
     creds = {}
@@ -177,7 +194,8 @@ def resolve(ctx, loaded, cli_version):
     if dev is None and inventory.parse_version(version):
         raise ParamsError(f"{p}: developmentVersion is required when version ends in .0 (for example 9.3.0-SNAPSHOT)")
     out = {"branch": d["branch"] or details.branch_default(ctx, version),
-           **{k: d.get(k) for k in details.FIELDS}, "developmentVersion": dev}
+           **{k: d.get(k) for k in details.FIELDS}, "developmentVersion": dev,
+           "jdks": d.get("jdks") or [], "jdksExperimental": d.get("jdksExperimental") or []}
     err = details.validate(out)
     if err:
         raise ParamsError(f"{p}: {err}")
@@ -323,6 +341,11 @@ highlights: {_todo("highlights, one per line")}
 knownIssues: {_todo("known issues")}
 # Acknowledgements (delete or leave empty if none).
 acknowledgements: {_todo("acknowledgements")}
+# JDKs to run `mvn verify` on before the RC is built.  A number N is ~/jdk/jdk-N, else the single ~/jdk/*N* entry; a path
+# (such as /Library/Java/JavaVirtualMachines/<name>.jdk) is used as given.  A required JDK that fails stops the release.
+jdks: [17, 21, 25, 27]
+# JDKs that are tried too, but a failure on one is only a warning (early-access releases).  Delete or leave empty if none.
+jdks_experimental: [28]
 # After the vote closes, uncomment and fill in, then run:  release.py --resume --version {version}
 # vote:
 #   plus1: 3          # binding +1 votes (whole number)

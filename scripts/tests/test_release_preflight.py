@@ -187,7 +187,7 @@ def test_params_checks_pass_with_a_loaded_file(make_ctx, tmp_path):
     pytest.importorskip("yaml")
     from types import SimpleNamespace
     path = tmp_path / "p.yml"
-    path.write_text('version: "9.2.1"\nrc: 1\nsummary: s\napache: {availid: jb}\ngpg: {keyid: ABCD1234}\n'
+    path.write_text('version: "9.2.1"\nrc: 1\nsummary: s\njdks: [17]\napache: {availid: jb}\ngpg: {keyid: ABCD1234}\n'
                     'developmentVersion: "9.2.2-SNAPSHOT"\n', encoding="utf-8")
     ctx = make_ctx(with_details=False)
     preflight.prepare(ctx, SimpleNamespace(params=str(path), version=None, home=str(tmp_path)))
@@ -218,7 +218,7 @@ def test_bad_details_fail_with_the_validation_message(make_ctx, tmp_path):
     pytest.importorskip("yaml")
     from types import SimpleNamespace
     path = tmp_path / "p.yml"
-    path.write_text('version: "9.2.1"\nrc: 1\nsummary: s\napache: {availid: jb}\ngpg: {keyid: ABCD1234}\n'
+    path.write_text('version: "9.2.1"\nrc: 1\nsummary: s\njdks: [17]\napache: {availid: jb}\ngpg: {keyid: ABCD1234}\n'
                     'developmentVersion: "9.2.0-SNAPSHOT"\n', encoding="utf-8")
     ctx = make_ctx(with_details=False)
     preflight.prepare(ctx, SimpleNamespace(params=str(path), version=None, home=str(tmp_path)))

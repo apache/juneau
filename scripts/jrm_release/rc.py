@@ -10,14 +10,14 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""RC phase steps (inventory.STEPS 1-16).  Each step is fn(ctx) -> optional summary str; FUNCS maps name -> fn."""
+"""RC phase steps (inventory.STEPS 1-17).  Each step is fn(ctx) -> optional summary str; FUNCS maps name -> fn."""
 import hashlib
 import json
 import os
 from datetime import timedelta
 
 from . import details as details_mod
-from . import diffcheck, emails, inventory, prereqs
+from . import diffcheck, emails, inventory, jdks, prereqs
 from .ctx import StepError
 
 FUNCS = {}
@@ -109,6 +109,11 @@ def _mvn(ctx, title, *args, tty=False, env=None, capture=None, bar=None):
     if not r.ok:
         raise StepError(f"{title} failed (exit {r.code})")
     return r
+
+
+@step
+def jdk_verify(ctx):
+    return jdks.verify(ctx)
 
 
 @step
@@ -455,5 +460,6 @@ def compose_vote_email(ctx):
     facts = {"src_sha": sha(f"apache-juneau-{v}-src.zip"), "bin_sha": sha(f"apache-juneau-{v}-bin.zip"), "commit": commit,
              "repo": ctx.rf.get("nexusRepoId") or "REPO_NOT_FOUND",
              "deadline": deadline.astimezone().strftime("%d-%b-%Y %-I:%M%p %Z")}
+    facts["jdks"] = jdks.tested_line(ctx.rf.get("jdkResults"))
     to, sub, body = emails.vote(ctx.d, facts)
     return emails.send(ctx, "vote", to, sub, body)
