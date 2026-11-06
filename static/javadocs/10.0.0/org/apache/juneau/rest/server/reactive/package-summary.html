@@ -142,8 +142,12 @@ loadScripts(document, 'script');</script>
 <div class="block">Response processor that bridges <a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>
  return values from <code>@RestOp</code> handlers to Juneau's response pipeline.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ReactiveStreamsAdapter.html" title="interface in org.apache.juneau.rest.server.reactive">ReactiveStreamsAdapter</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ReactiveResponseProperties.html" title="class in org.apache.juneau.rest.server.reactive">ReactiveResponseProperties</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="block">The <code>ReactiveResponse.*</code> settings for <a href="ReactiveResponseProcessor.html" title="class in org.apache.juneau.rest.server.reactive"><code>ReactiveResponseProcessor</code></a>, resolved as a single bound object.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ReactiveStreamsAdapter.html" title="interface in org.apache.juneau.rest.server.reactive">ReactiveStreamsAdapter</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">SPI that bridges a third-party reactive return type to one of the two JDK-native shapes that the
  <a href="ReactiveResponseProcessor.html" title="class in org.apache.juneau.rest.server.reactive"><code>ReactiveResponseProcessor</code></a> understands: a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletionStage.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletionStage</code></a> (single value) or a
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.Publisher.html" title="class or interface in java.util.concurrent" class="external-link"><code>Flow.Publisher</code></a> (a stream of values).</div>
