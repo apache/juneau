@@ -63,7 +63,7 @@
 		<juneau.node.floor>18</juneau.node.floor>
 		<jetty.version>12.1.14</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
-		<tomcat.version>11.0.25</tomcat.version>
+		<tomcat.version>11.0.27</tomcat.version>
 		<spring.version>4.1.1</spring.version>
 		<sonar.organization>apache</sonar.organization>
 		<!-- Maven scanner defaults to Java compile roots only (scanAll=false), so CSS/JS never reached SonarCloud.
