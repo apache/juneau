@@ -916,157 +916,178 @@
 <span class="source-line-no">903</span><span id="line-903">               throw new BeanCreationException("Failed to register @Bean field: " + field, e);</span>
 <span class="source-line-no">904</span><span id="line-904">            }</span>
 <span class="source-line-no">905</span><span id="line-905">         }</span>
-<span class="source-line-no">906</span><span id="line-906">         for (var method : c.getDeclaredMethods()) {</span>
-<span class="source-line-no">907</span><span id="line-907">            var beanAnn = method.getAnnotation(Bean.class);</span>
-<span class="source-line-no">908</span><span id="line-908">            if (beanAnn == null)</span>
-<span class="source-line-no">909</span><span id="line-909">               continue;</span>
-<span class="source-line-no">910</span><span id="line-910">            if (!matchesConditions(method))</span>
-<span class="source-line-no">911</span><span id="line-911">               continue;</span>
-<span class="source-line-no">912</span><span id="line-912">            try {</span>
-<span class="source-line-no">913</span><span id="line-913">               if (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) &amp;&amp; instance == null)</span>
-<span class="source-line-no">914</span><span id="line-914">                  instance = BeanInstantiator.of(configType, this).run();</span>
-<span class="source-line-no">915</span><span id="line-915">               method.setAccessible(true);</span>
-<span class="source-line-no">916</span><span id="line-916">               var value = MethodInfo.of(method).inject(this, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? null : instance);</span>
-<span class="source-line-no">917</span><span id="line-917">               addBeanWithMeta((Class&lt;Object&gt;)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));</span>
-<span class="source-line-no">918</span><span id="line-918">            } catch (Exception e) {</span>
-<span class="source-line-no">919</span><span id="line-919">               throw new BeanCreationException("Failed to register @Bean method: " + method, e);</span>
-<span class="source-line-no">920</span><span id="line-920">            }</span>
-<span class="source-line-no">921</span><span id="line-921">         }</span>
-<span class="source-line-no">922</span><span id="line-922">      }</span>
-<span class="source-line-no">923</span><span id="line-923">   }</span>
-<span class="source-line-no">924</span><span id="line-924"></span>
-<span class="source-line-no">925</span><span id="line-925">   private boolean matchesConditions(java.lang.reflect.AnnotatedElement element) {</span>
-<span class="source-line-no">926</span><span id="line-926">      var classLoader = element instanceof Class&lt;?&gt; element2 ? element2.getClassLoader() : element.getClass().getClassLoader();</span>
-<span class="source-line-no">927</span><span id="line-927">      var ctx = new ConditionContext(this, Settings.get(), classLoader, element);</span>
-<span class="source-line-no">928</span><span id="line-928">      for (var c : element.getAnnotationsByType(Conditional.class)) {</span>
-<span class="source-line-no">929</span><span id="line-929">         if (!BeanInstantiator.of(c.value(), this).run().matches(ctx)) {</span>
-<span class="source-line-no">930</span><span id="line-930">            LOGGER.fine(() -&gt; "Skipping conditional element due to @Conditional: " + element);</span>
-<span class="source-line-no">931</span><span id="line-931">            return false;</span>
-<span class="source-line-no">932</span><span id="line-932">         }</span>
-<span class="source-line-no">933</span><span id="line-933">      }</span>
-<span class="source-line-no">934</span><span id="line-934">      for (var c : element.getAnnotationsByType(ConditionalOnClass.class)) {</span>
-<span class="source-line-no">935</span><span id="line-935">         try {</span>
-<span class="source-line-no">936</span><span id="line-936">            Class.forName(c.value(), false, classLoader);</span>
-<span class="source-line-no">937</span><span id="line-937">         } catch (@SuppressWarnings("unused") ClassNotFoundException e) {</span>
-<span class="source-line-no">938</span><span id="line-938">            LOGGER.fine(() -&gt; "Skipping conditional element due to missing class " + c.value() + ": " + element);</span>
-<span class="source-line-no">939</span><span id="line-939">            return false;</span>
-<span class="source-line-no">940</span><span id="line-940">         }</span>
-<span class="source-line-no">941</span><span id="line-941">      }</span>
-<span class="source-line-no">942</span><span id="line-942">      for (var c : element.getAnnotationsByType(ConditionalOnMissingBean.class)) {</span>
-<span class="source-line-no">943</span><span id="line-943">         var type = c.value();</span>
-<span class="source-line-no">944</span><span id="line-944">         var name = c.name().isEmpty() ? null : c.name();</span>
-<span class="source-line-no">945</span><span id="line-945">         if (type == Object.class) {</span>
-<span class="source-line-no">946</span><span id="line-946">            if (name != null &amp;&amp; anyLocalBeanNamed(name))</span>
-<span class="source-line-no">947</span><span id="line-947">               return false;</span>
-<span class="source-line-no">948</span><span id="line-948">         } else if (hasBean(type, name)) {</span>
-<span class="source-line-no">949</span><span id="line-949">            return false;</span>
-<span class="source-line-no">950</span><span id="line-950">         }</span>
-<span class="source-line-no">951</span><span id="line-951">      }</span>
-<span class="source-line-no">952</span><span id="line-952">      for (var c : element.getAnnotationsByType(ConditionalOnProperty.class)) {</span>
-<span class="source-line-no">953</span><span id="line-953">         var value = Settings.get().get(c.name()).orElse(null);</span>
-<span class="source-line-no">954</span><span id="line-954">         if (value == null &amp;&amp; !c.matchIfMissing())</span>
-<span class="source-line-no">955</span><span id="line-955">            return false;</span>
-<span class="source-line-no">956</span><span id="line-956">         if (value != null &amp;&amp; !c.havingValue().isEmpty() &amp;&amp; !c.havingValue().equals(value))</span>
-<span class="source-line-no">957</span><span id="line-957">            return false;</span>
-<span class="source-line-no">958</span><span id="line-958">      }</span>
-<span class="source-line-no">959</span><span id="line-959">      return true;</span>
-<span class="source-line-no">960</span><span id="line-960">   }</span>
-<span class="source-line-no">961</span><span id="line-961"></span>
-<span class="source-line-no">962</span><span id="line-962">   private boolean anyLocalBeanNamed(String name) {</span>
-<span class="source-line-no">963</span><span id="line-963">      var key = emptyIfNull(name);</span>
-<span class="source-line-no">964</span><span id="line-964">      var x = extras;</span>
-<span class="source-line-no">965</span><span id="line-965">      return entries.values().stream().anyMatch(m -&gt; m.containsKey(key))</span>
-<span class="source-line-no">966</span><span id="line-966">         || (x != null &amp;&amp; x.defaults.values().stream().anyMatch(m -&gt; m.containsKey(key)));</span>
-<span class="source-line-no">967</span><span id="line-967">   }</span>
-<span class="source-line-no">968</span><span id="line-968"></span>
-<span class="source-line-no">969</span><span id="line-969">   private String beanName(Bean bean) {</span>
-<span class="source-line-no">970</span><span id="line-970">      return bean.name().isEmpty() ? bean.value() : bean.name();</span>
-<span class="source-line-no">971</span><span id="line-971">   }</span>
-<span class="source-line-no">972</span><span id="line-972"></span>
-<span class="source-line-no">973</span><span id="line-973">   private &lt;T&gt; void addBeanWithMeta(Class&lt;T&gt; beanType, T bean, String name, BeanSourceMeta meta) {</span>
-<span class="source-line-no">974</span><span id="line-974">      var key = emptyIfNull(name);</span>
-<span class="source-line-no">975</span><span id="line-975">      // Duplicate-check against LOCAL entries only.  Beans present via the overridingParent or parent</span>
-<span class="source-line-no">976</span><span id="line-976">      // chain are allowed to coexist with a local registration here — the resolution order</span>
-<span class="source-line-no">977</span><span id="line-977">      // (overridingParent &gt; local &gt; parent &gt; defaults) ensures the right entry wins at lookup time.</span>
-<span class="source-line-no">978</span><span id="line-978">      // This is what lets a test-time overlay installed in the overridingParent slot coexist with a</span>
-<span class="source-line-no">979</span><span id="line-979">      // local @Bean factory of the same (type, name) declared on a @Configuration class without</span>
-<span class="source-line-no">980</span><span id="line-980">      // triggering a spurious duplicate-bean error.</span>
-<span class="source-line-no">981</span><span id="line-981">      var typeMap = entries.computeIfAbsent(beanType, k -&gt; new ConcurrentHashMap&lt;&gt;());</span>
-<span class="source-line-no">982</span><span id="line-982">      if (typeMap.containsKey(key))</span>
-<span class="source-line-no">983</span><span id="line-983">         throw new BeanCreationException("Duplicate bean: type=" + beanType.getName() + ", name=" + key);</span>
-<span class="source-line-no">984</span><span id="line-984">      typeMap.put(key, () -&gt; bean);</span>
-<span class="source-line-no">985</span><span id="line-985">      putEntryMeta(beanType, key, meta);</span>
-<span class="source-line-no">986</span><span id="line-986">   }</span>
-<span class="source-line-no">987</span><span id="line-987"></span>
-<span class="source-line-no">988</span><span id="line-988">   private &lt;T&gt; T trackResolved(T bean) {</span>
-<span class="source-line-no">989</span><span id="line-989">      if (bean == null)</span>
-<span class="source-line-no">990</span><span id="line-990">         return null;</span>
-<span class="source-line-no">991</span><span id="line-991">      var t = tracking;</span>
-<span class="source-line-no">992</span><span id="line-992">      if (t == null) {</span>
-<span class="source-line-no">993</span><span id="line-993">         synchronized (this) {</span>
-<span class="source-line-no">994</span><span id="line-994">            t = tracking;</span>
-<span class="source-line-no">995</span><span id="line-995">            if (t == null) {</span>
-<span class="source-line-no">996</span><span id="line-996">               t = new Tracking();</span>
-<span class="source-line-no">997</span><span id="line-997">               tracking = t;</span>
-<span class="source-line-no">998</span><span id="line-998">            }</span>
-<span class="source-line-no">999</span><span id="line-999">         }</span>
-<span class="source-line-no">1000</span><span id="line-1000">      }</span>
-<span class="source-line-no">1001</span><span id="line-1001">      synchronized (t) {</span>
-<span class="source-line-no">1002</span><span id="line-1002">         if (t.identities.add(bean))</span>
-<span class="source-line-no">1003</span><span id="line-1003">            t.beans.add(bean);</span>
-<span class="source-line-no">1004</span><span id="line-1004">      }</span>
-<span class="source-line-no">1005</span><span id="line-1005">      return bean;</span>
-<span class="source-line-no">1006</span><span id="line-1006">   }</span>
-<span class="source-line-no">1007</span><span id="line-1007"></span>
-<span class="source-line-no">1008</span><span id="line-1008">   private &lt;T&gt; Optional&lt;T&gt; selectPrimary(Class&lt;T&gt; beanType) {</span>
-<span class="source-line-no">1009</span><span id="line-1009">      // @Primary is a local-entry-only signal.  Default suppliers added via addDefaultSupplier()</span>
-<span class="source-line-no">1010</span><span id="line-1010">      // always carry BeanSourceMeta.DEFAULT (primary = false), so default suppliers never</span>
-<span class="source-line-no">1011</span><span id="line-1011">      // contributes a primary candidate — only entryMetadata is consulted here.  Parent and</span>
-<span class="source-line-no">1012</span><span id="line-1012">      // overridingParent stores (including Spring-backed delegates) are similarly excluded because</span>
-<span class="source-line-no">1013</span><span id="line-1013">      // @Primary metadata only exists on beans this store registered itself.</span>
-<span class="source-line-no">1014</span><span id="line-1014">      Set&lt;String&gt; primaryNames = st();</span>
-<span class="source-line-no">1015</span><span id="line-1015">      var x = extras;</span>
-<span class="source-line-no">1016</span><span id="line-1016">      var em = x == null ? null : x.entryMetadata.get(beanType);</span>
-<span class="source-line-no">1017</span><span id="line-1017">      if (nn(em))</span>
-<span class="source-line-no">1018</span><span id="line-1018">         em.forEach((name, meta) -&gt; { if (meta.primary()) primaryNames.add(name); });</span>
-<span class="source-line-no">1019</span><span id="line-1019">      if (primaryNames.isEmpty())</span>
-<span class="source-line-no">1020</span><span id="line-1020">         return oe();</span>
-<span class="source-line-no">1021</span><span id="line-1021">      if (primaryNames.size() &gt; 1)</span>
-<span class="source-line-no">1022</span><span id="line-1022">         throw new BeanCreationException("Multiple @Primary candidates of type " + beanType.getName());</span>
-<span class="source-line-no">1023</span><span id="line-1023">      var primaryName = primaryNames.iterator().next();</span>
-<span class="source-line-no">1024</span><span id="line-1024">      return resolve(beanType, primaryName).map(Supplier::get);</span>
-<span class="source-line-no">1025</span><span id="line-1025">   }</span>
-<span class="source-line-no">1026</span><span id="line-1026"></span>
-<span class="source-line-no">1027</span><span id="line-1027">   private int beanOrder(Class&lt;?&gt; type, String name) {</span>
-<span class="source-line-no">1028</span><span id="line-1028">      // @Order / priority is sourced from registered entries only.  Default suppliers always carry</span>
-<span class="source-line-no">1029</span><span id="line-1029">      // BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to</span>
-<span class="source-line-no">1030</span><span id="line-1030">      // the same constant rather than tracking default-supplier metadata.</span>
-<span class="source-line-no">1031</span><span id="line-1031">      var key = emptyIfNull(name);</span>
-<span class="source-line-no">1032</span><span id="line-1032">      var x = extras;</span>
-<span class="source-line-no">1033</span><span id="line-1033">      var m = x == null ? null : x.entryMetadata.get(type);</span>
-<span class="source-line-no">1034</span><span id="line-1034">      if (m != null)</span>
-<span class="source-line-no">1035</span><span id="line-1035">         return m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();</span>
-<span class="source-line-no">1036</span><span id="line-1036">      return Integer.MAX_VALUE / 2;</span>
-<span class="source-line-no">1037</span><span id="line-1037">   }</span>
-<span class="source-line-no">1038</span><span id="line-1038"></span>
-<span class="source-line-no">1039</span><span id="line-1039">   private void checkOpen() {</span>
-<span class="source-line-no">1040</span><span id="line-1040">      if (closed)</span>
-<span class="source-line-no">1041</span><span id="line-1041">         throw new IllegalStateException("BeanStore has been closed.");</span>
-<span class="source-line-no">1042</span><span id="line-1042">   }</span>
-<span class="source-line-no">1043</span><span id="line-1043"></span>
-<span class="source-line-no">1044</span><span id="line-1044">   private record BeanSourceMeta(boolean primary, Integer order, int priority) {</span>
-<span class="source-line-no">1045</span><span id="line-1045">      static final BeanSourceMeta DEFAULT = new BeanSourceMeta(false, null, Integer.MAX_VALUE / 2);</span>
-<span class="source-line-no">1046</span><span id="line-1046"></span>
-<span class="source-line-no">1047</span><span id="line-1047">      int orderValue() {</span>
-<span class="source-line-no">1048</span><span id="line-1048">         return order == null ? priority : order.intValue();</span>
-<span class="source-line-no">1049</span><span id="line-1049">      }</span>
-<span class="source-line-no">1050</span><span id="line-1050"></span>
-<span class="source-line-no">1051</span><span id="line-1051">      static BeanSourceMeta from(java.lang.reflect.AnnotatedElement element, Bean bean) {</span>
-<span class="source-line-no">1052</span><span id="line-1052">         var order = element.getAnnotation(Order.class);</span>
-<span class="source-line-no">1053</span><span id="line-1053">         return new BeanSourceMeta(element.getAnnotation(Primary.class) != null, order == null ? null : order.value(), bean.priority());</span>
-<span class="source-line-no">1054</span><span id="line-1054">      }</span>
-<span class="source-line-no">1055</span><span id="line-1055">   }</span>
-<span class="source-line-no">1056</span><span id="line-1056">}</span>
+<span class="source-line-no">906</span><span id="line-906">         // Class.getDeclaredMethods() has no defined order, so a @Bean method that depends on a bean produced by</span>
+<span class="source-line-no">907</span><span id="line-907">         // another @Bean method of the same class may be reached first.  Methods whose parameters cannot be</span>
+<span class="source-line-no">908</span><span id="line-908">         // resolved yet are deferred and retried until a pass makes no progress.</span>
+<span class="source-line-no">909</span><span id="line-909">         var pending = new ArrayList&lt;java.lang.reflect.Method&gt;();</span>
+<span class="source-line-no">910</span><span id="line-910">         for (var method : c.getDeclaredMethods()) {</span>
+<span class="source-line-no">911</span><span id="line-911">            var beanAnn = method.getAnnotation(Bean.class);</span>
+<span class="source-line-no">912</span><span id="line-912">            if (beanAnn == null)</span>
+<span class="source-line-no">913</span><span id="line-913">               continue;</span>
+<span class="source-line-no">914</span><span id="line-914">            if (!matchesConditions(method))</span>
+<span class="source-line-no">915</span><span id="line-915">               continue;</span>
+<span class="source-line-no">916</span><span id="line-916">            pending.add(method);</span>
+<span class="source-line-no">917</span><span id="line-917">         }</span>
+<span class="source-line-no">918</span><span id="line-918">         while (! pending.isEmpty()) {</span>
+<span class="source-line-no">919</span><span id="line-919">            var deferred = new ArrayList&lt;java.lang.reflect.Method&gt;();</span>
+<span class="source-line-no">920</span><span id="line-920">            Exception firstUnresolved = null;</span>
+<span class="source-line-no">921</span><span id="line-921">            for (var method : pending) {</span>
+<span class="source-line-no">922</span><span id="line-922">               var beanAnn = method.getAnnotation(Bean.class);</span>
+<span class="source-line-no">923</span><span id="line-923">               try {</span>
+<span class="source-line-no">924</span><span id="line-924">                  if (!java.lang.reflect.Modifier.isStatic(method.getModifiers()) &amp;&amp; instance == null)</span>
+<span class="source-line-no">925</span><span id="line-925">                     instance = BeanInstantiator.of(configType, this).run();</span>
+<span class="source-line-no">926</span><span id="line-926">                  method.setAccessible(true);</span>
+<span class="source-line-no">927</span><span id="line-927">                  var value = MethodInfo.of(method).inject(this, java.lang.reflect.Modifier.isStatic(method.getModifiers()) ? null : instance);</span>
+<span class="source-line-no">928</span><span id="line-928">                  addBeanWithMeta((Class&lt;Object&gt;)method.getReturnType(), value, emptyIfNull(beanName(beanAnn)), BeanSourceMeta.from(method, beanAnn));</span>
+<span class="source-line-no">929</span><span id="line-929">               } catch (ExecutableException e) {</span>
+<span class="source-line-no">930</span><span id="line-930">                  if (e.getCause() != null || e.getMessage() == null || ! e.getMessage().startsWith("Could not resolve value for parameter"))</span>
+<span class="source-line-no">931</span><span id="line-931">                     throw new BeanCreationException("Failed to register @Bean method: " + method, e);</span>
+<span class="source-line-no">932</span><span id="line-932">                  if (firstUnresolved == null)</span>
+<span class="source-line-no">933</span><span id="line-933">                     firstUnresolved = new BeanCreationException("Failed to register @Bean method: " + method, e);</span>
+<span class="source-line-no">934</span><span id="line-934">                  deferred.add(method);</span>
+<span class="source-line-no">935</span><span id="line-935">               } catch (Exception e) {</span>
+<span class="source-line-no">936</span><span id="line-936">                  throw new BeanCreationException("Failed to register @Bean method: " + method, e);</span>
+<span class="source-line-no">937</span><span id="line-937">               }</span>
+<span class="source-line-no">938</span><span id="line-938">            }</span>
+<span class="source-line-no">939</span><span id="line-939">            if (deferred.size() == pending.size())</span>
+<span class="source-line-no">940</span><span id="line-940">               throw (BeanCreationException)firstUnresolved;</span>
+<span class="source-line-no">941</span><span id="line-941">            pending = deferred;</span>
+<span class="source-line-no">942</span><span id="line-942">         }</span>
+<span class="source-line-no">943</span><span id="line-943">      }</span>
+<span class="source-line-no">944</span><span id="line-944">   }</span>
+<span class="source-line-no">945</span><span id="line-945"></span>
+<span class="source-line-no">946</span><span id="line-946">   private boolean matchesConditions(java.lang.reflect.AnnotatedElement element) {</span>
+<span class="source-line-no">947</span><span id="line-947">      var classLoader = element instanceof Class&lt;?&gt; element2 ? element2.getClassLoader() : element.getClass().getClassLoader();</span>
+<span class="source-line-no">948</span><span id="line-948">      var ctx = new ConditionContext(this, Settings.get(), classLoader, element);</span>
+<span class="source-line-no">949</span><span id="line-949">      for (var c : element.getAnnotationsByType(Conditional.class)) {</span>
+<span class="source-line-no">950</span><span id="line-950">         if (!BeanInstantiator.of(c.value(), this).run().matches(ctx)) {</span>
+<span class="source-line-no">951</span><span id="line-951">            LOGGER.fine(() -&gt; "Skipping conditional element due to @Conditional: " + element);</span>
+<span class="source-line-no">952</span><span id="line-952">            return false;</span>
+<span class="source-line-no">953</span><span id="line-953">         }</span>
+<span class="source-line-no">954</span><span id="line-954">      }</span>
+<span class="source-line-no">955</span><span id="line-955">      for (var c : element.getAnnotationsByType(ConditionalOnClass.class)) {</span>
+<span class="source-line-no">956</span><span id="line-956">         try {</span>
+<span class="source-line-no">957</span><span id="line-957">            Class.forName(c.value(), false, classLoader);</span>
+<span class="source-line-no">958</span><span id="line-958">         } catch (@SuppressWarnings("unused") ClassNotFoundException e) {</span>
+<span class="source-line-no">959</span><span id="line-959">            LOGGER.fine(() -&gt; "Skipping conditional element due to missing class " + c.value() + ": " + element);</span>
+<span class="source-line-no">960</span><span id="line-960">            return false;</span>
+<span class="source-line-no">961</span><span id="line-961">         }</span>
+<span class="source-line-no">962</span><span id="line-962">      }</span>
+<span class="source-line-no">963</span><span id="line-963">      for (var c : element.getAnnotationsByType(ConditionalOnMissingBean.class)) {</span>
+<span class="source-line-no">964</span><span id="line-964">         var type = c.value();</span>
+<span class="source-line-no">965</span><span id="line-965">         var name = c.name().isEmpty() ? null : c.name();</span>
+<span class="source-line-no">966</span><span id="line-966">         if (type == Object.class) {</span>
+<span class="source-line-no">967</span><span id="line-967">            if (name != null &amp;&amp; anyLocalBeanNamed(name))</span>
+<span class="source-line-no">968</span><span id="line-968">               return false;</span>
+<span class="source-line-no">969</span><span id="line-969">         } else if (hasBean(type, name)) {</span>
+<span class="source-line-no">970</span><span id="line-970">            return false;</span>
+<span class="source-line-no">971</span><span id="line-971">         }</span>
+<span class="source-line-no">972</span><span id="line-972">      }</span>
+<span class="source-line-no">973</span><span id="line-973">      for (var c : element.getAnnotationsByType(ConditionalOnProperty.class)) {</span>
+<span class="source-line-no">974</span><span id="line-974">         var value = Settings.get().get(c.name()).orElse(null);</span>
+<span class="source-line-no">975</span><span id="line-975">         if (value == null &amp;&amp; !c.matchIfMissing())</span>
+<span class="source-line-no">976</span><span id="line-976">            return false;</span>
+<span class="source-line-no">977</span><span id="line-977">         if (value != null &amp;&amp; !c.havingValue().isEmpty() &amp;&amp; !c.havingValue().equals(value))</span>
+<span class="source-line-no">978</span><span id="line-978">            return false;</span>
+<span class="source-line-no">979</span><span id="line-979">      }</span>
+<span class="source-line-no">980</span><span id="line-980">      return true;</span>
+<span class="source-line-no">981</span><span id="line-981">   }</span>
+<span class="source-line-no">982</span><span id="line-982"></span>
+<span class="source-line-no">983</span><span id="line-983">   private boolean anyLocalBeanNamed(String name) {</span>
+<span class="source-line-no">984</span><span id="line-984">      var key = emptyIfNull(name);</span>
+<span class="source-line-no">985</span><span id="line-985">      var x = extras;</span>
+<span class="source-line-no">986</span><span id="line-986">      return entries.values().stream().anyMatch(m -&gt; m.containsKey(key))</span>
+<span class="source-line-no">987</span><span id="line-987">         || (x != null &amp;&amp; x.defaults.values().stream().anyMatch(m -&gt; m.containsKey(key)));</span>
+<span class="source-line-no">988</span><span id="line-988">   }</span>
+<span class="source-line-no">989</span><span id="line-989"></span>
+<span class="source-line-no">990</span><span id="line-990">   private String beanName(Bean bean) {</span>
+<span class="source-line-no">991</span><span id="line-991">      return bean.name().isEmpty() ? bean.value() : bean.name();</span>
+<span class="source-line-no">992</span><span id="line-992">   }</span>
+<span class="source-line-no">993</span><span id="line-993"></span>
+<span class="source-line-no">994</span><span id="line-994">   private &lt;T&gt; void addBeanWithMeta(Class&lt;T&gt; beanType, T bean, String name, BeanSourceMeta meta) {</span>
+<span class="source-line-no">995</span><span id="line-995">      var key = emptyIfNull(name);</span>
+<span class="source-line-no">996</span><span id="line-996">      // Duplicate-check against LOCAL entries only.  Beans present via the overridingParent or parent</span>
+<span class="source-line-no">997</span><span id="line-997">      // chain are allowed to coexist with a local registration here — the resolution order</span>
+<span class="source-line-no">998</span><span id="line-998">      // (overridingParent &gt; local &gt; parent &gt; defaults) ensures the right entry wins at lookup time.</span>
+<span class="source-line-no">999</span><span id="line-999">      // This is what lets a test-time overlay installed in the overridingParent slot coexist with a</span>
+<span class="source-line-no">1000</span><span id="line-1000">      // local @Bean factory of the same (type, name) declared on a @Configuration class without</span>
+<span class="source-line-no">1001</span><span id="line-1001">      // triggering a spurious duplicate-bean error.</span>
+<span class="source-line-no">1002</span><span id="line-1002">      var typeMap = entries.computeIfAbsent(beanType, k -&gt; new ConcurrentHashMap&lt;&gt;());</span>
+<span class="source-line-no">1003</span><span id="line-1003">      if (typeMap.containsKey(key))</span>
+<span class="source-line-no">1004</span><span id="line-1004">         throw new BeanCreationException("Duplicate bean: type=" + beanType.getName() + ", name=" + key);</span>
+<span class="source-line-no">1005</span><span id="line-1005">      typeMap.put(key, () -&gt; bean);</span>
+<span class="source-line-no">1006</span><span id="line-1006">      putEntryMeta(beanType, key, meta);</span>
+<span class="source-line-no">1007</span><span id="line-1007">   }</span>
+<span class="source-line-no">1008</span><span id="line-1008"></span>
+<span class="source-line-no">1009</span><span id="line-1009">   private &lt;T&gt; T trackResolved(T bean) {</span>
+<span class="source-line-no">1010</span><span id="line-1010">      if (bean == null)</span>
+<span class="source-line-no">1011</span><span id="line-1011">         return null;</span>
+<span class="source-line-no">1012</span><span id="line-1012">      var t = tracking;</span>
+<span class="source-line-no">1013</span><span id="line-1013">      if (t == null) {</span>
+<span class="source-line-no">1014</span><span id="line-1014">         synchronized (this) {</span>
+<span class="source-line-no">1015</span><span id="line-1015">            t = tracking;</span>
+<span class="source-line-no">1016</span><span id="line-1016">            if (t == null) {</span>
+<span class="source-line-no">1017</span><span id="line-1017">               t = new Tracking();</span>
+<span class="source-line-no">1018</span><span id="line-1018">               tracking = t;</span>
+<span class="source-line-no">1019</span><span id="line-1019">            }</span>
+<span class="source-line-no">1020</span><span id="line-1020">         }</span>
+<span class="source-line-no">1021</span><span id="line-1021">      }</span>
+<span class="source-line-no">1022</span><span id="line-1022">      synchronized (t) {</span>
+<span class="source-line-no">1023</span><span id="line-1023">         if (t.identities.add(bean))</span>
+<span class="source-line-no">1024</span><span id="line-1024">            t.beans.add(bean);</span>
+<span class="source-line-no">1025</span><span id="line-1025">      }</span>
+<span class="source-line-no">1026</span><span id="line-1026">      return bean;</span>
+<span class="source-line-no">1027</span><span id="line-1027">   }</span>
+<span class="source-line-no">1028</span><span id="line-1028"></span>
+<span class="source-line-no">1029</span><span id="line-1029">   private &lt;T&gt; Optional&lt;T&gt; selectPrimary(Class&lt;T&gt; beanType) {</span>
+<span class="source-line-no">1030</span><span id="line-1030">      // @Primary is a local-entry-only signal.  Default suppliers added via addDefaultSupplier()</span>
+<span class="source-line-no">1031</span><span id="line-1031">      // always carry BeanSourceMeta.DEFAULT (primary = false), so default suppliers never</span>
+<span class="source-line-no">1032</span><span id="line-1032">      // contributes a primary candidate — only entryMetadata is consulted here.  Parent and</span>
+<span class="source-line-no">1033</span><span id="line-1033">      // overridingParent stores (including Spring-backed delegates) are similarly excluded because</span>
+<span class="source-line-no">1034</span><span id="line-1034">      // @Primary metadata only exists on beans this store registered itself.</span>
+<span class="source-line-no">1035</span><span id="line-1035">      Set&lt;String&gt; primaryNames = st();</span>
+<span class="source-line-no">1036</span><span id="line-1036">      var x = extras;</span>
+<span class="source-line-no">1037</span><span id="line-1037">      var em = x == null ? null : x.entryMetadata.get(beanType);</span>
+<span class="source-line-no">1038</span><span id="line-1038">      if (nn(em))</span>
+<span class="source-line-no">1039</span><span id="line-1039">         em.forEach((name, meta) -&gt; { if (meta.primary()) primaryNames.add(name); });</span>
+<span class="source-line-no">1040</span><span id="line-1040">      if (primaryNames.isEmpty())</span>
+<span class="source-line-no">1041</span><span id="line-1041">         return oe();</span>
+<span class="source-line-no">1042</span><span id="line-1042">      if (primaryNames.size() &gt; 1)</span>
+<span class="source-line-no">1043</span><span id="line-1043">         throw new BeanCreationException("Multiple @Primary candidates of type " + beanType.getName());</span>
+<span class="source-line-no">1044</span><span id="line-1044">      var primaryName = primaryNames.iterator().next();</span>
+<span class="source-line-no">1045</span><span id="line-1045">      return resolve(beanType, primaryName).map(Supplier::get);</span>
+<span class="source-line-no">1046</span><span id="line-1046">   }</span>
+<span class="source-line-no">1047</span><span id="line-1047"></span>
+<span class="source-line-no">1048</span><span id="line-1048">   private int beanOrder(Class&lt;?&gt; type, String name) {</span>
+<span class="source-line-no">1049</span><span id="line-1049">      // @Order / priority is sourced from registered entries only.  Default suppliers always carry</span>
+<span class="source-line-no">1050</span><span id="line-1050">      // BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to</span>
+<span class="source-line-no">1051</span><span id="line-1051">      // the same constant rather than tracking default-supplier metadata.</span>
+<span class="source-line-no">1052</span><span id="line-1052">      var key = emptyIfNull(name);</span>
+<span class="source-line-no">1053</span><span id="line-1053">      var x = extras;</span>
+<span class="source-line-no">1054</span><span id="line-1054">      var m = x == null ? null : x.entryMetadata.get(type);</span>
+<span class="source-line-no">1055</span><span id="line-1055">      if (m != null)</span>
+<span class="source-line-no">1056</span><span id="line-1056">         return m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();</span>
+<span class="source-line-no">1057</span><span id="line-1057">      return Integer.MAX_VALUE / 2;</span>
+<span class="source-line-no">1058</span><span id="line-1058">   }</span>
+<span class="source-line-no">1059</span><span id="line-1059"></span>
+<span class="source-line-no">1060</span><span id="line-1060">   private void checkOpen() {</span>
+<span class="source-line-no">1061</span><span id="line-1061">      if (closed)</span>
+<span class="source-line-no">1062</span><span id="line-1062">         throw new IllegalStateException("BeanStore has been closed.");</span>
+<span class="source-line-no">1063</span><span id="line-1063">   }</span>
+<span class="source-line-no">1064</span><span id="line-1064"></span>
+<span class="source-line-no">1065</span><span id="line-1065">   private record BeanSourceMeta(boolean primary, Integer order, int priority) {</span>
+<span class="source-line-no">1066</span><span id="line-1066">      static final BeanSourceMeta DEFAULT = new BeanSourceMeta(false, null, Integer.MAX_VALUE / 2);</span>
+<span class="source-line-no">1067</span><span id="line-1067"></span>
+<span class="source-line-no">1068</span><span id="line-1068">      int orderValue() {</span>
+<span class="source-line-no">1069</span><span id="line-1069">         return order == null ? priority : order.intValue();</span>
+<span class="source-line-no">1070</span><span id="line-1070">      }</span>
+<span class="source-line-no">1071</span><span id="line-1071"></span>
+<span class="source-line-no">1072</span><span id="line-1072">      static BeanSourceMeta from(java.lang.reflect.AnnotatedElement element, Bean bean) {</span>
+<span class="source-line-no">1073</span><span id="line-1073">         var order = element.getAnnotation(Order.class);</span>
+<span class="source-line-no">1074</span><span id="line-1074">         return new BeanSourceMeta(element.getAnnotation(Primary.class) != null, order == null ? null : order.value(), bean.priority());</span>
+<span class="source-line-no">1075</span><span id="line-1075">      }</span>
+<span class="source-line-no">1076</span><span id="line-1076">   }</span>
+<span class="source-line-no">1077</span><span id="line-1077">}</span>
 
 
 

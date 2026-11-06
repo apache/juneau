@@ -30,6 +30,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import mvn_lock
+
 BOOTSTRAP_FILE = 'bootstrap.py'
 CONSOLE_MODES = ('full', 'board', 'none')
 
@@ -201,6 +203,14 @@ class View:
             return
         with self.run.step(id, title, label=label, parent=parent) as step:
             step.skip(reason)
+
+    def lock_wait(self, say):
+        """The on_wait callback for the Maven lock: the log lines, plus (under the view) a "Maven lock" row that
+        appears only if the lock is busy.  Call .close() on it once the lock is taken."""
+        # juneau_terminal itself: the scripts' run module wraps steps but has no bare row or tick
+        jr = None if self.run is None else sys.modules.get('juneau_terminal')
+        open_row = None if jr is None else lambda: jr.row("mvn-lock", "Maven lock", label="Maven lock")
+        return mvn_lock.WaitRow(open_row or (lambda: None), say, None if jr is None else jr.tick)
 
     def paused(self):
         """The console view cleared for the block, so a prompt or an interactive child isn't drawn over; a no-op when plain."""

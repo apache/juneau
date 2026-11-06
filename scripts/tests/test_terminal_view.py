@@ -426,3 +426,11 @@ def test_console_flag_is_validated(script):
     result = subprocess.run([sys.executable, '-B', str(SCRIPTS_DIR / script), '--console', 'loud'],
                             capture_output=True, text=True)
     assert result.returncode == 2 and "invalid choice: 'loud'" in result.stderr
+
+
+def test_lock_wait_without_a_board_only_logs():
+    said = []
+    waiting = terminal_view.View().lock_wait(said.append)
+    waiting(None, 0)
+    waiting.close()
+    assert said

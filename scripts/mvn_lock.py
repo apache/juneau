@@ -15,6 +15,7 @@ The shared Maven lock, in Python: the same `mkdir` lock as ~/agents/skills/junea
 Documented in the Gotchas of push.md and build-docs.md.
 """
 
+import contextlib
 import os
 import shutil
 import subprocess
@@ -177,3 +178,52 @@ def wait_notifier(say, every=60):
             state['last'] = waited
             say(f"Waiting for the Maven lock held by {describe_holder(pid)} ({int(waited)}s so far)")
     return notify
+
+
+def holder_name(pid):
+    """A short name for the holder, for the board: its script (push.py), else its command's basename."""
+    if pid is None:
+        return "another build"
+    cmd = subprocess.run(['ps', '-o', 'command=', '-p', str(pid)], capture_output=True, text=True,
+                         check=False).stdout.split()
+    script = next((Path(a).name for a in cmd if a.endswith('.py')), None)
+    return f"pid {pid} ({script or (Path(cmd[0]).name if cmd else '?')})"
+
+
+def _clock(seconds):
+    return f"{int(seconds) // 60}:{int(seconds) % 60:02d}"
+
+
+class WaitRow:
+    """
+    An on_wait callback that shows the wait on the board: a "Maven lock" row, opened on the first wait only, whose
+    detail names the holder and whose timer runs while it waits.  open_row() returns the row's context manager (its
+    step has .detail and .summary), or None when there is no board; tick redraws the board.  close() ends the row ok
+    once the lock is taken, and does nothing when the lock was free.  The log's say lines stay (see wait_notifier).
+    """
+
+    def __init__(self, open_row, say, tick=None, every=60):
+        self.open_row = open_row
+        self.tick = tick
+        self.say = wait_notifier(say, every)
+        self.stack = contextlib.ExitStack()
+        self.step = None
+        self.waited = 0
+
+    def __call__(self, pid, waited):
+        self.say(pid, waited)
+        self.waited = waited
+        if self.step is None:
+            cm = self.open_row()
+            if cm is None:
+                return
+            self.step = self.stack.enter_context(cm)
+        self.step.detail(f"held by {holder_name(pid)}")
+        if self.tick:
+            self.tick()
+
+    def close(self):
+        if self.step is not None:
+            self.step.summary = f"acquired after {_clock(self.waited)}"
+            self.stack.close()
+            self.step = None

@@ -682,7 +682,13 @@ def build(args, master_root, docs_dir):
     else:
         # Hold the shared Maven lock from the clean install until the javadocs and site are copied out of
         # target/, so a concurrent Juneau push cannot clean target/ in between.
-        maven_lock = None if DRY_RUN else mvn_lock.MvnLock(on_wait=mvn_lock.wait_notifier(say)).acquire()
+        maven_lock = None
+        if not DRY_RUN:
+            waiting = VIEW.lock_wait(say)
+            try:
+                maven_lock = mvn_lock.MvnLock(on_wait=waiting).acquire()
+            finally:
+                waiting.close()
         try:
             compile_java_modules(master_root)
             generate_maven_site(master_root)
