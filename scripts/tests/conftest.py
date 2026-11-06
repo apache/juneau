@@ -249,6 +249,12 @@ def _fake_jdk_root(monkeypatch, tmp_path_factory):
 
 
 @pytest.fixture(autouse=True)
+def _no_real_jdk_passes(monkeypatch, tmp_path_factory):
+    """The jdk-verify step records passes in ~/.cache/juneau-terminal/jdk-passes.json; point it at a scratch file."""
+    monkeypatch.setenv("JUNEAU_JDK_PASSES", str(tmp_path_factory.mktemp("jdk-passes") / "jdk-passes.json"))
+
+
+@pytest.fixture(autouse=True)
 def _no_open_files(monkeypatch):
     """Nothing in the suite may launch the desktop opener for an email file."""
     monkeypatch.setenv("JRM_NO_OPEN", "1")

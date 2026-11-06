@@ -11,7 +11,9 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """The multi-JDK gate: resolution, the jdk-verify step, the --check row, the params keys and the vote email line."""
+import json
 import os
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -114,8 +116,9 @@ def test_an_experimental_failure_is_a_warning_in_the_result(make_ctx, root):
 
     def cmd(argv, **kw):
         out = real(argv, **kw)
-        calls.append(kw.get("env", {}).get("JAVA_HOME"))
-        if kw.get("env", {}).get("JAVA_HOME", "").endswith("jdk-28"):
+        home = (kw.get("env") or {}).get("JAVA_HOME", "")
+        calls.append(home)
+        if home.endswith("jdk-28"):
             return type(out)(False, 1, "")
         return out
     ctx.fake.cmd = cmd
@@ -208,3 +211,96 @@ def test_vote_email_carries_the_tested_line_only_when_there_is_one():
     assert "Tested on" not in emails.vote(d, facts)[2]
     body = emails.vote(d, {**facts, "jdks": "Tested on JDKs: 17, 21"})[2]
     assert "Tested on JDKs: 17, 21\n\nBuild the release candidate using:" in body
+
+
+# ---- the shared pass record (~/.cache/juneau-terminal/jdk-passes.json, written by Juneau's push.py / test.py too)
+
+RELEASE_SHA = "c" * 40
+PARENT_SHA = "d" * 40
+
+
+def test_record_pass_round_trips_and_sorts_by_major(tmp_path):
+    f = tmp_path / "sub" / "jdk-passes.json"
+    for label in ("28-ea", "17", "21", "17"):
+        assert jdks.record_pass(RELEASE_SHA, label, file=f)
+    assert jdks.recorded_passes(RELEASE_SHA, file=f) == ["17", "21", "28-ea"]
+    assert len(json.loads(f.read_text())[RELEASE_SHA]) == 3
+    assert jdks.recorded_passes("e" * 40, file=f) == []
+
+
+def test_pass_record_tolerates_missing_and_corrupt_files(tmp_path):
+    f = tmp_path / "jdk-passes.json"
+    assert jdks.recorded_passes(RELEASE_SHA, file=f) == []
+    f.write_text("{oops")
+    assert jdks.recorded_passes(RELEASE_SHA, file=f) == []
+    assert jdks.record_pass(RELEASE_SHA, "21", file=f)
+    assert jdks.recorded_passes(RELEASE_SHA, file=f) == ["21"]
+    assert not jdks.record_pass(None, "21", file=f)
+
+
+def test_pass_record_prunes_old_entries_and_extra_commits(tmp_path, monkeypatch):
+    f = tmp_path / "jdk-passes.json"
+    now = datetime(2026, 11, 6, tzinfo=timezone.utc)
+    jdks.record_pass("1" * 40, "17", file=f, now=now - timedelta(days=jdks.PASSES_MAX_AGE_DAYS + 1))
+    jdks.record_pass("2" * 40, "17", file=f, now=now)
+    assert list(json.loads(f.read_text())) == ["2" * 40]
+    monkeypatch.setattr(jdks, "PASSES_MAX_COMMITS", 2)
+    for i in (3, 4, 5):
+        jdks.record_pass(str(i) * 40, "17", file=f, now=now + timedelta(minutes=i))
+    assert sorted(json.loads(f.read_text())) == ["4" * 40, "5" * 40]
+
+
+def test_recorded_line_wording():
+    assert jdks.recorded_line([]) == ""
+    assert jdks.recorded_line(["17"]) == "Tested on JDK 17."
+    assert jdks.recorded_line(["17", "21"]) == "Tested on JDK 17 and 21."
+    assert jdks.recorded_line(["17", "21", "28-ea"]) == "Tested on JDK 17, 21 and 28-ea."
+
+
+def test_pass_label_uses_the_token_or_asks_the_jdk(tmp_path):
+    assert jdks.pass_label(17, "/nowhere") == "17"
+    assert jdks.pass_label("28-ea", "/nowhere") == "28-ea"
+    home = tmp_path / "x.jdk"
+    (home / "bin").mkdir(parents=True)
+    java = home / "bin" / "java"
+    java.write_text('#!/bin/sh\necho \'openjdk version "25.0.1" 2025-10-21\' >&2\n')
+    java.chmod(0o755)
+    assert jdks.pass_label(str(home), str(home)) == "25"
+    assert jdks.pass_label(str(home), str(tmp_path / "missing")) is None
+
+
+def test_jdk_verify_records_passes_for_the_built_commit(make_ctx, root):
+    ctx = ctx_with(make_ctx, root)
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", "HEAD", out=PARENT_SHA + "\n")
+    rc.jdk_verify(ctx)
+    assert jdks.recorded_passes(PARENT_SHA) == ["17", "21", "28"]
+
+
+def test_jdk_verify_records_only_passing_jdks(make_ctx, root):
+    ctx = ctx_with(make_ctx, root)
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", "HEAD", out=PARENT_SHA + "\n")
+    ctx.fake.script("mvn", ok=False)
+    with pytest.raises(StepError):
+        rc.jdk_verify(ctx)
+    assert jdks.recorded_passes(PARENT_SHA) == []
+
+
+def test_vote_email_line_comes_from_the_record(make_ctx, root):
+    ctx = make_ctx(state={"nexusRepoId": "orgapachejuneau-1002"})
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", f"{ctx.rc_tag}^{{commit}}", out=RELEASE_SHA + "\n")
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", f"{RELEASE_SHA}^", out=PARENT_SHA + "\n")
+    jdks.record_pass(PARENT_SHA, "17")
+    jdks.record_pass(RELEASE_SHA, "21")
+    jdks.record_pass(RELEASE_SHA, "28-ea")
+    with pytest.raises(ctx.pause):
+        rc.compose_vote_email(ctx)
+    mail = (ctx.run_dir / "emails" / "vote.eml.txt").read_text()
+    assert "Tested on JDK 17, 21 and 28-ea.\n" in mail
+
+
+def test_vote_email_omits_the_line_when_nothing_is_recorded(make_ctx, root):
+    ctx = make_ctx(state={"nexusRepoId": "orgapachejuneau-1002"})
+    ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", f"{ctx.rc_tag}^{{commit}}", out=RELEASE_SHA + "\n")
+    with pytest.raises(ctx.pause):
+        rc.compose_vote_email(ctx)
+    assert "Tested on" not in (ctx.run_dir / "emails" / "vote.eml.txt").read_text()

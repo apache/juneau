@@ -460,6 +460,11 @@ def compose_vote_email(ctx):
     facts = {"src_sha": sha(f"apache-juneau-{v}-src.zip"), "bin_sha": sha(f"apache-juneau-{v}-bin.zip"), "commit": commit,
              "repo": ctx.rf.get("nexusRepoId") or "REPO_NOT_FOUND",
              "deadline": deadline.astimezone().strftime("%d-%b-%Y %-I:%M%p %Z")}
-    facts["jdks"] = jdks.tested_line(ctx.rf.get("jdkResults"))
+    # jdk-verify records its passes on the commit it built, the parent of the release commit; the record can also hold
+    # passes of the release commit itself (push.py / test.py runs).  Without either, fall back to this run's results.
+    parent = ctx.runner.run(["git", "-C", str(ctx.ws), "rev-parse", f"{commit}^"], title="Verified commit", mutating=False)
+    labels = sorted({*jdks.recorded_passes(commit), *(jdks.recorded_passes(parent.out.strip()) if parent.ok else [])},
+                    key=jdks._sort_key)
+    facts["jdks"] = jdks.recorded_line(labels) or jdks.tested_line(ctx.rf.get("jdkResults"))
     to, sub, body = emails.vote(ctx.d, facts)
     return emails.send(ctx, "vote", to, sub, body)
