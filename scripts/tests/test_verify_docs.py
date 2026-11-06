@@ -286,6 +286,17 @@ def test_lockfile_absent_is_skipped(docs):
 
 def test_lockfile_other_host_fails(docs):
     write(docs / 'package-lock.json', LOCK_OK.replace('https://registry.npmjs.org/', 'https://mirror.example.net/npm/'))
-    assert run(docs, ['lockfile']) == [(17, '`resolved` URL is not on the public npm registry: '
+    assert run(docs, ['lockfile']) == [(17, '`resolved` URL is not a public npm registry tarball URL: '
                                             'https://mirror.example.net/npm/a/-/a-1.0.0.tgz', 'package-lock.json')]
     assert verify.main(['--docs-dir', str(docs), '--only', 'lockfile']) == 1
+
+
+def test_lockfile_scoped_url_passes(docs):
+    write(docs / 'package-lock.json', LOCK_OK.replace('a/-/a-1.0.0.tgz', '@s/a/-/a-1.0.0.tgz'))
+    assert run(docs, ['lockfile']) == []
+
+
+def test_lockfile_npm_prefixed_path_fails(docs):
+    write(docs / 'package-lock.json', LOCK_OK.replace('npmjs.org/a/', 'npmjs.org/npm/a/'))
+    assert run(docs, ['lockfile']) == [(17, '`resolved` URL is not a public npm registry tarball URL: '
+                                            'https://registry.npmjs.org/npm/a/-/a-1.0.0.tgz', 'package-lock.json')]

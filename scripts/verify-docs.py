@@ -61,6 +61,8 @@ GUIDES_LANDING_SLUG = '/guides'
 # Every `resolved` URL in package-lock.json must be on the public npm registry.
 LOCKFILE_RESOLVED_RE = re.compile(r'"resolved":\s*"([^"]*)"')
 PUBLIC_NPM_REGISTRY = 'https://registry.npmjs.org/'
+# After the registry prefix the path must be `<name>/-/<file>.tgz` or `@scope/name/-/<file>.tgz` (rejects `/npm/ws/-/...`).
+LOCKFILE_TARBALL_PATH_RE = re.compile(r'^(?:@[^/]+/)?[^/]+/-/[^/]+\.tgz$')
 # A numbered landing row that links a topic (`8. [Title](/docs/topics/Slug)...`): a guide kept as a sidebar `ref`.
 LANDING_TOPIC_ROW_RE = re.compile(r'^\d+\. \[[^\]]*\]\(/docs/topics/([A-Za-z][A-Za-z0-9]*)\)', re.M)
 
@@ -729,7 +731,7 @@ def run_checks(docs_dir, enabled, anchors_enabled, findings):
 
 
 def _check_lockfile(lockfile, findings):
-    """Check 17: every `resolved` URL in package-lock.json is on the public npm registry (a mirror leaks in when npm runs
+    """Check 17: every `resolved` URL in package-lock.json is on the public npm registry with a canonical tarball path (a mirror leaks in when npm runs
     against a local registry setting).  Skipped when there is no lockfile."""
     if not lockfile.is_file():
         return
@@ -738,8 +740,9 @@ def _check_lockfile(lockfile, findings):
         if not m:
             continue
         url = m.group(1)
-        if not url.startswith(PUBLIC_NPM_REGISTRY):
-            findings.error(17, f'`resolved` URL is not on the public npm registry: {url}',
+        if not (url.startswith(PUBLIC_NPM_REGISTRY)
+                and LOCKFILE_TARBALL_PATH_RE.match(url[len(PUBLIC_NPM_REGISTRY):])):
+            findings.error(17, f'`resolved` URL is not a public npm registry tarball URL: {url}',
                            file=lockfile.name, line=line)
 
 
