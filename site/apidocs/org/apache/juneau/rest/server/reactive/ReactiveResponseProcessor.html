@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-119">ReactiveResponseProcessor</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-126">ReactiveResponseProcessor</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a></span></div>
 <div class="block">Response processor that bridges <a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>
@@ -129,7 +129,9 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
    <li><b>Buffer</b> (default, any other media type) &mdash; all elements are collected into a
       <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> and serialized through the normal serializer chain (e.g. a JSON
       array). The collection is wrapped in a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> and handed to the async path,
-      so a slow producer never blocks the request thread.
+      so a slow producer never blocks the request thread. The collection is bounded by
+      <a href="ReactiveResponseProperties.html#getMaxBufferedElements()"><code>ReactiveResponse.maxBufferedElements</code></a>
+      (default 10,000 elements).
  </ul>
 
  <h2 class='topic'>Backpressure</h2>
@@ -138,7 +140,11 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
  each frame is written and flushed). Because writing to the servlet output stream blocks until the
  socket accepts the bytes, this gives natural backpressure &mdash; the producer is paced by the
  client's drain rate and the server-side buffer does not grow without bound. Buffer-shape subscribers
- request <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html#MAX_VALUE" title="class or interface in java.lang" class="external-link"><code>Long.MAX_VALUE</code></a> since the collection is bounded by the publisher's own completion.
+ request at most one element more than the configured limit
+ (<a href="ReactiveResponseProperties.html#getMaxBufferedElements()"><code>ReactiveResponse.maxBufferedElements</code></a>, default
+ 10,000). If the publisher emits more elements than the limit, the subscription is cancelled and the request
+ fails with a <code>500</code> response whose message names the limit; the response is never silently truncated.
+ The subscription is likewise cancelled when the buffered response times out or is otherwise abandoned.
 
  <h2 class='topic'>Threading, executors, and MDC</h2>
  <p>
@@ -228,7 +234,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ReactiveResponseProcessor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-124">ReactiveResponseProcessor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-131">ReactiveResponseProcessor</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -242,7 +248,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
 <li>
 <section class="detail" id="process(org.apache.juneau.rest.server.RestOpSession)">
 <h3>process</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-172">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/reactive/ReactiveResponseProcessor.html#line-179">process</a></span><wbr><span class="parameters">(<a href="../RestOpSession.html" title="class in org.apache.juneau.rest.server">RestOpSession</a>&nbsp;opSession)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../../../http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response">BasicHttpException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../processor/ResponseProcessor.html#process(org.apache.juneau.rest.server.RestOpSession)">ResponseProcessor</a></code></span></div>
