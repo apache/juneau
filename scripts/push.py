@@ -1161,7 +1161,11 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):
     """
     if args.dry_run:
         return _push_steps_locked(s, args, run, console, script_dir, juneau_root, mvn_lock.MvnLock())
-    lock = mvn_lock.MvnLock(on_wait=mvn_lock.wait_notifier(say)).acquire()
+    waiting = mvn_lock.WaitRow(lambda: run.row("mvn-lock", "Maven lock", label="Maven lock"), say, run.tick)
+    try:
+        lock = mvn_lock.MvnLock(on_wait=waiting).acquire()
+    finally:
+        waiting.close()
     try:
         return _push_steps_locked(s, args, run, console, script_dir, juneau_root, lock)
     finally:

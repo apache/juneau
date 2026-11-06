@@ -83,6 +83,9 @@ class RemoteClient_ReturnModesAndRetry_Test extends TestBase {
 
 		// Fails with 503 for the first `failFirstNAttempts` hits (reset per-test), then succeeds.
 		server.createContext("/flaky", exchange -> {
+			// Read the request body first: closing the exchange while a streamed body is still arriving can drop
+			// the connection before the client reads the response headers.
+			exchange.getRequestBody().readAllBytes();
 			var n = retryHits.incrementAndGet();
 			if (n <= failFirstNAttempts) {
 				exchange.sendResponseHeaders(503, -1);

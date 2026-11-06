@@ -165,3 +165,62 @@ def test_a_stale_lock_is_broken_even_when_subprocess_run_is_replaced(lockenv, mo
     monkeypatch.setattr(subprocess, 'run', lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, '', ''))
     with mvn_lock.MvnLock():
         assert (lockenv / 'lockdir' / 'pid').read_text().strip() == str(os.getpid())
+
+
+class _FakeStep:
+    def __init__(self):
+        self.details = []
+        self.summary = None
+
+    def detail(self, text):
+        self.details.append(text)
+
+
+class _FakeRow:
+    def __init__(self, log, step):
+        self.log, self.step = log, step
+
+    def __enter__(self):
+        self.log.append('open')
+        return self.step
+
+    def __exit__(self, *exc):
+        self.log.append('close')
+        return False
+
+
+def test_wait_row_not_opened_when_lock_is_free(lockenv):
+    log = []
+    waiting = mvn_lock.WaitRow(lambda: _FakeRow(log, _FakeStep()), lambda t: None)
+    with mvn_lock.MvnLock(on_wait=waiting):
+        pass
+    waiting.close()
+    assert log == []
+
+
+def test_wait_row_shows_holder_then_ends_with_elapsed(lockenv):
+    log, step, said = [], _FakeStep(), []
+    waiting = mvn_lock.WaitRow(lambda: _FakeRow(log, step), said.append)
+    waiting(None, 0)
+    waiting(None, 125)
+    assert log == ['open'] and step.details == ['held by another build'] * 2 and said
+    waiting.close()
+    assert log == ['open', 'close'] and step.summary == 'acquired after 2:05'
+    waiting.close()
+    assert log == ['open', 'close']
+
+
+def test_wait_row_without_a_board_only_logs(lockenv):
+    said = []
+    waiting = mvn_lock.WaitRow(lambda: None, said.append)
+    waiting(None, 0)
+    waiting.close()
+    assert said
+
+
+def test_holder_name_prefers_the_script(monkeypatch):
+    class R:
+        stdout = '/usr/bin/python3 /x/scripts/push.py --test-only'
+    monkeypatch.setattr(mvn_lock.subprocess, 'run', lambda *a, **k: R)
+    assert mvn_lock.holder_name(77) == 'pid 77 (push.py)'
+    assert mvn_lock.holder_name(None) == 'another build'
