@@ -161,6 +161,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#categorical()" class="member-name-link">categorical</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Colours every distinct value of a <code>pill</code> column from the categorical palette.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#category(java.lang.String,int)" class="member-name-link">category</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+ int&nbsp;slot)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Pins one cell value of a <code>pill</code> column to a categorical palette slot.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#meta(java.lang.String,java.lang.Object)" class="member-name-link">meta</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -208,6 +219,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a <code>progress</code> renderer with maximum and optional warn/exceeds thresholds.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tone(java.lang.String,org.apache.juneau.console.widgets.StatusTone)" class="member-name-link">tone</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+ <a href="../widgets/StatusTone.html" title="enum class in org.apache.juneau.console.widgets">StatusTone</a>&nbsp;tone)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Maps one cell value to a status tone on a <code>pill</code> renderer.</div>
+</div>
 </div>
 </div>
 </div>
@@ -242,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="popover">
 <h3>popover</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CellPopover.html" title="class in org.apache.juneau.console.views">CellPopover</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-116">popover</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CellPopover.html" title="class in org.apache.juneau.console.views">CellPopover</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-211">popover</a></span></div>
 <div class="block">Optional per-cell popover, omitted from the wire when unset.
 
  <p>
@@ -319,9 +336,98 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="tone(java.lang.String,org.apache.juneau.console.widgets.StatusTone)">
+<h3>tone</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-141">tone</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+ <a href="../widgets/StatusTone.html" title="enum class in org.apache.juneau.console.widgets">StatusTone</a>&nbsp;tone)</span></div>
+<div class="block">Maps one cell value to a status tone on a <code>pill</code> renderer.
+
+ <p>
+ Emits <code>meta.tones[value] = tone.wire()</code>.  Value matching is exact and case-sensitive against the string
+ the chip displays.  Re-adding a value replaces its tone and keeps its position.
+
+ <h4 class='section'>Precedence (first hit wins):</h4>
+ <ol>
+   <li>An entry added here.
+   <li>A slot pinned with <a href="#category(java.lang.String,int)"><code>category(String,int)</code></a>.
+   <li><a href="#categorical()"><code>categorical()</code></a>: the value's hashed palette slot.
+   <li>The column-wide tone from <a href="#pill(org.apache.juneau.console.widgets.StatusTone)"><code>pill(StatusTone)</code></a>.
+   <li>Otherwise no colour class; but in a column that uses <code>tone(...)</code> or <code>category(...)</code> an
+      unmapped value renders as a neutral (grey) chip.
+ </ol>
+
+ <h4 class='section'>Example:</h4>
+ <p class='bjava'>
+   <jc>// Renders as {id:"pill",meta:{tones:{AVAILABLE:"success",SOLD:"neutral"}}}.</jc>
+   Render <jv>r</jv> = Render.<jsm>pill</jsm>()
+      .tone(<js>"AVAILABLE"</js>, StatusTone.<jsf>SUCCESS</jsf>)
+      .tone(<js>"SOLD"</js>, StatusTone.<jsf>NEUTRAL</jsf>);
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The cell value, case-sensitive.  Must not be <jk>null</jk> or blank.</dd>
+<dd><code>tone</code> - The status tone.  Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If this is not a <code>pill</code> renderer.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <code>value</code> is <jk>null</jk> or blank, or <code>tone</code> is <jk>null</jk>.</dd>
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="categorical()">
+<h3>categorical</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-163">categorical</a></span>()</div>
+<div class="block">Colours every distinct value of a <code>pill</code> column from the categorical palette.
+
+ <p>
+ Emits <code>meta.categorical = true</code>.  A value without an explicit <a href="#tone(java.lang.String,org.apache.juneau.console.widgets.StatusTone)"><code>tone(String,StatusTone)</code></a> or
+ <a href="#category(java.lang.String,int)"><code>category(String,int)</code></a> entry gets a stable colour from <a href="PillPalette.html#slot(java.lang.String)"><code>PillPalette.slot(String)</code></a>: the same value
+ has the same colour on every page.  Hashing is case-sensitive, and hashing <code>N</code> values into
+ <a href="PillPalette.html#SIZE"><code>PillPalette.SIZE</code></a> slots can collide; pin a closed set with <a href="#category(java.lang.String,int)"><code>category(String,int)</code></a>.
+ See <a href="#tone(java.lang.String,org.apache.juneau.console.widgets.StatusTone)"><code>tone(String,StatusTone)</code></a> for the full precedence.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If this is not a <code>pill</code> renderer.</dd>
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="category(java.lang.String,int)">
+<h3>category</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-184">category</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+ int&nbsp;slot)</span></div>
+<div class="block">Pins one cell value of a <code>pill</code> column to a categorical palette slot.
+
+ <p>
+ Emits <code>meta.categories[value] = slot</code>.  Use it for a closed value set so the values get distinct colours
+ instead of a hash collision.  Value matching is exact and case-sensitive.  See
+ <a href="#tone(java.lang.String,org.apache.juneau.console.widgets.StatusTone)"><code>tone(String,StatusTone)</code></a> for the full precedence.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The cell value, case-sensitive.  Must not be <jk>null</jk> or blank.</dd>
+<dd><code>slot</code> - The palette slot, 1 through <a href="PillPalette.html#SIZE"><code>PillPalette.SIZE</code></a>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - If this is not a <code>pill</code> renderer.</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <code>value</code> is <jk>null</jk> or blank, or <code>slot</code> is out of range.</dd>
+<dt>Since:</dt>
+<dd>10.0.0</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="popover(org.apache.juneau.console.views.CellPopover)">
 <h3>popover</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-124">popover</a></span><wbr><span class="parameters">(<a href="CellPopover.html" title="class in org.apache.juneau.console.views">CellPopover</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-219">popover</a></span><wbr><span class="parameters">(<a href="CellPopover.html" title="class in org.apache.juneau.console.views">CellPopover</a>&nbsp;value)</span></div>
 <div class="block">Sets the optional per-cell popover.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -334,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="progress(int)">
 <h3>progress</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-139">progress</a></span><wbr><span class="parameters">(int&nbsp;max)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-234">progress</a></span><wbr><span class="parameters">(int&nbsp;max)</span></div>
 <div class="block">Creates a <code>progress</code> renderer with the given maximum (denominator).
 
  <p>
@@ -351,7 +457,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="progress(int,java.lang.Integer,java.lang.Integer)">
 <h3>progress</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-155">progress</a></span><wbr><span class="parameters">(int&nbsp;max,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-250">progress</a></span><wbr><span class="parameters">(int&nbsp;max,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;warn,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;exceeds)</span></div>
 <div class="block">Creates a <code>progress</code> renderer with maximum and optional warn/exceeds thresholds.
@@ -372,7 +478,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pill()">
 <h3>pill</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-178">pill</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-273">pill</a></span>()</div>
 <div class="block">Creates a <code>pill</code> renderer with the leading dot on and the tone inherited from the chip theme.
 
  <p>
@@ -392,7 +498,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pill(java.lang.String)">
 <h3>pill</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-201">pill</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tone)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-296">pill</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tone)</span></div>
 <div class="block">Creates a <code>pill</code> renderer with an explicit dot tone.
 
  <p>
@@ -418,7 +524,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pill(org.apache.juneau.console.widgets.StatusTone)">
 <h3>pill</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-224">pill</a></span><wbr><span class="parameters">(<a href="../widgets/StatusTone.html" title="enum class in org.apache.juneau.console.widgets">StatusTone</a>&nbsp;tone)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Render.html" title="class in org.apache.juneau.console.views">Render</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/Render.html#line-319">pill</a></span><wbr><span class="parameters">(<a href="../widgets/StatusTone.html" title="enum class in org.apache.juneau.console.widgets">StatusTone</a>&nbsp;tone)</span></div>
 <div class="block">Creates a <code>pill</code> renderer with an explicit dot tone taken from the <a href="../widgets/StatusTone.html" title="enum class in org.apache.juneau.console.widgets"><code>StatusTone</code></a> palette.
 
  <p>

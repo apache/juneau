@@ -70,32 +70,33 @@
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  		CUIF + <span class="jxr_string">"Decorator.java"</span>, CUIF + <span class="jxr_string">"Fn.java"</span>, CUIF + <span class="jxr_string">"Markers.java"</span>, CUIF + <span class="jxr_string">"Bands.java"</span>, CUIF + <span class="jxr_string">"Thresholds.java"</span>, CUIF + <span class="jxr_string">"Annotations.java"</span>,
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		CUIF + <span class="jxr_string">"DataSourceDef.java"</span>, CUIF + <span class="jxr_string">"Derived.java"</span>, CD + <span class="jxr_string">"SeriesSource.java"</span>, CD + <span class="jxr_string">"SeriesAggregator.java"</span>,
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  		CUIF + <span class="jxr_string">"Section.java"</span>, CUIF + <span class="jxr_string">"RangeSection.java"</span>, CUIF + <span class="jxr_string">"SearchSection.java"</span>, CUIF + <span class="jxr_string">"ChoiceSection.java"</span>,
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		CUIF + <span class="jxr_string">"CardSection.java"</span>, CUIF + <span class="jxr_string">"Rail.java"</span>, CUIF + <span class="jxr_string">"PersistSpec.java"</span>, CUIF + <span class="jxr_string">"DashboardSpec.java"</span>);
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertHasExampleBlock(Path file) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		assertTrue(Files.exists(file), () -&gt; <span class="jxr_string">"Missing file, update NEW_PUBLIC_TYPE_FILES: '"</span> + file + <span class="jxr_string">"'."</span>);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> text = Files.readString(file);
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> typeIdx = text.indexOf(<span class="jxr_string">"public final class"</span>);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">if</strong> (typeIdx &lt; 0)
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public class"</span>);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<strong class="jxr_keyword">if</strong> (typeIdx &lt; 0)
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public interface"</span>);
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">if</strong> (typeIdx &lt; 0)
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public abstract class"</span>);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		assertTrue(typeIdx &gt;= 0, () -&gt; <span class="jxr_string">"No public type declaration found in '"</span> + file + <span class="jxr_string">"'."</span>);
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> javadoc = text.substring(0, typeIdx);
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"&lt;h2 class='section'&gt;Example:&lt;/h2&gt;"</span>),
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing the class-level &lt;h2 class='section'&gt;Example:&lt;/h2&gt; Javadoc block."</span>);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"@since 10.0.0"</span>),
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing @since 10.0.0 on its class-level Javadoc."</span>);
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> everyNewPublicType_hasExampleBlock() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> root = juneauRoot();
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rel : NEW_PUBLIC_TYPE_FILES)
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  			assertHasExampleBlock(root.resolve(rel));
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		CUIF + <span class="jxr_string">"CardSection.java"</span>, CUIF + <span class="jxr_string">"Rail.java"</span>, CUIF + <span class="jxr_string">"PersistSpec.java"</span>, CUIF + <span class="jxr_string">"DashboardSpec.java"</span>,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		CUIF + <span class="jxr_string">"SwitcherDef.java"</span>, CUIF + <span class="jxr_string">"SwitcherCardType.java"</span>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> assertHasExampleBlock(Path file) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		assertTrue(Files.exists(file), () -&gt; <span class="jxr_string">"Missing file, update NEW_PUBLIC_TYPE_FILES: '"</span> + file + <span class="jxr_string">"'."</span>);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> text = Files.readString(file);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">var</strong> typeIdx = text.indexOf(<span class="jxr_string">"public final class"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">if</strong> (typeIdx &lt; 0)
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public class"</span>);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<strong class="jxr_keyword">if</strong> (typeIdx &lt; 0)
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public interface"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">if</strong> (typeIdx &lt; 0)
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			typeIdx = text.indexOf(<span class="jxr_string">"public abstract class"</span>);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		assertTrue(typeIdx &gt;= 0, () -&gt; <span class="jxr_string">"No public type declaration found in '"</span> + file + <span class="jxr_string">"'."</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">var</strong> javadoc = text.substring(0, typeIdx);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"&lt;h2 class='section'&gt;Example:&lt;/h2&gt;"</span>),
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing the class-level &lt;h2 class='section'&gt;Example:&lt;/h2&gt; Javadoc block."</span>);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		assertTrue(javadoc.contains(<span class="jxr_string">"@since 10.0.0"</span>),
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  			() -&gt; <span class="jxr_string">"'"</span> + file + <span class="jxr_string">"' is missing @since 10.0.0 on its class-level Javadoc."</span>);
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> everyNewPublicType_hasExampleBlock() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">var</strong> root = juneauRoot();
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> rel : NEW_PUBLIC_TYPE_FILES)
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			assertHasExampleBlock(root.resolve(rel));
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	}
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

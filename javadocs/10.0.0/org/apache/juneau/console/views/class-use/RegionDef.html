@@ -78,55 +78,77 @@ loadScripts(document, 'script');</script>
 <div class="block">Opts in app-approved populator names for <a href="../RegionDef.html#populate"><code>populate</code></a>, in addition to
  <a href="../PopulatorAllowlist.html#BUILTIN_IDS"><code>PopulatorAllowlist.BUILTIN_IDS</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#config(java.util.Map)" class="member-name-link">config</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
+<div class="col-first odd-row-color"><code>static <a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#chart(java.lang.String,java.lang.String)" class="member-name-link">chart</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dataUrl)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Creates a chart region fed by a same-origin endpoint that returns row records.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#config(java.util.Map)" class="member-name-link">config</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the populator-owned structured configuration.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#create(java.lang.String)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static <a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#create(java.lang.String)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Creates a region with the given id.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#dataUrl(java.lang.String)" class="member-name-link">dataUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#dataUrl(java.lang.String)" class="member-name-link">dataUrl</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the same-origin data-fetch endpoint.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#fields(org.apache.juneau.console.views.RegionDef.Field...)" class="member-name-link">fields</a><wbr>(<a href="../RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a>...&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#fields(org.apache.juneau.console.views.RegionDef.Field...)" class="member-name-link">fields</a><wbr>(<a href="../RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the field catalog.</div>
 </div>
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#height(int)" class="member-name-link">height</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the chart height in pixels (chart regions only).</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#lazy(boolean)" class="member-name-link">lazy</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#kind(java.lang.String)" class="member-name-link">kind</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets the chart kind (chart regions only).</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#lazy(boolean)" class="member-name-link">lazy</a><wbr>(boolean&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets whether this region's first populate is deferred until it becomes visible.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#params(java.lang.Object...)" class="member-name-link">params</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#params(java.lang.Object...)" class="member-name-link">params</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;keyValuePairs)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the author-declared request parameters from key/value pairs, preserving call order.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#params(java.util.Map)" class="member-name-link">params</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#params(java.util.Map)" class="member-name-link">params</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the author-declared request parameters.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#populate(java.lang.String)" class="member-name-link">populate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#populate(java.lang.String)" class="member-name-link">populate</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the name of the client populator to resolve.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#refreshMs(long)" class="member-name-link">refreshMs</a><wbr>(long&nbsp;intervalMs)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#refreshMs(long)" class="member-name-link">refreshMs</a><wbr>(long&nbsp;intervalMs)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Declares that this region should be polled (re-fetched and re-populated) on the given interval.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#renderer(java.lang.String)" class="member-name-link">renderer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#renderer(java.lang.String)" class="member-name-link">renderer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the helper name the declarative default paints with.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#series(java.lang.String,java.lang.String)" class="member-name-link">series</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Adds a plotted series (chart regions only).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#titleFields(java.lang.String...)" class="member-name-link">titleFields</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</code></div>
@@ -153,26 +175,37 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Hides this region unless every rule matches.</div>
 </div>
+<div class="col-first even-row-color"><code><a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionDef.</span><code><a href="../RegionDef.html#x(java.lang.String)" class="member-name-link">x</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the record field plotted on the x axis (chart regions only).</div>
+</div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.console.views</a> with parameters of type <a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../../../bean/html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RegionTable.</span><code><a href="../RegionTable.html#of(org.apache.juneau.console.views.RegionDef)" class="member-name-link">of</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;region)</code></div>
+<div class="col-first even-row-color"><code>static <a href="../DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">DetailTab.</span><code><a href="../DetailTab.html#chart(java.lang.String,org.apache.juneau.console.views.RegionDef)" class="member-name-link">chart</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
+ <a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;region)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Emits one empty region container.</div>
+<div class="block">Starts a chart tab.</div>
 </div>
 <div class="col-first odd-row-color"><code>static <a href="../../../bean/html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RegionTable.</span><code><a href="../RegionTable.html#of(org.apache.juneau.console.views.RegionDef,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;region,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;csrfToken)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RegionTable.</span><code><a href="../RegionTable.html#of(org.apache.juneau.console.views.RegionDef)" class="member-name-link">of</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;region)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Emits one empty region container.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../../../bean/html5/Div.html" title="class in org.apache.juneau.bean.html5">Div</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RegionTable.</span><code><a href="../RegionTable.html#of(org.apache.juneau.console.views.RegionDef,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;region,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;csrfToken)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Emits one empty region container, optionally carrying the non-table host's CSRF stamp.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#region(org.apache.juneau.console.views.RegionDef)" class="member-name-link">region</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#region(org.apache.juneau.console.views.RegionDef)" class="member-name-link">region</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the detail panel's region.</div>
 </div>
 </div>

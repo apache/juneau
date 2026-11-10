@@ -76,7 +76,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="freemarker/ChartCardType.html" title="class in org.apache.juneau.console.freemarker">ChartCardType</a></code>, <code><a href="freemarker/DatatablesCardType.html" title="class in org.apache.juneau.console.freemarker">DatatablesCardType</a></code>, <code><a href="HtmlCardType.html" title="class in org.apache.juneau.console">HtmlCardType</a></code>, <code><a href="../petstore/console/dev/InventoryGaugeCardType.html" title="class in org.apache.juneau.petstore.console.dev">InventoryGaugeCardType</a></code>, <code><a href="freemarker/JobLogCardType.html" title="class in org.apache.juneau.console.freemarker">JobLogCardType</a></code>, <code><a href="freemarker/TerminalCardType.html" title="class in org.apache.juneau.console.freemarker">TerminalCardType</a></code></dd>
+<dd><code><a href="freemarker/ChartCardType.html" title="class in org.apache.juneau.console.freemarker">ChartCardType</a></code>, <code><a href="freemarker/DatatablesCardType.html" title="class in org.apache.juneau.console.freemarker">DatatablesCardType</a></code>, <code><a href="HtmlCardType.html" title="class in org.apache.juneau.console">HtmlCardType</a></code>, <code><a href="../petstore/console/dev/InventoryGaugeCardType.html" title="class in org.apache.juneau.petstore.console.dev">InventoryGaugeCardType</a></code>, <code><a href="freemarker/JobLogCardType.html" title="class in org.apache.juneau.console.freemarker">JobLogCardType</a></code>, <code><a href="freemarker/SwitcherCardType.html" title="class in org.apache.juneau.console.freemarker">SwitcherCardType</a></code>, <code><a href="freemarker/TerminalCardType.html" title="class in org.apache.juneau.console.freemarker">TerminalCardType</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-50">CardTypeHandler</a></span></div>
@@ -136,19 +136,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Topics this card publishes without declaring them, for R-10.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks</a><wbr>(<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#nestedCards(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">nestedCards</a><wbr>(<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">The cards this card holds, for a container type such as a switcher.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks</a><wbr>(<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment</a><wbr>(<a href="CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Validates the authored card and returns its contract fragment.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">The type name this handler serves.</div>
 </div>
 </div>
@@ -215,9 +220,10 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="acceptedRoles()">
 <h3>acceptedRoles</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-96">acceptedRoles</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-97">acceptedRoles</a></span>()</div>
 <div class="block">Roles this type accepts in <code>subscribes[].as</code>, beyond <code>refresh</code> and <code>params</code>.
  <code>null</code> (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.
+ For a card class these mirror the keys of its JS <code>static roles</code>.  A handler subscription (<code>topic</code> + <code>handler</code>) names no role and is never checked against this set.
 
  <h4 class='section'>Example:</h4>
  <p class='bjava'>
@@ -233,8 +239,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="acceptedOps()">
 <h3>acceptedOps</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-114">acceptedOps</a></span>()</div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-116">acceptedOps</a></span>()</div>
 <div class="block"><code>cmd:&lt;id&gt;</code> ops this type handles, beyond the shell's <code>refresh</code>, for E-43 on a ribbon <code>target</code>.
+ For a card class these mirror the keys of its JS <code>static ops</code>.
  <code>null</code> (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports
  an unhandled op at runtime (E-JS-48).
 
@@ -252,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requiredPacks(org.apache.juneau.marshall.collections.JsonMap)">
 <h3>requiredPacks</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-134">requiredPacks</a></span><wbr><span class="parameters">(<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span></div>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-136">requiredPacks</a></span><wbr><span class="parameters">(<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span></div>
 <div class="block">Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.
  Unioned with the type's packs and the card's <code>requires=</code>.  Default: none.
 
@@ -268,6 +275,28 @@ loadScripts(document, 'script');</script>
 <dd><code>body</code> - The card's body: this type's fragment, as <a href="#toFragment(org.apache.juneau.console.CardSource)"><code>toFragment(CardSource)</code></a> returned it.</dd>
 <dt>Returns:</dt>
 <dd>The pack names; each must be a registered pack.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="nestedCards(org.apache.juneau.marshall.collections.JsonMap)">
+<h3>nestedCards</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeHandler.html#line-153">nestedCards</a></span><wbr><span class="parameters">(<a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span></div>
+<div class="block">The cards this card holds, for a container type such as a switcher.  The registry lifts each one through its own
+ type's handler, and the page validators and pack requirements treat them as page cards.  Default: none.
+
+ <h4 class='section'>Example:</h4>
+ <p class='bjava'>
+   <ja>@Override</ja>
+   <jk>public</jk> List&lt;Map&lt;String,Object&gt;&gt; nestedCards(JsonMap <jv>body</jv>) {
+     <jk>return</jk> (List&lt;Map&lt;String,Object&gt;&gt;)<jv>body</jv>.get(<js>"cards"</js>);
+   }
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>body</code> - The card's body: this type's fragment, or the card object as the page contract holds it.</dd>
+<dt>Returns:</dt>
+<dd>The nested card maps themselves (each with <code>id</code> and <code>type</code>), not copies, so they can be replaced in place.</dd>
 </dl>
 </section>
 </li>

@@ -99,93 +99,98 @@
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		report = run(<span class="jxr_string">"chart"</span>, base, List.of(
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"store"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/store"</span>,
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  				<span class="jxr_string">"actions"</span>, List.of(
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, drawn(<span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"by-species"</span>, <span class="jxr_string">"by-status"</span>, <span class="jxr_string">"pets-map"</span>)),
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"!!document.querySelector('#revenue-body .petstore-kpi-value')"</span>)),
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<span class="jxr_string">"queries"</span>, Map.of(
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					<span class="jxr_string">"trend"</span>, option(<span class="jxr_string">"orders-trend"</span>) + <span class="jxr_string">".series.map(function (s) { return s.name; })"</span>,
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  					<span class="jxr_string">"speciesType"</span>, option(<span class="jxr_string">"by-species"</span>) + <span class="jxr_string">".series[0].type"</span>,
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  					<span class="jxr_string">"statusType"</span>, option(<span class="jxr_string">"by-status"</span>) + <span class="jxr_string">".series[0].type"</span>,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 					<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"document.querySelector('#revenue-body .petstore-kpi-value').textContent"</span>,
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					<span class="jxr_string">"revenueLabel"</span>, <span class="jxr_string">"document.querySelector('#revenue-body .petstore-kpi-label').textContent"</span>,
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					<span class="jxr_string">"live"</span>, <span class="jxr_string">"window.JuneauConsole.charts.__liveCount()"</span>),
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				<span class="jxr_string">"fetches"</span>, Map.of(<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"/console/store/kpi/revenue"</span>)),
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"cards"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/dev/cards"</span>,
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				<span class="jxr_string">"actions"</span>, List.of(
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 					Map.of(<span class="jxr_string">"waitFor"</span>, drawn(<span class="jxr_string">"bands"</span>, <span class="jxr_string">"prices"</span>)),
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__picked = []; window.JuneauViews.bus.subscribe('app.band-picked', function (v) { window.__picked.push(v); }, { retained: false });"</span>),
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 					Map.of(<span class="jxr_string">"press"</span>, List.of(<span class="jxr_string">"#bands .jc-chart-plot"</span>, <span class="jxr_string">"ArrowRight"</span>)),
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 					Map.of(<span class="jxr_string">"press"</span>, List.of(<span class="jxr_string">"#bands .jc-chart-plot"</span>, <span class="jxr_string">"Enter"</span>)),
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"window.__picked.length &gt; 0"</span>),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.JuneauConsole.cardApi('prices').chart().dispatchAction({ type: 'dataZoom', dataZoomIndex: 0, start: 0, end: 50 })"</span>),
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"!!window.JuneauViews.bus.get('zoom:prices')"</span>)),
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 				<span class="jxr_string">"queries"</span>, Map.of(
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					<span class="jxr_string">"stacks"</span>, option(<span class="jxr_string">"bands"</span>) + <span class="jxr_string">".series.map(function (s) { return s.stack; })"</span>,
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 					<span class="jxr_string">"subtext"</span>, option(<span class="jxr_string">"bands"</span>) + <span class="jxr_string">".title.subtext"</span>,
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 					<span class="jxr_string">"picked"</span>, <span class="jxr_string">"window.__picked.map(function (v) { return { card: v.card, species: v.row &amp;&amp; v.row.species }; })"</span>,
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 					<span class="jxr_string">"zoom"</span>, <span class="jxr_string">"window.JuneauViews.bus.get('zoom:prices')"</span>),
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 				<span class="jxr_string">"fetches"</span>, Map.of(<span class="jxr_string">"pets"</span>, <span class="jxr_string">"/petstore/pets"</span>))));
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_javadoccomment">/** The body of a {@code fetches} entry, after asserting its status is 200. */</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// fetches are {status, body} objects.</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	})
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String fetched(Map&lt;String,Object&gt; c, String key) {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;)((Map&lt;String,Object&gt;)c.get(<span class="jxr_string">"fetches"</span>)).get(key);
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertEquals(200, ((Number)f.get(<span class="jxr_string">"status"</span>)).intValue(), () -&gt; key + <span class="jxr_string">": "</span> + f);
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> String.valueOf(f.get(<span class="jxr_string">"body"</span>));
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	}
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	<em class="jxr_comment">// a - Store dashboard</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, drawn(<span class="jxr_string">"revenue-chart"</span>, <span class="jxr_string">"orders-trend"</span>, <span class="jxr_string">"by-species"</span>)),
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.JuneauConsole.cardApi('pets-sw').select('status')"</span>),
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, drawn(<span class="jxr_string">"by-status"</span>)),
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.JuneauConsole.cardApi('pets-sw').select('both')"</span>),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, drawn(<span class="jxr_string">"pets-map"</span>)),
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"!!document.querySelector('#revenue-body .petstore-kpi-value')"</span>)),
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<span class="jxr_string">"queries"</span>, Map.of(
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					<span class="jxr_string">"trend"</span>, option(<span class="jxr_string">"orders-trend"</span>) + <span class="jxr_string">".series.map(function (s) { return s.name; })"</span>,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					<span class="jxr_string">"speciesType"</span>, option(<span class="jxr_string">"by-species"</span>) + <span class="jxr_string">".series[0].type"</span>,
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					<span class="jxr_string">"statusType"</span>, option(<span class="jxr_string">"by-status"</span>) + <span class="jxr_string">".series[0].type"</span>,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"document.querySelector('#revenue-body .petstore-kpi-value').textContent"</span>,
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					<span class="jxr_string">"revenueLabel"</span>, <span class="jxr_string">"document.querySelector('#revenue-body .petstore-kpi-label').textContent"</span>,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 					<span class="jxr_string">"live"</span>, <span class="jxr_string">"window.JuneauConsole.charts.__liveCount()"</span>),
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				<span class="jxr_string">"fetches"</span>, Map.of(<span class="jxr_string">"revenue"</span>, <span class="jxr_string">"/console/store/kpi/revenue"</span>)),
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			Map.of(<span class="jxr_string">"name"</span>, <span class="jxr_string">"cards"</span>, <span class="jxr_string">"path"</span>, <span class="jxr_string">"/console/dev/cards"</span>,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				<span class="jxr_string">"actions"</span>, List.of(
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 					Map.of(<span class="jxr_string">"waitFor"</span>, drawn(<span class="jxr_string">"bands"</span>, <span class="jxr_string">"prices"</span>)),
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.__picked = []; window.JuneauViews.bus.subscribe('app.band-picked', function (v) { window.__picked.push(v); }, { retained: false });"</span>),
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 					Map.of(<span class="jxr_string">"press"</span>, List.of(<span class="jxr_string">"#bands .jc-chart-plot"</span>, <span class="jxr_string">"ArrowRight"</span>)),
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 					Map.of(<span class="jxr_string">"press"</span>, List.of(<span class="jxr_string">"#bands .jc-chart-plot"</span>, <span class="jxr_string">"Enter"</span>)),
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"window.__picked.length &gt; 0"</span>),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 					Map.of(<span class="jxr_string">"evaluate"</span>, <span class="jxr_string">"window.JuneauConsole.cardApi('prices').chart().dispatchAction({ type: 'dataZoom', dataZoomIndex: 0, start: 0, end: 50 })"</span>),
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 					Map.of(<span class="jxr_string">"waitFor"</span>, <span class="jxr_string">"!!window.JuneauViews.bus.get('zoom:prices')"</span>)),
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 				<span class="jxr_string">"queries"</span>, Map.of(
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 					<span class="jxr_string">"stacks"</span>, option(<span class="jxr_string">"bands"</span>) + <span class="jxr_string">".series.map(function (s) { return s.stack; })"</span>,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 					<span class="jxr_string">"subtext"</span>, option(<span class="jxr_string">"bands"</span>) + <span class="jxr_string">".title.subtext"</span>,
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 					<span class="jxr_string">"picked"</span>, <span class="jxr_string">"window.__picked.map(function (v) { return { card: v.card, species: v.row &amp;&amp; v.row.species }; })"</span>,
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 					<span class="jxr_string">"zoom"</span>, <span class="jxr_string">"window.JuneauViews.bus.get('zoom:prices')"</span>),
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 				<span class="jxr_string">"fetches"</span>, Map.of(<span class="jxr_string">"pets"</span>, <span class="jxr_string">"/petstore/pets"</span>))));
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	<em class="jxr_javadoccomment">/** The body of a {@code fetches} entry, after asserting its status is 200. */</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// fetches are {status, body} objects.</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	})
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String fetched(Map&lt;String,Object&gt; c, String key) {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> f = (Map&lt;String,Object&gt;)((Map&lt;String,Object&gt;)c.get(<span class="jxr_string">"fetches"</span>)).get(key);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(200, ((Number)f.get(<span class="jxr_string">"status"</span>)).intValue(), () -&gt; key + <span class="jxr_string">": "</span> + f);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">return</strong> String.valueOf(f.get(<span class="jxr_string">"body"</span>));
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	@Test <strong class="jxr_keyword">void</strong> a01_storeChartsDraw() {
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"store"</span>);
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		assertList(query(c, <span class="jxr_string">"trend"</span>), <span class="jxr_string">"Placed"</span>, <span class="jxr_string">"Delivered"</span>);
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertString(<span class="jxr_string">"pie"</span>, query(c, <span class="jxr_string">"speciesType"</span>));
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertString(<span class="jxr_string">"bar"</span>, query(c, <span class="jxr_string">"statusType"</span>));
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(4, ((Number)query(c, <span class="jxr_string">"live"</span>)).intValue());
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> a02_revenueTileShowsTheServerValue() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"store"</span>);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertTrue(pinned &gt; 0, <span class="jxr_string">"no priced pet to deliver"</span>);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(pinned, <strong class="jxr_keyword">new</strong> JsonMap(fetched(c, <span class="jxr_string">"revenue"</span>)).get(<span class="jxr_string">"value"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001);
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		<strong class="jxr_keyword">var</strong> text = String.valueOf(query(c, <span class="jxr_string">"revenue"</span>));
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		assertTrue(text.endsWith(<span class="jxr_string">" USD"</span>), () -&gt; <span class="jxr_string">"revenue has no unit: "</span> + text);
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(pinned, Double.parseDouble(text.substring(0, text.length() - 4)), 0.001);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertString(<span class="jxr_string">"Revenue today"</span>, query(c, <span class="jxr_string">"revenueLabel"</span>));
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<em class="jxr_comment">// b - Custom cards charts</em>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> b01_bandsAreStacked() {
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertList(query(assertClean(report, <span class="jxr_string">"cards"</span>), <span class="jxr_string">"stacks"</span>), <span class="jxr_string">"total"</span>, <span class="jxr_string">"total"</span>, <span class="jxr_string">"total"</span>);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> b02_appDecoratorTotalsThePets() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"cards"</span>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		<strong class="jxr_keyword">var</strong> pets = <strong class="jxr_keyword">new</strong> JsonList(fetched(c, <span class="jxr_string">"pets"</span>)).size();
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		assertString(pets + <span class="jxr_string">" pets in all"</span>, query(c, <span class="jxr_string">"subtext"</span>));
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Test <strong class="jxr_keyword">void</strong> b03_keyboardClickPublishesTheBand() {
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		assertList(query(assertClean(report, <span class="jxr_string">"cards"</span>), <span class="jxr_string">"picked"</span>), <span class="jxr_string">"{card=bands,species=BIRD}"</span>);
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	}
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	@Test <strong class="jxr_keyword">void</strong> b04_zoomWindowIsPublished() {
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		@SuppressWarnings({
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// the retained value is a JSON object.</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		})
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">var</strong> z = (Map&lt;String,Object&gt;)query(assertClean(report, <span class="jxr_string">"cards"</span>), <span class="jxr_string">"zoom"</span>);
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		assertNotNull(z, <span class="jxr_string">"no zoom:prices value"</span>);
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		assertEquals(0, ((Number)z.get(<span class="jxr_string">"start"</span>)).intValue());
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		assertEquals(50, ((Number)z.get(<span class="jxr_string">"end"</span>)).intValue());
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	}
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<em class="jxr_comment">// a - Store dashboard</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a01_storeChartsDraw() {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"store"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertList(query(c, <span class="jxr_string">"trend"</span>), <span class="jxr_string">"Placed"</span>, <span class="jxr_string">"Delivered"</span>);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertString(<span class="jxr_string">"pie"</span>, query(c, <span class="jxr_string">"speciesType"</span>));
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertString(<span class="jxr_string">"bar"</span>, query(c, <span class="jxr_string">"statusType"</span>));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		<em class="jxr_comment">// Revenue, orders and the three pets views: a view the switcher has built stays alive when hidden.</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(5, ((Number)query(c, <span class="jxr_string">"live"</span>)).intValue());
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> a02_revenueTileShowsTheServerValue() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"store"</span>);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertTrue(pinned &gt; 0, <span class="jxr_string">"no priced pet to deliver"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(pinned, <strong class="jxr_keyword">new</strong> JsonMap(fetched(c, <span class="jxr_string">"revenue"</span>)).get(<span class="jxr_string">"value"</span>, Double.<strong class="jxr_keyword">class</strong>), 0.001);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">var</strong> text = String.valueOf(query(c, <span class="jxr_string">"revenue"</span>));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertTrue(text.endsWith(<span class="jxr_string">" USD"</span>), () -&gt; <span class="jxr_string">"revenue has no unit: "</span> + text);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(pinned, Double.parseDouble(text.substring(0, text.length() - 4)), 0.001);
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertString(<span class="jxr_string">"Revenue today"</span>, query(c, <span class="jxr_string">"revenueLabel"</span>));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 	<em class="jxr_comment">// b - Custom cards charts</em>
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test <strong class="jxr_keyword">void</strong> b01_bandsAreStacked() {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertList(query(assertClean(report, <span class="jxr_string">"cards"</span>), <span class="jxr_string">"stacks"</span>), <span class="jxr_string">"total"</span>, <span class="jxr_string">"total"</span>, <span class="jxr_string">"total"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> b02_appDecoratorTotalsThePets() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		<strong class="jxr_keyword">var</strong> c = assertClean(report, <span class="jxr_string">"cards"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">var</strong> pets = <strong class="jxr_keyword">new</strong> JsonList(fetched(c, <span class="jxr_string">"pets"</span>)).size();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		assertString(pets + <span class="jxr_string">" pets in all"</span>, query(c, <span class="jxr_string">"subtext"</span>));
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Test <strong class="jxr_keyword">void</strong> b03_keyboardClickPublishesTheBand() {
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		assertList(query(assertClean(report, <span class="jxr_string">"cards"</span>), <span class="jxr_string">"picked"</span>), <span class="jxr_string">"{card=bands,species=BIRD}"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	@Test <strong class="jxr_keyword">void</strong> b04_zoomWindowIsPublished() {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		@SuppressWarnings({
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// the retained value is a JSON object.</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		})
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		<strong class="jxr_keyword">var</strong> z = (Map&lt;String,Object&gt;)query(assertClean(report, <span class="jxr_string">"cards"</span>), <span class="jxr_string">"zoom"</span>);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		assertNotNull(z, <span class="jxr_string">"no zoom:prices value"</span>);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		assertEquals(0, ((Number)z.get(<span class="jxr_string">"start"</span>)).intValue());
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		assertEquals(50, ((Number)z.get(<span class="jxr_string">"end"</span>)).intValue());
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 	}
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -508,65 +508,121 @@
 <span class="source-line-no">495</span><span id="line-495">      for (var o : contract.getList("cards"))</span>
 <span class="source-line-no">496</span><span id="line-496">         if (id.equals(((JsonMap)o).getString("id")))</span>
 <span class="source-line-no">497</span><span id="line-497">            return (JsonMap)o;</span>
-<span class="source-line-no">498</span><span id="line-498">      throw new AssertionError("no card '" + id + "'; cards: " + cardIds());</span>
-<span class="source-line-no">499</span><span id="line-499">   }</span>
-<span class="source-line-no">500</span><span id="line-500"></span>
-<span class="source-line-no">501</span><span id="line-501">   private List&lt;String&gt; cardIds() {</span>
-<span class="source-line-no">502</span><span id="line-502">      return contract.getList("cards").stream().map(o -&gt; ((JsonMap)o).getString("id")).toList();</span>
-<span class="source-line-no">503</span><span id="line-503">   }</span>
-<span class="source-line-no">504</span><span id="line-504"></span>
-<span class="source-line-no">505</span><span id="line-505">   private static Object resolvePointer(Object node, String pointer) {</span>
-<span class="source-line-no">506</span><span id="line-506">      if (pointer.isEmpty())</span>
-<span class="source-line-no">507</span><span id="line-507">         return node;</span>
-<span class="source-line-no">508</span><span id="line-508">      if (! pointer.startsWith("/"))</span>
-<span class="source-line-no">509</span><span id="line-509">         throw new AssertionError("json pointer '" + pointer + "' must start with '/'");</span>
-<span class="source-line-no">510</span><span id="line-510">      var cur = node;</span>
-<span class="source-line-no">511</span><span id="line-511">      for (var raw : pointer.substring(1).split("/", -1)) {</span>
-<span class="source-line-no">512</span><span id="line-512">         var seg = raw.replace("~1", "/").replace("~0", "~");</span>
-<span class="source-line-no">513</span><span id="line-513">         if (cur instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">514</span><span id="line-514">            cur = m.get(seg);</span>
-<span class="source-line-no">515</span><span id="line-515">         } else if (cur instanceof List&lt;?&gt; l) {</span>
-<span class="source-line-no">516</span><span id="line-516">            var idx = Integer.parseInt(seg);</span>
-<span class="source-line-no">517</span><span id="line-517">            cur = idx &gt;= 0 &amp;&amp; idx &lt; l.size() ? l.get(idx) : null;</span>
-<span class="source-line-no">518</span><span id="line-518">         } else {</span>
-<span class="source-line-no">519</span><span id="line-519">            throw new AssertionError("json pointer '" + pointer + "' hit a leaf before '" + seg + "'; node was: " + cur);</span>
-<span class="source-line-no">520</span><span id="line-520">         }</span>
-<span class="source-line-no">521</span><span id="line-521">      }</span>
-<span class="source-line-no">522</span><span id="line-522">      return cur;</span>
-<span class="source-line-no">523</span><span id="line-523">   }</span>
-<span class="source-line-no">524</span><span id="line-524"></span>
-<span class="source-line-no">525</span><span id="line-525">   private static List&lt;String&gt; strings(List&lt;?&gt; l) {</span>
-<span class="source-line-no">526</span><span id="line-526">      return l == null ? List.of() : l.stream().map(String::valueOf).toList();</span>
-<span class="source-line-no">527</span><span id="line-527">   }</span>
-<span class="source-line-no">528</span><span id="line-528"></span>
-<span class="source-line-no">529</span><span id="line-529">   // Depth-aware: page markup may itself contain &lt;template&gt; elements.</span>
-<span class="source-line-no">530</span><span id="line-530">   private static Map&lt;String,String&gt; scanTemplates(String html) {</span>
-<span class="source-line-no">531</span><span id="line-531">      var out = new LinkedHashMap&lt;String,String&gt;();</span>
-<span class="source-line-no">532</span><span id="line-532">      var m = TEMPLATE_OPEN.matcher(html);</span>
-<span class="source-line-no">533</span><span id="line-533">      var from = 0;</span>
-<span class="source-line-no">534</span><span id="line-534">      while (m.find(from)) {</span>
-<span class="source-line-no">535</span><span id="line-535">         var start = m.end();</span>
-<span class="source-line-no">536</span><span id="line-536">         var depth = 1;</span>
-<span class="source-line-no">537</span><span id="line-537">         var i = start;</span>
-<span class="source-line-no">538</span><span id="line-538">         while (depth &gt; 0) {</span>
-<span class="source-line-no">539</span><span id="line-539">            var open = html.indexOf("&lt;template", i);</span>
-<span class="source-line-no">540</span><span id="line-540">            var close = html.indexOf("&lt;/template&gt;", i);</span>
-<span class="source-line-no">541</span><span id="line-541">            if (close &lt; 0)</span>
-<span class="source-line-no">542</span><span id="line-542">               throw new AssertionError("unterminated &lt;template data-" + m.group(1) + "=\"" + m.group(2) + "\"&gt;");</span>
-<span class="source-line-no">543</span><span id="line-543">            if (open &gt;= 0 &amp;&amp; open &lt; close) {</span>
-<span class="source-line-no">544</span><span id="line-544">               depth++;</span>
-<span class="source-line-no">545</span><span id="line-545">               i = open + 9;</span>
-<span class="source-line-no">546</span><span id="line-546">            } else {</span>
-<span class="source-line-no">547</span><span id="line-547">               depth--;</span>
-<span class="source-line-no">548</span><span id="line-548">               i = close + 11;</span>
-<span class="source-line-no">549</span><span id="line-549">            }</span>
-<span class="source-line-no">550</span><span id="line-550">         }</span>
-<span class="source-line-no">551</span><span id="line-551">         out.put(m.group(2), html.substring(start, i - 11));</span>
-<span class="source-line-no">552</span><span id="line-552">         from = i;</span>
-<span class="source-line-no">553</span><span id="line-553">      }</span>
+<span class="source-line-no">498</span><span id="line-498">      for (var o : contract.getList("cards")) {</span>
+<span class="source-line-no">499</span><span id="line-499">         var found = findNested((JsonMap)o, id);</span>
+<span class="source-line-no">500</span><span id="line-500">         if (found != null)</span>
+<span class="source-line-no">501</span><span id="line-501">            return found;</span>
+<span class="source-line-no">502</span><span id="line-502">      }</span>
+<span class="source-line-no">503</span><span id="line-503">      throw new AssertionError("no card '" + id + "'; cards: " + cardIds());</span>
+<span class="source-line-no">504</span><span id="line-504">   }</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">   /**</span>
+<span class="source-line-no">507</span><span id="line-507">    * Asserts that a card sits inside another card (a switcher view or section).</span>
+<span class="source-line-no">508</span><span id="line-508">    *</span>
+<span class="source-line-no">509</span><span id="line-509">    * @param parentId The enclosing card id.</span>
+<span class="source-line-no">510</span><span id="line-510">    * @param id The nested card id.</span>
+<span class="source-line-no">511</span><span id="line-511">    * @param type The expected nested card type.</span>
+<span class="source-line-no">512</span><span id="line-512">    * @return This object.</span>
+<span class="source-line-no">513</span><span id="line-513">    */</span>
+<span class="source-line-no">514</span><span id="line-514">   public PageContractAssert hasNestedCard(String parentId, String id, String type) {</span>
+<span class="source-line-no">515</span><span id="line-515">      var parent = card(parentId);</span>
+<span class="source-line-no">516</span><span id="line-516">      var found = findNested(parent, id);</span>
+<span class="source-line-no">517</span><span id="line-517">      if (found == null)</span>
+<span class="source-line-no">518</span><span id="line-518">         throw new AssertionError("card '" + parentId + "' does not hold a nested card '" + id + "'");</span>
+<span class="source-line-no">519</span><span id="line-519">      if (neq(type, found.getString("type")))</span>
+<span class="source-line-no">520</span><span id="line-520">         throw new AssertionError("nested card '" + id + "' type: expected '" + type + "' but was '" + found.getString("type") + "'");</span>
+<span class="source-line-no">521</span><span id="line-521">      return this;</span>
+<span class="source-line-no">522</span><span id="line-522">   }</span>
+<span class="source-line-no">523</span><span id="line-523"></span>
+<span class="source-line-no">524</span><span id="line-524">   // Depth-first through views[*].card and views[*].sections[*].card.</span>
+<span class="source-line-no">525</span><span id="line-525">   private static JsonMap findNested(JsonMap card, String id) {</span>
+<span class="source-line-no">526</span><span id="line-526">      if (! (card.get("views") instanceof List&lt;?&gt; views))</span>
+<span class="source-line-no">527</span><span id="line-527">         return null;</span>
+<span class="source-line-no">528</span><span id="line-528">      for (var v : views) {</span>
+<span class="source-line-no">529</span><span id="line-529">         if (! (v instanceof Map&lt;?,?&gt; vm))</span>
+<span class="source-line-no">530</span><span id="line-530">            continue;</span>
+<span class="source-line-no">531</span><span id="line-531">         var candidates = new ArrayList&lt;Object&gt;();</span>
+<span class="source-line-no">532</span><span id="line-532">         candidates.add(vm.get("card"));</span>
+<span class="source-line-no">533</span><span id="line-533">         if (vm.get("sections") instanceof List&lt;?&gt; secs)</span>
+<span class="source-line-no">534</span><span id="line-534">            for (var s : secs)</span>
+<span class="source-line-no">535</span><span id="line-535">               if (s instanceof Map&lt;?,?&gt; sm)</span>
+<span class="source-line-no">536</span><span id="line-536">                  candidates.add(sm.get("card"));</span>
+<span class="source-line-no">537</span><span id="line-537">         for (var c : candidates) {</span>
+<span class="source-line-no">538</span><span id="line-538">            if (! (c instanceof Map&lt;?,?&gt; cm))</span>
+<span class="source-line-no">539</span><span id="line-539">               continue;</span>
+<span class="source-line-no">540</span><span id="line-540">            var j = cm instanceof JsonMap jm ? jm : new JsonMap(toStringKeys(cm));</span>
+<span class="source-line-no">541</span><span id="line-541">            if (id.equals(j.getString("id")))</span>
+<span class="source-line-no">542</span><span id="line-542">               return j;</span>
+<span class="source-line-no">543</span><span id="line-543">            var deeper = findNested(j, id);</span>
+<span class="source-line-no">544</span><span id="line-544">            if (deeper != null)</span>
+<span class="source-line-no">545</span><span id="line-545">               return deeper;</span>
+<span class="source-line-no">546</span><span id="line-546">         }</span>
+<span class="source-line-no">547</span><span id="line-547">      }</span>
+<span class="source-line-no">548</span><span id="line-548">      return null;</span>
+<span class="source-line-no">549</span><span id="line-549">   }</span>
+<span class="source-line-no">550</span><span id="line-550"></span>
+<span class="source-line-no">551</span><span id="line-551">   private static Map&lt;String,Object&gt; toStringKeys(Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">552</span><span id="line-552">      var out = new LinkedHashMap&lt;String,Object&gt;();</span>
+<span class="source-line-no">553</span><span id="line-553">      m.forEach((k, v) -&gt; out.put(String.valueOf(k), v));</span>
 <span class="source-line-no">554</span><span id="line-554">      return out;</span>
 <span class="source-line-no">555</span><span id="line-555">   }</span>
-<span class="source-line-no">556</span><span id="line-556">}</span>
+<span class="source-line-no">556</span><span id="line-556"></span>
+<span class="source-line-no">557</span><span id="line-557">   private List&lt;String&gt; cardIds() {</span>
+<span class="source-line-no">558</span><span id="line-558">      return contract.getList("cards").stream().map(o -&gt; ((JsonMap)o).getString("id")).toList();</span>
+<span class="source-line-no">559</span><span id="line-559">   }</span>
+<span class="source-line-no">560</span><span id="line-560"></span>
+<span class="source-line-no">561</span><span id="line-561">   private static Object resolvePointer(Object node, String pointer) {</span>
+<span class="source-line-no">562</span><span id="line-562">      if (pointer.isEmpty())</span>
+<span class="source-line-no">563</span><span id="line-563">         return node;</span>
+<span class="source-line-no">564</span><span id="line-564">      if (! pointer.startsWith("/"))</span>
+<span class="source-line-no">565</span><span id="line-565">         throw new AssertionError("json pointer '" + pointer + "' must start with '/'");</span>
+<span class="source-line-no">566</span><span id="line-566">      var cur = node;</span>
+<span class="source-line-no">567</span><span id="line-567">      for (var raw : pointer.substring(1).split("/", -1)) {</span>
+<span class="source-line-no">568</span><span id="line-568">         var seg = raw.replace("~1", "/").replace("~0", "~");</span>
+<span class="source-line-no">569</span><span id="line-569">         if (cur instanceof Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">570</span><span id="line-570">            cur = m.get(seg);</span>
+<span class="source-line-no">571</span><span id="line-571">         } else if (cur instanceof List&lt;?&gt; l) {</span>
+<span class="source-line-no">572</span><span id="line-572">            var idx = Integer.parseInt(seg);</span>
+<span class="source-line-no">573</span><span id="line-573">            cur = idx &gt;= 0 &amp;&amp; idx &lt; l.size() ? l.get(idx) : null;</span>
+<span class="source-line-no">574</span><span id="line-574">         } else {</span>
+<span class="source-line-no">575</span><span id="line-575">            throw new AssertionError("json pointer '" + pointer + "' hit a leaf before '" + seg + "'; node was: " + cur);</span>
+<span class="source-line-no">576</span><span id="line-576">         }</span>
+<span class="source-line-no">577</span><span id="line-577">      }</span>
+<span class="source-line-no">578</span><span id="line-578">      return cur;</span>
+<span class="source-line-no">579</span><span id="line-579">   }</span>
+<span class="source-line-no">580</span><span id="line-580"></span>
+<span class="source-line-no">581</span><span id="line-581">   private static List&lt;String&gt; strings(List&lt;?&gt; l) {</span>
+<span class="source-line-no">582</span><span id="line-582">      return l == null ? List.of() : l.stream().map(String::valueOf).toList();</span>
+<span class="source-line-no">583</span><span id="line-583">   }</span>
+<span class="source-line-no">584</span><span id="line-584"></span>
+<span class="source-line-no">585</span><span id="line-585">   // Depth-aware: page markup may itself contain &lt;template&gt; elements.</span>
+<span class="source-line-no">586</span><span id="line-586">   private static Map&lt;String,String&gt; scanTemplates(String html) {</span>
+<span class="source-line-no">587</span><span id="line-587">      var out = new LinkedHashMap&lt;String,String&gt;();</span>
+<span class="source-line-no">588</span><span id="line-588">      var m = TEMPLATE_OPEN.matcher(html);</span>
+<span class="source-line-no">589</span><span id="line-589">      var from = 0;</span>
+<span class="source-line-no">590</span><span id="line-590">      while (m.find(from)) {</span>
+<span class="source-line-no">591</span><span id="line-591">         var start = m.end();</span>
+<span class="source-line-no">592</span><span id="line-592">         var depth = 1;</span>
+<span class="source-line-no">593</span><span id="line-593">         var i = start;</span>
+<span class="source-line-no">594</span><span id="line-594">         while (depth &gt; 0) {</span>
+<span class="source-line-no">595</span><span id="line-595">            var open = html.indexOf("&lt;template", i);</span>
+<span class="source-line-no">596</span><span id="line-596">            var close = html.indexOf("&lt;/template&gt;", i);</span>
+<span class="source-line-no">597</span><span id="line-597">            if (close &lt; 0)</span>
+<span class="source-line-no">598</span><span id="line-598">               throw new AssertionError("unterminated &lt;template data-" + m.group(1) + "=\"" + m.group(2) + "\"&gt;");</span>
+<span class="source-line-no">599</span><span id="line-599">            if (open &gt;= 0 &amp;&amp; open &lt; close) {</span>
+<span class="source-line-no">600</span><span id="line-600">               depth++;</span>
+<span class="source-line-no">601</span><span id="line-601">               i = open + 9;</span>
+<span class="source-line-no">602</span><span id="line-602">            } else {</span>
+<span class="source-line-no">603</span><span id="line-603">               depth--;</span>
+<span class="source-line-no">604</span><span id="line-604">               i = close + 11;</span>
+<span class="source-line-no">605</span><span id="line-605">            }</span>
+<span class="source-line-no">606</span><span id="line-606">         }</span>
+<span class="source-line-no">607</span><span id="line-607">         out.put(m.group(2), html.substring(start, i - 11));</span>
+<span class="source-line-no">608</span><span id="line-608">         from = i;</span>
+<span class="source-line-no">609</span><span id="line-609">      }</span>
+<span class="source-line-no">610</span><span id="line-610">      return out;</span>
+<span class="source-line-no">611</span><span id="line-611">   }</span>
+<span class="source-line-no">612</span><span id="line-612">}</span>
 
 
 

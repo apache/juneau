@@ -72,15 +72,67 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static <a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#create(java.lang.String)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;endpoint)</code></div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#action(org.apache.juneau.console.views.RowAction)" class="member-name-link">action</a><wbr>(<a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a>&nbsp;a)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Starts a row-detail definition for the given per-row GET endpoint.</div>
+<div class="block">Adds a header action, shown right-aligned in the detail header.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#cache(org.apache.juneau.console.views.DetailTab.Cache)" class="member-name-link">cache</a><wbr>(<a href="../DetailTab.Cache.html" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets how tab content is cached.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#columns(int)" class="member-name-link">columns</a><wbr>(int&nbsp;n)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the default grid column count of the fields tabs.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#copy()" class="member-name-link">copy</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns an independent copy, so a shared instance can be attached to several tables.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#counts(java.lang.String)" class="member-name-link">counts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets a dedicated endpoint for the tab counts.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#create(java.lang.String)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;endpoint)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Starts a row-detail definition for the given per-row GET endpoint.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#fields(java.lang.String...)" class="member-name-link">fields</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Narrows the fields the generated Details tab shows.</div>
+</div>
+<div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;<a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#fromBean(java.lang.Class,java.util.function.Function)" class="member-name-link">fromBean</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr>T&gt;&nbsp;lookup)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Starts a tabbed detail served by <a href="../RowDetailMixin.html" title="interface in org.apache.juneau.console.views"><code>RowDetailMixin</code></a> from a bean.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the detail panel's icon.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#inline()" class="member-name-link">inline</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Starts a tabbed detail fed from the clicked row's own data, with no server round trip.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#key(java.lang.String)" class="member-name-link">key</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the URL key of a bean-backed detail (default: the decapitalised simple class name).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#label(java.lang.String,java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets an explicit label for a field.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#region(org.apache.juneau.console.views.RegionDef)" class="member-name-link">region</a><wbr>(<a href="../RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a>&nbsp;value)</code></div>
@@ -88,8 +140,22 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the detail panel's region.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#title(java.lang.String)" class="member-name-link">title</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#section(java.lang.String,java.lang.String...)" class="member-name-link">section</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tabTitle,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;fields)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Adds a fields tab.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#tab(org.apache.juneau.console.views.DetailTab)" class="member-name-link">tab</a><wbr>(<a href="../DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a>&nbsp;t)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Adds a tab.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#title(java.lang.String)" class="member-name-link">title</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the detail panel's title template.</div>
 </div>
 </div>
@@ -101,6 +167,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../TableSpec.html#detail()" class="member-name-link">detail</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../RowDetailMixin.html#rowDetailIndex()" class="member-name-link">rowDetailIndex</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the details indexed by key.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../RowDetailMixin.html#rowDetails()" class="member-name-link">rowDetails</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The bean-backed details this resource serves.</div>
+</div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.console.views</a> with parameters of type <a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></span></div>
 <div class="summary-table three-column-summary">

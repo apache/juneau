@@ -234,209 +234,214 @@
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">void</strong> recordRequirements(PageCapture cap, String type, String id, List&lt;String&gt; requires, Map&lt;String,Object&gt; body)
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 			<strong class="jxr_keyword">throws</strong> TemplateModelException {
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">var</strong> bodyPacks = cardTypes.handler(type).requiredPacks(<strong class="jxr_keyword">new</strong> JsonMap(body));
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			cap.require(requirements.forCard(type, id, requires, bodyPacks));
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		}
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	})
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			String cssClass, <strong class="jxr_keyword">boolean</strong> sanitize, Object pubs, Object subs)
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">throws</strong> TemplateModelException {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> hasBody = ! markup.isBlank();
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">if</strong> (sources == 0)
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='html' requires a body or src=."</span>, id));
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">if</strong> (sources &gt; 1)
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='html' takes exactly one of a body, template= or src=."</span>, id));
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">var</strong> card = CardSpec.html(id);
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">if</strong> (! title.isEmpty())
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			card.title(title);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">if</strong> (! src.isEmpty())
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			card.src(src);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">if</strong> (! template.isEmpty())
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			card.template(template);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">if</strong> (! cssClass.isEmpty())
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			card.cssClass(cssClass);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (sanitize)
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			card.sanitize(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		wire(card, pubs, subs);
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		cap.addCard(card, hasBody ? markup : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	}
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 	<em class="jxr_javadoccomment">/** Names whichever of {@code src=} and {@code template=} is present. */</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	<strong class="jxr_keyword">static</strong> String notAllowed(String src, String template) {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		<strong class="jxr_keyword">if</strong> (src.isEmpty())
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"template= is not allowed"</span>;
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">if</strong> (template.isEmpty())
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"src= is not allowed"</span>;
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"src= and template= are not allowed"</span>;
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	}
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">	 * Every type other than {@code html} and {@code terminal-view}: validated and lifted by the host's</em>
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code terminal} or {@code job-log}, or the</em>
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> <em class="jxr_javadoccomment">	 * generic passthrough for an unregistered type).</em>
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	})
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">private</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> registryCard(PageCapture cap, String type, String id, String title, String src, String template,
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			String markup, String cssClass, Object pubs, Object subs) <strong class="jxr_keyword">throws</strong> TemplateModelException {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">if</strong> (id.isEmpty())
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card type=\&quot;%s\&quot;&gt; requires id=."</span>, type));
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">var</strong> hasBody = ! markup.isBlank();
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		<strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"terminal"</span>) || eq(type, <span class="jxr_string">"job-log"</span>)) {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			<strong class="jxr_keyword">if</strong> (! (src.isEmpty() &amp;&amp; template.isEmpty()))
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='%s' takes its options as the body; %s."</span>, id, type,
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					notAllowed(src, template)));
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"chart"</span>)) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			<strong class="jxr_keyword">if</strong> (! template.isEmpty())
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed."</span>, id));
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"datatables"</span>)) {
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">if</strong> (! template.isEmpty())
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; type='datatables' takes src= or a JSON5 body; template= is not allowed."</span>, id));
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1) &gt; 1) {
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='%s' takes at most one of a body, template= or src=."</span>, id, type));
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">var</strong> captured = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[1];
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> source = CardSource.create(type, id).templateSink((cid, m) -&gt; captured[0] = <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		<strong class="jxr_keyword">if</strong> (! title.isEmpty())
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 			source.title(title);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		<strong class="jxr_keyword">if</strong> (! src.isEmpty())
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			source.src(src);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">if</strong> (! template.isEmpty())
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			source.template(template);
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		<strong class="jxr_keyword">if</strong> (hasBody)
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			source.body(markup);
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		JsonMap card;
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			card = cardTypes.toCard(source.build());
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		}
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> bodySubs = card.remove(<span class="jxr_string">"subscribes"</span>);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> bodyPubs = card.remove(<span class="jxr_string">"publishes"</span>);
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">if</strong> (subs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodySubs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>, id));
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">if</strong> (pubs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodyPubs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'publishes' is reserved; set it as an attribute."</span>, id));
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> spec = toCardSpec(card);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">if</strong> (! cssClass.isEmpty())
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			spec.cssClass(cssClass);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		wire(spec, pubs != <strong class="jxr_keyword">null</strong> ? pubs : bodyPubs, subs != <strong class="jxr_keyword">null</strong> ? subs : bodySubs);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		cap.addCard(spec, captured[0] ? markup : <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">return</strong> spec;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	}
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * Lifts a card source through the registry into the {@link CardSpec} {@link PageCapture} wants; the same path</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * {@code &lt;@card&gt;} takes for a registered type.  {@code subscribes} / {@code publishes} found in the handler's</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 * result (a JSON5 body) are wired onto the card, and refused when the authored card already declares them, as</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * {@code &lt;@card&gt;} refuses them alongside the attribute.</em>
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * @param source The card source.</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * @param authored The authored card whose wiring the result takes.</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * @return The lifted card.</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * @throws TemplateModelException If the registry or its handler rejects the source, or its wiring conflicts.</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 	CardSpec lift(<a name="CardSource" href="../../../../../org/apache/juneau/console/CardSource.html#CardSource">CardSource</a> source, <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> authored) <strong class="jxr_keyword">throws</strong> TemplateModelException {
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		JsonMap card;
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			card = cardTypes.toCard(source);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> id = source.id();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		<strong class="jxr_keyword">var</strong> bodySubs = card.remove(<span class="jxr_string">"subscribes"</span>);
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		<strong class="jxr_keyword">var</strong> bodyPubs = card.remove(<span class="jxr_string">"publishes"</span>);
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">if</strong> (authored.hasSubscribes() &amp;&amp; bodySubs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>, id));
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">if</strong> (authored.hasPublishes() &amp;&amp; bodyPubs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'publishes' is reserved; set it as an attribute."</span>, id));
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> spec = toCardSpec(card);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		wire(spec, bodyPubs, bodySubs);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		<strong class="jxr_keyword">return</strong> spec.wiringFrom(authored);
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_javadoccomment">/** Converts the flat {@link CardTypeRegistry#toCard} result into the {@link CardSpec} {@link PageCapture} wants. */</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> toCardSpec(JsonMap card) {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> spec = CardSpec.of((String)card.get(<span class="jxr_string">"type"</span>), (String)card.get(<span class="jxr_string">"id"</span>));
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		<strong class="jxr_keyword">if</strong> (card.get(<span class="jxr_string">"title"</span>) instanceof String v)
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 			spec.title(v);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		<strong class="jxr_keyword">if</strong> (card.get(<span class="jxr_string">"src"</span>) instanceof String v)
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 			spec.src(v);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">if</strong> (card.get(<span class="jxr_string">"template"</span>) instanceof String v)
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			spec.template(v);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : card.entrySet())
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			<strong class="jxr_keyword">if</strong> (! BASE_KEYS.contains(e.getKey()))
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 				spec.body(e.getKey(), e.getValue());
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">return</strong> spec;
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; RUN_VIEW_BODY_KEYS = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"terminalView"</span>));
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 * The terminal-view bridge: a JSON5 {@code {contractVersion: '1', terminalView: {...}}} body whose {@code terminalView} keys</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> <em class="jxr_javadoccomment">	 * are exactly {@link TerminalViewDef#KEYS}, validated through {@link TerminalViewDef} so an unsafe URL fails the</em>
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * render. The shell mounts it through {@code JuneauViews.terminalView.mount}.</em>
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<span class="jxr_string">"java:S107"</span>, <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// JSON5 object keys are always strings.</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	})
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> terminalViewCard(PageCapture cap, String id, String title, String src, String template,
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 			String markup, String cssClass, Object pubs, Object subs) <strong class="jxr_keyword">throws</strong> TemplateModelException {
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">if</strong> (id.isEmpty())
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(<span class="jxr_string">"&lt;@card type=\&quot;terminal-view\&quot;&gt; requires id=."</span>);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">if</strong> (! (src.isEmpty() &amp;&amp; template.isEmpty()))
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' takes its options as the body; %s."</span>, id,
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 				notAllowed(src, template)));
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">var</strong> trimmed = markup.trim();
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">if</strong> (! trimmed.startsWith(<span class="jxr_string">"{"</span>))
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' requires a JSON5 body { contractVersion: '1', terminalView: {...} }."</span>, id));
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		JsonMap envelope;
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			envelope = Json5Parser.DEFAULT.read(trimmed, JsonMap.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		} <strong class="jxr_keyword">catch</strong> (org.apache.juneau.marshall.parser.ParseException ex) {
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(<span class="jxr_string">"Card JSON5 is invalid: "</span> + ex.getMessage());
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		}
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">var</strong> bodySubs = envelope.remove(<span class="jxr_string">"subscribes"</span>);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> bodyPubs = envelope.remove(<span class="jxr_string">"publishes"</span>);
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">if</strong> (subs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodySubs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>, id));
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">if</strong> (pubs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodyPubs != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'publishes' is reserved; set it as an attribute."</span>, id));
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : envelope.keySet())
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			<strong class="jxr_keyword">if</strong> (! RUN_VIEW_BODY_KEYS.contains(k))
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' unknown key '%s'; allowed: contractVersion, terminalView, subscribes, publishes."</span>, id, k));
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		<strong class="jxr_keyword">var</strong> version = envelope.get(<span class="jxr_string">"contractVersion"</span>);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">if</strong> (neq(<span class="jxr_string">"1"</span>, version))
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' requires contractVersion: '1'; got '%s'."</span>, id, version));
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">if</strong> (! (envelope.get(<span class="jxr_string">"terminalView"</span>) instanceof Map&lt;?,?&gt; terminalView))
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' requires a terminalView object."</span>, id));
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">var</strong> def = TerminalViewDef.fromMap(id, (Map&lt;String,?&gt;)terminalView).validate();
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		<strong class="jxr_keyword">var</strong> card = CardSpec.of(<span class="jxr_string">"terminal-view"</span>, id);
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">if</strong> (! title.isEmpty())
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 			card.title(title);
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">if</strong> (! cssClass.isEmpty())
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			card.cssClass(cssClass);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		card.body(<span class="jxr_string">"terminalView"</span>, def.toMap());
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		wire(card, pubs != <strong class="jxr_keyword">null</strong> ? pubs : bodyPubs, subs != <strong class="jxr_keyword">null</strong> ? subs : bodySubs);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		cap.addCard(card, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	}
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">var</strong> handler = cardTypes.handler(type);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">var</strong> bodyPacks = handler.requiredPacks(<strong class="jxr_keyword">new</strong> JsonMap(body));
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<em class="jxr_comment">// Nested cards first: a container builds them as it renders, so their runtimes must load ahead of its own.</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> nested : handler.nestedCards(<strong class="jxr_keyword">new</strong> JsonMap(body)))
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">if</strong> (nested.get(<span class="jxr_string">"type"</span>) instanceof String nt &amp;&amp; nested.get(<span class="jxr_string">"id"</span>) instanceof String ni)
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					recordRequirements(cap, nt, ni, List.of(), nested);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			cap.require(requirements.forCard(type, id, requires, bodyPacks));
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	})
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			String cssClass, <strong class="jxr_keyword">boolean</strong> sanitize, Object pubs, Object subs)
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">throws</strong> TemplateModelException {
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<strong class="jxr_keyword">var</strong> hasBody = ! markup.isBlank();
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">var</strong> sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<strong class="jxr_keyword">if</strong> (sources == 0)
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='html' requires a body or src=."</span>, id));
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">if</strong> (sources &gt; 1)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='html' takes exactly one of a body, template= or src=."</span>, id));
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">var</strong> card = CardSpec.html(id);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">if</strong> (! title.isEmpty())
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			card.title(title);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<strong class="jxr_keyword">if</strong> (! src.isEmpty())
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			card.src(src);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">if</strong> (! template.isEmpty())
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			card.template(template);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">if</strong> (! cssClass.isEmpty())
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			card.cssClass(cssClass);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">if</strong> (sanitize)
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			card.sanitize(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		wire(card, pubs, subs);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		cap.addCard(card, hasBody ? markup : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	}
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	<em class="jxr_javadoccomment">/** Names whichever of {@code src=} and {@code template=} is present. */</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	<strong class="jxr_keyword">static</strong> String notAllowed(String src, String template) {
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">if</strong> (src.isEmpty())
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"template= is not allowed"</span>;
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">if</strong> (template.isEmpty())
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"src= is not allowed"</span>;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"src= and template= are not allowed"</span>;
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> <em class="jxr_javadoccomment">	 * Every type other than {@code html} and {@code terminal-view}: validated and lifted by the host's</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> <em class="jxr_javadoccomment">	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code terminal} or {@code job-log}, or the</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">	 * generic passthrough for an unregistered type).</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<span class="jxr_string">"java:S107"</span> <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	})
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<strong class="jxr_keyword">private</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> registryCard(PageCapture cap, String type, String id, String title, String src, String template,
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 			String markup, String cssClass, Object pubs, Object subs) <strong class="jxr_keyword">throws</strong> TemplateModelException {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">if</strong> (id.isEmpty())
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card type=\&quot;%s\&quot;&gt; requires id=."</span>, type));
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<strong class="jxr_keyword">var</strong> hasBody = ! markup.isBlank();
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"terminal"</span>) || eq(type, <span class="jxr_string">"job-log"</span>)) {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">if</strong> (! (src.isEmpty() &amp;&amp; template.isEmpty()))
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='%s' takes its options as the body; %s."</span>, id, type,
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 					notAllowed(src, template)));
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"chart"</span>)) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">if</strong> (! template.isEmpty())
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed."</span>, id));
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (eq(type, <span class="jxr_string">"datatables"</span>)) {
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">if</strong> (! template.isEmpty())
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; type='datatables' takes src= or a JSON5 body; template= is not allowed."</span>, id));
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1) &gt; 1) {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='%s' takes at most one of a body, template= or src=."</span>, id, type));
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">var</strong> captured = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">boolean</strong>[1];
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> source = CardSource.create(type, id).templateSink((cid, m) -&gt; captured[0] = <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">if</strong> (! title.isEmpty())
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			source.title(title);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">if</strong> (! src.isEmpty())
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			source.src(src);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">if</strong> (! template.isEmpty())
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			source.template(template);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">if</strong> (hasBody)
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			source.body(markup);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		JsonMap card;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			card = cardTypes.toCard(source.build());
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		}
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> bodySubs = card.remove(<span class="jxr_string">"subscribes"</span>);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> bodyPubs = card.remove(<span class="jxr_string">"publishes"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		<strong class="jxr_keyword">if</strong> (subs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodySubs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>, id));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">if</strong> (pubs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodyPubs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'publishes' is reserved; set it as an attribute."</span>, id));
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 		<strong class="jxr_keyword">var</strong> spec = toCardSpec(card);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">if</strong> (! cssClass.isEmpty())
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			spec.cssClass(cssClass);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		wire(spec, pubs != <strong class="jxr_keyword">null</strong> ? pubs : bodyPubs, subs != <strong class="jxr_keyword">null</strong> ? subs : bodySubs);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		cap.addCard(spec, captured[0] ? markup : <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">return</strong> spec;
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * Lifts a card source through the registry into the {@link CardSpec} {@link PageCapture} wants; the same path</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * {@code &lt;@card&gt;} takes for a registered type.  {@code subscribes} / {@code publishes} found in the handler's</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * result (a JSON5 body) are wired onto the card, and refused when the authored card already declares them, as</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * {@code &lt;@card&gt;} refuses them alongside the attribute.</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 * @param source The card source.</em>
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * @param authored The authored card whose wiring the result takes.</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * @return The lifted card.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * @throws TemplateModelException If the registry or its handler rejects the source, or its wiring conflicts.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	CardSpec lift(<a name="CardSource" href="../../../../../org/apache/juneau/console/CardSource.html#CardSource">CardSource</a> source, <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> authored) <strong class="jxr_keyword">throws</strong> TemplateModelException {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		JsonMap card;
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			card = cardTypes.toCard(source);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(e.getMessage());
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">var</strong> id = source.id();
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">var</strong> bodySubs = card.remove(<span class="jxr_string">"subscribes"</span>);
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<strong class="jxr_keyword">var</strong> bodyPubs = card.remove(<span class="jxr_string">"publishes"</span>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		<strong class="jxr_keyword">if</strong> (authored.hasSubscribes() &amp;&amp; bodySubs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>, id));
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">if</strong> (authored.hasPublishes() &amp;&amp; bodyPubs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'publishes' is reserved; set it as an attribute."</span>, id));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">var</strong> spec = toCardSpec(card);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		wire(spec, bodyPubs, bodySubs);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">return</strong> spec.wiringFrom(authored);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<em class="jxr_javadoccomment">/** Converts the flat {@link CardTypeRegistry#toCard} result into the {@link CardSpec} {@link PageCapture} wants. */</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <a name="CardSpec" href="../../../../../org/apache/juneau/console/freemarker/CardSpec.html#CardSpec">CardSpec</a> toCardSpec(JsonMap card) {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> spec = CardSpec.of((String)card.get(<span class="jxr_string">"type"</span>), (String)card.get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">if</strong> (card.get(<span class="jxr_string">"title"</span>) instanceof String v)
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			spec.title(v);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">if</strong> (card.get(<span class="jxr_string">"src"</span>) instanceof String v)
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			spec.src(v);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">if</strong> (card.get(<span class="jxr_string">"template"</span>) instanceof String v)
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			spec.template(v);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : card.entrySet())
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 			<strong class="jxr_keyword">if</strong> (! BASE_KEYS.contains(e.getKey()))
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 				spec.body(e.getKey(), e.getValue());
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 		<strong class="jxr_keyword">return</strong> spec;
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; RUN_VIEW_BODY_KEYS = <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(List.of(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"terminalView"</span>));
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * The terminal-view bridge: a JSON5 {@code {contractVersion: '1', terminalView: {...}}} body whose {@code terminalView} keys</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * are exactly {@link TerminalViewDef#KEYS}, validated through {@link TerminalViewDef} so an unsafe URL fails the</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * render. The shell mounts it through {@code JuneauViews.terminalView.mount}.</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<span class="jxr_string">"java:S107"</span>, <em class="jxr_comment">// Internal helper whose parameters are the render/validation context.</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// JSON5 object keys are always strings.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	})
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> terminalViewCard(PageCapture cap, String id, String title, String src, String template,
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 			String markup, String cssClass, Object pubs, Object subs) <strong class="jxr_keyword">throws</strong> TemplateModelException {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		<strong class="jxr_keyword">if</strong> (id.isEmpty())
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(<span class="jxr_string">"&lt;@card type=\&quot;terminal-view\&quot;&gt; requires id=."</span>);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">if</strong> (! (src.isEmpty() &amp;&amp; template.isEmpty()))
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' takes its options as the body; %s."</span>, id,
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				notAllowed(src, template)));
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> trimmed = markup.trim();
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		<strong class="jxr_keyword">if</strong> (! trimmed.startsWith(<span class="jxr_string">"{"</span>))
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' requires a JSON5 body { contractVersion: '1', terminalView: {...} }."</span>, id));
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		JsonMap envelope;
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			envelope = Json5Parser.DEFAULT.read(trimmed, JsonMap.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		} <strong class="jxr_keyword">catch</strong> (org.apache.juneau.marshall.parser.ParseException ex) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(<span class="jxr_string">"Card JSON5 is invalid: "</span> + ex.getMessage());
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">var</strong> bodySubs = envelope.remove(<span class="jxr_string">"subscribes"</span>);
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> bodyPubs = envelope.remove(<span class="jxr_string">"publishes"</span>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">if</strong> (subs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodySubs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'subscribes' is reserved; set it as an attribute."</span>, id));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (pubs != <strong class="jxr_keyword">null</strong> &amp;&amp; bodyPubs != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; body key 'publishes' is reserved; set it as an attribute."</span>, id));
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k : envelope.keySet())
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			<strong class="jxr_keyword">if</strong> (! RUN_VIEW_BODY_KEYS.contains(k))
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 					<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' unknown key '%s'; allowed: contractVersion, terminalView, subscribes, publishes."</span>, id, k));
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> version = envelope.get(<span class="jxr_string">"contractVersion"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">if</strong> (neq(<span class="jxr_string">"1"</span>, version))
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 				<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' requires contractVersion: '1'; got '%s'."</span>, id, version));
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">if</strong> (! (envelope.get(<span class="jxr_string">"terminalView"</span>) instanceof Map&lt;?,?&gt; terminalView))
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">throw</strong> FtlAttrLists.reject(f(<span class="jxr_string">"&lt;@card id='%s'&gt; type='terminal-view' requires a terminalView object."</span>, id));
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> def = TerminalViewDef.fromMap(id, (Map&lt;String,?&gt;)terminalView).validate();
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> card = CardSpec.of(<span class="jxr_string">"terminal-view"</span>, id);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">if</strong> (! title.isEmpty())
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			card.title(title);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		<strong class="jxr_keyword">if</strong> (! cssClass.isEmpty())
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 			card.cssClass(cssClass);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		card.body(<span class="jxr_string">"terminalView"</span>, def.toMap());
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		wire(card, pubs != <strong class="jxr_keyword">null</strong> ? pubs : bodyPubs, subs != <strong class="jxr_keyword">null</strong> ? subs : bodySubs);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		cap.addCard(card, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

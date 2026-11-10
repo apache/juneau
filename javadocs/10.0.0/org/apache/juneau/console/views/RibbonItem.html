@@ -77,9 +77,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">org.apache.juneau.console.views.RibbonItem</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>&gt;</code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-60">RibbonItem</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-61">RibbonItem</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>&gt;</span></div>
 <div class="block">One ribbon (toolbar) entry above a table.
 
  <p>
@@ -129,20 +134,31 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appearance(java.lang.String)" class="member-name-link">appearance</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#action(java.lang.String)" class="member-name-link">action</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">A custom button whose click runs a handler declared with <a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String)"><code>Handled.action(String,String,String)</code></a> or
+ <a href="../Handled.html#on(java.lang.String,java.lang.String)"><code>Handled.on(String,String)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#appearance(java.lang.String)" class="member-name-link">appearance</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets how this item's button is drawn.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collapseAll()" class="member-name-link">collapseAll</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#collapseAll()" class="member-name-link">collapseAll</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">The ribbon's collapse-all-detail-rows button.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#column(java.lang.String)" class="member-name-link">column</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#column(java.lang.String)" class="member-name-link">column</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Scopes an <code>option</code> to a table column.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#columnSettings()" class="member-name-link">columnSettings</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">The button that opens the column chooser (View Settings).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#defaultOn()" class="member-name-link">defaultOn</a>()</code></div>
@@ -190,14 +206,34 @@ loadScripts(document, 'script');</script>
 <div class="block">Clusters this item with adjacent items sharing the same group name.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id(java.lang.String)" class="member-name-link">id</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets this item's stable id.</div>
+<div class="block">Sets the icon of an <code>action</code> item.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#method(org.apache.juneau.console.views.RowAction.Method)" class="member-name-link">method</a><wbr>(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;m)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id(java.lang.String)" class="member-name-link">id</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets this item's stable id.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the label of an <code>action</code> item.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#linkButton()" class="member-name-link">linkButton</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">The copy-shareable-link button.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#method(org.apache.juneau.console.views.RowAction.Method)" class="member-name-link">method</a><wbr>(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;m)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the non-safe HTTP method a dialog item's form submits with.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modelBlock()" class="member-name-link">modelBlock</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the element's model block.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onSuccess(org.apache.juneau.console.views.RowAction.OnSuccess)" class="member-name-link">onSuccess</a><wbr>(<a href="RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;s)</code></div>
@@ -253,6 +289,16 @@ loadScripts(document, 'script');</script>
 <div class="block">The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,
  search and options) and applies it at once, with no dialog.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#search()" class="member-name-link">search</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">The table's search box.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns this builder.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#symbol(java.lang.String)" class="member-name-link">symbol</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -299,6 +345,9 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-org.apache.juneau.console.Handled">Methods inherited from interface&nbsp;org.apache.juneau.console.<a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a></h3>
+<code><a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String)">action</a>, <a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String,java.util.Map)">action</a>, <a href="../Handled.html#action(org.apache.juneau.console.ModelAction)">action</a>, <a href="../Handled.html#on(java.lang.String,java.lang.String)">on</a>, <a href="../Handled.html#on(java.lang.String,org.apache.juneau.console.HandlerRef)">on</a>, <a href="../Handled.html#subscribe(java.lang.String,java.lang.String)">subscribe</a>, <a href="../Handled.html#subscribe(java.lang.String,org.apache.juneau.console.HandlerRef)">subscribe</a></code></div>
 </section>
 </li>
 </ul>
@@ -311,9 +360,112 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="modelBlock()">
+<h3>modelBlock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-148">modelBlock</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#modelBlock()">Handled</a></code></span></div>
+<div class="block">Returns the element's model block.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../Handled.html#modelBlock()">modelBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>The block; never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="self()">
+<h3>self</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-151">self</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#self()">Handled</a></code></span></div>
+<div class="block">Returns this builder.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../Handled.html#self()">self</a></code>&nbsp;in interface&nbsp;<code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="action(java.lang.String)">
+<h3>action</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-162">action</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="block">A custom button whose click runs a handler declared with <a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String)"><code>Handled.action(String,String,String)</code></a> or
+ <a href="../Handled.html#on(java.lang.String,java.lang.String)"><code>Handled.on(String,String)</code></a>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - The item's id.  Must not be <jk>null</jk> or blank.</dd>
+<dt>Returns:</dt>
+<dd>A new <a href="RibbonItem.html" title="class in org.apache.juneau.console.views"><code>RibbonItem</code></a>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <code>id</code> is <jk>null</jk> or blank.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="icon(java.lang.String)">
+<h3>icon</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-177">icon</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="block">Sets the icon of an <code>action</code> item.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>v</code> - The icon name.  Can be <jk>null</jk> to unset.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="label(java.lang.String)">
+<h3>label</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-188">label</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="block">Sets the label of an <code>action</code> item.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>v</code> - The label.  Can be <jk>null</jk> to unset.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="search()">
+<h3>search</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-223">search</a></span>()</div>
+<div class="block">The table's search box.  A slot the runtime fills with the table's search field; it takes no symbol or appearance.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A new <a href="RibbonItem.html" title="class in org.apache.juneau.console.views"><code>RibbonItem</code></a>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="linkButton()">
+<h3>linkButton</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-232">linkButton</a></span>()</div>
+<div class="block">The copy-shareable-link button.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A new <a href="RibbonItem.html" title="class in org.apache.juneau.console.views"><code>RibbonItem</code></a>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="columnSettings()">
+<h3>columnSettings</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-241">columnSettings</a></span>()</div>
+<div class="block">The button that opens the column chooser (View Settings).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A new <a href="RibbonItem.html" title="class in org.apache.juneau.console.views"><code>RibbonItem</code></a>.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="divider()">
 <h3>divider</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-120">divider</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-250">divider</a></span>()</div>
 <div class="block">A visual separator between ribbon items; it also closes any open item cluster.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -324,7 +476,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="refresh()">
 <h3>refresh</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-129">refresh</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-259">refresh</a></span>()</div>
 <div class="block">The ribbon's reload-the-table button.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -335,7 +487,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="collapseAll()">
 <h3>collapseAll</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-138">collapseAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-268">collapseAll</a></span>()</div>
 <div class="block">The ribbon's collapse-all-detail-rows button.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -346,7 +498,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pausePolling()">
 <h3>pausePolling</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-147">pausePolling</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-277">pausePolling</a></span>()</div>
 <div class="block">The ribbon's pause/resume auto-refresh toggle.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -357,7 +509,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resetDefaults()">
 <h3>resetDefaults</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-160">resetDefaults</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-290">resetDefaults</a></span>()</div>
 <div class="block">The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,
  search and options) and applies it at once, with no dialog.
 
@@ -372,7 +524,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="export(java.lang.String...)">
 <h3>export</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-178">export</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;buttons)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-308">export</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;buttons)</span></div>
 <div class="block">The ribbon's export menu, offering the named buttons.
 
  <p>
@@ -394,7 +546,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dialog(java.lang.String)">
 <h3>dialog</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-193">dialog</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;actionId)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-323">dialog</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;actionId)</span></div>
 <div class="block">A ribbon button that opens a modal dialog.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -409,7 +561,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="option(java.lang.String)">
 <h3>option</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-212">option</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-343">option</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">A server-query toggle button.
 
  <p>
@@ -428,7 +580,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="optionGroup(java.lang.String,org.apache.juneau.console.views.RibbonItem...)">
 <h3>optionGroup</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-233">optionGroup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-365">optionGroup</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>...&nbsp;members)</span></div>
 <div class="block">A group of mutually exclusive <a href="#option(java.lang.String)"><code>option</code></a> toggles.
 
@@ -450,7 +602,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="publish(java.lang.String,java.lang.String,java.util.Map)">
 <h3>publish</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-258">publish</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-391">publish</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;payload)</span></div>
 <div class="block">A ribbon button that publishes a message when clicked.  The topic must be a custom topic declared in the
@@ -471,7 +623,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="target(java.lang.String)">
 <h3>target</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-279">target</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cardId)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-412">target</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cardId)</span></div>
 <div class="block">Sends this item's command to another card instead of its own table.  Accepted on <code>refresh</code>,
  <code>collapseAll</code>, <code>pausePolling</code>, <code>option</code> and <code>optionGroup</code>; <a href="#toMap()"><code>toMap()</code></a> rejects it
  elsewhere.</div>
@@ -488,7 +640,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen(org.apache.juneau.console.views.VisibilityRule...)">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-293">visibleWhen</a></span><wbr><span class="parameters">(<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-426">visibleWhen</a></span><wbr><span class="parameters">(<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
 <div class="block">Hides this item unless every rule matches the console's facts.  Evaluated by the client; this only serializes the
  rules.  Accepted on every item type; not on an <code>optionGroup</code> member.</div>
 <dl class="notes">
@@ -502,13 +654,13 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="id(java.lang.String)">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-312">id</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-445">id</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Sets this item's stable id.
 
  <p>
  The id is emitted on the item's ribbon entry, where it is scoped to its card (it is not stamped as a DOM id).
  <a href="#toMap()"><code>toMap()</code></a> rejects an id on the types the runtime ignores it for
- (<code>divider</code> and <code>export</code>).</div>
+ (<code>divider</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>v</code> - The id.  Must not be <jk>null</jk> or blank.</dd>
@@ -522,7 +674,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="title(java.lang.String)">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-329">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-463">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Sets this item's title/label text.
 
  <p>
@@ -539,12 +691,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="group(java.lang.String)">
 <h3>group</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-346">group</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-480">group</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Clusters this item with adjacent items sharing the same group name.
 
  <p>
- The toolbar's canonical group ids are <code>entity</code>, <code>filter</code>, <code>search</code>, <code>viewing</code>,
- <code>page</code> and <code>status</code>.  Groups using them are sorted into that order among the slots they already
+ The toolbar's canonical group ids are <code>search</code>, <code>entity</code>, <code>filter</code>, <code>export</code>,
+ <code>viewing</code>, <code>page</code> and <code>status</code>.  Groups using them are sorted into that order among the slots they already
  occupy; groups with any other name keep their declared position.  An ungrouped <code>refresh</code> joins the
  <code>page</code> group, last, when one exists.</div>
 <dl class="notes">
@@ -558,7 +710,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="appearance(java.lang.String)">
 <h3>appearance</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-358">appearance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-492">appearance</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Sets how this item's button is drawn.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -573,7 +725,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="symbol(java.lang.String)">
 <h3>symbol</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-371">symbol</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-505">symbol</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Sets the icon name overriding this item's default icon.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -586,7 +738,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="form(java.lang.String)">
 <h3>form</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-382">form</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-516">form</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
 <div class="block">Sets the form-source URL supplying a dialog item's input fields.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -599,7 +751,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="endpoint(java.lang.String)">
 <h3>endpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-393">endpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-527">endpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;url)</span></div>
 <div class="block">Sets the URL a dialog item's form submits to.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -612,7 +764,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="method(org.apache.juneau.console.views.RowAction.Method)">
 <h3>method</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-404">method</a></span><wbr><span class="parameters">(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;m)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-538">method</a></span><wbr><span class="parameters">(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;m)</span></div>
 <div class="block">Sets the non-safe HTTP method a dialog item's form submits with.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -625,7 +777,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onSuccess(org.apache.juneau.console.views.RowAction.OnSuccess)">
 <h3>onSuccess</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-417">onSuccess</a></span><wbr><span class="parameters">(<a href="RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;s)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-551">onSuccess</a></span><wbr><span class="parameters">(<a href="RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;s)</span></div>
 <div class="block">Sets what the runtime does with a successful dialog submission.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -638,7 +790,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="optional(java.lang.String...)">
 <h3>optional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-431">optional</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-565">optional</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Adds export buttons that are omitted, rather than rendered disabled, when their library is absent.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -653,7 +805,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="column(java.lang.String)">
 <h3>column</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-447">column</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-581">column</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Scopes an <code>option</code> to a table column.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -666,7 +818,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="param(java.lang.String)">
 <h3>param</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-458">param</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-592">param</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Scopes an <code>option</code> to a URL query parameter.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -679,7 +831,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value(java.lang.String)">
 <h3>value</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-470">value</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-604">value</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Sets an <code>option</code>'s value: a BeanQuery <code>$</code>-expression for a <a href="#column(java.lang.String)"><code>column</code></a>-scoped
  option, or the raw parameter value for a <a href="#param(java.lang.String)"><code>param</code></a>-scoped one.</div>
 <dl class="notes">
@@ -693,7 +845,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="persist(boolean)">
 <h3>persist</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-481">persist</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-615">persist</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
 <div class="block">Sets whether this option's (or group's) state is remembered across page loads.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -706,7 +858,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultOn()">
 <h3>defaultOn</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-491">defaultOn</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-625">defaultOn</a></span>()</div>
 <div class="block">Marks an <code>option</code> as on until the user (or persisted state) says otherwise.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -717,7 +869,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaultOption(java.lang.String)">
 <h3>defaultOption</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-503">defaultOption</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;memberId)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-637">defaultOption</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;memberId)</span></div>
 <div class="block">Selects an <code>optionGroup</code> member until the user (or persisted state) says otherwise.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -732,7 +884,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deselectable(boolean)">
 <h3>deselectable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-516">deselectable</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-650">deselectable</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
 <div class="block">Lets an <code>optionGroup</code>'s selected member be clicked again to deselect it.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -745,7 +897,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toMap()">
 <h3>toMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-531">toMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-665">toMap</a></span>()</div>
 <div class="block">Builds this item's ribbon entry.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -762,7 +914,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate(java.util.Map)">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-599">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;item)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RibbonItem.html#line-740">validate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;?,<wbr>?&gt;&nbsp;item)</span></div>
 <div class="block">Validates an authored ribbon item map (for example from a JSON5 card body) with exactly the rules
  <a href="#toMap()"><code>toMap()</code></a> applies to a built item: a known <code>type</code>, only keys the runtime reads, an
  <code>export</code> with at least one valid button, an <code>option</code> with exactly one of <code>column</code> or

@@ -252,8 +252,13 @@ loadScripts(document, 'script');</script>
 <div class="block">[GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../../console/ConsoleChromeMixin.html#getThemeCss(java.lang.String)" class="member-name-link">getThemeCss</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../../console/ConsoleChromeMixin.html#getSwitcherJs()" class="member-name-link">getSwitcherJs</a>()</code></div>
 <div class="col-last odd-row-color">
+<div class="block">[GET /juneau-console/juneau-switcher.js] &mdash; serve the switcher card runtime.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ConsoleChromeMixin.</span><code><a href="../../../console/ConsoleChromeMixin.html#getThemeCss(java.lang.String)" class="member-name-link">getThemeCss</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</code></div>
+<div class="col-last even-row-color">
 <div class="block">[GET /juneau-console/themes/{file}] &mdash; serve one of the shipped stock-theme stylesheets.</div>
 </div>
 </div>
@@ -351,6 +356,16 @@ loadScripts(document, 'script');</script>
 <div class="block">[GET /juneau-icons.js] &mdash; serve the icon registry.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getModelInlineScript()" class="member-name-link">getModelInlineScript</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">[GET /juneau-model-inline.js] &mdash; serve the opt-in inline-handler compiler.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getModelScript()" class="member-name-link">getModelScript</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">[GET /juneau-model.js] &mdash; serve the client object model.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getPageStateScript()" class="member-name-link">getPageStateScript</a>()</code></div>
 <div class="col-last odd-row-color">
 <div class="block">[GET /juneau-pagestate.js] &mdash; serve the general page-state store.</div>
@@ -376,34 +391,61 @@ loadScripts(document, 'script');</script>
 <div class="block">[GET /juneau-search.js] &mdash; serve the column-search engine.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getSymbolsMaterialSvg()" class="member-name-link">getSymbolsMaterialSvg</a>()</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getSymbolsLucideSvg()" class="member-name-link">getSymbolsLucideSvg</a>()</code></div>
 <div class="col-last even-row-color">
+<div class="block">[GET /juneau-symbols-lucide.svg] &mdash; serve the Lucide base sprite (the lowest icon layer).</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getSymbolsMaterialSvg()" class="member-name-link">getSymbolsMaterialSvg</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">[GET /juneau-symbols-material.svg] &mdash; serve the opt-in Material Symbols Outlined sprite.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getSymbolsSvg()" class="member-name-link">getSymbolsSvg</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getSymbolsSvg()" class="member-name-link">getSymbolsSvg</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">[GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getTerminalViewScript()" class="member-name-link">getTerminalViewScript</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getTerminalViewScript()" class="member-name-link">getTerminalViewScript</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">[GET /juneau-terminal-view.js] &mdash; serve the opt-in terminal-view module.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getUrlStateScript()" class="member-name-link">getUrlStateScript</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getUrlStateScript()" class="member-name-link">getUrlStateScript</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">[GET /juneau-urlstate.js] &mdash; serve the shareable-link URL-state codec.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getViewsScript()" class="member-name-link">getViewsScript</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getViewsScript()" class="member-name-link">getViewsScript</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">[GET /juneau-views.js] &mdash; serve the client initializer.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getViewsStylesheet()" class="member-name-link">getViewsStylesheet</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../../../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewsMixin.</span><code><a href="../../../console/views/ViewsMixin.html#getViewsStylesheet()" class="member-name-link">getViewsStylesheet</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">[GET /juneau-views.css] &mdash; serve the base view stylesheet.</div>
+</div>
+<div class="col-first odd-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../../../console/views/RowDetailMixin.html#rowDetail(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serves one row's detail.</div>
+</div>
+<div class="col-first even-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../../../console/views/RowDetailMixin.html#rowDetailCounts(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetailCounts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serves the tab counts of a row.</div>
+</div>
+<div class="col-first odd-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../../../console/views/RowDetailMixin.html#rowDetailTab(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetailTab</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tabId,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serves one tab of a row's detail.</div>
 </div>
 <div class="col-first even-row-color"><code>default void</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">AsyncJobsMixin.</span><code><a href="../../../console/views/AsyncJobsMixin.html#streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">streamJob</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
@@ -556,38 +598,48 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#daily()" class="member-name-link">daily</a>()</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#hours()" class="member-name-link">hours</a>()</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../beans/Hyperlink.html" title="class in org.apache.juneau.rest.server.beans">Hyperlink</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AboutRest.</span><code><a href="../../../petstore/console/AboutRest.html#hyperlink()" class="member-name-link">hyperlink</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#exportLib(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">exportLib</a><wbr>(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last odd-row-color">
-<div class="block"><code>GET /console</code> redirects to the store dashboard.</div>
+<div class="block">Serves one of the vendored export libraries (<code>jszip.min.js</code>, <code>pdfmake.min.js</code>, <code>vfs_fonts.js</code>)
+ that the <code>datatables-export</code> toolkit pack loads.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AboutRest.</span><code><a href="../../../petstore/console/AboutRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#hours()" class="member-name-link">hours</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../beans/Hyperlink.html" title="class in org.apache.juneau.rest.server.beans">Hyperlink</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AboutRest.</span><code><a href="../../../petstore/console/AboutRest.html#hyperlink()" class="member-name-link">hyperlink</a>()</code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code><a href="../../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color">
-<div class="block">The About page.</div>
+<div class="block"><code>GET /console</code> redirects to the store dashboard.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">AboutRest.</span><code><a href="../../../petstore/console/AboutRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">The About page.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Renders the Store page, with the quick-stat tile values computed from the store.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#pets()" class="member-name-link">pets</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../petstore/dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#recentOrders()" class="member-name-link">recentOrders</a>()</code></div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#pets()" class="member-name-link">pets</a>()</code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#revenue()" class="member-name-link">revenue</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../petstore/dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#recentOrders()" class="member-name-link">recentOrders</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#revenue()" class="member-name-link">revenue</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">The revenue tile: the summed pet prices of the orders delivered today, by the store clock in UTC.</div>
 </div>
+<div class="col-first even-row-color"><code><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">StoreRest.</span><code><a href="../../../petstore/console/StoreRest.html#revenueByDay()" class="member-name-link">revenueByDay</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>void</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#script(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">script</a><wbr>(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color">

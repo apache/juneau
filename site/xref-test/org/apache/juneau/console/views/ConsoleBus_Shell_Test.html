@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Test <strong class="jxr_keyword">void</strong> a00_sourceShape() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<strong class="jxr_keyword">var</strong> src = BusHarness.source(CONSOLE_JS);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> validate = src.indexOf(<span class="jxr_string">"paintWiringProblems(doc, bus.wiring.validate(contract, cardTypeTable()));"</span>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">var</strong> validate = src.indexOf(<span class="jxr_string">"paintWiringProblems(doc, bus.wiring.validate(withNestedCards(contract), cardTypeTable()));"</span>);
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">var</strong> anchor = src.indexOf(<span class="jxr_string">"// ---- bus: bridges attach here ----"</span>);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">var</strong> wire = src.indexOf(<span class="jxr_string">"wireCards(doc, bus, contract);"</span>);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		assertTrue(validate &gt; 0 &amp;&amp; validate &lt; anchor &amp;&amp; anchor &lt; wire, <span class="jxr_string">"validate, then the bridge anchor, then wireCards"</span>);

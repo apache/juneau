@@ -35,14 +35,14 @@
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">class</strong> <a name="RibbonItem_Bus_Test" href="../../../../../org/apache/juneau/console/views/RibbonItem_Bus_Test.html#RibbonItem_Bus_Test">RibbonItem_Bus_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  
 <a class="jxr_linenumber" name="L29" href="#L29">29</a>  	@Test <strong class="jxr_keyword">void</strong> a01_publish() {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">var</strong> i = RibbonItem.publish(<span class="jxr_string">"Focus east"</span>, <span class="jxr_string">"app.region-picked"</span>, Map.of(<span class="jxr_string">"region"</span>, <span class="jxr_string">"east"</span>));
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		assertEquals(<span class="jxr_string">"{type:'publish',title:'Focus east',topic:'app.region-picked',payload:{region:'east'}}"</span>, Json5.DEFAULT.write(i.toMap()));
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertEquals(<span class="jxr_string">"{type:'publish',title:'Go live',topic:'app.go-live'}"</span>,
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			Json5.DEFAULT.write(RibbonItem.publish(<span class="jxr_string">"Go live"</span>, <span class="jxr_string">"app.go-live"</span>, <strong class="jxr_keyword">null</strong>).toMap()));
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">var</strong> i = RibbonItem.publish(<span class="jxr_string">"Focus east"</span>, <span class="jxr_string">"app.region-picked"</span>, Map.of(<span class="jxr_string">"region"</span>, <span class="jxr_string">"east"</span>)).id(<span class="jxr_string">"focus-east"</span>);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		assertEquals(<span class="jxr_string">"{type:'publish',id:'focus-east',title:'Focus east',topic:'app.region-picked',payload:{region:'east'}}"</span>, Json5.DEFAULT.write(i.toMap()));
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertEquals(<span class="jxr_string">"{type:'publish',id:'go-live',title:'Go live',topic:'app.go-live'}"</span>,
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			Json5.DEFAULT.write(RibbonItem.publish(<span class="jxr_string">"Go live"</span>, <span class="jxr_string">"app.go-live"</span>, <strong class="jxr_keyword">null</strong>).id(<span class="jxr_string">"go-live"</span>).toMap()));
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	}
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@Test <strong class="jxr_keyword">void</strong> a02_target_onRefresh() {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"{type:'refresh',title:'Refresh tasks',target:'tasks'}"</span>,
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		assertEquals(<span class="jxr_string">"{type:'refresh',id:'refresh',title:'Refresh tasks',target:'tasks'}"</span>,
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  			Json5.DEFAULT.write(RibbonItem.refresh().title(<span class="jxr_string">"Refresh tasks"</span>).target(<span class="jxr_string">"tasks"</span>).toMap()));
 <a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
 <a class="jxr_linenumber" name="L40" href="#L40">40</a>  

@@ -289,20 +289,23 @@
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 				eq(p, p.hover(<span class="jxr_string">"ds2"</span>, prop), p.<strong class="jxr_keyword">rest</strong>(<span class="jxr_string">"ds1"</span>, prop), <span class="jxr_string">"dialog section selected = hover: "</span> + prop);
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 	}
 <a class="jxr_linenumber" name="L283" href="#L283">283</a> 
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	@Test <strong class="jxr_keyword">void</strong> a12_tabsAndDetailStripUnchanged() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	@Test <strong class="jxr_keyword">void</strong> a12_tabsUseFolderWash() {
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : probes()) {
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : List.of(<span class="jxr_string">"st1"</span>, <span class="jxr_string">"tab"</span>, <span class="jxr_string">"sub"</span>)) {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : List.of(<span class="jxr_string">"tab"</span>, <span class="jxr_string">"sub"</span>)) {
 <a class="jxr_linenumber" name="L287" href="#L287">287</a> 				eq(p, p.tok(<span class="jxr_string">"--jc-accent-selected"</span>), p.<strong class="jxr_keyword">rest</strong>(id, <span class="jxr_string">"background-color"</span>), id + <span class="jxr_string">" solid selected fill"</span>);
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 				eq(p, p.tok(<span class="jxr_string">"--jc-on-accent"</span>), p.<strong class="jxr_keyword">rest</strong>(id, <span class="jxr_string">"color"</span>), id + <span class="jxr_string">" selected ink"</span>);
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 			}
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	}
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	@Test <strong class="jxr_keyword">void</strong> a13_iconButtonStaysRound() {
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : probes())
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			eq(p, <span class="jxr_string">"50%"</span>, p.<strong class="jxr_keyword">rest</strong>(<span class="jxr_string">"ico"</span>, <span class="jxr_string">"border-top-left-radius"</span>), <span class="jxr_string">".jc-icon-btn radius"</span>);
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> }
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			<em class="jxr_comment">// A tab-mode strip's selected tab wears the folder-tab wash, not the solid fill.</em>
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			eq(p, p.tok(<span class="jxr_string">"--jc-accent-wash"</span>), p.<strong class="jxr_keyword">rest</strong>(<span class="jxr_string">"st1"</span>, <span class="jxr_string">"background-color"</span>), <span class="jxr_string">"st1 folder-tab wash fill"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			eq(p, p.tok(<span class="jxr_string">"--jc-link"</span>), p.<strong class="jxr_keyword">rest</strong>(<span class="jxr_string">"st1"</span>, <span class="jxr_string">"color"</span>), <span class="jxr_string">"st1 selected ink"</span>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> a13_iconButtonStaysRound() {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : probes())
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			eq(p, <span class="jxr_string">"50%"</span>, p.<strong class="jxr_keyword">rest</strong>(<span class="jxr_string">"ico"</span>, <span class="jxr_string">"border-top-left-radius"</span>), <span class="jxr_string">".jc-icon-btn radius"</span>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	}
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -40,7 +40,7 @@
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> * Where {@code buildToolbarRow(...)} puts the DataTables search box: at the canonical {@code search} slot among the</em>
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * tagged ribbon groups ({@code entity|filter|search|viewing|page|status}), with the paging pill alone on the left.</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <em class="jxr_javadoccomment"> * tagged ribbon groups ({@code search|entity|filter|export|viewing|page|status}), with the paging pill alone on the left.</em>
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L37" href="#L37">37</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
 <a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment"> * Drives {@code toolbar-row.cjs}, which loads the view and ribbon runtimes into one window.  Runs when {@code node}</em>
@@ -151,11 +151,11 @@
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 	}
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 	@Test <strong class="jxr_keyword">void</strong> a03_taggedRibbon_searchTakesItsCanonicalSlot() {
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(<span class="jxr_string">"entity filter search viewing page"</span>, report().get(<span class="jxr_string">"tagged_right"</span>));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		assertEquals(<span class="jxr_string">"search entity filter viewing page"</span>, report().get(<span class="jxr_string">"tagged_right"</span>));
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 	}
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 	@Test <strong class="jxr_keyword">void</strong> a04_onlyGroupsRankedBeforeSearch_searchGoesLast() {
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"filter search"</span>, report().get(<span class="jxr_string">"onlyBefore_right"</span>));
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"search filter"</span>, report().get(<span class="jxr_string">"onlyBefore_right"</span>));
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 	}
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 	@Test <strong class="jxr_keyword">void</strong> a05_onlyGroupsRankedAfterSearch_searchGoesFirst() {
@@ -165,7 +165,16 @@
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> a06_noRibbon_searchAlone() {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertEquals(<span class="jxr_string">"search"</span>, report().get(<span class="jxr_string">"noRibbon_right"</span>));
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> }
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	@Test <strong class="jxr_keyword">void</strong> a07_ribbonSearchSlot_isReplacedByTheFilterBox() {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		assertBean(report(), <span class="jxr_string">"slot_filterInRibbon,slot_noPlaceholderLeft,slot_notDuplicatedInRight,slot_filterTagged,slot_inSearchGroup"</span>,
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<span class="jxr_string">"true,true,true,search,search"</span>);
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> a08_ribbonSearchSlot_removedWhenThereIsNoFilterBox() {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"slot_removedWithoutFilter"</span>));
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    * @return The page spec.</span>
 <span class="source-line-no">104</span><span id="line-104">    */</span>
 <span class="source-line-no">105</span><span id="line-105">   public static PageSpec store(QuickStats qs) {</span>
-<span class="source-line-no">106</span><span id="line-106">      return PageSpec.create().tab("store").toolkit("views").init("/console/dev/cards/petstore-cards.js")</span>
+<span class="source-line-no">106</span><span id="line-106">      return PageSpec.create().tab("store").toolkit("views", "datatables-buttons", "datatables-export").init("/console/dev/cards/petstore-cards.js")</span>
 <span class="source-line-no">107</span><span id="line-107">         .html("welcome", "Welcome to the petstore", """</span>
 <span class="source-line-no">108</span><span id="line-108">            &lt;div class="jc-prose"&gt;&lt;p&gt;Browse pets, place orders and review what changed. Every page here is built from the same</span>
 <span class="source-line-no">109</span><span id="line-109">            Juneau console pieces your own app can use.&lt;/p&gt;</span>
@@ -126,27 +126,51 @@
 <span class="source-line-no">113</span><span id="line-113">               Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}"),</span>
 <span class="source-line-no">114</span><span id="line-114">               Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),</span>
 <span class="source-line-no">115</span><span id="line-115">               Column.create("shipDate").label("Ship date").render("date"),</span>
-<span class="source-line-no">116</span><span id="line-116">               Column.create("status").label("Status").render("pill"))</span>
-<span class="source-line-no">117</span><span id="line-117">            .quickStats("store", storeQuickStats(qs)), "Recent orders")</span>
-<span class="source-line-no">118</span><span id="line-118">         .card(CardSpec.of("kpi", "revenue").title("Revenue")</span>
-<span class="source-line-no">119</span><span id="line-119">            .body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))</span>
-<span class="source-line-no">120</span><span id="line-120">         .card(ChartDef.line("orders-trend").title("Orders, last 30 days").src("/console/store/stats/daily")</span>
-<span class="source-line-no">121</span><span id="line-121">            .x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")</span>
-<span class="source-line-no">122</span><span id="line-122">            .onClickHref("/console/orders?state=day({day})").toCardSpec())</span>
-<span class="source-line-no">123</span><span id="line-123">         .card(ChartDef.donut("by-species").title("Pets by species").src("/console/store/stats/species")</span>
-<span class="source-line-no">124</span><span id="line-124">            .label("species").value("count").center("total").toCardSpec())</span>
-<span class="source-line-no">125</span><span id="line-125">         .card(ChartDef.bar("by-status").title("Pets by status").src("/console/store/stats/status")</span>
-<span class="source-line-no">126</span><span id="line-126">            .x("status").series("count", "Pets").toCardSpec())</span>
-<span class="source-line-no">127</span><span id="line-127">         .card(ChartDef.treemap("pets-map").title("Pets by species and status").src("/console/store/stats/pets")</span>
-<span class="source-line-no">128</span><span id="line-128">            .groupBy("species", "status").label("name")</span>
-<span class="source-line-no">129</span><span id="line-129">            .colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),</span>
-<span class="source-line-no">130</span><span id="line-130">               ChartDef.legendItem("PENDING", "Pending", "warning"),</span>
-<span class="source-line-no">131</span><span id="line-131">               ChartDef.legendItem("SOLD", "Sold", null))</span>
-<span class="source-line-no">132</span><span id="line-132">            .tileFields("id", "name", "species", "status")</span>
-<span class="source-line-no">133</span><span id="line-133">            .onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).toCardSpec())</span>
-<span class="source-line-no">134</span><span id="line-134">         .htmlSrc("hours", "Store hours", "/console/store/fragments/hours");</span>
-<span class="source-line-no">135</span><span id="line-135">   }</span>
-<span class="source-line-no">136</span><span id="line-136">}</span>
+<span class="source-line-no">116</span><span id="line-116">               Column.create("status").label("Status").render(PillRenders.orderStatus()))</span>
+<span class="source-line-no">117</span><span id="line-117">            .columnConfig(true)</span>
+<span class="source-line-no">118</span><span id="line-118">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">119</span><span id="line-119">               .create(RibbonItem.dialog("new-order").title("+ New order").symbol("plus")</span>
+<span class="source-line-no">120</span><span id="line-120">                  .form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
+<span class="source-line-no">121</span><span id="line-121">               .export("excel", "pdf")</span>
+<span class="source-line-no">122</span><span id="line-122">               .build())</span>
+<span class="source-line-no">123</span><span id="line-123">            .quickStats("store", storeQuickStats(qs)), "Recent orders")</span>
+<span class="source-line-no">124</span><span id="line-124">         .card(CardSpec.of("kpi", "revenue").title("Revenue")</span>
+<span class="source-line-no">125</span><span id="line-125">            .body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))</span>
+<span class="source-line-no">126</span><span id="line-126">         .card(SwitcherDef.create("revenue-sw").title("Revenue, last 30 days")</span>
+<span class="source-line-no">127</span><span id="line-127">            .view("chart", "Chart", v -&gt; v.section(ChartDef.line("revenue-chart").src("/console/store/stats/revenue")</span>
+<span class="source-line-no">128</span><span id="line-128">               .x("day", null, "Day").series("revenue", "Revenue").toCardSpec()))</span>
+<span class="source-line-no">129</span><span id="line-129">            .view("data", "Data", v -&gt; v.section(dataCard("revenue-data", "/console/store/stats/revenue", "day", "Day", "revenue", "Revenue")))</span>
+<span class="source-line-no">130</span><span id="line-130">            .initialView("chart").toCardSpec())</span>
+<span class="source-line-no">131</span><span id="line-131">         .card(SwitcherDef.create("orders-sw").title("Orders, last 30 days")</span>
+<span class="source-line-no">132</span><span id="line-132">            .view("chart", "Chart", v -&gt; v.section(ChartDef.line("orders-trend").src("/console/store/stats/daily")</span>
+<span class="source-line-no">133</span><span id="line-133">               .x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")</span>
+<span class="source-line-no">134</span><span id="line-134">               .onClickHref("/console/orders?state=day({day})").toCardSpec()))</span>
+<span class="source-line-no">135</span><span id="line-135">            .view("data", "Data", v -&gt; v.section(dataCard("orders-data", "/console/store/stats/daily", "day", "Day", "placed", "Placed", "delivered", "Delivered")))</span>
+<span class="source-line-no">136</span><span id="line-136">            .initialView("chart").toCardSpec())</span>
+<span class="source-line-no">137</span><span id="line-137">         .card(SwitcherDef.create("pets-sw").title("Pets")</span>
+<span class="source-line-no">138</span><span id="line-138">            .view("species", "Species", v -&gt; v.section(ChartDef.donut("by-species").src("/console/store/stats/species")</span>
+<span class="source-line-no">139</span><span id="line-139">               .label("species").value("count").center("total").toCardSpec()))</span>
+<span class="source-line-no">140</span><span id="line-140">            .view("status", "Status", v -&gt; v.section(ChartDef.bar("by-status").src("/console/store/stats/status")</span>
+<span class="source-line-no">141</span><span id="line-141">               .x("status").series("count", "Pets").toCardSpec()))</span>
+<span class="source-line-no">142</span><span id="line-142">            .view("both", "Species and status", v -&gt; v.section(ChartDef.treemap("pets-map").src("/console/store/stats/pets")</span>
+<span class="source-line-no">143</span><span id="line-143">               .groupBy("species", "status").label("name")</span>
+<span class="source-line-no">144</span><span id="line-144">               .colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),</span>
+<span class="source-line-no">145</span><span id="line-145">                  ChartDef.legendItem("PENDING", "Pending", "warning"),</span>
+<span class="source-line-no">146</span><span id="line-146">                  ChartDef.legendItem("SOLD", "Sold", null))</span>
+<span class="source-line-no">147</span><span id="line-147">               .tileFields("id", "name", "species", "status")</span>
+<span class="source-line-no">148</span><span id="line-148">               .onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).toCardSpec()))</span>
+<span class="source-line-no">149</span><span id="line-149">            .initialView("species").toCardSpec())</span>
+<span class="source-line-no">150</span><span id="line-150">         .htmlSrc("hours", "Store hours", "/console/store/fragments/hours");</span>
+<span class="source-line-no">151</span><span id="line-151">   }</span>
+<span class="source-line-no">152</span><span id="line-152"></span>
+<span class="source-line-no">153</span><span id="line-153">   /** A datatables card for a nested switcher view: client-side rows from {@code dataUrl}, one plain column per {@code key,label} pair. */</span>
+<span class="source-line-no">154</span><span id="line-154">   private static CardSpec dataCard(String id, String dataUrl, String...keyLabelPairs) {</span>
+<span class="source-line-no">155</span><span id="line-155">      var columns = new ArrayList&lt;Map&lt;String,Object&gt;&gt;();</span>
+<span class="source-line-no">156</span><span id="line-156">      for (var i = 0; i &lt; keyLabelPairs.length; i += 2)</span>
+<span class="source-line-no">157</span><span id="line-157">         columns.add(new LinkedHashMap&lt;&gt;(Map.of("key", keyLabelPairs[i], "label", keyLabelPairs[i + 1])));</span>
+<span class="source-line-no">158</span><span id="line-158">      return CardSpec.of("datatables", id).body("dataMode", "client").body("dataUrl", dataUrl).body("columns", columns);</span>
+<span class="source-line-no">159</span><span id="line-159">   }</span>
+<span class="source-line-no">160</span><span id="line-160">}</span>
 
 
 

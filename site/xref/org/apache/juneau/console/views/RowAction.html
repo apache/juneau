@@ -124,7 +124,7 @@
 <a class="jxr_linenumber" name="L116" href="#L116">116</a> <em class="jxr_javadoccomment"> *</em>
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> <em class="jxr_javadoccomment"> * @since 10.0.0</em>
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> @BeanType(properties=<span class="jxr_string">"id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer"</span>)
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> @BeanType(properties=<span class="jxr_string">"id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer,href"</span>)
 <a class="jxr_linenumber" name="L120" href="#L120">120</a> @SuppressWarnings({
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<span class="jxr_string">"java:S1845"</span> <em class="jxr_comment">// Fluent-builder setters intentionally mirror field names (Juneau DSL convention).</em>
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> })
@@ -311,368 +311,416 @@
 <a class="jxr_linenumber" name="L303" href="#L303">303</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<strong class="jxr_keyword">public</strong> String endpoint;
 <a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_javadoccomment">/** The non-safe HTTP method wire token (see {@link Method#wire()}). */</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	<strong class="jxr_keyword">public</strong> String method;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	<em class="jxr_javadoccomment">/** Optional confirmation prompt shown before the submit, or literal &lt;jk&gt;false&lt;/jk&gt; for none (see {@link #noConfirm()}). */</em>
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">public</strong> Object confirm;
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> <em class="jxr_javadoccomment">	 * The same-origin path template of a link action (see {@link #link(String,String)}); {@code {id}} and</em>
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> <em class="jxr_javadoccomment">	 * {@code {property}} are replaced from the row.</em>
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">public</strong> String href;
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/** Optional confirm-dialog title when this action is driven in bulk. */</em>
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">public</strong> String confirmTitle;
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_javadoccomment">/** The non-safe HTTP method wire token (see {@link Method#wire()}). */</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	<strong class="jxr_keyword">public</strong> String method;
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_javadoccomment">/** Optional bulk-mode wire token (see {@link BulkMode#wire()}); &lt;jk&gt;null&lt;/jk&gt; means {@code perRow}. */</em>
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">public</strong> String bulkMode;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	<em class="jxr_javadoccomment">/** Optional confirmation prompt shown before the submit, or literal &lt;jk&gt;false&lt;/jk&gt; for none (see {@link #noConfirm()}). */</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 	<strong class="jxr_keyword">public</strong> Object confirm;
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_javadoccomment">/** Optional form-source URL supplying the action's input fields. */</em>
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">public</strong> String form;
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	<em class="jxr_javadoccomment">/** Optional confirm-dialog title when this action is driven in bulk. */</em>
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	<strong class="jxr_keyword">public</strong> String confirmTitle;
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/** Optional presentation hint wire token (see {@link Present#wire()}). */</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">public</strong> String present;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<em class="jxr_javadoccomment">/** Optional bulk-mode wire token (see {@link BulkMode#wire()}); &lt;jk&gt;null&lt;/jk&gt; means {@code perRow}. */</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 	<strong class="jxr_keyword">public</strong> String bulkMode;
 <a class="jxr_linenumber" name="L323" href="#L323">323</a> 
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<em class="jxr_javadoccomment">/** Optional success-behavior hint wire token (see {@link OnSuccess#wire()}). */</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">public</strong> String onSuccess;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	<em class="jxr_javadoccomment">/** Optional form-source URL supplying the action's input fields. */</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	<strong class="jxr_keyword">public</strong> String form;
 <a class="jxr_linenumber" name="L326" href="#L326">326</a> 
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * The row-state rules that must all match for this action to render enabled.</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;null&lt;/jk&gt; or empty means "never gated" &amp;mdash; the action renders exactly as it does today.  See</em>
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">	 * {@link #enabledWhen(String,Op,Object,String)} for the semantics, which mirror</em>
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">	 * {@code ActionRef.enabledWhen} on the detail-panel {@code ActionBar} (widgets module): presentation only,</em>
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * disabled never hidden, first-declared-rule-wins, and a field the row does not carry fails closed.</em>
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<strong class="jxr_keyword">public</strong> List&lt;RowActionEnabledRule&gt; enabledWhen;
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * The rules that must all match for this action to render at all.  &lt;jk&gt;null&lt;/jk&gt; or empty means always visible.</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> <em class="jxr_javadoccomment">	 * Unlike {@link #enabledWhen}, which disables but never hides, a row whose data does not satisfy every rule</em>
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> <em class="jxr_javadoccomment">	 * here has this action hidden entirely (re-evaluated on every draw).  Prefer {@code enabledWhen}, which tells</em>
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> <em class="jxr_javadoccomment">	 * the user why an action is unavailable, and hide only when the action is irrelevant to the row.  Still</em>
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * presentation only &amp;mdash; the endpoint must authorize independently.  The evaluation map is the row, plus the</em>
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 * page's {@code facts} under a {@code facts.} prefix, so a rule can test either {@code "status"} or</em>
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * {@code "facts.viewer.roles"}.</em>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<strong class="jxr_keyword">public</strong> List&lt;VisibilityRule&gt; visibleWhen;
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<em class="jxr_javadoccomment">/** Optional confirmation tone wire token (see {@link Tone#wire()}). */</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<strong class="jxr_keyword">public</strong> String tone;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	<em class="jxr_javadoccomment">/** Optional text of the confirm button; &lt;jk&gt;null&lt;/jk&gt; means the action's {@link #label}. */</em>
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> String confirmLabel;
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	<em class="jxr_javadoccomment">/** Optional presentation hint wire token (see {@link Present#wire()}). */</em>
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 	<strong class="jxr_keyword">public</strong> String present;
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 	<em class="jxr_javadoccomment">/** Optional success-behavior hint wire token (see {@link OnSuccess#wire()}). */</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	<strong class="jxr_keyword">public</strong> String onSuccess;
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">	 * The row-state rules that must all match for this action to render enabled.</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;null&lt;/jk&gt; or empty means "never gated" &amp;mdash; the action renders exactly as it does today.  See</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * {@link #enabledWhen(String,Op,Object,String)} for the semantics, which mirror</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * {@code ActionRef.enabledWhen} on the detail-panel {@code ActionBar} (widgets module): presentation only,</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 * disabled never hidden, first-declared-rule-wins, and a field the row does not carry fails closed.</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">public</strong> List&lt;RowActionEnabledRule&gt; enabledWhen;
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> <em class="jxr_javadoccomment">	 * The rules that must all match for this action to render at all.  &lt;jk&gt;null&lt;/jk&gt; or empty means always visible.</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">	 * Unlike {@link #enabledWhen}, which disables but never hides, a row whose data does not satisfy every rule</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">	 * here has this action hidden entirely (re-evaluated on every draw).  Prefer {@code enabledWhen}, which tells</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">	 * the user why an action is unavailable, and hide only when the action is irrelevant to the row.  Still</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">	 * presentation only &amp;mdash; the endpoint must authorize independently.  The evaluation map is the row, plus the</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">	 * page's {@code facts} under a {@code facts.} prefix, so a rule can test either {@code "status"} or</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> <em class="jxr_javadoccomment">	 * {@code "facts.viewer.roles"}.</em>
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">public</strong> List&lt;VisibilityRule&gt; visibleWhen;
 <a class="jxr_linenumber" name="L356" href="#L356">356</a> 
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_javadoccomment">/** Optional name of a confirm renderer registered with the client runtime; &lt;jk&gt;null&lt;/jk&gt; means the built-in modal. */</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> String confirmRenderer;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	<em class="jxr_javadoccomment">/** Optional confirmation tone wire token (see {@link Tone#wire()}). */</em>
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> String tone;
 <a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">	 * Starts a new {@link RowAction} with the specified stable action id.</em>
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">	 * @param id The stable action id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">	 * @return A new mutable {@link RowAction} to chain builder calls on.</em>
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowAction create(String id) {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RowAction id must not be null or blank."</span>);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> RowAction();
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		a.id = id;
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">return</strong> a;
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	}
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> <em class="jxr_javadoccomment">	 * Sets the menu-item text.</em>
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<strong class="jxr_keyword">public</strong> RowAction label(String value) {
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		label = value;
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 * Sets the glyph/icon name.</em>
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 	<strong class="jxr_keyword">public</strong> RowAction icon(String value) {
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		icon = value;
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_javadoccomment">/** Optional text of the confirm button; &lt;jk&gt;null&lt;/jk&gt; means the action's {@link #label}. */</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">public</strong> String confirmLabel;
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	<em class="jxr_javadoccomment">/** Optional name of a confirm renderer registered with the client runtime; &lt;jk&gt;null&lt;/jk&gt; means the built-in modal. */</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	<strong class="jxr_keyword">public</strong> String confirmRenderer;
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">	 * Starts a new {@link RowAction} with the specified stable action id.</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> <em class="jxr_javadoccomment">	 * @param id The stable action id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> <em class="jxr_javadoccomment">	 * @return A new mutable {@link RowAction} to chain builder calls on.</em>
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowAction create(String id) {
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		<strong class="jxr_keyword">if</strong> (ib(id))
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RowAction id must not be null or blank."</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> a = <strong class="jxr_keyword">new</strong> RowAction();
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		a.id = id;
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">return</strong> a;
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> <em class="jxr_javadoccomment">	 * Starts a link action: a header button that navigates to a same-origin page instead of submitting.</em>
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> <em class="jxr_javadoccomment">	 * A link action has no endpoint, method, form or confirmation.  Row menus ignore it; it shows in a tabbed row</em>
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> <em class="jxr_javadoccomment">	 * detail's header.</em>
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> <em class="jxr_javadoccomment">	 * @param id The stable action id.  Must not be blank.</em>
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> <em class="jxr_javadoccomment">	 * @param urlTemplate A same-origin path template; {@code {id}} and {@code {property}} are replaced from the row.</em>
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> <em class="jxr_javadoccomment">	 * @return A new link {@link RowAction}.</em>
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If {@code id} is blank or the template is not a same-origin path.</em>
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> RowAction link(String id, String urlTemplate) {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">return</strong> create(id).href(urlTemplate);
 <a class="jxr_linenumber" name="L395" href="#L395">395</a> 	}
 <a class="jxr_linenumber" name="L396" href="#L396">396</a> 
 <a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * Sets the URL this action submits to.</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> <em class="jxr_javadoccomment">	 * Sets the link target, making this a link action.</em>
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * May contain one or more {@code {property}} tokens (e.g. {@code "servlet:/incidents/{id}/ack"}), substituted</em>
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * from the CURRENT ROW's own already-fetched data at submit time &amp;mdash; the client-side ({@code</em>
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 * juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the identical</em>
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 * {@code interpolateHref} helper the {@code linked} cell renderer uses</em>
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> <em class="jxr_javadoccomment">	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and the</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> <em class="jxr_javadoccomment">	 * SAME per-value {@code encodeURIComponent} escaping &amp;mdash; unchanged.</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from a rendered {@code href} is deliberate:&lt;/b&gt; because this URL is &lt;i&gt;submitted&lt;/i&gt;</em>
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> <em class="jxr_javadoccomment">	 * rather than merely rendered, the runtime &lt;b&gt;refuses the submission&lt;/b&gt; (renders a visible refusal; issues no</em>
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> <em class="jxr_javadoccomment">	 * request; never a request-time exception) instead of firing a malformed or undeclared write, when:</em>
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;a {@code {property}} token's row value is absent, &lt;jk&gt;null&lt;/jk&gt;, or blank;</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped</em>
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer);</em>
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise</em>
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> <em class="jxr_javadoccomment">	 * 		normalize into a different, undeclared endpoint); or</em>
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;no {@code endpoint} is declared at all.</em>
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> <em class="jxr_javadoccomment">	 * {@code Column.href} keeps substituting to an empty string in each of these cases, because a rendered link is</em>
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> <em class="jxr_javadoccomment">	 * not a write.</em>
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Backward compatible, narrowed:&lt;/b&gt; an {@code endpoint} with no {@code {...}} token is still</em>
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 * issued as declared (three of the four guards above cannot fire on it; the fourth,</em>
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now</em>
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a</em>
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 * row with no {@code id}) rather than issuing it.</em>
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">public</strong> RowAction endpoint(String value) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		endpoint = value;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 * Sets the non-safe HTTP method this action submits with.</em>
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> <em class="jxr_javadoccomment">	 * Only a {@link Method} (POST/PUT/PATCH/DELETE) can be passed, so a safe method can never be declared &amp;mdash;</em>
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> <em class="jxr_javadoccomment">	 * the build-time half of the safe-method refusal.</em>
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> <em class="jxr_javadoccomment">	 * @param value The method.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 	<strong class="jxr_keyword">public</strong> RowAction method(Method value) {
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		method = value.wire();
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * Sets the confirmation prompt shown before the submit.</em>
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> <em class="jxr_javadoccomment">	 * @param urlTemplate A same-origin path template starting with {@code /}.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the template is not a same-origin path.</em>
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">public</strong> RowAction href(String urlTemplate) {
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		<strong class="jxr_keyword">if</strong> (urlTemplate == <strong class="jxr_keyword">null</strong> || ! urlTemplate.startsWith(<span class="jxr_string">"/"</span>) || ! RegionDef.isSafeDetailEndpoint(urlTemplate))
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RowAction '%s' href '%s' must be a same-origin path starting with '/'."</span>, id, urlTemplate);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		href = urlTemplate;
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> <em class="jxr_javadoccomment">	 * Checks that this action is coherent: a link action carries nothing a submit would.</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If a link action also sets an endpoint, method, form or confirmation.</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	<strong class="jxr_keyword">void</strong> validateLink() {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		<strong class="jxr_keyword">if</strong> (href == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">if</strong> (endpoint != <strong class="jxr_keyword">null</strong> || method != <strong class="jxr_keyword">null</strong> || form != <strong class="jxr_keyword">null</strong> || confirm != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"RowAction '%s' is a link and cannot also set endpoint, method, form or confirm."</span>, id);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	}
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> <em class="jxr_javadoccomment">	 * Sets the menu-item text.</em>
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<strong class="jxr_keyword">public</strong> RowAction label(String value) {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		label = value;
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> <em class="jxr_javadoccomment">	 * Sets the glyph/icon name.</em>
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	<strong class="jxr_keyword">public</strong> RowAction icon(String value) {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		icon = value;
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	}
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> <em class="jxr_javadoccomment">	 * Sets the URL this action submits to.</em>
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> <em class="jxr_javadoccomment">	 * May contain one or more {@code {property}} tokens (e.g. {@code "servlet:/incidents/{id}/ack"}), substituted</em>
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> <em class="jxr_javadoccomment">	 * from the CURRENT ROW's own already-fetched data at submit time &amp;mdash; the client-side ({@code</em>
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> <em class="jxr_javadoccomment">	 * juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the identical</em>
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> <em class="jxr_javadoccomment">	 * {@code interpolateHref} helper the {@code linked} cell renderer uses</em>
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> <em class="jxr_javadoccomment">	 * (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and the</em>
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> <em class="jxr_javadoccomment">	 * SAME per-value {@code encodeURIComponent} escaping &amp;mdash; unchanged.</em>
 <a class="jxr_linenumber" name="L455" href="#L455">455</a> <em class="jxr_javadoccomment">	 *</em>
 <a class="jxr_linenumber" name="L456" href="#L456">456</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * The prompt is shown whatever {@link #present(Present) present} says: without {@link Present#DIALOG} the action</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * opens a confirm-only dialog (or its {@link #confirmRenderer(String) confirmRenderer}) and submits only on</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * Confirm.  Use {@link #noConfirm()} for an action that never prompts.</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * One surface never prompts: committing an inline cell edit (the {@code edit} renderer's pencil) submits the action</em>
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * directly on Enter or blur even when the action declares a confirm or a</em>
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * {@link #confirmRenderer(String) confirmRenderer}, because a dialog opening on Enter or blur is awkward.  Do not</em>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * wire a confirm-guarded action to an inline editor.</em>
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 	<strong class="jxr_keyword">public</strong> RowAction confirm(String value) {
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		confirm = value;
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 	}
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * Sets how this action behaves when driven from a bulk-mutate toolbar: one call per selected row</em>
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 * ({@link BulkMode#PER_ROW}, the default) or a single call carrying every selected id</em>
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * ({@link BulkMode#AGGREGATE}).</em>
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 * @param value The new mode. A &lt;jk&gt;null&lt;/jk&gt; value clears it (the default, {@link BulkMode#PER_ROW}).</em>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 	<strong class="jxr_keyword">public</strong> RowAction bulkMode(BulkMode value) {
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		bulkMode = value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : value.wire();
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * Sets the confirm dialog's title when this action is driven in bulk (e.g. {@code "Abort {count} pending changes"}).</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * @param value The title template. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 	<strong class="jxr_keyword">public</strong> RowAction confirmTitle(String value) {
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 		confirmTitle = value;
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 	}
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> <em class="jxr_javadoccomment">	 * Marks this action as never requiring a confirm dialog, in bulk or otherwise &amp;mdash; writes a literal</em>
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;false&lt;/jk&gt; onto the same {@link #confirm} wire key a confirm message would otherwise occupy.</em>
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 	<strong class="jxr_keyword">public</strong> RowAction noConfirm() {
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 		confirm = Boolean.FALSE;
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 	}
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * Sets the form-source URL supplying the action's input fields.</em>
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 * May contain one or more {@code {property}} tokens (e.g. {@code "/data/alerts/{id}/ack-form"}), substituted</em>
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * from the CURRENT ROW's own already-fetched data before the confirmation GET &amp;mdash; the client-side</em>
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * ({@code juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the</em>
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 * identical {@code interpolateHref} helper the {@code linked} cell renderer</em>
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> <em class="jxr_javadoccomment">	 * uses (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and</em>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> <em class="jxr_javadoccomment">	 * the SAME per-value {@code encodeURIComponent} escaping.</em>
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from a rendered {@code href}:&lt;/b&gt; because this URL is &lt;i&gt;fetched&lt;/i&gt; (the confirmation GET) rather</em>
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> <em class="jxr_javadoccomment">	 * than merely rendered, the runtime &lt;b&gt;refuses the open&lt;/b&gt; (renders a visible refusal; issues no {@code</em>
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * fetch}) instead of GETting a malformed or undeclared path, when:</em>
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;a {@code {property}} token's row value is absent, &lt;jk&gt;null&lt;/jk&gt;, or blank;</em>
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped</em>
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer); or</em>
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise</em>
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * 		normalize into a different, undeclared endpoint).</em>
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 * {@code href} keeps substituting to an empty string in each of these cases, because a rendered link is</em>
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 * not a fetch.</em>
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from {@link #endpoint(String) endpoint}:&lt;/b&gt; a blank/absent {@code form} is still the</em>
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched</em>
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 * as declared.</em>
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * @param value The new value.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank for a confirm-only dialog.</em>
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<strong class="jxr_keyword">public</strong> RowAction form(String value) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		form = value;
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	}
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * Sets the presentation hint.</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from a rendered {@code href} is deliberate:&lt;/b&gt; because this URL is &lt;i&gt;submitted&lt;/i&gt;</em>
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">	 * rather than merely rendered, the runtime &lt;b&gt;refuses the submission&lt;/b&gt; (renders a visible refusal; issues no</em>
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">	 * request; never a request-time exception) instead of firing a malformed or undeclared write, when:</em>
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;a {@code {property}} token's row value is absent, &lt;jk&gt;null&lt;/jk&gt;, or blank;</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> <em class="jxr_javadoccomment">	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer);</em>
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise</em>
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> <em class="jxr_javadoccomment">	 * 		normalize into a different, undeclared endpoint); or</em>
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;no {@code endpoint} is declared at all.</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> <em class="jxr_javadoccomment">	 * {@code Column.href} keeps substituting to an empty string in each of these cases, because a rendered link is</em>
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> <em class="jxr_javadoccomment">	 * not a write.</em>
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Backward compatible, narrowed:&lt;/b&gt; an {@code endpoint} with no {@code {...}} token is still</em>
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> <em class="jxr_javadoccomment">	 * issued as declared (three of the four guards above cannot fire on it; the fourth,</em>
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> <em class="jxr_javadoccomment">	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now</em>
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> <em class="jxr_javadoccomment">	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a</em>
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> <em class="jxr_javadoccomment">	 * row with no {@code id}) rather than issuing it.</em>
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 	<strong class="jxr_keyword">public</strong> RowAction endpoint(String value) {
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		endpoint = value;
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 	}
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> <em class="jxr_javadoccomment">	 * Sets the non-safe HTTP method this action submits with.</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 * Only a {@link Method} (POST/PUT/PATCH/DELETE) can be passed, so a safe method can never be declared &amp;mdash;</em>
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * the build-time half of the safe-method refusal.</em>
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> <em class="jxr_javadoccomment">	 * @param value The method.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 	<strong class="jxr_keyword">public</strong> RowAction method(Method value) {
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 		method = value.wire();
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 	}
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> <em class="jxr_javadoccomment">	 * Sets the confirmation prompt shown before the submit.</em>
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> <em class="jxr_javadoccomment">	 * The prompt is shown whatever {@link #present(Present) present} says: without {@link Present#DIALOG} the action</em>
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> <em class="jxr_javadoccomment">	 * opens a confirm-only dialog (or its {@link #confirmRenderer(String) confirmRenderer}) and submits only on</em>
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> <em class="jxr_javadoccomment">	 * Confirm.  Use {@link #noConfirm()} for an action that never prompts.</em>
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> <em class="jxr_javadoccomment">	 * One surface never prompts: committing an inline cell edit (the {@code edit} renderer's pencil) submits the action</em>
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> <em class="jxr_javadoccomment">	 * directly on Enter or blur even when the action declares a confirm or a</em>
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> <em class="jxr_javadoccomment">	 * {@link #confirmRenderer(String) confirmRenderer}, because a dialog opening on Enter or blur is awkward.  Do not</em>
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> <em class="jxr_javadoccomment">	 * wire a confirm-guarded action to an inline editor.</em>
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> <em class="jxr_javadoccomment">	 * @param value The new value.</em>
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 	<strong class="jxr_keyword">public</strong> RowAction confirm(String value) {
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 		confirm = value;
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 	}
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> <em class="jxr_javadoccomment">	 * Sets how this action behaves when driven from a bulk-mutate toolbar: one call per selected row</em>
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> <em class="jxr_javadoccomment">	 * ({@link BulkMode#PER_ROW}, the default) or a single call carrying every selected id</em>
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> <em class="jxr_javadoccomment">	 * ({@link BulkMode#AGGREGATE}).</em>
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * @param value The new mode. A &lt;jk&gt;null&lt;/jk&gt; value clears it (the default, {@link BulkMode#PER_ROW}).</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 	<strong class="jxr_keyword">public</strong> RowAction bulkMode(BulkMode value) {
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		bulkMode = value == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : value.wire();
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	}
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> <em class="jxr_javadoccomment">	 * Sets the confirm dialog's title when this action is driven in bulk (e.g. {@code "Abort {count} pending changes"}).</em>
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> <em class="jxr_javadoccomment">	 * @param value The title template. May be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	<strong class="jxr_keyword">public</strong> RowAction confirmTitle(String value) {
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		confirmTitle = value;
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	}
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> <em class="jxr_javadoccomment">	 * Marks this action as never requiring a confirm dialog, in bulk or otherwise &amp;mdash; writes a literal</em>
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> <em class="jxr_javadoccomment">	 * &lt;jk&gt;false&lt;/jk&gt; onto the same {@link #confirm} wire key a confirm message would otherwise occupy.</em>
 <a class="jxr_linenumber" name="L550" href="#L550">550</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * @param value The presentation.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 	<strong class="jxr_keyword">public</strong> RowAction present(Present value) {
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		present = value.wire();
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	}
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 * Sets the success-behavior hint.</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * @param value The success behavior.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 	<strong class="jxr_keyword">public</strong> RowAction onSuccess(OnSuccess value) {
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		onSuccess = value.wire();
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	}
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * Gates this action on the row's own state, comparing one field against one value.</em>
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 * Mirrors {@code ActionRef.enabledWhen(String,Op,Object,String)} on the detail-panel {@code ActionBar}</em>
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * (widgets module).  This is presentation only, never the authorization gate: the endpoint behind this</em>
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * action must still perform its own real check and refuse on its own authority.  A row whose field does</em>
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * not satisfy every declared rule renders this action present but disabled, carrying {@code reason} as its</em>
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * explanation; disabled, never hidden.  Call this more than once to declare more than one rule &amp;mdash; all</em>
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 * of them must match, and when several fail, the runtime shows the first-declared failing reason.</em>
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * @param field The row field to test.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 * @param op The comparison operator.  Must be {@link Op#EQ} or {@link Op#NE}.</em>
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * @param value The comparison value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * @param reason Why the action is unavailable when this rule does not match.  Must not be &lt;jk&gt;null&lt;/jk&gt; or</em>
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * 	blank.</em>
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 	<strong class="jxr_keyword">public</strong> RowAction enabledWhen(String field, <a name="Op" href="../../../../../org/apache/juneau/console/widgets/Op.html#Op">Op</a> op, Object value, String reason) {
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">return</strong> addEnabledRule(RowActionEnabledRule.of(field, op, value, reason));
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 	}
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> <em class="jxr_javadoccomment">	 * Gates this action on the presence or absence of a row field.</em>
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> <em class="jxr_javadoccomment">	 * The presence-based counterpart of {@link #enabledWhen(String,Op,Object,String)}, which carries the full</em>
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * semantics.</em>
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 	<strong class="jxr_keyword">public</strong> RowAction noConfirm() {
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		confirm = Boolean.FALSE;
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 	}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> <em class="jxr_javadoccomment">	 * Sets the form-source URL supplying the action's input fields.</em>
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> <em class="jxr_javadoccomment">	 * May contain one or more {@code {property}} tokens (e.g. {@code "/data/alerts/{id}/ack-form"}), substituted</em>
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> <em class="jxr_javadoccomment">	 * from the CURRENT ROW's own already-fetched data before the confirmation GET &amp;mdash; the client-side</em>
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> <em class="jxr_javadoccomment">	 * ({@code juneau-views.js}) runtime, not this Java layer, performs the substitution, by delegating to the</em>
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> <em class="jxr_javadoccomment">	 * identical {@code interpolateHref} helper the {@code linked} cell renderer</em>
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> <em class="jxr_javadoccomment">	 * uses (juneau-renders.js): the SAME token grammar (any {@code {property}}, not a hardcoded {@code {id}}) and</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> <em class="jxr_javadoccomment">	 * the SAME per-value {@code encodeURIComponent} escaping.</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from a rendered {@code href}:&lt;/b&gt; because this URL is &lt;i&gt;fetched&lt;/i&gt; (the confirmation GET) rather</em>
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> <em class="jxr_javadoccomment">	 * than merely rendered, the runtime &lt;b&gt;refuses the open&lt;/b&gt; (renders a visible refusal; issues no {@code</em>
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> <em class="jxr_javadoccomment">	 * fetch}) instead of GETting a malformed or undeclared path, when:</em>
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> <em class="jxr_javadoccomment">	 * &lt;ul&gt;</em>
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;a {@code {property}} token's row value is absent, &lt;jk&gt;null&lt;/jk&gt;, or blank;</em>
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL still carries an unsubstituted {@code {property}} token (e.g. the page shipped</em>
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> <em class="jxr_javadoccomment">	 * 		{@code juneau-views.js} without its {@code juneau-renders.js} peer); or</em>
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> <em class="jxr_javadoccomment">	 * 	&lt;li&gt;the resolved URL contains a {@code ..} path segment (which browser URL resolution would otherwise</em>
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> <em class="jxr_javadoccomment">	 * 		normalize into a different, undeclared endpoint).</em>
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> <em class="jxr_javadoccomment">	 * &lt;/ul&gt;</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> <em class="jxr_javadoccomment">	 * {@code href} keeps substituting to an empty string in each of these cases, because a rendered link is</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> <em class="jxr_javadoccomment">	 * not a fetch.</em>
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> <em class="jxr_javadoccomment">	 * &lt;b&gt;Divergence from {@link #endpoint(String) endpoint}:&lt;/b&gt; a blank/absent {@code form} is still the</em>
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> <em class="jxr_javadoccomment">	 * confirm-only local path (no GET), not a {@code no-endpoint} refusal.  A token-less {@code form} is fetched</em>
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> <em class="jxr_javadoccomment">	 * as declared.</em>
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> <em class="jxr_javadoccomment">	 * @param value The new value.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank for a confirm-only dialog.</em>
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 	<strong class="jxr_keyword">public</strong> RowAction form(String value) {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 		form = value;
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 	}
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> <em class="jxr_javadoccomment">	 * Sets the presentation hint.</em>
 <a class="jxr_linenumber" name="L598" href="#L598">598</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">	 * @param field The row field to test.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 * @param op The comparison operator.  Must be {@link Op#PRESENT} or {@link Op#ABSENT}.</em>
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">	 * @param reason Why the action is unavailable when this rule does not match.  Must not be &lt;jk&gt;null&lt;/jk&gt; or</em>
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> <em class="jxr_javadoccomment">	 * 	blank.</em>
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	<strong class="jxr_keyword">public</strong> RowAction enabledWhen(String field, <a name="Op" href="../../../../../org/apache/juneau/console/widgets/Op.html#Op">Op</a> op, String reason) {
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">return</strong> addEnabledRule(RowActionEnabledRule.of(field, op, reason));
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	}
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">private</strong> RowAction addEnabledRule(<a name="RowActionEnabledRule" href="../../../../../org/apache/juneau/console/views/RowActionEnabledRule.html#RowActionEnabledRule">RowActionEnabledRule</a> rule) {
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">if</strong> (enabledWhen == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			enabledWhen = l();
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		enabledWhen.add(rule);
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 	}
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> <em class="jxr_javadoccomment">	 * Hides this action, per row, unless every rule matches (see {@link #visibleWhen} for the semantics).</em>
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * @param rules The rules; all must match.  Replaces any rules set by an earlier call.</em>
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	<strong class="jxr_keyword">public</strong> RowAction visibleWhen(VisibilityRule...rules) {
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 		visibleWhen = l(rules);
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	}
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 * Sets the confirmation tone.</em>
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * @param value The tone.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<strong class="jxr_keyword">public</strong> RowAction tone(Tone value) {
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		tone = value.wire();
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	}
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_javadoccomment">	 * Sets the text of the confirm button.</em>
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">	 * @param value The label.  Can be &lt;jk&gt;null&lt;/jk&gt; to fall back to {@link #label}.</em>
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<strong class="jxr_keyword">public</strong> RowAction confirmLabel(String value) {
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		confirmLabel = value;
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 	}
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * Sets the name of the confirm renderer to use for this action's confirmation.</em>
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> <em class="jxr_javadoccomment">	 * The name must be registered on the client with {@code JuneauViews.rowActions.registerConfirmRenderer}; an</em>
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> <em class="jxr_javadoccomment">	 * unregistered name refuses the confirmation.</em>
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> <em class="jxr_javadoccomment">	 * A renderer on its own, with no {@link #confirm(String) confirm} text, is enough to prompt: the action asks the</em>
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> <em class="jxr_javadoccomment">	 * renderer before it submits even without {@code present(DIALOG)}, and the prompt is titled with the action's name.</em>
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> <em class="jxr_javadoccomment">	 * @param value The renderer name.  Can be &lt;jk&gt;null&lt;/jk&gt; for the built-in modal.</em>
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	<strong class="jxr_keyword">public</strong> RowAction confirmRenderer(String value) {
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		confirmRenderer = value;
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	}
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> }
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> <em class="jxr_javadoccomment">	 * @param value The presentation.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 	<strong class="jxr_keyword">public</strong> RowAction present(Present value) {
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		present = value.wire();
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 	}
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> <em class="jxr_javadoccomment">	 * Sets the success-behavior hint.</em>
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> <em class="jxr_javadoccomment">	 * @param value The success behavior.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	<strong class="jxr_keyword">public</strong> RowAction onSuccess(OnSuccess value) {
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		onSuccess = value.wire();
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 	}
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> <em class="jxr_javadoccomment">	 * Gates this action on the row's own state, comparing one field against one value.</em>
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> <em class="jxr_javadoccomment">	 * Mirrors {@code ActionRef.enabledWhen(String,Op,Object,String)} on the detail-panel {@code ActionBar}</em>
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> <em class="jxr_javadoccomment">	 * (widgets module).  This is presentation only, never the authorization gate: the endpoint behind this</em>
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> <em class="jxr_javadoccomment">	 * action must still perform its own real check and refuse on its own authority.  A row whose field does</em>
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> <em class="jxr_javadoccomment">	 * not satisfy every declared rule renders this action present but disabled, carrying {@code reason} as its</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> <em class="jxr_javadoccomment">	 * explanation; disabled, never hidden.  Call this more than once to declare more than one rule &amp;mdash; all</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> <em class="jxr_javadoccomment">	 * of them must match, and when several fail, the runtime shows the first-declared failing reason.</em>
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> <em class="jxr_javadoccomment">	 * @param field The row field to test.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> <em class="jxr_javadoccomment">	 * @param op The comparison operator.  Must be {@link Op#EQ} or {@link Op#NE}.</em>
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> <em class="jxr_javadoccomment">	 * @param value The comparison value.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> <em class="jxr_javadoccomment">	 * @param reason Why the action is unavailable when this rule does not match.  Must not be &lt;jk&gt;null&lt;/jk&gt; or</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> <em class="jxr_javadoccomment">	 * 	blank.</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	<strong class="jxr_keyword">public</strong> RowAction enabledWhen(String field, <a name="Op" href="../../../../../org/apache/juneau/console/widgets/Op.html#Op">Op</a> op, Object value, String reason) {
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 		<strong class="jxr_keyword">return</strong> addEnabledRule(RowActionEnabledRule.of(field, op, value, reason));
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 	}
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> <em class="jxr_javadoccomment">	 * Gates this action on the presence or absence of a row field.</em>
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> <em class="jxr_javadoccomment">	 * The presence-based counterpart of {@link #enabledWhen(String,Op,Object,String)}, which carries the full</em>
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> <em class="jxr_javadoccomment">	 * semantics.</em>
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> <em class="jxr_javadoccomment">	 * @param field The row field to test.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</em>
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> <em class="jxr_javadoccomment">	 * @param op The comparison operator.  Must be {@link Op#PRESENT} or {@link Op#ABSENT}.</em>
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> <em class="jxr_javadoccomment">	 * @param reason Why the action is unavailable when this rule does not match.  Must not be &lt;jk&gt;null&lt;/jk&gt; or</em>
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> <em class="jxr_javadoccomment">	 * 	blank.</em>
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 	<strong class="jxr_keyword">public</strong> RowAction enabledWhen(String field, <a name="Op" href="../../../../../org/apache/juneau/console/widgets/Op.html#Op">Op</a> op, String reason) {
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		<strong class="jxr_keyword">return</strong> addEnabledRule(RowActionEnabledRule.of(field, op, reason));
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 	}
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 	<strong class="jxr_keyword">private</strong> RowAction addEnabledRule(<a name="RowActionEnabledRule" href="../../../../../org/apache/juneau/console/views/RowActionEnabledRule.html#RowActionEnabledRule">RowActionEnabledRule</a> rule) {
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		<strong class="jxr_keyword">if</strong> (enabledWhen == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			enabledWhen = l();
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		enabledWhen.add(rule);
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> <em class="jxr_javadoccomment">	 * Hides this action, per row, unless every rule matches (see {@link #visibleWhen} for the semantics).</em>
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> <em class="jxr_javadoccomment">	 * @param rules The rules; all must match.  Replaces any rules set by an earlier call.</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	<strong class="jxr_keyword">public</strong> RowAction visibleWhen(VisibilityRule...rules) {
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		visibleWhen = l(rules);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 	}
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> <em class="jxr_javadoccomment">	 * Sets the confirmation tone.</em>
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> <em class="jxr_javadoccomment">	 * @param value The tone.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 	<strong class="jxr_keyword">public</strong> RowAction tone(Tone value) {
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		tone = value.wire();
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	}
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> <em class="jxr_javadoccomment">	 * Sets the text of the confirm button.</em>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> <em class="jxr_javadoccomment">	 * @param value The label.  Can be &lt;jk&gt;null&lt;/jk&gt; to fall back to {@link #label}.</em>
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 	<strong class="jxr_keyword">public</strong> RowAction confirmLabel(String value) {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 		confirmLabel = value;
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 	}
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> <em class="jxr_javadoccomment">	 * Sets the name of the confirm renderer to use for this action's confirmation.</em>
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> <em class="jxr_javadoccomment">	 * The name must be registered on the client with {@code JuneauViews.rowActions.registerConfirmRenderer}; an</em>
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> <em class="jxr_javadoccomment">	 * unregistered name refuses the confirmation.</em>
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> <em class="jxr_javadoccomment">	 * A renderer on its own, with no {@link #confirm(String) confirm} text, is enough to prompt: the action asks the</em>
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> <em class="jxr_javadoccomment">	 * renderer before it submits even without {@code present(DIALOG)}, and the prompt is titled with the action's name.</em>
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> <em class="jxr_javadoccomment">	 * @param value The renderer name.  Can be &lt;jk&gt;null&lt;/jk&gt; for the built-in modal.</em>
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> <em class="jxr_javadoccomment">	 * @return This object.</em>
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	<strong class="jxr_keyword">public</strong> RowAction confirmRenderer(String value) {
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 		confirmRenderer = value;
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">this</strong>;
+<a class="jxr_linenumber" name="L714" href="#L714">714</a> 	}
+<a class="jxr_linenumber" name="L715" href="#L715">715</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

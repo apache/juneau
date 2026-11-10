@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-54">PetstoreConsoleResource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-55">PetstoreConsoleResource</a></span>
 <span class="extends-implements">extends <a href="PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a></span></div>
 <div class="block">Root of the petstore admin console, mounted at <code>/console</code> beside the <code>/petstore</code> API and sharing its
  <a href="../service/PetStore.html" title="class in org.apache.juneau.petstore.service"><code>PetStore</code></a>.
@@ -171,14 +171,21 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportLib(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">exportLib</a><wbr>(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Serves one of the vendored export libraries (<code>jszip.min.js</code>, <code>pdfmake.min.js</code>, <code>vfs_fonts.js</code>)
+ that the <code>datatables-export</code> toolkit pack loads.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#index(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">index</a><wbr>(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block"><code>GET /console</code> redirects to the store dashboard.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#script(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">script</a><wbr>(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#script(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">script</a><wbr>(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Serves <code>petstore.js</code>, the shared page script <code>base.ftlh</code> loads after the toolkit on every page.</div>
 </div>
 </div>
@@ -213,7 +220,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>PetstoreConsoleResource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-71">PetstoreConsoleResource</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-72">PetstoreConsoleResource</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -227,7 +234,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="index(org.apache.juneau.rest.server.RestRequest)">
 <h3>index</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-81">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../http/response/SeeOther.html" title="class in org.apache.juneau.http.response">SeeOther</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-82">index</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block"><code>GET /console</code> redirects to the store dashboard.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -240,7 +247,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="script(org.apache.juneau.rest.server.RestResponse)">
 <h3>script</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-92">script</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-93">script</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Serves <code>petstore.js</code>, the shared page script <code>base.ftlh</code> loads after the toolkit on every page.</div>
 <dl class="notes">
@@ -248,6 +255,24 @@ loadScripts(document, 'script');</script>
 <dd><code>res</code> - The response.</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the bundled script can't be read.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="exportLib(org.apache.juneau.rest.server.RestResponse,java.lang.String)">
+<h3>exportLib</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/petstore/console/PetstoreConsoleResource.html#line-111">exportLib</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("name")
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Serves one of the vendored export libraries (<code>jszip.min.js</code>, <code>pdfmake.min.js</code>, <code>vfs_fonts.js</code>)
+ that the <code>datatables-export</code> toolkit pack loads.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>res</code> - The response.</dd>
+<dd><code>name</code> - The library file name; anything outside the fixed list is a 404.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If the bundled library can't be read.</dd>
 </dl>
 </section>
 </li>

@@ -160,7 +160,7 @@
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				+ <span class="jxr_string">"&lt;body data-juneau-csrf=\&quot;"</span> + attr(tokens.get()) + <span class="jxr_string">"\&quot; data-juneau-csrf-header=\&quot;"</span> + CSRF_HEADER + <span class="jxr_string">"\&quot;&gt;\n"</span>
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				+ <span class="jxr_string">"&lt;script type=\&quot;application/json\&quot; id=\&quot;juneau-page\&quot;&gt;"</span>
 <a class="jxr_linenumber" name="L154" href="#L154">154</a> 				+ <span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;probe\&quot;,\&quot;type\&quot;:\&quot;probe\&quot;}]}&lt;/script&gt;\n"</span>
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				+ <span class="jxr_string">"&lt;script&gt;window.JuneauConsoleCards = [[\&quot;probe\&quot;, function (card, el, ctx) { window.cardContext = ctx; }]];&lt;/script&gt;\n"</span>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				+ <span class="jxr_string">"&lt;script&gt;window.JuneauConsoleCards = [[\&quot;probe\&quot;, class { static lateBase = true; render() { window.cardContext = this; } }]];&lt;/script&gt;\n"</span>
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 				+ <span class="jxr_string">"&lt;script src=\&quot;/assets/juneau-console.js\&quot;&gt;&lt;/script&gt;\n"</span>
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 				+ <span class="jxr_string">"&lt;/body&gt;&lt;/html&gt;\n"</span>);
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		}

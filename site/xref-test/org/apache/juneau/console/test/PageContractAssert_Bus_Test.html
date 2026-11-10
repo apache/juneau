@@ -86,7 +86,24 @@
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			<span class="jxr_string">""</span><span class="jxr_string">");
 <a class="jxr_linenumber" name="L79" href="#L79">79</a>  		PageContractAssert.assertPage(two).subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>, <span class="jxr_string">"filter"</span>).subscribes(<span class="jxr_string">"b"</span>, <span class="jxr_string">"ssc.focus"</span>, <span class="jxr_string">"refresh"</span>);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  	}
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  }
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String NESTED = page(<span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		{<span class="jxr_string">"contractVersion"</span>:<span class="jxr_string">"1"</span>,<span class="jxr_string">"title"</span>:<span class="jxr_string">"t"</span>,<span class="jxr_string">"nav"</span>:[],<span class="jxr_string">"activeNav"</span>:[],
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		 <span class="jxr_string">"cards"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"sw"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"switcher"</span>,<span class="jxr_string">"views"</span>:[
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		   {<span class="jxr_string">"id"</span>:<span class="jxr_string">"v"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"V"</span>,<span class="jxr_string">"sections"</span>:[{<span class="jxr_string">"id"</span>:<span class="jxr_string">"s"</span>,<span class="jxr_string">"label"</span>:<span class="jxr_string">"S"</span>,<span class="jxr_string">"card"</span>:{<span class="jxr_string">"id"</span>:<span class="jxr_string">"c"</span>,<span class="jxr_string">"type"</span>:<span class="jxr_string">"chart"</span>,<span class="jxr_string">"helper"</span>:{<span class="jxr_string">"kind"</span>:<span class="jxr_string">"line"</span>},<span class="jxr_string">"publishes"</span>:[{<span class="jxr_string">"topic"</span>:<span class="jxr_string">"c.click"</span>,<span class="jxr_string">"retain"</span>:false}]}}]}]}]}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<span class="jxr_string">""</span><span class="jxr_string">");
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> c01_nestedCardLookups() {
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		PageContractAssert.assertPage(NESTED)
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.hasCard(<span class="jxr_string">"c"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			.hasCardKey(<span class="jxr_string">"c"</span>, <span class="jxr_string">"/helper/kind"</span>, <span class="jxr_string">"line"</span>)
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			.hasNestedCard(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"c"</span>, <span class="jxr_string">"chart"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.publishes(<span class="jxr_string">"c"</span>, <span class="jxr_string">"c.click"</span>);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> a = PageContractAssert.assertPage(NESTED);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.hasNestedCard(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"nope"</span>, <span class="jxr_string">"chart"</span>));
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		assertThrows(AssertionError.<strong class="jxr_keyword">class</strong>, () -&gt; a.hasCardOrder(<span class="jxr_string">"sw"</span>, <span class="jxr_string">"c"</span>));
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	}
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

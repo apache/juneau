@@ -417,7 +417,46 @@
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"pp_declaredUntouched"</span>));
 <a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, r.get(<span class="jxr_string">"pp_alreadyStatusStays"</span>));
 <a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> }
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<em class="jxr_comment">// Claiming items, visibility rules and ribbon ids on buttons</em>
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 	<em class="jxr_comment">//------------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Test <strong class="jxr_keyword">void</strong> j01_searchItemRendersASlotInTheSearchGroupAndClaimsIt() {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertBean(report(), <span class="jxr_string">"claim_search_slot,claim_search_group,claim_search_ribbonId,claim_search_owns"</span>, <span class="jxr_string">"true,search,search,true"</span>);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	@Test <strong class="jxr_keyword">void</strong> j02_linkButtonRendersClaimsAndHidesWhenNotVisible() {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertBean(report(), <span class="jxr_string">"claim_link_rendered,claim_link_ribbonId,claim_link_clicked,claim_link_owns,claim_link_hidden,claim_link_hidden_noOwn,claim_link_noUrlState"</span>,
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<span class="jxr_string">"true,link,1,true,true,true,true"</span>);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Test <strong class="jxr_keyword">void</strong> j03_columnSettingsRendersOpensChooserAndHidesWithoutConfig() {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertBean(report(), <span class="jxr_string">"claim_cols_rendered,claim_cols_ribbonId,claim_cols_icon,claim_cols_opened,claim_cols_owns,claim_cols_hiddenNoConfig,claim_cols_hiddenNoRuntime"</span>,
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<span class="jxr_string">"true,columns,tune,1,true,true,true"</span>);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 	}
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 	@Test <strong class="jxr_keyword">void</strong> j04_collapseAndResetFollowTheirVisibilityRules() {
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertBean(report(), <span class="jxr_string">"vis_collapse_noDetail,vis_collapse_withDetail,vis_reset_noConfig,vis_reset_withConfig,vis_bare_bothHidden"</span>, <span class="jxr_string">"true,true,true,true,true"</span>);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 	}
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	@Test <strong class="jxr_keyword">void</strong> j05_everyRenderedButtonCarriesItsRibbonId() {
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		assertEquals(<span class="jxr_string">"search,copy,csv,link,collapse,columns,reset,refresh"</span>, report().get(<span class="jxr_string">"ids_all"</span>));
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	@Test <strong class="jxr_keyword">void</strong> j06_ownershipIsResetOnEachBuild() {
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, report().get(<span class="jxr_string">"owns_reset"</span>));
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 	}
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 	@Test <strong class="jxr_keyword">void</strong> k01_exportGroupSitsBetweenFilterAndViewingAndSearchSortsFirst() {
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertEquals(<span class="jxr_string">"search:s0 filter:f1 export:x1 viewing:v1"</span>, report().get(<span class="jxr_string">"order_exportBetween"</span>));
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertEquals(<span class="jxr_string">"search:s0 entity:e1 filter:f1"</span>, report().get(<span class="jxr_string">"order_oldSearchLast"</span>));
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	@Test <strong class="jxr_keyword">void</strong> k02_unknownGroupKeepsItsSlotAndRefreshKeepsPage() {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertEquals(<span class="jxr_string">"zeta:z1 viewing:v1"</span>, report().get(<span class="jxr_string">"order_unknownStays"</span>));
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertEquals(<span class="jxr_string">"export:x1 page:r1"</span>, report().get(<span class="jxr_string">"order_refreshKeepsPage"</span>));
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 	}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

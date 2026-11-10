@@ -57,102 +57,109 @@
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<span class="jxr_string">"juneau-sym-cancel"</span>, <span class="jxr_string">"juneau-sym-check"</span>, <span class="jxr_string">"juneau-sym-chevrondown"</span>, <span class="jxr_string">"juneau-sym-chevronleft"</span>,
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<span class="jxr_string">"juneau-sym-chevronright"</span>, <span class="jxr_string">"juneau-sym-chevronup"</span>, <span class="jxr_string">"juneau-sym-close"</span>, <span class="jxr_string">"juneau-sym-collapse_all"</span>,
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<span class="jxr_string">"juneau-sym-columns"</span>, <span class="jxr_string">"juneau-sym-copy"</span>, <span class="jxr_string">"juneau-sym-csv"</span>, <span class="jxr_string">"juneau-sym-download"</span>, <span class="jxr_string">"juneau-sym-edit"</span>,
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<span class="jxr_string">"juneau-sym-filter"</span>, <span class="jxr_string">"juneau-sym-first_page"</span>, <span class="jxr_string">"juneau-sym-forceStop"</span>, <span class="jxr_string">"juneau-sym-last_page"</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<span class="jxr_string">"juneau-sym-filter"</span>, <span class="jxr_string">"juneau-sym-first_page"</span>, <span class="jxr_string">"juneau-sym-forceStop"</span>, <span class="jxr_string">"juneau-sym-grip"</span>, <span class="jxr_string">"juneau-sym-last_page"</span>,
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<span class="jxr_string">"juneau-sym-link"</span>, <span class="jxr_string">"juneau-sym-more"</span>, <span class="jxr_string">"juneau-sym-new"</span>, <span class="jxr_string">"juneau-sym-openPr"</span>, <span class="jxr_string">"juneau-sym-pause"</span>, <span class="jxr_string">"juneau-sym-pdf"</span>,
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<span class="jxr_string">"juneau-sym-play"</span>, <span class="jxr_string">"juneau-sym-plus"</span>, <span class="jxr_string">"juneau-sym-print"</span>,
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<span class="jxr_string">"juneau-sym-push"</span>, <span class="jxr_string">"juneau-sym-refresh"</span>, <span class="jxr_string">"juneau-sym-restore"</span>, <span class="jxr_string">"juneau-sym-search"</span>, <span class="jxr_string">"juneau-sym-settings"</span>, <span class="jxr_string">"juneau-sym-sort"</span>,
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<span class="jxr_string">"juneau-sym-spreadsheet"</span>, <span class="jxr_string">"juneau-sym-stop"</span>, <span class="jxr_string">"juneau-sym-toggle-deleted"</span>,
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<span class="jxr_string">"juneau-sym-toggle_column_search"</span>, <span class="jxr_string">"juneau-sym-tune"</span>
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<span class="jxr_string">"juneau-sym-toggle_column_search"</span>, <span class="jxr_string">"juneau-sym-trash"</span>, <span class="jxr_string">"juneau-sym-tune"</span>
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  	);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<em class="jxr_javadoccomment">/** Ids intentionally present in more than one sprite file (the default pack, its authoring key, the material pack). */</em>
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MATERIAL_RESOURCE = <span class="jxr_string">"/org/apache/juneau/views/juneau-symbols-material.svg"</span>;
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  	<em class="jxr_javadoccomment">/** The material pack is not edited by this work; its id set stays as it was. */</em>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; MATERIAL_IDS = Set.of(
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<span class="jxr_string">"juneau-sym-copy"</span>, <span class="jxr_string">"juneau-sym-csv"</span>, <span class="jxr_string">"juneau-sym-spreadsheet"</span>, <span class="jxr_string">"juneau-sym-pdf"</span>,
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<span class="jxr_string">"juneau-sym-refresh"</span>, <span class="jxr_string">"juneau-sym-toggle_column_search"</span>, <span class="jxr_string">"juneau-sym-collapse_all"</span>,
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<span class="jxr_string">"juneau-sym-settings"</span>, <span class="jxr_string">"juneau-sym-first_page"</span>, <span class="jxr_string">"juneau-sym-chevronleft"</span>,
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<span class="jxr_string">"juneau-sym-chevronright"</span>, <span class="jxr_string">"juneau-sym-last_page"</span>, <span class="jxr_string">"juneau-sym-filter"</span>,
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<span class="jxr_string">"juneau-sym-chevrondown"</span>
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	);
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	<em class="jxr_javadoccomment">/** Ids intentionally in more than one file: the material pack overlays the default pack by stem (pack("material")). */</em>
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; OVERLAY_ALLOWLIST = MATERIAL_IDS;
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern SYMBOL_ID_PATTERN = Pattern.compile(<span class="jxr_string">"&lt;symbol&#92;&#92;s+id=\&quot;([^\&quot;]+)\&quot;"</span>);
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; idList(String resource) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		String svg;
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(resource)) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			assertNotNull(in, () -&gt; <span class="jxr_string">"missing classpath resource: "</span> + resource);
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			svg = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		}
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<strong class="jxr_keyword">var</strong> ids = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> m = SYMBOL_ID_PATTERN.matcher(svg);
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">while</strong> (m.find())
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  			ids.add(m.group(1));
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">return</strong> ids;
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; actualIds() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(idList(ViewsMixin.SYMBOLS_SVG_RESOURCE));
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  	}
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; duplicates(List&lt;String&gt; ids) {
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> dup = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : ids)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			<strong class="jxr_keyword">if</strong> (!seen.add(id))
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				dup.add(id);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<strong class="jxr_keyword">return</strong> dup;
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	}
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<span class="jxr_string">"java:S4030"</span> <em class="jxr_comment">// removed/added are read only by the failure-message lambda, which Sonar does not count as a use.</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 	})
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	@Test <strong class="jxr_keyword">void</strong> a01_stemIdSetIsPinned() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> actual = actualIds();
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> removed = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(EXPECTED_IDS);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		removed.removeAll(actual);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<strong class="jxr_keyword">var</strong> added = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actual);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		added.removeAll(EXPECTED_IDS);
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		assertList(() -&gt; <span class="jxr_string">"juneau-symbols.svg &lt;symbol&gt; stem ids no longer match the pinned set - removed: "</span> + removed
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			+ <span class="jxr_string">", added: "</span> + added + <span class="jxr_string">". A stem id is a lookup key a host page can override a glyph by; changing,"</span>
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			+ <span class="jxr_string">" adding, or removing one here (even one renamed to something equivalent-looking) breaks that"</span>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			+ <span class="jxr_string">" lookup silently, with no error on either side. If this change is intentional, update"</span>
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			+ <span class="jxr_string">" EXPECTED_IDS to match."</span>, <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actual), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(EXPECTED_IDS).toArray());
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	}
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	@Test <strong class="jxr_keyword">void</strong> a02_idsAreUniqueWithinEachSpriteFile() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> resource : List.of(ViewsMixin.SYMBOLS_SVG_RESOURCE, MATERIAL_RESOURCE))
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> 			assertEmpty(() -&gt; <span class="jxr_string">"duplicate &lt;symbol&gt; ids within "</span> + resource, duplicates(idList(resource)));
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 	@Test <strong class="jxr_keyword">void</strong> a03_idsSharedAcrossSpriteFilesAreAllowlisted() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		<strong class="jxr_keyword">var</strong> shared = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actualIds());
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		shared.retainAll(<strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(idList(MATERIAL_RESOURCE)));
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		shared.removeAll(OVERLAY_ALLOWLIST);
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		assertEmpty(() -&gt; <span class="jxr_string">"ids present in more than one sprite file but not in OVERLAY_ALLOWLIST"</span>, shared);
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	@Test <strong class="jxr_keyword">void</strong> a04_materialIdSetIsUnchanged() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertEquals(MATERIAL_IDS, <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(idList(MATERIAL_RESOURCE)));
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a05_tuneIsTheJuneauSlidersNotTheColumnsGear() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		String svg;
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(ViewsMixin.SYMBOLS_SVG_RESOURCE)) {
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			svg = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		}
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		<strong class="jxr_keyword">var</strong> tune = Pattern.compile(<span class="jxr_string">"&lt;symbol&#92;&#92;s+id=\&quot;juneau-sym-tune\&quot;.*?&lt;/symbol&gt;"</span>, Pattern.DOTALL).matcher(svg);
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertTrue(tune.find());
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">var</strong> body = tune.group();
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		assertEquals(3, body.split(<span class="jxr_string">"&lt;circle"</span>, -1).length - 1, <span class="jxr_string">"three slider knobs: "</span> + body);
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertFalse(body.contains(<span class="jxr_string">"M9.594"</span>), <span class="jxr_string">"tune must not carry the columns gear path: "</span> + body);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> }
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String LUCIDE_RESOURCE = <span class="jxr_string">"/org/apache/juneau/views/juneau-symbols-lucide.svg"</span>;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MATERIAL_RESOURCE = <span class="jxr_string">"/org/apache/juneau/views/juneau-symbols-material.svg"</span>;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	<em class="jxr_javadoccomment">/** The material pack is not edited by this work; its id set stays as it was. */</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; MATERIAL_IDS = Set.of(
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<span class="jxr_string">"juneau-sym-copy"</span>, <span class="jxr_string">"juneau-sym-csv"</span>, <span class="jxr_string">"juneau-sym-spreadsheet"</span>, <span class="jxr_string">"juneau-sym-pdf"</span>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<span class="jxr_string">"juneau-sym-refresh"</span>, <span class="jxr_string">"juneau-sym-toggle_column_search"</span>, <span class="jxr_string">"juneau-sym-collapse_all"</span>,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<span class="jxr_string">"juneau-sym-settings"</span>, <span class="jxr_string">"juneau-sym-first_page"</span>, <span class="jxr_string">"juneau-sym-chevronleft"</span>,
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<span class="jxr_string">"juneau-sym-chevronright"</span>, <span class="jxr_string">"juneau-sym-last_page"</span>, <span class="jxr_string">"juneau-sym-filter"</span>,
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<span class="jxr_string">"juneau-sym-chevrondown"</span>
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<em class="jxr_javadoccomment">/** Ids intentionally in more than one file: the material pack overlays the default pack by stem (pack("material")). */</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; OVERLAY_ALLOWLIST = MATERIAL_IDS;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Pattern SYMBOL_ID_PATTERN = Pattern.compile(<span class="jxr_string">"&lt;symbol&#92;&#92;s+id=\&quot;([^\&quot;]+)\&quot;"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; idList(String resource) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		String svg;
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(resource)) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			assertNotNull(in, () -&gt; <span class="jxr_string">"missing classpath resource: "</span> + resource);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			svg = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<strong class="jxr_keyword">var</strong> ids = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">var</strong> m = SYMBOL_ID_PATTERN.matcher(svg);
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">while</strong> (m.find())
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  			ids.add(m.group(1));
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<strong class="jxr_keyword">return</strong> ids;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  	}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; actualIds() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> LinkedHashSet&lt;&gt;(idList(ViewsMixin.SYMBOLS_SVG_RESOURCE));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Set&lt;String&gt; duplicates(List&lt;String&gt; ids) {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> seen = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<strong class="jxr_keyword">var</strong> dup = <strong class="jxr_keyword">new</strong> TreeSet&lt;String&gt;();
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : ids)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			<strong class="jxr_keyword">if</strong> (!seen.add(id))
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				dup.add(id);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<strong class="jxr_keyword">return</strong> dup;
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<span class="jxr_string">"java:S4030"</span> <em class="jxr_comment">// removed/added are read only by the failure-message lambda, which Sonar does not count as a use.</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 	})
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 	@Test <strong class="jxr_keyword">void</strong> a01_stemIdSetIsPinned() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">var</strong> actual = actualIds();
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<strong class="jxr_keyword">var</strong> removed = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(EXPECTED_IDS);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		removed.removeAll(actual);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<strong class="jxr_keyword">var</strong> added = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actual);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		added.removeAll(EXPECTED_IDS);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertList(() -&gt; <span class="jxr_string">"juneau-symbols.svg &lt;symbol&gt; stem ids no longer match the pinned set - removed: "</span> + removed
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			+ <span class="jxr_string">", added: "</span> + added + <span class="jxr_string">". A stem id is a lookup key a host page can override a glyph by; changing,"</span>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			+ <span class="jxr_string">" adding, or removing one here (even one renamed to something equivalent-looking) breaks that"</span>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 			+ <span class="jxr_string">" lookup silently, with no error on either side. If this change is intentional, update"</span>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 			+ <span class="jxr_string">" EXPECTED_IDS to match."</span>, <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actual), <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(EXPECTED_IDS).toArray());
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	}
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	@Test <strong class="jxr_keyword">void</strong> a02_idsAreUniqueWithinEachSpriteFile() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> resource : List.of(ViewsMixin.SYMBOLS_SVG_RESOURCE, MATERIAL_RESOURCE, LUCIDE_RESOURCE))
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			assertEmpty(() -&gt; <span class="jxr_string">"duplicate &lt;symbol&gt; ids within "</span> + resource, duplicates(idList(resource)));
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	}
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 	@Test <strong class="jxr_keyword">void</strong> a03_idsSharedAcrossSpriteFilesAreAllowlisted() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 		<strong class="jxr_keyword">var</strong> shared = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actualIds());
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		shared.retainAll(<strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(idList(MATERIAL_RESOURCE)));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		shared.removeAll(OVERLAY_ALLOWLIST);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEmpty(() -&gt; <span class="jxr_string">"ids present in more than one sprite file but not in OVERLAY_ALLOWLIST"</span>, shared);
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> a03b_lucideIdsDoNotRepeatShippedIds() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> shared = <strong class="jxr_keyword">new</strong> TreeSet&lt;&gt;(actualIds());
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		shared.retainAll(<strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(idList(LUCIDE_RESOURCE)));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		assertEmpty(() -&gt; <span class="jxr_string">"ids in both the shipped and Lucide sprite files"</span>, shared);
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	}
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 	@Test <strong class="jxr_keyword">void</strong> a04_materialIdSetIsUnchanged() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(MATERIAL_IDS, <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(idList(MATERIAL_RESOURCE)));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 	@Test <strong class="jxr_keyword">void</strong> a05_tuneIsTheJuneauSlidersNotTheColumnsGear() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		String svg;
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = ViewsMixin.<strong class="jxr_keyword">class</strong>.getResourceAsStream(ViewsMixin.SYMBOLS_SVG_RESOURCE)) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 			svg = <strong class="jxr_keyword">new</strong> String(in.readAllBytes(), UTF_8);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 		<strong class="jxr_keyword">var</strong> tune = Pattern.compile(<span class="jxr_string">"&lt;symbol&#92;&#92;s+id=\&quot;juneau-sym-tune\&quot;.*?&lt;/symbol&gt;"</span>, Pattern.DOTALL).matcher(svg);
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertTrue(tune.find());
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> body = tune.group();
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(3, body.split(<span class="jxr_string">"&lt;circle"</span>, -1).length - 1, <span class="jxr_string">"three slider knobs: "</span> + body);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertFalse(body.contains(<span class="jxr_string">"M9.594"</span>), <span class="jxr_string">"tune must not carry the columns gear path: "</span> + body);
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	}
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

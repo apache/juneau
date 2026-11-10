@@ -211,229 +211,236 @@
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 				sendFailure(ex, e);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			}
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		});
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		server.createContext(<span class="jxr_string">"/page/"</span>, ex -&gt; {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		server.createContext(<span class="jxr_string">"/page/juneau-symbols-lucide.svg"</span>, ex -&gt; {
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				<strong class="jxr_keyword">var</strong> c = ex.getRequestURI().getPath().substring(<span class="jxr_string">"/page/"</span>.length());
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">var</strong> theme = Optional.ofNullable(queryParam(ex.getRequestURI().getRawQuery(), <span class="jxr_string">"theme"</span>)).orElse(<span class="jxr_string">"gray"</span>);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				writeBody(ex, 200, <span class="jxr_string">"text/html;charset=utf-8"</span>, page(c, theme));
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 				sendFailure(ex, e);
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			}
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		});
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		server.start();
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		report = runHarness();
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	@AfterAll
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> tearDown() {
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">if</strong> (server != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			server.stop(0);
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 	<em class="jxr_javadoccomment">/** Forwards /juneau-terminal-view/* to the mixin. */</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> bridge(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<strong class="jxr_keyword">var</strong> uri = ex.getRequestURI();
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			<strong class="jxr_keyword">var</strong> path = uri.getRawPath();
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			<strong class="jxr_keyword">var</strong> target = uri.getRawQuery() == <strong class="jxr_keyword">null</strong> ? path : path + <span class="jxr_string">"?"</span> + uri.getRawQuery();
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">int</strong> status;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			String type;
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			String body;
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			<strong class="jxr_keyword">synchronized</strong> (LOGS) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 				<strong class="jxr_keyword">var</strong> res = mock.get(target).run();
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 				status = res.getStatusCode();
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 				type = res.getStringHeader(<span class="jxr_string">"Content-Type"</span>).orElse(<span class="jxr_string">"application/octet-stream"</span>);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 				body = res.getContent().asString();
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			writeBody(ex, status, type, body);
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 			sendFailure(ex, e);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		}
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 	}
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	<em class="jxr_javadoccomment">/** The prober's control API: GET /ctl/&lt;runId&gt;/&lt;action&gt;?... */</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> control(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">var</strong> parts = ex.getRequestURI().getPath().split(<span class="jxr_string">"/"</span>);
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			<strong class="jxr_keyword">var</strong> id = parts[2];
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			<strong class="jxr_keyword">var</strong> action = parts[3];
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">var</strong> q = ex.getRequestURI().getRawQuery();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">var</strong> log = LOGS.get(id);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">switch</strong> (action) {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 				<strong class="jxr_keyword">case</strong> <span class="jxr_string">"script"</span> -&gt; {
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					log.append(TerminalEvent.suite(<span class="jxr_string">"build"</span>, <span class="jxr_string">"surefire"</span>, <span class="jxr_string">"FooTest"</span>, 1, 1, 0));
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 					log.append(TerminalEvent.test(<span class="jxr_string">"build"</span>, <span class="jxr_string">"surefire"</span>, <span class="jxr_string">"FooTest"</span>, <span class="jxr_string">"a"</span>, TestStatus.PASS));
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 					log.append(TerminalEvent.test(<span class="jxr_string">"build"</span>, <span class="jxr_string">"surefire"</span>, <span class="jxr_string">"FooTest"</span>, <span class="jxr_string">"b"</span>, TestStatus.FAIL).withMsg(<span class="jxr_string">"expected 1\nbut was 2"</span>));
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 					log.append(TerminalEvent.end(<span class="jxr_string">"build"</span>, EndStatus.FAIL));
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 					log.append(TerminalEvent.done(DoneStatus.FAIL));
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 				}
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 				<strong class="jxr_keyword">case</strong> <span class="jxr_string">"step"</span> -&gt; log.append(TerminalEvent.step(queryParam(q, <span class="jxr_string">"id"</span>), queryParam(q, <span class="jxr_string">"title"</span>)));
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				<strong class="jxr_keyword">case</strong> <span class="jxr_string">"reset"</span> -&gt; log.reset();
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 				<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"unknown action: "</span> + action);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			writeBody(ex, 200, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"ok"</span>);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			sendFailure(ex, e);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 	}
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String queryParam(String query, String name) {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		<strong class="jxr_keyword">if</strong> (query == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pair : query.split(<span class="jxr_string">"&amp;"</span>)) {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">var</strong> i = pair.indexOf('=');
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">if</strong> (i &gt;= 0 &amp;&amp; URLDecoder.decode(pair.substring(0, i), UTF_8).equals(name))
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 				<strong class="jxr_keyword">return</strong> URLDecoder.decode(pair.substring(i + 1), UTF_8);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		}
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeBody(HttpExchange ex, <strong class="jxr_keyword">int</strong> status, String type, String body) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">var</strong> bytes = body.getBytes(UTF_8);
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		ex.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, type);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		ex.sendResponseHeaders(status, bytes.length == 0 ? -1 : bytes.length);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">if</strong> (bytes.length &gt; 0) {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = ex.getResponseBody()) {
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				os.write(bytes);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 			}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			ex.close();
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<em class="jxr_javadoccomment">/** A 500 with the stack trace instead of a dropped connection, so the prober's diagnostics show the cause. */</em>
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> sendFailure(HttpExchange ex, Exception e) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter();
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		e.printStackTrace(<strong class="jxr_keyword">new</strong> PrintWriter(sw));
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		System.err.println(sw);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		writeBody(ex, 500, <span class="jxr_string">"text/plain;charset=utf-8"</span>, sw.toString());
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; runHarness() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<strong class="jxr_keyword">var</strong> dir = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.dir"</span>));
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> harness = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.harness"</span>)).getParent().resolve(<span class="jxr_string">"terminal-view-browser.cjs"</span>);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> baseUrl = <span class="jxr_string">"http://127.0.0.1:"</span> + port + <span class="jxr_string">"/"</span>;
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">var</strong> cmd = List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString(), baseUrl);
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		<strong class="jxr_keyword">var</strong> stdout = dir.resolve(<span class="jxr_string">"terminal-view-browser-stdout.json"</span>);
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">var</strong> stderr = dir.resolve(<span class="jxr_string">"terminal-view-browser-stderr.txt"</span>);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(cmd).redirectOutput(stdout.toFile()).redirectError(stderr.toFile());
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		pb.environment().put(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString());
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		pb.environment().put(<span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, requiredProperty(<span class="jxr_string">"juneau.jsTests.browsers"</span>));
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> p = pb.start();
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">if</strong> (! p.waitFor(5, TimeUnit.MINUTES)) {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			p.destroyForcibly();
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			fail(<span class="jxr_string">"prober did not finish within 5m; stderr:\n"</span> + quietRead(stderr));
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		assertEquals(0, p.exitValue(), () -&gt; <span class="jxr_string">"prober exited non-zero; stderr:\n"</span> + quietRead(stderr));
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">return</strong> Json.to(Files.readString(stdout), Map.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	}
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String quietRead(Path p) {
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			<strong class="jxr_keyword">return</strong> Files.readString(p);
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unreadable: "</span> + e + <span class="jxr_string">"&gt;"</span>;
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 	}
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	<em class="jxr_comment">// Report access</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; c(String name) {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;) report.get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;?,?&gt;) cases.get(name);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertNotNull(m, () -&gt; <span class="jxr_string">"no report for "</span> + name + <span class="jxr_string">": "</span> + report);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertNull(m.get(<span class="jxr_string">"harnessError"</span>), () -&gt; name + <span class="jxr_string">" harness error: "</span> + m.get(<span class="jxr_string">"harnessError"</span>) + <span class="jxr_string">"\n"</span> + report.get(<span class="jxr_string">"diagnostics"</span>));
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">return</strong> m;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> noPageErrors(String name) {
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;) report.get(<span class="jxr_string">"pageErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" page errors"</span>);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> clean(String name) {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		noPageErrors(name);
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;) report.get(<span class="jxr_string">"consoleErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" console errors"</span>);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_comment">// Cases</em>
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> a01_scriptedRunEndsFailedAtTheStep() {
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		clean(<span class="jxr_string">"a01"</span>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertBean(c(<span class="jxr_string">"a01"</span>), <span class="jxr_string">"running,final,status,failures"</span>, <span class="jxr_string">"Running,Failed at Build,fail,1"</span>);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	}
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	@Test <strong class="jxr_keyword">void</strong> a02_tooltipShowsAndEscapeHides() {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		clean(<span class="jxr_string">"a02"</span>);
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a02"</span>);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		assertBean(m, <span class="jxr_string">"role,hiddenAfterEscape"</span>, <span class="jxr_string">"tooltip,true"</span>);
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertContains(m::toString, <span class="jxr_string">"b"</span>, (String) m.get(<span class="jxr_string">"tipText"</span>));
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				writeBody(ex, 200, <span class="jxr_string">"image/svg+xml"</span>, resource(ViewsMixin.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"/org/apache/juneau/views/juneau-symbols-lucide.svg"</span>));
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				sendFailure(ex, e);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			}
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		});
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		server.createContext(<span class="jxr_string">"/page/"</span>, ex -&gt; {
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">var</strong> c = ex.getRequestURI().getPath().substring(<span class="jxr_string">"/page/"</span>.length());
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 				<strong class="jxr_keyword">var</strong> theme = Optional.ofNullable(queryParam(ex.getRequestURI().getRawQuery(), <span class="jxr_string">"theme"</span>)).orElse(<span class="jxr_string">"gray"</span>);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 				writeBody(ex, 200, <span class="jxr_string">"text/html;charset=utf-8"</span>, page(c, theme));
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				sendFailure(ex, e);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			}
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		});
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		server.start();
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		report = runHarness();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@AfterAll
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> tearDown() {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		<strong class="jxr_keyword">if</strong> (server != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			server.stop(0);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<em class="jxr_javadoccomment">/** Forwards /juneau-terminal-view/* to the mixin. */</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> bridge(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			<strong class="jxr_keyword">var</strong> uri = ex.getRequestURI();
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			<strong class="jxr_keyword">var</strong> path = uri.getRawPath();
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			<strong class="jxr_keyword">var</strong> target = uri.getRawQuery() == <strong class="jxr_keyword">null</strong> ? path : path + <span class="jxr_string">"?"</span> + uri.getRawQuery();
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			<strong class="jxr_keyword">int</strong> status;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 			String type;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			String body;
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">synchronized</strong> (LOGS) {
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 				<strong class="jxr_keyword">var</strong> res = mock.get(target).run();
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				status = res.getStatusCode();
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				type = res.getStringHeader(<span class="jxr_string">"Content-Type"</span>).orElse(<span class="jxr_string">"application/octet-stream"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 				body = res.getContent().asString();
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			}
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			writeBody(ex, status, type, body);
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			sendFailure(ex, e);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		}
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<em class="jxr_javadoccomment">/** The prober's control API: GET /ctl/&lt;runId&gt;/&lt;action&gt;?... */</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> control(HttpExchange ex) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			<strong class="jxr_keyword">var</strong> parts = ex.getRequestURI().getPath().split(<span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">var</strong> id = parts[2];
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			<strong class="jxr_keyword">var</strong> action = parts[3];
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">var</strong> q = ex.getRequestURI().getRawQuery();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			<strong class="jxr_keyword">var</strong> log = LOGS.get(id);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 			<strong class="jxr_keyword">switch</strong> (action) {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 				<strong class="jxr_keyword">case</strong> <span class="jxr_string">"script"</span> -&gt; {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 					log.append(TerminalEvent.suite(<span class="jxr_string">"build"</span>, <span class="jxr_string">"surefire"</span>, <span class="jxr_string">"FooTest"</span>, 1, 1, 0));
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 					log.append(TerminalEvent.test(<span class="jxr_string">"build"</span>, <span class="jxr_string">"surefire"</span>, <span class="jxr_string">"FooTest"</span>, <span class="jxr_string">"a"</span>, TestStatus.PASS));
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 					log.append(TerminalEvent.test(<span class="jxr_string">"build"</span>, <span class="jxr_string">"surefire"</span>, <span class="jxr_string">"FooTest"</span>, <span class="jxr_string">"b"</span>, TestStatus.FAIL).withMsg(<span class="jxr_string">"expected 1\nbut was 2"</span>));
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 					log.append(TerminalEvent.end(<span class="jxr_string">"build"</span>, EndStatus.FAIL));
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 					log.append(TerminalEvent.done(DoneStatus.FAIL));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				<strong class="jxr_keyword">case</strong> <span class="jxr_string">"step"</span> -&gt; log.append(TerminalEvent.step(queryParam(q, <span class="jxr_string">"id"</span>), queryParam(q, <span class="jxr_string">"title"</span>)));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<strong class="jxr_keyword">case</strong> <span class="jxr_string">"reset"</span> -&gt; log.reset();
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"unknown action: "</span> + action);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			writeBody(ex, 200, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"ok"</span>);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			sendFailure(ex, e);
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		}
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	}
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String queryParam(String query, String name) {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">if</strong> (query == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> pair : query.split(<span class="jxr_string">"&amp;"</span>)) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">var</strong> i = pair.indexOf('=');
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			<strong class="jxr_keyword">if</strong> (i &gt;= 0 &amp;&amp; URLDecoder.decode(pair.substring(0, i), UTF_8).equals(name))
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				<strong class="jxr_keyword">return</strong> URLDecoder.decode(pair.substring(i + 1), UTF_8);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> writeBody(HttpExchange ex, <strong class="jxr_keyword">int</strong> status, String type, String body) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">var</strong> bytes = body.getBytes(UTF_8);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		ex.getResponseHeaders().add(<span class="jxr_string">"Content-Type"</span>, type);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		ex.sendResponseHeaders(status, bytes.length == 0 ? -1 : bytes.length);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">if</strong> (bytes.length &gt; 0) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> os = ex.getResponseBody()) {
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				os.write(bytes);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 			}
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			ex.close();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 	}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	<em class="jxr_javadoccomment">/** A 500 with the stack trace instead of a dropped connection, so the prober's diagnostics show the cause. */</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> sendFailure(HttpExchange ex, Exception e) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<strong class="jxr_keyword">var</strong> sw = <strong class="jxr_keyword">new</strong> StringWriter();
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		e.printStackTrace(<strong class="jxr_keyword">new</strong> PrintWriter(sw));
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		System.err.println(sw);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		writeBody(ex, 500, <span class="jxr_string">"text/plain;charset=utf-8"</span>, sw.toString());
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	}
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	}
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; runHarness() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		<strong class="jxr_keyword">var</strong> dir = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.dir"</span>));
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		<strong class="jxr_keyword">var</strong> harness = Path.of(requiredProperty(<span class="jxr_string">"juneau.jsTests.harness"</span>)).getParent().resolve(<span class="jxr_string">"terminal-view-browser.cjs"</span>);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> baseUrl = <span class="jxr_string">"http://127.0.0.1:"</span> + port + <span class="jxr_string">"/"</span>;
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		<strong class="jxr_keyword">var</strong> cmd = List.of(System.getProperty(<span class="jxr_string">"juneau.jsTests.node"</span>, <span class="jxr_string">"node"</span>), harness.toString(), baseUrl);
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		<strong class="jxr_keyword">var</strong> stdout = dir.resolve(<span class="jxr_string">"terminal-view-browser-stdout.json"</span>);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> stderr = dir.resolve(<span class="jxr_string">"terminal-view-browser-stderr.txt"</span>);
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(cmd).redirectOutput(stdout.toFile()).redirectError(stderr.toFile());
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		pb.environment().put(<span class="jxr_string">"NODE_PATH"</span>, dir.resolve(<span class="jxr_string">"node_modules"</span>).toString());
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		pb.environment().put(<span class="jxr_string">"PLAYWRIGHT_BROWSERS_PATH"</span>, requiredProperty(<span class="jxr_string">"juneau.jsTests.browsers"</span>));
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> p = pb.start();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		<strong class="jxr_keyword">if</strong> (! p.waitFor(5, TimeUnit.MINUTES)) {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			p.destroyForcibly();
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			fail(<span class="jxr_string">"prober did not finish within 5m; stderr:\n"</span> + quietRead(stderr));
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		assertEquals(0, p.exitValue(), () -&gt; <span class="jxr_string">"prober exited non-zero; stderr:\n"</span> + quietRead(stderr));
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		<strong class="jxr_keyword">return</strong> Json.to(Files.readString(stdout), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String quietRead(Path p) {
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			<strong class="jxr_keyword">return</strong> Files.readString(p);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 		} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;unreadable: "</span> + e + <span class="jxr_string">"&gt;"</span>;
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	<em class="jxr_comment">// Report access</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; c(String name) {
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;) report.get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> m = (Map&lt;?,?&gt;) cases.get(name);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertNotNull(m, () -&gt; <span class="jxr_string">"no report for "</span> + name + <span class="jxr_string">": "</span> + report);
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertNull(m.get(<span class="jxr_string">"harnessError"</span>), () -&gt; name + <span class="jxr_string">" harness error: "</span> + m.get(<span class="jxr_string">"harnessError"</span>) + <span class="jxr_string">"\n"</span> + report.get(<span class="jxr_string">"diagnostics"</span>));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		<strong class="jxr_keyword">return</strong> m;
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> noPageErrors(String name) {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;) report.get(<span class="jxr_string">"pageErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" page errors"</span>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> clean(String name) {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		noPageErrors(name);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;) report.get(<span class="jxr_string">"consoleErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" console errors"</span>);
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	<em class="jxr_comment">// Cases</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 	@Test <strong class="jxr_keyword">void</strong> a01_scriptedRunEndsFailedAtTheStep() {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 		clean(<span class="jxr_string">"a01"</span>);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		assertBean(c(<span class="jxr_string">"a01"</span>), <span class="jxr_string">"running,final,status,failures"</span>, <span class="jxr_string">"Running,Failed at Build,fail,1"</span>);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 	}
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test <strong class="jxr_keyword">void</strong> a03_blockLinkSetsTheHash() {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		clean(<span class="jxr_string">"a03"</span>);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertBean(c(<span class="jxr_string">"a03"</span>), <span class="jxr_string">"hash"</span>, <span class="jxr_string">"#raw-O120"</span>);
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	@Test <strong class="jxr_keyword">void</strong> a04_compactAndFullShowTheSameRun() {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		clean(<span class="jxr_string">"a04"</span>);
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a04"</span>);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		assertBean(m, <span class="jxr_string">"bothMounted,sameHeadline"</span>, <span class="jxr_string">"true,true"</span>);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertTrue(((Number) m.get(<span class="jxr_string">"fullFailures"</span>)).intValue() &gt;= 1, () -&gt; <span class="jxr_string">"full failures: "</span> + m);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	@Test <strong class="jxr_keyword">void</strong> a02_tooltipShowsAndEscapeHides() {
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		clean(<span class="jxr_string">"a02"</span>);
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a02"</span>);
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 		assertBean(m, <span class="jxr_string">"role,hiddenAfterEscape"</span>, <span class="jxr_string">"tooltip,true"</span>);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		assertContains(m::toString, <span class="jxr_string">"b"</span>, (String) m.get(<span class="jxr_string">"tipText"</span>));
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	}
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 	@Test <strong class="jxr_keyword">void</strong> a03_blockLinkSetsTheHash() {
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		clean(<span class="jxr_string">"a03"</span>);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		assertBean(c(<span class="jxr_string">"a03"</span>), <span class="jxr_string">"hash"</span>, <span class="jxr_string">"#raw-O120"</span>);
 <a class="jxr_linenumber" name="L384" href="#L384">384</a> 	}
 <a class="jxr_linenumber" name="L385" href="#L385">385</a> 
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test <strong class="jxr_keyword">void</strong> a05_pushModeMakesNoEventsRequests() {
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		clean(<span class="jxr_string">"a05"</span>);
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		assertBean(c(<span class="jxr_string">"a05"</span>), <span class="jxr_string">"headline,eventsRequests"</span>, <span class="jxr_string">"Failed at Pushed,0"</span>);
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	}
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	@Test <strong class="jxr_keyword">void</strong> a06_resetReloadsWithoutABanner() {
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		noPageErrors(<span class="jxr_string">"a06"</span>);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		<em class="jxr_comment">// The browser logs the expected 410 itself; it is the only console error allowed.</em>
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		assertEquals(List.of(<span class="jxr_string">"Failed to load resource: the server responded with a status of 410 (Gone)"</span>),
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			((Map&lt;?,?&gt;) report.get(<span class="jxr_string">"consoleErrors"</span>)).get(<span class="jxr_string">"a06"</span>), <span class="jxr_string">"a06 console errors"</span>);
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		assertBean(c(<span class="jxr_string">"a06"</span>), <span class="jxr_string">"hasOldStep,banner"</span>, <span class="jxr_string">"false,0"</span>);
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	}
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	@Test <strong class="jxr_keyword">void</strong> a07_contrastOnEveryTheme() {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">var</strong> all = (Map&lt;?,?&gt;) c(<span class="jxr_string">"a07"</span>).get(<span class="jxr_string">"themes"</span>);
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		noPageErrors(<span class="jxr_string">"a07"</span>);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		<strong class="jxr_keyword">var</strong> failures = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> theme : THEMES) {
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			<strong class="jxr_keyword">var</strong> ratios = (Map&lt;?,?&gt;) all.get(theme);
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 			assertNotNull(ratios, () -&gt; <span class="jxr_string">"no ratios for "</span> + theme);
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : ratios.entrySet())
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 				<strong class="jxr_keyword">if</strong> (((Number) e.getValue()).doubleValue() &lt; 4.5)
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 					failures.add(theme + <span class="jxr_string">"/"</span> + e.getKey() + <span class="jxr_string">" "</span> + e.getValue() + <span class="jxr_string">":1 is below 4.5:1"</span>);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		}
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertEquals(List.of(), failures, () -&gt; <span class="jxr_string">"contrast: "</span> + all);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	<em class="jxr_javadoccomment">/** Written but not run: Playwright needs network access. */</em>
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	@Test <strong class="jxr_keyword">void</strong> a09_blocksCarryStepIdAndFireOnBlockClick() {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		clean(<span class="jxr_string">"a09"</span>);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a09"</span>);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertEquals(List.of(<span class="jxr_string">"build"</span>, <span class="jxr_string">"build"</span>), m.get(<span class="jxr_string">"stepIds"</span>), m::toString);
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertEquals(List.of(Map.of(<span class="jxr_string">"stepId"</span>, <span class="jxr_string">"build"</span>, <span class="jxr_string">"kind"</span>, <span class="jxr_string">"pass"</span>), Map.of(<span class="jxr_string">"stepId"</span>, <span class="jxr_string">"build"</span>, <span class="jxr_string">"offset"</span>, 120, <span class="jxr_string">"kind"</span>, <span class="jxr_string">"fail"</span>)),
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			m.get(<span class="jxr_string">"clicks"</span>), m::toString);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	}
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	@Test <strong class="jxr_keyword">void</strong> a08_twelveThousandTestsStayBounded() {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		clean(<span class="jxr_string">"a08"</span>);
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a08"</span>);
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertContains(m::toString, <span class="jxr_string">"12000"</span>, (String) m.get(<span class="jxr_string">"counts"</span>));
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertTrue(((Number) m.get(<span class="jxr_string">"blocks"</span>)).intValue() &lt; 1500, () -&gt; <span class="jxr_string">"blocks in the DOM: "</span> + m);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 	@Test <strong class="jxr_keyword">void</strong> a04_compactAndFullShowTheSameRun() {
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		clean(<span class="jxr_string">"a04"</span>);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a04"</span>);
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 		assertBean(m, <span class="jxr_string">"bothMounted,sameHeadline"</span>, <span class="jxr_string">"true,true"</span>);
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		assertTrue(((Number) m.get(<span class="jxr_string">"fullFailures"</span>)).intValue() &gt;= 1, () -&gt; <span class="jxr_string">"full failures: "</span> + m);
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 	}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	@Test <strong class="jxr_keyword">void</strong> a05_pushModeMakesNoEventsRequests() {
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		clean(<span class="jxr_string">"a05"</span>);
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 		assertBean(c(<span class="jxr_string">"a05"</span>), <span class="jxr_string">"headline,eventsRequests"</span>, <span class="jxr_string">"Failed at Pushed,0"</span>);
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	@Test <strong class="jxr_keyword">void</strong> a06_resetReloadsWithoutABanner() {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		noPageErrors(<span class="jxr_string">"a06"</span>);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<em class="jxr_comment">// The browser logs the expected 410 itself; it is the only console error allowed.</em>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertEquals(List.of(<span class="jxr_string">"Failed to load resource: the server responded with a status of 410 (Gone)"</span>),
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			((Map&lt;?,?&gt;) report.get(<span class="jxr_string">"consoleErrors"</span>)).get(<span class="jxr_string">"a06"</span>), <span class="jxr_string">"a06 console errors"</span>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		assertBean(c(<span class="jxr_string">"a06"</span>), <span class="jxr_string">"hasOldStep,banner"</span>, <span class="jxr_string">"false,0"</span>);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	@Test <strong class="jxr_keyword">void</strong> a07_contrastOnEveryTheme() {
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">var</strong> all = (Map&lt;?,?&gt;) c(<span class="jxr_string">"a07"</span>).get(<span class="jxr_string">"themes"</span>);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		noPageErrors(<span class="jxr_string">"a07"</span>);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">var</strong> failures = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> theme : THEMES) {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">var</strong> ratios = (Map&lt;?,?&gt;) all.get(theme);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			assertNotNull(ratios, () -&gt; <span class="jxr_string">"no ratios for "</span> + theme);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : ratios.entrySet())
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 				<strong class="jxr_keyword">if</strong> (((Number) e.getValue()).doubleValue() &lt; 4.5)
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					failures.add(theme + <span class="jxr_string">"/"</span> + e.getKey() + <span class="jxr_string">" "</span> + e.getValue() + <span class="jxr_string">":1 is below 4.5:1"</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		}
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertEquals(List.of(), failures, () -&gt; <span class="jxr_string">"contrast: "</span> + all);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	<em class="jxr_javadoccomment">/** Written but not run: Playwright needs network access. */</em>
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	@Test <strong class="jxr_keyword">void</strong> a09_blocksCarryStepIdAndFireOnBlockClick() {
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		clean(<span class="jxr_string">"a09"</span>);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a09"</span>);
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertEquals(List.of(<span class="jxr_string">"build"</span>, <span class="jxr_string">"build"</span>), m.get(<span class="jxr_string">"stepIds"</span>), m::toString);
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertEquals(List.of(Map.of(<span class="jxr_string">"stepId"</span>, <span class="jxr_string">"build"</span>, <span class="jxr_string">"kind"</span>, <span class="jxr_string">"pass"</span>), Map.of(<span class="jxr_string">"stepId"</span>, <span class="jxr_string">"build"</span>, <span class="jxr_string">"offset"</span>, 120, <span class="jxr_string">"kind"</span>, <span class="jxr_string">"fail"</span>)),
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			m.get(<span class="jxr_string">"clicks"</span>), m::toString);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> }
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	@Test <strong class="jxr_keyword">void</strong> a08_twelveThousandTestsStayBounded() {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		clean(<span class="jxr_string">"a08"</span>);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> m = c(<span class="jxr_string">"a08"</span>);
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertContains(m::toString, <span class="jxr_string">"12000"</span>, (String) m.get(<span class="jxr_string">"counts"</span>));
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertTrue(((Number) m.get(<span class="jxr_string">"blocks"</span>)).intValue() &lt; 1500, () -&gt; <span class="jxr_string">"blocks in the DOM: "</span> + m);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 	}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

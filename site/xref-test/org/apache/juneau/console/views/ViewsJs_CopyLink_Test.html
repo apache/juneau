@@ -170,7 +170,11 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 	@Test <strong class="jxr_keyword">void</strong> a09_rejectedCopy_isCaughtAndAnnouncesFailure() {
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		assertBean(report(), <span class="jxr_string">"rejectedCopyHandled,rejectedCopyAnnounced"</span>, <span class="jxr_string">"true,true"</span>);
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> }
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	@Test <strong class="jxr_keyword">void</strong> a10_buildCopyLinkButton_returnsDetachedButtonOrNull() {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		assertBean(report(), <span class="jxr_string">"buildReturnsDetachedButton,buildNullWhenCopyLinkFalse,mountStillMountsOnce"</span>, <span class="jxr_string">"true,true,true"</span>);
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

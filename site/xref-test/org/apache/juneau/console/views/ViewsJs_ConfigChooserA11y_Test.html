@@ -173,7 +173,55 @@
 <a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertBean(report(), <span class="jxr_string">"sortTabInitialOrder,sortTabDirAfterChange,sortTabAfterUncheckOrder,sortTabAfterUncheckDraft,sortTabAfterRecheckDraft"</span>,
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 			<span class="jxr_string">"[name,status],desc,[status],[status],[status,name]"</span>);
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 	}
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> }
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	@Test <strong class="jxr_keyword">void</strong> e09_chooserHeaderHasGearOnlyForTheChooser() {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		assertBean(report(), <span class="jxr_string">"gearPresent,plainNoTitleIcon,actionFigureIsNotTitleIcon"</span>, <span class="jxr_string">"true,true,true"</span>);
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Test <strong class="jxr_keyword">void</strong> e09b_leftPaneFindGripAndDraggableRows() {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		assertBean(report(),
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<span class="jxr_string">"findPlaceholder,paneTitleHidden,listboxStillLabelled,availKeys,availDraggable,availHaveGrip,gridHandleHasGrip"</span>,
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<span class="jxr_string">"Find...,true,true,[notes,owner],true,true,true"</span>);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	}
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	@Test <strong class="jxr_keyword">void</strong> e10_dropFromAvailableInsertsAtDropPosition() {
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertBean(report(),
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<span class="jxr_string">"dragInitialSelected,dropBefore,dropBeforeDirty,dropBeforeAvail,dropAfter,dropAppend"</span>,
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<span class="jxr_string">"[name,status],[name,notes,status],true,[owner],[name,owner,status],[name,status,notes]"</span>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	}
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 	@Test <strong class="jxr_keyword">void</strong> e10b_dropRefocusesTheMovedRowsHandle() {
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		assertBean(report(), <span class="jxr_string">"rowDropRefocuses,listDropRefocuses"</span>, <span class="jxr_string">"true,true"</span>);
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 	}
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test <strong class="jxr_keyword">void</strong> e11_dropWithoutDragIsNoopAndOtherPathsUnchanged() {
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		assertBean(report(), <span class="jxr_string">"dropNoDragNoop,dropNoDragClean,dblclickAdds,reorderStillWorks"</span>,
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<span class="jxr_string">"[name,status],true,[name,status,owner],[status,name]"</span>);
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 	}
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 	@Test <strong class="jxr_keyword">void</strong> e12_detailStripDefaultsAndUpdatesFromBothPanes() {
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		assertBean(r, <span class="jxr_string">"detailRole,detailLive,detailDefault,detailAvailKey,detailHostileIsText,detailKeyCleared,detailTextHelperNoCol"</span>,
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<span class="jxr_string">"status,polite,Click a column to see details.,danger,true,true,Click a column to see details."</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		assertEquals(<span class="jxr_string">"Name \u00b7 name \u00b7 sortable \u00b7 searchable \u00b7 shown by default \u2014 The display name."</span>, r.get(<span class="jxr_string">"detailSelected"</span>));
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		assertEquals(<span class="jxr_string">"&lt;img src=x onerror=alert(1)&gt; \u00b7 danger \u00b7 not sortable \u00b7 not searchable \u00b7 formats: date/ts-zulu \u00b7 hidden by default \u2014 &lt;b&gt;x&lt;/b&gt;"</span>, r.get(<span class="jxr_string">"detailAvail"</span>));
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertEquals(<span class="jxr_string">"Id \u00b7 id \u00b7 sortable \u00b7 not searchable \u00b7 shown by default \u00b7 pinned"</span>, r.get(<span class="jxr_string">"detailPinned"</span>));
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> e12b_detailSearchableFlagAndRepaintAfterListChange() {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 		assertBean(report(), <span class="jxr_string">"detailSearchableFlag,detailRepaintedAfterAdd"</span>, <span class="jxr_string">"true,true"</span>);
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	}
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	@Test <strong class="jxr_keyword">void</strong> e13_resetIsABorderedButtonThatOnlyDraftsDefaults() {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		assertBean(report(), <span class="jxr_string">"resetNotLink,resetDraftsDefaults"</span>, <span class="jxr_string">"true,name/status"</span>);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 	}
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 	@Test <strong class="jxr_keyword">void</strong> e14_savedBarIsCompactOnlyWhenNoSavedViews() {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertBean(report(),
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 			<span class="jxr_string">"barCompactWhenEmpty,menuClosedInitially,menuOpenAfterMore,menuHoldsActions,barNotCompactWithViews,menuNoHaspopup,menuClosesOnOutsideClick,menuClosesOnEscape,escapeRefocusesMore,pickClosesMenu"</span>,
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			<span class="jxr_string">"true,true,true,true,false,true,true,true,true,true"</span>);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

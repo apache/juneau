@@ -132,7 +132,47 @@
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;decimal\&quot;,\&quot;meta\&quot;:{\&quot;places\&quot;:2,\&quot;field\&quot;:\&quot;price\&quot;}}"</span>, Json.of(r));
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertEquals(2, ((Map&lt;?,?&gt;)wire(r).get(<span class="jxr_string">"meta"</span>)).get(<span class="jxr_string">"places"</span>));
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 	}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> }
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 	@Test <strong class="jxr_keyword">void</strong> b01_tone_wireShapeAndCallOrder() {
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		<strong class="jxr_keyword">var</strong> r = Render.pill().tone(<span class="jxr_string">"AVAILABLE"</span>, StatusTone.SUCCESS).tone(<span class="jxr_string">"PENDING"</span>, StatusTone.WARNING).tone(<span class="jxr_string">"SOLD"</span>, StatusTone.NEUTRAL);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;pill\&quot;,\&quot;meta\&quot;:{\&quot;tones\&quot;:{\&quot;AVAILABLE\&quot;:\&quot;success\&quot;,\&quot;PENDING\&quot;:\&quot;warning\&quot;,\&quot;SOLD\&quot;:\&quot;neutral\&quot;}}}"</span>, Json.of(r));
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 	}
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 	@Test <strong class="jxr_keyword">void</strong> b02_tone_reAddReplacesInPlace() {
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 		<strong class="jxr_keyword">var</strong> r = Render.pill().tone(<span class="jxr_string">"A"</span>, StatusTone.INFO).tone(<span class="jxr_string">"B"</span>, StatusTone.ERROR).tone(<span class="jxr_string">"A"</span>, StatusTone.SUCCESS);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;pill\&quot;,\&quot;meta\&quot;:{\&quot;tones\&quot;:{\&quot;A\&quot;:\&quot;success\&quot;,\&quot;B\&quot;:\&quot;error\&quot;}}}"</span>, Json.of(r));
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> b03_tone_rejectsNullAndBlank() {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().tone(<strong class="jxr_keyword">null</strong>, StatusTone.INFO));
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().tone(<span class="jxr_string">"  "</span>, StatusTone.INFO));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().tone(<span class="jxr_string">"A"</span>, <strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	@Test <strong class="jxr_keyword">void</strong> b04_categorical_wireShape() {
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;pill\&quot;,\&quot;meta\&quot;:{\&quot;categorical\&quot;:true}}"</span>, Json.of(Render.pill().categorical()));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	}
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	@Test <strong class="jxr_keyword">void</strong> b05_category_wireShapeAndBounds() {
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> r = Render.pill().categorical().category(<span class="jxr_string">"DOG"</span>, 1).category(<span class="jxr_string">"CAT"</span>, 10);
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;pill\&quot;,\&quot;meta\&quot;:{\&quot;categorical\&quot;:true,\&quot;categories\&quot;:{\&quot;DOG\&quot;:1,\&quot;CAT\&quot;:10}}}"</span>, Json.of(r));
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().category(<span class="jxr_string">"X"</span>, 0));
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().category(<span class="jxr_string">"X"</span>, 11));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().category(<strong class="jxr_keyword">null</strong>, 1));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.pill().category(<span class="jxr_string">" "</span>, 1));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 	@Test <strong class="jxr_keyword">void</strong> b06_wrongRenderer_throwsIllegalState() {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.of(<span class="jxr_string">"tag"</span>).tone(<span class="jxr_string">"A"</span>, StatusTone.INFO));
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.of(<span class="jxr_string">"tag"</span>).categorical());
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		assertThrows(IllegalStateException.<strong class="jxr_keyword">class</strong>, () -&gt; Render.of(<span class="jxr_string">"tag"</span>).category(<span class="jxr_string">"A"</span>, 1));
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 	}
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	@Test <strong class="jxr_keyword">void</strong> b07_combinesWithColumnWideTone() {
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">var</strong> r = Render.pill(StatusTone.INFO).tone(<span class="jxr_string">"X"</span>, StatusTone.ERROR);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		assertEquals(<span class="jxr_string">"{\&quot;id\&quot;:\&quot;pill\&quot;,\&quot;meta\&quot;:{\&quot;tone\&quot;:\&quot;info\&quot;,\&quot;tones\&quot;:{\&quot;X\&quot;:\&quot;error\&quot;}}}"</span>, Json.of(r));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.10.2">
 <title data-rh="true">Petstore: Pets | Apache Juneau</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://juneau.staged.apache.org/img/juneau-social-card.png"><meta data-rh="true" name="twitter:image" content="https://juneau.staged.apache.org/img/juneau-social-card.png"><meta data-rh="true" property="og:url" content="https://juneau.staged.apache.org/docs/topics/PetstorePets/"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Petstore: Pets | Apache Juneau"><meta data-rh="true" name="description" content="The Pets page, served at /console/pets, is the petstore&#x27;s main table. It lists every pet with server-side"><meta data-rh="true" property="og:description" content="The Pets page, served at /console/pets, is the petstore&#x27;s main table. It lists every pet with server-side"><link data-rh="true" rel="icon" href="/img/oakleaf.svg"><link data-rh="true" rel="canonical" href="https://juneau.staged.apache.org/docs/topics/PetstorePets/"><link data-rh="true" rel="alternate" href="https://juneau.staged.apache.org/docs/topics/PetstorePets/" hreflang="en"><link data-rh="true" rel="alternate" href="https://juneau.staged.apache.org/docs/topics/PetstorePets/" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"5.1. juneau-petstore","item":"https://juneau.staged.apache.org/docs/topics/JuneauPetstore"},{"@type":"ListItem","position":2,"name":"5.1.3. Pets","item":"https://juneau.staged.apache.org/docs/topics/PetstorePets"}]}</script><link rel="stylesheet" href="/assets/css/styles.c8c4dbd2.css">
-<script src="/assets/js/runtime~main.e9f20624.js" defer="defer"></script>
-<script src="/assets/js/main.1222e4f7.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.146c342c.js" defer="defer"></script>
+<script src="/assets/js/main.9e0e4255.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -22,9 +22,8 @@ action, and export. It is the best single page to read if you want to see what a
 the pet collection with <code>DataTablesQuery.run</code>, so searching and ordering are BeanQuery expressions evaluated on
 the server. A malformed search expression comes back as a 200 response carrying an <code>error</code> envelope, so the table
 can show the message instead of failing.</li>
-<li class=""><strong>Ribbon.</strong> Two option groups (&quot;Pet status&quot; with Available and Pending, and &quot;Species&quot; with Mammals and Others)
-that set column filters, an &quot;+ Add pet&quot; dialog button, copy and CSV export (Excel and PDF when available) and
-a refresh button.</li>
+<li class=""><strong>Ribbon.</strong> Built on <code>Ribbons.standard()</code> (search, copy, CSV, Excel, PDF, copy link, columns, reset, refresh) with two option groups (&quot;Pet status&quot; with Available and Pending, and &quot;Species&quot; with Mammals and Others)
+that set column filters and an &quot;+ Add pet&quot; dialog button.</li>
 <li class=""><strong>Row actions.</strong> Edit (a dialog form, merges the row on success) and Delete (with a confirmation).</li>
 <li class=""><strong>Selection and bulk.</strong> Rows can be selected across pages, except sold pets, which carry the reason &quot;Already
 sold.&quot; The bulk action &quot;Mark sold&quot; calls <code>POST /console/pets/{id}/sell</code> once per selected row.</li>

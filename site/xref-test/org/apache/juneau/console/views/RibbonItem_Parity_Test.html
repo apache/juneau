@@ -115,7 +115,7 @@
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 			phaseGroup().persist(<strong class="jxr_keyword">true</strong>).defaultOption(<span class="jxr_string">"pending"</span>)));
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		BUILDERS.put(<span class="jxr_string">"bus-target-and-publish"</span>, () -&gt; List.of(
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			RibbonItem.refresh().title(<span class="jxr_string">"Refresh tasks"</span>).target(<span class="jxr_string">"tasks"</span>),
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			RibbonItem.publish(<span class="jxr_string">"Focus east"</span>, <span class="jxr_string">"app.region-picked"</span>, Map.of(<span class="jxr_string">"region"</span>, <span class="jxr_string">"east"</span>))));
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			RibbonItem.publish(<span class="jxr_string">"Focus east"</span>, <span class="jxr_string">"app.region-picked"</span>, Map.of(<span class="jxr_string">"region"</span>, <span class="jxr_string">"east"</span>)).id(<span class="jxr_string">"focus-east"</span>)));
 <a class="jxr_linenumber" name="L111" href="#L111">111</a> 	}
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Map&lt;String,Object&gt;&gt; normalized(List&lt;Map&lt;String,Object&gt;&gt; ribbon) {
@@ -129,16 +129,25 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : cases) {
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 			<strong class="jxr_keyword">var</strong> builder = BUILDERS.get(c.name);
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			assertNotNull(builder, <span class="jxr_string">"No builder for corpus case '"</span> + c.name + <span class="jxr_string">"'"</span>);
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">var</strong> actual = builder.get().stream().map(i -&gt; (Map&lt;String,Object&gt;)i.toMap()).toList();
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			assertEquals(normalized(c.ribbon), actual, c.name);
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> 		}
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> 	}
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> 	@Test <strong class="jxr_keyword">void</strong> a02_noStaleBuilders() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 		<strong class="jxr_keyword">var</strong> names = RibbonCorpus_Test.corpus().cases.stream().map(c -&gt; c.name).collect(Collectors.toSet());
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 		assertEquals(names, BUILDERS.keySet());
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 	}
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> }
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">var</strong> expected = normalized(c.ribbon);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 			<strong class="jxr_keyword">var</strong> actual = <strong class="jxr_keyword">new</strong> java.util.ArrayList&lt;Map&lt;String,Object&gt;&gt;();
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			<strong class="jxr_keyword">var</strong> built = builder.get();
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> k = 0; k &lt; built.size(); k++) {
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				<em class="jxr_comment">// The corpus is shared with the client and predates item ids; compare ids only where it declares one.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 				<strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> java.util.LinkedHashMap&lt;String,Object&gt;(built.get(k).toMap());
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				<strong class="jxr_keyword">if</strong> (k &lt; expected.size() &amp;&amp; ! expected.get(k).containsKey(<span class="jxr_string">"id"</span>))
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 					m.remove(<span class="jxr_string">"id"</span>);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				actual.add(m);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 			}
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			assertEquals(expected, actual, c.name);
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 		}
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	}
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	@Test <strong class="jxr_keyword">void</strong> a02_noStaleBuilders() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 		<strong class="jxr_keyword">var</strong> names = RibbonCorpus_Test.corpus().cases.stream().map(c -&gt; c.name).collect(Collectors.toSet());
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		assertEquals(names, BUILDERS.keySet());
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

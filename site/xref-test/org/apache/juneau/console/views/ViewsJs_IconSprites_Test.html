@@ -227,111 +227,127 @@
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 	@Test <strong class="jxr_keyword">void</strong> b02_shippedOnly_everyNameResolvesToTheShippedLayer() {
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_shipped"</span>);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">var</strong> layers = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>);
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertBean(layers, <span class="jxr_string">"shipped,replacement,override"</span>, <span class="jxr_string">"loaded,absent,absent"</span>);
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		assertBean(layers, <span class="jxr_string">"base,shipped,replacement,override"</span>, <span class="jxr_string">"loaded,loaded,absent,absent"</span>);
 <a class="jxr_linenumber" name="L223" href="#L223">223</a> 		<em class="jxr_comment">// sort / first_page / last_page / chevron directions are real shipped stems.</em>
 <a class="jxr_linenumber" name="L224" href="#L224">224</a> 		assertBean(s, <span class="jxr_string">"w_search,w_settings,hasSearchStem,hasSort,hasFirstPage,hasLastPage,hasChevronleft"</span>,
 <a class="jxr_linenumber" name="L225" href="#L225">225</a> 			<span class="jxr_string">"shipped,shipped,true,true,true,true,true"</span>);
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 	}
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	@Test <strong class="jxr_keyword">void</strong> b03_shippedOnly_publishesTheNameToStemMapAndStemCatalog() {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	@Test <strong class="jxr_keyword">void</strong> b02b_trashIcon_isShipped_andResolves() {
 <a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_shipped"</span>);
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> n2s = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"nameToStem"</span>);
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertBean(n2s, <span class="jxr_string">"content_copy,table,picture_as_pdf,manage_search"</span>, <span class="jxr_string">"copy,spreadsheet,pdf,toggle_column_search"</span>);
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<em class="jxr_comment">// stems() returns the shipped stem catalog after load; it matches the injected sprite's symbol count.</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		assertBean(s, <span class="jxr_string">"stemsCount,namesCount"</span>, <span class="jxr_string">"37,37"</span>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@Test <strong class="jxr_keyword">void</strong> b04_partialReplacement_replacedNamesWinAndTheRestFallThrough() {
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_repl"</span>);
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<strong class="jxr_keyword">var</strong> layers = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertBean(layers, <span class="jxr_string">"shipped,replacement"</span>, <span class="jxr_string">"loaded,loaded"</span>);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<em class="jxr_comment">// The two names the partial replacement carries win; a name it omits falls through to shipped.  A stem</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 		<em class="jxr_comment">// present only in the replacement layer still resolves (an app may add a role Juneau lacks).</em>
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		assertBean(s, <span class="jxr_string">"w_search,w_settings,w_close,hasClose,w_brandnew"</span>, <span class="jxr_string">"replacement,replacement,shipped,true,replacement"</span>);
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	}
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 	@Test <strong class="jxr_keyword">void</strong> b05_overrideBeatsReplacementBeatsShipped() {
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_ovr"</span>);
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		assertBean((Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>), <span class="jxr_string">"override"</span>, <span class="jxr_string">"loaded"</span>);
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<em class="jxr_comment">// Override and replacement both define `settings`; the override must win.  `search` is only in the</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		<em class="jxr_comment">// replacement, so it stays replacement.  `close` is in neither app layer, so it stays shipped.</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertBean(s, <span class="jxr_string">"w_settings,w_search,w_close"</span>, <span class="jxr_string">"override,replacement,shipped"</span>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	@Test <strong class="jxr_keyword">void</strong> b06_aFailedLayerIsSkipped_loadedOverrideStillWins() {
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_fail"</span>);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">var</strong> layers = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertBean(layers, <span class="jxr_string">"replacement,override"</span>, <span class="jxr_string">"failed,loaded"</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		<em class="jxr_comment">// The override that DID load still wins; a name the failed replacement would have carried uses shipped.</em>
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<em class="jxr_comment">// Dev mode was on for this scenario, so the failed fetch warns.</em>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		assertBean(s, <span class="jxr_string">"w_settings,w_search,warned"</span>, <span class="jxr_string">"override,shipped,true"</span>);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	@Test <strong class="jxr_keyword">void</strong> b07_aNonOkLayerFetchIsAlsoTreatedAsFailed() {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_notfound"</span>);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		assertBean(s, <span class="jxr_string">"replacement,w_search"</span>, <span class="jxr_string">"failed,shipped"</span>);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	@Test <strong class="jxr_keyword">void</strong> b08_resolveIcon_prefixEquivalenceMapAndUnknownWarn() {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_resolve"</span>);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<em class="jxr_comment">// `search` and `juneau-sym-search` resolve to the same glyph (U3).  An app-supplied stem present in a</em>
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<em class="jxr_comment">// loaded layer resolves to a &lt;use&gt; host even without explicit reg().  An unknown name returns null</em>
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<em class="jxr_comment">// (caller draws nothing) and warns in dev - never the raw name (U11).</em>
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		assertBean(s, <span class="jxr_string">"searchEqPrefixed,searchNotNull,newStemResolved,unknownNull,unknownWarned"</span>, <span class="jxr_string">"true,true,true,true,true"</span>);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	}
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 	@Test <strong class="jxr_keyword">void</strong> b09_aLateSpritesCallIsIgnoredAndWarns() {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_late"</span>);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<em class="jxr_comment">// A sprites(...) after first paint must return the same report, not reload, and a late registration warns.</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertBean(s, <span class="jxr_string">"sameReport,w_search_unchanged,warned"</span>, <span class="jxr_string">"true,replacement,true"</span>);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, s.get(<span class="jxr_string">"hasTrash"</span>));
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		assertTrue(String.valueOf(s.get(<span class="jxr_string">"trashMarkup"</span>)).contains(<span class="jxr_string">"juneau-sym-trash"</span>), () -&gt; String.valueOf(s.get(<span class="jxr_string">"trashMarkup"</span>)));
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	}
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	@Test <strong class="jxr_keyword">void</strong> b03_shippedOnly_publishesTheNameToStemMapAndStemCatalog() {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_shipped"</span>);
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> n2s = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"nameToStem"</span>);
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertBean(n2s, <span class="jxr_string">"content_copy,table,picture_as_pdf,manage_search"</span>, <span class="jxr_string">"copy,spreadsheet,pdf,toggle_column_search"</span>);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<em class="jxr_comment">// stems() returns the shipped stem catalog after load; it matches the injected sprite's symbol count.</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertBean(s, <span class="jxr_string">"stemsCount,namesCount"</span>, <span class="jxr_string">"39,40"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@Test <strong class="jxr_keyword">void</strong> b04_partialReplacement_replacedNamesWinAndTheRestFallThrough() {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_repl"</span>);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> layers = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		assertBean(layers, <span class="jxr_string">"base,shipped,replacement"</span>, <span class="jxr_string">"loaded,loaded,loaded"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<em class="jxr_comment">// The two names the partial replacement carries win; a name it omits falls through to shipped.  A stem</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		<em class="jxr_comment">// present only in the replacement layer still resolves (an app may add a role Juneau lacks).</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		assertBean(s, <span class="jxr_string">"w_search,w_settings,w_close,hasClose,w_brandnew"</span>, <span class="jxr_string">"replacement,replacement,shipped,true,replacement"</span>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 	}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	@Test <strong class="jxr_keyword">void</strong> b05_overrideBeatsReplacementBeatsShipped() {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_ovr"</span>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertBean((Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>), <span class="jxr_string">"override"</span>, <span class="jxr_string">"loaded"</span>);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		<em class="jxr_comment">// Override and replacement both define `settings`; the override must win.  `search` is only in the</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<em class="jxr_comment">// replacement, so it stays replacement.  `close` is in neither app layer, so it stays shipped.</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		assertBean(s, <span class="jxr_string">"w_settings,w_search,w_close"</span>, <span class="jxr_string">"override,replacement,shipped"</span>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	}
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	@Test <strong class="jxr_keyword">void</strong> b06_aFailedLayerIsSkipped_loadedOverrideStillWins() {
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_fail"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> layers = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"layers"</span>);
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		assertBean(layers, <span class="jxr_string">"replacement,override"</span>, <span class="jxr_string">"failed,loaded"</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<em class="jxr_comment">// The override that DID load still wins; a name the failed replacement would have carried uses shipped.</em>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<em class="jxr_comment">// Dev mode was on for this scenario, so the failed fetch warns.</em>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertBean(s, <span class="jxr_string">"w_settings,w_search,warned"</span>, <span class="jxr_string">"override,shipped,true"</span>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 	}
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 	@Test <strong class="jxr_keyword">void</strong> b07_aNonOkLayerFetchIsAlsoTreatedAsFailed() {
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_notfound"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertBean(s, <span class="jxr_string">"replacement,w_search"</span>, <span class="jxr_string">"failed,shipped"</span>);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	}
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	@Test <strong class="jxr_keyword">void</strong> b08_resolveIcon_prefixEquivalenceMapAndUnknownWarn() {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_resolve"</span>);
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<em class="jxr_comment">// `search` and `juneau-sym-search` resolve to the same glyph (U3).  An app-supplied stem present in a</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<em class="jxr_comment">// loaded layer resolves to a &lt;use&gt; host even without explicit reg().  An unknown name returns null</em>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<em class="jxr_comment">// (caller draws nothing) and warns in dev - never the raw name (U11).</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		assertBean(s, <span class="jxr_string">"searchEqPrefixed,searchNotNull,newStemResolved,unknownNull,unknownWarned"</span>, <span class="jxr_string">"true,true,true,true,true"</span>);
 <a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test <strong class="jxr_keyword">void</strong> b10_scriptTagAttributesConfigureBeforeFirstPaint() {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_attrs"</span>);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<em class="jxr_comment">// The documented path: layer URLs read from the script tag, applied on the boot-time load.</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertBean(s, <span class="jxr_string">"replacement,w_search"</span>, <span class="jxr_string">"loaded,replacement"</span>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	@Test <strong class="jxr_keyword">void</strong> b09_aLateSpritesCallIsIgnoredAndWarns() {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_late"</span>);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<em class="jxr_comment">// A sprites(...) after first paint must return the same report, not reload, and a late registration warns.</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertBean(s, <span class="jxr_string">"sameReport,w_search_unchanged,warned"</span>, <span class="jxr_string">"true,replacement,true"</span>);
 <a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
 <a class="jxr_linenumber" name="L286" href="#L286">286</a> 
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> c01_sortIsAUseHostResolvedBeforeTheSpriteLoadsAndTheOverrideWins() {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<em class="jxr_comment">// resolveIcon('sort') is called while the load is still in flight: it must already be a &lt;use&gt; of the merged</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<em class="jxr_comment">// sprite's #juneau-sym-sort (no inline fallback art), identical before and after the load, and the override</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		<em class="jxr_comment">// sprite's symbol is what the merged sprite holds once loaded.</em>
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertBean(scenario(<span class="jxr_string">"s_sort"</span>),
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<span class="jxr_string">"useBeforeLoad,noInlineArtBeforeLoad,prefixedSame,sameMarkupAfterLoad,winnerLayer,spriteHoldsOverrideArt"</span>,
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<span class="jxr_string">"true,true,true,true,override,true"</span>);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> c02_unknownNameInProductionDrawsNothingAndIsSilent() {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		assertBean(scenario(<span class="jxr_string">"s_unknown_prod"</span>), <span class="jxr_string">"unknownNull,silent"</span>, <span class="jxr_string">"true,true"</span>);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	}
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@Test <strong class="jxr_keyword">void</strong> c03_stemsIsTheShippedCatalogNotTheMergedSet() {
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertBean(scenario(<span class="jxr_string">"s_catalog"</span>), <span class="jxr_string">"stemsMatchShipped,brandnewInStems,brandnewResolves"</span>, <span class="jxr_string">"true,false,true"</span>);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@Test <strong class="jxr_keyword">void</strong> c04_aSpritesCallFromADeferredScriptStillLandsBeforeTheBootLoad() {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		<em class="jxr_comment">// readyState "interactive": the boot load waits for DOMContentLoaded / a timer, so the app's call is not "late".</em>
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertBean(scenario(<span class="jxr_string">"s_deferred"</span>), <span class="jxr_string">"bootDidNotPreempt,replacement,w_search,noLateWarn"</span>, <span class="jxr_string">"true,loaded,replacement,true"</span>);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 	@Test <strong class="jxr_keyword">void</strong> c05_packDuringAnInFlightLoadDropsTheStaleLoadAndKeepsTheGateClosed() {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertBean(scenario(<span class="jxr_string">"s_pack"</span>),
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<span class="jxr_string">"freshInjectedOnce,staleNotInjected,staleResolvesToCurrent,stemsStillShipped,spriteSymbols,gateStaysClosed"</span>,
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<span class="jxr_string">"true,true,true,37,37,true"</span>);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> b10_scriptTagAttributesConfigureBeforeFirstPaint() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> s = scenario(<span class="jxr_string">"s_attrs"</span>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<em class="jxr_comment">// The documented path: layer URLs read from the script tag, applied on the boot-time load.</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertBean(s, <span class="jxr_string">"replacement,w_search"</span>, <span class="jxr_string">"loaded,replacement"</span>);
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	}
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	@Test <strong class="jxr_keyword">void</strong> c01_sortIsAUseHostResolvedBeforeTheSpriteLoadsAndTheOverrideWins() {
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<em class="jxr_comment">// resolveIcon('sort') is called while the load is still in flight: it must already be a &lt;use&gt; of the merged</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<em class="jxr_comment">// sprite's #juneau-sym-sort (no inline fallback art), identical before and after the load, and the override</em>
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<em class="jxr_comment">// sprite's symbol is what the merged sprite holds once loaded.</em>
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		assertBean(scenario(<span class="jxr_string">"s_sort"</span>),
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			<span class="jxr_string">"useBeforeLoad,noInlineArtBeforeLoad,prefixedSame,sameMarkupAfterLoad,winnerLayer,spriteHoldsOverrideArt"</span>,
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			<span class="jxr_string">"true,true,true,true,override,true"</span>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	@Test <strong class="jxr_keyword">void</strong> c02_unknownNameInProductionDrawsNothingAndIsSilent() {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		assertBean(scenario(<span class="jxr_string">"s_unknown_prod"</span>), <span class="jxr_string">"unknownNull,silent"</span>, <span class="jxr_string">"true,true"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	}
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	@Test <strong class="jxr_keyword">void</strong> c03_stemsIsTheShippedCatalogNotTheMergedSet() {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		assertBean(scenario(<span class="jxr_string">"s_catalog"</span>), <span class="jxr_string">"stemsMatchShipped,brandnewInStems,brandnewResolves"</span>, <span class="jxr_string">"true,false,true"</span>);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Test <strong class="jxr_keyword">void</strong> c04_aSpritesCallFromADeferredScriptStillLandsBeforeTheBootLoad() {
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		<em class="jxr_comment">// readyState "interactive": the boot load waits for DOMContentLoaded / a timer, so the app's call is not "late".</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		assertBean(scenario(<span class="jxr_string">"s_deferred"</span>), <span class="jxr_string">"bootDidNotPreempt,replacement,w_search,noLateWarn"</span>, <span class="jxr_string">"true,loaded,replacement,true"</span>);
 <a class="jxr_linenumber" name="L313" href="#L313">313</a> 	}
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> c06_materialPackLayersOverTheShippedSpriteSoMissingStemsFallBack() {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertBean(scenario(<span class="jxr_string">"s_materialOverShipped"</span>),
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<span class="jxr_string">"replacementLayer,searchWinner,copyWinner,spriteHasSearch,noWarn"</span>,
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<span class="jxr_string">"loaded,shipped,replacement,true,true"</span>);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> c05_packDuringAnInFlightLoadDropsTheStaleLoadAndKeepsTheGateClosed() {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertBean(scenario(<span class="jxr_string">"s_pack"</span>),
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<span class="jxr_string">"freshInjectedOnce,staleNotInjected,staleResolvesToCurrent,stemsStillShipped,spriteSymbols,gateStaysClosed"</span>,
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<span class="jxr_string">"true,true,true,39,40,true"</span>);
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	@Test <strong class="jxr_keyword">void</strong> c07_newGlyphNamesResolveToTheirStemsAndColumnsMapsToTune() {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertBean(scenario(<span class="jxr_string">"s_newGlyphs"</span>),
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<span class="jxr_string">"plus,play,restore,tune,columns,settings,unknownNull,unknownWarned"</span>,
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<span class="jxr_string">"plus,play,restore,tune,tune,settings,true,true"</span>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	@Test <strong class="jxr_keyword">void</strong> c06_materialPackLayersOverTheShippedSpriteSoMissingStemsFallBack() {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertBean(scenario(<span class="jxr_string">"s_materialOverShipped"</span>),
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<span class="jxr_string">"replacementLayer,searchWinner,copyWinner,spriteHasSearch,noWarn"</span>,
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<span class="jxr_string">"loaded,shipped,replacement,true,true"</span>);
 <a class="jxr_linenumber" name="L325" href="#L325">325</a> 	}
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> }
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> c07_newGlyphNamesResolveToTheirStemsAndColumnsMapsToTune() {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertBean(scenario(<span class="jxr_string">"s_newGlyphs"</span>),
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<span class="jxr_string">"plus,play,restore,tune,columns,settings,unknownNull,unknownWarned"</span>,
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<span class="jxr_string">"plus,play,restore,tune,tune,settings,true,true"</span>);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> c08_lucideBaseLayerSitsUnderShipped() {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertBean(scenario(<span class="jxr_string">"s_lucide"</span>),
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<span class="jxr_string">"baseLayer,circleWinner,searchWinner,circleResolves,shippedExcludesLucide,noWarn"</span>,
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			<span class="jxr_string">"loaded,base,shipped,circle_check,true,true"</span>);
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 	}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	@Test <strong class="jxr_keyword">void</strong> c09_aFailedLucideFetchDegradesToTheShippedGlyphs() {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 		assertBean(scenario(<span class="jxr_string">"s_lucide404"</span>), <span class="jxr_string">"baseLayer,shippedLayer,searchWinner,circleAbsent"</span>, <span class="jxr_string">"failed,loaded,shipped,true"</span>);
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	}
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

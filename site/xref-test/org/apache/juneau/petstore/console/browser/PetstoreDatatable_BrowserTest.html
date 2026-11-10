@@ -184,8 +184,8 @@
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Test <strong class="jxr_keyword">void</strong> c01_exportButtonsRender() {
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 		<strong class="jxr_keyword">var</strong> buttons = String.valueOf(query(assertClean(report, <span class="jxr_string">"pets-export"</span>), <span class="jxr_string">"buttons"</span>));
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		assertContainsAll(buttons, <span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertNotContains(() -&gt; buttons, <span class="jxr_string">"excel"</span>, buttons);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<em class="jxr_comment">// The datatables-export pack loads JSZip and pdfMake, so the optional buttons show too.</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		assertContainsAll(buttons, <span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>, <span class="jxr_string">"excel"</span>, <span class="jxr_string">"pdf"</span>);
 <a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
 <a class="jxr_linenumber" name="L182" href="#L182">182</a> 
 <a class="jxr_linenumber" name="L183" href="#L183">183</a> 	@SuppressWarnings({

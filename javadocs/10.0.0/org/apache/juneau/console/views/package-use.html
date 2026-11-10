@@ -200,104 +200,120 @@ loadScripts(document, 'script');</script>
 <div class="block">One datatable column's search configuration &mdash; its value <a href="../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery"><code>SearchType</code></a> and the optional
  per-column <a href="../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperatorSet</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/FieldFormat.html#org.apache.juneau.console.views">FieldFormat</a></div>
+<div class="col-first even-row-color"><a href="class-use/DetailTab.html#org.apache.juneau.console.views">DetailTab</a></div>
 <div class="col-last even-row-color">
+<div class="block">One tab of a tabbed <a href="RowDetail.html" title="class in org.apache.juneau.console.views"><code>RowDetail</code></a>: a fields grid, a nested table, a chart or a client-rendered pane.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/DetailTab.Cache.html#org.apache.juneau.console.views">DetailTab.Cache</a></div>
+<div class="col-last odd-row-color">
+<div class="block">How a row detail caches the content of its tabs.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/DetailTab.Kind.html#org.apache.juneau.console.views">DetailTab.Kind</a></div>
+<div class="col-last even-row-color">
+<div class="block">The tab kinds.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/FieldFormat.html#org.apache.juneau.console.views">FieldFormat</a></div>
+<div class="col-last odd-row-color">
 <div class="block">How a field-grid catalog entry (or a remaining declarative field) is painted.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/FieldSpan.html#org.apache.juneau.console.views">FieldSpan</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/FieldSpan.html#org.apache.juneau.console.views">FieldSpan</a></div>
+<div class="col-last even-row-color">
 <div class="block">How many of a field-grid's columns one catalog entry occupies.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/FileLineIndex.html#org.apache.juneau.console.views">FileLineIndex</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/FileLineIndex.html#org.apache.juneau.console.views">FileLineIndex</a></div>
+<div class="col-last odd-row-color">
 <div class="block">A sparse, bounded index from 1-based line numbers to byte offsets in one UTF-8 text file that may keep growing
  while it is read.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/FileLineIndex.Builder.html#org.apache.juneau.console.views">FileLineIndex.Builder</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/FileLineIndex.Builder.html#org.apache.juneau.console.views">FileLineIndex.Builder</a></div>
+<div class="col-last even-row-color">
 <div class="block">Builder for <a href="FileLineIndex.html" title="class in org.apache.juneau.console.views"><code>FileLineIndex</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/FileLineIndex.Snapshot.html#org.apache.juneau.console.views">FileLineIndex.Snapshot</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/FileLineIndex.Snapshot.html#org.apache.juneau.console.views">FileLineIndex.Snapshot</a></div>
+<div class="col-last odd-row-color">
 <div class="block">The result of a <a href="FileLineIndex.html#refresh()"><code>FileLineIndex.refresh()</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/FileTerminalViewSource.html#org.apache.juneau.console.views">FileTerminalViewSource</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/FileTerminalViewSource.html#org.apache.juneau.console.views">FileTerminalViewSource</a></div>
+<div class="col-last even-row-color">
 <div class="block">A <a href="TerminalViewSource.html" title="interface in org.apache.juneau.console.views"><code>TerminalViewSource</code></a> over one growing JSON Lines file, one event per line, paged through a
  <a href="FileLineIndex.html" title="class in org.apache.juneau.console.views"><code>FileLineIndex</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/FileTerminalViewSource.Builder.html#org.apache.juneau.console.views">FileTerminalViewSource.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/FileTerminalViewSource.Builder.html#org.apache.juneau.console.views">FileTerminalViewSource.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder for <a href="FileTerminalViewSource.html" title="class in org.apache.juneau.console.views"><code>FileTerminalViewSource</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/IdempotencyKey.html#org.apache.juneau.console.views">IdempotencyKey</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/IdempotencyKey.html#org.apache.juneau.console.views">IdempotencyKey</a></div>
+<div class="col-last even-row-color">
 <div class="block">A server-minted idempotency key for a row-action submit, bound at mint time to the <code>(action, targetId)</code> pair
  it was issued for.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/JobKeyLedger.html#org.apache.juneau.console.views">JobKeyLedger</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/JobKeyLedger.html#org.apache.juneau.console.views">JobKeyLedger</a></div>
+<div class="col-last odd-row-color">
 <div class="block">The stock "record the minted key" store for row-bound job keys: issues an <a href="IdempotencyKey.html" title="class in org.apache.juneau.console.views"><code>IdempotencyKey</code></a> bound to
  <code>(action, targetId[, principal])</code>, and verifies a submitted key value against that recorded binding.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/JobKeyLedger.Grant.html#org.apache.juneau.console.views">JobKeyLedger.Grant</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/JobKeyLedger.Grant.html#org.apache.juneau.console.views">JobKeyLedger.Grant</a></div>
+<div class="col-last even-row-color">
 <div class="block">A successful verify.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/JobLogChecks.Mode.html#org.apache.juneau.console.views">JobLogChecks.Mode</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/JobLogChecks.Mode.html#org.apache.juneau.console.views">JobLogChecks.Mode</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Where a job-log declaration lives.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/JobLogRegion.html#org.apache.juneau.console.views">JobLogRegion</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/JobLogRegion.html#org.apache.juneau.console.views">JobLogRegion</a></div>
+<div class="col-last even-row-color">
 <div class="block">The author-facing declaration of a job-log row-detail region, compiled to a <a href="RegionDef.html" title="class in org.apache.juneau.console.views"><code>RegionDef</code></a>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/JobLogRegion.Detail.html#org.apache.juneau.console.views">JobLogRegion.Detail</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/JobLogRegion.Detail.html#org.apache.juneau.console.views">JobLogRegion.Detail</a></div>
+<div class="col-last odd-row-color">
 <div class="block">The optional field grid painted above the form, whose slots <code>output.target.field</code> can address.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/JobLogRegion.Field.html#org.apache.juneau.console.views">JobLogRegion.Field</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/JobLogRegion.Field.html#org.apache.juneau.console.views">JobLogRegion.Field</a></div>
+<div class="col-last even-row-color">
 <div class="block">One <code>submit.fields</code> entry.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/JobLogRegion.Output.html#org.apache.juneau.console.views">JobLogRegion.Output</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/JobLogRegion.Output.html#org.apache.juneau.console.views">JobLogRegion.Output</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Where a terminal result is written.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/JobLogRegion.Submit.html#org.apache.juneau.console.views">JobLogRegion.Submit</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/JobLogRegion.Submit.html#org.apache.juneau.console.views">JobLogRegion.Submit</a></div>
+<div class="col-last even-row-color">
 <div class="block">The <code>submit</code> declaration.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/PopoverField.html#org.apache.juneau.console.views">PopoverField</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/PopoverField.html#org.apache.juneau.console.views">PopoverField</a></div>
+<div class="col-last odd-row-color">
 <div class="block">One labelled value in a <a href="CellPopover.html" title="class in org.apache.juneau.console.views"><code>CellPopover</code></a>, bound to a top-level row-data key.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/QuickStat.html#org.apache.juneau.console.views">QuickStat</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/QuickStat.html#org.apache.juneau.console.views">QuickStat</a></div>
+<div class="col-last even-row-color">
 <div class="block">One item in a table's quick-stats strip (<code>quickStats.items[]</code>): a plain tile, a meter (one value against a
  maximum) or a segmented tile (a proportional bar of labelled counts).</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/QuickStat.Tone.html#org.apache.juneau.console.views">QuickStat.Tone</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/QuickStat.Tone.html#org.apache.juneau.console.views">QuickStat.Tone</a></div>
+<div class="col-last odd-row-color">
 <div class="block">The tile's visual tone.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/RegionDef.html#org.apache.juneau.console.views">RegionDef</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/RegionDef.html#org.apache.juneau.console.views">RegionDef</a></div>
+<div class="col-last even-row-color">
 <div class="block">A page "region": a named container whose contents a client-side populator fills in, chosen by name via
  <a href="RegionDef.html#populate"><code>RegionDef.populate</code></a> rather than declared inline.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RegionDef.Field.html#org.apache.juneau.console.views">RegionDef.Field</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RegionDef.Field.html#org.apache.juneau.console.views">RegionDef.Field</a></div>
+<div class="col-last odd-row-color">
 <div class="block">One entry in the field catalog: a label, an optional named renderer and its meta, an
  optional href template, a paint format, a grid span, and per-field action-bar ids.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Render.html#org.apache.juneau.console.views">Render</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Render.html#org.apache.juneau.console.views">Render</a></div>
+<div class="col-last even-row-color">
 <div class="block">A named cell-renderer reference in the <code>VIEW_META</code> wire contract.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/RibbonItem.html#org.apache.juneau.console.views">RibbonItem</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/RibbonItem.html#org.apache.juneau.console.views">RibbonItem</a></div>
+<div class="col-last odd-row-color">
 <div class="block">One ribbon (toolbar) entry above a table.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/Ribbons.Standard.html#org.apache.juneau.console.views">Ribbons.Standard</a></div>
+<div class="col-last even-row-color">
+<div class="block">Builder for the standard table ribbon.</div>
 </div>
 <div class="col-first odd-row-color"><a href="class-use/RowAction.html#org.apache.juneau.console.views">RowAction</a></div>
 <div class="col-last odd-row-color">

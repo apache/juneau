@@ -58,19 +58,19 @@
 <span class="source-line-no">045</span><span id="line-45">   public static PageSpec changes() {</span>
 <span class="source-line-no">046</span><span id="line-46">      var selection = SelectionDef.create("id").selectAll(true).scope(SelectionDef.Scope.PERSISTENT).labelField("summary")</span>
 <span class="source-line-no">047</span><span id="line-47">         .selectableWhen(RowActionEnabledRule.of("state", Op.EQ, "PENDING", "Only pending changes can be discarded or applied."));</span>
-<span class="source-line-no">048</span><span id="line-48">      return PageSpec.create().tab("pets/changes").toolkit("views")</span>
+<span class="source-line-no">048</span><span id="line-48">      return PageSpec.create().tab("pets/changes").toolkit("views", "datatables-buttons")</span>
 <span class="source-line-no">049</span><span id="line-49">         .table(TableSpec.create("changes").rowType("PendingChange").dataMode(DataMode.SERVER).dataUrl("/console/pets/changes/query")</span>
 <span class="source-line-no">050</span><span id="line-50">            .defaultOrder("id", Sort.DESC)</span>
 <span class="source-line-no">051</span><span id="line-51">            .columns(</span>
 <span class="source-line-no">052</span><span id="line-52">               Column.create("id").label("Change"),</span>
 <span class="source-line-no">053</span><span id="line-53">               Column.create("summary").label("Change summary"),</span>
 <span class="source-line-no">054</span><span id="line-54">               Column.create("author").label("Author"),</span>
-<span class="source-line-no">055</span><span id="line-55">               Column.create("state").label("State").render("pill"),</span>
+<span class="source-line-no">055</span><span id="line-55">               Column.create("state").label("State").render(PillRenders.changeState()),</span>
 <span class="source-line-no">056</span><span id="line-56">               Column.create("message").label("Message").defaultVisible(false))</span>
-<span class="source-line-no">057</span><span id="line-57">            .ribbon(</span>
-<span class="source-line-no">058</span><span id="line-58">               RibbonItem.option("pending-only").title("Pending only").column("state").value("$eq(PENDING)").defaultOn().group("filter"),</span>
-<span class="source-line-no">059</span><span id="line-59">               RibbonItem.resetDefaults().group("page"),</span>
-<span class="source-line-no">060</span><span id="line-60">               RibbonItem.refresh())</span>
+<span class="source-line-no">057</span><span id="line-57">            .columnConfig(true)</span>
+<span class="source-line-no">058</span><span id="line-58">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">059</span><span id="line-59">               .filter(RibbonItem.option("pending-only").title("Pending only").symbol("hourglass").column("state").value("$eq(PENDING)").defaultOn())</span>
+<span class="source-line-no">060</span><span id="line-60">               .build())</span>
 <span class="source-line-no">061</span><span id="line-61">            .rowActions(</span>
 <span class="source-line-no">062</span><span id="line-62">               RowAction.create("retry").label("Retry").endpoint("/console/pets/changes/{id}/retry").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
 <span class="source-line-no">063</span><span id="line-63">                  .visibleWhen(VisibilityRule.when("state").eq("FAILED")))</span>

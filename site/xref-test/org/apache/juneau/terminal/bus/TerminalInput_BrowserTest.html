@@ -234,81 +234,82 @@
 <a class="jxr_linenumber" name="L226" href="#L226">226</a> 			+ <span class="jxr_string">" session: '/rest"</span> + BusEventsMixin.SESSION_PATH + (typist ? <span class="jxr_string">"?typist=1"</span> : <span class="jxr_string">""</span>) + <span class="jxr_string">"',"</span>
 <a class="jxr_linenumber" name="L227" href="#L227">227</a> 			+ <span class="jxr_string">" downstream: ['term.input-status'], upstream: ['term.input']}]});"</span>
 <a class="jxr_linenumber" name="L228" href="#L228">228</a> 			<em class="jxr_comment">// The console routes the card's input-status role; here the page does it, through the registered card handler.</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			+ <span class="jxr_string">"const role = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1].roles['input-status'];"</span>
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			+ <span class="jxr_string">"B.subscribe('term.input-status', function (p, m) { role(p, m, {id: '"</span> + id + <span class="jxr_string">"'}); });"</span>
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			+ <span class="jxr_string">"window.JuneauTerminal.mount(document.getElementById('host'), {id: '"</span> + id + <span class="jxr_string">"', refreshMs: 250,"</span>
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			+ (input ? <span class="jxr_string">" input: true, inputId: '"</span> + id + <span class="jxr_string">"',"</span> : <span class="jxr_string">""</span>)
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			+ <span class="jxr_string">" bytesUrl: '/rest"</span> + TerminalMixin.TERMINAL_PREFIX + <span class="jxr_string">"/"</span> + id + <span class="jxr_string">"/bytes',"</span>
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			+ <span class="jxr_string">" eventsUrl: '/rest"</span> + TerminalViewMixin.RUN_VIEW_PREFIX + <span class="jxr_string">"/"</span> + id + <span class="jxr_string">"/events'},"</span>
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			+ <span class="jxr_string">" {publish: function (p) { B.publish('term.input', p); },"</span>
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			+ <span class="jxr_string">" onConnected: function (fn) { return B.subscribe('bridge:term', function (s) { fn(!!s &amp;&amp; s.state === 'open'); }); }});"</span>
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			+ <span class="jxr_string">"&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"</span>;
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	<em class="jxr_javadoccomment">/** The bytes of a classpath asset: this module's dependencies carry the three scripts, the stylesheet and xterm. */</em>
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] asset(String name) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 		<strong class="jxr_keyword">var</strong> path = <strong class="jxr_keyword">switch</strong> (name) {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"xterm.js"</span> -&gt; WebJarResolver.WEBJARS_ROOT + WebJarResolver.resolvePath(TerminalMixin.XTERM_JS_ASSET);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"xterm.css"</span> -&gt; WebJarResolver.WEBJARS_ROOT + WebJarResolver.resolvePath(TerminalMixin.XTERM_CSS_ASSET);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"juneau-terminal.js"</span> -&gt; <span class="jxr_string">"org/apache/juneau/terminal/juneau-terminal.js"</span>;
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"juneau-terminal.css"</span> -&gt; <span class="jxr_string">"org/apache/juneau/terminal/juneau-terminal.css"</span>;
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"juneau-bus.js"</span> -&gt; <span class="jxr_string">"org/apache/juneau/views/juneau-bus.js"</span>;
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(name);
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		};
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = TerminalInput_BrowserTest.<strong class="jxr_keyword">class</strong>.getClassLoader().getResourceAsStream(path)) {
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			assertNotNull(in, () -&gt; <span class="jxr_string">"missing classpath resource: "</span> + path);
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">return</strong> in.readAllBytes();
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		}
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 	<em class="jxr_javadoccomment">/** Runs the token list (never a shell string) and returns its stdout; the child and its descendants are killed in {@code finally}. */</em>
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String runNode(List&lt;String&gt; cmd, Map&lt;String,String&gt; env, <strong class="jxr_keyword">int</strong> seconds) <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">var</strong> stdout = Files.createTempFile(<span class="jxr_string">"terminal-input-stdout-"</span>, <span class="jxr_string">".json"</span>);
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">var</strong> stderr = Files.createTempFile(<span class="jxr_string">"terminal-input-stderr-"</span>, <span class="jxr_string">".txt"</span>);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		Process p = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(cmd).redirectOutput(stdout.toFile()).redirectError(stderr.toFile());
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			pb.environment().putAll(env);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			p = pb.start();
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			<strong class="jxr_keyword">if</strong> (! p.waitFor(seconds, TimeUnit.SECONDS))
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 				fail(cmd + <span class="jxr_string">" did not finish within "</span> + seconds + <span class="jxr_string">"s; stderr:\n"</span> + Files.readString(stderr, UTF_8));
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			<strong class="jxr_keyword">if</strong> (p.exitValue() != 0)
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 				fail(cmd + <span class="jxr_string">" exited "</span> + p.exitValue() + <span class="jxr_string">"; stderr:\n"</span> + Files.readString(stderr, UTF_8) + <span class="jxr_string">"\nstdout:\n"</span> + Files.readString(stdout, UTF_8));
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">return</strong> Files.readString(stdout, UTF_8);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong> &amp;&amp; p.isAlive()) {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 				p.descendants().forEach(ProcessHandle::destroyForcibly);
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				p.destroyForcibly();
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			}
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			Files.deleteIfExists(stdout);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			Files.deleteIfExists(stderr);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		}
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">return</strong> v;
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	<em class="jxr_javadoccomment">/** Asserts that case {@code name} passed with no page or console errors. */</em>
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> ok(String name) {
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, cases.get(name), () -&gt; name + <span class="jxr_string">" -&gt; "</span> + cases.get(name));
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"pageErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" page errors"</span>);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"consoleErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" console errors"</span>);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	@Test <strong class="jxr_keyword">void</strong> a01_typedAnswerReachesTheJobAndItsOutputShows() { ok(<span class="jxr_string">"i01_typedAnswerReachesTheJobAndItsOutputShows"</span>); }
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> a02_ctrlCReachesTheJobAndTheBadgeFails() { ok(<span class="jxr_string">"i02_ctrlCReachesTheJobAndTheBadgeFails"</span>); }
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> a03_noToggleWhenTheCardHasNoInput() { ok(<span class="jxr_string">"i03_noToggleWhenTheCardHasNoInput"</span>); }
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	@Test <strong class="jxr_keyword">void</strong> a04_deniedKeepsTheTerminalUpdating() { ok(<span class="jxr_string">"i04_deniedKeepsTheTerminalUpdating"</span>); }
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCaseHasAMethod() {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + cases.keySet(), 4, cases);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> }
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			+ <span class="jxr_string">"const K = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];"</span>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			+ <span class="jxr_string">"const card = Object.create(K.prototype); card.spec = {id: '"</span> + id + <span class="jxr_string">"'};"</span>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			+ <span class="jxr_string">"B.subscribe('term.input-status', function (p, m) { K.prototype[K.roles['input-status']].call(card, p, m); });"</span>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			+ <span class="jxr_string">"window.JuneauTerminal.mount(document.getElementById('host'), {id: '"</span> + id + <span class="jxr_string">"', refreshMs: 250,"</span>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 			+ (input ? <span class="jxr_string">" input: true, inputId: '"</span> + id + <span class="jxr_string">"',"</span> : <span class="jxr_string">""</span>)
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			+ <span class="jxr_string">" bytesUrl: '/rest"</span> + TerminalMixin.TERMINAL_PREFIX + <span class="jxr_string">"/"</span> + id + <span class="jxr_string">"/bytes',"</span>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			+ <span class="jxr_string">" eventsUrl: '/rest"</span> + TerminalViewMixin.RUN_VIEW_PREFIX + <span class="jxr_string">"/"</span> + id + <span class="jxr_string">"/events'},"</span>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			+ <span class="jxr_string">" {publish: function (p) { B.publish('term.input', p); },"</span>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 			+ <span class="jxr_string">" onConnected: function (fn) { return B.subscribe('bridge:term', function (s) { fn(!!s &amp;&amp; s.state === 'open'); }); }});"</span>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			+ <span class="jxr_string">"&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"</span>;
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 	}
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 	<em class="jxr_javadoccomment">/** The bytes of a classpath asset: this module's dependencies carry the three scripts, the stylesheet and xterm. */</em>
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> byte[] asset(String name) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 		<strong class="jxr_keyword">var</strong> path = <strong class="jxr_keyword">switch</strong> (name) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"xterm.js"</span> -&gt; WebJarResolver.WEBJARS_ROOT + WebJarResolver.resolvePath(TerminalMixin.XTERM_JS_ASSET);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"xterm.css"</span> -&gt; WebJarResolver.WEBJARS_ROOT + WebJarResolver.resolvePath(TerminalMixin.XTERM_CSS_ASSET);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"juneau-terminal.js"</span> -&gt; <span class="jxr_string">"org/apache/juneau/terminal/juneau-terminal.js"</span>;
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"juneau-terminal.css"</span> -&gt; <span class="jxr_string">"org/apache/juneau/terminal/juneau-terminal.css"</span>;
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">case</strong> <span class="jxr_string">"juneau-bus.js"</span> -&gt; <span class="jxr_string">"org/apache/juneau/views/juneau-bus.js"</span>;
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			<strong class="jxr_keyword">default</strong> -&gt; <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(name);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		};
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> in = TerminalInput_BrowserTest.<strong class="jxr_keyword">class</strong>.getClassLoader().getResourceAsStream(path)) {
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			assertNotNull(in, () -&gt; <span class="jxr_string">"missing classpath resource: "</span> + path);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 			<strong class="jxr_keyword">return</strong> in.readAllBytes();
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 	}
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<em class="jxr_javadoccomment">/** Runs the token list (never a shell string) and returns its stdout; the child and its descendants are killed in {@code finally}. */</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String runNode(List&lt;String&gt; cmd, Map&lt;String,String&gt; env, <strong class="jxr_keyword">int</strong> seconds) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		<strong class="jxr_keyword">var</strong> stdout = Files.createTempFile(<span class="jxr_string">"terminal-input-stdout-"</span>, <span class="jxr_string">".json"</span>);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> stderr = Files.createTempFile(<span class="jxr_string">"terminal-input-stderr-"</span>, <span class="jxr_string">".txt"</span>);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		Process p = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			<strong class="jxr_keyword">var</strong> pb = <strong class="jxr_keyword">new</strong> ProcessBuilder(cmd).redirectOutput(stdout.toFile()).redirectError(stderr.toFile());
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			pb.environment().putAll(env);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			p = pb.start();
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">if</strong> (! p.waitFor(seconds, TimeUnit.SECONDS))
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				fail(cmd + <span class="jxr_string">" did not finish within "</span> + seconds + <span class="jxr_string">"s; stderr:\n"</span> + Files.readString(stderr, UTF_8));
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			<strong class="jxr_keyword">if</strong> (p.exitValue() != 0)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				fail(cmd + <span class="jxr_string">" exited "</span> + p.exitValue() + <span class="jxr_string">"; stderr:\n"</span> + Files.readString(stderr, UTF_8) + <span class="jxr_string">"\nstdout:\n"</span> + Files.readString(stdout, UTF_8));
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">return</strong> Files.readString(stdout, UTF_8);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong> &amp;&amp; p.isAlive()) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				p.descendants().forEach(ProcessHandle::destroyForcibly);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 				p.destroyForcibly();
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			}
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			Files.deleteIfExists(stdout);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			Files.deleteIfExists(stderr);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		}
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	}
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String requiredProperty(String name) {
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">var</strong> v = System.getProperty(name);
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertNotNull(v, () -&gt; <span class="jxr_string">"-D"</span> + name + <span class="jxr_string">" not set; the js-tests profile is responsible for providing it"</span>);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">return</strong> v;
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	<em class="jxr_javadoccomment">/** Asserts that case {@code name} passed with no page or console errors. */</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> ok(String name) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		assertEquals(<strong class="jxr_keyword">true</strong>, cases.get(name), () -&gt; name + <span class="jxr_string">" -&gt; "</span> + cases.get(name));
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"pageErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" page errors"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertEquals(List.of(), ((Map&lt;?,?&gt;)report.get(<span class="jxr_string">"consoleErrors"</span>)).get(name), () -&gt; name + <span class="jxr_string">" console errors"</span>);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> a01_typedAnswerReachesTheJobAndItsOutputShows() { ok(<span class="jxr_string">"i01_typedAnswerReachesTheJobAndItsOutputShows"</span>); }
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> a02_ctrlCReachesTheJobAndTheBadgeFails() { ok(<span class="jxr_string">"i02_ctrlCReachesTheJobAndTheBadgeFails"</span>); }
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	@Test <strong class="jxr_keyword">void</strong> a03_noToggleWhenTheCardHasNoInput() { ok(<span class="jxr_string">"i03_noToggleWhenTheCardHasNoInput"</span>); }
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	@Test <strong class="jxr_keyword">void</strong> a04_deniedKeepsTheTerminalUpdating() { ok(<span class="jxr_string">"i04_deniedKeepsTheTerminalUpdating"</span>); }
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCaseHasAMethod() {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + cases.keySet(), 4, cases);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -95,7 +95,7 @@
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<em class="jxr_comment">// -----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;?,?&gt; report() {
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> r = NodeHarness.report(<span class="jxr_string">"hooks-api.cjs"</span>, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> r = NodeHarness.report(<span class="jxr_string">"hooks-api.cjs"</span>, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE, <span class="jxr_string">"/org/apache/juneau/views/juneau-model.js"</span>);
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		assumeTrue(r != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"node not available or hooks-api.cjs not found - behavioral layer skipped"</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">return</strong> r;
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
@@ -121,7 +121,7 @@
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> r = report();
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"hookNamespacesFrozen"</span>), <span class="jxr_string">"HOOK_NAMESPACES must be a frozen array"</span>);
 <a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertEquals(<strong class="jxr_keyword">new</strong> HashSet&lt;&gt;(List.of(<span class="jxr_string">"actions"</span>, <span class="jxr_string">"rowActions"</span>, <span class="jxr_string">"dialogs"</span>, <span class="jxr_string">"probeSelection"</span>, <span class="jxr_string">"tables"</span>, <span class="jxr_string">"status"</span>,
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<span class="jxr_string">"csrf"</span>, <span class="jxr_string">"rules"</span>, <span class="jxr_string">"details"</span>, <span class="jxr_string">"html"</span>, <span class="jxr_string">"jobs"</span>)), <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;((Collection&lt;?&gt;)r.get(<span class="jxr_string">"hookNamespaces"</span>)));
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<span class="jxr_string">"csrf"</span>, <span class="jxr_string">"rules"</span>, <span class="jxr_string">"details"</span>, <span class="jxr_string">"html"</span>, <span class="jxr_string">"jobs"</span>, <span class="jxr_string">"detail"</span>)), <strong class="jxr_keyword">new</strong> HashSet&lt;&gt;((Collection&lt;?&gt;)r.get(<span class="jxr_string">"hookNamespaces"</span>)));
 <a class="jxr_linenumber" name="L117" href="#L117">117</a> 		assertEquals(<strong class="jxr_keyword">new</strong> HashSet&lt;&gt;((Collection&lt;?&gt;)r.get(<span class="jxr_string">"hookNamespaces"</span>)),
 <a class="jxr_linenumber" name="L118" href="#L118">118</a> 			<strong class="jxr_keyword">new</strong> HashSet&lt;&gt;((Collection&lt;?&gt;)r.get(<span class="jxr_string">"frozenNamespaces"</span>)),
 <a class="jxr_linenumber" name="L119" href="#L119">119</a> 			<span class="jxr_string">"every frozen top-level JuneauViews namespace must be listed in HOOK_NAMESPACES, and vice versa"</span>);
@@ -157,11 +157,12 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 		assertEquals(<span class="jxr_string">"v"</span>, r.get(<span class="jxr_string">"handleViewId"</span>));
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 		assertEquals(Map.of(<span class="jxr_string">"id"</span>, 7), r.get(<span class="jxr_string">"handleRow"</span>));
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"handleNull"</span>));
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(Arrays.asList(<strong class="jxr_keyword">null</strong>, false), r.get(<span class="jxr_string">"reloadDefault"</span>));
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(Arrays.asList(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">true</strong>), r.get(<span class="jxr_string">"reloadReset"</span>));
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"contextOfNull"</span>));
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 	}
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> }
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"handleIsModelTable"</span>));
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		assertEquals(Arrays.asList(<strong class="jxr_keyword">null</strong>, false), r.get(<span class="jxr_string">"reloadDefault"</span>));
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 		assertEquals(Arrays.asList(<strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">true</strong>), r.get(<span class="jxr_string">"reloadReset"</span>));
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"contextOfNull"</span>));
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	}
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

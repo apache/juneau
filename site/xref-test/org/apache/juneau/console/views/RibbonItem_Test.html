@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  	@Test <strong class="jxr_keyword">void</strong> a01_refresh_toMap() {
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">var</strong> m = RibbonItem.refresh().toMap();
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  		assertEquals(<span class="jxr_string">"refresh"</span>, m.get(<span class="jxr_string">"type"</span>));
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertEquals(Set.of(<span class="jxr_string">"type"</span>), m.keySet());
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		assertEquals(Set.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"id"</span>), m.keySet());
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  	}
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	@Test <strong class="jxr_keyword">void</strong> a02_collapseAll_pausePolling_toMap() {
@@ -342,30 +342,76 @@
 <a class="jxr_linenumber" name="L334" href="#L334">334</a> 
 <a class="jxr_linenumber" name="L335" href="#L335">335</a> 	@Test <strong class="jxr_keyword">void</strong> a40_id_rejectedWhereTheRuntimeIgnoresIt() {
 <a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertIgnored(<span class="jxr_string">"divider"</span>, RibbonItem.divider().id(<span class="jxr_string">"x"</span>), <span class="jxr_string">"id"</span>);
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		<strong class="jxr_keyword">var</strong> target2 = RibbonItem.export(<span class="jxr_string">"copy"</span>).id(<span class="jxr_string">"x"</span>);
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, target2::toMap);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 	}
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Test <strong class="jxr_keyword">void</strong> a41_id_blank_rejected() {
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		<strong class="jxr_keyword">var</strong> target3 = RibbonItem.refresh();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target3.id(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> target4 = RibbonItem.refresh();
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target4.id(<span class="jxr_string">" "</span>));
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 	@Test <strong class="jxr_keyword">void</strong> a42_resetDefaults_toMap() {
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertEquals(<span class="jxr_string">"resetDefaults"</span>, RibbonItem.resetDefaults().toMap().get(<span class="jxr_string">"type"</span>));
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">var</strong> m = RibbonItem.resetDefaults().title(<span class="jxr_string">"Reset"</span>).group(<span class="jxr_string">"page"</span>).toMap();
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertEquals(<span class="jxr_string">"Reset"</span>, m.get(<span class="jxr_string">"title"</span>));
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		assertEquals(<span class="jxr_string">"page"</span>, m.get(<span class="jxr_string">"group"</span>));
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		RibbonItem.validate(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"resetDefaults"</span>, <span class="jxr_string">"group"</span>, <span class="jxr_string">"page"</span>));
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> a43_resetDefaults_target_rejected() {
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		<em class="jxr_comment">// The reset acts on its own table only; it is not a bus command, so a target is rejected.</em>
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertIgnored(<span class="jxr_string">"resetDefaults"</span>, RibbonItem.resetDefaults().target(<span class="jxr_string">"orders"</span>), <span class="jxr_string">"target"</span>);
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	}
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> }
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertEquals(<span class="jxr_string">"x"</span>, RibbonItem.export(<span class="jxr_string">"copy"</span>).id(<span class="jxr_string">"x"</span>).toMap().get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@Test <strong class="jxr_keyword">void</strong> a41_id_blank_rejected() {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> target3 = RibbonItem.refresh();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target3.id(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		<strong class="jxr_keyword">var</strong> target4 = RibbonItem.refresh();
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; target4.id(<span class="jxr_string">" "</span>));
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 	}
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	@Test <strong class="jxr_keyword">void</strong> a42_resetDefaults_toMap() {
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		assertEquals(<span class="jxr_string">"resetDefaults"</span>, RibbonItem.resetDefaults().toMap().get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		<strong class="jxr_keyword">var</strong> m = RibbonItem.resetDefaults().title(<span class="jxr_string">"Reset"</span>).group(<span class="jxr_string">"page"</span>).toMap();
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		assertEquals(<span class="jxr_string">"Reset"</span>, m.get(<span class="jxr_string">"title"</span>));
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 		assertEquals(<span class="jxr_string">"page"</span>, m.get(<span class="jxr_string">"group"</span>));
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 		RibbonItem.validate(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"resetDefaults"</span>, <span class="jxr_string">"group"</span>, <span class="jxr_string">"page"</span>));
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	}
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	@Test <strong class="jxr_keyword">void</strong> a43_resetDefaults_target_rejected() {
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<em class="jxr_comment">// The reset acts on its own table only; it is not a bus command, so a target is rejected.</em>
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertIgnored(<span class="jxr_string">"resetDefaults"</span>, RibbonItem.resetDefaults().target(<span class="jxr_string">"orders"</span>), <span class="jxr_string">"target"</span>);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test <strong class="jxr_keyword">void</strong> a44_export_allows_id() {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 		assertEquals(<span class="jxr_string">"exp"</span>, RibbonItem.export(<span class="jxr_string">"csv"</span>).id(<span class="jxr_string">"exp"</span>).toMap().get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	}
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test <strong class="jxr_keyword">void</strong> a60_search_toMap() {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertEquals(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"search"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"search"</span>), RibbonItem.search().toMap());
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	}
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	@Test <strong class="jxr_keyword">void</strong> a61_linkButton_toMap_defaultId() {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 		assertEquals(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"linkButton"</span>, <span class="jxr_string">"id"</span>, <span class="jxr_string">"link"</span>), RibbonItem.linkButton().toMap());
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	}
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 	@Test <strong class="jxr_keyword">void</strong> a62_columnSettings_toMap_symbolAppearance() {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		<strong class="jxr_keyword">var</strong> m = RibbonItem.columnSettings().symbol(<span class="jxr_string">"tune"</span>).appearance(<span class="jxr_string">"icon"</span>).group(<span class="jxr_string">"viewing"</span>).toMap();
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertEquals(<span class="jxr_string">"columnSettings"</span>, m.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 		assertEquals(<span class="jxr_string">"columns"</span>, m.get(<span class="jxr_string">"id"</span>));
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		assertEquals(<span class="jxr_string">"viewing"</span>, m.get(<span class="jxr_string">"group"</span>));
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	@Test <strong class="jxr_keyword">void</strong> a63_search_rejects_symbol_and_appearance() {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; RibbonItem.search().symbol(<span class="jxr_string">"x"</span>).toMap());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; RibbonItem.search().appearance(<span class="jxr_string">"icon"</span>).toMap());
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	}
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 	@Test <strong class="jxr_keyword">void</strong> a64_<strong class="jxr_keyword">new</strong>_types_listed_in_unknown_type_error() {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; RibbonItem.validate(Map.of(<span class="jxr_string">"type"</span>, <span class="jxr_string">"nope"</span>)));
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : List.of(<span class="jxr_string">"search"</span>, <span class="jxr_string">"linkButton"</span>, <span class="jxr_string">"columnSettings"</span>))
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 			assertTrue(e.getMessage().contains(t), t);
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 	}
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	@Test <strong class="jxr_keyword">void</strong> a65_<strong class="jxr_keyword">new</strong>_types_are_handled() {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		<strong class="jxr_keyword">var</strong> m = RibbonItem.linkButton().on(<span class="jxr_string">"activated"</span>, <span class="jxr_string">"juneau.refresh"</span>).toMap();
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		assertTrue(m.containsKey(<span class="jxr_string">"model"</span>), String.valueOf(m));
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 	}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 	@Test <strong class="jxr_keyword">void</strong> a45_publish_without_id_<strong class="jxr_keyword">throws</strong>() {
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 		<strong class="jxr_keyword">var</strong> pub = RibbonItem.publish(<span class="jxr_string">"Go"</span>, <span class="jxr_string">"app.go"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		<strong class="jxr_keyword">var</strong> items = List.of(pub);
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 		<strong class="jxr_keyword">var</strong> e = assertThrows(IllegalArgumentException.<strong class="jxr_keyword">class</strong>, () -&gt; RibbonItem.validateList(<span class="jxr_string">"t"</span>, items));
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		assertTrue(e.getMessage().contains(<span class="jxr_string">"needs an explicit id"</span>), e.getMessage());
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		RibbonItem.validateList(<span class="jxr_string">"t"</span>, List.of(RibbonItem.publish(<span class="jxr_string">"Go"</span>, <span class="jxr_string">"app.go"</span>, <strong class="jxr_keyword">null</strong>).id(<span class="jxr_string">"go"</span>)));
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	}
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@Test <strong class="jxr_keyword">void</strong> a46_divider_needs_no_id() {
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 		RibbonItem.validateList(<span class="jxr_string">"t"</span>, List.of(RibbonItem.divider(), RibbonItem.divider()));
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

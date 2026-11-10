@@ -88,39 +88,45 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets whether this column starts visible.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">ViewDef.</span><code><a href="../ViewDef.html#findColumn(java.lang.String)" class="member-name-link">findColumn</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#description(java.lang.String)" class="member-name-link">description</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets optional help text for this column, shown in the View Settings dialog's detail strip when the column is
+ selected.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ViewDef.</span><code><a href="../ViewDef.html#findColumn(java.lang.String)" class="member-name-link">findColumn</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Looks up a column by name.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#href(java.lang.String)" class="member-name-link">href</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#href(java.lang.String)" class="member-name-link">href</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the row-data interpolation template this column's rendered cell links to.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the human-readable column label.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#operators(org.apache.juneau.commons.beanquery.SearchOperatorSet)" class="member-name-link">operators</a><wbr>(<a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#operators(org.apache.juneau.commons.beanquery.SearchOperatorSet)" class="member-name-link">operators</a><wbr>(<a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets this column's own <a href="../../../commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery"><code>SearchOperatorSet</code></a> &mdash; it entirely replaces the table-level
  set for this column.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#render(java.lang.String)" class="member-name-link">render</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spec)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#render(java.lang.String)" class="member-name-link">render</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;spec)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets this column's cell renderer from the compact <code>"id:field"</code> string sugar.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#render(org.apache.juneau.console.views.Render)" class="member-name-link">render</a><wbr>(<a href="../Render.html" title="class in org.apache.juneau.console.views">Render</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#render(org.apache.juneau.console.views.Render)" class="member-name-link">render</a><wbr>(<a href="../Render.html" title="class in org.apache.juneau.console.views">Render</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets this column's cell renderer.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#searchType(org.apache.juneau.commons.beanquery.SearchType)" class="member-name-link">searchType</a><wbr>(<a href="../../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery">SearchType</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../Column.html" title="class in org.apache.juneau.console.views">Column</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Column.</span><code><a href="../Column.html#searchType(org.apache.juneau.commons.beanquery.SearchType)" class="member-name-link">searchType</a><wbr>(<a href="../../../commons/beanquery/SearchType.html" title="enum class in org.apache.juneau.commons.beanquery">SearchType</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the column's value type, which governs both leaf semantics and the offerable built-in operators.</div>
 </div>
 </div>

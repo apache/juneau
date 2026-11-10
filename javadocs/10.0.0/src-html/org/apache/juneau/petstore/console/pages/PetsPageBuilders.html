@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60">    * @return The page spec.</span>
 <span class="source-line-no">061</span><span id="line-61">    */</span>
 <span class="source-line-no">062</span><span id="line-62">   public static PageSpec pets() {</span>
-<span class="source-line-no">063</span><span id="line-63">      return PageSpec.create().tab("pets").toolkit("views", "datatables-buttons").table(petsTable(), "Pets");</span>
+<span class="source-line-no">063</span><span id="line-63">      return PageSpec.create().tab("pets").toolkit("views", "datatables-buttons", "datatables-export").table(petsTable(), "Pets");</span>
 <span class="source-line-no">064</span><span id="line-64">   }</span>
 <span class="source-line-no">065</span><span id="line-65"></span>
 <span class="source-line-no">066</span><span id="line-66">   /**</span>
@@ -103,25 +103,25 @@
 <span class="source-line-no">090</span><span id="line-90">         .columns(</span>
 <span class="source-line-no">091</span><span id="line-91">            Column.create("id").label("Id"),</span>
 <span class="source-line-no">092</span><span id="line-92">            Column.create("name").label("Name").href("/console/pets/{id}/summary"),</span>
-<span class="source-line-no">093</span><span id="line-93">            Column.create("species").label("Species"),</span>
-<span class="source-line-no">094</span><span id="line-94">            Column.create("status").label("Status").render("pill"),</span>
+<span class="source-line-no">093</span><span id="line-93">            Column.create("species").label("Species").render(PillRenders.species()),</span>
+<span class="source-line-no">094</span><span id="line-94">            Column.create("status").label("Status").render(PillRenders.petStatus()),</span>
 <span class="source-line-no">095</span><span id="line-95">            Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)),</span>
 <span class="source-line-no">096</span><span id="line-96">            Column.create("tags").label("Tags").defaultVisible(false))</span>
 <span class="source-line-no">097</span><span id="line-97">         .rowClass("status", Op.EQ, "SOLD", "is-muted")</span>
-<span class="source-line-no">098</span><span id="line-98">         .ribbon(</span>
-<span class="source-line-no">099</span><span id="line-99">            RibbonItem.optionGroup("status",</span>
-<span class="source-line-no">100</span><span id="line-100">               RibbonItem.option("available").title("Available").column("status").value("$eq(AVAILABLE)"),</span>
-<span class="source-line-no">101</span><span id="line-101">               RibbonItem.option("pending").title("Pending").column("status").value("$eq(PENDING)"))</span>
-<span class="source-line-no">102</span><span id="line-102">               .title("Pet status").deselectable(true).defaultOption("available").group("filter"),</span>
-<span class="source-line-no">103</span><span id="line-103">            RibbonItem.optionGroup("species",</span>
-<span class="source-line-no">104</span><span id="line-104">               RibbonItem.option("mammals").title("Mammals").column("species").value("$in(DOG,CAT,MOUSE,RABBIT)"),</span>
-<span class="source-line-no">105</span><span id="line-105">               RibbonItem.option("others").title("Others").column("species").value("$in(BIRD,FISH,SNAKE)"))</span>
-<span class="source-line-no">106</span><span id="line-106">               .title("Species").deselectable(true).defaultOption("mammals").group("filter"),</span>
-<span class="source-line-no">107</span><span id="line-107">            RibbonItem.dialog("add-pet").title("+ Add pet").symbol("plus")</span>
-<span class="source-line-no">108</span><span id="line-108">               .form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),</span>
-<span class="source-line-no">109</span><span id="line-109">            RibbonItem.export("copy", "csv").optional("excel", "pdf").group("viewing"),</span>
-<span class="source-line-no">110</span><span id="line-110">            RibbonItem.resetDefaults().group("page"),</span>
-<span class="source-line-no">111</span><span id="line-111">            RibbonItem.refresh())</span>
+<span class="source-line-no">098</span><span id="line-98">         .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">099</span><span id="line-99">            .create(RibbonItem.dialog("add-pet").title("+ Add pet").symbol("plus")</span>
+<span class="source-line-no">100</span><span id="line-100">               .form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
+<span class="source-line-no">101</span><span id="line-101">            .filter(</span>
+<span class="source-line-no">102</span><span id="line-102">               RibbonItem.optionGroup("status",</span>
+<span class="source-line-no">103</span><span id="line-103">                  RibbonItem.option("available").title("Available").symbol("circle_check").column("status").value("$eq(AVAILABLE)"),</span>
+<span class="source-line-no">104</span><span id="line-104">                  RibbonItem.option("pending").title("Pending").symbol("hourglass").column("status").value("$eq(PENDING)"))</span>
+<span class="source-line-no">105</span><span id="line-105">                  .title("Pet status").deselectable(true).defaultOption("available"),</span>
+<span class="source-line-no">106</span><span id="line-106">               RibbonItem.optionGroup("species",</span>
+<span class="source-line-no">107</span><span id="line-107">                  RibbonItem.option("mammals").title("Mammals").symbol("paw_print").column("species").value("$in(DOG,CAT,MOUSE,RABBIT)"),</span>
+<span class="source-line-no">108</span><span id="line-108">                  RibbonItem.option("others").title("Others").symbol("shapes").column("species").value("$in(BIRD,FISH,SNAKE)"))</span>
+<span class="source-line-no">109</span><span id="line-109">                  .title("Species").deselectable(true).defaultOption("mammals"))</span>
+<span class="source-line-no">110</span><span id="line-110">            .export("excel", "pdf")</span>
+<span class="source-line-no">111</span><span id="line-111">            .build())</span>
 <span class="source-line-no">112</span><span id="line-112">         .rowActions(</span>
 <span class="source-line-no">113</span><span id="line-113">            editPetAction(OnSuccess.MERGE_ROW),</span>
 <span class="source-line-no">114</span><span id="line-114">            RowAction.create("delete").label("Delete").endpoint("/console/pets/{id}").method(Method.DELETE)</span>
@@ -138,20 +138,20 @@
 <span class="source-line-no">125</span><span id="line-125">    * @return The page spec.</span>
 <span class="source-line-no">126</span><span id="line-126">    */</span>
 <span class="source-line-no">127</span><span id="line-127">   public static PageSpec sold() {</span>
-<span class="source-line-no">128</span><span id="line-128">      return PageSpec.create().toolkit("views")</span>
+<span class="source-line-no">128</span><span id="line-128">      return PageSpec.create().toolkit("views", "datatables-buttons")</span>
 <span class="source-line-no">129</span><span id="line-129">         .table(TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")</span>
-<span class="source-line-no">130</span><span id="line-130">            .columns(</span>
-<span class="source-line-no">131</span><span id="line-131">               Column.create("id").label("Id"),</span>
-<span class="source-line-no">132</span><span id="line-132">               Column.create("name").label("Name"),</span>
-<span class="source-line-no">133</span><span id="line-133">               Column.create("species").label("Species"),</span>
-<span class="source-line-no">134</span><span id="line-134">               Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)))</span>
-<span class="source-line-no">135</span><span id="line-135">            .ribbon(</span>
-<span class="source-line-no">136</span><span id="line-136">               RibbonItem.optionGroup("species",</span>
-<span class="source-line-no">137</span><span id="line-137">                  RibbonItem.option("dogs").title("Dogs").column("species").value("$eq(DOG)"),</span>
-<span class="source-line-no">138</span><span id="line-138">                  RibbonItem.option("cats").title("Cats").column("species").value("$eq(CAT)"))</span>
-<span class="source-line-no">139</span><span id="line-139">                  .title("Species").group("filter"),</span>
-<span class="source-line-no">140</span><span id="line-140">               RibbonItem.resetDefaults().group("page"),</span>
-<span class="source-line-no">141</span><span id="line-141">               RibbonItem.refresh()), "Sold pets");</span>
+<span class="source-line-no">130</span><span id="line-130">            .columnConfig(true)</span>
+<span class="source-line-no">131</span><span id="line-131">            .columns(</span>
+<span class="source-line-no">132</span><span id="line-132">               Column.create("id").label("Id"),</span>
+<span class="source-line-no">133</span><span id="line-133">               Column.create("name").label("Name"),</span>
+<span class="source-line-no">134</span><span id="line-134">               Column.create("species").label("Species").render(PillRenders.species()),</span>
+<span class="source-line-no">135</span><span id="line-135">               Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)))</span>
+<span class="source-line-no">136</span><span id="line-136">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">137</span><span id="line-137">               .filter(RibbonItem.optionGroup("species",</span>
+<span class="source-line-no">138</span><span id="line-138">                  RibbonItem.option("dogs").title("Dogs").symbol("paw_print").column("species").value("$eq(DOG)"),</span>
+<span class="source-line-no">139</span><span id="line-139">                  RibbonItem.option("cats").title("Cats").symbol("shapes").column("species").value("$eq(CAT)"))</span>
+<span class="source-line-no">140</span><span id="line-140">                  .title("Species"))</span>
+<span class="source-line-no">141</span><span id="line-141">               .build()), "Sold pets");</span>
 <span class="source-line-no">142</span><span id="line-142">   }</span>
 <span class="source-line-no">143</span><span id="line-143"></span>
 <span class="source-line-no">144</span><span id="line-144">   /**</span>
@@ -185,8 +185,8 @@
 <span class="source-line-no">172</span><span id="line-172">            .columns(</span>
 <span class="source-line-no">173</span><span id="line-173">               Column.create("id").label("Id"),</span>
 <span class="source-line-no">174</span><span id="line-174">               Column.create("name").label("Name").render(Render.of("edit").meta("action", "rename").meta("column", "name").meta("input", "text")),</span>
-<span class="source-line-no">175</span><span id="line-175">               Column.create("species").label("Species"),</span>
-<span class="source-line-no">176</span><span id="line-176">               Column.create("status").label("Status").render("pill"),</span>
+<span class="source-line-no">175</span><span id="line-175">               Column.create("species").label("Species").render(PillRenders.species()),</span>
+<span class="source-line-no">176</span><span id="line-176">               Column.create("status").label("Status").render(PillRenders.petStatus()),</span>
 <span class="source-line-no">177</span><span id="line-177">               Column.create("price").label("Price (USD)").render(Render.of("edit").meta("action", "reprice").meta("column", "price").meta("input", "number")))</span>
 <span class="source-line-no">178</span><span id="line-178">            .rowActions(</span>
 <span class="source-line-no">179</span><span id="line-179">               stage("rename", "Rename"),</span>
@@ -214,7 +214,7 @@
 <span class="source-line-no">201</span><span id="line-201">               .columns(</span>
 <span class="source-line-no">202</span><span id="line-202">                  Column.create("id").label("Order").href(href + "/orders/{id}"),</span>
 <span class="source-line-no">203</span><span id="line-203">                  Column.create("shipDate").label("Ship date"),</span>
-<span class="source-line-no">204</span><span id="line-204">                  Column.create("status").label("Status").render("pill"))</span>
+<span class="source-line-no">204</span><span id="line-204">                  Column.create("status").label("Status").render(PillRenders.orderStatus()))</span>
 <span class="source-line-no">205</span><span id="line-205">               .detail(RowDetail.create(href + "/orders/{id}/detail").title("Order {id}")), "Orders");</span>
 <span class="source-line-no">206</span><span id="line-206">            if (order != null)</span>
 <span class="source-line-no">207</span><span id="line-207">               p.html("order", "Order " + order.getId(),</span>
@@ -226,7 +226,7 @@
 <span class="source-line-no">213</span><span id="line-213">            .columns(</span>
 <span class="source-line-no">214</span><span id="line-214">               Column.create("at").label("When").render("timestamp"),</span>
 <span class="source-line-no">215</span><span id="line-215">               Column.create("actor").label("Actor"),</span>
-<span class="source-line-no">216</span><span id="line-216">               Column.create("action").label("Action"),</span>
+<span class="source-line-no">216</span><span id="line-216">               Column.create("action").label("Action").render(PillRenders.auditAction()),</span>
 <span class="source-line-no">217</span><span id="line-217">               Column.create("detail").label("Detail")), "History");</span>
 <span class="source-line-no">218</span><span id="line-218">      }</span>
 <span class="source-line-no">219</span><span id="line-219">      return p;</span>

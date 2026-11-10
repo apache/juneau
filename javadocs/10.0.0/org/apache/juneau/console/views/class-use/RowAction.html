@@ -175,14 +175,25 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the form-source URL supplying the action's input fields.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#href(java.lang.String)" class="member-name-link">href</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlTemplate)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets the glyph/icon name.</div>
+<div class="block">Sets the link target, making this a link action.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets the glyph/icon name.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the menu-item text.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#link(java.lang.String,java.lang.String)" class="member-name-link">link</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlTemplate)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Starts a link action: a header button that navigates to a same-origin page instead of submitting.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">RowAction.</span><code><a href="../RowAction.html#method(org.apache.juneau.console.views.RowAction.Method)" class="member-name-link">method</a><wbr>(<a href="../RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;value)</code></div>
@@ -230,14 +241,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../BulkMutateDef.html" title="class in org.apache.juneau.console.views">BulkMutateDef</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BulkMutateDef.</span><code><a href="../BulkMutateDef.html#actions(org.apache.juneau.console.views.RowAction...)" class="member-name-link">actions</a><wbr>(<a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a>...&nbsp;value)</code></div>
+<div class="col-first even-row-color"><code><a href="../RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetail.</span><code><a href="../RowDetail.html#action(org.apache.juneau.console.views.RowAction)" class="member-name-link">action</a><wbr>(<a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a>&nbsp;a)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Adds a header action, shown right-aligned in the detail header.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../BulkMutateDef.html" title="class in org.apache.juneau.console.views">BulkMutateDef</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BulkMutateDef.</span><code><a href="../BulkMutateDef.html#actions(org.apache.juneau.console.views.RowAction...)" class="member-name-link">actions</a><wbr>(<a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a>...&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Declares the bulk actions.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../TableSpec.html#rowActions(org.apache.juneau.console.views.RowAction...)" class="member-name-link">rowActions</a><wbr>(<a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a>...&nbsp;actions)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../TableSpec.html#rowActions(org.apache.juneau.console.views.RowAction...)" class="member-name-link">rowActions</a><wbr>(<a href="../RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a>...&nbsp;actions)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Appends row actions, in menu order.</div>
 </div>
 </div>

@@ -73,7 +73,7 @@
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			.page(<span class="jxr_string">"e11"</span>, ORIGIN + <span class="jxr_string">"/e11"</span>, contractPage(c(<span class="jxr_string">""</span>), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>,
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<span class="jxr_string">"&lt;script&gt;window.JuneauConsole.mount("</span> + c(<span class="jxr_string">""</span>) + <span class="jxr_string">", {root: document.body});&lt;/script&gt;"</span>))
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  			.page(<span class="jxr_string">"e12"</span>, ORIGIN + <span class="jxr_string">"/e12"</span>, contractPage(c(<span class="jxr_string">""</span>), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>,
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<span class="jxr_string">"&lt;script&gt;window.JuneauConsole.registerCard('html', function(){});&lt;/script&gt;"</span>))
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<span class="jxr_string">"&lt;script&gt;window.JuneauConsole.registerCard('html', class extends window.JuneauConsole.Card { render() {} });&lt;/script&gt;"</span>))
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  			<em class="jxr_comment">// E-JS-24/E-JS-25 are card-level: painted in the card body, logged unprefixed by juneau-views.js, no banner.</em>
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  			.page(<span class="jxr_string">"e24"</span>, ORIGIN + <span class="jxr_string">"/e24"</span>, contractPage(c(<span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;releases\&quot;,\&quot;type\&quot;:\&quot;datatables\&quot;,"</span>
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  				+ <span class="jxr_string">"\&quot;table\&quot;:{\&quot;dataUrl\&quot;:\&quot;/rest/releases/data\&quot;}}]"</span>), <span class="jxr_string">""</span>, viewsPack(), <span class="jxr_string">""</span>),
@@ -98,7 +98,7 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probeRegister() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> shell = <span class="jxr_string">"&lt;script src=\&quot;"</span> + SHELL + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span>;
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> badType = shell + caught(<span class="jxr_string">"JuneauConsole.registerCard('Bad_Type', function(){});"</span>);
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">var</strong> badType = shell + caught(<span class="jxr_string">"JuneauConsole.registerCard('Bad_Type', class extends JuneauConsole.Card { render() {} });"</span>);
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<strong class="jxr_keyword">var</strong> badHandler = shell + caught(<span class="jxr_string">"JuneauConsole.registerCard('ok', 'nope');"</span>);
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">var</strong> notMounted = shell + caught(<span class="jxr_string">"JuneauConsole.refreshCard('never-mounted');"</span>);
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> badQueueEntry = <span class="jxr_string">"&lt;script&gt;(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['oops', 'nope', 'extra']);&lt;/script&gt;\n"</span> + shell;
@@ -199,7 +199,7 @@
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 	@Test <strong class="jxr_keyword">void</strong> a18_badHandlerShape() {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertFailure(registerReport.get(<span class="jxr_string">"e21"</span>), <span class="jxr_string">"E-JS-21"</span>, <span class="jxr_string">"card type 'ok' handler must be a function or an object with render(); got 'string'"</span>);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		assertFailure(registerReport.get(<span class="jxr_string">"e21"</span>), <span class="jxr_string">"E-JS-21"</span>, <span class="jxr_string">"card type 'ok': registerCard now takes a JuneauViews.model.Card subclass (class X extends JuneauViews.model.Card { render() {...} }); the object form was removed"</span>);
 <a class="jxr_linenumber" name="L195" href="#L195">195</a> 	}
 <a class="jxr_linenumber" name="L196" href="#L196">196</a> 
 <a class="jxr_linenumber" name="L197" href="#L197">197</a> 	@Test <strong class="jxr_keyword">void</strong> a19_refreshNotMounted_throwsWithoutBanner() {

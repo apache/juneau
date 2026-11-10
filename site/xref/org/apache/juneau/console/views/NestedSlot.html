@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>NestedSlot xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../apidocs/org/apache/juneau/console/views/NestedSlot.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.commons.utils.Shorts.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.*;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * Serializes a {@link TableSpec} into the nested-table slot a tabbed {@link RowDetail} carries.</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * The slot holds the table shell ({@code view}), the sidecar metadata the client builds the nested table from</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * ({@code meta}) and, when declared, the nested table's selection and row detail.  A nested table sits at depth two;</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * a table that itself declares a nested-table tab would sit at depth three and is rejected.</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a name="NestedSlot" href="../../../../../org/apache/juneau/console/views/NestedSlot.html#NestedSlot">NestedSlot</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<em class="jxr_javadoccomment">/** The deepest table nesting: the page table is depth one, a table inside its row detail is depth two. */</em>
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> MAX_NESTED_DEPTH = 2;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <a name="NestedSlot" href="../../../../../org/apache/juneau/console/views/NestedSlot.html#NestedSlot">NestedSlot</a>() {}
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  <em class="jxr_javadoccomment">	 * Builds the nested slot.</em>
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">	 * @param view The nested table.  Must declare a rows data URL and at least one column.</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 * @param scopeParam The query parameter carrying the parent row id.</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 * @return The slot map, in fixed key order.</em>
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException If the table is unusable or would exceed {@link #MAX_NESTED_DEPTH}.</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  	<strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; of(TableSpec view, String scopeParam) {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">if</strong> (view == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"A nested table is required."</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">var</strong> body = view.toCardBody();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">if</strong> (ib((String)body.get(<span class="jxr_string">"dataUrl"</span>)))
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Nested table '%s' needs a rows data URL."</span>, view.id());
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		view.validate();
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> detail = body.get(<span class="jxr_string">"detail"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">if</strong> (detail instanceof Map&lt;?,?&gt; dm &amp;&amp; dm.get(<span class="jxr_string">"tabs"</span>) instanceof List&lt;?&gt; tl)
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> t : tl)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  				<strong class="jxr_keyword">if</strong> (t instanceof Map&lt;?,?&gt; tm &amp;&amp; <span class="jxr_string">"table"</span>.equals(tm.get(<span class="jxr_string">"kind"</span>)))
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  					<strong class="jxr_keyword">throw</strong> iaex(<span class="jxr_string">"Nested table '%s' declares a nested-table tab; tables nest at most %s deep (MAX_NESTED_DEPTH)."</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  						view.id(), MAX_NESTED_DEPTH);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<strong class="jxr_keyword">var</strong> cols = <strong class="jxr_keyword">new</strong> ArrayList&lt;Map&lt;String,Object&gt;&gt;();
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : (List&lt;?&gt;)body.get(<span class="jxr_string">"columns"</span>)) {
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">var</strong> cm = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : ((Map&lt;?,?&gt;)c).entrySet()) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<strong class="jxr_keyword">var</strong> k = (String)e.getKey();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  				cm.put(<span class="jxr_string">"key"</span>.equals(k) ? <span class="jxr_string">"data"</span> : <span class="jxr_string">"label"</span>.equals(k) ? <span class="jxr_string">"title"</span> : k, e.getValue());
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  			}
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			cols.add(cm);
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		}
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">var</strong> shell = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		shell.put(<span class="jxr_string">"id"</span>, view.id());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		shell.put(<span class="jxr_string">"columns"</span>, cols);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">var</strong> meta = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		meta.put(<span class="jxr_string">"contractVersion"</span>, ViewsMixin.CONTRACT_VERSION);
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		meta.put(<span class="jxr_string">"id"</span>, view.id());
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> e : body.entrySet()) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  			<strong class="jxr_keyword">var</strong> k = e.getKey();
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  			<strong class="jxr_keyword">if</strong> (! NOT_META.contains(k) &amp;&amp; ! <span class="jxr_string">"columns"</span>.equals(k))
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  				meta.put(k, e.getValue());
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		meta.put(<span class="jxr_string">"columns"</span>, cols);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<strong class="jxr_keyword">var</strong> n = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		n.put(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"2"</span>);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		n.put(<span class="jxr_string">"parentScopeParam"</span>, scopeParam);
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		n.put(<span class="jxr_string">"view"</span>, shell);
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		n.put(<span class="jxr_string">"meta"</span>, meta);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">if</strong> (body.get(<span class="jxr_string">"selection"</span>) != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  			n.put(<span class="jxr_string">"selection"</span>, body.get(<span class="jxr_string">"selection"</span>));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<strong class="jxr_keyword">if</strong> (detail != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			n.put(<span class="jxr_string">"detail"</span>, detail);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<strong class="jxr_keyword">return</strong> n;
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	}
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Set&lt;String&gt; NOT_META = Set.of(<span class="jxr_string">"selection"</span>, <span class="jxr_string">"detail"</span>, <span class="jxr_string">"bulk"</span>, <span class="jxr_string">"model"</span>, <span class="jxr_string">"quickStats"</span>, <span class="jxr_string">"columnConfig"</span>,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<span class="jxr_string">"pollIntervalMs"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

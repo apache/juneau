@@ -92,55 +92,74 @@
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">	 * Roles this type accepts in {@code subscribes[].as}, beyond {@code refresh} and {@code params}.</em>
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">	 * {@code null} (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.</em>
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; Set&amp;lt;String&amp;gt; acceptedRoles() { &lt;jk&gt;return&lt;/jk&gt; Set.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"highlight"&lt;/js&gt;); }</em>
-<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 * @return The accepted role names, or {@code null} if unknown.</em>
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  	@SuppressWarnings({
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// null means "unknown to Java" in the public API</em>
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  	})
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	<strong class="jxr_keyword">default</strong> Set&lt;String&gt; acceptedRoles() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> <em class="jxr_javadoccomment">	 * {@code cmd:&lt;id&gt;} ops this type handles, beyond the shell's {@code refresh}, for E-43 on a ribbon {@code target}.</em>
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * {@code null} (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports</em>
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * an unhandled op at runtime (E-JS-48).</em>
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; Set&amp;lt;String&amp;gt; acceptedOps() { &lt;jk&gt;return&lt;/jk&gt; Set.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"set-target"&lt;/js&gt;); }</em>
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * @return The handled op names, or {@code null} if unknown.</em>
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@SuppressWarnings({
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// null means "unknown to Java" in the public API</em>
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	})
-<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	<strong class="jxr_keyword">default</strong> Set&lt;String&gt; acceptedOps() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
-<a class="jxr_linenumber" name="L118" href="#L118">118</a> 
-<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L120" href="#L120">120</a> <em class="jxr_javadoccomment">	 * Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.</em>
-<a class="jxr_linenumber" name="L121" href="#L121">121</a> <em class="jxr_javadoccomment">	 * Unioned with the type's packs and the card's {@code requires=}.  Default: none.</em>
-<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
-<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; List&amp;lt;String&amp;gt; requiredPacks(JsonMap &lt;jv&gt;body&lt;/jv&gt;) {</em>
-<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *     &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;body&lt;/jv&gt;.containsKey(&lt;js&gt;"terminal"&lt;/js&gt;) ? List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"terminal"&lt;/js&gt;) : List.&lt;jsm&gt;of&lt;/jsm&gt;();</em>
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 *   }</em>
-<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * @param body The card's body: this type's fragment, as {@link #toFragment(CardSource)} returned it.</em>
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 * @return The pack names; each must be a registered pack.</em>
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 	<strong class="jxr_keyword">default</strong> List&lt;String&gt; requiredPacks(JsonMap body) { <strong class="jxr_keyword">return</strong> List.of(); }
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> }
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">	 * For a card class these mirror the keys of its JS {@code static roles}.  A handler subscription ({@code topic} + {@code handler}) names no role and is never checked against this set.</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; Set&amp;lt;String&amp;gt; acceptedRoles() { &lt;jk&gt;return&lt;/jk&gt; Set.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"highlight"&lt;/js&gt;); }</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  <em class="jxr_javadoccomment">	 * @return The accepted role names, or {@code null} if unknown.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  	@SuppressWarnings({
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// null means "unknown to Java" in the public API</em>
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  	})
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 	<strong class="jxr_keyword">default</strong> Set&lt;String&gt; acceptedRoles() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> <em class="jxr_javadoccomment">	 * {@code cmd:&lt;id&gt;} ops this type handles, beyond the shell's {@code refresh}, for E-43 on a ribbon {@code target}.</em>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> <em class="jxr_javadoccomment">	 * For a card class these mirror the keys of its JS {@code static ops}.</em>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> <em class="jxr_javadoccomment">	 * {@code null} (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports</em>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> <em class="jxr_javadoccomment">	 * an unhandled op at runtime (E-JS-48).</em>
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; Set&amp;lt;String&amp;gt; acceptedOps() { &lt;jk&gt;return&lt;/jk&gt; Set.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"set-target"&lt;/js&gt;); }</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> <em class="jxr_javadoccomment">	 * @return The handled op names, or {@code null} if unknown.</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	@SuppressWarnings({
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<span class="jxr_string">"java:S1168"</span> <em class="jxr_comment">// null means "unknown to Java" in the public API</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 	})
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 	<strong class="jxr_keyword">default</strong> Set&lt;String&gt; acceptedOps() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> <em class="jxr_javadoccomment">	 * Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> <em class="jxr_javadoccomment">	 * Unioned with the type's packs and the card's {@code requires=}.  Default: none.</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; List&amp;lt;String&amp;gt; requiredPacks(JsonMap &lt;jv&gt;body&lt;/jv&gt;) {</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">	 *     &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;body&lt;/jv&gt;.containsKey(&lt;js&gt;"terminal"&lt;/js&gt;) ? List.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"terminal"&lt;/js&gt;) : List.&lt;jsm&gt;of&lt;/jsm&gt;();</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">	 *   }</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">	 * @param body The card's body: this type's fragment, as {@link #toFragment(CardSource)} returned it.</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">	 * @return The pack names; each must be a registered pack.</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<strong class="jxr_keyword">default</strong> List&lt;String&gt; requiredPacks(JsonMap body) { <strong class="jxr_keyword">return</strong> List.of(); }
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> <em class="jxr_javadoccomment">	 * The cards this card holds, for a container type such as a switcher.  The registry lifts each one through its own</em>
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> <em class="jxr_javadoccomment">	 * type's handler, and the page validators and pack requirements treat them as page cards.  Default: none.</em>
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</em>
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * &lt;p class='bjava'&gt;</em>
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 *   &lt;ja&gt;@Override&lt;/ja&gt;</em>
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 *   &lt;jk&gt;public&lt;/jk&gt; List&amp;lt;Map&amp;lt;String,Object&amp;gt;&amp;gt; nestedCards(JsonMap &lt;jv&gt;body&lt;/jv&gt;) {</em>
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> <em class="jxr_javadoccomment">	 *     &lt;jk&gt;return&lt;/jk&gt; (List&amp;lt;Map&amp;lt;String,Object&amp;gt;&amp;gt;)&lt;jv&gt;body&lt;/jv&gt;.get(&lt;js&gt;"cards"&lt;/js&gt;);</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">	 *   }</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">	 * &lt;/p&gt;</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">	 * @param body The card's body: this type's fragment, or the card object as the page contract holds it.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * @return The nested card maps themselves (each with {@code id} and {@code type}), not copies, so they can be replaced in place.</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 	<strong class="jxr_keyword">default</strong> List&lt;Map&lt;String,Object&gt;&gt; nestedCards(JsonMap body) { <strong class="jxr_keyword">return</strong> List.of(); }
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

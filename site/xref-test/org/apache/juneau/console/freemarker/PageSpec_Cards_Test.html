@@ -637,7 +637,24 @@
 <a class="jxr_linenumber" name="L629" href="#L629">629</a> 		<strong class="jxr_keyword">var</strong> ex = assertThrows(freemarker.template.TemplateModelException.<strong class="jxr_keyword">class</strong>, () -&gt; spec.applyTo(arg31, CUSTOM));
 <a class="jxr_linenumber" name="L630" href="#L630">630</a> 		assertTrue(ex.getMessage().contains(<span class="jxr_string">"&lt;@card id='load'&gt; sanitize= applies only to an html card with src=."</span>), ex::getMessage);
 <a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> }
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	@Test <strong class="jxr_keyword">void</strong> z01_switcherCard_liftsNestedAndPullsPacks() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		PageSpec.create().card(SwitcherDef.create(<span class="jxr_string">"sw1"</span>)
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			.view(<span class="jxr_string">"a"</span>, <span class="jxr_string">"A"</span>, v -&gt; v.section(ChartDef.line(<span class="jxr_string">"c1"</span>).src(<span class="jxr_string">"/x"</span>).x(<span class="jxr_string">"d"</span>).series(<span class="jxr_string">"n"</span>, <span class="jxr_string">"N"</span>).toCardSpec()))
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			.view(<span class="jxr_string">"t"</span>, <span class="jxr_string">"T"</span>, v -&gt; v.section(CardSpec.of(<span class="jxr_string">"datatables"</span>, <span class="jxr_string">"d1"</span>).body(<span class="jxr_string">"dataMode"</span>, <span class="jxr_string">"client"</span>).body(<span class="jxr_string">"dataUrl"</span>, <span class="jxr_string">"/x"</span>).body(<span class="jxr_string">"columns"</span>, List.of(Map.of(<span class="jxr_string">"key"</span>, <span class="jxr_string">"k"</span>, <span class="jxr_string">"label"</span>, <span class="jxr_string">"K"</span>)))))
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			.toCardSpec()).applyTo(cap, MODEL);
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">var</strong> card = cap.unplacedCards().get(0).toMap();
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 		assertEquals(<span class="jxr_string">"switcher"</span>, card.get(<span class="jxr_string">"type"</span>));
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		<strong class="jxr_keyword">var</strong> views = (List&lt;?&gt;)card.get(<span class="jxr_string">"views"</span>);
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">var</strong> d = (Map&lt;?,?&gt;)((Map&lt;?,?&gt;)views.get(1)).get(<span class="jxr_string">"card"</span>);
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		assertNotNull(d.get(<span class="jxr_string">"table"</span>));
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		<strong class="jxr_keyword">var</strong> packs = cap.requiredPacks();
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		assertTrue(packs.contains(ToolkitPackRegistry.PACK_SWITCHER), packs.toString());
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		assertTrue(packs.contains(ToolkitPackRegistry.PACK_CHARTS), packs.toString());
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		assertTrue(packs.contains(ToolkitPackRegistry.PACK_DATATABLES_GLUE), packs.toString());
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 	}
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

@@ -68,7 +68,7 @@
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">	 * @return The page spec.</em>
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> PageSpec pets() {
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"pets"</span>).toolkit(<span class="jxr_string">"views"</span>, <span class="jxr_string">"datatables-buttons"</span>).table(petsTable(), <span class="jxr_string">"Pets"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"pets"</span>).toolkit(<span class="jxr_string">"views"</span>, <span class="jxr_string">"datatables-buttons"</span>, <span class="jxr_string">"datatables-export"</span>).table(petsTable(), <span class="jxr_string">"Pets"</span>);
 <a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -98,25 +98,25 @@
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  			.columns(
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  				Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>),
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  				Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>).href(<span class="jxr_string">"/console/pets/{id}/summary"</span>),
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>),
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(<span class="jxr_string">"pill"</span>),
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  				Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>).render(PillRenders.species()),
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(PillRenders.petStatus()),
 <a class="jxr_linenumber" name="L95" href="#L95">95</a>  				Column.create(<span class="jxr_string">"price"</span>).label(<span class="jxr_string">"Price (USD)"</span>).render(Render.of(<span class="jxr_string">"decimal"</span>).meta(<span class="jxr_string">"places"</span>, 2)),
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				Column.create(<span class="jxr_string">"tags"</span>).label(<span class="jxr_string">"Tags"</span>).defaultVisible(false))
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  			.rowClass(<span class="jxr_string">"status"</span>, Op.EQ, <span class="jxr_string">"SOLD"</span>, <span class="jxr_string">"is-muted"</span>)
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.ribbon(
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				RibbonItem.optionGroup(<span class="jxr_string">"status"</span>,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 					RibbonItem.option(<span class="jxr_string">"available"</span>).title(<span class="jxr_string">"Available"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(AVAILABLE)"</span>),
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					RibbonItem.option(<span class="jxr_string">"pending"</span>).title(<span class="jxr_string">"Pending"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(PENDING)"</span>))
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					.title(<span class="jxr_string">"Pet status"</span>).deselectable(<strong class="jxr_keyword">true</strong>).defaultOption(<span class="jxr_string">"available"</span>).group(<span class="jxr_string">"filter"</span>),
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				RibbonItem.optionGroup(<span class="jxr_string">"species"</span>,
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					RibbonItem.option(<span class="jxr_string">"mammals"</span>).title(<span class="jxr_string">"Mammals"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$in(DOG,CAT,MOUSE,RABBIT)"</span>),
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					RibbonItem.option(<span class="jxr_string">"others"</span>).title(<span class="jxr_string">"Others"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$in(BIRD,FISH,SNAKE)"</span>))
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 					.title(<span class="jxr_string">"Species"</span>).deselectable(<strong class="jxr_keyword">true</strong>).defaultOption(<span class="jxr_string">"mammals"</span>).group(<span class="jxr_string">"filter"</span>),
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				RibbonItem.dialog(<span class="jxr_string">"add-pet"</span>).title(<span class="jxr_string">"+ Add pet"</span>).symbol(<span class="jxr_string">"plus"</span>)
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 					.form(<span class="jxr_string">"/console/pets/form"</span>).endpoint(<span class="jxr_string">"/console/pets"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW).group(<span class="jxr_string">"entity"</span>),
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				RibbonItem.export(<span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>).optional(<span class="jxr_string">"excel"</span>, <span class="jxr_string">"pdf"</span>).group(<span class="jxr_string">"viewing"</span>),
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				RibbonItem.resetDefaults().group(<span class="jxr_string">"page"</span>),
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				RibbonItem.refresh())
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  			.ribbon(Ribbons.standard()
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				.create(RibbonItem.dialog(<span class="jxr_string">"add-pet"</span>).title(<span class="jxr_string">"+ Add pet"</span>).symbol(<span class="jxr_string">"plus"</span>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 					.form(<span class="jxr_string">"/console/pets/form"</span>).endpoint(<span class="jxr_string">"/console/pets"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW))
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				.filter(
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					RibbonItem.optionGroup(<span class="jxr_string">"status"</span>,
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 						RibbonItem.option(<span class="jxr_string">"available"</span>).title(<span class="jxr_string">"Available"</span>).symbol(<span class="jxr_string">"circle_check"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(AVAILABLE)"</span>),
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 						RibbonItem.option(<span class="jxr_string">"pending"</span>).title(<span class="jxr_string">"Pending"</span>).symbol(<span class="jxr_string">"hourglass"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(PENDING)"</span>))
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 						.title(<span class="jxr_string">"Pet status"</span>).deselectable(<strong class="jxr_keyword">true</strong>).defaultOption(<span class="jxr_string">"available"</span>),
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 					RibbonItem.optionGroup(<span class="jxr_string">"species"</span>,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 						RibbonItem.option(<span class="jxr_string">"mammals"</span>).title(<span class="jxr_string">"Mammals"</span>).symbol(<span class="jxr_string">"paw_print"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$in(DOG,CAT,MOUSE,RABBIT)"</span>),
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 						RibbonItem.option(<span class="jxr_string">"others"</span>).title(<span class="jxr_string">"Others"</span>).symbol(<span class="jxr_string">"shapes"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$in(BIRD,FISH,SNAKE)"</span>))
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 						.title(<span class="jxr_string">"Species"</span>).deselectable(<strong class="jxr_keyword">true</strong>).defaultOption(<span class="jxr_string">"mammals"</span>))
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				.export(<span class="jxr_string">"excel"</span>, <span class="jxr_string">"pdf"</span>)
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 				.build())
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			.rowActions(
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 				editPetAction(OnSuccess.MERGE_ROW),
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 				RowAction.create(<span class="jxr_string">"delete"</span>).label(<span class="jxr_string">"Delete"</span>).endpoint(<span class="jxr_string">"/console/pets/{id}"</span>).method(Method.DELETE)
@@ -133,20 +133,20 @@
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> <em class="jxr_javadoccomment">	 * @return The page spec.</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> PageSpec sold() {
-<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> PageSpec.create().toolkit(<span class="jxr_string">"views"</span>)
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 		<strong class="jxr_keyword">return</strong> PageSpec.create().toolkit(<span class="jxr_string">"views"</span>, <span class="jxr_string">"datatables-buttons"</span>)
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 			.table(TableSpec.create(<span class="jxr_string">"sold"</span>).rowType(<span class="jxr_string">"Pet"</span>).dataMode(DataMode.CLIENT).dataUrl(<span class="jxr_string">"/console/pets/sold/rows"</span>)
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				.columns(
-<a class="jxr_linenumber" name="L131" href="#L131">131</a> 					Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>),
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 					Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>),
-<a class="jxr_linenumber" name="L133" href="#L133">133</a> 					Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>),
-<a class="jxr_linenumber" name="L134" href="#L134">134</a> 					Column.create(<span class="jxr_string">"price"</span>).label(<span class="jxr_string">"Price (USD)"</span>).render(Render.of(<span class="jxr_string">"decimal"</span>).meta(<span class="jxr_string">"places"</span>, 2)))
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> 				.ribbon(
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 					RibbonItem.optionGroup(<span class="jxr_string">"species"</span>,
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 						RibbonItem.option(<span class="jxr_string">"dogs"</span>).title(<span class="jxr_string">"Dogs"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$eq(DOG)"</span>),
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 						RibbonItem.option(<span class="jxr_string">"cats"</span>).title(<span class="jxr_string">"Cats"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$eq(CAT)"</span>))
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 						.title(<span class="jxr_string">"Species"</span>).group(<span class="jxr_string">"filter"</span>),
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 					RibbonItem.resetDefaults().group(<span class="jxr_string">"page"</span>),
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 					RibbonItem.refresh()), <span class="jxr_string">"Sold pets"</span>);
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				.columnConfig(<strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				.columns(
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 					Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>),
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 					Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>),
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 					Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>).render(PillRenders.species()),
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 					Column.create(<span class="jxr_string">"price"</span>).label(<span class="jxr_string">"Price (USD)"</span>).render(Render.of(<span class="jxr_string">"decimal"</span>).meta(<span class="jxr_string">"places"</span>, 2)))
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 				.ribbon(Ribbons.standard()
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 					.filter(RibbonItem.optionGroup(<span class="jxr_string">"species"</span>,
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 						RibbonItem.option(<span class="jxr_string">"dogs"</span>).title(<span class="jxr_string">"Dogs"</span>).symbol(<span class="jxr_string">"paw_print"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$eq(DOG)"</span>),
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 						RibbonItem.option(<span class="jxr_string">"cats"</span>).title(<span class="jxr_string">"Cats"</span>).symbol(<span class="jxr_string">"shapes"</span>).column(<span class="jxr_string">"species"</span>).value(<span class="jxr_string">"$eq(CAT)"</span>))
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 						.title(<span class="jxr_string">"Species"</span>))
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 					.build()), <span class="jxr_string">"Sold pets"</span>);
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	}
 <a class="jxr_linenumber" name="L143" href="#L143">143</a> 
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	<em class="jxr_javadoccomment">/**</em>
@@ -180,8 +180,8 @@
 <a class="jxr_linenumber" name="L172" href="#L172">172</a> 				.columns(
 <a class="jxr_linenumber" name="L173" href="#L173">173</a> 					Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>),
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 					Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>).render(Render.of(<span class="jxr_string">"edit"</span>).meta(<span class="jxr_string">"action"</span>, <span class="jxr_string">"rename"</span>).meta(<span class="jxr_string">"column"</span>, <span class="jxr_string">"name"</span>).meta(<span class="jxr_string">"input"</span>, <span class="jxr_string">"text"</span>)),
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 					Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>),
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 					Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(<span class="jxr_string">"pill"</span>),
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 					Column.create(<span class="jxr_string">"species"</span>).label(<span class="jxr_string">"Species"</span>).render(PillRenders.species()),
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 					Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(PillRenders.petStatus()),
 <a class="jxr_linenumber" name="L177" href="#L177">177</a> 					Column.create(<span class="jxr_string">"price"</span>).label(<span class="jxr_string">"Price (USD)"</span>).render(Render.of(<span class="jxr_string">"edit"</span>).meta(<span class="jxr_string">"action"</span>, <span class="jxr_string">"reprice"</span>).meta(<span class="jxr_string">"column"</span>, <span class="jxr_string">"price"</span>).meta(<span class="jxr_string">"input"</span>, <span class="jxr_string">"number"</span>)))
 <a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.rowActions(
 <a class="jxr_linenumber" name="L179" href="#L179">179</a> 					stage(<span class="jxr_string">"rename"</span>, <span class="jxr_string">"Rename"</span>),
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 					.columns(
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 						Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Order"</span>).href(href + <span class="jxr_string">"/orders/{id}"</span>),
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 						Column.create(<span class="jxr_string">"shipDate"</span>).label(<span class="jxr_string">"Ship date"</span>),
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 						Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(<span class="jxr_string">"pill"</span>))
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 						Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(PillRenders.orderStatus()))
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 					.detail(RowDetail.create(href + <span class="jxr_string">"/orders/{id}/detail"</span>).title(<span class="jxr_string">"Order {id}"</span>)), <span class="jxr_string">"Orders"</span>);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 				<strong class="jxr_keyword">if</strong> (order != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 					p.html(<span class="jxr_string">"order"</span>, <span class="jxr_string">"Order "</span> + order.getId(),
@@ -221,7 +221,7 @@
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 				.columns(
 <a class="jxr_linenumber" name="L214" href="#L214">214</a> 					Column.create(<span class="jxr_string">"at"</span>).label(<span class="jxr_string">"When"</span>).render(<span class="jxr_string">"timestamp"</span>),
 <a class="jxr_linenumber" name="L215" href="#L215">215</a> 					Column.create(<span class="jxr_string">"actor"</span>).label(<span class="jxr_string">"Actor"</span>),
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 					Column.create(<span class="jxr_string">"action"</span>).label(<span class="jxr_string">"Action"</span>),
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 					Column.create(<span class="jxr_string">"action"</span>).label(<span class="jxr_string">"Action"</span>).render(PillRenders.auditAction()),
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 					Column.create(<span class="jxr_string">"detail"</span>).label(<span class="jxr_string">"Detail"</span>)), <span class="jxr_string">"History"</span>);
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 		}
 <a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">return</strong> p;

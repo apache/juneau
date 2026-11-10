@@ -33,687 +33,828 @@
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.collections.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * One ribbon (toolbar) entry above a table.</span>
-<span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * The ribbon runtime ({@code juneau-ribbon.js}) implements every behavior; this type only names it and carries its</span>
-<span class="source-line-no">030</span><span id="line-30"> * parameters.  {@link #toMap()} produces the same {@code {type, ...}} entry the runtime reads from {@code viewDef.ribbon}.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * Setters are not gated per item type, but {@link #toMap()} fails loudly rather than emit a key the runtime ignores</span>
-<span class="source-line-no">034</span><span id="line-34"> * for that type (for example {@code form} on a {@code refresh}, or {@code symbol} on an {@code optionGroup}), and</span>
-<span class="source-line-no">035</span><span id="line-35"> * checks the invariants the runtime cannot: a top-level {@code option} needs {@code column} or {@code param} (exactly</span>
-<span class="source-line-no">036</span><span id="line-36"> * one) plus a {@code value}, and a group's {@code default} must name a member.  Group members take only</span>
-<span class="source-line-no">037</span><span id="line-37"> * {@code id}, {@code title}, {@code symbol}, {@code column}, {@code param} and {@code value}.</span>
-<span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;jv&gt;table&lt;/jv&gt;.ribbon(</span>
-<span class="source-line-no">042</span><span id="line-42"> *       RibbonItem.&lt;jsm&gt;collapseAll&lt;/jsm&gt;(),</span>
-<span class="source-line-no">043</span><span id="line-43"> *       RibbonItem.&lt;jsm&gt;export&lt;/jsm&gt;(&lt;js&gt;"copy"&lt;/js&gt;, &lt;js&gt;"csv"&lt;/js&gt;).optional(&lt;js&gt;"excel"&lt;/js&gt;, &lt;js&gt;"pdf"&lt;/js&gt;),</span>
-<span class="source-line-no">044</span><span id="line-44"> *       RibbonItem.&lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"dropped-only"&lt;/js&gt;).title(&lt;js&gt;"Dropped only"&lt;/js&gt;).column(&lt;js&gt;"status"&lt;/js&gt;).value(&lt;js&gt;"$eq(DROPPED)"&lt;/js&gt;).persist(&lt;jk&gt;true&lt;/jk&gt;),</span>
-<span class="source-line-no">045</span><span id="line-45"> *       RibbonItem.&lt;jsm&gt;optionGroup&lt;/jsm&gt;(&lt;js&gt;"phase"&lt;/js&gt;,</span>
-<span class="source-line-no">046</span><span id="line-46"> *          RibbonItem.&lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"pending"&lt;/js&gt;).column(&lt;js&gt;"phase"&lt;/js&gt;).value(&lt;js&gt;"$in(Waiting)"&lt;/js&gt;),</span>
-<span class="source-line-no">047</span><span id="line-47"> *          RibbonItem.&lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"done"&lt;/js&gt;).column(&lt;js&gt;"phase"&lt;/js&gt;).value(&lt;js&gt;"$in(Completed)"&lt;/js&gt;)</span>
-<span class="source-line-no">048</span><span id="line-48"> *       ).defaultOption(&lt;js&gt;"pending"&lt;/js&gt;),</span>
-<span class="source-line-no">049</span><span id="line-49"> *       RibbonItem.&lt;jsm&gt;dialog&lt;/jsm&gt;(&lt;js&gt;"add"&lt;/js&gt;).title(&lt;js&gt;"Add repo"&lt;/js&gt;).form(&lt;js&gt;"/rest/skill-repos/add-modal"&lt;/js&gt;)</span>
-<span class="source-line-no">050</span><span id="line-50"> *          .endpoint(&lt;js&gt;"/rest/skill-repos/new"&lt;/js&gt;).method(RowAction.Method.&lt;jsf&gt;POST&lt;/jsf&gt;)</span>
-<span class="source-line-no">051</span><span id="line-51"> *          .onSuccess(RowAction.OnSuccess.&lt;jsf&gt;REDRAW&lt;/jsf&gt;),</span>
-<span class="source-line-no">052</span><span id="line-52"> *       RibbonItem.&lt;jsm&gt;refresh&lt;/jsm&gt;());</span>
-<span class="source-line-no">053</span><span id="line-53"> *</span>
-<span class="source-line-no">054</span><span id="line-54"> *    RibbonItem.&lt;jsm&gt;refresh&lt;/jsm&gt;().title(&lt;js&gt;"Refresh tasks"&lt;/js&gt;).target(&lt;js&gt;"tasks"&lt;/js&gt;);</span>
-<span class="source-line-no">055</span><span id="line-55"> *    RibbonItem.&lt;jsm&gt;publish&lt;/jsm&gt;(&lt;js&gt;"Focus east"&lt;/js&gt;, &lt;js&gt;"app.region-picked"&lt;/js&gt;, Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"region"&lt;/js&gt;, &lt;js&gt;"east"&lt;/js&gt;));</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> * @since 10.0.0</span>
-<span class="source-line-no">059</span><span id="line-59"> */</span>
-<span class="source-line-no">060</span><span id="line-60">@SuppressWarnings({</span>
-<span class="source-line-no">061</span><span id="line-61">   "java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.</span>
-<span class="source-line-no">062</span><span id="line-62">   "java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.</span>
-<span class="source-line-no">063</span><span id="line-63">})</span>
-<span class="source-line-no">064</span><span id="line-64">public final class RibbonItem {</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">   private static final List&lt;String&gt; EXPORT_BUTTONS = List.of("copy", "csv", "print", "excel", "pdf");</span>
-<span class="source-line-no">067</span><span id="line-67">   private static final List&lt;String&gt; EXPORT_OPTIONAL = List.of("excel", "pdf");</span>
-<span class="source-line-no">068</span><span id="line-68">   private static final List&lt;String&gt; APPEARANCES = List.of("icon");</span>
-<span class="source-line-no">069</span><span id="line-69"></span>
-<span class="source-line-no">070</span><span id="line-70">   // The keys juneau-ribbon.js reads for each item type (everything else is ignored there, so toMap() rejects it).</span>
-<span class="source-line-no">071</span><span id="line-71">   private static final Set&lt;String&gt; COMMON = Set.of("type", "id", "title", "group", "appearance", "symbol", "visibleWhen");</span>
-<span class="source-line-no">072</span><span id="line-72">   private static final Map&lt;String,Set&lt;String&gt;&gt; ALLOWED = Map.of(</span>
-<span class="source-line-no">073</span><span id="line-73">      "refresh", union(COMMON, "target"),</span>
-<span class="source-line-no">074</span><span id="line-74">      "collapseAll", union(COMMON, "target"),</span>
-<span class="source-line-no">075</span><span id="line-75">      "pausePolling", union(COMMON, "target"),</span>
-<span class="source-line-no">076</span><span id="line-76">      "resetDefaults", COMMON,</span>
-<span class="source-line-no">077</span><span id="line-77">      "dialog", union(COMMON, "form", "endpoint", "method", "onSuccess"),</span>
-<span class="source-line-no">078</span><span id="line-78">      "export", Set.of("type", "group", "appearance", "buttons", "optional", "visibleWhen"),</span>
-<span class="source-line-no">079</span><span id="line-79">      "option", union(COMMON, "column", "param", "value", "persist", "default", "target"),</span>
-<span class="source-line-no">080</span><span id="line-80">      "optionGroup", Set.of("type", "id", "title", "group", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),</span>
-<span class="source-line-no">081</span><span id="line-81">      "publish", union(COMMON, "topic", "payload"),</span>
-<span class="source-line-no">082</span><span id="line-82">      "divider", Set.of("type", "visibleWhen")</span>
-<span class="source-line-no">083</span><span id="line-83">   );</span>
-<span class="source-line-no">084</span><span id="line-84">   private static final java.util.regex.Pattern CARD_ID = java.util.regex.Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");</span>
-<span class="source-line-no">085</span><span id="line-85">   private static final Set&lt;String&gt; MEMBER_ALLOWED = Set.of("id", "title", "symbol", "column", "param", "value");</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   private final String type;</span>
-<span class="source-line-no">088</span><span id="line-88">   private String id;</span>
-<span class="source-line-no">089</span><span id="line-89">   private String title;</span>
-<span class="source-line-no">090</span><span id="line-90">   private String group;</span>
-<span class="source-line-no">091</span><span id="line-91">   private String appearance;</span>
-<span class="source-line-no">092</span><span id="line-92">   private String symbol;</span>
-<span class="source-line-no">093</span><span id="line-93">   private String form;</span>
-<span class="source-line-no">094</span><span id="line-94">   private String endpoint;</span>
-<span class="source-line-no">095</span><span id="line-95">   private String method;</span>
-<span class="source-line-no">096</span><span id="line-96">   private String onSuccess;</span>
-<span class="source-line-no">097</span><span id="line-97">   private List&lt;String&gt; buttons;</span>
-<span class="source-line-no">098</span><span id="line-98">   private List&lt;String&gt; optional;</span>
-<span class="source-line-no">099</span><span id="line-99">   private String column;</span>
-<span class="source-line-no">100</span><span id="line-100">   private String param;</span>
-<span class="source-line-no">101</span><span id="line-101">   private String value;</span>
-<span class="source-line-no">102</span><span id="line-102">   private Boolean persist;</span>
-<span class="source-line-no">103</span><span id="line-103">   private Object dflt;  // Boolean for an option, String (member id) for an optionGroup.</span>
-<span class="source-line-no">104</span><span id="line-104">   private Boolean deselectable;</span>
-<span class="source-line-no">105</span><span id="line-105">   private List&lt;RibbonItem&gt; options;</span>
-<span class="source-line-no">106</span><span id="line-106">   private String target;</span>
-<span class="source-line-no">107</span><span id="line-107">   private List&lt;VisibilityRule&gt; visibleWhen;</span>
-<span class="source-line-no">108</span><span id="line-108">   private String topic;</span>
-<span class="source-line-no">109</span><span id="line-109">   private Map&lt;String,Object&gt; payload;</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   private RibbonItem(String type) {</span>
-<span class="source-line-no">112</span><span id="line-112">      this.type = type;</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   /**</span>
-<span class="source-line-no">116</span><span id="line-116">    * A visual separator between ribbon items; it also closes any open item cluster.</span>
-<span class="source-line-no">117</span><span id="line-117">    *</span>
-<span class="source-line-no">118</span><span id="line-118">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">119</span><span id="line-119">    */</span>
-<span class="source-line-no">120</span><span id="line-120">   public static RibbonItem divider() {</span>
-<span class="source-line-no">121</span><span id="line-121">      return new RibbonItem("divider");</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
-<span class="source-line-no">123</span><span id="line-123"></span>
-<span class="source-line-no">124</span><span id="line-124">   /**</span>
-<span class="source-line-no">125</span><span id="line-125">    * The ribbon's reload-the-table button.</span>
-<span class="source-line-no">126</span><span id="line-126">    *</span>
-<span class="source-line-no">127</span><span id="line-127">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">128</span><span id="line-128">    */</span>
-<span class="source-line-no">129</span><span id="line-129">   public static RibbonItem refresh() {</span>
-<span class="source-line-no">130</span><span id="line-130">      return new RibbonItem("refresh");</span>
-<span class="source-line-no">131</span><span id="line-131">   }</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">   /**</span>
-<span class="source-line-no">134</span><span id="line-134">    * The ribbon's collapse-all-detail-rows button.</span>
-<span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">137</span><span id="line-137">    */</span>
-<span class="source-line-no">138</span><span id="line-138">   public static RibbonItem collapseAll() {</span>
-<span class="source-line-no">139</span><span id="line-139">      return new RibbonItem("collapseAll");</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.console.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.marshall.collections.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">/**</span>
+<span class="source-line-no">027</span><span id="line-27"> * One ribbon (toolbar) entry above a table.</span>
+<span class="source-line-no">028</span><span id="line-28"> *</span>
+<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
+<span class="source-line-no">030</span><span id="line-30"> * The ribbon runtime ({@code juneau-ribbon.js}) implements every behavior; this type only names it and carries its</span>
+<span class="source-line-no">031</span><span id="line-31"> * parameters.  {@link #toMap()} produces the same {@code {type, ...}} entry the runtime reads from {@code viewDef.ribbon}.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * Setters are not gated per item type, but {@link #toMap()} fails loudly rather than emit a key the runtime ignores</span>
+<span class="source-line-no">035</span><span id="line-35"> * for that type (for example {@code form} on a {@code refresh}, or {@code symbol} on an {@code optionGroup}), and</span>
+<span class="source-line-no">036</span><span id="line-36"> * checks the invariants the runtime cannot: a top-level {@code option} needs {@code column} or {@code param} (exactly</span>
+<span class="source-line-no">037</span><span id="line-37"> * one) plus a {@code value}, and a group's {@code default} must name a member.  Group members take only</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@code id}, {@code title}, {@code symbol}, {@code column}, {@code param} and {@code value}.</span>
+<span class="source-line-no">039</span><span id="line-39"> *</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;jv&gt;table&lt;/jv&gt;.ribbon(</span>
+<span class="source-line-no">043</span><span id="line-43"> *       RibbonItem.&lt;jsm&gt;collapseAll&lt;/jsm&gt;(),</span>
+<span class="source-line-no">044</span><span id="line-44"> *       RibbonItem.&lt;jsm&gt;export&lt;/jsm&gt;(&lt;js&gt;"copy"&lt;/js&gt;, &lt;js&gt;"csv"&lt;/js&gt;).optional(&lt;js&gt;"excel"&lt;/js&gt;, &lt;js&gt;"pdf"&lt;/js&gt;),</span>
+<span class="source-line-no">045</span><span id="line-45"> *       RibbonItem.&lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"dropped-only"&lt;/js&gt;).title(&lt;js&gt;"Dropped only"&lt;/js&gt;).column(&lt;js&gt;"status"&lt;/js&gt;).value(&lt;js&gt;"$eq(DROPPED)"&lt;/js&gt;).persist(&lt;jk&gt;true&lt;/jk&gt;),</span>
+<span class="source-line-no">046</span><span id="line-46"> *       RibbonItem.&lt;jsm&gt;optionGroup&lt;/jsm&gt;(&lt;js&gt;"phase"&lt;/js&gt;,</span>
+<span class="source-line-no">047</span><span id="line-47"> *          RibbonItem.&lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"pending"&lt;/js&gt;).column(&lt;js&gt;"phase"&lt;/js&gt;).value(&lt;js&gt;"$in(Waiting)"&lt;/js&gt;),</span>
+<span class="source-line-no">048</span><span id="line-48"> *          RibbonItem.&lt;jsm&gt;option&lt;/jsm&gt;(&lt;js&gt;"done"&lt;/js&gt;).column(&lt;js&gt;"phase"&lt;/js&gt;).value(&lt;js&gt;"$in(Completed)"&lt;/js&gt;)</span>
+<span class="source-line-no">049</span><span id="line-49"> *       ).defaultOption(&lt;js&gt;"pending"&lt;/js&gt;),</span>
+<span class="source-line-no">050</span><span id="line-50"> *       RibbonItem.&lt;jsm&gt;dialog&lt;/jsm&gt;(&lt;js&gt;"add"&lt;/js&gt;).title(&lt;js&gt;"Add repo"&lt;/js&gt;).form(&lt;js&gt;"/rest/skill-repos/add-modal"&lt;/js&gt;)</span>
+<span class="source-line-no">051</span><span id="line-51"> *          .endpoint(&lt;js&gt;"/rest/skill-repos/new"&lt;/js&gt;).method(RowAction.Method.&lt;jsf&gt;POST&lt;/jsf&gt;)</span>
+<span class="source-line-no">052</span><span id="line-52"> *          .onSuccess(RowAction.OnSuccess.&lt;jsf&gt;REDRAW&lt;/jsf&gt;),</span>
+<span class="source-line-no">053</span><span id="line-53"> *       RibbonItem.&lt;jsm&gt;refresh&lt;/jsm&gt;());</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> *    RibbonItem.&lt;jsm&gt;refresh&lt;/jsm&gt;().title(&lt;js&gt;"Refresh tasks"&lt;/js&gt;).target(&lt;js&gt;"tasks"&lt;/js&gt;);</span>
+<span class="source-line-no">056</span><span id="line-56"> *    RibbonItem.&lt;jsm&gt;publish&lt;/jsm&gt;(&lt;js&gt;"Focus east"&lt;/js&gt;, &lt;js&gt;"app.region-picked"&lt;/js&gt;, Map.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;js&gt;"region"&lt;/js&gt;, &lt;js&gt;"east"&lt;/js&gt;));</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
+<span class="source-line-no">059</span><span id="line-59"> * @since 10.0.0</span>
+<span class="source-line-no">060</span><span id="line-60"> */</span>
+<span class="source-line-no">061</span><span id="line-61">@SuppressWarnings({</span>
+<span class="source-line-no">062</span><span id="line-62">   "java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.</span>
+<span class="source-line-no">063</span><span id="line-63">   "java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.</span>
+<span class="source-line-no">064</span><span id="line-64">})</span>
+<span class="source-line-no">065</span><span id="line-65">public final class RibbonItem implements Handled&lt;RibbonItem&gt; {</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   private static final List&lt;String&gt; EXPORT_BUTTONS = List.of("copy", "csv", "print", "excel", "pdf");</span>
+<span class="source-line-no">068</span><span id="line-68">   private static final List&lt;String&gt; EXPORT_OPTIONAL = List.of("excel", "pdf");</span>
+<span class="source-line-no">069</span><span id="line-69">   private static final List&lt;String&gt; APPEARANCES = List.of("icon");</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   // The keys juneau-ribbon.js reads for each item type (everything else is ignored there, so toMap() rejects it).</span>
+<span class="source-line-no">072</span><span id="line-72">   private static final Set&lt;String&gt; COMMON = Set.of("type", "id", "title", "group", "appearance", "symbol", "visibleWhen", "model");</span>
+<span class="source-line-no">073</span><span id="line-73">   private static final Map&lt;String,Set&lt;String&gt;&gt; ALLOWED = Map.ofEntries(</span>
+<span class="source-line-no">074</span><span id="line-74">      Map.entry("refresh", union(COMMON, "target")),</span>
+<span class="source-line-no">075</span><span id="line-75">      Map.entry("collapseAll", union(COMMON, "target")),</span>
+<span class="source-line-no">076</span><span id="line-76">      Map.entry("pausePolling", union(COMMON, "target")),</span>
+<span class="source-line-no">077</span><span id="line-77">      Map.entry("resetDefaults", COMMON),</span>
+<span class="source-line-no">078</span><span id="line-78">      Map.entry("search", Set.of("type", "id", "title", "group", "visibleWhen", "model")),</span>
+<span class="source-line-no">079</span><span id="line-79">      Map.entry("linkButton", COMMON),</span>
+<span class="source-line-no">080</span><span id="line-80">      Map.entry("columnSettings", COMMON),</span>
+<span class="source-line-no">081</span><span id="line-81">      Map.entry("dialog", union(COMMON, "form", "endpoint", "method", "onSuccess")),</span>
+<span class="source-line-no">082</span><span id="line-82">      Map.entry("export", Set.of("type", "id", "group", "appearance", "buttons", "optional", "visibleWhen", "model")),</span>
+<span class="source-line-no">083</span><span id="line-83">      Map.entry("option", union(COMMON, "column", "param", "value", "persist", "default", "target")),</span>
+<span class="source-line-no">084</span><span id="line-84">      Map.entry("optionGroup", Set.of("type", "id", "title", "group", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen", "model")),</span>
+<span class="source-line-no">085</span><span id="line-85">      Map.entry("publish", union(COMMON, "topic", "payload")),</span>
+<span class="source-line-no">086</span><span id="line-86">      Map.entry("action", Set.of("type", "id", "icon", "label", "title", "appearance", "optional", "visibleWhen", "model")),</span>
+<span class="source-line-no">087</span><span id="line-87">      Map.entry("divider", Set.of("type", "visibleWhen", "model"))</span>
+<span class="source-line-no">088</span><span id="line-88">   );</span>
+<span class="source-line-no">089</span><span id="line-89">   private static final java.util.regex.Pattern CARD_ID = java.util.regex.Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");</span>
+<span class="source-line-no">090</span><span id="line-90">   private static final Set&lt;String&gt; MEMBER_ALLOWED = Set.of("id", "title", "symbol", "column", "param", "value");</span>
+<span class="source-line-no">091</span><span id="line-91"></span>
+<span class="source-line-no">092</span><span id="line-92">   private final String type;</span>
+<span class="source-line-no">093</span><span id="line-93">   private String id;</span>
+<span class="source-line-no">094</span><span id="line-94">   private boolean idExplicit;</span>
+<span class="source-line-no">095</span><span id="line-95">   private String icon;</span>
+<span class="source-line-no">096</span><span id="line-96">   private String label;</span>
+<span class="source-line-no">097</span><span id="line-97">   private final ModelBlock model;</span>
+<span class="source-line-no">098</span><span id="line-98">   private String title;</span>
+<span class="source-line-no">099</span><span id="line-99">   private String group;</span>
+<span class="source-line-no">100</span><span id="line-100">   private String appearance;</span>
+<span class="source-line-no">101</span><span id="line-101">   private String symbol;</span>
+<span class="source-line-no">102</span><span id="line-102">   private String form;</span>
+<span class="source-line-no">103</span><span id="line-103">   private String endpoint;</span>
+<span class="source-line-no">104</span><span id="line-104">   private String method;</span>
+<span class="source-line-no">105</span><span id="line-105">   private String onSuccess;</span>
+<span class="source-line-no">106</span><span id="line-106">   private List&lt;String&gt; buttons;</span>
+<span class="source-line-no">107</span><span id="line-107">   private List&lt;String&gt; optional;</span>
+<span class="source-line-no">108</span><span id="line-108">   private String column;</span>
+<span class="source-line-no">109</span><span id="line-109">   private String param;</span>
+<span class="source-line-no">110</span><span id="line-110">   private String value;</span>
+<span class="source-line-no">111</span><span id="line-111">   private Boolean persist;</span>
+<span class="source-line-no">112</span><span id="line-112">   private Object dflt;  // Boolean for an option, String (member id) for an optionGroup.</span>
+<span class="source-line-no">113</span><span id="line-113">   private Boolean deselectable;</span>
+<span class="source-line-no">114</span><span id="line-114">   private List&lt;RibbonItem&gt; options;</span>
+<span class="source-line-no">115</span><span id="line-115">   private String target;</span>
+<span class="source-line-no">116</span><span id="line-116">   private List&lt;VisibilityRule&gt; visibleWhen;</span>
+<span class="source-line-no">117</span><span id="line-117">   private String topic;</span>
+<span class="source-line-no">118</span><span id="line-118">   private Map&lt;String,Object&gt; payload;</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   private RibbonItem(String type) {</span>
+<span class="source-line-no">121</span><span id="line-121">      this.type = type;</span>
+<span class="source-line-no">122</span><span id="line-122">      this.model = new ModelBlock("ribbonitem", type);</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /** The stock item types whose id defaults to the type name; the same map the client applies. */</span>
+<span class="source-line-no">126</span><span id="line-126">   static java.util.Map&lt;String,String&gt; defaultIds() {</span>
+<span class="source-line-no">127</span><span id="line-127">      var m = new java.util.LinkedHashMap&lt;String,String&gt;();</span>
+<span class="source-line-no">128</span><span id="line-128">      for (var t : new String[]{"refresh", "collapseAll", "pausePolling", "resetDefaults", "export"})</span>
+<span class="source-line-no">129</span><span id="line-129">         m.put(t, t);</span>
+<span class="source-line-no">130</span><span id="line-130">      m.put("search", "search");</span>
+<span class="source-line-no">131</span><span id="line-131">      m.put("linkButton", "link");</span>
+<span class="source-line-no">132</span><span id="line-132">      m.put("columnSettings", "columns");</span>
+<span class="source-line-no">133</span><span id="line-133">      return m;</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   private static RibbonItem stockAs(String type, String defaultId) {</span>
+<span class="source-line-no">137</span><span id="line-137">      var r = new RibbonItem(type);</span>
+<span class="source-line-no">138</span><span id="line-138">      r.id = defaultId;</span>
+<span class="source-line-no">139</span><span id="line-139">      return r;</span>
 <span class="source-line-no">140</span><span id="line-140">   }</span>
 <span class="source-line-no">141</span><span id="line-141"></span>
-<span class="source-line-no">142</span><span id="line-142">   /**</span>
-<span class="source-line-no">143</span><span id="line-143">    * The ribbon's pause/resume auto-refresh toggle.</span>
-<span class="source-line-no">144</span><span id="line-144">    *</span>
-<span class="source-line-no">145</span><span id="line-145">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">146</span><span id="line-146">    */</span>
-<span class="source-line-no">147</span><span id="line-147">   public static RibbonItem pausePolling() {</span>
-<span class="source-line-no">148</span><span id="line-148">      return new RibbonItem("pausePolling");</span>
-<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">142</span><span id="line-142">   private static RibbonItem stock(String type) {</span>
+<span class="source-line-no">143</span><span id="line-143">      var r = new RibbonItem(type);</span>
+<span class="source-line-no">144</span><span id="line-144">      r.id = type;</span>
+<span class="source-line-no">145</span><span id="line-145">      return r;</span>
+<span class="source-line-no">146</span><span id="line-146">   }</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">   @Override /* Handled */</span>
+<span class="source-line-no">149</span><span id="line-149">   public ModelBlock modelBlock() { return model; }</span>
 <span class="source-line-no">150</span><span id="line-150"></span>
-<span class="source-line-no">151</span><span id="line-151">   /**</span>
-<span class="source-line-no">152</span><span id="line-152">    * The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,</span>
-<span class="source-line-no">153</span><span id="line-153">    * search and options) and applies it at once, with no dialog.</span>
-<span class="source-line-no">154</span><span id="line-154">    *</span>
-<span class="source-line-no">155</span><span id="line-155">    * &lt;p&gt;</span>
-<span class="source-line-no">156</span><span id="line-156">    * Consumers declare it in the {@code page} group.  It acts on its own table only, so it takes no {@code target}.</span>
+<span class="source-line-no">151</span><span id="line-151">   @Override /* Handled */</span>
+<span class="source-line-no">152</span><span id="line-152">   public RibbonItem self() { return this; }</span>
+<span class="source-line-no">153</span><span id="line-153"></span>
+<span class="source-line-no">154</span><span id="line-154">   /**</span>
+<span class="source-line-no">155</span><span id="line-155">    * A custom button whose click runs a handler declared with {@link #action(String,String,String)} or</span>
+<span class="source-line-no">156</span><span id="line-156">    * {@link #on(String,String)}.</span>
 <span class="source-line-no">157</span><span id="line-157">    *</span>
-<span class="source-line-no">158</span><span id="line-158">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">159</span><span id="line-159">    */</span>
-<span class="source-line-no">160</span><span id="line-160">   public static RibbonItem resetDefaults() {</span>
-<span class="source-line-no">161</span><span id="line-161">      return new RibbonItem("resetDefaults");</span>
-<span class="source-line-no">162</span><span id="line-162">   }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   /**</span>
-<span class="source-line-no">165</span><span id="line-165">    * The ribbon's export menu, offering the named buttons.</span>
-<span class="source-line-no">166</span><span id="line-166">    *</span>
-<span class="source-line-no">167</span><span id="line-167">    * &lt;p&gt;</span>
-<span class="source-line-no">168</span><span id="line-168">    * A button here is required: if its library is missing at runtime (JSZip for {@code excel}, pdfMake for</span>
-<span class="source-line-no">169</span><span id="line-169">    * {@code pdf}) it renders disabled and logs an error.  Use {@link #optional(String...)} for buttons that should</span>
-<span class="source-line-no">170</span><span id="line-170">    * simply be omitted when their library is absent.  The menu may consist of optional buttons alone, but</span>
-<span class="source-line-no">171</span><span id="line-171">    * {@link #toMap()} rejects one with no buttons at all.</span>
-<span class="source-line-no">172</span><span id="line-172">    *</span>
-<span class="source-line-no">173</span><span id="line-173">    * @param buttons The required buttons, each one of {@code copy}, {@code csv}, {@code print}, {@code excel} or</span>
-<span class="source-line-no">174</span><span id="line-174">    *    {@code pdf}.</span>
-<span class="source-line-no">175</span><span id="line-175">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">176</span><span id="line-176">    * @throws IllegalArgumentException If {@code buttons} names a button not in that set.</span>
-<span class="source-line-no">177</span><span id="line-177">    */</span>
-<span class="source-line-no">178</span><span id="line-178">   public static RibbonItem export(String...buttons) {</span>
-<span class="source-line-no">179</span><span id="line-179">      for (var b : buttons)</span>
-<span class="source-line-no">180</span><span id="line-180">         checkOneOf(b, EXPORT_BUTTONS, "export button");</span>
-<span class="source-line-no">181</span><span id="line-181">      var r = new RibbonItem("export");</span>
-<span class="source-line-no">182</span><span id="line-182">      r.buttons = buttons.length == 0 ? null : List.of(buttons);</span>
-<span class="source-line-no">183</span><span id="line-183">      return r;</span>
-<span class="source-line-no">184</span><span id="line-184">   }</span>
-<span class="source-line-no">185</span><span id="line-185"></span>
-<span class="source-line-no">186</span><span id="line-186">   /**</span>
-<span class="source-line-no">187</span><span id="line-187">    * A ribbon button that opens a modal dialog.</span>
-<span class="source-line-no">188</span><span id="line-188">    *</span>
-<span class="source-line-no">189</span><span id="line-189">    * @param actionId This item's stable id (also the dialog's logical name).  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">190</span><span id="line-190">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">191</span><span id="line-191">    * @throws IllegalArgumentException If {@code actionId} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">192</span><span id="line-192">    */</span>
-<span class="source-line-no">193</span><span id="line-193">   public static RibbonItem dialog(String actionId) {</span>
-<span class="source-line-no">194</span><span id="line-194">      if (ib(actionId))</span>
-<span class="source-line-no">195</span><span id="line-195">         throw iaex("RibbonItem dialog action id must not be null or blank.");</span>
-<span class="source-line-no">196</span><span id="line-196">      var r = new RibbonItem("dialog");</span>
-<span class="source-line-no">197</span><span id="line-197">      r.id = actionId;</span>
-<span class="source-line-no">198</span><span id="line-198">      return r;</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200"></span>
-<span class="source-line-no">201</span><span id="line-201">   /**</span>
-<span class="source-line-no">202</span><span id="line-202">    * A server-query toggle button.</span>
-<span class="source-line-no">203</span><span id="line-203">    *</span>
-<span class="source-line-no">204</span><span id="line-204">    * &lt;p&gt;</span>
-<span class="source-line-no">205</span><span id="line-205">    * Set exactly one of {@link #column(String)} (a BeanQuery {@code $}-expression {@link #value(String) value}</span>
-<span class="source-line-no">206</span><span id="line-206">    * against that column) or {@link #param(String)} (a URL query parameter).  Checked by {@link #toMap()}.</span>
-<span class="source-line-no">207</span><span id="line-207">    *</span>
-<span class="source-line-no">208</span><span id="line-208">    * @param id The toggle's stable id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">209</span><span id="line-209">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">210</span><span id="line-210">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">211</span><span id="line-211">    */</span>
-<span class="source-line-no">212</span><span id="line-212">   public static RibbonItem option(String id) {</span>
-<span class="source-line-no">213</span><span id="line-213">      if (ib(id))</span>
-<span class="source-line-no">214</span><span id="line-214">         throw iaex("RibbonItem option id must not be null or blank.");</span>
-<span class="source-line-no">215</span><span id="line-215">      var r = new RibbonItem("option");</span>
-<span class="source-line-no">216</span><span id="line-216">      r.id = id;</span>
-<span class="source-line-no">217</span><span id="line-217">      return r;</span>
-<span class="source-line-no">218</span><span id="line-218">   }</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">   /**</span>
-<span class="source-line-no">221</span><span id="line-221">    * A group of mutually exclusive {@link #option(String) option} toggles.</span>
-<span class="source-line-no">222</span><span id="line-222">    *</span>
-<span class="source-line-no">223</span><span id="line-223">    * &lt;p&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">    * A member may omit {@code column}/{@code param}/{@code value}; selecting it then applies no filter (an "All"</span>
-<span class="source-line-no">225</span><span id="line-225">    * member).</span>
-<span class="source-line-no">226</span><span id="line-226">    *</span>
-<span class="source-line-no">227</span><span id="line-227">    * @param id The group's stable id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">228</span><span id="line-228">    * @param members The members, each created by {@link #option(String)}.  Must not be empty.</span>
-<span class="source-line-no">229</span><span id="line-229">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">230</span><span id="line-230">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank, or {@code members} is empty or</span>
-<span class="source-line-no">231</span><span id="line-231">    *    holds anything other than an {@code option}.</span>
-<span class="source-line-no">232</span><span id="line-232">    */</span>
-<span class="source-line-no">233</span><span id="line-233">   public static RibbonItem optionGroup(String id, RibbonItem...members) {</span>
-<span class="source-line-no">234</span><span id="line-234">      if (ib(id))</span>
-<span class="source-line-no">235</span><span id="line-235">         throw iaex("RibbonItem optionGroup id must not be null or blank.");</span>
-<span class="source-line-no">236</span><span id="line-236">      if (members.length == 0)</span>
-<span class="source-line-no">237</span><span id="line-237">         throw iaex("RibbonItem optionGroup '%s' requires at least one option.", id);</span>
-<span class="source-line-no">238</span><span id="line-238">      for (var m : members)</span>
-<span class="source-line-no">239</span><span id="line-239">         if (! "option".equals(m.type))</span>
-<span class="source-line-no">240</span><span id="line-240">            throw iaex("RibbonItem optionGroup '%s' member must be an option, not '%s'.", id, m.type);</span>
-<span class="source-line-no">241</span><span id="line-241">      var r = new RibbonItem("optionGroup");</span>
-<span class="source-line-no">242</span><span id="line-242">      r.id = id;</span>
-<span class="source-line-no">243</span><span id="line-243">      r.options = List.of(members);</span>
-<span class="source-line-no">244</span><span id="line-244">      return r;</span>
-<span class="source-line-no">245</span><span id="line-245">   }</span>
-<span class="source-line-no">246</span><span id="line-246"></span>
-<span class="source-line-no">247</span><span id="line-247">   /**</span>
-<span class="source-line-no">248</span><span id="line-248">    * A ribbon button that publishes a message when clicked.  The topic must be a custom topic declared in the</span>
-<span class="source-line-no">249</span><span id="line-249">    * page's {@code topics} or a card's {@code publishes}, or {@code cmd:&lt;cardId&gt;}; the console's wiring check</span>
-<span class="source-line-no">250</span><span id="line-250">    * enforces that.  Rendered only on a console page (no bus, no button).</span>
-<span class="source-line-no">251</span><span id="line-251">    *</span>
-<span class="source-line-no">252</span><span id="line-252">    * @param title The button label.</span>
-<span class="source-line-no">253</span><span id="line-253">    * @param topic The topic to publish.</span>
-<span class="source-line-no">254</span><span id="line-254">    * @param payload A JSON-serializable payload, or &lt;jk&gt;null&lt;/jk&gt; for &lt;code&gt;{}&lt;/code&gt;.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @return A new {@link RibbonItem}.</span>
-<span class="source-line-no">256</span><span id="line-256">    * @throws IllegalArgumentException If {@code title} or {@code topic} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">257</span><span id="line-257">    */</span>
-<span class="source-line-no">258</span><span id="line-258">   public static RibbonItem publish(String title, String topic, Map&lt;String,Object&gt; payload) {</span>
-<span class="source-line-no">259</span><span id="line-259">      if (ib(title))</span>
-<span class="source-line-no">260</span><span id="line-260">         throw iaex("RibbonItem publish requires a title.");</span>
-<span class="source-line-no">261</span><span id="line-261">      if (ib(topic))</span>
-<span class="source-line-no">262</span><span id="line-262">         throw iaex("RibbonItem publish '%s' requires a topic.", title);</span>
-<span class="source-line-no">263</span><span id="line-263">      var i = new RibbonItem("publish");</span>
-<span class="source-line-no">264</span><span id="line-264">      i.title = title;</span>
-<span class="source-line-no">265</span><span id="line-265">      i.topic = topic;</span>
-<span class="source-line-no">266</span><span id="line-266">      i.payload = payload == null ? null : new LinkedHashMap&lt;&gt;(payload);</span>
-<span class="source-line-no">267</span><span id="line-267">      return i;</span>
-<span class="source-line-no">268</span><span id="line-268">   }</span>
-<span class="source-line-no">269</span><span id="line-269"></span>
-<span class="source-line-no">270</span><span id="line-270">   /**</span>
-<span class="source-line-no">271</span><span id="line-271">    * Sends this item's command to another card instead of its own table.  Accepted on {@code refresh},</span>
-<span class="source-line-no">272</span><span id="line-272">    * {@code collapseAll}, {@code pausePolling}, {@code option} and {@code optionGroup}; {@link #toMap()} rejects it</span>
-<span class="source-line-no">273</span><span id="line-273">    * elsewhere.</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param id The item's id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">161</span><span id="line-161">    */</span>
+<span class="source-line-no">162</span><span id="line-162">   public static RibbonItem action(String id) {</span>
+<span class="source-line-no">163</span><span id="line-163">      if (ib(id))</span>
+<span class="source-line-no">164</span><span id="line-164">         throw iaex("RibbonItem action id must not be null or blank.");</span>
+<span class="source-line-no">165</span><span id="line-165">      var r = new RibbonItem("action");</span>
+<span class="source-line-no">166</span><span id="line-166">      r.id = id;</span>
+<span class="source-line-no">167</span><span id="line-167">      r.idExplicit = true;</span>
+<span class="source-line-no">168</span><span id="line-168">      return r;</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   /**</span>
+<span class="source-line-no">172</span><span id="line-172">    * Sets the icon of an {@code action} item.</span>
+<span class="source-line-no">173</span><span id="line-173">    *</span>
+<span class="source-line-no">174</span><span id="line-174">    * @param v The icon name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">175</span><span id="line-175">    * @return This object.</span>
+<span class="source-line-no">176</span><span id="line-176">    */</span>
+<span class="source-line-no">177</span><span id="line-177">   public RibbonItem icon(String v) {</span>
+<span class="source-line-no">178</span><span id="line-178">      icon = v;</span>
+<span class="source-line-no">179</span><span id="line-179">      return this;</span>
+<span class="source-line-no">180</span><span id="line-180">   }</span>
+<span class="source-line-no">181</span><span id="line-181"></span>
+<span class="source-line-no">182</span><span id="line-182">   /**</span>
+<span class="source-line-no">183</span><span id="line-183">    * Sets the label of an {@code action} item.</span>
+<span class="source-line-no">184</span><span id="line-184">    *</span>
+<span class="source-line-no">185</span><span id="line-185">    * @param v The label.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">186</span><span id="line-186">    * @return This object.</span>
+<span class="source-line-no">187</span><span id="line-187">    */</span>
+<span class="source-line-no">188</span><span id="line-188">   public RibbonItem label(String v) {</span>
+<span class="source-line-no">189</span><span id="line-189">      label = v;</span>
+<span class="source-line-no">190</span><span id="line-190">      return this;</span>
+<span class="source-line-no">191</span><span id="line-191">   }</span>
+<span class="source-line-no">192</span><span id="line-192"></span>
+<span class="source-line-no">193</span><span id="line-193">   /**</span>
+<span class="source-line-no">194</span><span id="line-194">    * Validates a whole ribbon: every non-divider item has an id (a {@code publish} needs an explicit one), a second</span>
+<span class="source-line-no">195</span><span id="line-195">    * stock item of the same kind needs an explicit id, and ids are unique.</span>
+<span class="source-line-no">196</span><span id="line-196">    *</span>
+<span class="source-line-no">197</span><span id="line-197">    * @param tableId The owning table id, for messages.</span>
+<span class="source-line-no">198</span><span id="line-198">    * @param items The items, in order.</span>
+<span class="source-line-no">199</span><span id="line-199">    * @throws IllegalArgumentException If a rule is broken.</span>
+<span class="source-line-no">200</span><span id="line-200">    */</span>
+<span class="source-line-no">201</span><span id="line-201">   static void validateList(String tableId, List&lt;RibbonItem&gt; items) {</span>
+<span class="source-line-no">202</span><span id="line-202">      var seen = new HashMap&lt;String,Integer&gt;();</span>
+<span class="source-line-no">203</span><span id="line-203">      for (var i = 0; i &lt; items.size(); i++) {</span>
+<span class="source-line-no">204</span><span id="line-204">         var it = items.get(i);</span>
+<span class="source-line-no">205</span><span id="line-205">         if ("divider".equals(it.type))</span>
+<span class="source-line-no">206</span><span id="line-206">            continue;</span>
+<span class="source-line-no">207</span><span id="line-207">         if (it.id == null)</span>
+<span class="source-line-no">208</span><span id="line-208">            throw iaex("table '%s' ribbon item %s: a %s item needs an explicit id(...).", tableId, i, it.type);</span>
+<span class="source-line-no">209</span><span id="line-209">         var prev = seen.put(it.id, i);</span>
+<span class="source-line-no">210</span><span id="line-210">         if (prev != null) {</span>
+<span class="source-line-no">211</span><span id="line-211">            if (! it.idExplicit)</span>
+<span class="source-line-no">212</span><span id="line-212">               throw iaex("table '%s' ribbon item %s: a second %s item (also item %s) needs an explicit id(...).", tableId, i, it.type, prev);</span>
+<span class="source-line-no">213</span><span id="line-213">            throw iaex("table '%s' ribbon item %s: duplicate id '%s' (also item %s).", tableId, i, it.id, prev);</span>
+<span class="source-line-no">214</span><span id="line-214">         }</span>
+<span class="source-line-no">215</span><span id="line-215">      }</span>
+<span class="source-line-no">216</span><span id="line-216">   }</span>
+<span class="source-line-no">217</span><span id="line-217"></span>
+<span class="source-line-no">218</span><span id="line-218">   /**</span>
+<span class="source-line-no">219</span><span id="line-219">    * The table's search box.  A slot the runtime fills with the table's search field; it takes no symbol or appearance.</span>
+<span class="source-line-no">220</span><span id="line-220">    *</span>
+<span class="source-line-no">221</span><span id="line-221">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">222</span><span id="line-222">    */</span>
+<span class="source-line-no">223</span><span id="line-223">   public static RibbonItem search() {</span>
+<span class="source-line-no">224</span><span id="line-224">      return stockAs("search", "search");</span>
+<span class="source-line-no">225</span><span id="line-225">   }</span>
+<span class="source-line-no">226</span><span id="line-226"></span>
+<span class="source-line-no">227</span><span id="line-227">   /**</span>
+<span class="source-line-no">228</span><span id="line-228">    * The copy-shareable-link button.</span>
+<span class="source-line-no">229</span><span id="line-229">    *</span>
+<span class="source-line-no">230</span><span id="line-230">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">231</span><span id="line-231">    */</span>
+<span class="source-line-no">232</span><span id="line-232">   public static RibbonItem linkButton() {</span>
+<span class="source-line-no">233</span><span id="line-233">      return stockAs("linkButton", "link");</span>
+<span class="source-line-no">234</span><span id="line-234">   }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">   /**</span>
+<span class="source-line-no">237</span><span id="line-237">    * The button that opens the column chooser (View Settings).</span>
+<span class="source-line-no">238</span><span id="line-238">    *</span>
+<span class="source-line-no">239</span><span id="line-239">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">240</span><span id="line-240">    */</span>
+<span class="source-line-no">241</span><span id="line-241">   public static RibbonItem columnSettings() {</span>
+<span class="source-line-no">242</span><span id="line-242">      return stockAs("columnSettings", "columns");</span>
+<span class="source-line-no">243</span><span id="line-243">   }</span>
+<span class="source-line-no">244</span><span id="line-244"></span>
+<span class="source-line-no">245</span><span id="line-245">   /**</span>
+<span class="source-line-no">246</span><span id="line-246">    * A visual separator between ribbon items; it also closes any open item cluster.</span>
+<span class="source-line-no">247</span><span id="line-247">    *</span>
+<span class="source-line-no">248</span><span id="line-248">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">249</span><span id="line-249">    */</span>
+<span class="source-line-no">250</span><span id="line-250">   public static RibbonItem divider() {</span>
+<span class="source-line-no">251</span><span id="line-251">      return new RibbonItem("divider");</span>
+<span class="source-line-no">252</span><span id="line-252">   }</span>
+<span class="source-line-no">253</span><span id="line-253"></span>
+<span class="source-line-no">254</span><span id="line-254">   /**</span>
+<span class="source-line-no">255</span><span id="line-255">    * The ribbon's reload-the-table button.</span>
+<span class="source-line-no">256</span><span id="line-256">    *</span>
+<span class="source-line-no">257</span><span id="line-257">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">258</span><span id="line-258">    */</span>
+<span class="source-line-no">259</span><span id="line-259">   public static RibbonItem refresh() {</span>
+<span class="source-line-no">260</span><span id="line-260">      return stock("refresh");</span>
+<span class="source-line-no">261</span><span id="line-261">   }</span>
+<span class="source-line-no">262</span><span id="line-262"></span>
+<span class="source-line-no">263</span><span id="line-263">   /**</span>
+<span class="source-line-no">264</span><span id="line-264">    * The ribbon's collapse-all-detail-rows button.</span>
+<span class="source-line-no">265</span><span id="line-265">    *</span>
+<span class="source-line-no">266</span><span id="line-266">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">267</span><span id="line-267">    */</span>
+<span class="source-line-no">268</span><span id="line-268">   public static RibbonItem collapseAll() {</span>
+<span class="source-line-no">269</span><span id="line-269">      return stock("collapseAll");</span>
+<span class="source-line-no">270</span><span id="line-270">   }</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">   /**</span>
+<span class="source-line-no">273</span><span id="line-273">    * The ribbon's pause/resume auto-refresh toggle.</span>
 <span class="source-line-no">274</span><span id="line-274">    *</span>
-<span class="source-line-no">275</span><span id="line-275">    * @param cardId The target card id; the console's wiring check verifies it names a card that handles the op.</span>
-<span class="source-line-no">276</span><span id="line-276">    * @return This object.</span>
-<span class="source-line-no">277</span><span id="line-277">    * @throws IllegalArgumentException If {@code cardId} is not a valid card id.</span>
-<span class="source-line-no">278</span><span id="line-278">    */</span>
-<span class="source-line-no">279</span><span id="line-279">   public RibbonItem target(String cardId) {</span>
-<span class="source-line-no">280</span><span id="line-280">      if (cardId == null || ! CARD_ID.matcher(cardId).matches())</span>
-<span class="source-line-no">281</span><span id="line-281">         throw iaex("RibbonItem target '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", cardId);</span>
-<span class="source-line-no">282</span><span id="line-282">      target = cardId;</span>
-<span class="source-line-no">283</span><span id="line-283">      return this;</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   /**</span>
-<span class="source-line-no">287</span><span id="line-287">    * Hides this item unless every rule matches the console's facts.  Evaluated by the client; this only serializes the</span>
-<span class="source-line-no">288</span><span id="line-288">    * rules.  Accepted on every item type; not on an {@code optionGroup} member.</span>
-<span class="source-line-no">289</span><span id="line-289">    *</span>
-<span class="source-line-no">290</span><span id="line-290">    * @param rules The rules, ANDed together.  None clears them.</span>
-<span class="source-line-no">291</span><span id="line-291">    * @return This object.</span>
-<span class="source-line-no">292</span><span id="line-292">    */</span>
-<span class="source-line-no">293</span><span id="line-293">   public RibbonItem visibleWhen(VisibilityRule...rules) {</span>
-<span class="source-line-no">294</span><span id="line-294">      if (rules == null || Arrays.stream(rules).anyMatch(Objects::isNull))</span>
-<span class="source-line-no">295</span><span id="line-295">         throw iaex("RibbonItem visibleWhen rules must not be null.");</span>
-<span class="source-line-no">296</span><span id="line-296">      visibleWhen = rules.length == 0 ? null : List.of(rules);</span>
-<span class="source-line-no">297</span><span id="line-297">      return this;</span>
-<span class="source-line-no">298</span><span id="line-298">   }</span>
-<span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">   /**</span>
-<span class="source-line-no">301</span><span id="line-301">    * Sets this item's stable id.</span>
+<span class="source-line-no">275</span><span id="line-275">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">276</span><span id="line-276">    */</span>
+<span class="source-line-no">277</span><span id="line-277">   public static RibbonItem pausePolling() {</span>
+<span class="source-line-no">278</span><span id="line-278">      return stock("pausePolling");</span>
+<span class="source-line-no">279</span><span id="line-279">   }</span>
+<span class="source-line-no">280</span><span id="line-280"></span>
+<span class="source-line-no">281</span><span id="line-281">   /**</span>
+<span class="source-line-no">282</span><span id="line-282">    * The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,</span>
+<span class="source-line-no">283</span><span id="line-283">    * search and options) and applies it at once, with no dialog.</span>
+<span class="source-line-no">284</span><span id="line-284">    *</span>
+<span class="source-line-no">285</span><span id="line-285">    * &lt;p&gt;</span>
+<span class="source-line-no">286</span><span id="line-286">    * Consumers declare it in the {@code page} group.  It acts on its own table only, so it takes no {@code target}.</span>
+<span class="source-line-no">287</span><span id="line-287">    *</span>
+<span class="source-line-no">288</span><span id="line-288">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">289</span><span id="line-289">    */</span>
+<span class="source-line-no">290</span><span id="line-290">   public static RibbonItem resetDefaults() {</span>
+<span class="source-line-no">291</span><span id="line-291">      return stock("resetDefaults");</span>
+<span class="source-line-no">292</span><span id="line-292">   }</span>
+<span class="source-line-no">293</span><span id="line-293"></span>
+<span class="source-line-no">294</span><span id="line-294">   /**</span>
+<span class="source-line-no">295</span><span id="line-295">    * The ribbon's export menu, offering the named buttons.</span>
+<span class="source-line-no">296</span><span id="line-296">    *</span>
+<span class="source-line-no">297</span><span id="line-297">    * &lt;p&gt;</span>
+<span class="source-line-no">298</span><span id="line-298">    * A button here is required: if its library is missing at runtime (JSZip for {@code excel}, pdfMake for</span>
+<span class="source-line-no">299</span><span id="line-299">    * {@code pdf}) it renders disabled and logs an error.  Use {@link #optional(String...)} for buttons that should</span>
+<span class="source-line-no">300</span><span id="line-300">    * simply be omitted when their library is absent.  The menu may consist of optional buttons alone, but</span>
+<span class="source-line-no">301</span><span id="line-301">    * {@link #toMap()} rejects one with no buttons at all.</span>
 <span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * &lt;p&gt;</span>
-<span class="source-line-no">304</span><span id="line-304">    * The id is emitted on the item's ribbon entry, where it is scoped to its card (it is not stamped as a DOM id).</span>
-<span class="source-line-no">305</span><span id="line-305">    * {@link #toMap()} rejects an id on the types the runtime ignores it for</span>
-<span class="source-line-no">306</span><span id="line-306">    * ({@code divider} and {@code export}).</span>
-<span class="source-line-no">307</span><span id="line-307">    *</span>
-<span class="source-line-no">308</span><span id="line-308">    * @param v The id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">309</span><span id="line-309">    * @return This object.</span>
-<span class="source-line-no">310</span><span id="line-310">    * @throws IllegalArgumentException If {@code v} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">311</span><span id="line-311">    */</span>
-<span class="source-line-no">312</span><span id="line-312">   public RibbonItem id(String v) {</span>
-<span class="source-line-no">313</span><span id="line-313">      if (ib(v))</span>
-<span class="source-line-no">314</span><span id="line-314">         throw iaex("RibbonItem %s id must not be null or blank.", type);</span>
-<span class="source-line-no">315</span><span id="line-315">      id = v;</span>
-<span class="source-line-no">316</span><span id="line-316">      return this;</span>
-<span class="source-line-no">317</span><span id="line-317">   }</span>
-<span class="source-line-no">318</span><span id="line-318"></span>
-<span class="source-line-no">319</span><span id="line-319">   /**</span>
-<span class="source-line-no">320</span><span id="line-320">    * Sets this item's title/label text.</span>
-<span class="source-line-no">321</span><span id="line-321">    *</span>
-<span class="source-line-no">322</span><span id="line-322">    * &lt;p&gt;</span>
-<span class="source-line-no">323</span><span id="line-323">    * On an {@code optionGroup} the title is not drawn; it becomes the group's accessible name</span>
-<span class="source-line-no">324</span><span id="line-324">    * ({@code role="group"} with {@code aria-label}).</span>
-<span class="source-line-no">325</span><span id="line-325">    *</span>
-<span class="source-line-no">326</span><span id="line-326">    * @param v The title.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">327</span><span id="line-327">    * @return This object.</span>
-<span class="source-line-no">328</span><span id="line-328">    */</span>
-<span class="source-line-no">329</span><span id="line-329">   public RibbonItem title(String v) {</span>
-<span class="source-line-no">330</span><span id="line-330">      title = v;</span>
-<span class="source-line-no">331</span><span id="line-331">      return this;</span>
-<span class="source-line-no">332</span><span id="line-332">   }</span>
-<span class="source-line-no">333</span><span id="line-333"></span>
-<span class="source-line-no">334</span><span id="line-334">   /**</span>
-<span class="source-line-no">335</span><span id="line-335">    * Clusters this item with adjacent items sharing the same group name.</span>
-<span class="source-line-no">336</span><span id="line-336">    *</span>
-<span class="source-line-no">337</span><span id="line-337">    * &lt;p&gt;</span>
-<span class="source-line-no">338</span><span id="line-338">    * The toolbar's canonical group ids are {@code entity}, {@code filter}, {@code search}, {@code viewing},</span>
-<span class="source-line-no">339</span><span id="line-339">    * {@code page} and {@code status}.  Groups using them are sorted into that order among the slots they already</span>
-<span class="source-line-no">340</span><span id="line-340">    * occupy; groups with any other name keep their declared position.  An ungrouped {@code refresh} joins the</span>
-<span class="source-line-no">341</span><span id="line-341">    * {@code page} group, last, when one exists.</span>
-<span class="source-line-no">342</span><span id="line-342">    *</span>
-<span class="source-line-no">343</span><span id="line-343">    * @param v The group name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">344</span><span id="line-344">    * @return This object.</span>
-<span class="source-line-no">345</span><span id="line-345">    */</span>
-<span class="source-line-no">346</span><span id="line-346">   public RibbonItem group(String v) {</span>
-<span class="source-line-no">347</span><span id="line-347">      group = v;</span>
-<span class="source-line-no">348</span><span id="line-348">      return this;</span>
-<span class="source-line-no">349</span><span id="line-349">   }</span>
-<span class="source-line-no">350</span><span id="line-350"></span>
-<span class="source-line-no">351</span><span id="line-351">   /**</span>
-<span class="source-line-no">352</span><span id="line-352">    * Sets how this item's button is drawn.</span>
-<span class="source-line-no">353</span><span id="line-353">    *</span>
-<span class="source-line-no">354</span><span id="line-354">    * @param v The appearance; currently only {@code icon}.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">355</span><span id="line-355">    * @return This object.</span>
-<span class="source-line-no">356</span><span id="line-356">    * @throws IllegalArgumentException If {@code v} is not a known appearance.</span>
-<span class="source-line-no">357</span><span id="line-357">    */</span>
-<span class="source-line-no">358</span><span id="line-358">   public RibbonItem appearance(String v) {</span>
-<span class="source-line-no">359</span><span id="line-359">      if (v != null)</span>
-<span class="source-line-no">360</span><span id="line-360">         checkOneOf(v, APPEARANCES, "appearance");</span>
-<span class="source-line-no">361</span><span id="line-361">      appearance = v;</span>
-<span class="source-line-no">362</span><span id="line-362">      return this;</span>
-<span class="source-line-no">363</span><span id="line-363">   }</span>
-<span class="source-line-no">364</span><span id="line-364"></span>
-<span class="source-line-no">365</span><span id="line-365">   /**</span>
-<span class="source-line-no">366</span><span id="line-366">    * Sets the icon name overriding this item's default icon.</span>
-<span class="source-line-no">367</span><span id="line-367">    *</span>
-<span class="source-line-no">368</span><span id="line-368">    * @param v The icon name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">369</span><span id="line-369">    * @return This object.</span>
-<span class="source-line-no">370</span><span id="line-370">    */</span>
-<span class="source-line-no">371</span><span id="line-371">   public RibbonItem symbol(String v) {</span>
-<span class="source-line-no">372</span><span id="line-372">      symbol = v;</span>
-<span class="source-line-no">373</span><span id="line-373">      return this;</span>
-<span class="source-line-no">374</span><span id="line-374">   }</span>
-<span class="source-line-no">375</span><span id="line-375"></span>
-<span class="source-line-no">376</span><span id="line-376">   /**</span>
-<span class="source-line-no">377</span><span id="line-377">    * Sets the form-source URL supplying a dialog item's input fields.</span>
-<span class="source-line-no">378</span><span id="line-378">    *</span>
-<span class="source-line-no">379</span><span id="line-379">    * @param url The form URL.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">380</span><span id="line-380">    * @return This object.</span>
-<span class="source-line-no">381</span><span id="line-381">    */</span>
-<span class="source-line-no">382</span><span id="line-382">   public RibbonItem form(String url) {</span>
-<span class="source-line-no">383</span><span id="line-383">      form = url;</span>
-<span class="source-line-no">384</span><span id="line-384">      return this;</span>
-<span class="source-line-no">385</span><span id="line-385">   }</span>
-<span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">   /**</span>
-<span class="source-line-no">388</span><span id="line-388">    * Sets the URL a dialog item's form submits to.</span>
-<span class="source-line-no">389</span><span id="line-389">    *</span>
-<span class="source-line-no">390</span><span id="line-390">    * @param url The endpoint URL.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">391</span><span id="line-391">    * @return This object.</span>
-<span class="source-line-no">392</span><span id="line-392">    */</span>
-<span class="source-line-no">393</span><span id="line-393">   public RibbonItem endpoint(String url) {</span>
-<span class="source-line-no">394</span><span id="line-394">      endpoint = url;</span>
-<span class="source-line-no">395</span><span id="line-395">      return this;</span>
-<span class="source-line-no">396</span><span id="line-396">   }</span>
-<span class="source-line-no">397</span><span id="line-397"></span>
-<span class="source-line-no">398</span><span id="line-398">   /**</span>
-<span class="source-line-no">399</span><span id="line-399">    * Sets the non-safe HTTP method a dialog item's form submits with.</span>
-<span class="source-line-no">400</span><span id="line-400">    *</span>
-<span class="source-line-no">401</span><span id="line-401">    * @param m The method.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">402</span><span id="line-402">    * @return This object.</span>
-<span class="source-line-no">403</span><span id="line-403">    */</span>
-<span class="source-line-no">404</span><span id="line-404">   public RibbonItem method(RowAction.Method m) {</span>
-<span class="source-line-no">405</span><span id="line-405">      if (m == null)</span>
-<span class="source-line-no">406</span><span id="line-406">         throw iaex("RibbonItem method must not be null.");</span>
-<span class="source-line-no">407</span><span id="line-407">      method = m.wire();</span>
-<span class="source-line-no">408</span><span id="line-408">      return this;</span>
-<span class="source-line-no">409</span><span id="line-409">   }</span>
-<span class="source-line-no">410</span><span id="line-410"></span>
-<span class="source-line-no">411</span><span id="line-411">   /**</span>
-<span class="source-line-no">412</span><span id="line-412">    * Sets what the runtime does with a successful dialog submission.</span>
-<span class="source-line-no">413</span><span id="line-413">    *</span>
-<span class="source-line-no">414</span><span id="line-414">    * @param s The success behavior.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">415</span><span id="line-415">    * @return This object.</span>
-<span class="source-line-no">416</span><span id="line-416">    */</span>
-<span class="source-line-no">417</span><span id="line-417">   public RibbonItem onSuccess(RowAction.OnSuccess s) {</span>
-<span class="source-line-no">418</span><span id="line-418">      if (s == null)</span>
-<span class="source-line-no">419</span><span id="line-419">         throw iaex("RibbonItem onSuccess must not be null.");</span>
-<span class="source-line-no">420</span><span id="line-420">      onSuccess = s.wire();</span>
-<span class="source-line-no">421</span><span id="line-421">      return this;</span>
-<span class="source-line-no">422</span><span id="line-422">   }</span>
-<span class="source-line-no">423</span><span id="line-423"></span>
-<span class="source-line-no">424</span><span id="line-424">   /**</span>
-<span class="source-line-no">425</span><span id="line-425">    * Adds export buttons that are omitted, rather than rendered disabled, when their library is absent.</span>
-<span class="source-line-no">426</span><span id="line-426">    *</span>
-<span class="source-line-no">427</span><span id="line-427">    * @param names The buttons, each {@code excel} or {@code pdf}.</span>
-<span class="source-line-no">428</span><span id="line-428">    * @return This object.</span>
-<span class="source-line-no">429</span><span id="line-429">    * @throws IllegalArgumentException If a name is not one of those, or is already a required button.</span>
-<span class="source-line-no">430</span><span id="line-430">    */</span>
-<span class="source-line-no">431</span><span id="line-431">   public RibbonItem optional(String...names) {</span>
-<span class="source-line-no">432</span><span id="line-432">      for (var n : names) {</span>
-<span class="source-line-no">433</span><span id="line-433">         checkOneOf(n, EXPORT_OPTIONAL, "optional export button");</span>
-<span class="source-line-no">434</span><span id="line-434">         if (buttons != null &amp;&amp; buttons.contains(n))</span>
-<span class="source-line-no">435</span><span id="line-435">            throw iaex("RibbonItem export button '%s' is both required and optional.", n);</span>
-<span class="source-line-no">436</span><span id="line-436">      }</span>
-<span class="source-line-no">437</span><span id="line-437">      optional = names.length == 0 ? null : List.of(names);</span>
-<span class="source-line-no">438</span><span id="line-438">      return this;</span>
-<span class="source-line-no">439</span><span id="line-439">   }</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">   /**</span>
-<span class="source-line-no">442</span><span id="line-442">    * Scopes an {@code option} to a table column.</span>
-<span class="source-line-no">443</span><span id="line-443">    *</span>
-<span class="source-line-no">444</span><span id="line-444">    * @param name The row-data column name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">445</span><span id="line-445">    * @return This object.</span>
-<span class="source-line-no">446</span><span id="line-446">    */</span>
-<span class="source-line-no">447</span><span id="line-447">   public RibbonItem column(String name) {</span>
-<span class="source-line-no">448</span><span id="line-448">      column = name;</span>
-<span class="source-line-no">449</span><span id="line-449">      return this;</span>
-<span class="source-line-no">450</span><span id="line-450">   }</span>
-<span class="source-line-no">451</span><span id="line-451"></span>
-<span class="source-line-no">452</span><span id="line-452">   /**</span>
-<span class="source-line-no">453</span><span id="line-453">    * Scopes an {@code option} to a URL query parameter.</span>
-<span class="source-line-no">454</span><span id="line-454">    *</span>
-<span class="source-line-no">455</span><span id="line-455">    * @param name The parameter name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">456</span><span id="line-456">    * @return This object.</span>
-<span class="source-line-no">457</span><span id="line-457">    */</span>
-<span class="source-line-no">458</span><span id="line-458">   public RibbonItem param(String name) {</span>
-<span class="source-line-no">459</span><span id="line-459">      param = name;</span>
-<span class="source-line-no">460</span><span id="line-460">      return this;</span>
-<span class="source-line-no">461</span><span id="line-461">   }</span>
-<span class="source-line-no">462</span><span id="line-462"></span>
-<span class="source-line-no">463</span><span id="line-463">   /**</span>
-<span class="source-line-no">464</span><span id="line-464">    * Sets an {@code option}'s value: a BeanQuery {@code $}-expression for a {@link #column(String) column}-scoped</span>
-<span class="source-line-no">465</span><span id="line-465">    * option, or the raw parameter value for a {@link #param(String) param}-scoped one.</span>
-<span class="source-line-no">466</span><span id="line-466">    *</span>
-<span class="source-line-no">467</span><span id="line-467">    * @param v The value.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">468</span><span id="line-468">    * @return This object.</span>
-<span class="source-line-no">469</span><span id="line-469">    */</span>
-<span class="source-line-no">470</span><span id="line-470">   public RibbonItem value(String v) {</span>
-<span class="source-line-no">471</span><span id="line-471">      value = v;</span>
-<span class="source-line-no">472</span><span id="line-472">      return this;</span>
-<span class="source-line-no">473</span><span id="line-473">   }</span>
-<span class="source-line-no">474</span><span id="line-474"></span>
-<span class="source-line-no">475</span><span id="line-475">   /**</span>
-<span class="source-line-no">476</span><span id="line-476">    * Sets whether this option's (or group's) state is remembered across page loads.</span>
-<span class="source-line-no">477</span><span id="line-477">    *</span>
-<span class="source-line-no">478</span><span id="line-478">    * @param v Whether to persist.</span>
-<span class="source-line-no">479</span><span id="line-479">    * @return This object.</span>
-<span class="source-line-no">480</span><span id="line-480">    */</span>
-<span class="source-line-no">481</span><span id="line-481">   public RibbonItem persist(boolean v) {</span>
-<span class="source-line-no">482</span><span id="line-482">      persist = v;</span>
-<span class="source-line-no">483</span><span id="line-483">      return this;</span>
-<span class="source-line-no">484</span><span id="line-484">   }</span>
-<span class="source-line-no">485</span><span id="line-485"></span>
-<span class="source-line-no">486</span><span id="line-486">   /**</span>
-<span class="source-line-no">487</span><span id="line-487">    * Marks an {@code option} as on until the user (or persisted state) says otherwise.</span>
-<span class="source-line-no">488</span><span id="line-488">    *</span>
+<span class="source-line-no">303</span><span id="line-303">    * @param buttons The required buttons, each one of {@code copy}, {@code csv}, {@code print}, {@code excel} or</span>
+<span class="source-line-no">304</span><span id="line-304">    *    {@code pdf}.</span>
+<span class="source-line-no">305</span><span id="line-305">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">306</span><span id="line-306">    * @throws IllegalArgumentException If {@code buttons} names a button not in that set.</span>
+<span class="source-line-no">307</span><span id="line-307">    */</span>
+<span class="source-line-no">308</span><span id="line-308">   public static RibbonItem export(String...buttons) {</span>
+<span class="source-line-no">309</span><span id="line-309">      for (var b : buttons)</span>
+<span class="source-line-no">310</span><span id="line-310">         checkOneOf(b, EXPORT_BUTTONS, "export button");</span>
+<span class="source-line-no">311</span><span id="line-311">      var r = stock("export");</span>
+<span class="source-line-no">312</span><span id="line-312">      r.buttons = buttons.length == 0 ? null : List.of(buttons);</span>
+<span class="source-line-no">313</span><span id="line-313">      return r;</span>
+<span class="source-line-no">314</span><span id="line-314">   }</span>
+<span class="source-line-no">315</span><span id="line-315"></span>
+<span class="source-line-no">316</span><span id="line-316">   /**</span>
+<span class="source-line-no">317</span><span id="line-317">    * A ribbon button that opens a modal dialog.</span>
+<span class="source-line-no">318</span><span id="line-318">    *</span>
+<span class="source-line-no">319</span><span id="line-319">    * @param actionId This item's stable id (also the dialog's logical name).  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">320</span><span id="line-320">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">321</span><span id="line-321">    * @throws IllegalArgumentException If {@code actionId} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">322</span><span id="line-322">    */</span>
+<span class="source-line-no">323</span><span id="line-323">   public static RibbonItem dialog(String actionId) {</span>
+<span class="source-line-no">324</span><span id="line-324">      if (ib(actionId))</span>
+<span class="source-line-no">325</span><span id="line-325">         throw iaex("RibbonItem dialog action id must not be null or blank.");</span>
+<span class="source-line-no">326</span><span id="line-326">      var r = new RibbonItem("dialog");</span>
+<span class="source-line-no">327</span><span id="line-327">      r.id = actionId;</span>
+<span class="source-line-no">328</span><span id="line-328">      r.idExplicit = true;</span>
+<span class="source-line-no">329</span><span id="line-329">      return r;</span>
+<span class="source-line-no">330</span><span id="line-330">   }</span>
+<span class="source-line-no">331</span><span id="line-331"></span>
+<span class="source-line-no">332</span><span id="line-332">   /**</span>
+<span class="source-line-no">333</span><span id="line-333">    * A server-query toggle button.</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * &lt;p&gt;</span>
+<span class="source-line-no">336</span><span id="line-336">    * Set exactly one of {@link #column(String)} (a BeanQuery {@code $}-expression {@link #value(String) value}</span>
+<span class="source-line-no">337</span><span id="line-337">    * against that column) or {@link #param(String)} (a URL query parameter).  Checked by {@link #toMap()}.</span>
+<span class="source-line-no">338</span><span id="line-338">    *</span>
+<span class="source-line-no">339</span><span id="line-339">    * @param id The toggle's stable id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">340</span><span id="line-340">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">341</span><span id="line-341">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">342</span><span id="line-342">    */</span>
+<span class="source-line-no">343</span><span id="line-343">   public static RibbonItem option(String id) {</span>
+<span class="source-line-no">344</span><span id="line-344">      if (ib(id))</span>
+<span class="source-line-no">345</span><span id="line-345">         throw iaex("RibbonItem option id must not be null or blank.");</span>
+<span class="source-line-no">346</span><span id="line-346">      var r = new RibbonItem("option");</span>
+<span class="source-line-no">347</span><span id="line-347">      r.id = id;</span>
+<span class="source-line-no">348</span><span id="line-348">      r.idExplicit = true;</span>
+<span class="source-line-no">349</span><span id="line-349">      return r;</span>
+<span class="source-line-no">350</span><span id="line-350">   }</span>
+<span class="source-line-no">351</span><span id="line-351"></span>
+<span class="source-line-no">352</span><span id="line-352">   /**</span>
+<span class="source-line-no">353</span><span id="line-353">    * A group of mutually exclusive {@link #option(String) option} toggles.</span>
+<span class="source-line-no">354</span><span id="line-354">    *</span>
+<span class="source-line-no">355</span><span id="line-355">    * &lt;p&gt;</span>
+<span class="source-line-no">356</span><span id="line-356">    * A member may omit {@code column}/{@code param}/{@code value}; selecting it then applies no filter (an "All"</span>
+<span class="source-line-no">357</span><span id="line-357">    * member).</span>
+<span class="source-line-no">358</span><span id="line-358">    *</span>
+<span class="source-line-no">359</span><span id="line-359">    * @param id The group's stable id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">360</span><span id="line-360">    * @param members The members, each created by {@link #option(String)}.  Must not be empty.</span>
+<span class="source-line-no">361</span><span id="line-361">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">362</span><span id="line-362">    * @throws IllegalArgumentException If {@code id} is &lt;jk&gt;null&lt;/jk&gt; or blank, or {@code members} is empty or</span>
+<span class="source-line-no">363</span><span id="line-363">    *    holds anything other than an {@code option}.</span>
+<span class="source-line-no">364</span><span id="line-364">    */</span>
+<span class="source-line-no">365</span><span id="line-365">   public static RibbonItem optionGroup(String id, RibbonItem...members) {</span>
+<span class="source-line-no">366</span><span id="line-366">      if (ib(id))</span>
+<span class="source-line-no">367</span><span id="line-367">         throw iaex("RibbonItem optionGroup id must not be null or blank.");</span>
+<span class="source-line-no">368</span><span id="line-368">      if (members.length == 0)</span>
+<span class="source-line-no">369</span><span id="line-369">         throw iaex("RibbonItem optionGroup '%s' requires at least one option.", id);</span>
+<span class="source-line-no">370</span><span id="line-370">      for (var m : members)</span>
+<span class="source-line-no">371</span><span id="line-371">         if (! "option".equals(m.type))</span>
+<span class="source-line-no">372</span><span id="line-372">            throw iaex("RibbonItem optionGroup '%s' member must be an option, not '%s'.", id, m.type);</span>
+<span class="source-line-no">373</span><span id="line-373">      var r = new RibbonItem("optionGroup");</span>
+<span class="source-line-no">374</span><span id="line-374">      r.id = id;</span>
+<span class="source-line-no">375</span><span id="line-375">      r.idExplicit = true;</span>
+<span class="source-line-no">376</span><span id="line-376">      r.options = List.of(members);</span>
+<span class="source-line-no">377</span><span id="line-377">      return r;</span>
+<span class="source-line-no">378</span><span id="line-378">   }</span>
+<span class="source-line-no">379</span><span id="line-379"></span>
+<span class="source-line-no">380</span><span id="line-380">   /**</span>
+<span class="source-line-no">381</span><span id="line-381">    * A ribbon button that publishes a message when clicked.  The topic must be a custom topic declared in the</span>
+<span class="source-line-no">382</span><span id="line-382">    * page's {@code topics} or a card's {@code publishes}, or {@code cmd:&lt;cardId&gt;}; the console's wiring check</span>
+<span class="source-line-no">383</span><span id="line-383">    * enforces that.  Rendered only on a console page (no bus, no button).</span>
+<span class="source-line-no">384</span><span id="line-384">    *</span>
+<span class="source-line-no">385</span><span id="line-385">    * @param title The button label.</span>
+<span class="source-line-no">386</span><span id="line-386">    * @param topic The topic to publish.</span>
+<span class="source-line-no">387</span><span id="line-387">    * @param payload A JSON-serializable payload, or &lt;jk&gt;null&lt;/jk&gt; for &lt;code&gt;{}&lt;/code&gt;.</span>
+<span class="source-line-no">388</span><span id="line-388">    * @return A new {@link RibbonItem}.</span>
+<span class="source-line-no">389</span><span id="line-389">    * @throws IllegalArgumentException If {@code title} or {@code topic} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">390</span><span id="line-390">    */</span>
+<span class="source-line-no">391</span><span id="line-391">   public static RibbonItem publish(String title, String topic, Map&lt;String,Object&gt; payload) {</span>
+<span class="source-line-no">392</span><span id="line-392">      if (ib(title))</span>
+<span class="source-line-no">393</span><span id="line-393">         throw iaex("RibbonItem publish requires a title.");</span>
+<span class="source-line-no">394</span><span id="line-394">      if (ib(topic))</span>
+<span class="source-line-no">395</span><span id="line-395">         throw iaex("RibbonItem publish '%s' requires a topic.", title);</span>
+<span class="source-line-no">396</span><span id="line-396">      var i = new RibbonItem("publish");</span>
+<span class="source-line-no">397</span><span id="line-397">      i.title = title;</span>
+<span class="source-line-no">398</span><span id="line-398">      i.topic = topic;</span>
+<span class="source-line-no">399</span><span id="line-399">      i.payload = payload == null ? null : new LinkedHashMap&lt;&gt;(payload);</span>
+<span class="source-line-no">400</span><span id="line-400">      return i;</span>
+<span class="source-line-no">401</span><span id="line-401">   }</span>
+<span class="source-line-no">402</span><span id="line-402"></span>
+<span class="source-line-no">403</span><span id="line-403">   /**</span>
+<span class="source-line-no">404</span><span id="line-404">    * Sends this item's command to another card instead of its own table.  Accepted on {@code refresh},</span>
+<span class="source-line-no">405</span><span id="line-405">    * {@code collapseAll}, {@code pausePolling}, {@code option} and {@code optionGroup}; {@link #toMap()} rejects it</span>
+<span class="source-line-no">406</span><span id="line-406">    * elsewhere.</span>
+<span class="source-line-no">407</span><span id="line-407">    *</span>
+<span class="source-line-no">408</span><span id="line-408">    * @param cardId The target card id; the console's wiring check verifies it names a card that handles the op.</span>
+<span class="source-line-no">409</span><span id="line-409">    * @return This object.</span>
+<span class="source-line-no">410</span><span id="line-410">    * @throws IllegalArgumentException If {@code cardId} is not a valid card id.</span>
+<span class="source-line-no">411</span><span id="line-411">    */</span>
+<span class="source-line-no">412</span><span id="line-412">   public RibbonItem target(String cardId) {</span>
+<span class="source-line-no">413</span><span id="line-413">      if (cardId == null || ! CARD_ID.matcher(cardId).matches())</span>
+<span class="source-line-no">414</span><span id="line-414">         throw iaex("RibbonItem target '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", cardId);</span>
+<span class="source-line-no">415</span><span id="line-415">      target = cardId;</span>
+<span class="source-line-no">416</span><span id="line-416">      return this;</span>
+<span class="source-line-no">417</span><span id="line-417">   }</span>
+<span class="source-line-no">418</span><span id="line-418"></span>
+<span class="source-line-no">419</span><span id="line-419">   /**</span>
+<span class="source-line-no">420</span><span id="line-420">    * Hides this item unless every rule matches the console's facts.  Evaluated by the client; this only serializes the</span>
+<span class="source-line-no">421</span><span id="line-421">    * rules.  Accepted on every item type; not on an {@code optionGroup} member.</span>
+<span class="source-line-no">422</span><span id="line-422">    *</span>
+<span class="source-line-no">423</span><span id="line-423">    * @param rules The rules, ANDed together.  None clears them.</span>
+<span class="source-line-no">424</span><span id="line-424">    * @return This object.</span>
+<span class="source-line-no">425</span><span id="line-425">    */</span>
+<span class="source-line-no">426</span><span id="line-426">   public RibbonItem visibleWhen(VisibilityRule...rules) {</span>
+<span class="source-line-no">427</span><span id="line-427">      if (rules == null || Arrays.stream(rules).anyMatch(Objects::isNull))</span>
+<span class="source-line-no">428</span><span id="line-428">         throw iaex("RibbonItem visibleWhen rules must not be null.");</span>
+<span class="source-line-no">429</span><span id="line-429">      visibleWhen = rules.length == 0 ? null : List.of(rules);</span>
+<span class="source-line-no">430</span><span id="line-430">      return this;</span>
+<span class="source-line-no">431</span><span id="line-431">   }</span>
+<span class="source-line-no">432</span><span id="line-432"></span>
+<span class="source-line-no">433</span><span id="line-433">   /**</span>
+<span class="source-line-no">434</span><span id="line-434">    * Sets this item's stable id.</span>
+<span class="source-line-no">435</span><span id="line-435">    *</span>
+<span class="source-line-no">436</span><span id="line-436">    * &lt;p&gt;</span>
+<span class="source-line-no">437</span><span id="line-437">    * The id is emitted on the item's ribbon entry, where it is scoped to its card (it is not stamped as a DOM id).</span>
+<span class="source-line-no">438</span><span id="line-438">    * {@link #toMap()} rejects an id on the types the runtime ignores it for</span>
+<span class="source-line-no">439</span><span id="line-439">    * ({@code divider}).</span>
+<span class="source-line-no">440</span><span id="line-440">    *</span>
+<span class="source-line-no">441</span><span id="line-441">    * @param v The id.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">442</span><span id="line-442">    * @return This object.</span>
+<span class="source-line-no">443</span><span id="line-443">    * @throws IllegalArgumentException If {@code v} is &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">444</span><span id="line-444">    */</span>
+<span class="source-line-no">445</span><span id="line-445">   public RibbonItem id(String v) {</span>
+<span class="source-line-no">446</span><span id="line-446">      if (ib(v))</span>
+<span class="source-line-no">447</span><span id="line-447">         throw iaex("RibbonItem %s id must not be null or blank.", type);</span>
+<span class="source-line-no">448</span><span id="line-448">      id = v;</span>
+<span class="source-line-no">449</span><span id="line-449">      idExplicit = true;</span>
+<span class="source-line-no">450</span><span id="line-450">      return this;</span>
+<span class="source-line-no">451</span><span id="line-451">   }</span>
+<span class="source-line-no">452</span><span id="line-452"></span>
+<span class="source-line-no">453</span><span id="line-453">   /**</span>
+<span class="source-line-no">454</span><span id="line-454">    * Sets this item's title/label text.</span>
+<span class="source-line-no">455</span><span id="line-455">    *</span>
+<span class="source-line-no">456</span><span id="line-456">    * &lt;p&gt;</span>
+<span class="source-line-no">457</span><span id="line-457">    * On an {@code optionGroup} the title is not drawn; it becomes the group's accessible name</span>
+<span class="source-line-no">458</span><span id="line-458">    * ({@code role="group"} with {@code aria-label}).</span>
+<span class="source-line-no">459</span><span id="line-459">    *</span>
+<span class="source-line-no">460</span><span id="line-460">    * @param v The title.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">461</span><span id="line-461">    * @return This object.</span>
+<span class="source-line-no">462</span><span id="line-462">    */</span>
+<span class="source-line-no">463</span><span id="line-463">   public RibbonItem title(String v) {</span>
+<span class="source-line-no">464</span><span id="line-464">      title = v;</span>
+<span class="source-line-no">465</span><span id="line-465">      return this;</span>
+<span class="source-line-no">466</span><span id="line-466">   }</span>
+<span class="source-line-no">467</span><span id="line-467"></span>
+<span class="source-line-no">468</span><span id="line-468">   /**</span>
+<span class="source-line-no">469</span><span id="line-469">    * Clusters this item with adjacent items sharing the same group name.</span>
+<span class="source-line-no">470</span><span id="line-470">    *</span>
+<span class="source-line-no">471</span><span id="line-471">    * &lt;p&gt;</span>
+<span class="source-line-no">472</span><span id="line-472">    * The toolbar's canonical group ids are {@code search}, {@code entity}, {@code filter}, {@code export},</span>
+<span class="source-line-no">473</span><span id="line-473">    * {@code viewing}, {@code page} and {@code status}.  Groups using them are sorted into that order among the slots they already</span>
+<span class="source-line-no">474</span><span id="line-474">    * occupy; groups with any other name keep their declared position.  An ungrouped {@code refresh} joins the</span>
+<span class="source-line-no">475</span><span id="line-475">    * {@code page} group, last, when one exists.</span>
+<span class="source-line-no">476</span><span id="line-476">    *</span>
+<span class="source-line-no">477</span><span id="line-477">    * @param v The group name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">478</span><span id="line-478">    * @return This object.</span>
+<span class="source-line-no">479</span><span id="line-479">    */</span>
+<span class="source-line-no">480</span><span id="line-480">   public RibbonItem group(String v) {</span>
+<span class="source-line-no">481</span><span id="line-481">      group = v;</span>
+<span class="source-line-no">482</span><span id="line-482">      return this;</span>
+<span class="source-line-no">483</span><span id="line-483">   }</span>
+<span class="source-line-no">484</span><span id="line-484"></span>
+<span class="source-line-no">485</span><span id="line-485">   /**</span>
+<span class="source-line-no">486</span><span id="line-486">    * Sets how this item's button is drawn.</span>
+<span class="source-line-no">487</span><span id="line-487">    *</span>
+<span class="source-line-no">488</span><span id="line-488">    * @param v The appearance; currently only {@code icon}.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
 <span class="source-line-no">489</span><span id="line-489">    * @return This object.</span>
-<span class="source-line-no">490</span><span id="line-490">    */</span>
-<span class="source-line-no">491</span><span id="line-491">   public RibbonItem defaultOn() {</span>
-<span class="source-line-no">492</span><span id="line-492">      dflt = Boolean.TRUE;</span>
-<span class="source-line-no">493</span><span id="line-493">      return this;</span>
-<span class="source-line-no">494</span><span id="line-494">   }</span>
-<span class="source-line-no">495</span><span id="line-495"></span>
-<span class="source-line-no">496</span><span id="line-496">   /**</span>
-<span class="source-line-no">497</span><span id="line-497">    * Selects an {@code optionGroup} member until the user (or persisted state) says otherwise.</span>
-<span class="source-line-no">498</span><span id="line-498">    *</span>
-<span class="source-line-no">499</span><span id="line-499">    * @param memberId The member's id; checked against the members by {@link #toMap()}.</span>
-<span class="source-line-no">500</span><span id="line-500">    * @return This object.</span>
-<span class="source-line-no">501</span><span id="line-501">    * @throws IllegalArgumentException If this item is a plain {@code option} (use {@link #defaultOn()}).</span>
-<span class="source-line-no">502</span><span id="line-502">    */</span>
-<span class="source-line-no">503</span><span id="line-503">   public RibbonItem defaultOption(String memberId) {</span>
-<span class="source-line-no">504</span><span id="line-504">      if ("option".equals(type))</span>
-<span class="source-line-no">505</span><span id="line-505">         throw iaex("RibbonItem option '%s' cannot take defaultOption(); use defaultOn().", id);</span>
-<span class="source-line-no">506</span><span id="line-506">      dflt = memberId;</span>
+<span class="source-line-no">490</span><span id="line-490">    * @throws IllegalArgumentException If {@code v} is not a known appearance.</span>
+<span class="source-line-no">491</span><span id="line-491">    */</span>
+<span class="source-line-no">492</span><span id="line-492">   public RibbonItem appearance(String v) {</span>
+<span class="source-line-no">493</span><span id="line-493">      if (v != null)</span>
+<span class="source-line-no">494</span><span id="line-494">         checkOneOf(v, APPEARANCES, "appearance");</span>
+<span class="source-line-no">495</span><span id="line-495">      appearance = v;</span>
+<span class="source-line-no">496</span><span id="line-496">      return this;</span>
+<span class="source-line-no">497</span><span id="line-497">   }</span>
+<span class="source-line-no">498</span><span id="line-498"></span>
+<span class="source-line-no">499</span><span id="line-499">   /**</span>
+<span class="source-line-no">500</span><span id="line-500">    * Sets the icon name overriding this item's default icon.</span>
+<span class="source-line-no">501</span><span id="line-501">    *</span>
+<span class="source-line-no">502</span><span id="line-502">    * @param v The icon name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">503</span><span id="line-503">    * @return This object.</span>
+<span class="source-line-no">504</span><span id="line-504">    */</span>
+<span class="source-line-no">505</span><span id="line-505">   public RibbonItem symbol(String v) {</span>
+<span class="source-line-no">506</span><span id="line-506">      symbol = v;</span>
 <span class="source-line-no">507</span><span id="line-507">      return this;</span>
 <span class="source-line-no">508</span><span id="line-508">   }</span>
 <span class="source-line-no">509</span><span id="line-509"></span>
 <span class="source-line-no">510</span><span id="line-510">   /**</span>
-<span class="source-line-no">511</span><span id="line-511">    * Lets an {@code optionGroup}'s selected member be clicked again to deselect it.</span>
+<span class="source-line-no">511</span><span id="line-511">    * Sets the form-source URL supplying a dialog item's input fields.</span>
 <span class="source-line-no">512</span><span id="line-512">    *</span>
-<span class="source-line-no">513</span><span id="line-513">    * @param v Whether the group is deselectable.</span>
+<span class="source-line-no">513</span><span id="line-513">    * @param url The form URL.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
 <span class="source-line-no">514</span><span id="line-514">    * @return This object.</span>
 <span class="source-line-no">515</span><span id="line-515">    */</span>
-<span class="source-line-no">516</span><span id="line-516">   public RibbonItem deselectable(boolean v) {</span>
-<span class="source-line-no">517</span><span id="line-517">      deselectable = v;</span>
+<span class="source-line-no">516</span><span id="line-516">   public RibbonItem form(String url) {</span>
+<span class="source-line-no">517</span><span id="line-517">      form = url;</span>
 <span class="source-line-no">518</span><span id="line-518">      return this;</span>
 <span class="source-line-no">519</span><span id="line-519">   }</span>
 <span class="source-line-no">520</span><span id="line-520"></span>
 <span class="source-line-no">521</span><span id="line-521">   /**</span>
-<span class="source-line-no">522</span><span id="line-522">    * Builds this item's ribbon entry.</span>
+<span class="source-line-no">522</span><span id="line-522">    * Sets the URL a dialog item's form submits to.</span>
 <span class="source-line-no">523</span><span id="line-523">    *</span>
-<span class="source-line-no">524</span><span id="line-524">    * @return The entry, {@code type} first, then only the keys that were set.</span>
-<span class="source-line-no">525</span><span id="line-525">    * @throws IllegalArgumentException If the item sets a key the runtime ignores for its type, a top-level</span>
-<span class="source-line-no">526</span><span id="line-526">    *    {@code option} sets neither or both of {@code column} and {@code param} or no {@code value}, an</span>
-<span class="source-line-no">527</span><span id="line-527">    *    {@code export} has no buttons, or a {@code default} does not suit the item (an {@code option} takes</span>
-<span class="source-line-no">528</span><span id="line-528">    *    {@link #defaultOn()}; an {@code optionGroup} takes {@link #defaultOption(String)} naming a member), or a</span>
-<span class="source-line-no">529</span><span id="line-529">    *    {@code target} is set on a type the runtime does not route.</span>
-<span class="source-line-no">530</span><span id="line-530">    */</span>
-<span class="source-line-no">531</span><span id="line-531">   public JsonMap toMap() {</span>
-<span class="source-line-no">532</span><span id="line-532">      var m = toMap(true);</span>
-<span class="source-line-no">533</span><span id="line-533">      check(m, null);</span>
-<span class="source-line-no">534</span><span id="line-534">      return m;</span>
-<span class="source-line-no">535</span><span id="line-535">   }</span>
-<span class="source-line-no">536</span><span id="line-536"></span>
-<span class="source-line-no">537</span><span id="line-537">   private JsonMap toMap(boolean withType) {</span>
-<span class="source-line-no">538</span><span id="line-538">      var m = new JsonMap();</span>
-<span class="source-line-no">539</span><span id="line-539">      if (withType)</span>
-<span class="source-line-no">540</span><span id="line-540">         m.put("type", type);</span>
-<span class="source-line-no">541</span><span id="line-541">      if (id != null)</span>
-<span class="source-line-no">542</span><span id="line-542">         m.put("id", id);</span>
-<span class="source-line-no">543</span><span id="line-543">      if (title != null)</span>
-<span class="source-line-no">544</span><span id="line-544">         m.put("title", title);</span>
-<span class="source-line-no">545</span><span id="line-545">      if (group != null)</span>
-<span class="source-line-no">546</span><span id="line-546">         m.put("group", group);</span>
-<span class="source-line-no">547</span><span id="line-547">      if (appearance != null)</span>
-<span class="source-line-no">548</span><span id="line-548">         m.put("appearance", appearance);</span>
-<span class="source-line-no">549</span><span id="line-549">      if (symbol != null)</span>
-<span class="source-line-no">550</span><span id="line-550">         m.put("symbol", symbol);</span>
-<span class="source-line-no">551</span><span id="line-551">      if (topic != null)</span>
-<span class="source-line-no">552</span><span id="line-552">         m.put("topic", topic);</span>
-<span class="source-line-no">553</span><span id="line-553">      if (payload != null)</span>
-<span class="source-line-no">554</span><span id="line-554">         m.put("payload", payload);</span>
-<span class="source-line-no">555</span><span id="line-555">      if (target != null)</span>
-<span class="source-line-no">556</span><span id="line-556">         m.put("target", target);</span>
-<span class="source-line-no">557</span><span id="line-557">      if (form != null)</span>
-<span class="source-line-no">558</span><span id="line-558">         m.put("form", form);</span>
-<span class="source-line-no">559</span><span id="line-559">      if (endpoint != null)</span>
-<span class="source-line-no">560</span><span id="line-560">         m.put("endpoint", endpoint);</span>
-<span class="source-line-no">561</span><span id="line-561">      if (method != null)</span>
-<span class="source-line-no">562</span><span id="line-562">         m.put("method", method);</span>
-<span class="source-line-no">563</span><span id="line-563">      if (onSuccess != null)</span>
-<span class="source-line-no">564</span><span id="line-564">         m.put("onSuccess", onSuccess);</span>
-<span class="source-line-no">565</span><span id="line-565">      if (buttons != null)</span>
-<span class="source-line-no">566</span><span id="line-566">         m.put("buttons", buttons);</span>
-<span class="source-line-no">567</span><span id="line-567">      if (optional != null)</span>
-<span class="source-line-no">568</span><span id="line-568">         m.put("optional", optional);</span>
-<span class="source-line-no">569</span><span id="line-569">      if (column != null)</span>
-<span class="source-line-no">570</span><span id="line-570">         m.put("column", column);</span>
-<span class="source-line-no">571</span><span id="line-571">      if (param != null)</span>
-<span class="source-line-no">572</span><span id="line-572">         m.put("param", param);</span>
-<span class="source-line-no">573</span><span id="line-573">      if (value != null)</span>
-<span class="source-line-no">574</span><span id="line-574">         m.put("value", value);</span>
-<span class="source-line-no">575</span><span id="line-575">      if (persist != null)</span>
-<span class="source-line-no">576</span><span id="line-576">         m.put("persist", persist);</span>
-<span class="source-line-no">577</span><span id="line-577">      if (dflt != null)</span>
-<span class="source-line-no">578</span><span id="line-578">         m.put("default", dflt);</span>
-<span class="source-line-no">579</span><span id="line-579">      if (deselectable != null)</span>
-<span class="source-line-no">580</span><span id="line-580">         m.put("deselectable", deselectable);</span>
-<span class="source-line-no">581</span><span id="line-581">      if (visibleWhen != null)</span>
-<span class="source-line-no">582</span><span id="line-582">         m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));</span>
-<span class="source-line-no">583</span><span id="line-583">      if (options != null) {</span>
-<span class="source-line-no">584</span><span id="line-584">         m.put("options", new JsonList(options.stream().map(o -&gt; o.toMap(false)).toList()));</span>
-<span class="source-line-no">585</span><span id="line-585">      }</span>
-<span class="source-line-no">586</span><span id="line-586">      return m;</span>
-<span class="source-line-no">587</span><span id="line-587">   }</span>
-<span class="source-line-no">588</span><span id="line-588"></span>
-<span class="source-line-no">589</span><span id="line-589">   /**</span>
-<span class="source-line-no">590</span><span id="line-590">    * Validates an authored ribbon item map (for example from a JSON5 card body) with exactly the rules</span>
-<span class="source-line-no">591</span><span id="line-591">    * {@link #toMap()} applies to a built item: a known {@code type}, only keys the runtime reads, an</span>
-<span class="source-line-no">592</span><span id="line-592">    * {@code export} with at least one valid button, an {@code option} with exactly one of {@code column} or</span>
-<span class="source-line-no">593</span><span id="line-593">    * {@code param} plus a {@code value}, a {@code default} that suits the item, a valid {@code appearance} and</span>
-<span class="source-line-no">594</span><span id="line-594">    * {@code target}, a well-formed {@code visibleWhen} (a list of {@code field}/{@code op} rules with a known op), and the same rules for each {@code optionGroup} member.</span>
-<span class="source-line-no">595</span><span id="line-595">    *</span>
-<span class="source-line-no">596</span><span id="line-596">    * @param item The authored item.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">597</span><span id="line-597">    * @throws IllegalArgumentException If the item is not valid.</span>
-<span class="source-line-no">598</span><span id="line-598">    */</span>
-<span class="source-line-no">599</span><span id="line-599">   public static void validate(Map&lt;?,?&gt; item) {</span>
-<span class="source-line-no">600</span><span id="line-600">      check(item, null);</span>
-<span class="source-line-no">601</span><span id="line-601">   }</span>
-<span class="source-line-no">602</span><span id="line-602"></span>
-<span class="source-line-no">603</span><span id="line-603">   // The one rule set behind toMap() and validate().  parentId is non-null only for an optionGroup member (a map with no 'type').</span>
-<span class="source-line-no">604</span><span id="line-604">   private static void check(Map&lt;?,?&gt; m, String parentId) {</span>
-<span class="source-line-no">605</span><span id="line-605">      var isMember = parentId != null;</span>
-<span class="source-line-no">606</span><span id="line-606">      var t = m.get("type");</span>
-<span class="source-line-no">607</span><span id="line-607">      var declaredType = t instanceof String ts ? ts : null;</span>
-<span class="source-line-no">608</span><span id="line-608">      var type = isMember ? "option" : declaredType;</span>
-<span class="source-line-no">609</span><span id="line-609">      if (! isMember &amp;&amp; (type == null || ! ALLOWED.containsKey(type))) {</span>
-<span class="source-line-no">610</span><span id="line-610">         if (t == null)</span>
-<span class="source-line-no">611</span><span id="line-611">            throw iaex("RibbonItem requires a 'type'; one of '%s'.", String.join(", ", new TreeSet&lt;&gt;(ALLOWED.keySet())));</span>
-<span class="source-line-no">612</span><span id="line-612">         if (! (t instanceof String))</span>
-<span class="source-line-no">613</span><span id="line-613">            throw iaex("RibbonItem 'type' must be a string, not '%s'; one of '%s'.", t, String.join(", ", new TreeSet&lt;&gt;(ALLOWED.keySet())));</span>
-<span class="source-line-no">614</span><span id="line-614">         throw iaex("RibbonItem type '%s' is not one of '%s'.", t, String.join(", ", new TreeSet&lt;&gt;(ALLOWED.keySet())));</span>
-<span class="source-line-no">615</span><span id="line-615">      }</span>
-<span class="source-line-no">616</span><span id="line-616">      var id = m.get("id");</span>
-<span class="source-line-no">617</span><span id="line-617">      if (! isMember) {</span>
-<span class="source-line-no">618</span><span id="line-618">         if ("export".equals(type)) {</span>
-<span class="source-line-no">619</span><span id="line-619">            if (m.get("buttons") == null &amp;&amp; m.get("optional") == null)</span>
-<span class="source-line-no">620</span><span id="line-620">               throw iaex("RibbonItem export requires at least one button.");</span>
-<span class="source-line-no">621</span><span id="line-621">            checkAll(m.get("buttons"), EXPORT_BUTTONS, "export button");</span>
-<span class="source-line-no">622</span><span id="line-622">            checkAll(m.get("optional"), EXPORT_OPTIONAL, "optional export button");</span>
-<span class="source-line-no">623</span><span id="line-623">         }</span>
-<span class="source-line-no">624</span><span id="line-624">         if (m.get("appearance") != null)</span>
-<span class="source-line-no">625</span><span id="line-625">            checkOneOf(String.valueOf(m.get("appearance")), APPEARANCES, "appearance");</span>
-<span class="source-line-no">626</span><span id="line-626">         if (m.get("target") != null &amp;&amp; ! (m.get("target") instanceof String ts &amp;&amp; CARD_ID.matcher(ts).matches()))</span>
-<span class="source-line-no">627</span><span id="line-627">            throw iaex("RibbonItem target '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", m.get("target"));</span>
-<span class="source-line-no">628</span><span id="line-628">      }</span>
-<span class="source-line-no">629</span><span id="line-629">      if (isMember || "option".equals(type))</span>
-<span class="source-line-no">630</span><span id="line-630">         checkScope(m, id, ! isMember);</span>
-<span class="source-line-no">631</span><span id="line-631">      if (! isMember &amp;&amp; m.get("default") != null)</span>
-<span class="source-line-no">632</span><span id="line-632">         checkDefault(m, type, id);</span>
-<span class="source-line-no">633</span><span id="line-633">      if (! isMember &amp;&amp; m.get("visibleWhen") != null)</span>
-<span class="source-line-no">634</span><span id="line-634">         checkVisibleWhen(m.get("visibleWhen"), type, id);</span>
-<span class="source-line-no">635</span><span id="line-635">      if ("optionGroup".equals(type) &amp;&amp; m.get("options") != null) {</span>
-<span class="source-line-no">636</span><span id="line-636">         if (! (m.get("options") instanceof List&lt;?&gt; members))</span>
-<span class="source-line-no">637</span><span id="line-637">            throw iaex("RibbonItem optionGroup '%s' options must be a list.", id);</span>
-<span class="source-line-no">638</span><span id="line-638">         for (var o : members) {</span>
-<span class="source-line-no">639</span><span id="line-639">            if (! (o instanceof Map&lt;?,?&gt; mm))</span>
-<span class="source-line-no">640</span><span id="line-640">               throw iaex("RibbonItem optionGroup '%s' each option must be an object.", id);</span>
-<span class="source-line-no">641</span><span id="line-641">            check(mm, String.valueOf(id));</span>
-<span class="source-line-no">642</span><span id="line-642">         }</span>
-<span class="source-line-no">643</span><span id="line-643">      }</span>
-<span class="source-line-no">644</span><span id="line-644">      var allowed = isMember ? MEMBER_ALLOWED : ALLOWED.get(type);</span>
-<span class="source-line-no">645</span><span id="line-645">      for (var k : m.keySet())</span>
-<span class="source-line-no">646</span><span id="line-646">         if (! allowed.contains(String.valueOf(k))) {</span>
-<span class="source-line-no">647</span><span id="line-647">            if (isMember)</span>
-<span class="source-line-no">648</span><span id="line-648">               throw iaex("RibbonItem optionGroup '%s' member '%s' does not accept '%s'.", parentId, id, k);</span>
-<span class="source-line-no">649</span><span id="line-649">            throw iaex("RibbonItem %s%s does not accept '%s'.", type, id == null ? "" : " '" + id + "'", k);</span>
-<span class="source-line-no">650</span><span id="line-650">         }</span>
-<span class="source-line-no">651</span><span id="line-651">   }</span>
-<span class="source-line-no">652</span><span id="line-652"></span>
-<span class="source-line-no">653</span><span id="line-653">   private static void checkVisibleWhen(Object v, String type, Object id) {</span>
-<span class="source-line-no">654</span><span id="line-654">      var ok = v instanceof List&lt;?&gt; l &amp;&amp; l.stream().allMatch(r -&gt; r instanceof Map&lt;?,?&gt; rm</span>
-<span class="source-line-no">655</span><span id="line-655">         &amp;&amp; rm.get("field") instanceof String f &amp;&amp; ! f.isBlank()</span>
-<span class="source-line-no">656</span><span id="line-656">         &amp;&amp; rm.get("op") instanceof String op &amp;&amp; VisibilityRule.KNOWN_OPS.contains(op));</span>
-<span class="source-line-no">657</span><span id="line-657">      if (! ok)</span>
-<span class="source-line-no">658</span><span id="line-658">         throw iaex("RibbonItem %s%s visibleWhen must be a list of {field, op[, value]} rules with a known op.", type, id == null ? "" : " '" + id + "'");</span>
-<span class="source-line-no">659</span><span id="line-659">   }</span>
-<span class="source-line-no">660</span><span id="line-660"></span>
-<span class="source-line-no">661</span><span id="line-661">   private static void checkAll(Object v, List&lt;String&gt; allowed, String what) {</span>
-<span class="source-line-no">662</span><span id="line-662">      if (v == null)</span>
-<span class="source-line-no">663</span><span id="line-663">         return;</span>
-<span class="source-line-no">664</span><span id="line-664">      if (! (v instanceof List&lt;?&gt; l))</span>
-<span class="source-line-no">665</span><span id="line-665">         throw iaex("RibbonItem %s list must be a list.", what);</span>
-<span class="source-line-no">666</span><span id="line-666">      for (var b : l)</span>
-<span class="source-line-no">667</span><span id="line-667">         checkOneOf(String.valueOf(b), allowed, what);</span>
-<span class="source-line-no">668</span><span id="line-668">   }</span>
-<span class="source-line-no">669</span><span id="line-669"></span>
-<span class="source-line-no">670</span><span id="line-670">   private static void checkScope(Map&lt;?,?&gt; m, Object id, boolean topLevel) {</span>
-<span class="source-line-no">671</span><span id="line-671">      var column = m.get("column");</span>
-<span class="source-line-no">672</span><span id="line-672">      var param = m.get("param");</span>
-<span class="source-line-no">673</span><span id="line-673">      if (column != null &amp;&amp; param != null)</span>
-<span class="source-line-no">674</span><span id="line-674">         throw iaex("RibbonItem option '%s' sets both column '%s' and param '%s'.", id, column, param);</span>
-<span class="source-line-no">675</span><span id="line-675">      if (topLevel &amp;&amp; column == null &amp;&amp; param == null)</span>
-<span class="source-line-no">676</span><span id="line-676">         throw iaex("RibbonItem option '%s' sets neither column nor param.", id);</span>
-<span class="source-line-no">677</span><span id="line-677">      if (topLevel &amp;&amp; m.get("value") == null)</span>
-<span class="source-line-no">678</span><span id="line-678">         throw iaex("RibbonItem option '%s' requires a value.", id);</span>
-<span class="source-line-no">679</span><span id="line-679">   }</span>
-<span class="source-line-no">680</span><span id="line-680"></span>
-<span class="source-line-no">681</span><span id="line-681">   private static void checkDefault(Map&lt;?,?&gt; m, String type, Object id) {</span>
-<span class="source-line-no">682</span><span id="line-682">      var d = m.get("default");</span>
-<span class="source-line-no">683</span><span id="line-683">      if ("optionGroup".equals(type)) {</span>
-<span class="source-line-no">684</span><span id="line-684">         var ok = d instanceof String &amp;&amp; m.get("options") instanceof List&lt;?&gt; l</span>
-<span class="source-line-no">685</span><span id="line-685">            &amp;&amp; l.stream().anyMatch(o -&gt; o instanceof Map&lt;?,?&gt; mm &amp;&amp; d.equals(mm.get("id")));</span>
-<span class="source-line-no">686</span><span id="line-686">         if (! ok)</span>
-<span class="source-line-no">687</span><span id="line-687">            throw iaex("RibbonItem optionGroup '%s' default '%s' is not one of its options.", id, d);</span>
-<span class="source-line-no">688</span><span id="line-688">      } else if ("option".equals(type) &amp;&amp; ! Boolean.TRUE.equals(d)) {</span>
-<span class="source-line-no">689</span><span id="line-689">         throw iaex("RibbonItem option '%s' default '%s' must be on; use defaultOn().", id, d);</span>
-<span class="source-line-no">690</span><span id="line-690">      }</span>
-<span class="source-line-no">691</span><span id="line-691">   }</span>
-<span class="source-line-no">692</span><span id="line-692"></span>
-<span class="source-line-no">693</span><span id="line-693">   private static Set&lt;String&gt; union(Set&lt;String&gt; base, String...more) {</span>
-<span class="source-line-no">694</span><span id="line-694">      var s = new LinkedHashSet&lt;&gt;(base);</span>
-<span class="source-line-no">695</span><span id="line-695">      s.addAll(Arrays.asList(more));</span>
-<span class="source-line-no">696</span><span id="line-696">      return Set.copyOf(s);</span>
-<span class="source-line-no">697</span><span id="line-697">   }</span>
-<span class="source-line-no">698</span><span id="line-698"></span>
-<span class="source-line-no">699</span><span id="line-699">   private static void checkOneOf(String v, List&lt;String&gt; allowed, String what) {</span>
-<span class="source-line-no">700</span><span id="line-700">      if (! allowed.contains(v))</span>
-<span class="source-line-no">701</span><span id="line-701">         throw iaex("RibbonItem %s '%s' is not one of '%s'.", what, v, String.join(", ", allowed));</span>
-<span class="source-line-no">702</span><span id="line-702">   }</span>
-<span class="source-line-no">703</span><span id="line-703">}</span>
+<span class="source-line-no">524</span><span id="line-524">    * @param url The endpoint URL.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">525</span><span id="line-525">    * @return This object.</span>
+<span class="source-line-no">526</span><span id="line-526">    */</span>
+<span class="source-line-no">527</span><span id="line-527">   public RibbonItem endpoint(String url) {</span>
+<span class="source-line-no">528</span><span id="line-528">      endpoint = url;</span>
+<span class="source-line-no">529</span><span id="line-529">      return this;</span>
+<span class="source-line-no">530</span><span id="line-530">   }</span>
+<span class="source-line-no">531</span><span id="line-531"></span>
+<span class="source-line-no">532</span><span id="line-532">   /**</span>
+<span class="source-line-no">533</span><span id="line-533">    * Sets the non-safe HTTP method a dialog item's form submits with.</span>
+<span class="source-line-no">534</span><span id="line-534">    *</span>
+<span class="source-line-no">535</span><span id="line-535">    * @param m The method.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">536</span><span id="line-536">    * @return This object.</span>
+<span class="source-line-no">537</span><span id="line-537">    */</span>
+<span class="source-line-no">538</span><span id="line-538">   public RibbonItem method(RowAction.Method m) {</span>
+<span class="source-line-no">539</span><span id="line-539">      if (m == null)</span>
+<span class="source-line-no">540</span><span id="line-540">         throw iaex("RibbonItem method must not be null.");</span>
+<span class="source-line-no">541</span><span id="line-541">      method = m.wire();</span>
+<span class="source-line-no">542</span><span id="line-542">      return this;</span>
+<span class="source-line-no">543</span><span id="line-543">   }</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   /**</span>
+<span class="source-line-no">546</span><span id="line-546">    * Sets what the runtime does with a successful dialog submission.</span>
+<span class="source-line-no">547</span><span id="line-547">    *</span>
+<span class="source-line-no">548</span><span id="line-548">    * @param s The success behavior.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">549</span><span id="line-549">    * @return This object.</span>
+<span class="source-line-no">550</span><span id="line-550">    */</span>
+<span class="source-line-no">551</span><span id="line-551">   public RibbonItem onSuccess(RowAction.OnSuccess s) {</span>
+<span class="source-line-no">552</span><span id="line-552">      if (s == null)</span>
+<span class="source-line-no">553</span><span id="line-553">         throw iaex("RibbonItem onSuccess must not be null.");</span>
+<span class="source-line-no">554</span><span id="line-554">      onSuccess = s.wire();</span>
+<span class="source-line-no">555</span><span id="line-555">      return this;</span>
+<span class="source-line-no">556</span><span id="line-556">   }</span>
+<span class="source-line-no">557</span><span id="line-557"></span>
+<span class="source-line-no">558</span><span id="line-558">   /**</span>
+<span class="source-line-no">559</span><span id="line-559">    * Adds export buttons that are omitted, rather than rendered disabled, when their library is absent.</span>
+<span class="source-line-no">560</span><span id="line-560">    *</span>
+<span class="source-line-no">561</span><span id="line-561">    * @param names The buttons, each {@code excel} or {@code pdf}.</span>
+<span class="source-line-no">562</span><span id="line-562">    * @return This object.</span>
+<span class="source-line-no">563</span><span id="line-563">    * @throws IllegalArgumentException If a name is not one of those, or is already a required button.</span>
+<span class="source-line-no">564</span><span id="line-564">    */</span>
+<span class="source-line-no">565</span><span id="line-565">   public RibbonItem optional(String...names) {</span>
+<span class="source-line-no">566</span><span id="line-566">      for (var n : names) {</span>
+<span class="source-line-no">567</span><span id="line-567">         checkOneOf(n, EXPORT_OPTIONAL, "optional export button");</span>
+<span class="source-line-no">568</span><span id="line-568">         if (buttons != null &amp;&amp; buttons.contains(n))</span>
+<span class="source-line-no">569</span><span id="line-569">            throw iaex("RibbonItem export button '%s' is both required and optional.", n);</span>
+<span class="source-line-no">570</span><span id="line-570">      }</span>
+<span class="source-line-no">571</span><span id="line-571">      optional = names.length == 0 ? null : List.of(names);</span>
+<span class="source-line-no">572</span><span id="line-572">      return this;</span>
+<span class="source-line-no">573</span><span id="line-573">   }</span>
+<span class="source-line-no">574</span><span id="line-574"></span>
+<span class="source-line-no">575</span><span id="line-575">   /**</span>
+<span class="source-line-no">576</span><span id="line-576">    * Scopes an {@code option} to a table column.</span>
+<span class="source-line-no">577</span><span id="line-577">    *</span>
+<span class="source-line-no">578</span><span id="line-578">    * @param name The row-data column name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">579</span><span id="line-579">    * @return This object.</span>
+<span class="source-line-no">580</span><span id="line-580">    */</span>
+<span class="source-line-no">581</span><span id="line-581">   public RibbonItem column(String name) {</span>
+<span class="source-line-no">582</span><span id="line-582">      column = name;</span>
+<span class="source-line-no">583</span><span id="line-583">      return this;</span>
+<span class="source-line-no">584</span><span id="line-584">   }</span>
+<span class="source-line-no">585</span><span id="line-585"></span>
+<span class="source-line-no">586</span><span id="line-586">   /**</span>
+<span class="source-line-no">587</span><span id="line-587">    * Scopes an {@code option} to a URL query parameter.</span>
+<span class="source-line-no">588</span><span id="line-588">    *</span>
+<span class="source-line-no">589</span><span id="line-589">    * @param name The parameter name.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">590</span><span id="line-590">    * @return This object.</span>
+<span class="source-line-no">591</span><span id="line-591">    */</span>
+<span class="source-line-no">592</span><span id="line-592">   public RibbonItem param(String name) {</span>
+<span class="source-line-no">593</span><span id="line-593">      param = name;</span>
+<span class="source-line-no">594</span><span id="line-594">      return this;</span>
+<span class="source-line-no">595</span><span id="line-595">   }</span>
+<span class="source-line-no">596</span><span id="line-596"></span>
+<span class="source-line-no">597</span><span id="line-597">   /**</span>
+<span class="source-line-no">598</span><span id="line-598">    * Sets an {@code option}'s value: a BeanQuery {@code $}-expression for a {@link #column(String) column}-scoped</span>
+<span class="source-line-no">599</span><span id="line-599">    * option, or the raw parameter value for a {@link #param(String) param}-scoped one.</span>
+<span class="source-line-no">600</span><span id="line-600">    *</span>
+<span class="source-line-no">601</span><span id="line-601">    * @param v The value.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">602</span><span id="line-602">    * @return This object.</span>
+<span class="source-line-no">603</span><span id="line-603">    */</span>
+<span class="source-line-no">604</span><span id="line-604">   public RibbonItem value(String v) {</span>
+<span class="source-line-no">605</span><span id="line-605">      value = v;</span>
+<span class="source-line-no">606</span><span id="line-606">      return this;</span>
+<span class="source-line-no">607</span><span id="line-607">   }</span>
+<span class="source-line-no">608</span><span id="line-608"></span>
+<span class="source-line-no">609</span><span id="line-609">   /**</span>
+<span class="source-line-no">610</span><span id="line-610">    * Sets whether this option's (or group's) state is remembered across page loads.</span>
+<span class="source-line-no">611</span><span id="line-611">    *</span>
+<span class="source-line-no">612</span><span id="line-612">    * @param v Whether to persist.</span>
+<span class="source-line-no">613</span><span id="line-613">    * @return This object.</span>
+<span class="source-line-no">614</span><span id="line-614">    */</span>
+<span class="source-line-no">615</span><span id="line-615">   public RibbonItem persist(boolean v) {</span>
+<span class="source-line-no">616</span><span id="line-616">      persist = v;</span>
+<span class="source-line-no">617</span><span id="line-617">      return this;</span>
+<span class="source-line-no">618</span><span id="line-618">   }</span>
+<span class="source-line-no">619</span><span id="line-619"></span>
+<span class="source-line-no">620</span><span id="line-620">   /**</span>
+<span class="source-line-no">621</span><span id="line-621">    * Marks an {@code option} as on until the user (or persisted state) says otherwise.</span>
+<span class="source-line-no">622</span><span id="line-622">    *</span>
+<span class="source-line-no">623</span><span id="line-623">    * @return This object.</span>
+<span class="source-line-no">624</span><span id="line-624">    */</span>
+<span class="source-line-no">625</span><span id="line-625">   public RibbonItem defaultOn() {</span>
+<span class="source-line-no">626</span><span id="line-626">      dflt = Boolean.TRUE;</span>
+<span class="source-line-no">627</span><span id="line-627">      return this;</span>
+<span class="source-line-no">628</span><span id="line-628">   }</span>
+<span class="source-line-no">629</span><span id="line-629"></span>
+<span class="source-line-no">630</span><span id="line-630">   /**</span>
+<span class="source-line-no">631</span><span id="line-631">    * Selects an {@code optionGroup} member until the user (or persisted state) says otherwise.</span>
+<span class="source-line-no">632</span><span id="line-632">    *</span>
+<span class="source-line-no">633</span><span id="line-633">    * @param memberId The member's id; checked against the members by {@link #toMap()}.</span>
+<span class="source-line-no">634</span><span id="line-634">    * @return This object.</span>
+<span class="source-line-no">635</span><span id="line-635">    * @throws IllegalArgumentException If this item is a plain {@code option} (use {@link #defaultOn()}).</span>
+<span class="source-line-no">636</span><span id="line-636">    */</span>
+<span class="source-line-no">637</span><span id="line-637">   public RibbonItem defaultOption(String memberId) {</span>
+<span class="source-line-no">638</span><span id="line-638">      if ("option".equals(type))</span>
+<span class="source-line-no">639</span><span id="line-639">         throw iaex("RibbonItem option '%s' cannot take defaultOption(); use defaultOn().", id);</span>
+<span class="source-line-no">640</span><span id="line-640">      dflt = memberId;</span>
+<span class="source-line-no">641</span><span id="line-641">      return this;</span>
+<span class="source-line-no">642</span><span id="line-642">   }</span>
+<span class="source-line-no">643</span><span id="line-643"></span>
+<span class="source-line-no">644</span><span id="line-644">   /**</span>
+<span class="source-line-no">645</span><span id="line-645">    * Lets an {@code optionGroup}'s selected member be clicked again to deselect it.</span>
+<span class="source-line-no">646</span><span id="line-646">    *</span>
+<span class="source-line-no">647</span><span id="line-647">    * @param v Whether the group is deselectable.</span>
+<span class="source-line-no">648</span><span id="line-648">    * @return This object.</span>
+<span class="source-line-no">649</span><span id="line-649">    */</span>
+<span class="source-line-no">650</span><span id="line-650">   public RibbonItem deselectable(boolean v) {</span>
+<span class="source-line-no">651</span><span id="line-651">      deselectable = v;</span>
+<span class="source-line-no">652</span><span id="line-652">      return this;</span>
+<span class="source-line-no">653</span><span id="line-653">   }</span>
+<span class="source-line-no">654</span><span id="line-654"></span>
+<span class="source-line-no">655</span><span id="line-655">   /**</span>
+<span class="source-line-no">656</span><span id="line-656">    * Builds this item's ribbon entry.</span>
+<span class="source-line-no">657</span><span id="line-657">    *</span>
+<span class="source-line-no">658</span><span id="line-658">    * @return The entry, {@code type} first, then only the keys that were set.</span>
+<span class="source-line-no">659</span><span id="line-659">    * @throws IllegalArgumentException If the item sets a key the runtime ignores for its type, a top-level</span>
+<span class="source-line-no">660</span><span id="line-660">    *    {@code option} sets neither or both of {@code column} and {@code param} or no {@code value}, an</span>
+<span class="source-line-no">661</span><span id="line-661">    *    {@code export} has no buttons, or a {@code default} does not suit the item (an {@code option} takes</span>
+<span class="source-line-no">662</span><span id="line-662">    *    {@link #defaultOn()}; an {@code optionGroup} takes {@link #defaultOption(String)} naming a member), or a</span>
+<span class="source-line-no">663</span><span id="line-663">    *    {@code target} is set on a type the runtime does not route.</span>
+<span class="source-line-no">664</span><span id="line-664">    */</span>
+<span class="source-line-no">665</span><span id="line-665">   public JsonMap toMap() {</span>
+<span class="source-line-no">666</span><span id="line-666">      var m = toMap(true);</span>
+<span class="source-line-no">667</span><span id="line-667">      check(m, null);</span>
+<span class="source-line-no">668</span><span id="line-668">      return m;</span>
+<span class="source-line-no">669</span><span id="line-669">   }</span>
+<span class="source-line-no">670</span><span id="line-670"></span>
+<span class="source-line-no">671</span><span id="line-671">   private JsonMap toMap(boolean withType) {</span>
+<span class="source-line-no">672</span><span id="line-672">      var m = new JsonMap();</span>
+<span class="source-line-no">673</span><span id="line-673">      if (withType)</span>
+<span class="source-line-no">674</span><span id="line-674">         m.put("type", type);</span>
+<span class="source-line-no">675</span><span id="line-675">      if (id != null)</span>
+<span class="source-line-no">676</span><span id="line-676">         m.put("id", id);</span>
+<span class="source-line-no">677</span><span id="line-677">      if (icon != null)</span>
+<span class="source-line-no">678</span><span id="line-678">         m.put("icon", icon);</span>
+<span class="source-line-no">679</span><span id="line-679">      if (label != null)</span>
+<span class="source-line-no">680</span><span id="line-680">         m.put("label", label);</span>
+<span class="source-line-no">681</span><span id="line-681">      if (title != null)</span>
+<span class="source-line-no">682</span><span id="line-682">         m.put("title", title);</span>
+<span class="source-line-no">683</span><span id="line-683">      if (group != null)</span>
+<span class="source-line-no">684</span><span id="line-684">         m.put("group", group);</span>
+<span class="source-line-no">685</span><span id="line-685">      if (appearance != null)</span>
+<span class="source-line-no">686</span><span id="line-686">         m.put("appearance", appearance);</span>
+<span class="source-line-no">687</span><span id="line-687">      if (symbol != null)</span>
+<span class="source-line-no">688</span><span id="line-688">         m.put("symbol", symbol);</span>
+<span class="source-line-no">689</span><span id="line-689">      if (topic != null)</span>
+<span class="source-line-no">690</span><span id="line-690">         m.put("topic", topic);</span>
+<span class="source-line-no">691</span><span id="line-691">      if (payload != null)</span>
+<span class="source-line-no">692</span><span id="line-692">         m.put("payload", payload);</span>
+<span class="source-line-no">693</span><span id="line-693">      if (target != null)</span>
+<span class="source-line-no">694</span><span id="line-694">         m.put("target", target);</span>
+<span class="source-line-no">695</span><span id="line-695">      if (form != null)</span>
+<span class="source-line-no">696</span><span id="line-696">         m.put("form", form);</span>
+<span class="source-line-no">697</span><span id="line-697">      if (endpoint != null)</span>
+<span class="source-line-no">698</span><span id="line-698">         m.put("endpoint", endpoint);</span>
+<span class="source-line-no">699</span><span id="line-699">      if (method != null)</span>
+<span class="source-line-no">700</span><span id="line-700">         m.put("method", method);</span>
+<span class="source-line-no">701</span><span id="line-701">      if (onSuccess != null)</span>
+<span class="source-line-no">702</span><span id="line-702">         m.put("onSuccess", onSuccess);</span>
+<span class="source-line-no">703</span><span id="line-703">      if (buttons != null)</span>
+<span class="source-line-no">704</span><span id="line-704">         m.put("buttons", buttons);</span>
+<span class="source-line-no">705</span><span id="line-705">      if (optional != null)</span>
+<span class="source-line-no">706</span><span id="line-706">         m.put("optional", optional);</span>
+<span class="source-line-no">707</span><span id="line-707">      if (column != null)</span>
+<span class="source-line-no">708</span><span id="line-708">         m.put("column", column);</span>
+<span class="source-line-no">709</span><span id="line-709">      if (param != null)</span>
+<span class="source-line-no">710</span><span id="line-710">         m.put("param", param);</span>
+<span class="source-line-no">711</span><span id="line-711">      if (value != null)</span>
+<span class="source-line-no">712</span><span id="line-712">         m.put("value", value);</span>
+<span class="source-line-no">713</span><span id="line-713">      if (persist != null)</span>
+<span class="source-line-no">714</span><span id="line-714">         m.put("persist", persist);</span>
+<span class="source-line-no">715</span><span id="line-715">      if (dflt != null)</span>
+<span class="source-line-no">716</span><span id="line-716">         m.put("default", dflt);</span>
+<span class="source-line-no">717</span><span id="line-717">      if (deselectable != null)</span>
+<span class="source-line-no">718</span><span id="line-718">         m.put("deselectable", deselectable);</span>
+<span class="source-line-no">719</span><span id="line-719">      if (visibleWhen != null)</span>
+<span class="source-line-no">720</span><span id="line-720">         m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));</span>
+<span class="source-line-no">721</span><span id="line-721">      if (options != null) {</span>
+<span class="source-line-no">722</span><span id="line-722">         m.put("options", new JsonList(options.stream().map(o -&gt; o.toMap(false)).toList()));</span>
+<span class="source-line-no">723</span><span id="line-723">      }</span>
+<span class="source-line-no">724</span><span id="line-724">      var mm = model.toMap();</span>
+<span class="source-line-no">725</span><span id="line-725">      if (mm != null)</span>
+<span class="source-line-no">726</span><span id="line-726">         m.put("model", mm);</span>
+<span class="source-line-no">727</span><span id="line-727">      return m;</span>
+<span class="source-line-no">728</span><span id="line-728">   }</span>
+<span class="source-line-no">729</span><span id="line-729"></span>
+<span class="source-line-no">730</span><span id="line-730">   /**</span>
+<span class="source-line-no">731</span><span id="line-731">    * Validates an authored ribbon item map (for example from a JSON5 card body) with exactly the rules</span>
+<span class="source-line-no">732</span><span id="line-732">    * {@link #toMap()} applies to a built item: a known {@code type}, only keys the runtime reads, an</span>
+<span class="source-line-no">733</span><span id="line-733">    * {@code export} with at least one valid button, an {@code option} with exactly one of {@code column} or</span>
+<span class="source-line-no">734</span><span id="line-734">    * {@code param} plus a {@code value}, a {@code default} that suits the item, a valid {@code appearance} and</span>
+<span class="source-line-no">735</span><span id="line-735">    * {@code target}, a well-formed {@code visibleWhen} (a list of {@code field}/{@code op} rules with a known op), and the same rules for each {@code optionGroup} member.</span>
+<span class="source-line-no">736</span><span id="line-736">    *</span>
+<span class="source-line-no">737</span><span id="line-737">    * @param item The authored item.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">738</span><span id="line-738">    * @throws IllegalArgumentException If the item is not valid.</span>
+<span class="source-line-no">739</span><span id="line-739">    */</span>
+<span class="source-line-no">740</span><span id="line-740">   public static void validate(Map&lt;?,?&gt; item) {</span>
+<span class="source-line-no">741</span><span id="line-741">      check(item, null);</span>
+<span class="source-line-no">742</span><span id="line-742">   }</span>
+<span class="source-line-no">743</span><span id="line-743"></span>
+<span class="source-line-no">744</span><span id="line-744">   // The one rule set behind toMap() and validate().  parentId is non-null only for an optionGroup member (a map with no 'type').</span>
+<span class="source-line-no">745</span><span id="line-745">   private static void check(Map&lt;?,?&gt; m, String parentId) {</span>
+<span class="source-line-no">746</span><span id="line-746">      var isMember = parentId != null;</span>
+<span class="source-line-no">747</span><span id="line-747">      var t = m.get("type");</span>
+<span class="source-line-no">748</span><span id="line-748">      var declaredType = t instanceof String ts ? ts : null;</span>
+<span class="source-line-no">749</span><span id="line-749">      var type = isMember ? "option" : declaredType;</span>
+<span class="source-line-no">750</span><span id="line-750">      if (! isMember &amp;&amp; (type == null || ! ALLOWED.containsKey(type))) {</span>
+<span class="source-line-no">751</span><span id="line-751">         if (t == null)</span>
+<span class="source-line-no">752</span><span id="line-752">            throw iaex("RibbonItem requires a 'type'; one of '%s'.", String.join(", ", new TreeSet&lt;&gt;(ALLOWED.keySet())));</span>
+<span class="source-line-no">753</span><span id="line-753">         if (! (t instanceof String))</span>
+<span class="source-line-no">754</span><span id="line-754">            throw iaex("RibbonItem 'type' must be a string, not '%s'; one of '%s'.", t, String.join(", ", new TreeSet&lt;&gt;(ALLOWED.keySet())));</span>
+<span class="source-line-no">755</span><span id="line-755">         throw iaex("RibbonItem type '%s' is not one of '%s'.", t, String.join(", ", new TreeSet&lt;&gt;(ALLOWED.keySet())));</span>
+<span class="source-line-no">756</span><span id="line-756">      }</span>
+<span class="source-line-no">757</span><span id="line-757">      var id = m.get("id");</span>
+<span class="source-line-no">758</span><span id="line-758">      if (! isMember) {</span>
+<span class="source-line-no">759</span><span id="line-759">         if ("export".equals(type)) {</span>
+<span class="source-line-no">760</span><span id="line-760">            if (m.get("buttons") == null &amp;&amp; m.get("optional") == null)</span>
+<span class="source-line-no">761</span><span id="line-761">               throw iaex("RibbonItem export requires at least one button.");</span>
+<span class="source-line-no">762</span><span id="line-762">            checkAll(m.get("buttons"), EXPORT_BUTTONS, "export button");</span>
+<span class="source-line-no">763</span><span id="line-763">            checkAll(m.get("optional"), EXPORT_OPTIONAL, "optional export button");</span>
+<span class="source-line-no">764</span><span id="line-764">         }</span>
+<span class="source-line-no">765</span><span id="line-765">         if (m.get("appearance") != null)</span>
+<span class="source-line-no">766</span><span id="line-766">            checkOneOf(String.valueOf(m.get("appearance")), APPEARANCES, "appearance");</span>
+<span class="source-line-no">767</span><span id="line-767">         if (m.get("target") != null &amp;&amp; ! (m.get("target") instanceof String ts &amp;&amp; CARD_ID.matcher(ts).matches()))</span>
+<span class="source-line-no">768</span><span id="line-768">            throw iaex("RibbonItem target '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", m.get("target"));</span>
+<span class="source-line-no">769</span><span id="line-769">      }</span>
+<span class="source-line-no">770</span><span id="line-770">      if (isMember || "option".equals(type))</span>
+<span class="source-line-no">771</span><span id="line-771">         checkScope(m, id, ! isMember);</span>
+<span class="source-line-no">772</span><span id="line-772">      if (! isMember &amp;&amp; m.get("default") != null)</span>
+<span class="source-line-no">773</span><span id="line-773">         checkDefault(m, type, id);</span>
+<span class="source-line-no">774</span><span id="line-774">      if (! isMember &amp;&amp; m.get("visibleWhen") != null)</span>
+<span class="source-line-no">775</span><span id="line-775">         checkVisibleWhen(m.get("visibleWhen"), type, id);</span>
+<span class="source-line-no">776</span><span id="line-776">      if ("optionGroup".equals(type) &amp;&amp; m.get("options") != null) {</span>
+<span class="source-line-no">777</span><span id="line-777">         if (! (m.get("options") instanceof List&lt;?&gt; members))</span>
+<span class="source-line-no">778</span><span id="line-778">            throw iaex("RibbonItem optionGroup '%s' options must be a list.", id);</span>
+<span class="source-line-no">779</span><span id="line-779">         for (var o : members) {</span>
+<span class="source-line-no">780</span><span id="line-780">            if (! (o instanceof Map&lt;?,?&gt; mm))</span>
+<span class="source-line-no">781</span><span id="line-781">               throw iaex("RibbonItem optionGroup '%s' each option must be an object.", id);</span>
+<span class="source-line-no">782</span><span id="line-782">            check(mm, String.valueOf(id));</span>
+<span class="source-line-no">783</span><span id="line-783">         }</span>
+<span class="source-line-no">784</span><span id="line-784">      }</span>
+<span class="source-line-no">785</span><span id="line-785">      var allowed = isMember ? MEMBER_ALLOWED : ALLOWED.get(type);</span>
+<span class="source-line-no">786</span><span id="line-786">      for (var k : m.keySet())</span>
+<span class="source-line-no">787</span><span id="line-787">         if (! allowed.contains(String.valueOf(k))) {</span>
+<span class="source-line-no">788</span><span id="line-788">            if (isMember)</span>
+<span class="source-line-no">789</span><span id="line-789">               throw iaex("RibbonItem optionGroup '%s' member '%s' does not accept '%s'.", parentId, id, k);</span>
+<span class="source-line-no">790</span><span id="line-790">            throw iaex("RibbonItem %s%s does not accept '%s'.", type, id == null ? "" : " '" + id + "'", k);</span>
+<span class="source-line-no">791</span><span id="line-791">         }</span>
+<span class="source-line-no">792</span><span id="line-792">   }</span>
+<span class="source-line-no">793</span><span id="line-793"></span>
+<span class="source-line-no">794</span><span id="line-794">   private static void checkVisibleWhen(Object v, String type, Object id) {</span>
+<span class="source-line-no">795</span><span id="line-795">      var ok = v instanceof List&lt;?&gt; l &amp;&amp; l.stream().allMatch(r -&gt; r instanceof Map&lt;?,?&gt; rm</span>
+<span class="source-line-no">796</span><span id="line-796">         &amp;&amp; rm.get("field") instanceof String f &amp;&amp; ! f.isBlank()</span>
+<span class="source-line-no">797</span><span id="line-797">         &amp;&amp; rm.get("op") instanceof String op &amp;&amp; VisibilityRule.KNOWN_OPS.contains(op));</span>
+<span class="source-line-no">798</span><span id="line-798">      if (! ok)</span>
+<span class="source-line-no">799</span><span id="line-799">         throw iaex("RibbonItem %s%s visibleWhen must be a list of {field, op[, value]} rules with a known op.", type, id == null ? "" : " '" + id + "'");</span>
+<span class="source-line-no">800</span><span id="line-800">   }</span>
+<span class="source-line-no">801</span><span id="line-801"></span>
+<span class="source-line-no">802</span><span id="line-802">   private static void checkAll(Object v, List&lt;String&gt; allowed, String what) {</span>
+<span class="source-line-no">803</span><span id="line-803">      if (v == null)</span>
+<span class="source-line-no">804</span><span id="line-804">         return;</span>
+<span class="source-line-no">805</span><span id="line-805">      if (! (v instanceof List&lt;?&gt; l))</span>
+<span class="source-line-no">806</span><span id="line-806">         throw iaex("RibbonItem %s list must be a list.", what);</span>
+<span class="source-line-no">807</span><span id="line-807">      for (var b : l)</span>
+<span class="source-line-no">808</span><span id="line-808">         checkOneOf(String.valueOf(b), allowed, what);</span>
+<span class="source-line-no">809</span><span id="line-809">   }</span>
+<span class="source-line-no">810</span><span id="line-810"></span>
+<span class="source-line-no">811</span><span id="line-811">   private static void checkScope(Map&lt;?,?&gt; m, Object id, boolean topLevel) {</span>
+<span class="source-line-no">812</span><span id="line-812">      var column = m.get("column");</span>
+<span class="source-line-no">813</span><span id="line-813">      var param = m.get("param");</span>
+<span class="source-line-no">814</span><span id="line-814">      if (column != null &amp;&amp; param != null)</span>
+<span class="source-line-no">815</span><span id="line-815">         throw iaex("RibbonItem option '%s' sets both column '%s' and param '%s'.", id, column, param);</span>
+<span class="source-line-no">816</span><span id="line-816">      if (topLevel &amp;&amp; column == null &amp;&amp; param == null)</span>
+<span class="source-line-no">817</span><span id="line-817">         throw iaex("RibbonItem option '%s' sets neither column nor param.", id);</span>
+<span class="source-line-no">818</span><span id="line-818">      if (topLevel &amp;&amp; m.get("value") == null)</span>
+<span class="source-line-no">819</span><span id="line-819">         throw iaex("RibbonItem option '%s' requires a value.", id);</span>
+<span class="source-line-no">820</span><span id="line-820">   }</span>
+<span class="source-line-no">821</span><span id="line-821"></span>
+<span class="source-line-no">822</span><span id="line-822">   private static void checkDefault(Map&lt;?,?&gt; m, String type, Object id) {</span>
+<span class="source-line-no">823</span><span id="line-823">      var d = m.get("default");</span>
+<span class="source-line-no">824</span><span id="line-824">      if ("optionGroup".equals(type)) {</span>
+<span class="source-line-no">825</span><span id="line-825">         var ok = d instanceof String &amp;&amp; m.get("options") instanceof List&lt;?&gt; l</span>
+<span class="source-line-no">826</span><span id="line-826">            &amp;&amp; l.stream().anyMatch(o -&gt; o instanceof Map&lt;?,?&gt; mm &amp;&amp; d.equals(mm.get("id")));</span>
+<span class="source-line-no">827</span><span id="line-827">         if (! ok)</span>
+<span class="source-line-no">828</span><span id="line-828">            throw iaex("RibbonItem optionGroup '%s' default '%s' is not one of its options.", id, d);</span>
+<span class="source-line-no">829</span><span id="line-829">      } else if ("option".equals(type) &amp;&amp; ! Boolean.TRUE.equals(d)) {</span>
+<span class="source-line-no">830</span><span id="line-830">         throw iaex("RibbonItem option '%s' default '%s' must be on; use defaultOn().", id, d);</span>
+<span class="source-line-no">831</span><span id="line-831">      }</span>
+<span class="source-line-no">832</span><span id="line-832">   }</span>
+<span class="source-line-no">833</span><span id="line-833"></span>
+<span class="source-line-no">834</span><span id="line-834">   private static Set&lt;String&gt; union(Set&lt;String&gt; base, String...more) {</span>
+<span class="source-line-no">835</span><span id="line-835">      var s = new LinkedHashSet&lt;&gt;(base);</span>
+<span class="source-line-no">836</span><span id="line-836">      s.addAll(Arrays.asList(more));</span>
+<span class="source-line-no">837</span><span id="line-837">      return Set.copyOf(s);</span>
+<span class="source-line-no">838</span><span id="line-838">   }</span>
+<span class="source-line-no">839</span><span id="line-839"></span>
+<span class="source-line-no">840</span><span id="line-840">   private static void checkOneOf(String v, List&lt;String&gt; allowed, String what) {</span>
+<span class="source-line-no">841</span><span id="line-841">      if (! allowed.contains(v))</span>
+<span class="source-line-no">842</span><span id="line-842">         throw iaex("RibbonItem %s '%s' is not one of '%s'.", what, v, String.join(", ", allowed));</span>
+<span class="source-line-no">843</span><span id="line-843">   }</span>
+<span class="source-line-no">844</span><span id="line-844">}</span>
 
 
 

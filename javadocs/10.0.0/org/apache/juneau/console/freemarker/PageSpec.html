@@ -77,9 +77,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">org.apache.juneau.console.freemarker.PageSpec</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a>&gt;</code></dd>
+</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-71">PageSpec</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-72">PageSpec</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a>&gt;</span></div>
 <div class="block">Java description of one console page: the active tab, toolkits, page CSS and init scripts, per-request header
  fields, the stock theme by name, and the page's cards (tables, html and registered custom types) and body attributes.
 
@@ -149,135 +154,145 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attr(java.lang.String,java.lang.Object)" class="member-name-link">attr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#allowInlineHandlers(boolean)" class="member-name-link">allowInlineHandlers</a><wbr>(boolean&nbsp;v)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Allows inline handler references on this page.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#attr(java.lang.String,java.lang.Object)" class="member-name-link">attr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a passthrough attribute, applied to the view this spec builds.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#badge(org.apache.juneau.console.views.BadgeDef)" class="member-name-link">badge</a><wbr>(<a href="../views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a>&nbsp;def)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#badge(org.apache.juneau.console.views.BadgeDef)" class="member-name-link">badge</a><wbr>(<a href="../views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a>&nbsp;def)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a header badge.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyAttr(java.lang.String,java.lang.String)" class="member-name-link">bodyAttr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyAttr(java.lang.String,java.lang.String)" class="member-name-link">bodyAttr</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets one <code>&lt;body&gt;</code> attribute.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bridge(org.apache.juneau.console.BridgeDecl)" class="member-name-link">bridge</a><wbr>(<a href="../BridgeDecl.html" title="class in org.apache.juneau.console">BridgeDecl</a>&nbsp;decl)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bridge(org.apache.juneau.console.BridgeDecl)" class="member-name-link">bridge</a><wbr>(<a href="../BridgeDecl.html" title="class in org.apache.juneau.console">BridgeDecl</a>&nbsp;decl)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Declares a server bridge; repeatable.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#card(java.lang.String)" class="member-name-link">card</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#card(java.lang.String)" class="member-name-link">card</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Looks up a declared card by id.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#card(org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">card</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#card(org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">card</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a custom-type card with no inline markup.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#card(org.apache.juneau.console.freemarker.CardSpec,java.lang.String)" class="member-name-link">card</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#card(org.apache.juneau.console.freemarker.CardSpec,java.lang.String)" class="member-name-link">card</a><wbr>(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markupOrNull)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a custom-type card that also takes inline markup.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cards()" class="member-name-link">cards</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cards()" class="member-name-link">cards</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a new, empty spec.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#csrf(java.lang.String,java.lang.String)" class="member-name-link">csrf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#csrf(java.lang.String,java.lang.String)" class="member-name-link">csrf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;headerName)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the CSRF body attributes: <code>data-juneau-csrf</code> and, if <code>headerName</code> is non-blank,
  <code>data-juneau-csrf-header</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#css(java.lang.String...)" class="member-name-link">css</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#css(java.lang.String...)" class="member-name-link">css</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds page CSS URLs, appending any not already present.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dashboard(org.apache.juneau.console.freemarker.DashboardSpec)" class="member-name-link">dashboard</a><wbr>(<a href="DashboardSpec.html" title="class in org.apache.juneau.console.freemarker">DashboardSpec</a>&nbsp;dashboard)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dashboard(org.apache.juneau.console.freemarker.DashboardSpec)" class="member-name-link">dashboard</a><wbr>(<a href="DashboardSpec.html" title="class in org.apache.juneau.console.freemarker">DashboardSpec</a>&nbsp;dashboard)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds the page's dashboard: a rail of filter sections beside a grid of card panels.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data(org.apache.juneau.console.freemarker.DataSourceDef)" class="member-name-link">data</a><wbr>(<a href="DataSourceDef.html" title="class in org.apache.juneau.console.freemarker">DataSourceDef</a>&nbsp;def)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data(org.apache.juneau.console.freemarker.DataSourceDef)" class="member-name-link">data</a><wbr>(<a href="DataSourceDef.html" title="class in org.apache.juneau.console.freemarker">DataSourceDef</a>&nbsp;def)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Declares a data source, published on <code>data:&lt;id&gt;</code>; repeatable.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data(org.apache.juneau.console.freemarker.Derived)" class="member-name-link">data</a><wbr>(<a href="Derived.html" title="class in org.apache.juneau.console.freemarker">Derived</a>&nbsp;def)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#data(org.apache.juneau.console.freemarker.Derived)" class="member-name-link">data</a><wbr>(<a href="Derived.html" title="class in org.apache.juneau.console.freemarker">Derived</a>&nbsp;def)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Declares a derived data source, published on <code>data:&lt;as&gt;</code>; repeatable.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#facts(java.util.Map)" class="member-name-link">facts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;v)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#facts(java.util.Map)" class="member-name-link">facts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;v)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Seeds page-level facts, which <code>visibleWhen</code> rules test on the client.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#header(java.lang.String,java.lang.String)" class="member-name-link">header</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#header(java.lang.String,java.lang.String)" class="member-name-link">header</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds a passthrough HTTP response header, applied to the view this spec builds.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#header(java.util.function.Consumer)" class="member-name-link">header</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="PageCapture.HeaderSpec.html" title="class in org.apache.juneau.console.freemarker">PageCapture.HeaderSpec</a>&gt;&nbsp;c)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#header(java.util.function.Consumer)" class="member-name-link">header</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="PageCapture.HeaderSpec.html" title="class in org.apache.juneau.console.freemarker">PageCapture.HeaderSpec</a>&gt;&nbsp;c)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the header's <code>subtitle</code> and/or <code>userMenu</code>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#html(java.lang.String,java.lang.String)" class="member-name-link">html</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, with no title.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#html(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">html</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#html(java.lang.String,java.lang.String)" class="member-name-link">html</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, with a title.</div>
+<div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, with no title.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#html(java.lang.String,java.lang.String,java.util.function.Consumer)" class="member-name-link">html</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#html(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">html</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, with a title.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#html(java.lang.String,java.lang.String,java.util.function.Consumer)" class="member-name-link">html</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;&nbsp;card)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, letting <code>card</code> adjust the card (title, CSS
  class, and so on).</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#htmlSrc(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">htmlSrc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#htmlSrc(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">htmlSrc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;src)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, unsanitized.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#htmlSrc(java.lang.String,java.lang.String,java.lang.String,boolean)" class="member-name-link">htmlSrc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#htmlSrc(java.lang.String,java.lang.String,java.lang.String,boolean)" class="member-name-link">htmlSrc</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;src,
  boolean&nbsp;sanitize)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, optionally rebuilt through the
  views attribute-allowlist sanitizer.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#init(java.lang.String...)" class="member-name-link">init</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#init(java.lang.String...)" class="member-name-link">init</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Adds page init-script URLs, appending any not already present.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modelBlock()" class="member-name-link">modelBlock</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the element's model block.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#navUnder(java.lang.String,org.apache.juneau.console.freemarker.PageCapture.NavAdder)" class="member-name-link">navUnder</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentIdPath,
@@ -294,6 +309,16 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#schemeToggle(boolean)" class="member-name-link">schemeToggle</a><wbr>(boolean&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Lets the visitor override the page's colour scheme with a stored choice.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#script(java.lang.String...)" class="member-name-link">script</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Adds page scripts; an alias of <a href="#init(java.lang.String...)"><code>init(String...)</code></a> with the same de-duplication.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns this builder.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tab()" class="member-name-link">tab</a>()</code></div>
@@ -362,6 +387,9 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-org.apache.juneau.console.Handled">Methods inherited from interface&nbsp;org.apache.juneau.console.<a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a></h3>
+<code><a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String)">action</a>, <a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String,java.util.Map)">action</a>, <a href="../Handled.html#action(org.apache.juneau.console.ModelAction)">action</a>, <a href="../Handled.html#on(java.lang.String,java.lang.String)">on</a>, <a href="../Handled.html#on(java.lang.String,org.apache.juneau.console.HandlerRef)">on</a>, <a href="../Handled.html#subscribe(java.lang.String,java.lang.String)">subscribe</a>, <a href="../Handled.html#subscribe(java.lang.String,org.apache.juneau.console.HandlerRef)">subscribe</a></code></div>
 </section>
 </li>
 </ul>
@@ -376,7 +404,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ATTR">
 <h3>ATTR</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-79">ATTR</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-80">ATTR</a></span></div>
 <div class="block">Data-model attribute that carries the spec into the render.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -399,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-130">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-135">create</a></span>()</div>
 <div class="block">Creates a new, empty spec.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -410,7 +438,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="template(java.lang.String)">
 <h3>template</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-140">template</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pageTemplateName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-145">template</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pageTemplateName)</span></div>
 <div class="block">Sets the page template, overriding the mixin's configured chrome template.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -423,7 +451,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="attr(java.lang.String,java.lang.Object)">
 <h3>attr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-152">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-157">attr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds a passthrough attribute, applied to the view this spec builds.</div>
 <dl class="notes">
@@ -438,7 +466,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="header(java.lang.String,java.lang.String)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-166">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-171">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Adds a passthrough HTTP response header, applied to the view this spec builds.</div>
 <dl class="notes">
@@ -453,7 +481,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="title(java.lang.String)">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-177">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-182">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <div class="block">Sets the page title.  The spec always wins over <code>&lt;@console title&gt;</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -466,7 +494,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tab(java.lang.String)">
 <h3>tab</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-189">tab</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idPath)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-194">tab</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idPath)</span></div>
 <div class="block">Sets the <code>&lt;@page tab&gt;</code>-equivalent active-nav path.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -481,7 +509,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="theme(java.lang.String)">
 <h3>theme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-218">theme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stockName)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-223">theme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stockName)</span></div>
 <div class="block">Selects a stock theme by name.  Validated immediately via <a href="../ConsoleChromeMixin.html#stockTheme(java.lang.String)"><code>ConsoleChromeMixin.stockTheme(String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -496,7 +524,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="scheme(java.lang.String)">
 <h3>scheme</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-235">scheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-240">scheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Pins the page's colour scheme.
 
  <p>
@@ -515,7 +543,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemeToggle(boolean)">
 <h3>schemeToggle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-251">schemeToggle</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-256">schemeToggle</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Lets the visitor override the page's colour scheme with a stored choice.
 
  <p>
@@ -531,7 +559,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toolkit(java.lang.String...)">
 <h3>toolkit</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-262">toolkit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-267">toolkit</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Adds toolkit names, appending any not already present.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -544,7 +572,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="css(java.lang.String...)">
 <h3>css</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-273">css</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-278">css</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</span></div>
 <div class="block">Adds page CSS URLs, appending any not already present.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -557,8 +585,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="init(java.lang.String...)">
 <h3>init</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-284">init</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-290">init</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</span></div>
 <div class="block">Adds page init-script URLs, appending any not already present.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>urls</code> - The script URLs.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If a URL is not a same-origin path.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="script(java.lang.String...)">
+<h3>script</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-304">script</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;urls)</span></div>
+<div class="block">Adds page scripts; an alias of <a href="#init(java.lang.String...)"><code>init(String...)</code></a> with the same de-duplication.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>urls</code> - The script URLs.</dd>
@@ -568,9 +611,50 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="allowInlineHandlers(boolean)">
+<h3>allowInlineHandlers</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-315">allowInlineHandlers</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
+<div class="block">Allows inline handler references on this page.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>v</code> - Whether inline handlers are allowed; the default is <jk>false</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="modelBlock()">
+<h3>modelBlock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-320">modelBlock</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#modelBlock()">Handled</a></code></span></div>
+<div class="block">Returns the element's model block.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../Handled.html#modelBlock()">modelBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>The block; never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="self()">
+<h3>self</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-323">self</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#self()">Handled</a></code></span></div>
+<div class="block">Returns this builder.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../Handled.html#self()">self</a></code>&nbsp;in interface&nbsp;<code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="header(java.util.function.Consumer)">
 <h3>header</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-304">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="PageCapture.HeaderSpec.html" title="class in org.apache.juneau.console.freemarker">PageCapture.HeaderSpec</a>&gt;&nbsp;c)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-341">header</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="PageCapture.HeaderSpec.html" title="class in org.apache.juneau.console.freemarker">PageCapture.HeaderSpec</a>&gt;&nbsp;c)</span></div>
 <div class="block">Sets the header's <code>subtitle</code> and/or <code>userMenu</code>.  These are the only two header fields this builder
  may set; every other field belongs in the chrome template.</div>
 <dl class="notes">
@@ -587,7 +671,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="table(org.apache.juneau.console.views.TableSpec)">
 <h3>table</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-355">table</a></span><wbr><span class="parameters">(<a href="../views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a>&nbsp;table)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-392">table</a></span><wbr><span class="parameters">(<a href="../views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a>&nbsp;table)</span></div>
 <div class="block">Adds a <code>datatables</code> card for <code>table</code>, with no title.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -600,7 +684,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="table(org.apache.juneau.console.views.TableSpec,java.lang.String)">
 <h3>table</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-366">table</a></span><wbr><span class="parameters">(<a href="../views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a>&nbsp;table,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-403">table</a></span><wbr><span class="parameters">(<a href="../views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a>&nbsp;table,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title)</span></div>
 <div class="block">Adds a <code>datatables</code> card for <code>table</code>, with a title.</div>
 <dl class="notes">
@@ -615,7 +699,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="table(org.apache.juneau.console.views.TableSpec,java.util.function.Consumer)">
 <h3>table</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-381">table</a></span><wbr><span class="parameters">(<a href="../views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a>&nbsp;table,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-418">table</a></span><wbr><span class="parameters">(<a href="../views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a>&nbsp;table,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;&nbsp;card)</span></div>
 <div class="block">Adds a <code>datatables</code> card for <code>table</code>, letting <code>card</code> adjust the card.
 
@@ -634,7 +718,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="html(java.lang.String,java.lang.String)">
 <h3>html</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-404">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-442">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup)</span></div>
 <div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, with no title.</div>
 <dl class="notes">
@@ -651,7 +735,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="html(java.lang.String,java.lang.String,java.lang.String)">
 <h3>html</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-416">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-454">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup)</span></div>
 <div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, with a title.</div>
@@ -668,7 +752,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="html(java.lang.String,java.lang.String,java.util.function.Consumer)">
 <h3>html</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-430">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-468">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markup,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;&nbsp;card)</span></div>
 <div class="block">Adds an <code>html</code> card whose body is <code>markup</code>, letting <code>card</code> adjust the card (title, CSS
@@ -688,7 +772,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="htmlSrc(java.lang.String,java.lang.String,java.lang.String)">
 <h3>htmlSrc</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-444">htmlSrc</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-482">htmlSrc</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;src)</span></div>
 <div class="block">Adds an <code>html</code> card whose body is fetched from <code>src</code>, with a title, unsanitized.  See
@@ -708,7 +792,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="htmlSrc(java.lang.String,java.lang.String,java.lang.String,boolean)">
 <h3>htmlSrc</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-477">htmlSrc</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-515">htmlSrc</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;src,
  boolean&nbsp;sanitize)</span></div>
@@ -748,7 +832,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="card(org.apache.juneau.console.freemarker.CardSpec)">
 <h3>card</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-515">card</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-553">card</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card)</span></div>
 <div class="block">Adds a custom-type card with no inline markup.
 
  <p>
@@ -767,7 +851,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="card(org.apache.juneau.console.freemarker.CardSpec,java.lang.String)">
 <h3>card</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-529">card</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-567">card</a></span><wbr><span class="parameters">(<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&nbsp;card,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;markupOrNull)</span></div>
 <div class="block">Adds a custom-type card that also takes inline markup.</div>
 <dl class="notes">
@@ -785,7 +869,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="dashboard(org.apache.juneau.console.freemarker.DashboardSpec)">
 <h3>dashboard</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-550">dashboard</a></span><wbr><span class="parameters">(<a href="DashboardSpec.html" title="class in org.apache.juneau.console.freemarker">DashboardSpec</a>&nbsp;dashboard)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-588">dashboard</a></span><wbr><span class="parameters">(<a href="DashboardSpec.html" title="class in org.apache.juneau.console.freemarker">DashboardSpec</a>&nbsp;dashboard)</span></div>
 <div class="block">Adds the page's dashboard: a rail of filter sections beside a grid of card panels.
 
  <p>
@@ -806,7 +890,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="csrf(java.lang.String,java.lang.String)">
 <h3>csrf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-598">csrf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-636">csrf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;headerName)</span></div>
 <div class="block">Sets the CSRF body attributes: <code>data-juneau-csrf</code> and, if <code>headerName</code> is non-blank,
  <code>data-juneau-csrf-header</code>.</div>
@@ -822,7 +906,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bodyAttr(java.lang.String,java.lang.String)">
 <h3>bodyAttr</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-614">bodyAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-652">bodyAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets one <code>&lt;body&gt;</code> attribute.</div>
 <dl class="notes">
@@ -837,7 +921,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cards()">
 <h3>cards</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-626">cards</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-664">cards</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The declared cards, in declaration order; a snapshot.</dd>
@@ -847,7 +931,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="card(java.lang.String)">
 <h3>card</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-636">card</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-674">card</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">Looks up a declared card by id.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -860,7 +944,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="badge(org.apache.juneau.console.views.BadgeDef)">
 <h3>badge</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-647">badge</a></span><wbr><span class="parameters">(<a href="../views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a>&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-685">badge</a></span><wbr><span class="parameters">(<a href="../views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a>&nbsp;def)</span></div>
 <div class="block">Adds a header badge.  The Java twin of <code>&lt;@badge&gt;</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -875,7 +959,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="facts(java.util.Map)">
 <h3>facts</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-661">facts</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-699">facts</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;v)</span></div>
 <div class="block">Seeds page-level facts, which <code>visibleWhen</code> rules test on the client.  Repeated calls merge, last wins, on
  this side only; the strict check against chrome-supplied facts runs once, at <code>&lt;/@console&gt;</code>.</div>
 <dl class="notes">
@@ -891,7 +975,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="navUnder(java.lang.String,org.apache.juneau.console.freemarker.PageCapture.NavAdder)">
 <h3>navUnder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-737">navUnder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentIdPath,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-775">navUnder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;parentIdPath,
  <a href="PageCapture.NavAdder.html" title="interface in org.apache.juneau.console.freemarker">PageCapture.NavAdder</a>&nbsp;adder)</span></div>
 <div class="block">Queues a child to add under an existing chrome nav node, resolved once the chrome's own nav tree exists.
 
@@ -911,7 +995,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="topic(org.apache.juneau.console.TopicDecl)">
 <h3>topic</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-749">topic</a></span><wbr><span class="parameters">(<a href="../TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a>&nbsp;decl)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-787">topic</a></span><wbr><span class="parameters">(<a href="../TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a>&nbsp;decl)</span></div>
 <div class="block">Declares a page-level custom topic; repeatable.  Unions with FTL <code>&lt;@topic&gt;</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -926,7 +1010,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bridge(org.apache.juneau.console.BridgeDecl)">
 <h3>bridge</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-772">bridge</a></span><wbr><span class="parameters">(<a href="../BridgeDecl.html" title="class in org.apache.juneau.console">BridgeDecl</a>&nbsp;decl)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-810">bridge</a></span><wbr><span class="parameters">(<a href="../BridgeDecl.html" title="class in org.apache.juneau.console">BridgeDecl</a>&nbsp;decl)</span></div>
 <div class="block">Declares a server bridge; repeatable.  Unions with FTL <code>&lt;@bridge&gt;</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -941,7 +1025,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="data(org.apache.juneau.console.freemarker.DataSourceDef)">
 <h3>data</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-786">data</a></span><wbr><span class="parameters">(<a href="DataSourceDef.html" title="class in org.apache.juneau.console.freemarker">DataSourceDef</a>&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-824">data</a></span><wbr><span class="parameters">(<a href="DataSourceDef.html" title="class in org.apache.juneau.console.freemarker">DataSourceDef</a>&nbsp;def)</span></div>
 <div class="block">Declares a data source, published on <code>data:&lt;id&gt;</code>; repeatable.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -956,7 +1040,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="data(org.apache.juneau.console.freemarker.Derived)">
 <h3>data</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-800">data</a></span><wbr><span class="parameters">(<a href="Derived.html" title="class in org.apache.juneau.console.freemarker">Derived</a>&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-838">data</a></span><wbr><span class="parameters">(<a href="Derived.html" title="class in org.apache.juneau.console.freemarker">Derived</a>&nbsp;def)</span></div>
 <div class="block">Declares a derived data source, published on <code>data:&lt;as&gt;</code>; repeatable.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -972,7 +1056,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="template()">
 <h3>template</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-814">template</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-852">template</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The template name, or <jk>null</jk> if unset (the mixin's chrome template applies).</dd>
@@ -982,7 +1066,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tab()">
 <h3>tab</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-819">tab</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-857">tab</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The tab path, or <code>""</code> if unset.</dd>
@@ -992,7 +1076,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toolkits()">
 <h3>toolkits</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-824">toolkits</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-862">toolkits</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The toolkit names, in declaration order.</dd>
@@ -1002,7 +1086,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="view(org.apache.juneau.rest.server.RestRequest)">
 <h3>view</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/freemarker/FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-875">view</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../rest/server/view/freemarker/FreemarkerView.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerView</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/PageSpec.html#line-913">view</a></span><wbr><span class="parameters">(<a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Builds the view for this spec.
 
  <p>

@@ -52,7 +52,7 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">	 * @return The page spec.</em>
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> PageSpec orders() {
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"orders"</span>).toolkit(<span class="jxr_string">"views"</span>)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> PageSpec.create().tab(<span class="jxr_string">"orders"</span>).toolkit(<span class="jxr_string">"views"</span>, <span class="jxr_string">"datatables-buttons"</span>, <span class="jxr_string">"datatables-export"</span>)
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			.table(TableSpec.create(<span class="jxr_string">"orders"</span>).rowType(<span class="jxr_string">"Order"</span>).dataMode(DataMode.SERVER).dataUrl(<span class="jxr_string">"/console/orders/query"</span>).urlState(<span class="jxr_string">"day"</span>, <span class="jxr_string">"window"</span>)
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  				.columnConfig(Map.of(<span class="jxr_string">"tabs"</span>, List.of(<span class="jxr_string">"columns"</span>, <span class="jxr_string">"sort"</span>)))
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  				.defaultOrder(<span class="jxr_string">"id"</span>, Sort.ASC)
@@ -60,30 +60,29 @@
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  					Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>),
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  					Column.create(<span class="jxr_string">"petId"</span>).label(<span class="jxr_string">"Pet"</span>).href(<span class="jxr_string">"/console/pets/{petId}/summary"</span>),
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  					Column.create(<span class="jxr_string">"shipDate"</span>).label(<span class="jxr_string">"Ship date"</span>).render(<span class="jxr_string">"date"</span>),
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(<span class="jxr_string">"pill"</span>))
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  				.ribbon(
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  					RibbonItem.optionGroup(<span class="jxr_string">"status"</span>,
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  						RibbonItem.option(<span class="jxr_string">"placed"</span>).title(<span class="jxr_string">"Placed"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(PLACED)"</span>),
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  						RibbonItem.option(<span class="jxr_string">"approved"</span>).title(<span class="jxr_string">"Approved"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(APPROVED)"</span>),
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  						RibbonItem.option(<span class="jxr_string">"delivered"</span>).title(<span class="jxr_string">"Delivered"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(DELIVERED)"</span>))
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  						.title(<span class="jxr_string">"Order status"</span>).deselectable(<strong class="jxr_keyword">true</strong>).group(<span class="jxr_string">"filter"</span>),
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  					RibbonItem.dialog(<span class="jxr_string">"new-order"</span>).title(<span class="jxr_string">"+ New order"</span>).symbol(<span class="jxr_string">"plus"</span>)
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  						.form(<span class="jxr_string">"/console/orders/new-form"</span>).endpoint(<span class="jxr_string">"/console/orders"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW).group(<span class="jxr_string">"entity"</span>),
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  					RibbonItem.export(<span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>).optional(<span class="jxr_string">"excel"</span>, <span class="jxr_string">"pdf"</span>).group(<span class="jxr_string">"viewing"</span>),
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  					RibbonItem.resetDefaults().group(<span class="jxr_string">"page"</span>),
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  					RibbonItem.refresh())
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  				.rowActions(
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  					RowAction.create(<span class="jxr_string">"approve"</span>).label(<span class="jxr_string">"Approve"</span>).endpoint(<span class="jxr_string">"/console/orders/{id}/approve"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW)
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  						.visibleWhen(VisibilityRule.when(<span class="jxr_string">"status"</span>).eq(<span class="jxr_string">"PLACED"</span>)),
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  					RowAction.create(<span class="jxr_string">"deliver"</span>).label(<span class="jxr_string">"Deliver"</span>).endpoint(<span class="jxr_string">"/console/orders/{id}/deliver"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW)
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  						.visibleWhen(VisibilityRule.when(<span class="jxr_string">"status"</span>).eq(<span class="jxr_string">"APPROVED"</span>)),
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  					RowAction.create(<span class="jxr_string">"cancel"</span>).label(<span class="jxr_string">"Cancel"</span>).form(<span class="jxr_string">"/console/orders/{id}/cancel-form"</span>).present(Present.DIALOG)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  						.endpoint(<span class="jxr_string">"/console/orders/{id}"</span>).method(Method.DELETE).onSuccess(OnSuccess.REDRAW),
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  					RowAction.create(<span class="jxr_string">"delete"</span>).label(<span class="jxr_string">"Delete"</span>).endpoint(<span class="jxr_string">"/console/orders/{id}"</span>).method(Method.DELETE)
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  						.confirm(<span class="jxr_string">"Delete order '{id}'?"</span>).confirmLabel(<span class="jxr_string">"Delete"</span>).tone(Tone.DANGER).confirmRenderer(<span class="jxr_string">"typed"</span>).onSuccess(OnSuccess.REDRAW)),
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<span class="jxr_string">"Orders"</span>);
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  }
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  					Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>).render(PillRenders.orderStatus()))
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  				.ribbon(Ribbons.standard()
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  					.create(RibbonItem.dialog(<span class="jxr_string">"new-order"</span>).title(<span class="jxr_string">"+ New order"</span>).symbol(<span class="jxr_string">"plus"</span>)
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  						.form(<span class="jxr_string">"/console/orders/new-form"</span>).endpoint(<span class="jxr_string">"/console/orders"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW))
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  					.filter(RibbonItem.optionGroup(<span class="jxr_string">"status"</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  						RibbonItem.option(<span class="jxr_string">"placed"</span>).title(<span class="jxr_string">"Placed"</span>).symbol(<span class="jxr_string">"shopping_cart"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(PLACED)"</span>),
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  						RibbonItem.option(<span class="jxr_string">"approved"</span>).title(<span class="jxr_string">"Approved"</span>).symbol(<span class="jxr_string">"badge_check"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(APPROVED)"</span>),
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  						RibbonItem.option(<span class="jxr_string">"delivered"</span>).title(<span class="jxr_string">"Delivered"</span>).symbol(<span class="jxr_string">"truck"</span>).column(<span class="jxr_string">"status"</span>).value(<span class="jxr_string">"$eq(DELIVERED)"</span>))
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  						.title(<span class="jxr_string">"Order status"</span>).deselectable(<strong class="jxr_keyword">true</strong>))
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  					.export(<span class="jxr_string">"excel"</span>, <span class="jxr_string">"pdf"</span>)
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  					.build())
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  				.rowActions(
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  					RowAction.create(<span class="jxr_string">"approve"</span>).label(<span class="jxr_string">"Approve"</span>).endpoint(<span class="jxr_string">"/console/orders/{id}/approve"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW)
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  						.visibleWhen(VisibilityRule.when(<span class="jxr_string">"status"</span>).eq(<span class="jxr_string">"PLACED"</span>)),
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  					RowAction.create(<span class="jxr_string">"deliver"</span>).label(<span class="jxr_string">"Deliver"</span>).endpoint(<span class="jxr_string">"/console/orders/{id}/deliver"</span>).method(Method.POST).onSuccess(OnSuccess.REDRAW)
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  						.visibleWhen(VisibilityRule.when(<span class="jxr_string">"status"</span>).eq(<span class="jxr_string">"APPROVED"</span>)),
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  					RowAction.create(<span class="jxr_string">"cancel"</span>).label(<span class="jxr_string">"Cancel"</span>).form(<span class="jxr_string">"/console/orders/{id}/cancel-form"</span>).present(Present.DIALOG)
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  						.endpoint(<span class="jxr_string">"/console/orders/{id}"</span>).method(Method.DELETE).onSuccess(OnSuccess.REDRAW),
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  					RowAction.create(<span class="jxr_string">"delete"</span>).label(<span class="jxr_string">"Delete"</span>).endpoint(<span class="jxr_string">"/console/orders/{id}"</span>).method(Method.DELETE)
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  						.confirm(<span class="jxr_string">"Delete order '{id}'?"</span>).confirmLabel(<span class="jxr_string">"Delete"</span>).tone(Tone.DANGER).confirmRenderer(<span class="jxr_string">"typed"</span>).onSuccess(OnSuccess.REDRAW)),
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  				<span class="jxr_string">"Orders"</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

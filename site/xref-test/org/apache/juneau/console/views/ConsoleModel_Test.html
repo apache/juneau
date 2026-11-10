@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ConsoleModel_Test xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/views/ConsoleModel_Test.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment">// * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment">// * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment">// * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment">// * with the License.  You may obtain a copy of the License at                                                              *</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment">// *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment">// *                                                                                                                         *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment">// * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment">// * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment">// * specific language governing permissions and limitations under the License.                                              *</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment">// ***************************************************************************************************************************</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assumptions.*;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> java.util.stream.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Node-sandbox coverage for {@code juneau-model.js}, the client object model (handles, path ids, registry,</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * lifecycle, kind classes, triggers and the handler registry), through the harness {@code model.cjs}.  The harness</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * reports each check as {@code true} or a failure string.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> *</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <em class="jxr_javadoccomment"> * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Gated on {@code node} being on {@code PATH} (skipped otherwise).</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">class</strong> <a name="ConsoleModel_Test" href="../../../../../org/apache/juneau/console/views/ConsoleModel_Test.html#ConsoleModel_Test">ConsoleModel_Test</a> <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MODEL_JS = <span class="jxr_string">"/org/apache/juneau/views/juneau-model.js"</span>;
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String INLINE_JS = <span class="jxr_string">"/org/apache/juneau/views/juneau-model-inline.js"</span>;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String CONSOLE_JS = <span class="jxr_string">"/org/apache/juneau/console/juneau-console.js"</span>;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; report;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	@BeforeAll
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> run() {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		report = BusHarness.run(<span class="jxr_string">"model.cjs"</span>, ViewsMixin.BUS_JS_RESOURCE, CONSOLE_JS, ViewsMixin.RIBBON_JS_RESOURCE, MODEL_JS, INLINE_JS);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String[] KEYS = {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<em class="jxr_comment">// Core</em>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<span class="jxr_string">"path_segment_encoding"</span>, <span class="jxr_string">"path_page_card_table_row_detail_tab"</span>, <span class="jxr_string">"path_positional_row"</span>,
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<span class="jxr_string">"get_returns_same_object"</span>, <span class="jxr_string">"get_unknown_null"</span>, <span class="jxr_string">"get_never_creates"</span>,
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<span class="jxr_string">"detach_keyed_row_reopens_same_object"</span>, <span class="jxr_string">"detach_methods_noop_warn_once"</span>, <span class="jxr_string">"reattach_clears_warned_flag"</span>,
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<span class="jxr_string">"positional_rows_destroyed_on_draw"</span>, <span class="jxr_string">"collapse_destroys_detail_and_tabs_not_row"</span>, <span class="jxr_string">"missing_keyed_row_evicted_after_draw"</span>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<span class="jxr_string">"destroy_disposes_bus_owner"</span>, <span class="jxr_string">"registry_size_stable_after_polls"</span>, <span class="jxr_string">"page_unmount_destroys_subtree"</span>,
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<span class="jxr_string">"parent_children"</span>, <span class="jxr_string">"children_is_copy"</span>, <span class="jxr_string">"closest_self_and_ancestor"</span>, <span class="jxr_string">"find_relative_path"</span>, <span class="jxr_string">"find_kind_id_depth_first"</span>, <span class="jxr_string">"page_accessor"</span>,
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<span class="jxr_string">"spec_deep_frozen"</span>, <span class="jxr_string">"missing_member_is_typeerror"</span>, <span class="jxr_string">"helpers_is_frozen_empty_object"</span>,
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<em class="jxr_comment">// Handler registry and built-ins</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<span class="jxr_string">"register_ok_get_names_sorted"</span>, <span class="jxr_string">"register_badName_E114_fatal"</span>, <span class="jxr_string">"register_badName_with_shell_is_JuneauConsoleError"</span>,
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<span class="jxr_string">"register_duplicate_E115"</span>, <span class="jxr_string">"register_nonFunction_E122"</span>, <span class="jxr_string">"register_juneauNs_E123"</span>, <span class="jxr_string">"get_unknown_undefined"</span>,
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<span class="jxr_string">"handlers_namespace_frozen"</span>, <span class="jxr_string">"builtins_listed"</span>, <span class="jxr_string">"builtin_refresh_calls_target_refresh"</span>, <span class="jxr_string">"builtin_refreshClosest_kind_payload"</span>,
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		<span class="jxr_string">"builtin_expand_collapse_row"</span>, <span class="jxr_string">"builtin_activate"</span>, <span class="jxr_string">"builtin_publish_topic_payload"</span>,
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<span class="jxr_string">"countLabel_uses_payload_count_over_rowCount"</span>, <span class="jxr_string">"countLabel_undefined_noop"</span>, <span class="jxr_string">"countLabel_writes_serverLabel_plus_count"</span>,
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<span class="jxr_string">"countBadge_info_tone"</span>,
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<span class="jxr_string">"inline_compiles_body_to_fn_target_event"</span>, <span class="jxr_string">"inline_compile_error_E119"</span>, <span class="jxr_string">"inline_csp_evalerror_E119_mentions_unsafe_eval"</span>, <span class="jxr_string">"inline_opt_in_required"</span>,
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		<em class="jxr_comment">// Kind classes</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<span class="jxr_string">"Table_has_four_legacy_members"</span>, <span class="jxr_string">"Table_methods_delegate_to_impl"</span>, <span class="jxr_string">"Table_rows_rowCount_row_lookup"</span>, <span class="jxr_string">"Table_refresh_is_reload"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		<span class="jxr_string">"Row_positional_flag"</span>, <span class="jxr_string">"Row_expand_collapse_events"</span>, <span class="jxr_string">"RowDetail_tab_lookup"</span>, <span class="jxr_string">"Ribbon_item_lookup_by_id"</span>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<span class="jxr_string">"RibbonItem_requires_id_E121"</span>, <span class="jxr_string">"Switcher_Chart_skeletons"</span>, <span class="jxr_string">"absent_member_typeerror"</span>, <span class="jxr_string">"Card_collisions_resolved"</span>,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<span class="jxr_string">"Card_shell_assigns_el_and_spec"</span>, <span class="jxr_string">"Card_registers_and_renders_via_shell"</span>, <span class="jxr_string">"HtmlCard_instanceof_model_Card"</span>,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		<span class="jxr_string">"DetailTab_setLabel_updates_strip_button"</span>, <span class="jxr_string">"DetailTab_setBadge_chip_and_tones"</span>, <span class="jxr_string">"transient_setLabel_restored_on_rerender"</span>,
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<span class="jxr_string">"PageTab_label_badge_activate"</span>, <span class="jxr_string">"RibbonItem_label_enable_disable_activate"</span>, <span class="jxr_string">"Card_title_label_and_badge"</span>,
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<span class="jxr_string">"kind_Page_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_PageTab_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_Card_exists_and_instanceof_Handle"</span>,
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<span class="jxr_string">"kind_Table_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_Row_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_RowDetail_exists_and_instanceof_Handle"</span>,
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<span class="jxr_string">"kind_DetailTab_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_Ribbon_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_RibbonItem_exists_and_instanceof_Handle"</span>,
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<span class="jxr_string">"kind_Switcher_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_SwitcherView_exists_and_instanceof_Handle"</span>, <span class="jxr_string">"kind_Chart_exists_and_instanceof_Handle"</span>,
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">// Triggers and handler resolution</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<span class="jxr_string">"on_returns_off"</span>,
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<span class="jxr_string">"on_string_typeerror"</span>,
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<span class="jxr_string">"bind_function_typeerror"</span>,
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<span class="jxr_string">"subscribe_returns_off"</span>,
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<span class="jxr_string">"subscribe_string_typeerror"</span>,
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		<span class="jxr_string">"bind_returns_this"</span>,
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		<span class="jxr_string">"listen_returns_this"</span>,
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<span class="jxr_string">"action_returns_this"</span>,
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<span class="jxr_string">"action_duplicate_id_E121"</span>,
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  		<span class="jxr_string">"action_click_payload"</span>,
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  		<span class="jxr_string">"event_frozen_except_stopPropagation"</span>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<span class="jxr_string">"event_target_is_declaring_handle"</span>,
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  		<span class="jxr_string">"event_source_is_emitter"</span>,
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<span class="jxr_string">"event_target_for_row_action_is_row_not_card"</span>,
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		<span class="jxr_string">"action_handler_target_is_declaring_handle_event_source_is_clicked_row"</span>,
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  		<span class="jxr_string">"emit_bubbles_to_page"</span>,
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<span class="jxr_string">"emit_app_listeners_before_model_on"</span>,
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<span class="jxr_string">"emit_stopPropagation"</span>,
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<span class="jxr_string">"emit_custom_name"</span>,
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  		<span class="jxr_string">"bind_undocumented_event_E121"</span>,
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  		<span class="jxr_string">"listen_template_expansion"</span>,
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<span class="jxr_string">"listen_subscription_disposed_on_detach"</span>,
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<span class="jxr_string">"listen_resubscribed_on_reattach_once"</span>,
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  		<span class="jxr_string">"app_subscribe_suspended_on_detach_not_doubled"</span>,
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		<span class="jxr_string">"no_leaked_subscribers_after_destroy"</span>,
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  		<span class="jxr_string">"destroy_drops_app_listeners"</span>,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		<span class="jxr_string">"publish_through_handle_owner"</span>,
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 		<span class="jxr_string">"handler_throw_painted_E118_target_only"</span>,
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 		<span class="jxr_string">"handler_rejects_painted_E118"</span>,
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		<span class="jxr_string">"other_handlers_still_run_after_throw"</span>,
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 		<span class="jxr_string">"detached_target_logs_only"</span>,
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 		<span class="jxr_string">"lifecycle_events_per_kind"</span>,
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<span class="jxr_string">"resolve_unknown_E116_painted_inline_others_still_work"</span>,
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<span class="jxr_string">"imperative_unknown_handler_throws_E116_at_call"</span>,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<span class="jxr_string">"resolve_after_scripts"</span>,
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		<span class="jxr_string">"late_registration_still_E116"</span>,
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		<span class="jxr_string">"replay_first_paint_events_once_in_order"</span>,
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		<span class="jxr_string">"handler_error_reuses_one_slot_per_code"</span>,
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 		<span class="jxr_string">"replay_skips_destroyed_handles"</span>,
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<span class="jxr_string">"inline_without_opt_in_E119"</span>,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<span class="jxr_string">"inline_without_file_E119"</span>,
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		<span class="jxr_string">"inline_with_compiler_ok"</span>,
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		<span class="jxr_string">"fromJSON_builds_page_cards_nav"</span>, <span class="jxr_string">"fromJSON_card_ids_required_E121"</span>, <span class="jxr_string">"fromJSON_ribbon_item_ids_required_E121"</span>, <span class="jxr_string">"fromJSON_divider_no_handle"</span>, <span class="jxr_string">"fromJSON_model_blocks_become_declared"</span>, <span class="jxr_string">"fromJSON_bad_handler_is_finding_not_throw"</span>, <span class="jxr_string">"fromJSON_detail_template_and_tabs"</span>, <span class="jxr_string">"mount_creates_page_handle_with_paths"</span>, <span class="jxr_string">"mount_card_handles_are_instances_returned_by_cardApi"</span>, <span class="jxr_string">"mount_html_builtin_card_is_handle"</span>, <span class="jxr_string">"mount_replays_rendered_after_resolution"</span>, <span class="jxr_string">"unmount_destroys_tree"</span>, <span class="jxr_string">"second_mount_replaces_page"</span>, <span class="jxr_string">"premade_handles_win_over_json_instances"</span>, <span class="jxr_string">"late_registered_shell_card_subclass_is_not_adopted"</span>, <span class="jxr_string">"lateBase_builtins_registered_before_model_are_model_cards"</span>, <span class="jxr_string">"lateBase_builtins_registered_after_model_are_model_cards"</span>, <span class="jxr_string">"page_loaded_event_after_all_cards_settle"</span>, <span class="jxr_string">"mount_unregistered_name_painted_E116_page_renders"</span>, <span class="jxr_string">"mount_json_findings_painted_inline"</span>,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		<em class="jxr_comment">// Client validation</em>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		<span class="jxr_string">"corpus_every_case_has_mirror"</span>, <span class="jxr_string">"validate_never_throws"</span>, <span class="jxr_string">"validate_valid_page_has_no_findings"</span>, <span class="jxr_string">"validate_findings_shape"</span>, <span class="jxr_string">"schema_port_keywords_equal_java_set"</span>, <span class="jxr_string">"schema_port_full_schema_accepts_valid_page"</span>, <span class="jxr_string">"schema_pass_opt_in_on_json_mount"</span>, <span class="jxr_string">"pack_missing_reported"</span>, <span class="jxr_string">"handlerNameGrammar_json"</span>, <span class="jxr_string">"handlerNameGrammar_imperative"</span>, <span class="jxr_string">"reservedNamespace_json"</span>, <span class="jxr_string">"reservedNamespace_imperative"</span>, <span class="jxr_string">"actionIdUnique_json"</span>, <span class="jxr_string">"actionIdUnique_imperative"</span>, <span class="jxr_string">"actionIdGrammar_json"</span>, <span class="jxr_string">"actionIdGrammar_imperative"</span>, <span class="jxr_string">"onEventDocumented_page_json"</span>, <span class="jxr_string">"onEventDocumented_page_imperative"</span>, <span class="jxr_string">"onEventDocumented_card_json"</span>, <span class="jxr_string">"onEventDocumented_card_imperative"</span>, <span class="jxr_string">"onEventDocumented_table_json"</span>, <span class="jxr_string">"onEventDocumented_table_imperative"</span>, <span class="jxr_string">"onEventDocumented_row_imperative"</span>, <span class="jxr_string">"onEventDocumented_rowdetail_json"</span>, <span class="jxr_string">"onEventDocumented_rowdetail_imperative"</span>, <span class="jxr_string">"onEventDocumented_detailtab_json"</span>, <span class="jxr_string">"onEventDocumented_detailtab_imperative"</span>, <span class="jxr_string">"onEventDocumented_ribbonitem_json"</span>, <span class="jxr_string">"onEventDocumented_ribbonitem_imperative"</span>, <span class="jxr_string">"onEventDocumented_pagetab_json"</span>, <span class="jxr_string">"onEventDocumented_pagetab_imperative"</span>, <span class="jxr_string">"onEventDocumented_view_imperative"</span>, <span class="jxr_string">"onEventDocumented_chart_imperative"</span>, <span class="jxr_string">"subscribeTopic_json"</span>, <span class="jxr_string">"subscribeTopic_imperative"</span>, <span class="jxr_string">"subscribeTemplateScope_json"</span>, <span class="jxr_string">"subscribeTemplateScope_imperative"</span>, <span class="jxr_string">"inlineWithoutOptIn_json"</span>, <span class="jxr_string">"inlineWithoutOptIn_imperative"</span>, <span class="jxr_string">"modelVersion_json"</span>, <span class="jxr_string">"modelVersion_imperative"</span>, <span class="jxr_string">"contractVersion_json"</span>, <span class="jxr_string">"contractVersion_imperative"</span>, <span class="jxr_string">"siblingIdUnique_json"</span>, <span class="jxr_string">"siblingIdUnique_imperative"</span>, <span class="jxr_string">"subscriptionRole_json"</span>, <span class="jxr_string">"cardReservedKeys_json"</span>, <span class="jxr_string">"pageHeader_json"</span>, <span class="jxr_string">"schema_unknown_root_key_json"</span>, <span class="jxr_string">"schema_subscription_missing_as_json"</span>, <span class="jxr_string">"schema_subscription_both_as_and_handler_json"</span>, <span class="jxr_string">"schema_closed_card_extra_key_json"</span>,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		<em class="jxr_comment">// Imperative construction</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 		<span class="jxr_string">"ctor_Page_requires_title_nav_activeNav_E121"</span>, <span class="jxr_string">"ctor_Page_contractVersion_default"</span>, <span class="jxr_string">"ctor_Page_modelVersion_bad_E120_thrown"</span>, <span class="jxr_string">"page_add_card_wraps_bare_Table"</span>, <span class="jxr_string">"page_addCard_unknown_type_E4"</span>, <span class="jxr_string">"add_already_parented_E121"</span>, <span class="jxr_string">"add_sibling_collision_E121"</span>, <span class="jxr_string">"path_deferred_until_root"</span>, <span class="jxr_string">"path_assigned_at_add"</span>, <span class="jxr_string">"table_setDetail_template_path"</span>, <span class="jxr_string">"detail_addTab_template"</span>, <span class="jxr_string">"template_change_applies_to_future_instances"</span>, <span class="jxr_string">"instance_addTab_transient"</span>, <span class="jxr_string">"ribbon_addItem_requires_id"</span>, <span class="jxr_string">"removeTab_removeItem_remove_destroy"</span>, <span class="jxr_string">"toJSON_page_full_contract_validates_against_schema"</span>, <span class="jxr_string">"toJSON_includes_optional_root_keys"</span>, <span class="jxr_string">"toJSON_includes_model_blocks"</span>, <span class="jxr_string">"h_action_bind_listen_write_under_model"</span>, <span class="jxr_string">"fromJSON_toJSON_roundtrip_equal"</span>, <span class="jxr_string">"build_equals_fromJSON_mount"</span>, <span class="jxr_string">"identity_kept_through_mount"</span>, <span class="jxr_string">"page_mount_calls_shell_mount_with_toJSON_and_instances"</span>, <span class="jxr_string">"imperative_bad_handler_throws_E114_E123_E119_at_call"</span>, <span class="jxr_string">"prebuilt_handles_win_over_shell_instances"</span>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	};
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	@TestFactory
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 	Stream&lt;DynamicTest&gt; checks() {
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 		<strong class="jxr_keyword">return</strong> Arrays.stream(KEYS).map(k -&gt; DynamicTest.dynamicTest(k, () -&gt; {
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 			assumeTrue(report != <strong class="jxr_keyword">null</strong>, <span class="jxr_string">"node (or the harness) is not available"</span>);
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 			assertTrue(report.containsKey(k), <span class="jxr_string">"missing report key: "</span> + k);
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 			assertEquals(<strong class="jxr_keyword">true</strong>, report.get(k));
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 		}));
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	}
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

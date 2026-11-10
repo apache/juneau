@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-60">CustomCardsRest</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-61">CustomCardsRest</a></span>
 <span class="extends-implements">extends <a href="../PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a></span></div>
 <div class="block">The Custom cards page, which shows how an adopter writes a card type, and the feeds its cards read.
 
@@ -101,14 +101,15 @@ loadScripts(document, 'script');</script>
  <a href="InventoryGaugeCardType.html" title="class in org.apache.juneau.petstore.console.dev"><code>InventoryGaugeCardType</code></a>) and two charts: the stock bands and the zoomable prices.
 
  <p>
- Both JS handlers live in <code>petstore-cards.js</code>, served beside this class, which also shows the card API
+ Both JS card classes live in <code>petstore-cards.js</code>, served beside this class, which also shows the card API
  (<code>JuneauConsole.refreshCard</code>, <code>JuneauConsole.cardApi</code>) and the <code>juneau:card-mounted</code> event.
 
  <h2 class='section'>Example:</h2>
  <p class='bjs'>
-   (window.JuneauConsoleCards = window.JuneauConsoleCards || []).push([<js>'kpi'</js>, {
-      render(card, el, ctx) { ... }
-   }]);
+   class KpiCard extends JuneauConsole.Card {
+      render() { ... }
+   }
+   (window.JuneauConsoleCards = window.JuneauConsoleCards || []).push([<js>'kpi'</js>, KpiCard]);
  </p>
  <p class='bcode'>
    GET /console/dev/cards                       the page
@@ -230,7 +231,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>CustomCardsRest</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-65">CustomCardsRest</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-66">CustomCardsRest</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -244,7 +245,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="page(org.apache.juneau.rest.server.RestRequest)">
 <h3>page</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-75">page</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-76">page</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">The Custom cards page.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -257,7 +258,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="available()">
 <h3>available</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-81">available</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-82">available</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The kpi card's number: how many pets are available.</dd>
@@ -267,7 +268,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="inventory(java.lang.String)">
 <h3>inventory</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-94">inventory</a></span><wbr><span class="parameters">(<a href="../../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>("species")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-95">inventory</a></span><wbr><span class="parameters">(<a href="../../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>("species")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;species)</span></div>
 <div class="block">Counts one species' pets by status, for the gauge.</div>
 <dl class="notes">
@@ -283,7 +284,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="inventoryAll()">
 <h3>inventoryAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-115">inventoryAll</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-116">inventoryAll</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>One <a href="#inventory(java.lang.String)"><code>inventory(String)</code></a> row per species, in enum order, for the stock bands chart.</dd>
@@ -293,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="prices()">
 <h3>prices</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-123">prices</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-124">prices</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>One row <code>{id, price}</code> per pet, by id, for the zoomable prices chart.</dd>
@@ -303,7 +304,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="script(org.apache.juneau.rest.server.RestResponse)">
 <h3>script</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-137">script</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/dev/CustomCardsRest.html#line-138">script</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</span>
             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Serves the page-local script.</div>
 <dl class="notes">

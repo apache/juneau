@@ -186,7 +186,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.console.CardTypeHandler">Methods inherited from interface&nbsp;org.apache.juneau.console.<a href="../CardTypeHandler.html" title="interface in org.apache.juneau.console">CardTypeHandler</a></h3>
-<code><a href="../CardTypeHandler.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)">requiredPacks</a></code></div>
+<code><a href="../CardTypeHandler.html#nestedCards(org.apache.juneau.marshall.collections.JsonMap)">nestedCards</a>, <a href="../CardTypeHandler.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)">requiredPacks</a></code></div>
 </section>
 </li>
 </ul>
@@ -234,6 +234,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../CardTypeHandler.html#acceptedRoles()">CardTypeHandler</a></code></span></div>
 <div class="block">Roles this type accepts in <code>subscribes[].as</code>, beyond <code>refresh</code> and <code>params</code>.
  <code>null</code> (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.
+ For a card class these mirror the keys of its JS <code>static roles</code>.  A handler subscription (<code>topic</code> + <code>handler</code>) names no role and is never checked against this set.
 
  <h4 class='section'>Example:</h4>
  <p class='bjava'>
@@ -254,6 +255,7 @@ implements <a href="../CardTypeHandler.html" title="interface in org.apache.june
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ChartCardType.html#line-93">acceptedOps</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../CardTypeHandler.html#acceptedOps()">CardTypeHandler</a></code></span></div>
 <div class="block"><code>cmd:&lt;id&gt;</code> ops this type handles, beyond the shell's <code>refresh</code>, for E-43 on a ribbon <code>target</code>.
+ For a card class these mirror the keys of its JS <code>static ops</code>.
  <code>null</code> (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports
  an unhandled op at runtime (E-JS-48).
 

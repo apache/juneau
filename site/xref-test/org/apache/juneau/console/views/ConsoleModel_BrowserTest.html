@@ -1,0 +1,493 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>ConsoleModel_BrowserTest xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../testapidocs/org/apache/juneau/console/views/ConsoleModel_BrowserTest.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Licensed to the Apache Software Foundation (ASF) under one or more</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> * contributor license agreements.  See the NOTICE file distributed with</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * this work for additional information regarding copyright ownership.</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * The ASF licenses this file to You under the Apache License, Version 2.0</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * (the "License"); you may not use this file except in compliance with</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> * the License.  You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *      <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">package</strong> org.apache.juneau.console.views;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.apache.juneau.console.views.ConsoleBrowserFixture.*;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.junit.jupiter.api.Assertions.*;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> java.util.*;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.*;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.console.*;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <strong class="jxr_keyword">import</strong> org.apache.juneau.marshall.marshaller.*;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.*;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.junit.jupiter.api.condition.*;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * The client object model in a real browser on pages built from {@code html} cards only: an imperative page and its</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> * JSON twin, handler resolution and failure painting, the loud shell failures, an inline handler under a</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment"> * Content-Security-Policy without {@code 'unsafe-eval'}, and lookup by path.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  @EnabledIfSystemProperty(named=ConsoleBrowserFixture.GATE, matches=<span class="jxr_string">"true"</span>,
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	disabledReason=<span class="jxr_string">"JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-console-views/pom.xml test`"</span>)
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @SuppressWarnings({
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// Casts a parsed JSON value to its known Map/List shape.</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  })
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  <strong class="jxr_keyword">class</strong> ConsoleModel_BrowserTest <strong class="jxr_keyword">extends</strong> TestBase {
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String HANDLERS = <span class="jxr_string">"/app/handlers.js"</span>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String TEMPLATES = <span class="jxr_string">"&lt;template data-card=\&quot;t1\&quot;&gt;&lt;p&gt;one&lt;/p&gt;&lt;/template&gt;&lt;template data-card=\&quot;t2\&quot;&gt;&lt;p&gt;two&lt;/p&gt;&lt;/template&gt;"</span>;
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String MAKE_TEMPLATES = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		&lt;script&gt;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		['t1:one', 't2:two'].forEach(function (s) {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		  <strong class="jxr_keyword">var</strong> t = document.createElement('template'); t.setAttribute('data-card', s.split(':')[0]);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		  t.appendChild(document.createTextNode(s.split(':')[1])); document.body.appendChild(t);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		});
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  		&lt;/script&gt;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String IMPERATIVE = <span class="jxr_string">""</span><span class="jxr_string">"
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		&lt;script&gt;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		(function () {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		  <strong class="jxr_keyword">var</strong> M = window.JuneauViews.model;
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		  <strong class="jxr_keyword">var</strong> p = window.__probe = window.__probe || {};
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		  <strong class="jxr_keyword">var</strong> page = M.Page ? <strong class="jxr_keyword">new</strong> M.Page({ title: <span class="jxr_string">"T"</span>, nav: [{ id: <span class="jxr_string">"home"</span>, label: <span class="jxr_string">"Home"</span> }], activeNav: [<span class="jxr_string">"home"</span>], scripts: [<span class="jxr_string">"/app/handlers.js"</span>] }) : <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		  <strong class="jxr_keyword">var</strong> a = page.addCard(<span class="jxr_string">"html"</span>, { id: <span class="jxr_string">"h1"</span>, template: <span class="jxr_string">"t1"</span>, title: <span class="jxr_string">"One"</span> });
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		  a.action({ id: <span class="jxr_string">"go"</span>, handler: <span class="jxr_string">"app.go"</span> });
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		  a.bind(<span class="jxr_string">"loaded"</span>, <span class="jxr_string">"app.cardLoaded"</span>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		  <strong class="jxr_keyword">var</strong> b = page.addCard(<span class="jxr_string">"html"</span>, { id: <span class="jxr_string">"h2"</span>, template: <span class="jxr_string">"t2"</span>, title: <span class="jxr_string">"Two"</span> });
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		  b.listen(<span class="jxr_string">"app.picked"</span>, <span class="jxr_string">"app.go"</span>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		  page.on(<span class="jxr_string">"ping"</span>, function (e) { p.log.push(<span class="jxr_string">"ping:"</span> + e.source.id + <span class="jxr_string">":"</span> + e.payload.n); });
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		  window.__page = page;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		  page.mount();
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		  p.impJson = JSON.stringify(page.toJSON());
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		})();
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		&lt;/script&gt;
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<span class="jxr_string">""</span><span class="jxr_string">";
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String JSON_CARDS = <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h1\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t1\&quot;,\&quot;title\&quot;:\&quot;One\&quot;,\&quot;model\&quot;:{\&quot;actions\&quot;:[{\&quot;id\&quot;:\&quot;go\&quot;,\&quot;handler\&quot;:\&quot;app.go\&quot;}],\&quot;on\&quot;:{\&quot;loaded\&quot;:\&quot;app.cardLoaded\&quot;}}},"</span>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		+ <span class="jxr_string">"{\&quot;id\&quot;:\&quot;h2\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t2\&quot;,\&quot;title\&quot;:\&quot;Two\&quot;,\&quot;model\&quot;:{\&quot;subscribes\&quot;:[{\&quot;topic\&quot;:\&quot;app.picked\&quot;,\&quot;handler\&quot;:\&quot;app.go\&quot;}]}}]"</span>;
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String json(String extra, String cards) {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;modelVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;nav\&quot;:[{\&quot;id\&quot;:\&quot;home\&quot;,\&quot;label\&quot;:\&quot;Home\&quot;}],\&quot;activeNav\&quot;:[\&quot;home\&quot;]"</span> + extra + <span class="jxr_string">","</span> + cards + <span class="jxr_string">"}"</span>;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String pack() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">return</strong> viewsPack() + <span class="jxr_string">"&lt;script src=\&quot;"</span> + HANDLERS + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span>;
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  	}
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; report;
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@BeforeAll
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> probe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		LIFE_PACK = <span class="jxr_string">"&lt;script&gt;\n"</span> + resource(ConsoleChromeMixin.JOBLOG_JS_RESOURCE) + <span class="jxr_string">"\n&lt;/script&gt;\n&lt;script&gt;\n"</span>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			+ java.nio.file.Files.readString(java.nio.file.Path.of(<span class="jxr_string">"../juneau-terminal-region/src/main/resources/org/apache/juneau/terminal/juneau-terminal.js"</span>)) + <span class="jxr_string">"\n&lt;/script&gt;\n"</span>;
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">var</strong> handlers = resource(<span class="jxr_string">"/model-js-only/handlers.js"</span>);
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  		<strong class="jxr_keyword">var</strong> inline = resource(ViewsMixin.MODEL_INLINE_JS_RESOURCE);
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  		<strong class="jxr_keyword">var</strong> f = ConsoleBrowserFixture.create(<span class="jxr_string">"model-js-only"</span>)
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  			.asset(HANDLERS, handlers, <span class="jxr_string">"text/javascript"</span>)
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  			.asset(<span class="jxr_string">"/app/inline.js"</span>, inline, <span class="jxr_string">"text/javascript"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  		<em class="jxr_comment">// Imperative page: a script after the shell builds and mounts it (no island), then the steps drive it.</em>
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  		<strong class="jxr_keyword">var</strong> impPage = <span class="jxr_string">"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=\&quot;utf-8\&quot;&gt;&lt;link rel=\&quot;icon\&quot; href=\&quot;data:,\&quot;&gt;&lt;/head&gt;&lt;body&gt;\n"</span>
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  			+ <span class="jxr_string">"&lt;script src=\&quot;"</span> + SHELL + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span> + pack() + MAKE_TEMPLATES + IMPERATIVE + <span class="jxr_string">"\n&lt;/body&gt;&lt;/html&gt;"</span>;
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  		f.page(<span class="jxr_string">"imp"</span>, ORIGIN + <span class="jxr_string">"/imp"</span>, impPage, <span class="jxr_string">"h1"</span>, <span class="jxr_string">"#h1"</span>, <span class="jxr_string">"h2"</span>, <span class="jxr_string">"#h2"</span>)
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  			.click(<span class="jxr_string">"#h1 [data-action-id=go]"</span>)
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 			.eval(<span class="jxr_string">"var p = window.__probe, pg = window.__page; p.afterClick = p.log.slice();"</span>
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 				+ <span class="jxr_string">"pg.card('h1').setLabel('L1'); pg.card('h1').setBadge(3, 'info'); pg.tabs[0].setBadge(2, 'info'); pg.tabs[0].activate();"</span>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 				+ <span class="jxr_string">"p.tabAttached = pg.tabs[0].attached; p.path = pg.card('h1').path;"</span>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 				+ <span class="jxr_string">"pg.card('h1').emit('ping', { n: 7 });"</span>
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				+ <span class="jxr_string">"pg.card('h1').publish('app.picked', {});"</span>
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				+ <span class="jxr_string">"p.get = window.JuneauViews.model.get(p.path) === pg.card('h1');"</span>
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				+ <span class="jxr_string">"p.getMissing = window.JuneauViews.model.get('page/page/card:nope');"</span>);
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 		f.page(<span class="jxr_string">"json"</span>, ORIGIN + <span class="jxr_string">"/json"</span>,
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			contractPage(json(<span class="jxr_string">",\&quot;scripts\&quot;:[\&quot;"</span> + HANDLERS + <span class="jxr_string">"\&quot;]"</span>, JSON_CARDS), TEMPLATES, <span class="jxr_string">""</span>, viewsPack())
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 				+ <span class="jxr_string">"&lt;script&gt;window.__probe = window.__probe || {}; window.addEventListener('load', function () { window.__probe.jsonJson = JSON.stringify(window.JuneauViews.model.page().toJSON()); });&lt;/script&gt;"</span>,
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<span class="jxr_string">"h1"</span>, <span class="jxr_string">"#h1"</span>)
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			.click(<span class="jxr_string">"#h1 [data-action-id=go]"</span>)
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			.eval(<span class="jxr_string">"window.__probe.jsonLog = (window.__probe.log || []).slice();"</span>);
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		f.page(<span class="jxr_string">"htmlcmd"</span>, ORIGIN + <span class="jxr_string">"/htmlcmd"</span>,
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			contractPage(json(<span class="jxr_string">",\&quot;scripts\&quot;:[\&quot;"</span> + HANDLERS + <span class="jxr_string">"\&quot;]"</span>, <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h1\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t1\&quot;,\&quot;model\&quot;:{\&quot;on\&quot;:{\&quot;loaded\&quot;:\&quot;app.cardLoaded\&quot;}}}]"</span>), TEMPLATES, <span class="jxr_string">""</span>, viewsPack()),
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 			<span class="jxr_string">"h1"</span>, <span class="jxr_string">"#h1"</span>)
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			.eval(<span class="jxr_string">"(async function () { var p = window.__probe = window.__probe || {}; var body = document.querySelector('#h1 p'); p.before = body ? body.textContent : null; if (body) body.textContent = 'changed'; p.mid = document.querySelector('#h1 p') ? document.querySelector('#h1 p').textContent : null;"</span>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 				+ <span class="jxr_string">" JuneauViews.bus.publish('cmd:h1', { schemaVersion: 1, op: 'refresh' });"</span>
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 				+ <span class="jxr_string">" await new Promise(function (r) { setTimeout(r, 400); }); p.after = document.querySelector('#h1 p') ? document.querySelector('#h1 p').textContent : null;"</span>
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 				+ <span class="jxr_string">" JuneauConsole.destroyCard('h1'); p.destroyedEmpty = document.querySelector('#h1') ? document.querySelector('#h1').children.length : -1;"</span>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 				+ <span class="jxr_string">" try { JuneauConsole.refreshCard('h1'); p.afterDestroy = 'no error'; } catch (e) { p.afterDestroy = e.code; } p.done = true; })();"</span>);
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> lifeCards = <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;tv\&quot;,\&quot;type\&quot;:\&quot;terminal-view\&quot;,\&quot;src\&quot;:\&quot;/tv/none\&quot;},{\&quot;id\&quot;:\&quot;jl\&quot;,\&quot;type\&quot;:\&quot;job-log\&quot;,\&quot;submitUrl\&quot;:\&quot;/jobs/x\&quot;},{\&quot;id\&quot;:\&quot;tm\&quot;,\&quot;type\&quot;:\&quot;terminal\&quot;,\&quot;src\&quot;:\&quot;/term/none\&quot;}]"</span>;
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		f.page(<span class="jxr_string">"life"</span>, ORIGIN + <span class="jxr_string">"/life"</span>, contractPage(json(<span class="jxr_string">""</span>, lifeCards), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack() + LIFE_PACK), <span class="jxr_string">"other"</span>, <span class="jxr_string">"body"</span>)
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 			.eval(<span class="jxr_string">"(async function () { var p = window.__probe = window.__probe || {}; p.res = {};"</span>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 				+ <span class="jxr_string">" await new Promise(function (x) { setTimeout(x, 400); }); var b0 = document.querySelector('.jc-console-error'); if (b0) b0.remove();"</span>
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				+ <span class="jxr_string">" for (var id of ['tv', 'jl', 'tm']) { var r = p.res[id] = {};"</span>
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 				+ <span class="jxr_string">"  try { JuneauViews.bus.publish('cmd:' + id, { schemaVersion: 1, op: 'refresh' }); r.cmd = 'ok'; } catch (e) { r.cmd = String(e.code || e.message); }"</span>
+<a class="jxr_linenumber" name="L127" href="#L127">127</a> 				+ <span class="jxr_string">"  await new Promise(function (x) { setTimeout(x, 150); });"</span>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> 				+ <span class="jxr_string">"  var bn = document.querySelector('.jc-console-error'); r.bannerAfterCmd = bn &amp;&amp; bn.textContent.indexOf(\&quot;card '\&quot; + id + \&quot;'\&quot;) &gt;= 0 ? bn.textContent : ''; if (bn) bn.remove();"</span>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> 				+ <span class="jxr_string">"  try { JuneauConsole.destroyCard(id); r.destroy = 'ok'; } catch (e) { r.destroy = String(e.code || e.message); }"</span>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 				+ <span class="jxr_string">"  bn = document.querySelector('.jc-console-error'); r.bannerAfterDestroy = bn &amp;&amp; bn.textContent.indexOf(\&quot;card '\&quot; + id + \&quot;'\&quot;) &gt;= 0 ? bn.textContent : ''; if (bn) bn.remove();"</span>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> 				+ <span class="jxr_string">"  try { JuneauConsole.refreshCard(id); r.after = 'no error'; } catch (e) { r.after = e.code; } }"</span>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 				+ <span class="jxr_string">" p.done = true; })();"</span>);
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> 		f.page(<span class="jxr_string">"unknown"</span>, ORIGIN + <span class="jxr_string">"/unknown"</span>,
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> 			contractPage(json(<span class="jxr_string">",\&quot;scripts\&quot;:[\&quot;"</span> + HANDLERS + <span class="jxr_string">"\&quot;]"</span>, <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h1\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t1\&quot;,\&quot;model\&quot;:{\&quot;on\&quot;:{\&quot;loaded\&quot;:\&quot;app.nope\&quot;}}},{\&quot;id\&quot;:\&quot;h2\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t2\&quot;}]"</span>), TEMPLATES, <span class="jxr_string">""</span>, viewsPack()),
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 			<span class="jxr_string">"err"</span>, <span class="jxr_string">"#h1 [data-juneau-error]"</span>, <span class="jxr_string">"other"</span>, <span class="jxr_string">"#h2"</span>);
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 		f.page(<span class="jxr_string">"throws"</span>, ORIGIN + <span class="jxr_string">"/throws"</span>,
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 			contractPage(json(<span class="jxr_string">",\&quot;scripts\&quot;:[\&quot;"</span> + HANDLERS + <span class="jxr_string">"\&quot;]"</span>, <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h1\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t1\&quot;,\&quot;model\&quot;:{\&quot;actions\&quot;:[{\&quot;id\&quot;:\&quot;boom\&quot;,\&quot;handler\&quot;:\&quot;app.boom\&quot;}]}}]"</span>), TEMPLATES, <span class="jxr_string">""</span>, viewsPack()),
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 			<span class="jxr_string">"err"</span>, <span class="jxr_string">"#h1 [data-juneau-error]"</span>)
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			.click(<span class="jxr_string">"#h1 [data-action-id=boom]"</span>);
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 		<strong class="jxr_keyword">var</strong> kpi = <span class="jxr_string">"&lt;script&gt;try { JuneauConsole.registerCard('kpi', { render: function () {} }); } catch (e) { window.__probe = { threw: String(e.message) }; }&lt;/script&gt;"</span>;
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		f.page(<span class="jxr_string">"e21"</span>, ORIGIN + <span class="jxr_string">"/e21"</span>, contractPage(<span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;title\&quot;:\&quot;T\&quot;,\&quot;cards\&quot;:[]}"</span>, <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, kpi));
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		<strong class="jxr_keyword">var</strong> reg = <span class="jxr_string">"&lt;script&gt;window.__probe = { r: [] }; ['Bad', 'app.dup', 'app.dup'].forEach(function (n) { try { JuneauViews.handlers.register(n, function () {}); window.__probe.r.push('ok'); } catch (e) { window.__probe.r.push('threw'); } });&lt;/script&gt;"</span>;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		f.page(<span class="jxr_string">"e114"</span>, ORIGIN + <span class="jxr_string">"/e114"</span>, contractPage(json(<span class="jxr_string">""</span>, <span class="jxr_string">"\&quot;cards\&quot;:[]"</span>), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack() + reg));
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 		f.page(<span class="jxr_string">"e120"</span>, ORIGIN + <span class="jxr_string">"/e120"</span>, contractPage(json(<span class="jxr_string">""</span>, <span class="jxr_string">"\&quot;cards\&quot;:[]"</span>).replace(<span class="jxr_string">"\&quot;modelVersion\&quot;:\&quot;1\&quot;"</span>, <span class="jxr_string">"\&quot;modelVersion\&quot;:\&quot;9\&quot;"</span>), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, <span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 		f.page(<span class="jxr_string">"e124"</span>, ORIGIN + <span class="jxr_string">"/e124"</span>, contractPage(json(<span class="jxr_string">",\&quot;scripts\&quot;:[\&quot;/app/missing.js\&quot;]"</span>, <span class="jxr_string">"\&quot;cards\&quot;:[]"</span>), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack()));
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 		<strong class="jxr_keyword">var</strong> inlineCards = <span class="jxr_string">"\&quot;cards\&quot;:[{\&quot;id\&quot;:\&quot;h1\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t1\&quot;,\&quot;model\&quot;:{\&quot;on\&quot;:{\&quot;loaded\&quot;:{\&quot;inline\&quot;:\&quot;window.__probe.ran = true\&quot;}}}},{\&quot;id\&quot;:\&quot;h2\&quot;,\&quot;type\&quot;:\&quot;html\&quot;,\&quot;template\&quot;:\&quot;t2\&quot;}]"</span>;
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 		f.page(<span class="jxr_string">"csp"</span>, ORIGIN + <span class="jxr_string">"/csp"</span>,
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			contractPage(json(<span class="jxr_string">",\&quot;allowInlineHandlers\&quot;:true"</span>, inlineCards), TEMPLATES, <span class="jxr_string">""</span>, viewsPack() + <span class="jxr_string">"&lt;script src=\&quot;/app/inline.js\&quot;&gt;&lt;/script&gt;\n"</span>),
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			<span class="jxr_string">"other"</span>, <span class="jxr_string">"#h2"</span>)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			.pageHeader(<span class="jxr_string">"Content-Security-Policy"</span>, <span class="jxr_string">"default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"</span>);
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		report = f.run();
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 	}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String WAIT = <span class="jxr_string">"window.__w = function (fn) { return new Promise(function (res) { var n = 0; (function t() { if (fn() || n++ &gt; 160) res(); else setTimeout(t, 50); })(); }); };"</span>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 		+ <span class="jxr_string">"window.__tab = function (i) { return Array.from(document.querySelectorAll('#pets-body [role=tab]'))[i]; };"</span>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 		+ <span class="jxr_string">"window.__res = function (re) { return performance.getEntriesByType('resource').filter(function (e) { return re.test(new URL(e.name).pathname); }).length; };"</span>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 		+ <span class="jxr_string">"window.__size = function () { var n = 0; (function w(h) { n++; h.children.forEach(w); })(JuneauViews.model.page()); return n; };"</span>
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 		+ <span class="jxr_string">"window.__tbl = function () { var f = function (h) { if (h.kind === 'table') return h; for (var c of h.children) { var r = f(c); if (r) return r; } return null; }; return f(JuneauViews.model.page()); };"</span>;
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String DETAIL_RE = <span class="jxr_string">"/^&#92;&#92;/api&#92;&#92;/pets&#92;&#92;/p1&#92;&#92;/detail$/"</span>, PETS_RE = <span class="jxr_string">"/^&#92;&#92;/api&#92;&#92;/pets$/"</span>;
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 	<em class="jxr_javadoccomment">/** The shared steps: counts, label, detail refresh icon, ribbon refresh, forced draws (what a poll tick does), registry size. */</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String STEPS = <span class="jxr_string">"var p = window.__probe = window.__probe || {};"</span>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		+ <span class="jxr_string">"(async function () { try {"</span>
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		+ <span class="jxr_string">"  await __w(function () { return __tab(1); });"</span>
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 		+ <span class="jxr_string">"  __tab(1).click();"</span>
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		+ <span class="jxr_string">"  await __w(function () { return /Orders &#92;&#92;(3&#92;&#92;)/.test(__tab(1).textContent); });"</span>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		+ <span class="jxr_string">"  p.label1 = __tab(1).textContent;"</span>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		+ <span class="jxr_string">"  p.d0 = __res("</span> + DETAIL_RE + <span class="jxr_string">"); p.t0 = __res("</span> + PETS_RE + <span class="jxr_string">");"</span>
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		+ <span class="jxr_string">"  document.querySelector('#pets-body .juneau-model-actions [data-action-id=refresh]').click();"</span>
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		+ <span class="jxr_string">"  await __w(function () { return __res("</span> + DETAIL_RE + <span class="jxr_string">") &gt; p.d0; }); p.d1 = __res("</span> + DETAIL_RE + <span class="jxr_string">");"</span>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		+ <span class="jxr_string">"  document.querySelector('[data-juneau-ribbon-id=reload]').click();"</span>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 		+ <span class="jxr_string">"  await __w(function () { return __res("</span> + PETS_RE + <span class="jxr_string">") &gt; p.t0; }); p.t1 = __res("</span> + PETS_RE + <span class="jxr_string">");"</span>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		+ <span class="jxr_string">"  await __w(function () { return /Orders &#92;&#92;(3&#92;&#92;)/.test(__tab(1) &amp;&amp; __tab(1).textContent); });"</span>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		+ <span class="jxr_string">"  p.size0 = __size();"</span>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		+ <span class="jxr_string">"  for (var i = 0; i &lt; 12; i++) { var n = __res("</span> + PETS_RE + <span class="jxr_string">"); __tbl().reload(); await __w(function () { return __res("</span> + PETS_RE + <span class="jxr_string">") &gt; n; }); await new Promise(function (r) { setTimeout(r, 150); }); }"</span>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 		+ <span class="jxr_string">"  p.size1 = __size();"</span>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		+ <span class="jxr_string">"  await __w(function () { return __tab(1); });"</span>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		+ <span class="jxr_string">"  p.d2 = __res("</span> + DETAIL_RE + <span class="jxr_string">");"</span>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		+ <span class="jxr_string">"  p.reopenTabs = Array.from(document.querySelectorAll('#pets-body [role=tab]')).map(function (t) { return t.textContent; });"</span>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 		+ <span class="jxr_string">"  p.reopenSelected = Array.from(document.querySelectorAll('#pets-body [role=tab]')).map(function (t) { return t.getAttribute('aria-selected'); });"</span>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 		+ <span class="jxr_string">"  p.pageJson = JSON.stringify(JuneauViews.model.page().toJSON());"</span>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		+ <span class="jxr_string">"  p.done = true;"</span>
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		+ <span class="jxr_string">"} catch (e) { p.err = String(e &amp;&amp; e.stack || e); } })();"</span>;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String detailMeta() {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"{\&quot;contractVersion\&quot;:\&quot;1\&quot;,\&quot;fields\&quot;:{\&quot;name\&quot;:\&quot;Rex\&quot;},\&quot;counts\&quot;:{\&quot;orders\&quot;:3}}"</span>;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> TableSpec petsTable(<strong class="jxr_keyword">boolean</strong> refreshOnPoll) {
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">var</strong> orders = TableSpec.create(<span class="jxr_string">"pet-orders"</span>).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/orders"</span>)
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>), Column.create(<span class="jxr_string">"status"</span>).label(<span class="jxr_string">"Status"</span>));
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">var</strong> tab = DetailTab.table(<span class="jxr_string">"Orders"</span>, orders).id(<span class="jxr_string">"orders"</span>).scopeParam(<span class="jxr_string">"petId"</span>).on(<span class="jxr_string">"loaded"</span>, <span class="jxr_string">"juneau.countLabel"</span>).refreshOnPoll(refreshOnPoll);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">var</strong> detail = RowDetail.create(<span class="jxr_string">"/api/pets/{id}/detail"</span>).title(<span class="jxr_string">"Pet {id}"</span>)
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			.tab(DetailTab.fields(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"name"</span>).id(<span class="jxr_string">"info"</span>))
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			.tab(tab)
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			.action(<span class="jxr_string">"refresh"</span>, <span class="jxr_string">"refresh-cw"</span>, <span class="jxr_string">"juneau.refresh"</span>);
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		<strong class="jxr_keyword">return</strong> TableSpec.create(<span class="jxr_string">"pets"</span>).dataMode(TableSpec.DataMode.CLIENT).dataUrl(<span class="jxr_string">"/api/pets"</span>)
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			.selection(SelectionDef.create(<span class="jxr_string">"id"</span>))
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			.columns(Column.create(<span class="jxr_string">"id"</span>).label(<span class="jxr_string">"Id"</span>), Column.create(<span class="jxr_string">"name"</span>).label(<span class="jxr_string">"Name"</span>))
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			.ribbon(RibbonItem.action(<span class="jxr_string">"reload"</span>).icon(<span class="jxr_string">"refresh-cw"</span>).action(<span class="jxr_string">"click"</span>, <span class="jxr_string">"refresh-cw"</span>, <span class="jxr_string">"juneau.refreshClosest"</span>, Map.of(<span class="jxr_string">"kind"</span>, <span class="jxr_string">"table"</span>)))
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			.detail(detail);
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String petsPage(<strong class="jxr_keyword">boolean</strong> refreshOnPoll) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> card = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		card.put(<span class="jxr_string">"id"</span>, <span class="jxr_string">"pets"</span>);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		card.put(<span class="jxr_string">"type"</span>, <span class="jxr_string">"datatables"</span>);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		card.put(<span class="jxr_string">"title"</span>, <span class="jxr_string">"Pets"</span>);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		card.put(<span class="jxr_string">"table"</span>, petsTable(refreshOnPoll).toCardBody());
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> page = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,Object&gt;();
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		page.put(<span class="jxr_string">"contractVersion"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		page.put(<span class="jxr_string">"modelVersion"</span>, <span class="jxr_string">"1"</span>);
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 		page.put(<span class="jxr_string">"title"</span>, <span class="jxr_string">"Pets"</span>);
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		page.put(<span class="jxr_string">"cards"</span>, List.of(card));
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">return</strong> contractPage(Json.of(page), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack());
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String jsOnlyPage(<strong class="jxr_keyword">boolean</strong> refreshOnPoll) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">return</strong> jsOnlyPage(refreshOnPoll, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 	}
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 	<em class="jxr_javadoccomment">/** The JS-only page with an extra script (the handler variants) loaded before the page is built. */</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String jsOnlyPage(<strong class="jxr_keyword">boolean</strong> refreshOnPoll, String variantScript) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=\&quot;utf-8\&quot;&gt;&lt;link rel=\&quot;icon\&quot; href=\&quot;data:,\&quot;&gt;&lt;/head&gt;&lt;body&gt;\n"</span>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			+ <span class="jxr_string">"&lt;script src=\&quot;"</span> + SHELL + <span class="jxr_string">"\&quot;&gt;&lt;/script&gt;\n"</span> + viewsPack()
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			+ <span class="jxr_string">"&lt;script&gt;window.__refreshOnPoll = "</span> + refreshOnPoll + <span class="jxr_string">";"</span> + variantScript + <span class="jxr_string">"&lt;/script&gt;&lt;script src=\&quot;/app/cards-js-only.js\&quot;&gt;&lt;/script&gt;\n&lt;/body&gt;&lt;/html&gt;"</span>;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 	}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Map&lt;String,Object&gt;&gt; tableReport;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String LIFE_PACK;
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> String H_ = <span class="jxr_string">"var H = window.JuneauViews.handlers; "</span>;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	<em class="jxr_javadoccomment">/** The detail-count handler variants: update the detail header, update the row, tell an ancestor. */</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Map&lt;String,String&gt; VARIANTS = Map.of(
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<span class="jxr_string">"jsHdr"</span>, H_ + <span class="jxr_string">"H.register('pets.ordersInHeader', function (tab, e) { tab.closest('rowdetail').setBadge(e.payload.count, 'info'); }); window.__ordersHandler = 'pets.ordersInHeader';"</span>,
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<span class="jxr_string">"jsRow"</span>, H_ + <span class="jxr_string">"H.register('pets.ordersOnRow', function (tab, e) { tab.closest('row').setBadge(e.payload.count, 'info'); }); window.__ordersHandler = 'pets.ordersOnRow';"</span>,
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<span class="jxr_string">"jsEmit"</span>, H_ + <span class="jxr_string">"H.register('pets.ordersEmit', function (tab, e) { tab.emit('orders-counted', { count: e.payload.count }); }); window.__ordersHandler = 'pets.ordersEmit';"</span>
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 			+ <span class="jxr_string">" window.__onPage = function (page) { page.on('orders-counted', function (ev) { (window.__probe = window.__probe || {}).emitted = { path: ev.source.path, count: ev.payload.count }; }); };"</span>);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@BeforeAll
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 	<strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> tableProbe() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 		<strong class="jxr_keyword">var</strong> many = <strong class="jxr_keyword">new</strong> String[10];
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		Arrays.fill(many, <span class="jxr_string">"[{\&quot;id\&quot;:\&quot;p1\&quot;,\&quot;name\&quot;:\&quot;Rex\&quot;}]"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 		<strong class="jxr_keyword">var</strong> detailBodies = <strong class="jxr_keyword">new</strong> String[40];
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		Arrays.fill(detailBodies, detailMeta());
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">var</strong> f = ConsoleBrowserFixture.create(<span class="jxr_string">"model-table"</span>)
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			.asset(<span class="jxr_string">"/api/pets"</span>, <span class="jxr_string">"[{\&quot;id\&quot;:\&quot;p1\&quot;,\&quot;name\&quot;:\&quot;Rex\&quot;}]"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 			.asset(<span class="jxr_string">"/api/orders"</span>, <span class="jxr_string">"[{\&quot;id\&quot;:\&quot;o1\&quot;,\&quot;status\&quot;:\&quot;new\&quot;},{\&quot;id\&quot;:\&quot;o2\&quot;,\&quot;status\&quot;:\&quot;new\&quot;},{\&quot;id\&quot;:\&quot;o3\&quot;,\&quot;status\&quot;:\&quot;paid\&quot;}]"</span>, <span class="jxr_string">"application/json"</span>)
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 			.asset(<span class="jxr_string">"/app/cards-js-only.js"</span>, resource(<span class="jxr_string">"/model-js-only/cards-js-only.js"</span>), <span class="jxr_string">"text/javascript"</span>)
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			.sequence(<span class="jxr_string">"/api/pets/p1/detail"</span>, <span class="jxr_string">"application/json"</span>, detailBodies);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">var</strong> open = <span class="jxr_string">"#pets-body .juneau-view-detail-toggle"</span>;
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 		f.page(<span class="jxr_string">"tbl"</span>, ORIGIN + <span class="jxr_string">"/tbl"</span>, petsPage(false), <span class="jxr_string">"dump"</span>, <span class="jxr_string">"#pets-body"</span>)
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			.waitFor(<span class="jxr_string">"#pets-body tbody td.sorting_1"</span>).click(open).eval(WAIT).eval(STEPS)
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 			.waitFor(<span class="jxr_string">"body"</span>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 		f.page(<span class="jxr_string">"tblPoll"</span>, ORIGIN + <span class="jxr_string">"/tblPoll"</span>, petsPage(<strong class="jxr_keyword">true</strong>), <span class="jxr_string">"dump"</span>, <span class="jxr_string">"#pets-body"</span>)
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 			.waitFor(<span class="jxr_string">"#pets-body tbody td.sorting_1"</span>).click(open).eval(WAIT).eval(STEPS);
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		f.page(<span class="jxr_string">"js"</span>, ORIGIN + <span class="jxr_string">"/js"</span>, jsOnlyPage(false), <span class="jxr_string">"dump"</span>, <span class="jxr_string">"#pets-body"</span>)
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 			.waitFor(<span class="jxr_string">"#pets-body tbody td.sorting_1"</span>).click(open).eval(WAIT).eval(STEPS);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">var</strong> variantSteps = <span class="jxr_string">"var p = window.__probe = window.__probe || {};(async function () { try {"</span>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			+ <span class="jxr_string">"  await __w(function () { return __tab(1); }); __tab(1).click();"</span>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 			+ <span class="jxr_string">"  await __w(function () { return document.querySelectorAll('.juneau-view-detail-tab-count').length &gt; 0 || p.emitted; });"</span>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			+ <span class="jxr_string">"  await new Promise(function (r) { setTimeout(r, 300); });"</span>
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			+ <span class="jxr_string">"  p.chips = Array.from(document.querySelectorAll('.juneau-view-detail-tab-count')).map(function (c) { return { text: c.textContent, inTab: !!c.closest('[role=tab]'), inPanel: !!c.closest('.juneau-view-detail-panel'), inTr: !!c.closest('tr') }; });"</span>
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			+ <span class="jxr_string">"  p.done = true; } catch (e) { p.err = String(e &amp;&amp; e.stack || e); } })();"</span>;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : VARIANTS.entrySet())
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			f.page(v.getKey(), ORIGIN + <span class="jxr_string">"/"</span> + v.getKey(), jsOnlyPage(false, v.getValue()), <span class="jxr_string">"dump"</span>, <span class="jxr_string">"#pets-body"</span>)
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 				.waitFor(<span class="jxr_string">"#pets-body tbody td.sorting_1"</span>).click(open).eval(WAIT).eval(variantSteps);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		<strong class="jxr_keyword">var</strong> types = <span class="jxr_string">"&lt;script&gt;\n"</span> + resource(ConsoleChromeMixin.CHARTS_JS_RESOURCE) + <span class="jxr_string">"\n&lt;/script&gt;\n&lt;script&gt;\n"</span> + resource(ConsoleChromeMixin.JOBLOG_JS_RESOURCE)
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			+ <span class="jxr_string">"\n&lt;/script&gt;\n&lt;script&gt;\n"</span> + java.nio.file.Files.readString(java.nio.file.Path.of(<span class="jxr_string">"../juneau-terminal-region/src/main/resources/org/apache/juneau/terminal/juneau-terminal.js"</span>)) + <span class="jxr_string">"\n&lt;/script&gt;\n"</span>;
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 		<strong class="jxr_keyword">var</strong> typeProbe = <span class="jxr_string">"&lt;script&gt;window.addEventListener('load', function () { var JC = JuneauViews &amp;&amp; window.JuneauConsole, M = JuneauViews.model, out = {};"</span>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 			+ <span class="jxr_string">" ['html','terminal-view','datatables','chart','job-log','terminal'].forEach(function (t) {"</span>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			+ <span class="jxr_string">"  var c = JC.cardClass(t); var r = { registered: !!c, isModelCard: !!c &amp;&amp; c.prototype instanceof M.Card, bad: [] };"</span>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			+ <span class="jxr_string">"  if (c) ['roles','ops'].forEach(function (k) { var m = c[k] || {}; Object.keys(m).forEach(function (a) { if (typeof c.prototype[m[a]] !== 'function') r.bad.push(k + ':' + a); }); });"</span>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			+ <span class="jxr_string">"  out[t] = r; });"</span>
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			+ <span class="jxr_string">" window.__probe = { types: out }; });&lt;/script&gt;"</span>;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		f.page(<span class="jxr_string">"types"</span>, ORIGIN + <span class="jxr_string">"/types"</span>, contractPage(json(<span class="jxr_string">""</span>, <span class="jxr_string">"\&quot;cards\&quot;:[]"</span>), <span class="jxr_string">""</span>, <span class="jxr_string">""</span>, viewsPack() + types + typeProbe));
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		tableReport = f.run();
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; tp(String name) {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> r = tableReport.get(name);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertEquals(List.of(), r.get(<span class="jxr_string">"pageErrors"</span>), r::toString);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		<strong class="jxr_keyword">var</strong> p = ConsoleBrowserFixture.probe(r);
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 		assertEquals(Boolean.TRUE, p.get(<span class="jxr_string">"done"</span>), () -&gt; String.valueOf(p.get(<span class="jxr_string">"err"</span>)));
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		<strong class="jxr_keyword">return</strong> p;
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">long</strong> n(Map&lt;String,Object&gt; p, String k) {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> ((Number)p.get(k)).longValue();
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	}
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Map&lt;String,Object&gt; probeOf(String name) {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 		<strong class="jxr_keyword">return</strong> ConsoleBrowserFixture.probe(report.get(name));
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	}
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;String&gt; codes(String name) {
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">return</strong> ((List&lt;Map&lt;String,String&gt;&gt;)report.get(name).get(<span class="jxr_string">"banner"</span>)).stream().map(m -&gt; m.get(<span class="jxr_string">"code"</span>)).toList();
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	}
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_html_card_action_click_runs_handler() {
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"imp"</span>);
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		assertEquals(List.of(), r.get(<span class="jxr_string">"pageErrors"</span>), r::toString);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertEquals(List.of(<span class="jxr_string">"go:h1"</span>), probeOf(<span class="jxr_string">"imp"</span>).get(<span class="jxr_string">"afterClick"</span>), r::toString);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_card_setLabel_and_setBadge() {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">var</strong> t = String.valueOf(queries(report.get(<span class="jxr_string">"imp"</span>)).get(<span class="jxr_string">"h1"</span>));
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 		assertTrue(t.contains(<span class="jxr_string">"L1"</span>), t);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 		assertTrue(t.contains(<span class="jxr_string">"3"</span>), t);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	}
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_pagetab_setBadge_and_activate() {
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		assertEquals(List.of(), report.get(<span class="jxr_string">"imp"</span>).get(<span class="jxr_string">"pageErrors"</span>));
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertEquals(Boolean.TRUE, probeOf(<span class="jxr_string">"imp"</span>).get(<span class="jxr_string">"tabAttached"</span>), report.get(<span class="jxr_string">"imp"</span>)::toString);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 	}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_emit_bubbles_to_page_listener() {
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		<strong class="jxr_keyword">var</strong> log = (List&lt;String&gt;)probeOf(<span class="jxr_string">"imp"</span>).get(<span class="jxr_string">"log"</span>);
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		assertTrue(log.contains(<span class="jxr_string">"ping:h1:7"</span>), String.valueOf(log));
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		assertTrue(log.contains(<span class="jxr_string">"go:h2"</span>), <span class="jxr_string">"the declared listener on h2 ran for app.picked: "</span> + log);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 	}
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_json_variant_equals_imperative_toJSON() {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		<strong class="jxr_keyword">var</strong> imp = (Map&lt;String,Object&gt;)Json.to((String)probeOf(<span class="jxr_string">"imp"</span>).get(<span class="jxr_string">"impJson"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		<strong class="jxr_keyword">var</strong> js = (Map&lt;String,Object&gt;)Json.to((String)probeOf(<span class="jxr_string">"json"</span>).get(<span class="jxr_string">"jsonJson"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertEquals(imp, js);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 	}
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_scripts_loaded_by_shell_before_handler_resolution() {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"json"</span>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		assertNoShellErrors(r);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		assertEquals(List.of(), r.get(<span class="jxr_string">"pageErrors"</span>), r::toString);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> log = (List&lt;String&gt;)probeOf(<span class="jxr_string">"json"</span>).get(<span class="jxr_string">"jsonLog"</span>);
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		assertTrue(log.contains(<span class="jxr_string">"cardLoaded:h1"</span>) || log.contains(<span class="jxr_string">"go:h1"</span>), String.valueOf(log));
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		assertTrue(log.contains(<span class="jxr_string">"go:h1"</span>), String.valueOf(log));
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_unknown_handler_painted_E116_page_renders() {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"unknown"</span>);
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 		assertTrue(String.valueOf(queries(r).get(<span class="jxr_string">"err"</span>)).contains(<span class="jxr_string">"app.nope"</span>), r::toString);
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		assertTrue(String.valueOf(queries(r).get(<span class="jxr_string">"other"</span>)).contains(<span class="jxr_string">"two"</span>), r::toString);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 	}
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_handler_<strong class="jxr_keyword">throw</strong>_painted_E118() {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"throws"</span>);
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 		<strong class="jxr_keyword">var</strong> t = String.valueOf(queries(r).get(<span class="jxr_string">"err"</span>));
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		assertTrue(t.contains(<span class="jxr_string">"kaboom"</span>) &amp;&amp; t.contains(<span class="jxr_string">"app.boom"</span>), t);
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	}
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	@Test <strong class="jxr_keyword">void</strong> loudFailure_E21_object_form_banner() {
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 		assertTrue(codes(<span class="jxr_string">"e21"</span>).contains(<span class="jxr_string">"E-JS-21"</span>), report.get(<span class="jxr_string">"e21"</span>)::toString);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	@Test <strong class="jxr_keyword">void</strong> loudFailure_E114_duplicate_E115_E120_E124_banners() {
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 		assertEquals(List.of(<span class="jxr_string">"threw"</span>, <span class="jxr_string">"ok"</span>, <span class="jxr_string">"threw"</span>), probeOf(<span class="jxr_string">"e114"</span>).get(<span class="jxr_string">"r"</span>), report.get(<span class="jxr_string">"e114"</span>)::toString);
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 		assertTrue(codes(<span class="jxr_string">"e120"</span>).contains(<span class="jxr_string">"E-JS-120"</span>), report.get(<span class="jxr_string">"e120"</span>)::toString);
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		assertTrue(codes(<span class="jxr_string">"e124"</span>).contains(<span class="jxr_string">"E-JS-124"</span>), report.get(<span class="jxr_string">"e124"</span>)::toString);
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	}
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	@Test <strong class="jxr_keyword">void</strong> inline_csp_page_reports_E119_not_silent() {
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 		<strong class="jxr_keyword">var</strong> r = report.get(<span class="jxr_string">"csp"</span>);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		<strong class="jxr_keyword">var</strong> errors = String.valueOf(r.get(<span class="jxr_string">"consoleErrors"</span>));
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertTrue(errors.contains(<span class="jxr_string">"E-JS-119"</span>), r::toString);
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertNull(r.get(<span class="jxr_string">"probe"</span>) == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : ((Map&lt;String,Object&gt;)r.get(<span class="jxr_string">"probe"</span>)).get(<span class="jxr_string">"ran"</span>), r::toString);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertTrue(String.valueOf(queries(r).get(<span class="jxr_string">"other"</span>)).contains(<span class="jxr_string">"two"</span>), r::toString);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> model_get_by_path_in_page() {
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 		<strong class="jxr_keyword">var</strong> p = probeOf(<span class="jxr_string">"imp"</span>);
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		assertEquals(<span class="jxr_string">"page/page/card:h1"</span>, p.get(<span class="jxr_string">"path"</span>));
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 		assertEquals(Boolean.TRUE, p.get(<span class="jxr_string">"get"</span>), report.get(<span class="jxr_string">"imp"</span>)::toString);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		assertNull(p.get(<span class="jxr_string">"getMissing"</span>));
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 	}
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_ordersCount_sets_tab_label_Orders_3() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : List.of(<span class="jxr_string">"tbl"</span>, <span class="jxr_string">"js"</span>))
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			assertTrue(String.valueOf(tp(c).get(<span class="jxr_string">"label1"</span>)).contains(<span class="jxr_string">"Orders (3)"</span>), c + <span class="jxr_string">": "</span> + tableReport.get(c));
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	}
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_detailRefreshIcon_click_refetches_detail() {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : List.of(<span class="jxr_string">"tbl"</span>, <span class="jxr_string">"js"</span>)) {
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 			<strong class="jxr_keyword">var</strong> p = tp(c);
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			assertTrue(n(p, <span class="jxr_string">"d1"</span>) &gt; n(p, <span class="jxr_string">"d0"</span>), c + <span class="jxr_string">": "</span> + p);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		}
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_ribbonRefresh_reloads_table() {
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : List.of(<span class="jxr_string">"tbl"</span>, <span class="jxr_string">"js"</span>)) {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 			<strong class="jxr_keyword">var</strong> p = tp(c);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			assertTrue(n(p, <span class="jxr_string">"t1"</span>) &gt; n(p, <span class="jxr_string">"t0"</span>), c + <span class="jxr_string">": "</span> + p);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		}
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<em class="jxr_javadoccomment">/** After forced draws (what a poll tick does) the open row re-opens on the same subtab: the detail is fetched again, the label</em>
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> <em class="jxr_javadoccomment">	 *  goes back to the server label and the loaded handler re-applies the count. */</em>
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_ordersCount_after_poll_redraw_reopens_with_server_label() {
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 		<strong class="jxr_keyword">var</strong> p = tp(<span class="jxr_string">"tbl"</span>);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 		assertTrue(n(p, <span class="jxr_string">"d2"</span>) &gt; n(p, <span class="jxr_string">"d1"</span>), <span class="jxr_string">"the re-open fetched the detail again: "</span> + p);
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 		assertEquals(List.of(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"Orders (3)"</span>), p.get(<span class="jxr_string">"reopenTabs"</span>), p::toString);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		assertEquals(List.of(<span class="jxr_string">"false"</span>, <span class="jxr_string">"true"</span>), p.get(<span class="jxr_string">"reopenSelected"</span>), p::toString);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_count_on_detail_header_and_row_variants() {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> p = tp(<span class="jxr_string">"tblPoll"</span>);
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertTrue(String.valueOf(p.get(<span class="jxr_string">"label1"</span>)).contains(<span class="jxr_string">"Orders (3)"</span>), p::toString);
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertEquals(List.of(<span class="jxr_string">"Info"</span>, <span class="jxr_string">"Orders (3)"</span>), p.get(<span class="jxr_string">"reopenTabs"</span>), p::toString);
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	}
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	@Test <strong class="jxr_keyword">void</strong> registry_size_stable_over_forced_draws() {
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : List.of(<span class="jxr_string">"tbl"</span>, <span class="jxr_string">"js"</span>)) {
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">var</strong> p = tp(c);
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			assertEquals(n(p, <span class="jxr_string">"size0"</span>), n(p, <span class="jxr_string">"size1"</span>), c + <span class="jxr_string">": "</span> + p);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		}
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_header_variant_badges_the_detail_header_not_the_tab() {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		<strong class="jxr_keyword">var</strong> p = tp(<span class="jxr_string">"jsHdr"</span>);
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		<strong class="jxr_keyword">var</strong> chips = (List&lt;Map&lt;String,Object&gt;&gt;)p.get(<span class="jxr_string">"chips"</span>);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertTrue(chips.stream().anyMatch(c -&gt; <span class="jxr_string">"3"</span>.equals(c.get(<span class="jxr_string">"text"</span>)) &amp;&amp; Boolean.TRUE.equals(c.get(<span class="jxr_string">"inPanel"</span>)) &amp;&amp; ! Boolean.TRUE.equals(c.get(<span class="jxr_string">"inTab"</span>))), p::toString);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertTrue(chips.stream().noneMatch(c -&gt; Boolean.TRUE.equals(c.get(<span class="jxr_string">"inTab"</span>))), p::toString);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	}
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_row_variant_badges_the_row() {
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">var</strong> p = tp(<span class="jxr_string">"jsRow"</span>);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		<strong class="jxr_keyword">var</strong> chips = (List&lt;Map&lt;String,Object&gt;&gt;)p.get(<span class="jxr_string">"chips"</span>);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertTrue(chips.stream().anyMatch(c -&gt; <span class="jxr_string">"3"</span>.equals(c.get(<span class="jxr_string">"text"</span>)) &amp;&amp; Boolean.TRUE.equals(c.get(<span class="jxr_string">"inTr"</span>)) &amp;&amp; ! Boolean.TRUE.equals(c.get(<span class="jxr_string">"inPanel"</span>))), p::toString);
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	}
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_emit_variant_reaches_the_page_listener() {
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> p = tp(<span class="jxr_string">"jsEmit"</span>);
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">var</strong> e = (Map&lt;String,Object&gt;)p.get(<span class="jxr_string">"emitted"</span>);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertEquals(3L, ((Number)e.get(<span class="jxr_string">"count"</span>)).longValue(), p::toString);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		assertTrue(String.valueOf(e.get(<span class="jxr_string">"path"</span>)).contains(<span class="jxr_string">"tab:orders"</span>), p::toString);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 	}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	<em class="jxr_javadoccomment">/** The Java-built table page and the JS-only table page describe the same contract. */</em>
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 	@Test <strong class="jxr_keyword">void</strong> jsOnly_table_page_contract_equals_java_built_table_page() {
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">var</strong> java = Json.to((String)tp(<span class="jxr_string">"tbl"</span>).get(<span class="jxr_string">"pageJson"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">var</strong> js = Json.to((String)tp(<span class="jxr_string">"js"</span>).get(<span class="jxr_string">"pageJson"</span>), Map.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		assertEquals(java, js);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	}
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 	<em class="jxr_javadoccomment">/** Every ported card type is a class extending the model Card, and the methods its static roles and ops name exist. */</em>
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 	@Test <strong class="jxr_keyword">void</strong> builtin_card_types_are_model_Card_subclasses_with_real_role_and_op_methods() {
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		<strong class="jxr_keyword">var</strong> types = (Map&lt;String,Map&lt;String,Object&gt;&gt;)ConsoleBrowserFixture.probe(tableReport.get(<span class="jxr_string">"types"</span>)).get(<span class="jxr_string">"types"</span>);
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		assertEquals(Set.of(<span class="jxr_string">"html"</span>, <span class="jxr_string">"terminal-view"</span>, <span class="jxr_string">"datatables"</span>, <span class="jxr_string">"chart"</span>, <span class="jxr_string">"job-log"</span>, <span class="jxr_string">"terminal"</span>), types.keySet());
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		types.forEach((t, r) -&gt; {
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"registered"</span>), t + <span class="jxr_string">": "</span> + r);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 			assertEquals(Boolean.TRUE, r.get(<span class="jxr_string">"isModelCard"</span>), t + <span class="jxr_string">": "</span> + r);
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			assertEquals(List.of(), r.get(<span class="jxr_string">"bad"</span>), t + <span class="jxr_string">": "</span> + r);
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		});
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 	}
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 	<em class="jxr_javadoccomment">/** The html card: a cmd:refresh through the bus re-renders its template; destroyCard retires it and a later refresh raises E-JS-22. */</em>
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 	@Test <strong class="jxr_keyword">void</strong> html_card_cmd_refresh_and_destroy() {
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">var</strong> p = probeOf(<span class="jxr_string">"htmlcmd"</span>);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		assertEquals(Boolean.TRUE, p.get(<span class="jxr_string">"done"</span>), report.get(<span class="jxr_string">"htmlcmd"</span>)::toString);
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		assertEquals(<span class="jxr_string">"one"</span>, p.get(<span class="jxr_string">"before"</span>), p::toString);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 		assertEquals(<span class="jxr_string">"changed"</span>, p.get(<span class="jxr_string">"mid"</span>), p::toString);
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		assertEquals(<span class="jxr_string">"one"</span>, p.get(<span class="jxr_string">"after"</span>), <span class="jxr_string">"cmd:refresh re-rendered the template: "</span> + p);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		assertEquals(<span class="jxr_string">"E-JS-22"</span>, p.get(<span class="jxr_string">"afterDestroy"</span>), p::toString);
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 	}
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	<em class="jxr_javadoccomment">/** The terminal-view, job-log and terminal cards: a cmd:refresh through the bus and destroyCard work, and a refresh after destroy raises E-JS-22. A card's own cmd or destroy that throws is caught by the shell and painted as a page banner, so the test also requires that destroy raises no banner for the card. (The page has no xterm, so a cmd:refresh on the terminal cards paints a render banner by design: it is not asserted.) */</em>
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 	@Test <strong class="jxr_keyword">void</strong> terminal_view_job_log_and_terminal_cards_take_cmd_refresh_and_destroy() {
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">var</strong> p = probeOf(<span class="jxr_string">"life"</span>);
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 		assertEquals(Boolean.TRUE, p.get(<span class="jxr_string">"done"</span>), report.get(<span class="jxr_string">"life"</span>)::toString);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">var</strong> res = (Map&lt;String,Map&lt;String,Object&gt;&gt;)p.get(<span class="jxr_string">"res"</span>);
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 		<strong class="jxr_keyword">var</strong> bad = <strong class="jxr_keyword">new</strong> ArrayList&lt;String&gt;();
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> id : List.of(<span class="jxr_string">"tv"</span>, <span class="jxr_string">"jl"</span>, <span class="jxr_string">"tm"</span>)) {
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 			<strong class="jxr_keyword">var</strong> r = res.get(id);
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 			<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong> || ! <span class="jxr_string">"ok"</span>.equals(r.get(<span class="jxr_string">"cmd"</span>)) || ! <span class="jxr_string">"ok"</span>.equals(r.get(<span class="jxr_string">"destroy"</span>)) || ! <span class="jxr_string">"E-JS-22"</span>.equals(r.get(<span class="jxr_string">"after"</span>))
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				|| ! <span class="jxr_string">""</span>.equals(r.get(<span class="jxr_string">"bannerAfterDestroy"</span>)))
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				bad.add(id + <span class="jxr_string">"="</span> + r);
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 		}
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 		assertEquals(List.of(), bad, () -&gt; <span class="jxr_string">"cards that broke: "</span> + bad + <span class="jxr_string">"; probe: "</span> + p);
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 	}
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> }
+</pre>
+<hr/>
+<div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>
+</body>
+</html>

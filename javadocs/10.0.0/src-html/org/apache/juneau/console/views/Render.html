@@ -120,124 +120,219 @@
 <span class="source-line-no">107</span><span id="line-107">   }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
 <span class="source-line-no">109</span><span id="line-109">   /**</span>
-<span class="source-line-no">110</span><span id="line-110">    * Optional per-cell popover, omitted from the wire when unset.</span>
+<span class="source-line-no">110</span><span id="line-110">    * Maps one cell value to a status tone on a {@code pill} renderer.</span>
 <span class="source-line-no">111</span><span id="line-111">    *</span>
 <span class="source-line-no">112</span><span id="line-112">    * &lt;p&gt;</span>
-<span class="source-line-no">113</span><span id="line-113">    * The runtime appends a sibling trigger next to the rendered cell and paints the popover from row data</span>
-<span class="source-line-no">114</span><span id="line-114">    * already on the client.  Never assigned {@code innerHTML}.</span>
-<span class="source-line-no">115</span><span id="line-115">    */</span>
-<span class="source-line-no">116</span><span id="line-116">   public CellPopover popover;</span>
-<span class="source-line-no">117</span><span id="line-117"></span>
-<span class="source-line-no">118</span><span id="line-118">   /**</span>
-<span class="source-line-no">119</span><span id="line-119">    * Sets the optional per-cell popover.</span>
-<span class="source-line-no">120</span><span id="line-120">    *</span>
-<span class="source-line-no">121</span><span id="line-121">    * @param value The popover definition.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
-<span class="source-line-no">122</span><span id="line-122">    * @return This object.</span>
-<span class="source-line-no">123</span><span id="line-123">    */</span>
-<span class="source-line-no">124</span><span id="line-124">   public Render popover(CellPopover value) {</span>
-<span class="source-line-no">125</span><span id="line-125">      popover = value;</span>
-<span class="source-line-no">126</span><span id="line-126">      return this;</span>
-<span class="source-line-no">127</span><span id="line-127">   }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">   /**</span>
-<span class="source-line-no">130</span><span id="line-130">    * Creates a {@code progress} renderer with the given maximum (denominator).</span>
-<span class="source-line-no">131</span><span id="line-131">    *</span>
-<span class="source-line-no">132</span><span id="line-132">    * &lt;p&gt;</span>
-<span class="source-line-no">133</span><span id="line-133">    * Equivalent to {@code Render.of("progress").meta("max", String.valueOf(max))}.  Chain</span>
-<span class="source-line-no">134</span><span id="line-134">    * {@link #meta(String,Object)} for {@code label} / {@code field}.</span>
-<span class="source-line-no">135</span><span id="line-135">    *</span>
-<span class="source-line-no">136</span><span id="line-136">    * @param max The ratio denominator.  Serialized as the string {@code meta.max}.</span>
-<span class="source-line-no">137</span><span id="line-137">    * @return A new {@link Render}.</span>
-<span class="source-line-no">138</span><span id="line-138">    */</span>
-<span class="source-line-no">139</span><span id="line-139">   public static Render progress(int max) {</span>
-<span class="source-line-no">140</span><span id="line-140">      return of("progress").meta("max", String.valueOf(max));</span>
-<span class="source-line-no">141</span><span id="line-141">   }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">   /**</span>
-<span class="source-line-no">144</span><span id="line-144">    * Creates a {@code progress} renderer with maximum and optional warn/exceeds thresholds.</span>
-<span class="source-line-no">145</span><span id="line-145">    *</span>
-<span class="source-line-no">146</span><span id="line-146">    * &lt;p&gt;</span>
-<span class="source-line-no">147</span><span id="line-147">    * {@code warn} and {@code exceeds} are omitted from {@code meta} when &lt;jk&gt;null&lt;/jk&gt;.  A boxed {@code 0} is a</span>
-<span class="source-line-no">148</span><span id="line-148">    * real threshold ({@code "0"}), not omitted.</span>
-<span class="source-line-no">149</span><span id="line-149">    *</span>
-<span class="source-line-no">150</span><span id="line-150">    * @param max The ratio denominator.</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param warn Warn threshold in the same units as the cell value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @param exceeds Exceeds threshold in the same units as the cell value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">153</span><span id="line-153">    * @return A new {@link Render}.</span>
-<span class="source-line-no">154</span><span id="line-154">    */</span>
-<span class="source-line-no">155</span><span id="line-155">   public static Render progress(int max, Integer warn, Integer exceeds) {</span>
-<span class="source-line-no">156</span><span id="line-156">      var r = progress(max);</span>
-<span class="source-line-no">157</span><span id="line-157">      if (warn != null)</span>
-<span class="source-line-no">158</span><span id="line-158">         r.meta("warn", String.valueOf(warn));</span>
-<span class="source-line-no">159</span><span id="line-159">      if (exceeds != null)</span>
-<span class="source-line-no">160</span><span id="line-160">         r.meta("exceeds", String.valueOf(exceeds));</span>
-<span class="source-line-no">161</span><span id="line-161">      return r;</span>
-<span class="source-line-no">162</span><span id="line-162">   }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">   /**</span>
-<span class="source-line-no">165</span><span id="line-165">    * Creates a {@code pill} renderer with the leading dot on and the tone inherited from the chip theme.</span>
-<span class="source-line-no">166</span><span id="line-166">    *</span>
-<span class="source-line-no">167</span><span id="line-167">    * &lt;p&gt;</span>
-<span class="source-line-no">168</span><span id="line-168">    * Equivalent to {@code Render.of("pill")}.  The dot color follows the {@code .tag.&lt;field&gt;.&lt;value&gt;} theme</span>
-<span class="source-line-no">169</span><span id="line-169">    * ({@code currentColor}) until an explicit {@code tone} is chosen.  Chain {@link #meta(String,Object)} for</span>
-<span class="source-line-no">170</span><span id="line-170">    * {@code field}, {@code dot} ({@code on}|{@code off}) and {@code action} (a {@code rowActions} id).</span>
+<span class="source-line-no">113</span><span id="line-113">    * Emits {@code meta.tones[value] = tone.wire()}.  Value matching is exact and case-sensitive against the string</span>
+<span class="source-line-no">114</span><span id="line-114">    * the chip displays.  Re-adding a value replaces its tone and keeps its position.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * &lt;h4 class='section'&gt;Precedence (first hit wins):&lt;/h4&gt;</span>
+<span class="source-line-no">117</span><span id="line-117">    * &lt;ol&gt;</span>
+<span class="source-line-no">118</span><span id="line-118">    *    &lt;li&gt;An entry added here.</span>
+<span class="source-line-no">119</span><span id="line-119">    *    &lt;li&gt;A slot pinned with {@link #category(String,int)}.</span>
+<span class="source-line-no">120</span><span id="line-120">    *    &lt;li&gt;{@link #categorical()}: the value's hashed palette slot.</span>
+<span class="source-line-no">121</span><span id="line-121">    *    &lt;li&gt;The column-wide tone from {@link #pill(StatusTone)}.</span>
+<span class="source-line-no">122</span><span id="line-122">    *    &lt;li&gt;Otherwise no colour class; but in a column that uses {@code tone(...)} or {@code category(...)} an</span>
+<span class="source-line-no">123</span><span id="line-123">    *       unmapped value renders as a neutral (grey) chip.</span>
+<span class="source-line-no">124</span><span id="line-124">    * &lt;/ol&gt;</span>
+<span class="source-line-no">125</span><span id="line-125">    *</span>
+<span class="source-line-no">126</span><span id="line-126">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">127</span><span id="line-127">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">128</span><span id="line-128">    *    &lt;jc&gt;// Renders as {id:"pill",meta:{tones:{AVAILABLE:"success",SOLD:"neutral"}}}.&lt;/jc&gt;</span>
+<span class="source-line-no">129</span><span id="line-129">    *    Render &lt;jv&gt;r&lt;/jv&gt; = Render.&lt;jsm&gt;pill&lt;/jsm&gt;()</span>
+<span class="source-line-no">130</span><span id="line-130">    *       .tone(&lt;js&gt;"AVAILABLE"&lt;/js&gt;, StatusTone.&lt;jsf&gt;SUCCESS&lt;/jsf&gt;)</span>
+<span class="source-line-no">131</span><span id="line-131">    *       .tone(&lt;js&gt;"SOLD"&lt;/js&gt;, StatusTone.&lt;jsf&gt;NEUTRAL&lt;/jsf&gt;);</span>
+<span class="source-line-no">132</span><span id="line-132">    * &lt;/p&gt;</span>
+<span class="source-line-no">133</span><span id="line-133">    *</span>
+<span class="source-line-no">134</span><span id="line-134">    * @param value The cell value, case-sensitive.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">135</span><span id="line-135">    * @param tone The status tone.  Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">136</span><span id="line-136">    * @return This object.</span>
+<span class="source-line-no">137</span><span id="line-137">    * @throws IllegalStateException If this is not a {@code pill} renderer.</span>
+<span class="source-line-no">138</span><span id="line-138">    * @throws IllegalArgumentException If {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank, or {@code tone} is &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">139</span><span id="line-139">    * @since 10.0.0</span>
+<span class="source-line-no">140</span><span id="line-140">    */</span>
+<span class="source-line-no">141</span><span id="line-141">   public Render tone(String value, StatusTone tone) {</span>
+<span class="source-line-no">142</span><span id="line-142">      requirePill("tone");</span>
+<span class="source-line-no">143</span><span id="line-143">      if (! inb(value) || tone == null)</span>
+<span class="source-line-no">144</span><span id="line-144">         throw new IllegalArgumentException("tone(value, tone) requires a non-blank value and a non-null tone");</span>
+<span class="source-line-no">145</span><span id="line-145">      nested("tones").put(value, tone.wire());</span>
+<span class="source-line-no">146</span><span id="line-146">      return this;</span>
+<span class="source-line-no">147</span><span id="line-147">   }</span>
+<span class="source-line-no">148</span><span id="line-148"></span>
+<span class="source-line-no">149</span><span id="line-149">   /**</span>
+<span class="source-line-no">150</span><span id="line-150">    * Colours every distinct value of a {@code pill} column from the categorical palette.</span>
+<span class="source-line-no">151</span><span id="line-151">    *</span>
+<span class="source-line-no">152</span><span id="line-152">    * &lt;p&gt;</span>
+<span class="source-line-no">153</span><span id="line-153">    * Emits {@code meta.categorical = true}.  A value without an explicit {@link #tone(String,StatusTone)} or</span>
+<span class="source-line-no">154</span><span id="line-154">    * {@link #category(String,int)} entry gets a stable colour from {@link PillPalette#slot(String)}: the same value</span>
+<span class="source-line-no">155</span><span id="line-155">    * has the same colour on every page.  Hashing is case-sensitive, and hashing {@code N} values into</span>
+<span class="source-line-no">156</span><span id="line-156">    * {@link PillPalette#SIZE} slots can collide; pin a closed set with {@link #category(String,int)}.</span>
+<span class="source-line-no">157</span><span id="line-157">    * See {@link #tone(String,StatusTone)} for the full precedence.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * @return This object.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @throws IllegalStateException If this is not a {@code pill} renderer.</span>
+<span class="source-line-no">161</span><span id="line-161">    * @since 10.0.0</span>
+<span class="source-line-no">162</span><span id="line-162">    */</span>
+<span class="source-line-no">163</span><span id="line-163">   public Render categorical() {</span>
+<span class="source-line-no">164</span><span id="line-164">      requirePill("categorical");</span>
+<span class="source-line-no">165</span><span id="line-165">      meta("categorical", true);</span>
+<span class="source-line-no">166</span><span id="line-166">      return this;</span>
+<span class="source-line-no">167</span><span id="line-167">   }</span>
+<span class="source-line-no">168</span><span id="line-168"></span>
+<span class="source-line-no">169</span><span id="line-169">   /**</span>
+<span class="source-line-no">170</span><span id="line-170">    * Pins one cell value of a {@code pill} column to a categorical palette slot.</span>
 <span class="source-line-no">171</span><span id="line-171">    *</span>
 <span class="source-line-no">172</span><span id="line-172">    * &lt;p&gt;</span>
-<span class="source-line-no">173</span><span id="line-173">    * {@code action} is optional and only meaningful on a table column: a pill named on a field-grid fill</span>
-<span class="source-line-no">174</span><span id="line-174">    * sink is unconditionally display-only and rejects an {@code action} outright.</span>
-<span class="source-line-no">175</span><span id="line-175">    *</span>
-<span class="source-line-no">176</span><span id="line-176">    * @return A new {@link Render}.</span>
-<span class="source-line-no">177</span><span id="line-177">    */</span>
-<span class="source-line-no">178</span><span id="line-178">   public static Render pill() {</span>
-<span class="source-line-no">179</span><span id="line-179">      return of("pill");</span>
-<span class="source-line-no">180</span><span id="line-180">   }</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   /**</span>
-<span class="source-line-no">183</span><span id="line-183">    * Creates a {@code pill} renderer with an explicit dot tone.</span>
-<span class="source-line-no">184</span><span id="line-184">    *</span>
-<span class="source-line-no">185</span><span id="line-185">    * &lt;p&gt;</span>
-<span class="source-line-no">186</span><span id="line-186">    * {@code tone} is one of the five status tones</span>
-<span class="source-line-no">187</span><span id="line-187">    * {@code info}|{@code success}|{@code warning}|{@code error}|{@code neutral} (see</span>
-<span class="source-line-no">188</span><span id="line-188">    * {@link StatusTone}).  A &lt;jk&gt;null&lt;/jk&gt; or blank {@code tone} is omitted</span>
-<span class="source-line-no">189</span><span id="line-189">    * from {@code meta} (identical to {@link #pill()}); {@code neutral} is emitted verbatim and, like an absent tone,</span>
-<span class="source-line-no">190</span><span id="line-190">    * leaves the dot inheriting {@code currentColor}.  The tone is not validated server-side: the client</span>
-<span class="source-line-no">191</span><span id="line-191">    * (&lt;c&gt;NS._render.pillTones&lt;/c&gt;) ignores an off-palette token, so the dot gets no tone class.  Prefer</span>
-<span class="source-line-no">192</span><span id="line-192">    * {@link #pill(StatusTone)} to stay on the palette.</span>
-<span class="source-line-no">193</span><span id="line-193">    *</span>
-<span class="source-line-no">194</span><span id="line-194">    * &lt;p&gt;</span>
-<span class="source-line-no">195</span><span id="line-195">    * Not to be confused with {@link #progress(int, Integer, Integer)}'s {@code warn}/{@code exceeds} meta, which are</span>
-<span class="source-line-no">196</span><span id="line-196">    * numeric thresholds rather than tone names and share no vocabulary with this palette.</span>
-<span class="source-line-no">197</span><span id="line-197">    *</span>
-<span class="source-line-no">198</span><span id="line-198">    * @param tone The explicit dot tone.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank to inherit.</span>
-<span class="source-line-no">199</span><span id="line-199">    * @return A new {@link Render}.</span>
-<span class="source-line-no">200</span><span id="line-200">    */</span>
-<span class="source-line-no">201</span><span id="line-201">   public static Render pill(String tone) {</span>
-<span class="source-line-no">202</span><span id="line-202">      var r = pill();</span>
-<span class="source-line-no">203</span><span id="line-203">      if (inb(tone))</span>
-<span class="source-line-no">204</span><span id="line-204">         r.meta("tone", tone);</span>
-<span class="source-line-no">205</span><span id="line-205">      return r;</span>
-<span class="source-line-no">206</span><span id="line-206">   }</span>
-<span class="source-line-no">207</span><span id="line-207"></span>
-<span class="source-line-no">208</span><span id="line-208">   /**</span>
-<span class="source-line-no">209</span><span id="line-209">    * Creates a {@code pill} renderer with an explicit dot tone taken from the {@link StatusTone} palette.</span>
-<span class="source-line-no">210</span><span id="line-210">    *</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;p&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    * Equivalent to &lt;c&gt;pill(tone == &lt;jk&gt;null&lt;/jk&gt; ? &lt;jk&gt;null&lt;/jk&gt; : tone.wire())&lt;/c&gt;; a &lt;jk&gt;null&lt;/jk&gt; tone is</span>
-<span class="source-line-no">213</span><span id="line-213">    * omitted from {@code meta}, identical to {@link #pill()}.</span>
-<span class="source-line-no">214</span><span id="line-214">    *</span>
-<span class="source-line-no">215</span><span id="line-215">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
-<span class="source-line-no">216</span><span id="line-216">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">217</span><span id="line-217">    *    &lt;jc&gt;// Renders as {id:"pill",meta:{tone:"warning"}}.&lt;/jc&gt;</span>
-<span class="source-line-no">218</span><span id="line-218">    *    Render &lt;jv&gt;r&lt;/jv&gt; = Render.&lt;jsm&gt;pill&lt;/jsm&gt;(StatusTone.&lt;jsf&gt;WARNING&lt;/jsf&gt;);</span>
-<span class="source-line-no">219</span><span id="line-219">    * &lt;/p&gt;</span>
-<span class="source-line-no">220</span><span id="line-220">    *</span>
-<span class="source-line-no">221</span><span id="line-221">    * @param tone The explicit dot tone.  Can be &lt;jk&gt;null&lt;/jk&gt; to inherit.</span>
-<span class="source-line-no">222</span><span id="line-222">    * @return A new {@link Render}.</span>
-<span class="source-line-no">223</span><span id="line-223">    */</span>
-<span class="source-line-no">224</span><span id="line-224">   public static Render pill(StatusTone tone) {</span>
-<span class="source-line-no">225</span><span id="line-225">      return pill(tone == null ? null : tone.wire());</span>
-<span class="source-line-no">226</span><span id="line-226">   }</span>
-<span class="source-line-no">227</span><span id="line-227">}</span>
+<span class="source-line-no">173</span><span id="line-173">    * Emits {@code meta.categories[value] = slot}.  Use it for a closed value set so the values get distinct colours</span>
+<span class="source-line-no">174</span><span id="line-174">    * instead of a hash collision.  Value matching is exact and case-sensitive.  See</span>
+<span class="source-line-no">175</span><span id="line-175">    * {@link #tone(String,StatusTone)} for the full precedence.</span>
+<span class="source-line-no">176</span><span id="line-176">    *</span>
+<span class="source-line-no">177</span><span id="line-177">    * @param value The cell value, case-sensitive.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">178</span><span id="line-178">    * @param slot The palette slot, 1 through {@link PillPalette#SIZE}.</span>
+<span class="source-line-no">179</span><span id="line-179">    * @return This object.</span>
+<span class="source-line-no">180</span><span id="line-180">    * @throws IllegalStateException If this is not a {@code pill} renderer.</span>
+<span class="source-line-no">181</span><span id="line-181">    * @throws IllegalArgumentException If {@code value} is &lt;jk&gt;null&lt;/jk&gt; or blank, or {@code slot} is out of range.</span>
+<span class="source-line-no">182</span><span id="line-182">    * @since 10.0.0</span>
+<span class="source-line-no">183</span><span id="line-183">    */</span>
+<span class="source-line-no">184</span><span id="line-184">   public Render category(String value, int slot) {</span>
+<span class="source-line-no">185</span><span id="line-185">      requirePill("category");</span>
+<span class="source-line-no">186</span><span id="line-186">      if (! inb(value) || slot &lt; 1 || slot &gt; PillPalette.SIZE)</span>
+<span class="source-line-no">187</span><span id="line-187">         throw new IllegalArgumentException("category(value, slot) requires a non-blank value and a slot from 1 to " + PillPalette.SIZE);</span>
+<span class="source-line-no">188</span><span id="line-188">      nested("categories").put(value, slot);</span>
+<span class="source-line-no">189</span><span id="line-189">      return this;</span>
+<span class="source-line-no">190</span><span id="line-190">   }</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">   private void requirePill(String method) {</span>
+<span class="source-line-no">193</span><span id="line-193">      if (! "pill".equals(id))</span>
+<span class="source-line-no">194</span><span id="line-194">         throw new IllegalStateException(method + "(...) is only valid on a pill renderer, not '" + id + "'");</span>
+<span class="source-line-no">195</span><span id="line-195">   }</span>
+<span class="source-line-no">196</span><span id="line-196"></span>
+<span class="source-line-no">197</span><span id="line-197">   @SuppressWarnings("unchecked")</span>
+<span class="source-line-no">198</span><span id="line-198">   private Map&lt;String,Object&gt; nested(String key) {</span>
+<span class="source-line-no">199</span><span id="line-199">      if (meta == null)</span>
+<span class="source-line-no">200</span><span id="line-200">         meta = m();</span>
+<span class="source-line-no">201</span><span id="line-201">      return (Map&lt;String,Object&gt;)meta.computeIfAbsent(key, k -&gt; new LinkedHashMap&lt;String,Object&gt;());</span>
+<span class="source-line-no">202</span><span id="line-202">   }</span>
+<span class="source-line-no">203</span><span id="line-203"></span>
+<span class="source-line-no">204</span><span id="line-204">   /**</span>
+<span class="source-line-no">205</span><span id="line-205">    * Optional per-cell popover, omitted from the wire when unset.</span>
+<span class="source-line-no">206</span><span id="line-206">    *</span>
+<span class="source-line-no">207</span><span id="line-207">    * &lt;p&gt;</span>
+<span class="source-line-no">208</span><span id="line-208">    * The runtime appends a sibling trigger next to the rendered cell and paints the popover from row data</span>
+<span class="source-line-no">209</span><span id="line-209">    * already on the client.  Never assigned {@code innerHTML}.</span>
+<span class="source-line-no">210</span><span id="line-210">    */</span>
+<span class="source-line-no">211</span><span id="line-211">   public CellPopover popover;</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">   /**</span>
+<span class="source-line-no">214</span><span id="line-214">    * Sets the optional per-cell popover.</span>
+<span class="source-line-no">215</span><span id="line-215">    *</span>
+<span class="source-line-no">216</span><span id="line-216">    * @param value The popover definition.  Can be &lt;jk&gt;null&lt;/jk&gt; to unset.</span>
+<span class="source-line-no">217</span><span id="line-217">    * @return This object.</span>
+<span class="source-line-no">218</span><span id="line-218">    */</span>
+<span class="source-line-no">219</span><span id="line-219">   public Render popover(CellPopover value) {</span>
+<span class="source-line-no">220</span><span id="line-220">      popover = value;</span>
+<span class="source-line-no">221</span><span id="line-221">      return this;</span>
+<span class="source-line-no">222</span><span id="line-222">   }</span>
+<span class="source-line-no">223</span><span id="line-223"></span>
+<span class="source-line-no">224</span><span id="line-224">   /**</span>
+<span class="source-line-no">225</span><span id="line-225">    * Creates a {@code progress} renderer with the given maximum (denominator).</span>
+<span class="source-line-no">226</span><span id="line-226">    *</span>
+<span class="source-line-no">227</span><span id="line-227">    * &lt;p&gt;</span>
+<span class="source-line-no">228</span><span id="line-228">    * Equivalent to {@code Render.of("progress").meta("max", String.valueOf(max))}.  Chain</span>
+<span class="source-line-no">229</span><span id="line-229">    * {@link #meta(String,Object)} for {@code label} / {@code field}.</span>
+<span class="source-line-no">230</span><span id="line-230">    *</span>
+<span class="source-line-no">231</span><span id="line-231">    * @param max The ratio denominator.  Serialized as the string {@code meta.max}.</span>
+<span class="source-line-no">232</span><span id="line-232">    * @return A new {@link Render}.</span>
+<span class="source-line-no">233</span><span id="line-233">    */</span>
+<span class="source-line-no">234</span><span id="line-234">   public static Render progress(int max) {</span>
+<span class="source-line-no">235</span><span id="line-235">      return of("progress").meta("max", String.valueOf(max));</span>
+<span class="source-line-no">236</span><span id="line-236">   }</span>
+<span class="source-line-no">237</span><span id="line-237"></span>
+<span class="source-line-no">238</span><span id="line-238">   /**</span>
+<span class="source-line-no">239</span><span id="line-239">    * Creates a {@code progress} renderer with maximum and optional warn/exceeds thresholds.</span>
+<span class="source-line-no">240</span><span id="line-240">    *</span>
+<span class="source-line-no">241</span><span id="line-241">    * &lt;p&gt;</span>
+<span class="source-line-no">242</span><span id="line-242">    * {@code warn} and {@code exceeds} are omitted from {@code meta} when &lt;jk&gt;null&lt;/jk&gt;.  A boxed {@code 0} is a</span>
+<span class="source-line-no">243</span><span id="line-243">    * real threshold ({@code "0"}), not omitted.</span>
+<span class="source-line-no">244</span><span id="line-244">    *</span>
+<span class="source-line-no">245</span><span id="line-245">    * @param max The ratio denominator.</span>
+<span class="source-line-no">246</span><span id="line-246">    * @param warn Warn threshold in the same units as the cell value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">247</span><span id="line-247">    * @param exceeds Exceeds threshold in the same units as the cell value.  Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">248</span><span id="line-248">    * @return A new {@link Render}.</span>
+<span class="source-line-no">249</span><span id="line-249">    */</span>
+<span class="source-line-no">250</span><span id="line-250">   public static Render progress(int max, Integer warn, Integer exceeds) {</span>
+<span class="source-line-no">251</span><span id="line-251">      var r = progress(max);</span>
+<span class="source-line-no">252</span><span id="line-252">      if (warn != null)</span>
+<span class="source-line-no">253</span><span id="line-253">         r.meta("warn", String.valueOf(warn));</span>
+<span class="source-line-no">254</span><span id="line-254">      if (exceeds != null)</span>
+<span class="source-line-no">255</span><span id="line-255">         r.meta("exceeds", String.valueOf(exceeds));</span>
+<span class="source-line-no">256</span><span id="line-256">      return r;</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">   /**</span>
+<span class="source-line-no">260</span><span id="line-260">    * Creates a {@code pill} renderer with the leading dot on and the tone inherited from the chip theme.</span>
+<span class="source-line-no">261</span><span id="line-261">    *</span>
+<span class="source-line-no">262</span><span id="line-262">    * &lt;p&gt;</span>
+<span class="source-line-no">263</span><span id="line-263">    * Equivalent to {@code Render.of("pill")}.  The dot color follows the {@code .tag.&lt;field&gt;.&lt;value&gt;} theme</span>
+<span class="source-line-no">264</span><span id="line-264">    * ({@code currentColor}) until an explicit {@code tone} is chosen.  Chain {@link #meta(String,Object)} for</span>
+<span class="source-line-no">265</span><span id="line-265">    * {@code field}, {@code dot} ({@code on}|{@code off}) and {@code action} (a {@code rowActions} id).</span>
+<span class="source-line-no">266</span><span id="line-266">    *</span>
+<span class="source-line-no">267</span><span id="line-267">    * &lt;p&gt;</span>
+<span class="source-line-no">268</span><span id="line-268">    * {@code action} is optional and only meaningful on a table column: a pill named on a field-grid fill</span>
+<span class="source-line-no">269</span><span id="line-269">    * sink is unconditionally display-only and rejects an {@code action} outright.</span>
+<span class="source-line-no">270</span><span id="line-270">    *</span>
+<span class="source-line-no">271</span><span id="line-271">    * @return A new {@link Render}.</span>
+<span class="source-line-no">272</span><span id="line-272">    */</span>
+<span class="source-line-no">273</span><span id="line-273">   public static Render pill() {</span>
+<span class="source-line-no">274</span><span id="line-274">      return of("pill");</span>
+<span class="source-line-no">275</span><span id="line-275">   }</span>
+<span class="source-line-no">276</span><span id="line-276"></span>
+<span class="source-line-no">277</span><span id="line-277">   /**</span>
+<span class="source-line-no">278</span><span id="line-278">    * Creates a {@code pill} renderer with an explicit dot tone.</span>
+<span class="source-line-no">279</span><span id="line-279">    *</span>
+<span class="source-line-no">280</span><span id="line-280">    * &lt;p&gt;</span>
+<span class="source-line-no">281</span><span id="line-281">    * {@code tone} is one of the five status tones</span>
+<span class="source-line-no">282</span><span id="line-282">    * {@code info}|{@code success}|{@code warning}|{@code error}|{@code neutral} (see</span>
+<span class="source-line-no">283</span><span id="line-283">    * {@link StatusTone}).  A &lt;jk&gt;null&lt;/jk&gt; or blank {@code tone} is omitted</span>
+<span class="source-line-no">284</span><span id="line-284">    * from {@code meta} (identical to {@link #pill()}); {@code neutral} is emitted verbatim and, like an absent tone,</span>
+<span class="source-line-no">285</span><span id="line-285">    * leaves the dot inheriting {@code currentColor}.  The tone is not validated server-side: the client</span>
+<span class="source-line-no">286</span><span id="line-286">    * (&lt;c&gt;NS._render.pillTones&lt;/c&gt;) ignores an off-palette token, so the dot gets no tone class.  Prefer</span>
+<span class="source-line-no">287</span><span id="line-287">    * {@link #pill(StatusTone)} to stay on the palette.</span>
+<span class="source-line-no">288</span><span id="line-288">    *</span>
+<span class="source-line-no">289</span><span id="line-289">    * &lt;p&gt;</span>
+<span class="source-line-no">290</span><span id="line-290">    * Not to be confused with {@link #progress(int, Integer, Integer)}'s {@code warn}/{@code exceeds} meta, which are</span>
+<span class="source-line-no">291</span><span id="line-291">    * numeric thresholds rather than tone names and share no vocabulary with this palette.</span>
+<span class="source-line-no">292</span><span id="line-292">    *</span>
+<span class="source-line-no">293</span><span id="line-293">    * @param tone The explicit dot tone.  Can be &lt;jk&gt;null&lt;/jk&gt; or blank to inherit.</span>
+<span class="source-line-no">294</span><span id="line-294">    * @return A new {@link Render}.</span>
+<span class="source-line-no">295</span><span id="line-295">    */</span>
+<span class="source-line-no">296</span><span id="line-296">   public static Render pill(String tone) {</span>
+<span class="source-line-no">297</span><span id="line-297">      var r = pill();</span>
+<span class="source-line-no">298</span><span id="line-298">      if (inb(tone))</span>
+<span class="source-line-no">299</span><span id="line-299">         r.meta("tone", tone);</span>
+<span class="source-line-no">300</span><span id="line-300">      return r;</span>
+<span class="source-line-no">301</span><span id="line-301">   }</span>
+<span class="source-line-no">302</span><span id="line-302"></span>
+<span class="source-line-no">303</span><span id="line-303">   /**</span>
+<span class="source-line-no">304</span><span id="line-304">    * Creates a {@code pill} renderer with an explicit dot tone taken from the {@link StatusTone} palette.</span>
+<span class="source-line-no">305</span><span id="line-305">    *</span>
+<span class="source-line-no">306</span><span id="line-306">    * &lt;p&gt;</span>
+<span class="source-line-no">307</span><span id="line-307">    * Equivalent to &lt;c&gt;pill(tone == &lt;jk&gt;null&lt;/jk&gt; ? &lt;jk&gt;null&lt;/jk&gt; : tone.wire())&lt;/c&gt;; a &lt;jk&gt;null&lt;/jk&gt; tone is</span>
+<span class="source-line-no">308</span><span id="line-308">    * omitted from {@code meta}, identical to {@link #pill()}.</span>
+<span class="source-line-no">309</span><span id="line-309">    *</span>
+<span class="source-line-no">310</span><span id="line-310">    * &lt;h4 class='section'&gt;Example:&lt;/h4&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">312</span><span id="line-312">    *    &lt;jc&gt;// Renders as {id:"pill",meta:{tone:"warning"}}.&lt;/jc&gt;</span>
+<span class="source-line-no">313</span><span id="line-313">    *    Render &lt;jv&gt;r&lt;/jv&gt; = Render.&lt;jsm&gt;pill&lt;/jsm&gt;(StatusTone.&lt;jsf&gt;WARNING&lt;/jsf&gt;);</span>
+<span class="source-line-no">314</span><span id="line-314">    * &lt;/p&gt;</span>
+<span class="source-line-no">315</span><span id="line-315">    *</span>
+<span class="source-line-no">316</span><span id="line-316">    * @param tone The explicit dot tone.  Can be &lt;jk&gt;null&lt;/jk&gt; to inherit.</span>
+<span class="source-line-no">317</span><span id="line-317">    * @return A new {@link Render}.</span>
+<span class="source-line-no">318</span><span id="line-318">    */</span>
+<span class="source-line-no">319</span><span id="line-319">   public static Render pill(StatusTone tone) {</span>
+<span class="source-line-no">320</span><span id="line-320">      return pill(tone == null ? null : tone.wire());</span>
+<span class="source-line-no">321</span><span id="line-321">   }</span>
+<span class="source-line-no">322</span><span id="line-322">}</span>
 
 
 

@@ -72,20 +72,31 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#appearance(java.lang.String)" class="member-name-link">appearance</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#action(java.lang.String)" class="member-name-link">action</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
 <div class="col-last even-row-color">
+<div class="block">A custom button whose click runs a handler declared with <a href="../../Handled.html#action(java.lang.String,java.lang.String,java.lang.String)"><code>Handled.action(String,String,String)</code></a> or
+ <a href="../../Handled.html#on(java.lang.String,java.lang.String)"><code>Handled.on(String,String)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#appearance(java.lang.String)" class="member-name-link">appearance</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets how this item's button is drawn.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#collapseAll()" class="member-name-link">collapseAll</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#collapseAll()" class="member-name-link">collapseAll</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">The ribbon's collapse-all-detail-rows button.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#column(java.lang.String)" class="member-name-link">column</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#column(java.lang.String)" class="member-name-link">column</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Scopes an <code>option</code> to a table column.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#columnSettings()" class="member-name-link">columnSettings</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">The button that opens the column chooser (View Settings).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#defaultOn()" class="member-name-link">defaultOn</a>()</code></div>
@@ -133,94 +144,128 @@ loadScripts(document, 'script');</script>
 <div class="block">Clusters this item with adjacent items sharing the same group name.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#id(java.lang.String)" class="member-name-link">id</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Sets this item's stable id.</div>
+<div class="block">Sets the icon of an <code>action</code> item.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#method(org.apache.juneau.console.views.RowAction.Method)" class="member-name-link">method</a><wbr>(<a href="../RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;m)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#id(java.lang.String)" class="member-name-link">id</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Sets this item's stable id.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets the label of an <code>action</code> item.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#linkButton()" class="member-name-link">linkButton</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The copy-shareable-link button.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#method(org.apache.juneau.console.views.RowAction.Method)" class="member-name-link">method</a><wbr>(<a href="../RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;m)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets the non-safe HTTP method a dialog item's form submits with.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#onSuccess(org.apache.juneau.console.views.RowAction.OnSuccess)" class="member-name-link">onSuccess</a><wbr>(<a href="../RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;s)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#onSuccess(org.apache.juneau.console.views.RowAction.OnSuccess)" class="member-name-link">onSuccess</a><wbr>(<a href="../RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;s)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets what the runtime does with a successful dialog submission.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#option(java.lang.String)" class="member-name-link">option</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#option(java.lang.String)" class="member-name-link">option</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
+<div class="col-last even-row-color">
 <div class="block">A server-query toggle button.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#optional(java.lang.String...)" class="member-name-link">optional</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#optional(java.lang.String...)" class="member-name-link">optional</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Adds export buttons that are omitted, rather than rendered disabled, when their library is absent.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#optionGroup(java.lang.String,org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">optionGroup</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#optionGroup(java.lang.String,org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">optionGroup</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>...&nbsp;members)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">A group of mutually exclusive <a href="../RibbonItem.html#option(java.lang.String)"><code>option</code></a> toggles.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#param(java.lang.String)" class="member-name-link">param</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#param(java.lang.String)" class="member-name-link">param</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Scopes an <code>option</code> to a URL query parameter.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#pausePolling()" class="member-name-link">pausePolling</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#pausePolling()" class="member-name-link">pausePolling</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">The ribbon's pause/resume auto-refresh toggle.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#persist(boolean)" class="member-name-link">persist</a><wbr>(boolean&nbsp;v)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#persist(boolean)" class="member-name-link">persist</a><wbr>(boolean&nbsp;v)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets whether this option's (or group's) state is remembered across page loads.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#publish(java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">publish</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#publish(java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">publish</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;title,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;topic,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;payload)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">A ribbon button that publishes a message when clicked.</div>
 </div>
-<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#refresh()" class="member-name-link">refresh</a>()</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#refresh()" class="member-name-link">refresh</a>()</code></div>
+<div class="col-last odd-row-color">
 <div class="block">The ribbon's reload-the-table button.</div>
 </div>
-<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#resetDefaults()" class="member-name-link">resetDefaults</a>()</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#resetDefaults()" class="member-name-link">resetDefaults</a>()</code></div>
+<div class="col-last even-row-color">
 <div class="block">The ribbon's reset-to-defaults button: puts the table back on its built-in "Default" view (columns, sort,
  search and options) and applies it at once, with no dialog.</div>
 </div>
+<div class="col-first odd-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#search()" class="member-name-link">search</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">The table's search box.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#symbol(java.lang.String)" class="member-name-link">symbol</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
-<div class="col-last even-row-color">
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#symbol(java.lang.String)" class="member-name-link">symbol</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets the icon name overriding this item's default icon.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#target(java.lang.String)" class="member-name-link">target</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cardId)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#target(java.lang.String)" class="member-name-link">target</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;cardId)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sends this item's command to another card instead of its own table.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#title(java.lang.String)" class="member-name-link">title</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#title(java.lang.String)" class="member-name-link">title</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Sets this item's title/label text.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#value(java.lang.String)" class="member-name-link">value</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#value(java.lang.String)" class="member-name-link">value</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Sets an <code>option</code>'s value: a BeanQuery <code>$</code>-expression for a <a href="../RibbonItem.html#column(java.lang.String)"><code>column</code></a>-scoped
  option, or the raw parameter value for a <a href="../RibbonItem.html#param(java.lang.String)"><code>param</code></a>-scoped one.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#visibleWhen(org.apache.juneau.console.views.VisibilityRule...)" class="member-name-link">visibleWhen</a><wbr>(<a href="../VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#visibleWhen(org.apache.juneau.console.views.VisibilityRule...)" class="member-name-link">visibleWhen</a><wbr>(<a href="../VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Hides this item unless every rule matches the console's facts.</div>
+</div>
+</div>
+<div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.console.views</a> that return types with arguments of type <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Ribbons.Standard.</span><code><a href="../Ribbons.Standard.html#build()" class="member-name-link">build</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Builds the items in slot order, each with its canonical group.</div>
 </div>
 </div>
 <div class="caption"><span>Methods in <a href="../package-summary.html">org.apache.juneau.console.views</a> with parameters of type <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span></div>
@@ -228,6 +273,16 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Ribbons.Standard.</span><code><a href="../Ribbons.Standard.html#create(org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">create</a><wbr>(<a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>...&nbsp;items)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Adds items to the create slot (group <code>entity</code>); repeatable.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Ribbons.Standard.</span><code><a href="../Ribbons.Standard.html#filter(org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">filter</a><wbr>(<a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>...&nbsp;items)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Adds items to the filter slot (group <code>filter</code>); repeatable.</div>
+</div>
 <div class="col-first even-row-color"><code>static <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></code></div>
 <div class="col-second even-row-color"><span class="type-name-label">RibbonItem.</span><code><a href="../RibbonItem.html#optionGroup(java.lang.String,org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">optionGroup</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>...&nbsp;members)</code></div>
@@ -238,6 +293,17 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../TableSpec.html#ribbon(org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">ribbon</a><wbr>(<a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>...&nbsp;items)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Appends ribbon (toolbar) items, in display order.</div>
+</div>
+</div>
+<div class="caption"><span>Method parameters in <a href="../package-summary.html">org.apache.juneau.console.views</a> with type arguments of type <a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TableSpec.</span><code><a href="../TableSpec.html#ribbon(java.util.List)" class="member-name-link">ribbon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a>&gt;&nbsp;items)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Appends the ribbon items of a list, such as the result of <a href="../Ribbons.Standard.html#build()"><code>Ribbons.Standard.build()</code></a>.</div>
 </div>
 </div>
 </section>

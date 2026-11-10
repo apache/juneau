@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><a href="RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.html#line-576">RegionDef.Field</a></span>
+<div class="type-signature"><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.html#line-684">RegionDef.Field</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">One entry in the field catalog: a label, an optional named renderer and its meta, an
  optional href template, a paint format, a grid span, and per-field action-bar ids.
@@ -248,35 +248,35 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="data">
 <h3>data</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-579">data</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-687">data</a></span></div>
 <div class="block">The key into <code>ctx.data</code>'s values map. Unique across the enclosing <a href="RegionDef.html" title="class in org.apache.juneau.console.views"><code>RegionDef</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="label">
 <h3>label</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-582">label</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-690">label</a></span></div>
 <div class="block">The label shown above the value. <jk>null</jk> falls back to <a href="#data"><code>data</code></a> at paint time.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="render">
 <h3>render</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-585">render</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-693">render</a></span></div>
 <div class="block">Optional named renderer id, resolved against the same <code>NS._renderers</code> registry as today.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="renderMeta">
 <h3>renderMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-588">renderMeta</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-696">renderMeta</a></span></div>
 <div class="block">Optional metadata handed to <a href="#render"><code>render</code></a>'s renderer function.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="href">
 <h3>href</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-592">href</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-700">href</a></span></div>
 <div class="block">Optional <code>{property}</code> URL template consumed by the <code>linked</code> renderer (and any renderer
  that reads it). Independent of <a href="#render"><code>render</code></a>.</div>
 </section>
@@ -284,21 +284,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="format">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FieldFormat.html" title="enum class in org.apache.juneau.console.views">FieldFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-595">format</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FieldFormat.html" title="enum class in org.apache.juneau.console.views">FieldFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-703">format</a></span></div>
 <div class="block">How the value is painted. <jk>null</jk> means <a href="FieldFormat.html#TEXT"><code>FieldFormat.TEXT</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="span">
 <h3>span</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FieldSpan.html" title="enum class in org.apache.juneau.console.views">FieldSpan</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-598">span</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FieldSpan.html" title="enum class in org.apache.juneau.console.views">FieldSpan</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-706">span</a></span></div>
 <div class="block">How many of the grid's columns this field occupies. <jk>null</jk> means <a href="FieldSpan.html#ONE"><code>FieldSpan.ONE</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="actions">
 <h3>actions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-604">actions</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-712">actions</a></span></div>
 <div class="block">Action ids painted beside this field's value. Ids only &mdash; the bar itself is rendered by the
  client helper, not by this bean.</div>
 </section>
@@ -306,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-701">visibleWhen</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-809">visibleWhen</a></span></div>
 <div class="block">The rules that must all match for this one detail field to render.  <jk>null</jk> or empty means always
  visible.  See <a href="RowAction.html#visibleWhen"><code>RowAction.visibleWhen</code></a> for the shared semantics.</div>
 </section>
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Field</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-576">Field</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-684">Field</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -336,7 +336,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-612">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-720">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;data)</span></div>
 <div class="block">Creates a field bound to the specified values-map key.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -349,7 +349,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="label(java.lang.String)">
 <h3>label</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-626">label</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-734">label</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the label.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -362,7 +362,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="render(java.lang.String)">
 <h3>render</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-637">render</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-745">render</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the named renderer id.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -375,7 +375,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="renderMeta(java.util.Map)">
 <h3>renderMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-648">renderMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-756">renderMeta</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&nbsp;value)</span></div>
 <div class="block">Sets the renderer's metadata.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -388,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="href(java.lang.String)">
 <h3>href</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-659">href</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-767">href</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the declarative <code>{property}</code> URL template.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -401,7 +401,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="format(org.apache.juneau.console.views.FieldFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-670">format</a></span><wbr><span class="parameters">(<a href="FieldFormat.html" title="enum class in org.apache.juneau.console.views">FieldFormat</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-778">format</a></span><wbr><span class="parameters">(<a href="FieldFormat.html" title="enum class in org.apache.juneau.console.views">FieldFormat</a>&nbsp;value)</span></div>
 <div class="block">Sets the paint format.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -414,7 +414,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="span(org.apache.juneau.console.views.FieldSpan)">
 <h3>span</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-681">span</a></span><wbr><span class="parameters">(<a href="FieldSpan.html" title="enum class in org.apache.juneau.console.views">FieldSpan</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-789">span</a></span><wbr><span class="parameters">(<a href="FieldSpan.html" title="enum class in org.apache.juneau.console.views">FieldSpan</a>&nbsp;value)</span></div>
 <div class="block">Sets the grid span.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -427,7 +427,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="actions(java.lang.String...)">
 <h3>actions</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-692">actions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-800">actions</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;value)</span></div>
 <div class="block">Sets the per-field action ids.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -440,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen(org.apache.juneau.console.views.VisibilityRule...)">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-709">visibleWhen</a></span><wbr><span class="parameters">(<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-817">visibleWhen</a></span><wbr><span class="parameters">(<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
 <div class="block">Hides this field unless every rule matches.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -453,7 +453,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toContractMap()">
 <h3>toContractMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-729">toContractMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RegionDef.Field.html#line-837">toContractMap</a></span>()</div>
 <div class="block">Serializes this entry to the compact JSON shape of the sidecar contract.</div>
 <dl class="notes">
 <dt>Returns:</dt>

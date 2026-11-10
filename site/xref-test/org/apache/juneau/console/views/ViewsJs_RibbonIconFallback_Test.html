@@ -140,7 +140,14 @@
 <a class="jxr_linenumber" name="L132" href="#L132">132</a> 		<strong class="jxr_keyword">var</strong> known = (Map&lt;?,?&gt;)report().get(<span class="jxr_string">"known"</span>);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertBean(known, <span class="jxr_string">"built,text,empty,aria"</span>, <span class="jxr_string">"true,,false,Reload it"</span>);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
-<a class="jxr_linenumber" name="L135" href="#L135">135</a> }
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> 
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test <strong class="jxr_keyword">void</strong> a03_optionIconDefaults_hintsCycleAndKeys() {
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 		<strong class="jxr_keyword">var</strong> icons = (Map&lt;?,?&gt;)report().get(<span class="jxr_string">"icons"</span>);
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		assertBean(icons,
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			<span class="jxr_string">"hint_pending,hint_case,explicit_wins,cycle_distinct,cycle_wraps,default_key_unchanged,defaults_new,no_tune_for_options"</span>,
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			<span class="jxr_string">"hourglass,tag,truck,true,true,content_copy,search|link|tune,true"</span>);
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 	}
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

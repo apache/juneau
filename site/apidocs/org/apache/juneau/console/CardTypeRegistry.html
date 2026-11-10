@@ -130,7 +130,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#RESERVED" class="member-name-link">RESERVED</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Reserved type names: <code>html</code> (built in), <code>datatables</code>, <code>terminal-view</code>,
- <code>terminal</code>, <code>chart</code> and <code>job-log</code> (console-ui-freemarker).</div>
+ <code>terminal</code>, <code>chart</code>, <code>job-log</code> and <code>switcher</code> (console-ui-freemarker).</div>
 </div>
 </div>
 </section>
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <h3>RESERVED</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-52">RESERVED</a></span></div>
 <div class="block">Reserved type names: <code>html</code> (built in), <code>datatables</code>, <code>terminal-view</code>,
- <code>terminal</code>, <code>chart</code> and <code>job-log</code> (console-ui-freemarker).</div>
+ <code>terminal</code>, <code>chart</code>, <code>job-log</code> and <code>switcher</code> (console-ui-freemarker).</div>
 </section>
 </li>
 </ul>
@@ -203,7 +203,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="standard()">
 <h3>standard</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-85">standard</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-89">standard</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The standard registry: <code>html</code> plus every ServiceLoader-discovered handler.</dd>
@@ -213,7 +213,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardTypeRegistry.Builder.html" title="class in org.apache.juneau.console">CardTypeRegistry.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-90">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardTypeRegistry.Builder.html" title="class in org.apache.juneau.console">CardTypeRegistry.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-94">copy</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>A <a href="CardTypeRegistry.Builder.html" title="class in org.apache.juneau.console"><code>CardTypeRegistry.Builder</code></a> pre-seeded with this registry's handlers, to add more on top.</dd>
@@ -223,7 +223,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="handler(java.lang.String)">
 <h3>handler</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardTypeHandler.html" title="interface in org.apache.juneau.console">CardTypeHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-100">handler</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardTypeHandler.html" title="interface in org.apache.juneau.console">CardTypeHandler</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-104">handler</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>type</code> - The card type name.</dd>
@@ -235,7 +235,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRegistered(java.lang.String)">
 <h3>isRegistered</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-108">isRegistered</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-112">isRegistered</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>type</code> - The card type name.</dd>
@@ -247,7 +247,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="types()">
 <h3>types</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-113">types</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-117">types</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>Every registered type name.</dd>
@@ -257,7 +257,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toCard(org.apache.juneau.console.CardSource)">
 <h3>toCard</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-128">toCard</a></span><wbr><span class="parameters">(<a href="CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/CardTypeRegistry.html#line-132">toCard</a></span><wbr><span class="parameters">(<a href="CardSource.html" title="class in org.apache.juneau.console">CardSource</a>&nbsp;source)</span></div>
 <div class="block">The single server path for both <code>&lt;@card&gt;</code> and C3's <code>PageSpec</code>: validates the body (E-23),
  dispatches to <a href="#handler(java.lang.String)"><code>handler(String)</code></a>, and merges the fragment flat onto the card's base keys.
  A JSON body's <code>visibleWhen</code>, <code>subscribes</code> and <code>publishes</code> are promoted onto the card itself
