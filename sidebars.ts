@@ -2052,6 +2052,16 @@ const sidebars: SidebarsConfig = {
 													id: 'topics/10.62.04.JobLogCard',
 													label: 'Job-Log Card',
 												},
+												{
+													type: 'doc',
+													id: 'topics/10.62.05.SwitcherCard',
+													label: 'Switcher Card',
+												},
+												{
+													type: 'doc',
+													id: 'topics/10.62.06.ClientObjectModel',
+													label: 'Client Object Model',
+												},
 											],
 										},
 										{
