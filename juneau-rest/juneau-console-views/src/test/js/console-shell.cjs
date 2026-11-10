@@ -313,7 +313,7 @@ const CONTRAST = function (entries) { // NOSONAR javascript:S3776 - branching mi
 				if (f?.delayMs)
 					await new Promise(r => setTimeout(r, f.delayMs));
 				return f
-					? route.fulfill({ status: 200, contentType: f.type, body: f.body })
+					? route.fulfill({ status: 200, contentType: f.type, body: f.body, headers: f.headers })
 					: route.fulfill({ status: 404, contentType: 'text/plain', body: 'not found: ' + p });
 			};
 			const page = await context.newPage();

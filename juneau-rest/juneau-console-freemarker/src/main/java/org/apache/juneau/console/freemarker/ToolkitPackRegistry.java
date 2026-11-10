@@ -121,6 +121,9 @@ public final class ToolkitPackRegistry {
 	/** Dashboard chrome ({@code PageSpec.dashboard}); added by the builder, never needed in {@code toolkit(...)}. */
 	public static final String PACK_DASHBOARD = "dashboard";
 
+	/** The switcher card runtime ({@code juneau-switcher.js}); depends on the views pack. */
+	public static final String PACK_SWITCHER = "switcher";
+
 	/** The built-in ECharts WebJar pack ({@code org.webjars.npm:echarts}, optional on the classpath). */
 	public static final String PACK_ECHARTS = "echarts";
 
@@ -208,6 +211,7 @@ public final class ToolkitPackRegistry {
 			.js(
 				// Dependency-free and read by views, regions and the console shell: it must load first (E-JS-46).
 				ViewsMixin.BUS_JS_PATH,
+				ViewsMixin.MODEL_JS_PATH,
 				ViewsMixin.RENDERS_JS_PATH,
 				ViewsMixin.ICONS_JS_PATH,
 				ViewsMixin.SEARCH_JS_PATH,
@@ -257,6 +261,10 @@ public final class ToolkitPackRegistry {
 		register(ToolkitPack.create(PACK_DASHBOARD).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
 			.js(ConsoleChromeMixin.DASHBOARD_JS_PATH)
 			.dependsOn(PACK_VIEWS, PACK_DATA)
+			.build());
+		register(ToolkitPack.create(PACK_SWITCHER).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
+			.js(ConsoleChromeMixin.SWITCHER_JS_PATH)
+			.dependsOn(PACK_VIEWS)
 			.build());
 	}
 

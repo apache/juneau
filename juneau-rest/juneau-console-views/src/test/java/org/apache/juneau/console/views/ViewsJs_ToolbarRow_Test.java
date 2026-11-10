@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Where {@code buildToolbarRow(...)} puts the DataTables search box: at the canonical {@code search} slot among the
- * tagged ribbon groups ({@code entity|filter|search|viewing|page|status}), with the paging pill alone on the left.
+ * tagged ribbon groups ({@code search|entity|filter|export|viewing|page|status}), with the paging pill alone on the left.
  *
  * <p>
  * Drives {@code toolbar-row.cjs}, which loads the view and ribbon runtimes into one window.  Runs when {@code node}
@@ -143,11 +143,11 @@ class ViewsJs_ToolbarRow_Test extends TestBase {
 	}
 
 	@Test void a03_taggedRibbon_searchTakesItsCanonicalSlot() {
-		assertEquals("entity filter search viewing page", report().get("tagged_right"));
+		assertEquals("search entity filter viewing page", report().get("tagged_right"));
 	}
 
 	@Test void a04_onlyGroupsRankedBeforeSearch_searchGoesLast() {
-		assertEquals("filter search", report().get("onlyBefore_right"));
+		assertEquals("search filter", report().get("onlyBefore_right"));
 	}
 
 	@Test void a05_onlyGroupsRankedAfterSearch_searchGoesFirst() {
@@ -156,5 +156,14 @@ class ViewsJs_ToolbarRow_Test extends TestBase {
 
 	@Test void a06_noRibbon_searchAlone() {
 		assertEquals("search", report().get("noRibbon_right"));
+	}
+
+	@Test void a07_ribbonSearchSlot_isReplacedByTheFilterBox() {
+		assertBean(report(), "slot_filterInRibbon,slot_noPlaceholderLeft,slot_notDuplicatedInRight,slot_filterTagged,slot_inSearchGroup",
+			"true,true,true,search,search");
+	}
+
+	@Test void a08_ribbonSearchSlot_removedWhenThereIsNoFilterBox() {
+		assertEquals(true, report().get("slot_removedWithoutFilter"));
 	}
 }

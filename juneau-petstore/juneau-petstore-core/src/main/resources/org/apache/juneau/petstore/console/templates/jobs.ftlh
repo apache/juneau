@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="ops/jobs" toolkit="views">
+--><@page tab="ops/jobs" toolkit="views,datatables-buttons">
 <@card id="restock-help" title="Restocking">
 <div class="jc-prose"><p>Restock adds new available pets to the store as a background job; progress shows here until it finishes.
 Submitting twice from the same dialog runs one job.  Give the card below a wait to see a cancel before anything changes, or a longer hold to see one after.</p></div>
@@ -34,24 +34,31 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
   dataMode: 'client',
   dataUrl: '/console/ops/jobs/rows',
   pollIntervalMs: 2000,
+  columnConfig: true,
   columns: [
     { key: 'jobId', label: 'Job' },
     { key: 'submitted', label: 'Submitted', render: { id: 'timestamp' } },
-    { key: 'state', label: 'State', render: { id: 'pill' } },
+    { key: 'state', label: 'State', render: { id: 'pill', meta: { tones: { RUNNING: 'info', DONE: 'success', EXPIRED: 'neutral' } } } },
     { key: 'result.message', label: 'Result' }
   ],
   ribbon: [
+    { type: 'search', id: 'search', group: 'search' },
     { type: 'dialog', id: 'restock', title: 'Restock', endpoint: '/console/ops/jobs/restock', method: 'POST', form: '/console/ops/jobs/restock-form', group: 'entity' },
-    { type: 'resetDefaults', group: 'page' },
-    { type: 'refresh', id: 'refresh' }
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
   ]
 }</@card>
 <@card type="datatables" id="species">{
   dataMode: 'client',
   dataUrl: '/console/ops/jobs/species',
   pollIntervalMs: 2000,
+  columnConfig: true,
   columns: [
-    { key: 'species', label: 'Species' },
+    { key: 'species', label: 'Species', render: { id: 'pill', meta: { categorical: true, categories: { DOG: 1, CAT: 2, BIRD: 4, FISH: 6, SNAKE: 7, RABBIT: 9, MOUSE: 10 } } } },
     { key: 'available', label: 'Available' }
   ],
   detail: {
@@ -75,7 +82,16 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
         output: { target: { field: 'available' }, from: 'row.available' }
       }
     }
-  }
+  },
+  ribbon: [
+    { type: 'search', id: 'search', group: 'search' },
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
+  ]
 }</@card>
 <@card type="terminal" id="groom-output" title="Groom run">
 {
@@ -98,10 +114,11 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
 <@card type="datatables" id="groom-runs">{
   dataMode: 'client',
   dataUrl: '/console/ops/jobs/groom-rows',
+  columnConfig: true,
   columns: [
     { key: 'pet', label: 'Pet' },
     { key: 'submitted', label: 'Submitted', render: { id: 'timestamp' } },
-    { key: 'state', label: 'State', render: { id: 'pill' } },
+    { key: 'state', label: 'State', render: { id: 'pill', meta: { tones: { RUNNING: 'info', DONE: 'success', EXPIRED: 'neutral' } } } },
     { key: 'lines', label: 'Lines' }
   ],
   detail: {
@@ -109,10 +126,14 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
     region: { id: 'regroom', populate: 'petstore-regroom' }
   },
   ribbon: [
+    { type: 'search', id: 'search', group: 'search' },
     { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form', group: 'entity' },
-    { type: 'collapseAll', group: 'viewing' },
-    { type: 'resetDefaults', group: 'page' },
-    { type: 'refresh', id: 'groom-refresh' }
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'groom-refresh', group: 'page' }
   ]
 }</@card>
 </@page>

@@ -168,6 +168,29 @@ function waitRunning(page, id) {
 }
 
 /**
+ * Page-side stand-in for the shell: window.__cardFacade() drives the queued terminal card class the way the shell does
+ * (an instance per card with the spec, the host element and the bus members, roles routed by card id).
+ */
+const FACADE_SRC = `window.__cardFacade = function () {
+	const K = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+	const cards = {};
+	const bare = function (id) { return cards[id] || Object.assign(Object.create(K.prototype), { spec: { id: id } }); };
+	return {
+		render: function (card, el, ctx) {
+			const inst = new K();
+			Object.assign(inst, ctx, { spec: card, el: el });
+			cards[card.id] = inst;
+			inst.render();
+		},
+		destroy: function (card) { const i = cards[card.id]; if (i) { delete cards[card.id]; i.destroy(); } },
+		roles: {
+			'input-status': function (p, m, c) { bare(c.id).inputStatus(p, m); },
+			nudge: function (p, m, c) { bare(c.id).nudge(p, m); }
+		}
+	};
+};`;
+
+/**
  * A running card that subscribes to nudges, over a log the case can grow.  The bridge-state callback the card registers
  * is kept in window.__bridge; every bytes request URL is recorded in n.urls.
  */
@@ -182,6 +205,7 @@ async function nudgeCard(page, o) {
 	});
 	await page.goto(ORIGIN + '/page');
 	await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+	await page.evaluate(FACADE_SRC);
 	await page.evaluate(function (o) {
 		window.__subs = [];
 		window.__off = 0;
@@ -199,7 +223,7 @@ async function nudgeCard(page, o) {
 			publish: function () {},
 			subscribe: function (topic, fn) { window.__subs.push(topic); window.__bridge = fn; return function () { window.__off++; }; }
 		};
-		const h = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+		const h = window.__cardFacade();
 		window.__h = h;
 		const card = { id: 'card1', type: 'terminal', terminal: { bytesUrl: '/t/bytes', refreshMs: 3000 } };
 		if (o.subscribe)
@@ -513,8 +537,9 @@ const CASES = [
 		await page.click('#host .juneau-term-input');
 		expect(JSON.stringify(await page.evaluate(function () { return window.__sent; })) === JSON.stringify([{ id: 't1', data: '' }]), 'the press probes');
 		expect(await page.evaluate(function () { return window.__terms[0].options.disableStdin; }) === true, 'a probe alone does not arm');
+		await page.evaluate(FACADE_SRC);
 		await page.evaluate(function () {
-			const h = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+			const h = window.__cardFacade();
 			h.roles['input-status']({ id: 't1', state: 'live' }, {}, { id: 'card1' });
 		});
 		const armed = await page.evaluate(function () {
@@ -539,6 +564,7 @@ const CASES = [
 	}],
 	['b14_inputStatusRoleReachesItsCard', async function (page) {
 		await openRunning(page, { log: Buffer.from('hello\r\n') });
+		await page.evaluate(FACADE_SRC);
 		await page.evaluate(function () {
 			window.__pub = [];
 			window.__subs = [];
@@ -549,7 +575,7 @@ const CASES = [
 				publish: function (topic, p) { window.__pub.push([topic, p]); },
 				subscribe: function (topic, fn) { window.__subs.push(topic); fn({ state: 'open' }); return function () {}; }
 			};
-			const h = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+			const h = window.__cardFacade();
 			window.__h = h;
 			h.render({ id: 'card1', type: 'terminal', terminal: { bytesUrl: '/t/bytes', input: true, inputId: 't1' } }, document.getElementById('host'), ctx);
 			h.render({ id: 'card2', type: 'terminal', terminal: { bytesUrl: '/t/bytes', input: true, inputId: 't1' } }, document.getElementById('host2'), ctx);

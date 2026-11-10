@@ -65,7 +65,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 			.page("e11", ORIGIN + "/e11", contractPage(c(""), "", "",
 				"<script>window.JuneauConsole.mount(" + c("") + ", {root: document.body});</script>"))
 			.page("e12", ORIGIN + "/e12", contractPage(c(""), "", "",
-				"<script>window.JuneauConsole.registerCard('html', function(){});</script>"))
+				"<script>window.JuneauConsole.registerCard('html', class extends window.JuneauConsole.Card { render() {} });</script>"))
 			// E-JS-24/E-JS-25 are card-level: painted in the card body, logged unprefixed by juneau-views.js, no banner.
 			.page("e24", ORIGIN + "/e24", contractPage(c("\"cards\":[{\"id\":\"releases\",\"type\":\"datatables\","
 				+ "\"table\":{\"dataUrl\":\"/rest/releases/data\"}}]"), "", viewsPack(), ""),
@@ -90,7 +90,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 
 	private static void probeRegister() throws Exception {
 		var shell = "<script src=\"" + SHELL + "\"></script>\n";
-		var badType = shell + caught("JuneauConsole.registerCard('Bad_Type', function(){});");
+		var badType = shell + caught("JuneauConsole.registerCard('Bad_Type', class extends JuneauConsole.Card { render() {} });");
 		var badHandler = shell + caught("JuneauConsole.registerCard('ok', 'nope');");
 		var notMounted = shell + caught("JuneauConsole.refreshCard('never-mounted');");
 		var badQueueEntry = "<script>(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['oops', 'nope', 'extra']);</script>\n" + shell;
@@ -191,7 +191,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 	}
 
 	@Test void a18_badHandlerShape() {
-		assertFailure(registerReport.get("e21"), "E-JS-21", "card type 'ok' handler must be a function or an object with render(); got 'string'");
+		assertFailure(registerReport.get("e21"), "E-JS-21", "card type 'ok': registerCard now takes a JuneauViews.model.Card subclass (class X extends JuneauViews.model.Card { render() {...} }); the object form was removed");
 	}
 
 	@Test void a19_refreshNotMounted_throwsWithoutBanner() {

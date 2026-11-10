@@ -155,7 +155,7 @@ class PetstoreFailLoud_Test extends TestBase {
 	@Test void a15_adopterHandlerForAReservedType_failsAtMixinBuild() {
 		var ex = assertThrows(IllegalArgumentException.class,
 			() -> ConsoleFreemarkerMixin.create().cardType(new ImpostorDatatables()).build());
-		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, datatables, html, job-log, terminal, terminal-view'.",
+		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, datatables, html, job-log, switcher, terminal, terminal-view'.",
 			ex.getMessage());
 	}
 

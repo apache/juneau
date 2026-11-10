@@ -59,14 +59,16 @@ class Theme_TokenOrdering_Test extends TestBase {
 		assertEquals("--jc-font", names.get(0), () -> "Theme.OPEN's first declared token is not first, order: " + names);
 		// The canonical pill palette: green/blue/amber/neutral/red x bg/text/border, in that order.
 		var pills = names.stream().filter(x -> x.startsWith("--jc-pill-")).toList();
-		assertEquals(
-			List.of(
-				"--jc-pill-green-bg", "--jc-pill-green-text", "--jc-pill-green-border",
-				"--jc-pill-blue-bg", "--jc-pill-blue-text", "--jc-pill-blue-border",
-				"--jc-pill-amber-bg", "--jc-pill-amber-text", "--jc-pill-amber-border",
-				"--jc-pill-neutral-bg", "--jc-pill-neutral-text", "--jc-pill-neutral-border",
-				"--jc-pill-red-bg", "--jc-pill-red-text", "--jc-pill-red-border"),
-			pills);
+		var expected = new ArrayList<>(List.of(
+			"--jc-pill-green-bg", "--jc-pill-green-text", "--jc-pill-green-border",
+			"--jc-pill-blue-bg", "--jc-pill-blue-text", "--jc-pill-blue-border",
+			"--jc-pill-amber-bg", "--jc-pill-amber-text", "--jc-pill-amber-border",
+			"--jc-pill-neutral-bg", "--jc-pill-neutral-text", "--jc-pill-neutral-border",
+			"--jc-pill-red-bg", "--jc-pill-red-text", "--jc-pill-red-border"));
+		for (var i = 1; i <= 10; i++)
+			for (var part : List.of("bg", "text", "border"))
+				expected.add("--jc-pill-cat-" + i + "-" + part);
+		assertEquals(expected, pills);
 		// The legacy tag palette (aliases of the pill family) stays grouped in the same order, declared right after.
 		var tags = names.stream().filter(x -> x.startsWith("--jc-tag-")).toList();
 		assertEquals(

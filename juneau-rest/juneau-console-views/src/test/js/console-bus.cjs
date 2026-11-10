@@ -365,7 +365,7 @@ function answer(urlPath, req) {
 		await page.route('http://bus.test/**', async route => {
 			const req = route.request();
 			const u = new URL(req.url());
-			if (u.pathname === '/juneau-symbols.svg') {
+			if (u.pathname === '/juneau-symbols.svg' || u.pathname === '/juneau-symbols-lucide.svg') {
 				await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg"/>' });
 			} else if (u.pathname.startsWith('/api/')) {
 				const body = req.postData();

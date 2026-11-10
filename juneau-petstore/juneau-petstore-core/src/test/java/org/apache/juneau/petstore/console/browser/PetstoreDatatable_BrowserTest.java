@@ -176,8 +176,8 @@ class PetstoreDatatable_BrowserTest extends TestBase {
 
 	@Test void c01_exportButtonsRender() {
 		var buttons = String.valueOf(query(assertClean(report, "pets-export"), "buttons"));
-		assertContainsAll(buttons, "copy", "csv");
-		assertNotContains(() -> buttons, "excel", buttons);
+		// The datatables-export pack loads JSZip and pdfMake, so the optional buttons show too.
+		assertContainsAll(buttons, "copy", "csv", "excel", "pdf");
 	}
 
 	@SuppressWarnings({

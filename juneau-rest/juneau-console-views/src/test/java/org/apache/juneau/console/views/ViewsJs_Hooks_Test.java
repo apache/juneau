@@ -87,7 +87,7 @@ class ViewsJs_Hooks_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	private static Map<?,?> report() {
-		var r = NodeHarness.report("hooks-api.cjs", ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE);
+		var r = NodeHarness.report("hooks-api.cjs", ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE, "/org/apache/juneau/views/juneau-model.js");
 		assumeTrue(r != null, "node not available or hooks-api.cjs not found - behavioral layer skipped");
 		return r;
 	}
@@ -113,7 +113,7 @@ class ViewsJs_Hooks_Test extends TestBase {
 		var r = report();
 		assertEquals(Boolean.TRUE, r.get("hookNamespacesFrozen"), "HOOK_NAMESPACES must be a frozen array");
 		assertEquals(new HashSet<>(List.of("actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
-			"csrf", "rules", "details", "html", "jobs")), new HashSet<>((Collection<?>)r.get("hookNamespaces")));
+			"csrf", "rules", "details", "html", "jobs", "detail")), new HashSet<>((Collection<?>)r.get("hookNamespaces")));
 		assertEquals(new HashSet<>((Collection<?>)r.get("hookNamespaces")),
 			new HashSet<>((Collection<?>)r.get("frozenNamespaces")),
 			"every frozen top-level JuneauViews namespace must be listed in HOOK_NAMESPACES, and vice versa");
@@ -149,6 +149,7 @@ class ViewsJs_Hooks_Test extends TestBase {
 		assertEquals("v", r.get("handleViewId"));
 		assertEquals(Map.of("id", 7), r.get("handleRow"));
 		assertEquals(Boolean.TRUE, r.get("handleNull"));
+		assertEquals(Boolean.TRUE, r.get("handleIsModelTable"));
 		assertEquals(Arrays.asList(null, false), r.get("reloadDefault"));
 		assertEquals(Arrays.asList(null, true), r.get("reloadReset"));
 		assertEquals(Boolean.TRUE, r.get("contextOfNull"));

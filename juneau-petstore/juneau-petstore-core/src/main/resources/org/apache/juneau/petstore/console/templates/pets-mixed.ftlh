@@ -15,6 +15,6 @@
   limitations under the License.
 -->
 <#-- P2 Pets, half FTL: the layout is FreeMarker, the table comes from PetsPageBuilders.petsMixed(). -->
-<@page tab="pets" toolkit="views">
+<@page tab="pets" toolkit="views,datatables-buttons,datatables-export">
 <@card ref="pets"/>
 </@page>

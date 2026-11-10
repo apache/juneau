@@ -69,6 +69,7 @@ live `<use>` composition):
   header CSS can tint the active direction), kept.
 - **No reference glyph draws the role.** `more` (row-action overflow, author alias `more_vert`) — the reference
   `action` glyph is a bolt glyph, a different role. Three filled circles on the `1.5k` lattice, `currentColor`.
+- **No reference glyph draws the role.** `grip` (drag handle for column rows in View Settings; icon name `drag_handle`) — three filled bars on the `1.5k` lattice, `currentColor`; the middle bar keeps one off-lattice coordinate (`y=11.25`) so the three bars centre on 12.
 - **Truly absent Foundry stems** (the reference chrome has no such control): `forceStop`, `openPr`.
 - **Dormant ids from an unrelated sheet** — present in a stock icon sheet the source console never loads (its
   console symbol sprite is the live one), so they are *not* the live reference set and must not be copied: `print`,
@@ -92,6 +93,7 @@ live `<use>` composition):
 | `filter` | `original-artwork` | `8fbe460c68daf05bcfe9afc205666d8191e0577ca23b8c3c74b94c0d77dfadd0` |
 | `first_page` | `original-artwork` | `14bd5ebadf8d3bcfd0b44f19d9c897d04a8850c5d1c1c5d7169e55b86ccac408` |
 | `forceStop` | `juneau-original` | `3732dbae1b32bc6b53144ee03469e87893b6d1d9686c3c7a53720040703458d3` |
+| `grip` | `juneau-original` | `5f5b79925a3ac107dacabad195b9e34fccee9eda4503a26c0863d5810f513cfd` |
 | `last_page` | `original-artwork` | `947f6cc47850b1464d85465e214d58cd3a5d4ced84c90028c1780b389534909c` |
 | `link` | `juneau-original` | `5117de4b0677d59a14d241db8039890f57fe43dccd0fd82033a2dd9dc5ba2103` |
 | `more` | `juneau-original` | `88f14da9fd54c0a9ce3c55e04a63f282f329647e791166f38e89719730ad0182` |
@@ -112,6 +114,7 @@ live `<use>` composition):
 | `stop` | `juneau-original` | `dea9a934b0ff9bf814d422fa6288d82486b1fbb6d2c5959585388975067a2605` |
 | `toggle-deleted` | `original-artwork` | `1ccd56b9117c71b67e950eafcd42f34c56fe167c63b51b420ea020fcbea8dc0c` |
 | `toggle_column_search` | `original-artwork` | `875b83672d60c7cdae200f197850bfbd05e1ded31f0968ed21a918b861fdbbd8` |
+| `trash` | `juneau-original` | `65fb1b8d9978cf25ae4623ebcf1f244e32da6da00211108cf06c89a5759c1b59` |
 | `tune` | `juneau-original` | `132621d5be499ebabc56d19946f83b32bce190f8960e4c86b3a8ffae673c4ec6` |
 **Added glyphs (2026-11-02).** `plus`, `play` and `restore` are `original-artwork`: path data copied from
 the source console symbol sprite under the operator clearance of 2026-11-02, path data only (no ids, classes or

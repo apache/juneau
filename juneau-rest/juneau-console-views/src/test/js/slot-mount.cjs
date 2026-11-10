@@ -464,10 +464,8 @@ function envelope(NS, extra) {
 	{
 		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const host = slot(env, 'pets');
-		let api = null;
 		const cardCtx = {
 			document: env.document,
-			setApi: function (a) { api = a; },
 			onDestroy: function () {},
 			isAbort: function () { return false; },
 			fetchJson: function () { return Promise.resolve({}); },
@@ -482,7 +480,7 @@ function envelope(NS, extra) {
 		table.__juneauCtx = { selectionState: { selected: new Set(['a', 'b']) }, redraw: function () { redraws++; } };
 		let sel = null;
 		let err = null;
-		try { sel = api.selection(); await api.reload(); } catch (e) { err = String(e?.message); }
+		try { sel = Array.from(table.__juneauCtx.selectionState.selected); await NS.card.reload('pets'); } catch (e) { err = String(e?.message); }
 		out.t20_noThrow = err === null;
 		out.t20_selection = JSON.stringify(sel) === '["a","b"]';
 		out.t20_reloadRedraws = redraws === 1;
@@ -657,7 +655,7 @@ function envelope(NS, extra) {
 				quickStats: { contractVersion: '1', id: 'qs', items: items } };
 		};
 		const ctxFor = function (json) {
-			return { document: loaded.env.document, setApi: function () {}, onDestroy: function () {},
+			return { document: loaded.env.document, onDestroy: function () {},
 				isAbort: function () { return false; }, fetchJson: function () { return Promise.resolve(json); },
 				paintError: function () {} };
 		};

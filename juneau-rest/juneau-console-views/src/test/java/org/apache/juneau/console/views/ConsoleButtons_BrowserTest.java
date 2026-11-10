@@ -281,12 +281,15 @@ class ConsoleButtons_BrowserTest extends TestBase {
 				eq(p, p.hover("ds2", prop), p.rest("ds1", prop), "dialog section selected = hover: " + prop);
 	}
 
-	@Test void a12_tabsAndDetailStripUnchanged() {
+	@Test void a12_tabsUseFolderWash() {
 		for (var p : probes()) {
-			for (var id : List.of("st1", "tab", "sub")) {
+			for (var id : List.of("tab", "sub")) {
 				eq(p, p.tok("--jc-accent-selected"), p.rest(id, "background-color"), id + " solid selected fill");
 				eq(p, p.tok("--jc-on-accent"), p.rest(id, "color"), id + " selected ink");
 			}
+			// A tab-mode strip's selected tab wears the folder-tab wash, not the solid fill.
+			eq(p, p.tok("--jc-accent-wash"), p.rest("st1", "background-color"), "st1 folder-tab wash fill");
+			eq(p, p.tok("--jc-link"), p.rest("st1", "color"), "st1 selected ink");
 		}
 	}
 

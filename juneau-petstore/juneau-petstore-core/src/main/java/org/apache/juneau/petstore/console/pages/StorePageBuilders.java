@@ -103,7 +103,7 @@ public final class StorePageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec store(QuickStats qs) {
-		return PageSpec.create().tab("store").toolkit("views").init("/console/dev/cards/petstore-cards.js")
+		return PageSpec.create().tab("store").toolkit("views", "datatables-buttons", "datatables-export").init("/console/dev/cards/petstore-cards.js")
 			.html("welcome", "Welcome to the petstore", """
 				<div class="jc-prose"><p>Browse pets, place orders and review what changed. Every page here is built from the same
 				Juneau console pieces your own app can use.</p>
@@ -113,24 +113,48 @@ public final class StorePageBuilders {
 					Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}"),
 					Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),
 					Column.create("shipDate").label("Ship date").render("date"),
-					Column.create("status").label("Status").render("pill"))
+					Column.create("status").label("Status").render(PillRenders.orderStatus()))
+				.columnConfig(true)
+				.ribbon(Ribbons.standard()
+					.create(RibbonItem.dialog("new-order").title("+ New order").symbol("plus")
+						.form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))
+					.export("excel", "pdf")
+					.build())
 				.quickStats("store", storeQuickStats(qs)), "Recent orders")
 			.card(CardSpec.of("kpi", "revenue").title("Revenue")
 				.body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))
-			.card(ChartDef.line("orders-trend").title("Orders, last 30 days").src("/console/store/stats/daily")
-				.x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")
-				.onClickHref("/console/orders?state=day({day})").toCardSpec())
-			.card(ChartDef.donut("by-species").title("Pets by species").src("/console/store/stats/species")
-				.label("species").value("count").center("total").toCardSpec())
-			.card(ChartDef.bar("by-status").title("Pets by status").src("/console/store/stats/status")
-				.x("status").series("count", "Pets").toCardSpec())
-			.card(ChartDef.treemap("pets-map").title("Pets by species and status").src("/console/store/stats/pets")
-				.groupBy("species", "status").label("name")
-				.colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),
-					ChartDef.legendItem("PENDING", "Pending", "warning"),
-					ChartDef.legendItem("SOLD", "Sold", null))
-				.tileFields("id", "name", "species", "status")
-				.onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).toCardSpec())
+			.card(SwitcherDef.create("revenue-sw").title("Revenue, last 30 days")
+				.view("chart", "Chart", v -> v.section(ChartDef.line("revenue-chart").src("/console/store/stats/revenue")
+					.x("day", null, "Day").series("revenue", "Revenue").toCardSpec()))
+				.view("data", "Data", v -> v.section(dataCard("revenue-data", "/console/store/stats/revenue", "day", "Day", "revenue", "Revenue")))
+				.initialView("chart").toCardSpec())
+			.card(SwitcherDef.create("orders-sw").title("Orders, last 30 days")
+				.view("chart", "Chart", v -> v.section(ChartDef.line("orders-trend").src("/console/store/stats/daily")
+					.x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")
+					.onClickHref("/console/orders?state=day({day})").toCardSpec()))
+				.view("data", "Data", v -> v.section(dataCard("orders-data", "/console/store/stats/daily", "day", "Day", "placed", "Placed", "delivered", "Delivered")))
+				.initialView("chart").toCardSpec())
+			.card(SwitcherDef.create("pets-sw").title("Pets")
+				.view("species", "Species", v -> v.section(ChartDef.donut("by-species").src("/console/store/stats/species")
+					.label("species").value("count").center("total").toCardSpec()))
+				.view("status", "Status", v -> v.section(ChartDef.bar("by-status").src("/console/store/stats/status")
+					.x("status").series("count", "Pets").toCardSpec()))
+				.view("both", "Species and status", v -> v.section(ChartDef.treemap("pets-map").src("/console/store/stats/pets")
+					.groupBy("species", "status").label("name")
+					.colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),
+						ChartDef.legendItem("PENDING", "Pending", "warning"),
+						ChartDef.legendItem("SOLD", "Sold", null))
+					.tileFields("id", "name", "species", "status")
+					.onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).toCardSpec()))
+				.initialView("species").toCardSpec())
 			.htmlSrc("hours", "Store hours", "/console/store/fragments/hours");
+	}
+
+	/** A datatables card for a nested switcher view: client-side rows from {@code dataUrl}, one plain column per {@code key,label} pair. */
+	private static CardSpec dataCard(String id, String dataUrl, String...keyLabelPairs) {
+		var columns = new ArrayList<Map<String,Object>>();
+		for (var i = 0; i < keyLabelPairs.length; i += 2)
+			columns.add(new LinkedHashMap<>(Map.of("key", keyLabelPairs[i], "label", keyLabelPairs[i + 1])));
+		return CardSpec.of("datatables", id).body("dataMode", "client").body("dataUrl", dataUrl).body("columns", columns);
 	}
 }

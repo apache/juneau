@@ -84,6 +84,22 @@
 	/** The registered codec for `name`, or null. */
 	function directiveCodec(name) { return registry[name] ? registry[name].codec : null; }
 
+	const pageSources = Object.create(null);
+
+	/**
+	 * Registers a page-level source for an already-registered directive: `syncPage` asks `getFn()` for the directive's
+	 * current value and writes it to the address bar.  A name that is not a registered directive, a non-function, or a
+	 * second source for the same name logs E-JS-67 and returns false.
+	 */
+	function registerPageSource(name, getFn) {
+		if (! registry[name] || typeof getFn !== 'function' || pageSources[name]) {
+			console.error('[juneau-urlstate] E-JS-67: page source \'' + name + '\' is not a registered directive, is not a function, or is already registered');
+			return false;
+		}
+		pageSources[name] = getFn;
+		return true;
+	}
+
 	/** The registered directive names, in registration order. */
 	function directiveNames() { return directiveOrder.slice(); }
 
@@ -546,6 +562,30 @@
 	}
 
 	/**
+	 * Writes every page source's current value into the address bar, keeping the rest of the live state (tab, filters,
+	 * sort, other directives, other query params).  A null or empty value drops that directive.  Always the normal
+	 * (non-clean) form.
+	 */
+	function syncPage() {
+		if (! Object.keys(pageSources).length) return false;
+		const state = readFromSearch(window.location?.search) || decodeState('');
+		state.ext = state.ext || {};
+		for (const name of Object.keys(pageSources)) {
+			const value = pageSources[name]();
+			if (value == null || extValueEmpty(registry[name].codec, value)) delete state.ext[name];
+			else state.ext[name] = value;
+		}
+		return writeToAddressBar(window.history, window.location, state, { clean: false });
+	}
+
+	/** The live address bar's parsed value for the registered directive `name`, or undefined when absent or unregistered. */
+	function currentDirective(name) {
+		if (! registry[name]) return undefined;
+		const state = readFromSearch(window.location?.search);
+		return state?.ext && name in state.ext ? state.ext[name] : undefined;
+	}
+
+	/**
 	 * Builds the full shareable URL for the current state - ALWAYS carrying `?state=` even under the clean-address
 	 * option (that is the whole point of Copy link: the clipboard URL restores state even when the address bar did
 	 * not show it).
@@ -598,6 +638,9 @@
 		resolveOpenState: resolveOpenState,
 		registerDirective: registerDirective,
 		hasDirective: hasDirective,
+		registerPageSource: registerPageSource,
+		syncPage: syncPage,
+		currentDirective: currentDirective,
 		directiveCodec: directiveCodec,
 		directiveNames: directiveNames,
 		encodeArg: encodeArg,

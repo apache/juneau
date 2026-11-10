@@ -55,7 +55,7 @@ function mountPage(contract) {
 	env.window.document = doc;
 	vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const JC = sandbox.window.JuneauConsole;
-	JC.registerCard('note', (card, el) => { el.textContent = 'note:' + card.id; });
+	JC.registerCard('note', class extends JC.Card { render() { this.el.textContent = 'note:' + this.spec.id; } });
 	const result = JC.mount(contract, { root: doc.body, document: doc });
 	return { JC, result, errors };
 }

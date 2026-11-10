@@ -17,6 +17,7 @@
 package org.apache.juneau.console.views;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -164,20 +165,43 @@ class ViewSettings_BrowserTest extends TestBase {
 		assertEquals(true, l.get("deleteDisabled"));
 	}
 
+	@Test void c01_dragFromAvailableAndDetailStripAndHeaderIcon() {
+		var c = obj(report, "chooserLight");
+		assertBean(c, "findPlaceholder,detailDefault,resetIsLink", "Find...,Click a column to see details.,false");
+		assertEquals(List.of("name", "created", "status", "owner"), c.get("afterRowDrop"), c::toString);
+		assertEquals(List.of("name", "created", "status", "owner", "priority"), c.get("afterListDrop"), c::toString);
+		assertEquals(List.of("region"), c.get("availAfterDrops"), c::toString);
+		assertTrue(String.valueOf(c.get("detailAvail")).startsWith("Region"), c::toString);
+		assertTrue(String.valueOf(c.get("detailSelected")).startsWith("Name"), c::toString);
+	}
+
+	@Test void c02_selectedTabFillDiffersFromUnselectedAndDialog() {
+		var t = obj(obj(report, "chooserLight"), "tabs");
+		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
+		assertNotEquals(t.get("selBg"), t.get("dlgBg"), t::toString);
+		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
+	}
+
+	@Test void c03_selectedTabFillDiffersFromUnselectedAndDialog_dark() {
+		var t = obj(obj(report, "chooserDark"), "tabs");
+		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
+		assertNotEquals(t.get("selBg"), t.get("dlgBg"), t::toString);
+		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
+	}
+
 	@Test void a04_footerIsResetThenCancelThenApply() {
 		var l = wideLayout();
 		assertEquals(List.of("Reset to defaults", "Cancel", "Apply"), l.get("footer"));
-		assertEquals(true, l.get("resetLink"));
-		// Reset is pushed left (margin-right:auto), Cancel and Apply stay together on the right.
-		assertTrue(num(l, "resetToCancel") > 100, () -> "Reset not pushed left: " + l);
+		assertEquals(false, l.get("resetLink"));
+		// Reset is a bordered button that sits with Cancel and Apply on the right.
+		assertTrue(num(l, "resetToCancel") < 20, () -> "Reset not adjacent to Cancel: " + l);
 		assertTrue(num(l, "cancelToApply") < 20, () -> "Cancel/Apply not adjacent: " + l);
 		assertTrue(num(l, "applyRightGap") < 20, () -> "Apply not at the right edge: " + l);
-		// The standard kinds win inside the dialog: Apply is primary, Reset a link, Cancel secondary.
+		// The standard kinds win inside the dialog: Apply is primary, Reset and Cancel secondary.
 		var f = obj(l, "faces");
 		assertEquals(f.get("primaryBg"), f.get("applyBg"), f::toString);
 		assertEquals(f.get("onPrimary"), f.get("applyColor"), f::toString);
-		assertEquals(f.get("link"), f.get("resetColor"), f::toString);
-		assertEquals("rgba(0, 0, 0, 0)", f.get("resetBg"), f::toString);
+		assertEquals(f.get("controlBg"), f.get("resetBg"), f::toString);
 		assertEquals(f.get("controlBg"), f.get("cancelBg"), f::toString);
 	}
 

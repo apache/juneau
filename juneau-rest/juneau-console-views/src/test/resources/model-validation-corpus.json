@@ -1,0 +1,1460 @@
+{
+	"version": 1,
+	"cases": [
+		{
+			"name": "handlerNameGrammar",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"on": {
+								"rendered": "BadName"
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-114",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "bind",
+					"args": [
+						"rendered",
+						"BadName"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "reservedNamespace",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"on": {
+								"rendered": "juneau.bogus"
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-123",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "bind",
+					"args": [
+						"rendered",
+						"juneau.bogus"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "actionIdUnique",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"actions": [
+								{
+									"id": "go",
+									"handler": "juneau.refresh"
+								},
+								{
+									"id": "go",
+									"handler": "juneau.refresh"
+								}
+							]
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "action",
+					"args": [
+						"go",
+						"x",
+						"juneau.refresh"
+					]
+				},
+				{
+					"on": "card:c1",
+					"call": "action",
+					"args": [
+						"go",
+						"x",
+						"juneau.refresh"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "actionIdGrammar",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"actions": [
+								{
+									"id": "1 bad",
+									"handler": "juneau.refresh"
+								}
+							]
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "action",
+					"args": [
+						"1 bad",
+						"x",
+						"juneau.refresh"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_page",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [],
+				"model": {
+					"on": {
+						"bogusEvent": "app.hello"
+					}
+				}
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "page/pg",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_card",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"on": {
+								"bogusEvent": "app.hello"
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_table",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"model": {
+								"on": {
+									"bogusEvent": "app.hello"
+								}
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:t1/table",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_row",
+			"contract": null,
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"ctor": "Row",
+					"args": [
+						{
+							"id": "1"
+						}
+					],
+					"as": "h"
+				},
+				{
+					"on": "@h",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			]
+		},
+		{
+			"name": "onEventDocumented_rowdetail",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"detail": {
+								"endpoint": "/d/{id}",
+								"model": {
+									"on": {
+										"bogusEvent": "app.hello"
+									}
+								}
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:t1/table/detail",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"detail": {
+								"endpoint": "/d/{id}"
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_detailtab",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"detail": {
+								"endpoint": "/d/{id}",
+								"tabs": [
+									{
+										"id": "o",
+										"title": "O",
+										"model": {
+											"on": {
+												"bogusEvent": "app.hello"
+											}
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:t1/table/detail/tab:o",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"detail": {
+								"endpoint": "/d/{id}",
+								"tabs": [
+									{
+										"id": "o",
+										"title": "O"
+									}
+								]
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_ribbonitem",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"ribbon": [
+								{
+									"type": "option",
+									"id": "mine",
+									"title": "Mine",
+									"model": {
+										"on": {
+											"bogusEvent": "app.hello"
+										}
+									}
+								}
+							]
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:t1/table/ribbon/item:mine",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"ribbon": [
+								{
+									"type": "option",
+									"id": "mine",
+									"title": "Mine"
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "onEventDocumented_pagetab",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home",
+						"model": {
+							"on": {
+								"bogusEvent": "app.hello"
+							}
+						}
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": []
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "page/pg/pagetab:home",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": []
+			}
+		},
+		{
+			"name": "onEventDocumented_view",
+			"contract": null,
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"ctor": "SwitcherView",
+					"args": [
+						{
+							"id": "v"
+						}
+					],
+					"as": "h"
+				},
+				{
+					"on": "@h",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			]
+		},
+		{
+			"name": "onEventDocumented_chart",
+			"contract": null,
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"ctor": "Chart",
+					"args": [
+						{}
+					],
+					"as": "h"
+				},
+				{
+					"on": "@h",
+					"call": "bind",
+					"args": [
+						"bogusEvent",
+						"app.hello"
+					]
+				}
+			]
+		},
+		{
+			"name": "subscribeTopic",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"subscribes": [
+								{
+									"topic": "Bad Topic",
+									"handler": "app.hello"
+								}
+							]
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "listen",
+					"args": [
+						"Bad Topic",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "subscribeTemplateScope",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"subscribes": [
+								{
+									"topic": "app.x:{rowKey}",
+									"handler": "app.hello"
+								}
+							]
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "listen",
+					"args": [
+						"app.x:{rowKey}",
+						"app.hello"
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "inlineWithoutOptIn",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"on": {
+								"rendered": {
+									"inline": "return 1;"
+								}
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-119",
+			"imperativeCode": "E-JS-119",
+			"build": [
+				{
+					"on": "card:c1",
+					"call": "bind",
+					"args": [
+						"rendered",
+						{
+							"inline": "return 1;"
+						}
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe"
+					}
+				]
+			}
+		},
+		{
+			"name": "modelVersion",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "9",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"model": {
+							"on": {
+								"rendered": "app.hello"
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-120",
+			"imperativeCode": "E-JS-120",
+			"build": [
+				{
+					"ctor": "Page",
+					"args": [
+						{
+							"contractVersion": "1",
+							"modelVersion": "9",
+							"id": "pg",
+							"title": "T",
+							"nav": [
+								{
+									"id": "home",
+									"label": "Home"
+								}
+							],
+							"activeNav": [
+								"home"
+							],
+							"cards": []
+						}
+					],
+					"as": "p"
+				}
+			],
+			"fatal": true
+		},
+		{
+			"name": "contractVersion",
+			"contract": {
+				"contractVersion": "9",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": []
+			},
+			"jsonCode": "E-JS-2",
+			"imperativeCode": "E-JS-2",
+			"build": [
+				{
+					"ctor": "Page",
+					"args": [
+						{
+							"contractVersion": "9",
+							"modelVersion": "1",
+							"id": "pg",
+							"title": "T",
+							"nav": [
+								{
+									"id": "home",
+									"label": "Home"
+								}
+							],
+							"activeNav": [
+								"home"
+							],
+							"cards": []
+						}
+					],
+					"as": "p"
+				}
+			],
+			"fatal": true
+		},
+		{
+			"name": "siblingIdUnique",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"detail": {
+								"endpoint": "/d/{id}",
+								"tabs": [
+									{
+										"id": "o",
+										"title": "O"
+									},
+									{
+										"id": "o",
+										"title": "O2"
+									}
+								]
+							}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"imperativeCode": "E-JS-121",
+			"build": [
+				{
+					"on": "card:t1/table/detail",
+					"call": "addTab",
+					"args": [
+						{
+							"id": "o",
+							"title": "O2"
+						}
+					]
+				}
+			],
+			"base": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "t1",
+						"type": "datatables",
+						"table": {
+							"dataUrl": "/api/a",
+							"columns": [
+								{
+									"key": "id"
+								}
+							],
+							"detail": {
+								"endpoint": "/d/{id}",
+								"tabs": [
+									{
+										"id": "o",
+										"title": "O"
+									}
+								]
+							}
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "subscriptionRole",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"subscribes": [
+							{
+								"topic": "app.x",
+								"as": "Bad_Role"
+							}
+						]
+					}
+				]
+			},
+			"jsonCode": "E-JS-121"
+		},
+		{
+			"name": "cardReservedKeys",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"extra": {
+							"model": {}
+						}
+					}
+				]
+			},
+			"jsonCode": "E-JS-121"
+		},
+		{
+			"name": "pageHeader",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [],
+				"header": {
+					"userMenu": {
+						"label": "x",
+						"items": [],
+						"bogus": "y"
+					}
+				}
+			},
+			"jsonCode": "E-JS-121"
+		},
+		{
+			"name": "schema_unknown_root_key",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [],
+				"bogusKey": 1
+			},
+			"jsonCode": "E-JS-121",
+			"schema": true
+		},
+		{
+			"name": "schema_subscription_missing_as",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"subscribes": [
+							{
+								"topic": "app.x"
+							}
+						]
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"schema": true
+		},
+		{
+			"name": "schema_subscription_both_as_and_handler",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "c1",
+						"type": "probe",
+						"subscribes": [
+							{
+								"topic": "app.x",
+								"as": "filter",
+								"handler": "app.hello"
+							}
+						]
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"schema": true
+		},
+		{
+			"name": "schema_closed_card_extra_key",
+			"contract": {
+				"contractVersion": "1",
+				"modelVersion": "1",
+				"id": "pg",
+				"title": "T",
+				"nav": [
+					{
+						"id": "home",
+						"label": "Home"
+					}
+				],
+				"activeNav": [
+					"home"
+				],
+				"cards": [
+					{
+						"id": "h1",
+						"type": "html",
+						"template": "t",
+						"bogus": 1
+					}
+				]
+			},
+			"jsonCode": "E-JS-121",
+			"schema": true
+		}
+	]
+}

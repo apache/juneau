@@ -67,4 +67,27 @@ function probe(resolveIcon) {
 const out = {};
 out.unknown = probe(function () { return null; });
 out.known = probe(function () { return '<svg data-marker="x"></svg>'; });
+
+// Option icon defaults: the pure resolver, loaded the same way as the probe above.
+{
+	const env = makeEnv();
+	const sandbox = {
+		window: env.window, document: env.document, console: console,
+		setTimeout: function () { return 0; }, clearTimeout: function () { /* no-op */ },
+		setInterval: function () { return 0; }, clearInterval: function () { /* no-op */ }
+	};
+	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script
+	const R = env.window.JuneauViews.ribbon;
+	const cycle = [0, 1, 2, 3].map(function (i) { return R.resolveButtonIcon({ id: 'zzz' + i }, null, i); });
+	out.icons = {
+		hint_pending: R.resolveButtonIcon({ id: 'pending' }, null, 0),
+		hint_case: R.resolveButtonIcon({ id: 'Sold' }, null, 0),
+		explicit_wins: R.resolveButtonIcon({ id: 'x', symbol: 'truck' }, null, 0),
+		cycle_distinct: new Set(cycle).size === cycle.length,
+		cycle_wraps: R.resolveButtonIcon({ id: 'q' }, null, R.OPTION_ICON_CYCLE.length) === cycle[0],
+		default_key_unchanged: R.resolveButtonIcon({}, 'copy'),
+		defaults_new: [R.DEFAULT_ICONS.search, R.DEFAULT_ICONS.linkButton, R.DEFAULT_ICONS.columnSettings].join('|'),
+		no_tune_for_options: [0, 1, 2, 3, 4, 5, 6, 7].every(function (i) { return R.resolveButtonIcon({ id: 'n' + i }, null, i) !== 'tune'; })
+	};
+}
 process.stdout.write(JSON.stringify(out));

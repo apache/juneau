@@ -234,7 +234,7 @@ class DialogFrame_BrowserTest extends TestBase {
 		for (var p : probes()) {
 			for (var prop : List.of("background-color", "color", "border-top-color"))
 				eq(p, p.hover("p2", prop), p.rest("p1", prop), "pill selected = hover: " + prop);
-			eq(p, "0px", p.rest("ps", "border-bottom-width"), "pill strip has no rule");
+			eq(p, "1px", p.rest("ps", "border-bottom-width"), "section strip carries the floor line");
 		}
 	}
 
@@ -243,8 +243,9 @@ class DialogFrame_BrowserTest extends TestBase {
 			eq(p, "1px", p.rest("fs", "border-bottom-width"), "folder strip rule width");
 			eq(p, p.tok("--jc-border"), p.rest("fs", "border-bottom-color"), "folder strip rule colour");
 			for (var id : List.of("f1", "f2", "f3")) {
-				eq(p, "0px", p.rest(id, "border-bottom-width"), id + " open at the bottom");
-				eq(p, "-1px", p.rest(id, "margin-bottom"), id + " stands on the rule");
+				var selected = id.equals("f1");
+				eq(p, selected ? "1px" : "0px", p.rest(id, "border-bottom-width"), id + " bottom edge (selected overlaps the rule)");
+				eq(p, selected ? "-1px" : "0px", p.rest(id, "margin-bottom"), id + " floor overlap");
 				eq(p, "0px", p.rest(id, "border-bottom-left-radius"), id + " square bottom");
 				eq(p, "4px", p.rest(id, "border-top-left-radius"), id + " rounded top");
 				eq(p, "6px", p.rest(id, "padding-top"), id + " padding-y");

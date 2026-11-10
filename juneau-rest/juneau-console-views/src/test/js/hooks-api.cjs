@@ -36,6 +36,7 @@ if (!viewsJsPath) {
 	process.exit(2);
 }
 const rendersJsPath = process.argv[3];
+const modelJsPath = process.argv[4];
 
 const document = {
 	readyState: 'loading',
@@ -103,11 +104,15 @@ out.csrfToken = NS.csrf.token(fakeTable({ 'data-juneau-csrf': 'tok' }));
 // tables.handle / reload against a fake table carrying a __juneauCtx.
 let reloadArgs = null;
 const dt = { row: function () { return { data: function () { return { id: 7 }; } }; }, ajax: { reload: function (a, b) { reloadArgs = [a, b]; } } };
+// Loaded after the namespace-registry checks above: the object model adds its own (unregistered) namespaces.
+if (modelJsPath)
+	vm.runInNewContext(fs.readFileSync(path.resolve(modelJsPath), 'utf8'), sandbox, { filename: 'juneau-model.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 const tbl = { __juneauCtx: { dataTable: dt, viewDef: { id: 'v' } } };
 const h = NS.tables.handle(tbl);
 out.handleViewId = h?.viewDef?.id;
 out.handleRow = h?.contextOf({}).row;
 out.handleNull = NS.tables.handle({}) === null;
+out.handleIsModelTable = !modelJsPath || h instanceof NS.model.Table;
 NS.tables.reload(tbl);
 out.reloadDefault = reloadArgs;
 NS.tables.reload(tbl, { resetPaging: true });

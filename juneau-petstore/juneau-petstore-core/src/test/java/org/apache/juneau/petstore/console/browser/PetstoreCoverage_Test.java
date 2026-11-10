@@ -75,7 +75,8 @@ class PetstoreCoverage_Test extends TestBase {
 		PetstoreVisibility_BrowserTest.class,
 		PetstoreTwins_BrowserTest.class,
 		PetstoreHookRegistry_BrowserTest.class,
-		PetstoreSwaggerUi_BrowserTest.class);
+		PetstoreSwaggerUi_BrowserTest.class,
+		RibbonPreset_BrowserTest.class);
 
 	/** Parity ids not yet covered, each with what it waits on.  Remove a row when its browser test lands. */
 	static final Map<String,String> PENDING = Map.of();
@@ -176,7 +177,8 @@ class PetstoreCoverage_Test extends TestBase {
 	static final Map<String,String> HOOK_EXEMPT = Map.of(
 		"probeSelection", "framework-internal: enhances [data-juneau-probe-group] markup, and the petstore has no probe group",
 		"html", "escaping helpers for script-built markup, and the petstore script builds DOM with createElement and textContent only",
-		"tables", "table handle helpers for scripts that drive a table, and the petstore has none (the toolkit redraws tables itself)");
+		"tables", "table handle helpers for scripts that drive a table, and the petstore has none (the toolkit redraws tables itself)",
+		"detail", "registers client tab renderers for row details, and the petstore declares no client tab");
 
 	/** The hook namespaces each {@link HookCovers} browser test claims, keyed by name. */
 	static Map<String,List<Class<?>>> hookClaims() {

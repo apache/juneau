@@ -259,6 +259,15 @@ public class ConsoleChromeMixin {
 	/** Classpath resource behind {@link #DASHBOARD_JS_PATH}. */
 	public static final String DASHBOARD_JS_RESOURCE = "/org/apache/juneau/console/juneau-dashboard.js";
 
+	/** Context-root-absolute path of the switcher card runtime. */
+	public static final String SWITCHER_JS_PATH = "/juneau-console/juneau-switcher.js";
+
+	/** {@link #SWITCHER_JS_PATH} minus the {@code /juneau-console} prefix. */
+	public static final String SWITCHER_JS_PATH_UNPREFIXED = "/juneau-switcher.js";
+
+	/** Classpath resource behind {@link #SWITCHER_JS_PATH}. */
+	public static final String SWITCHER_JS_RESOURCE = "/org/apache/juneau/console/juneau-switcher.js";
+
 	/** Context-root-absolute path of the page-contract schema. */
 	public static final String SCHEMA_PATH = "/juneau-console/juneau-page.schema.json";
 
@@ -526,6 +535,21 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
+	 * [GET /juneau-console/juneau-switcher.js] &mdash; serve the switcher card runtime.
+	 *
+	 * @return The script.
+	 */
+	@RestGet(
+		path={SWITCHER_JS_PATH, SWITCHER_JS_PATH_UNPREFIXED},
+		summary="Console switcher card runtime",
+		description="The view selector, sections, persistence and URL state of a switcher card.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getSwitcherJs() {
+		return ASSET_CACHE.serve(SWITCHER_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/**
 	 * [GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.
 	 *
 	 * @return The schema.
@@ -604,7 +628,7 @@ public class ConsoleChromeMixin {
 	 * {@code joblog} toolkit packs.
 	 *
 	 * @param req The current request.
-	 * @param path {@link #CHARTS_JS_PATH}, {@link #JOBLOG_JS_PATH} or {@link #DASHBOARD_JS_PATH}.
+	 * @param path {@link #CHARTS_JS_PATH}, {@link #JOBLOG_JS_PATH}, {@link #DASHBOARD_JS_PATH} or {@link #SWITCHER_JS_PATH}.
 	 * @return The URL.
 	 * @throws IllegalArgumentException If {@code path} is neither.
 	 */
@@ -615,6 +639,8 @@ public class ConsoleChromeMixin {
 			return consoleMountUrl(req, JOBLOG_JS_PATH, JOBLOG_JS_RESOURCE);
 		if (DASHBOARD_JS_PATH.equals(path))
 			return consoleMountUrl(req, DASHBOARD_JS_PATH, DASHBOARD_JS_RESOURCE);
+		if (SWITCHER_JS_PATH.equals(path))
+			return consoleMountUrl(req, SWITCHER_JS_PATH, SWITCHER_JS_RESOURCE);
 		throw iaex("Unknown console asset '%s'.", path);
 	}
 

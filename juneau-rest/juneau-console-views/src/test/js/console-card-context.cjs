@@ -88,6 +88,14 @@ function makeStorage(behavior) {
 
 const base = { contractVersion: '1', title: 'T', nav: [], activeNav: [], cards: [] };
 const C = o => ({ ...base, ...o });
+// Class-form card from an object of render/destroy hooks; the third argument is the card instance, which carries
+// the helpers (fetchJson, isAbort, paintLoading, paintError, every, prefs, onDestroy).
+function ctxCard(JC, hooks) {
+	return class extends JC.Card {
+		render() { return hooks.render(this.spec, this.el, this); }
+	};
+}
+
 const out = {};
 
 // 1. fetchJson supersede: a second call before the first settles aborts the first; the first's promise
@@ -102,9 +110,9 @@ const out = {};
 		});
 		Promise.resolve().then(() => undefined).then(() => resolve({ ok: true, json: () => Promise.resolve({ v: url }) }));
 	}), {});
-	r.JC.registerCard('kpi', {
+	r.JC.registerCard('kpi', ctxCard(r.JC, {
 		render(card, el, ctx) { ctxRef = ctx; return Promise.resolve(); }
-	});
+	}));
 	r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
 	const p1 = ctxRef.fetchJson('/a').catch(e => ({ aborted: ctxRef.isAbort(e) }));
 	const p2 = ctxRef.fetchJson('/b').then(d => ({ v: d.v }));
@@ -117,7 +125,7 @@ const out = {};
 	let ctxRef = null;
 	const r = load((url, init) => { calls.push({ url, method: (init?.method) || 'GET', headers: { ...init?.headers } }); return Promise.resolve({ ok: true, json: () => Promise.resolve({}) }); },
 		{ csrf: 'tok-123', csrfHeader: 'X-My-Csrf' });
-	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; } });
+	r.JC.registerCard('kpi', ctxCard(r.JC, { render(card, el, ctx) { ctxRef = ctx; } }));
 	r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
 	// Sequential: a second concurrent call would supersede (abort) the first.
 	out.csrf = ctxRef.fetchJson('/get')
@@ -135,7 +143,7 @@ const out = {};
 		if (i === 2) return Promise.resolve({ ok: false, status: 500, json: () => Promise.reject(new Error('not json')) });
 		return Promise.reject(new TypeError('network down'));
 	}, {});
-	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; } });
+	r.JC.registerCard('kpi', ctxCard(r.JC, { render(card, el, ctx) { ctxRef = ctx; } }));
 	r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
 	const settle = p => p.then(v => v, e => e.message);
 	out.errorPrecedence = settle(ctxRef.fetchJson('/a'))
@@ -156,7 +164,7 @@ const out = {};
 		const e = Object.assign(new Error('body read failed'), { name });
 		return Promise.resolve({ ok: status === 200, status, json: () => Promise.reject(e) });
 	}, {});
-	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; } });
+	r.JC.registerCard('kpi', ctxCard(r.JC, { render(card, el, ctx) { ctxRef = ctx; } }));
 	r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
 	const settle = p => p.then(v => ({ value: v }), e => ({ error: e.message, abort: ctxRef.isAbort(e) }));
 	// Sequential: a second concurrent call would supersede (abort) the first.
@@ -169,7 +177,7 @@ const out = {};
 {
 	let ctxRef = null;
 	const r = load(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }), {});
-	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; ctx.paintLoading(el); } });
+	r.JC.registerCard('kpi', ctxCard(r.JC, { render(card, el, ctx) { ctxRef = ctx; ctx.paintLoading(el); } }));
 	const res = r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
 	const loadingRole = r.doc.querySelector('#k1 .jc-card-loading') && r.doc.querySelector('#k1 .jc-card-loading').getAttribute('role'); // NOSONAR javascript:S6582 - null (not undefined) reaches the serialized assertion
 	ctxRef.paintError(res.cards.k1, new Error('boom'));
@@ -185,11 +193,11 @@ const out = {};
 {
 	let tick = 0;
 	const r = load(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }), {});
-	r.JC.registerCard('poll', {
+	r.JC.registerCard('poll', ctxCard(r.JC, {
 		render(card, el, ctx) {
 			ctx.every(1000, () => { tick++; }, { pauseWhen: () => r.doc.__paused === true });
 		}
-	});
+	}));
 	r.JC.mount(C({ cards: [{ id: 'p1', type: 'poll' }] }), { root: r.doc.body, document: r.doc });
 	const runInterval = () => { for (const f of r.sandbox.__intervals || []) f(); };
 	runInterval();
@@ -214,11 +222,11 @@ const out = {};
 	const make = (id, onTick) => {
 		let handle = null;
 		const r = load(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }), {});
-		r.JC.registerCard('poll2', {
+		r.JC.registerCard('poll2', ctxCard(r.JC, {
 			render(card, el, ctx) {
 				handle = ctx.every(1000, onTick, { pauseWhen: () => r.doc.__paused === true });
 			}
-		});
+		}));
 		r.JC.mount(C({ cards: [{ id, type: 'poll2' }] }), { root: r.doc.body, document: r.doc });
 		return { r, handle };
 	};
@@ -272,11 +280,11 @@ const out = {};
 		const r = load(() => Promise.resolve({ ok: true }), {});
 		let ticksF = 0;
 		let hs = [];
-		r.JC.registerCard('poll3', {
+		r.JC.registerCard('poll3', ctxCard(r.JC, {
 			render(card, el, ctx) {
 				for (const bad of [Number.NaN, 0, -1, undefined, '1000']) hs.push(ctx.every(bad, () => { ticksF++; }));
 			}
-		});
+		}));
 		r.JC.mount(C({ cards: [{ id: 's6', type: 'poll3' }] }), { root: r.doc.body, document: r.doc });
 		let threw = null;
 		try { for (const h of hs) { h.setMs(100); h.stop(); } } catch (error_) { threw = String(error_); }
@@ -296,7 +304,7 @@ const out = {};
 {
 	let ctxRef = null;
 	const r = load(() => Promise.resolve({ ok: true }), {});
-	r.JC.registerCard('prefcard', { render(card, el, ctx) { ctxRef = ctx; } });
+	r.JC.registerCard('prefcard', ctxCard(r.JC, { render(card, el, ctx) { ctxRef = ctx; } }));
 	r.JC.mount(C({ cards: [{ id: 'pc1', type: 'prefcard' }] }), { root: r.doc.body, document: r.doc });
 	const prefs = ctxRef.prefs();
 	prefs.set('color', 'blue');
@@ -308,13 +316,13 @@ const out = {};
 	corruptStorage._raw.set('juneau-card:pc2:x', '{not json');
 	let ctxRef2 = null;
 	const r2 = load(() => Promise.resolve({ ok: true }), { storage: corruptStorage });
-	r2.JC.registerCard('prefcard', { render(card, el, ctx) { ctxRef2 = ctx; } });
+	r2.JC.registerCard('prefcard', ctxCard(r2.JC, { render(card, el, ctx) { ctxRef2 = ctx; } }));
 	r2.JC.mount(C({ cards: [{ id: 'pc2', type: 'prefcard' }] }), { root: r2.doc.body, document: r2.doc });
 	const corruptValue = ctxRef2.prefs().get('x', 'dflt');
 	const throwingStorage = makeStorage('throw');
 	let ctxRef3 = null;
 	const r3 = load(() => Promise.resolve({ ok: true }), { storage: throwingStorage });
-	r3.JC.registerCard('prefcard', { render(card, el, ctx) { ctxRef3 = ctx; } });
+	r3.JC.registerCard('prefcard', ctxCard(r3.JC, { render(card, el, ctx) { ctxRef3 = ctx; } }));
 	r3.JC.mount(C({ cards: [{ id: 'pc3', type: 'prefcard' }] }), { root: r3.doc.body, document: r3.doc });
 	let threw3 = null;
 	let val3 = null;
@@ -326,7 +334,7 @@ const out = {};
 {
 	const ran = [];
 	const r = load(() => Promise.resolve({ ok: true }), {});
-	r.JC.registerCard('ondcard', { render(card, el, ctx) { ctx.onDestroy(() => ran.push('a')); ctx.onDestroy(() => ran.push('b')); } });
+	r.JC.registerCard('ondcard', ctxCard(r.JC, { render(card, el, ctx) { ctx.onDestroy(() => ran.push('a')); ctx.onDestroy(() => ran.push('b')); } }));
 	r.JC.mount(C({ cards: [{ id: 'd1', type: 'ondcard' }] }), { root: r.doc.body, document: r.doc });
 	r.JC.destroyCard('d1');
 	out.onDestroy = { ran };

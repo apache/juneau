@@ -428,11 +428,40 @@
 	// numeric THRESHOLDS rather than tones and share no vocabulary with this map.
 	const PILL_TONES = { info: 1, success: 1, warning: 1, error: 1, neutral: 1 };
 
-	// `neutral` is a legal tone that deliberately emits NO modifier: "no semantic colour" is the absence of a class,
-	// so it inherits the chip's themed currentColor exactly as an absent tone does.  An off-palette value also emits
-	// nothing: the palette is closed and enforced here, on the client, with no server-side pre-check.
+	// `neutral` on the DOT (the column-wide `meta.tone`) deliberately emits NO modifier, exactly as before.  An
+	// off-palette value also emits nothing: the palette is closed and enforced here, on the client.
 	function pillToneClass(tone) {
 		return tone && tone !== "neutral" && Object.hasOwn(PILL_TONES, tone) ? " is-" + tone : "";
+	}
+
+	// Categorical palette: ten slots (`--jc-pill-cat-1-*` .. `--jc-pill-cat-10-*`).  The size is part of the colour
+	// contract: changing it recolours every categorical value.
+	const PILL_CATEGORY_SLOTS = 10;
+
+	// FNV-1a, 32-bit, over the UTF-16 code units of the exact string (no case folding, no trimming), then a 1-based
+	// slot.  PillPalette.slot in Java is the same function; a parity test pins both.
+	function pillSlot(value) {
+		let h = 0x811c9dc5;
+		const s = String(value);
+		for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);
+		return ((h >>> 0) % PILL_CATEGORY_SLOTS) + 1;
+	}
+
+	// The class that paints the pill span itself.  First hit wins: an explicit per-value tone, an explicit slot pin,
+	// the hashed slot, then the column-wide tone (back-compat).  A column that uses `tones`/`categories` renders an
+	// unmapped value as a neutral chip; a pure legacy pill (none of the new keys) paints nothing.  Lookups use
+	// Object.hasOwn so `__proto__`/`constructor` values are inert.
+	function pillClassFor(value, meta) {
+		const tones = meta?.tones, cats = meta?.categories;
+		if (tones && typeof tones === "object" && Object.hasOwn(tones, value) && Object.hasOwn(PILL_TONES, tones[value]))
+			return " is-" + tones[value];
+		if (cats && typeof cats === "object" && Object.hasOwn(cats, value)) {
+			const n = cats[value];
+			if (Number.isInteger(n) && n >= 1 && n <= PILL_CATEGORY_SLOTS) return " is-cat-" + n;
+		}
+		if (meta?.categorical === true) return " is-cat-" + pillSlot(value);
+		if (meta?.tone && Object.hasOwn(PILL_TONES, String(meta.tone)) && meta.tone !== "neutral") return " is-" + meta.tone;
+		return (tones || cats) ? " is-neutral" : "";
 	}
 
 	function pillMarkup(cellData, meta, allowAction) {
@@ -441,7 +470,8 @@
 		const domain = meta?.field ? String(meta.field) : "";
 		const domainToken = normalizeTagToken(domain);
 		const valueToken = normalizeTagToken(value);
-		const cls = "jc-pill tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "");
+		const cls = "jc-pill tag" + (domainToken ? " " + domainToken : "") + (valueToken ? " " + valueToken : "")
+			+ pillClassFor(value, meta);
 		const toneClass = pillToneClass(meta?.tone ? String(meta.tone) : "");
 		const dot = (meta?.dot === "off")
 			? ""
@@ -622,6 +652,8 @@
 	// The closed status palette, exposed so a test can pin the exact five names rather than probe them one chip at a
 	// time (and catch a sixth being smuggled in).
 	NS._render.pillTones = Object.keys(PILL_TONES);
+	NS._render.pillCategorySlots = PILL_CATEGORY_SLOTS;
+	NS._render.pillSlot = pillSlot;
 	// `pill`'s sink renderer is a hand-registered display-only variant rather than a snapshot of the cell renderer,
 	// so it is appended here instead of living in BUILTIN_RENDER_IDS (which drives snapshotFrozenBuiltins).
 	NS._render.frozenBuiltinIds = BUILTIN_RENDER_IDS.concat(SINK_VARIANT_RENDER_IDS);

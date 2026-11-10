@@ -26,14 +26,15 @@
  *
  * PAGE-LEVEL SPRITE CONFIGURATION
  * ------------------------------
- * Every chrome glyph the framework paints resolves through up to three sprite layers, in order:
+ * Every chrome glyph the framework paints resolves through up to four sprite layers, in order:
  *
- *     per-icon override  ->  replacement  ->  shipped        (first hit wins)
+ *     per-icon override  ->  replacement  ->  shipped  ->  base        (first hit wins)
  *
- * The SHIPPED layer is Juneau's own set (`juneau-symbols.svg`, injected once so hosts can
+ * The BASE layer is the Lucide set (`juneau-symbols-lucide.svg`), merged lowest; a failed fetch of it is skipped and
+ * the shipped glyphs draw as before.  The SHIPPED layer is Juneau's own set (`juneau-symbols.svg`, injected once so hosts can
  * <use href="#juneau-sym-{stem}"/>).  An app may, ONCE per page BEFORE the chrome draws, point at a
  * REPLACEMENT sprite (its own set - may be partial) and/or an OVERRIDE sprite (a few names on top).
- * All three use the SAME `juneau-sym-{stem}` symbol ids.
+ * All layers use the SAME `juneau-sym-{stem}` symbol ids.
  *
  * Documented registration is attributes on this script tag, read before first paint:
  *     <script src=".../juneau-icons.js"
@@ -48,7 +49,7 @@
  * and, per stem, which layer won.  The page still paints if the app does not await it.  A layer whose
  * URL fails to fetch or parse (including a blocked cross-origin fetch) is skipped - the remaining layers
  * and the shipped set fill any name it would have carried; a layer that DID load still wins.  A call that
- * arrives after first paint is ignored (dev warns).  A name in none of the three layers draws nothing.
+ * arrives after first paint is ignored (dev warns).  A name in none of the four layers draws nothing.
  *
  * Dev-mode warnings (failed load, unknown id, late registration) are emitted only when dev mode is on -
  * set `JuneauViews.dev = true` or add `data-juneau-dev` to this script tag.  Production is silent and
@@ -78,6 +79,8 @@
 	const PACK_FILES = {};
 	PACK_FILES[PACK_ORIGINAL] = "juneau-symbols.svg";
 	PACK_FILES[PACK_MATERIAL] = "juneau-symbols-material.svg";
+	// The Lucide glyphs are the lowest layer under every pack: shipped, replacement and override all win over it.
+	const LUCIDE_FILE = "juneau-symbols-lucide.svg";
 	let _pack = PACK_ORIGINAL;
 
 	// Page-level layer configuration.  Recorded from the script tag at eval time and/or a sprites(...) call
@@ -232,10 +235,14 @@
 		const stem = name.startsWith(STEM_PREFIX) ? name.slice(STEM_PREFIX.length) : name;
 		// Every stem, sort included, is a <use> host: it resolves against whatever sprite is in the document when it
 		// paints, so an override/replacement sprite wins even for a glyph drawn before the sprite loaded.
-		if (Object.hasOwn(registry, name))
-			return registry[name];
-		if (stem !== name && Object.hasOwn(registry, stem))
-			return registry[stem];
+		// Once the layers have loaded, a registered name whose stem no layer supplied (e.g. a Lucide-only glyph after a
+		// failed base-layer fetch) would paint an empty host; report it unknown so callers fall back instead.
+		const key = Object.hasOwn(registry, name) ? name : (stem !== name && Object.hasOwn(registry, stem) ? stem : null);
+		if (key != null) {
+			if (_mergedStems && Object.hasOwn(NAME_TO_STEM, key) && !_mergedStems.includes(NAME_TO_STEM[key]))
+				return null;
+			return registry[key];
+		}
 		if (_mergedStems?.includes(stem))
 			return host(stem);
 		warn("JuneauViews.icons.resolveIcon: unknown icon '" + name + "'.");
@@ -277,7 +284,7 @@
 	}
 
 	function emptyReport() {
-		return { layers: { shipped: "absent", replacement: "absent", override: "absent" }, stems: {}, names: [] };
+		return { layers: { base: "absent", shipped: "absent", replacement: "absent", override: "absent" }, stems: {}, names: [] };
 	}
 
 	/** Resolves a sprite file next to this script (the cache-buster query is preserved). */
@@ -347,7 +354,7 @@
 
 	/**
 	 * Fetches the shipped sprite (plus the configured replacement / override layers) once, merges them per stem
-	 * (override -> replacement -> shipped, first hit wins), injects the merged sprite, and resolves to the load
+	 * (override -> replacement -> shipped -> base, first hit wins), injects the merged sprite, and resolves to the load
 	 * report.  Always resolves - a failed layer is skipped, never a rejection.  Called automatically at boot;
 	 * calling it again returns the same Promise.
 	 *
@@ -366,6 +373,7 @@
 		}
 		const gen = _gen;
 		_spritePromise = Promise.all([
+			fetchLayer(siblingUrl(LUCIDE_FILE), "base"),
 			fetchLayer(siblingUrl(PACK_FILES[PACK_ORIGINAL]), "shipped"),
 			// pack("material") supplies the replacement layer unless the app named its own replacement URL.
 			fetchLayer(_replacementUrl || (_pack === PACK_MATERIAL ? siblingUrl(PACK_FILES[PACK_MATERIAL]) : null), "replacement"),
@@ -375,7 +383,7 @@
 			if (gen !== _gen)
 				return _spritePromise || emptyReport();
 			const winner = {}, merged = {};
-			// Applied shipped-first: a later layer overwrites, so override beats replacement beats shipped.
+			// Applied base-first: a later layer overwrites, so override beats replacement beats shipped beats base.
 			layers.forEach(function (layer) {
 				for (const stem in layer.symbols) {
 					if (Object.hasOwn(layer.symbols, stem)) {
@@ -385,10 +393,10 @@
 				}
 			});
 			injectMerged(merged);
-			_shippedStems = Object.keys(layers[0].symbols);
+			_shippedStems = Object.keys(layers[1].symbols);
 			_mergedStems = Object.keys(merged);
 			_report = {
-				layers: { shipped: layers[0].status, replacement: layers[1].status, override: layers[2].status },
+				layers: { base: layers[0].status, shipped: layers[1].status, replacement: layers[2].status, override: layers[3].status },
 				stems: winner,
 				names: _mergedStems.slice()
 			};
@@ -434,6 +442,7 @@
 	reg("collapse_all", "collapse_all");
 	reg("tune", "tune");
 	reg("settings", "settings");
+	reg("drag_handle", "grip");
 	reg("columns", "tune");
 	// The original columns gear stem stays shipped (byte-identical artwork to tune) so a host override keyed on it still
 	// has a target; no chrome uses it by default.
@@ -455,6 +464,7 @@
 	reg("close", "close");
 	reg("download", "download");
 	reg("link", "link");
+	reg("trash", "trash");
 	reg("edit", "edit");
 	reg("cancel", "cancel");
 	reg("check", "check");
@@ -467,6 +477,9 @@
 	reg("openPr", "openPr");
 	// Real sprite stems (no CSS-composed / flipped stand-ins).  sort is an ordinary <use> host;
 	// the header asc/desc tint is driven by CSS custom properties on the host (they inherit into the <use> shadow tree).
+	// Lucide base-layer glyphs (author name -> stem in juneau-symbols-lucide.svg).
+	["circle_check", "hourglass", "tag", "paw_print", "bird", "fish", "shapes", "badge_check", "truck", "package",
+		"shopping_cart", "user_check", "user_x", "store", "chart_line", "chart_column", "trending_up"].forEach(function (n) { reg(n, n); });
 	reg("first_page", "first_page");
 	reg("last_page", "last_page");
 	reg("more_vert", "more");

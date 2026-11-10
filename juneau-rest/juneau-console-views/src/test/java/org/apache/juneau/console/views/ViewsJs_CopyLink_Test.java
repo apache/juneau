@@ -162,4 +162,8 @@ class ViewsJs_CopyLink_Test extends TestBase {
 	@Test void a09_rejectedCopy_isCaughtAndAnnouncesFailure() {
 		assertBean(report(), "rejectedCopyHandled,rejectedCopyAnnounced", "true,true");
 	}
+
+	@Test void a10_buildCopyLinkButton_returnsDetachedButtonOrNull() {
+		assertBean(report(), "buildReturnsDetachedButton,buildNullWhenCopyLinkFalse,mountStillMountsOnce", "true,true,true");
+	}
 }

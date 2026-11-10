@@ -112,6 +112,24 @@ function makeTable(id) {
 	out.mountedButtonCount = wrapper.querySelectorAll('.juneau-view-copylink-btn').length;
 })();
 
+// --- Scenario: buildCopyLinkButton returns a detached button, or null when the visibility rule says no ----------
+(function buildDetached() {
+	env.body.textContent = '';
+	const table = makeTable('only');
+	const b = I.buildCopyLinkButton(table, { viewDef: {} });
+	out.buildReturnsDetachedButton = !!b && /juneau-view-copylink-btn/.test(b.className) && b.parentNode == null;
+	out.buildNullWhenCopyLinkFalse = I.buildCopyLinkButton(table, { viewDef: { copyLink: false } }) === null;
+	out.mountStillMountsOnce = (function () {
+		env.body.textContent = '';
+		const wrapper = env.el('div');
+		env.body.appendChild(wrapper);
+		const t2 = makeTable('o2');
+		wrapper.appendChild(t2);
+		I.mountCopyLinkButton(t2, { viewDef: {} });
+		return wrapper.querySelectorAll('.juneau-view-copylink-btn').length === 1;
+	})();
+})();
+
 // --- Scenario: the click handler calls NS.init.copyShareableUrl (the exported reference), not a closure --------
 (function clickCallsExportedCopyShareableUrl() {
 	env.body.textContent = '';

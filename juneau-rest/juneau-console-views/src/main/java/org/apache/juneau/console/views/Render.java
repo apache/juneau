@@ -107,6 +107,101 @@ public class Render {
 	}
 
 	/**
+	 * Maps one cell value to a status tone on a {@code pill} renderer.
+	 *
+	 * <p>
+	 * Emits {@code meta.tones[value] = tone.wire()}.  Value matching is exact and case-sensitive against the string
+	 * the chip displays.  Re-adding a value replaces its tone and keeps its position.
+	 *
+	 * <h4 class='section'>Precedence (first hit wins):</h4>
+	 * <ol>
+	 * 	<li>An entry added here.
+	 * 	<li>A slot pinned with {@link #category(String,int)}.
+	 * 	<li>{@link #categorical()}: the value's hashed palette slot.
+	 * 	<li>The column-wide tone from {@link #pill(StatusTone)}.
+	 * 	<li>Otherwise no colour class; but in a column that uses {@code tone(...)} or {@code category(...)} an
+	 * 		unmapped value renders as a neutral (grey) chip.
+	 * </ol>
+	 *
+	 * <h4 class='section'>Example:</h4>
+	 * <p class='bjava'>
+	 * 	<jc>// Renders as {id:"pill",meta:{tones:{AVAILABLE:"success",SOLD:"neutral"}}}.</jc>
+	 * 	Render <jv>r</jv> = Render.<jsm>pill</jsm>()
+	 * 		.tone(<js>"AVAILABLE"</js>, StatusTone.<jsf>SUCCESS</jsf>)
+	 * 		.tone(<js>"SOLD"</js>, StatusTone.<jsf>NEUTRAL</jsf>);
+	 * </p>
+	 *
+	 * @param value The cell value, case-sensitive.  Must not be <jk>null</jk> or blank.
+	 * @param tone The status tone.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalStateException If this is not a {@code pill} renderer.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank, or {@code tone} is <jk>null</jk>.
+	 * @since 10.0.0
+	 */
+	public Render tone(String value, StatusTone tone) {
+		requirePill("tone");
+		if (! inb(value) || tone == null)
+			throw new IllegalArgumentException("tone(value, tone) requires a non-blank value and a non-null tone");
+		nested("tones").put(value, tone.wire());
+		return this;
+	}
+
+	/**
+	 * Colours every distinct value of a {@code pill} column from the categorical palette.
+	 *
+	 * <p>
+	 * Emits {@code meta.categorical = true}.  A value without an explicit {@link #tone(String,StatusTone)} or
+	 * {@link #category(String,int)} entry gets a stable colour from {@link PillPalette#slot(String)}: the same value
+	 * has the same colour on every page.  Hashing is case-sensitive, and hashing {@code N} values into
+	 * {@link PillPalette#SIZE} slots can collide; pin a closed set with {@link #category(String,int)}.
+	 * See {@link #tone(String,StatusTone)} for the full precedence.
+	 *
+	 * @return This object.
+	 * @throws IllegalStateException If this is not a {@code pill} renderer.
+	 * @since 10.0.0
+	 */
+	public Render categorical() {
+		requirePill("categorical");
+		meta("categorical", true);
+		return this;
+	}
+
+	/**
+	 * Pins one cell value of a {@code pill} column to a categorical palette slot.
+	 *
+	 * <p>
+	 * Emits {@code meta.categories[value] = slot}.  Use it for a closed value set so the values get distinct colours
+	 * instead of a hash collision.  Value matching is exact and case-sensitive.  See
+	 * {@link #tone(String,StatusTone)} for the full precedence.
+	 *
+	 * @param value The cell value, case-sensitive.  Must not be <jk>null</jk> or blank.
+	 * @param slot The palette slot, 1 through {@link PillPalette#SIZE}.
+	 * @return This object.
+	 * @throws IllegalStateException If this is not a {@code pill} renderer.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank, or {@code slot} is out of range.
+	 * @since 10.0.0
+	 */
+	public Render category(String value, int slot) {
+		requirePill("category");
+		if (! inb(value) || slot < 1 || slot > PillPalette.SIZE)
+			throw new IllegalArgumentException("category(value, slot) requires a non-blank value and a slot from 1 to " + PillPalette.SIZE);
+		nested("categories").put(value, slot);
+		return this;
+	}
+
+	private void requirePill(String method) {
+		if (! "pill".equals(id))
+			throw new IllegalStateException(method + "(...) is only valid on a pill renderer, not '" + id + "'");
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String,Object> nested(String key) {
+		if (meta == null)
+			meta = m();
+		return (Map<String,Object>)meta.computeIfAbsent(key, k -> new LinkedHashMap<String,Object>());
+	}
+
+	/**
 	 * Optional per-cell popover, omitted from the wire when unset.
 	 *
 	 * <p>

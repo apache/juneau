@@ -175,6 +175,10 @@ class DarkScheme_BrowserTest extends TestBase {
 		<span class="jc-pill tag status pending"><span class="jc-pill-dot"></span>Pending</span>
 		<span class="jc-pill tag status unknown"><span class="jc-pill-dot"></span>Unknown</span>
 		<span class="jc-pill tag status failed"><span class="jc-pill-dot"></span>Failed</span>
+		<span class="jc-pill tag status available is-success"><span class="jc-pill-dot"></span>Available</span>
+		<span class="jc-pill tag species dog is-cat-1"><span class="jc-pill-dot"></span>Dog</span>
+		<span class="jc-pill tag species fish is-cat-6"><span class="jc-pill-dot"></span>Fish</span>
+		<span class="jc-pill tag status sold is-neutral"><span class="jc-pill-dot"></span>Sold</span>
 		<span class="jc-badge" data-juneau-badge-tone="info">Info</span>
 		<span class="jc-badge" data-juneau-badge-tone="success">Ok</span>
 		<span class="jc-badge" data-juneau-badge-tone="warning">Warn</span>
@@ -333,7 +337,6 @@ class DarkScheme_BrowserTest extends TestBase {
 	/** Disabled controls: exempt, measured and reported only. */
 	private static final String[][] DISABLED_SURFACES = {
 		{"pagingButtonDisabled", "text", ".juneau-view-pagingpill-btn[disabled]"},
-		{"configRenameDisabled", "text", ".juneau-config-rename[disabled]"},
 	};
 
 	/**
@@ -409,7 +412,7 @@ class DarkScheme_BrowserTest extends TestBase {
 
 		for (var scheme : List.of("dark", "light")) {
 			surface(f, scheme, surfacePage((scheme.equals("dark") ? PIN_DARK : PIN_LIGHT) + " " + TOGGLE, "", false));
-			f.click(".juneau-config-chooser-btn").eval(OPEN_OVERLAYS);
+			f.click(".juneau-config-chooser-btn").click(".juneau-config-saved-more").eval(OPEN_OVERLAYS);
 			probes(f, TEXT_SURFACES, NON_TEXT_SURFACES, DISABLED_SURFACES);
 		}
 		for (var scheme : List.of("dark", "light")) {
@@ -420,7 +423,7 @@ class DarkScheme_BrowserTest extends TestBase {
 		for (var p : PALETTES) {
 			if (! p.equals("open")) {
 				surface(f, lightCase(p), surfacePage(PIN_LIGHT + " " + TOGGLE, "", false).replace(THEME_CSS, theme(p)));
-				f.click(".juneau-config-chooser-btn").eval(OPEN_OVERLAYS);
+				f.click(".juneau-config-chooser-btn").click(".juneau-config-saved-more").eval(OPEN_OVERLAYS);
 				probes(f, TEXT_SURFACES, NON_TEXT_SURFACES, DISABLED_SURFACES);
 			}
 			surface(f, "palette-" + p, surfacePage(PIN_DARK + " " + TOGGLE, "", false).replace(THEME_CSS, theme(p)));

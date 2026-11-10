@@ -19,7 +19,14 @@
     "bridges":   { "type": "array", "items": { "$ref": "#/$defs/bridgeDecl" } },
     "dataSources": { "type": "array", "items": { "$ref": "#/$defs/dataSource" } },
     "facts":     { "type": "object", "description": "Page-level facts (for example the viewer's roles) that visibleWhen rules test; presentation only, never an authorization gate." },
-    "dashboard": { "$ref": "#/$defs/dashboard" }
+    "dashboard": { "$ref": "#/$defs/dashboard" },
+    "modelVersion": { "const": "1" },
+    "scripts":   { "type": "array", "items": { "$ref": "#/$defs/sameOriginPath" } },
+    "allowInlineHandlers": { "type": "boolean", "default": false },
+    "model": {
+      "description": "Page-level model block: only 'on' is allowed here.",
+      "allOf": [ { "$ref": "#/$defs/model" }, { "not": { "anyOf": [ { "required": ["actions"] }, { "required": ["subscribes"] } ] } } ]
+    }
   },
   "$defs": {
     "id":       { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
@@ -219,7 +226,8 @@
         "class":    { "type": "string", "pattern": "^[A-Za-z_-][A-Za-z0-9_-]*( [A-Za-z_-][A-Za-z0-9_-]*)*$", "description": "space-separated CSS classes stamped on the card wrapper element" },
         "visibleWhen": { "$ref": "#/$defs/visibleWhen" },
         "publishes":  { "type": "array", "items": { "$ref": "#/$defs/publication" } },
-        "subscribes": { "type": "array", "items": { "$ref": "#/$defs/subscription" } }
+        "subscribes": { "type": "array", "items": { "$ref": "#/$defs/subscription" } },
+        "model": { "$ref": "#/$defs/model" }
       },
       "oneOf": [
         { "$ref": "#/$defs/htmlCard" },
@@ -228,13 +236,78 @@
         { "$ref": "#/$defs/terminalCard" },
         { "$ref": "#/$defs/chartCard" },
         { "$ref": "#/$defs/jobLogCard" },
-        { "properties": { "type": { "not": { "enum": ["html", "datatables", "terminal-view", "terminal", "chart", "job-log"] } } } }
+        { "$ref": "#/$defs/switcherCard" },
+        { "properties": { "type": { "not": { "enum": ["html", "datatables", "terminal-view", "terminal", "chart", "job-log", "switcher"] } } } }
       ]
+    },
+    "nestedCard": {
+      "description": "A card hosted inside a switcher view or section; any card type except another switcher.",
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id":       { "$ref": "#/$defs/id" },
+        "type":     { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "src":      { "$ref": "#/$defs/url" },
+        "title":    { "type": "string" },
+        "template": { "type": "string" },
+        "class":    { "type": "string", "pattern": "^[A-Za-z_-][A-Za-z0-9_-]*( [A-Za-z_-][A-Za-z0-9_-]*)*$" },
+        "visibleWhen": { "$ref": "#/$defs/visibleWhen" },
+        "publishes":  { "type": "array", "items": { "$ref": "#/$defs/publication" } },
+        "subscribes": { "type": "array", "items": { "$ref": "#/$defs/subscription" } },
+        "model": { "$ref": "#/$defs/model" }
+      },
+      "oneOf": [
+        { "$ref": "#/$defs/htmlCard" },
+        { "$ref": "#/$defs/datatablesCard" },
+        { "$ref": "#/$defs/terminalViewCard" },
+        { "$ref": "#/$defs/terminalCard" },
+        { "$ref": "#/$defs/chartCard" },
+        { "$ref": "#/$defs/jobLogCard" },
+        { "properties": { "type": { "not": { "enum": ["html", "datatables", "terminal-view", "terminal", "chart", "job-log", "switcher"] } } } }
+      ]
+    },
+    "switcherCard": {
+      "description": "Switcher card; hosts one nested card per view (or per section within a view) and shows one at a time.",
+      "properties": {
+        "type":  { "const": "switcher" },
+        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true, "model": true,
+        "initialView": { "$ref": "#/$defs/id" },
+        "views": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/switcherView" } }
+      },
+      "required": ["type", "id", "views"],
+      "additionalProperties": false
+    },
+    "switcherView": {
+      "type": "object",
+      "properties": {
+        "id":    { "$ref": "#/$defs/id" },
+        "label": { "type": "string", "minLength": 1 },
+        "model": { "$ref": "#/$defs/model" },
+        "card":  { "$ref": "#/$defs/nestedCard" },
+        "initialSection": { "$ref": "#/$defs/id" },
+        "sections": {
+          "type": "array", "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id":    { "$ref": "#/$defs/id" },
+              "label": { "type": "string", "minLength": 1 },
+              "model": { "$ref": "#/$defs/model" },
+              "card":  { "$ref": "#/$defs/nestedCard" }
+            },
+            "required": ["id", "label", "card"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": ["id", "label"],
+      "additionalProperties": false,
+      "oneOf": [ { "required": ["card"] }, { "required": ["sections"] } ]
     },
     "htmlCard": {
       "properties": {
         "type": { "const": "html" },
-        "id": true, "title": true, "template": true, "class": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "template": true, "class": true, "publishes": true, "subscribes": true, "model": true,
         "src": { "description": "Trusted same-origin endpoint returning an HTML fragment. Unless sanitize is true, the shell inserts the response as-is (not sanitized), so the endpoint must be first-party and must escape any data it embeds. Must never be derived from request data." },
         "sanitize": { "type": "boolean", "default": false, "description": "Opt-in. When true, the fragment fetched from src is rebuilt through the views attribute-allowlist sanitizer (script, event handlers, unsafe URLs and unlisted attributes are dropped) instead of being inserted as-is. Needs the views toolkit on the page. Only valid on a card with src." },
         "bare": { "type": "boolean", "default": false, "description": "When true the card is inserted with no wrapper element at all." }
@@ -245,7 +318,7 @@
     "datatablesCard": {
       "properties": {
         "type":  { "const": "datatables" },
-        "id": true, "title": true, "visibleWhen": true, "class": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "visibleWhen": true, "class": true, "publishes": true, "subscribes": true, "model": true,
         "bare":  { "type": "boolean", "description": "When true the card keeps its host element but drops the card chrome and the title." },
         "src":   { "$ref": "#/$defs/url" },
         "page":  { "type": "object" },
@@ -269,7 +342,7 @@
         "dataMode":      { "enum": ["client", "server"] },
         "layout":        { "enum": ["wide", "narrow"] },
         "defaultOrder":  { "type": "array", "items": { "type": "object" } },
-        "ribbon":        { "type": "array", "items": { "type": "object", "required": ["type"] } },
+        "ribbon":        { "type": "array", "items": { "type": "object", "required": ["type"], "properties": { "model": { "$ref": "#/$defs/model" } } } },
         "pollIntervalMs":{ "type": "integer" },
         "pausePollingWhileEditing": { "type": "boolean" },
         "columnConfig":  { "anyOf": [ { "type": "boolean" }, { "type": "object" } ] },
@@ -282,6 +355,7 @@
         "selection":     { "$ref": "#/$defs/selection" },
         "bulk":          { "$ref": "#/$defs/bulk" },
         "detail":        { "$ref": "#/$defs/rowDetail" },
+        "model":         { "$ref": "#/$defs/model" },
         "quickStats":    { "$ref": "#/$defs/quickStats" },
         "urlState":      { "$ref": "#/$defs/urlState" }
       }
@@ -390,8 +464,27 @@
       }
     },
     "enabledRule": { "type": "object", "required": ["field", "op"], "properties": { "field": { "type": "string" }, "op": { "type": "string" }, "value": true, "reason": { "type": "string" } } },
-    "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": {
+    "detailAction": {
+      "description": "A header action of a tabbed row detail: handler (a model action), link (a same-origin href) or row-action (a submit).",
+      "oneOf": [
+        { "$ref": "#/$defs/handlerAction" },
+        { "type": "object", "required": ["type", "id", "href"], "properties": { "type": { "const": "link" }, "id": { "type": "string", "minLength": 1 }, "href": { "type": "string", "minLength": 1 } } },
+        { "type": "object", "required": ["type", "id", "endpoint"], "properties": { "type": { "const": "row-action" }, "id": { "type": "string", "minLength": 1 }, "endpoint": { "type": "string", "minLength": 1 } } }
+      ]
+    },
+    "rowDetail":   { "type": "object", "properties": {
       "contractVersion": false,
+      "mode": { "enum": ["inline", "bean"] },
+      "endpoint": { "type": "string", "minLength": 1 },
+      "title": { "type": "string" },
+      "icon": { "type": "string" },
+      "columns": { "type": "integer" },
+      "cache": { "enum": ["per-row", "none"] },
+      "countsEndpoint": { "type": "string" },
+      "labels": { "type": "object" },
+      "actions": { "type": "array", "items": { "$ref": "#/$defs/detailAction" } },
+      "tabs": { "type": "array", "items": { "type": "object", "required": ["id", "title"], "properties": { "id": { "type": "string" }, "kind": { "enum": ["fields", "table", "chart", "client"], "description": "When omitted, the tab is a client-side handle declaration (id, title, model) with no content kind; Java-built tabs always set it." }, "title": { "type": "string" } } } },
+      "model": { "$ref": "#/$defs/model" },
       "region": {
         "type": "object",
         "description": "Only a region that opts into populate 'job-log' is constrained; it then needs a jobLogRegionConfig.",
@@ -400,7 +493,7 @@
           { "required": ["config"], "properties": { "config": { "$ref": "#/$defs/jobLogRegionConfig" } } }
         ]
       }
-    } },
+    }, "anyOf": [ { "required": ["endpoint"] }, { "required": ["mode"] } ] },
     "visibleRule": {
       "type": "object",
       "additionalProperties": false,
@@ -469,15 +562,65 @@
       }
     },
     "subscription": {
+      "description": "A card-level subscription: a role subscription (topic + as) or a handler subscription (topic + handler), exactly one. Kept as one closed object so the field-level messages of the role form survive; model.subscribes uses handlerSubscription, whose topic may carry placeholders.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["topic", "as"],
+      "required": ["topic"],
+      "oneOf": [ { "required": ["as"] }, { "required": ["handler"] } ],
       "properties": {
         "topic":     { "$ref": "#/$defs/topic" },
         "as":        { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "handler":   { "$ref": "#/$defs/handlerRef" },
         "map":       { "type": "object", "additionalProperties": { "type": "string", "pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*$" } },
         "whenEmpty": { "enum": ["clear", "keep"] },
         "emptyText": { "type": "string" }
+      }
+    },
+    "handlerSubscription": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic", "handler"],
+      "properties": {
+        "topic":   { "$ref": "#/$defs/templatedTopic" },
+        "handler": { "$ref": "#/$defs/handlerRef" },
+        "map":     { "type": "object", "additionalProperties": { "type": "string", "pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*$" } }
+      }
+    },
+    "templatedTopic": {
+      "description": "A bus topic whose key may carry {rowKey}, {tabId} or {cardId} placeholders, expanded from the element's scope.",
+      "type": "string",
+      "pattern": "^(card|selection|filter|redraw|detail|bulk|cmd|probe|job|badge|bridge|data|zoom|legend|[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31})(:([A-Za-z0-9_.-]|\\{(rowKey|tabId|cardId)\\}){1,128})?$"
+    },
+    "sameOriginPath": { "type": "string", "pattern": "^/(?!/)(?![\\s\\S]*[\\\\\\s\\u0000-\\u001f\\u007f])", "description": "A same-origin absolute path; protocol-relative and absolute URLs, backslashes, whitespace and control characters are rejected." },
+    "handlerName": { "$ref": "#/$defs/dashboardName" },
+    "handlerRef": {
+      "oneOf": [
+        { "$ref": "#/$defs/handlerName" },
+        { "type": "object", "additionalProperties": false, "required": ["inline"], "properties": { "inline": { "type": "string", "minLength": 1 } } }
+      ]
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "actions":    { "type": "array", "items": { "$ref": "#/$defs/handlerAction" } },
+        "on":         { "type": "object", "propertyNames": { "enum": ["loaded", "rendered", "expanded", "collapsed", "activated"] }, "additionalProperties": { "$ref": "#/$defs/handlerRef" } },
+        "subscribes": { "type": "array", "items": { "$ref": "#/$defs/handlerSubscription" } }
+      }
+    },
+    "handlerAction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "id", "handler"],
+      "properties": {
+        "type":    { "const": "handler" },
+        "id":      { "type": "string", "pattern": "^[A-Za-z0-9_.-]{1,128}$" },
+        "icon":    { "type": "string" },
+        "label":   { "type": "string" },
+        "tooltip": { "type": "string" },
+        "tone":    { "type": "string" },
+        "handler": { "$ref": "#/$defs/handlerRef" },
+        "payload": { "type": "object" }
       }
     },
     "bridgeDecl": {
@@ -534,6 +677,7 @@
       "required": ["type", "title", "topic"],
       "properties": {
         "type":        { "const": "publish" },
+        "id":          { "type": "string" },
         "title":       { "type": "string" },
         "icon":        { "type": "string" },
         "topic":       { "$ref": "#/$defs/topic" },
@@ -581,7 +725,7 @@
       "description": "Terminal-view bridge card; the shell calls JuneauViews.terminalView.mount(body, terminalView). Ranges are checked by TerminalViewDef. eventsUrl is required unless poll is false (anyOf, because the subset validator has no if/then).",
       "properties": {
         "type":   { "const": "terminal-view" },
-        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true, "model": true,
         "terminalView": {
           "type": "object",
           "properties": {
@@ -606,7 +750,7 @@
       "description": "Terminal card; juneau-terminal.js mounts xterm.js over the bytes endpoint. Ranges are checked by TerminalDef.",
       "properties": {
         "type":   { "const": "terminal" },
-        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true, "model": true,
         "terminal": {
           "type": "object",
           "properties": {
@@ -638,7 +782,7 @@
       "description": "Chart card; juneau-charts.js draws it with ECharts. A helper (or the legacy flat kind) and/or a raw option; ChartCardType checks the keys.",
       "properties": {
         "type":  { "const": "chart" },
-        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true, "model": true,
         "bare":  { "type": "boolean", "description": "When true the card keeps its host element but drops the card chrome and the title." },
         "src":   { "$ref": "#/$defs/url" },
         "source": { "type": "string", "pattern": "^data:[A-Za-z0-9_.-]{1,128}$" },
@@ -695,7 +839,7 @@
       "description": "Job-log card; juneau-joblog.js submits to an AsyncJobsMixin endpoint and streams the job. Floors are checked by JobLogCardType.",
       "properties": {
         "type":   { "const": "job-log" },
-        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true, "model": true,
         "bare":   { "type": "boolean", "description": "When true the card keeps its host element but drops the card chrome and the title." },
         "submit": {
           "type": "object",

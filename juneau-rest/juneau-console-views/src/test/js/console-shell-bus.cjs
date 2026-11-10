@@ -90,7 +90,7 @@ async function page(contract, opts) {
 	env.window.window = env.window;
 	env.window.document = doc;
 	env.window.localStorage = sandbox.localStorage;
-	if (opts.queue) env.window.JuneauConsoleCards = opts.queue.slice();
+	if (opts.queue) env.window.JuneauConsoleCards = opts.queue.map(([t, h]) => [t, toCardClass(h)]);
 	doc.addEventListener('juneau:card-mounted', ev => cardEvents.push('mounted:' + ev.detail.id));
 	doc.addEventListener('juneau:card-failed', ev => cardEvents.push('failed:' + ev.detail.id));
 	vm.createContext(sandbox);
@@ -115,6 +115,33 @@ async function page(contract, opts) {
 	}
 	await tick();
 	return r;
+}
+
+/**
+ * Turns a test card description (render/refresh/destroy hooks taking the card spec, roles/ops taking the spec as the
+ * last argument, an implicit(spec) function) into a card class; the shell puts its Card base under it at registration.
+ */
+function toCardClass(h) {
+	const K = class {};
+	K.lateBase = true;
+	const P = K.prototype;
+	if (h.render) P.render = function () { return h.render(this.spec, this.el, this); };
+	if (h.refresh) P.refresh = function () { return h.refresh(this.spec, this.el, this); };
+	if (h.destroy) P.destroy = function () { return h.destroy(this.spec, this.el, this); };
+	K.roles = {};
+	for (const k of Object.keys(h.roles || {})) {
+		const f = h.roles[k];
+		P['role$' + k] = function (payload, meta) { return f.call(this, payload, meta, this.spec); };
+		K.roles[k] = 'role$' + k;
+	}
+	K.ops = {};
+	for (const k of Object.keys(h.ops || {})) {
+		const f = h.ops[k];
+		P['op$' + k] = function (cmd) { return f.call(this, cmd, this.spec); };
+		K.ops[k] = 'op$' + k;
+	}
+	if (h.implicit) K.implicitTopics = spec => h.implicit(spec);
+	return K;
 }
 
 /** `sel` inside card `id` (the shim's selectors have no descendant combinator). */

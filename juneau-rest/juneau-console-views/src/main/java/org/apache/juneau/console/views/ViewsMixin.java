@@ -215,6 +215,20 @@ public class ViewsMixin {
 	public static final String BUS_JS_PATH = "/juneau-bus.js";
 
 	/**
+	 * The URL path at which the client object model ({@code JuneauViews.model}) is served (relative to the host mount).
+	 * Loaded right after {@link #BUS_JS_PATH}; the {@code "views"} toolkit pack lists it second.
+	 */
+	public static final String MODEL_JS_PATH = "/juneau-model.js";
+
+	/**
+	 * The URL path at which the opt-in inline-handler compiler is served (relative to the host mount).  It is the only
+	 * shipped script that compiles code from strings, so it belongs to no toolkit pack: a page that opts in with
+	 * {@code allowInlineHandlers(true)} gets it as a separate script tag after the runtime pack, and the response CSP
+	 * must then allow {@code 'unsafe-eval'}.
+	 */
+	public static final String MODEL_INLINE_JS_PATH = "/juneau-model-inline.js";
+
+	/**
 	 * The URL path at which the shared SVG symbol sprite is served (relative to the host mount).
 	 * {@code juneau-icons.js} fetches this next to itself by default (pack {@code original}); the key/legend
 	 * file is not served to browsers.  An app replaces part or all of this shipped set per page with a replacement
@@ -247,6 +261,13 @@ public class ViewsMixin {
 	 * </p>
 	 */
 	public static final String SYMBOLS_MATERIAL_SVG_PATH = "/juneau-symbols-material.svg";
+
+	/**
+	 * The URL path at which the Lucide base sprite is served (relative to the host mount).  It is the lowest icon
+	 * layer: any stem the shipped sprite, a replacement or an override also carries wins over it, and a failed
+	 * fetch leaves the shipped glyphs in place.
+	 */
+	public static final String SYMBOLS_LUCIDE_SVG_PATH = "/juneau-symbols-lucide.svg";
 
 	/**
 	 * The URL path at which the opt-in region-populate runtime is served (relative to the host mount).  A page with
@@ -411,6 +432,12 @@ public class ViewsMixin {
 	/** Classpath location of the shipped in-page message bus ({@code JuneauViews.bus}). */
 	static final String BUS_JS_RESOURCE = "/org/apache/juneau/views/juneau-bus.js";
 
+	/** Classpath location of the shipped client object model ({@code JuneauViews.model}). */
+	static final String MODEL_JS_RESOURCE = "/org/apache/juneau/views/juneau-model.js";
+
+	/** Classpath location of the shipped opt-in inline-handler compiler. */
+	static final String MODEL_INLINE_JS_RESOURCE = "/org/apache/juneau/views/juneau-model-inline.js";
+
 	/** Classpath location of the shipped general page-state store. */
 	static final String PAGESTATE_JS_RESOURCE = "/org/apache/juneau/views/juneau-pagestate.js";
 
@@ -422,6 +449,9 @@ public class ViewsMixin {
 
 	/** Classpath location of the opt-in Material Symbols Outlined sprite. */
 	static final String SYMBOLS_MATERIAL_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols-material.svg";
+
+	/** Classpath location of the Lucide base sprite. */
+	static final String SYMBOLS_LUCIDE_SVG_RESOURCE = "/org/apache/juneau/views/juneau-symbols-lucide.svg";
 
 	/** Classpath location of the shipped region-populate runtime. */
 	static final String REGIONS_JS_RESOURCE = "/org/apache/juneau/views/juneau-regions.js";
@@ -639,6 +669,36 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-model.js] &mdash; serve the client object model.
+	 *
+	 * @return The object model as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=MODEL_JS_PATH,
+		summary="Juneau client object model",
+		description="Twin client object model (JuneauViews.model): handles, class cards, named handlers and the JSON builder.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getModelScript() {
+		return serve(MODEL_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-model-inline.js] &mdash; serve the opt-in inline-handler compiler.
+	 *
+	 * @return The inline-handler compiler as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=MODEL_INLINE_JS_PATH,
+		summary="Juneau inline-handler compiler",
+		description="Opt-in compiler for inline handler strings; needs 'unsafe-eval' in the page CSP.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getModelInlineScript() {
+		return serve(MODEL_INLINE_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.
 	 *
 	 * @return The sprite as an SVG {@link HttpResource}.
@@ -666,6 +726,21 @@ public class ViewsMixin {
 	)
 	public HttpResource getSymbolsMaterialSvg() {
 		return serve(SYMBOLS_MATERIAL_SVG_RESOURCE, SVG_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-symbols-lucide.svg] &mdash; serve the Lucide base sprite (the lowest icon layer).
+	 *
+	 * @return The Lucide sprite as an SVG {@link HttpResource}.
+	 */
+	@RestGet(
+		path=SYMBOLS_LUCIDE_SVG_PATH,
+		summary="Juneau rich-view Lucide SVG sprite (base layer)",
+		description="ISC-licensed Lucide glyphs that sit beneath the shipped sprite; any stem the shipped, replacement or override layer carries wins.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getSymbolsLucideSvg() {
+		return serve(SYMBOLS_LUCIDE_SVG_RESOURCE, SVG_CONTENT_TYPE);
 	}
 
 	/**
@@ -766,8 +841,8 @@ public class ViewsMixin {
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #BUS_JS_PATH}, {@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #DATA_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
-	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #SYMBOLS_LUCIDE_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #DATA_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}, {@link #MODEL_JS_PATH}, {@link #MODEL_INLINE_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(String path) {
@@ -790,8 +865,8 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #BUS_JS_PATH}, {@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #DATA_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
-	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #SYMBOLS_LUCIDE_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #DATA_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}, {@link #MODEL_JS_PATH}, {@link #MODEL_INLINE_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
 	public static String viewAssetUrl(RestRequest req, String path) {
@@ -881,8 +956,11 @@ public class ViewsMixin {
 		if (eq(path, PAGESTATE_JS_PATH)) return PAGESTATE_JS_RESOURCE;
 		if (eq(path, URLSTATE_JS_PATH)) return URLSTATE_JS_RESOURCE;
 		if (eq(path, BUS_JS_PATH)) return BUS_JS_RESOURCE;
+		if (eq(path, MODEL_JS_PATH)) return MODEL_JS_RESOURCE;
+		if (eq(path, MODEL_INLINE_JS_PATH)) return MODEL_INLINE_JS_RESOURCE;
 		if (eq(path, SYMBOLS_SVG_PATH)) return SYMBOLS_SVG_RESOURCE;
 		if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
+		if (eq(path, SYMBOLS_LUCIDE_SVG_PATH)) return SYMBOLS_LUCIDE_SVG_RESOURCE;
 		if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;
 		if (eq(path, HELPERS_JS_PATH)) return HELPERS_JS_RESOURCE;
 		if (eq(path, DATA_JS_PATH)) return DATA_JS_RESOURCE;

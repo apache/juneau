@@ -1,0 +1,7 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"sw","type":"switcher","initialView":"a","model":{"on":{"activated":"app.hx"}},"views":[
+    {"id":"a","label":"A","card":{"id":"ca","type":"html","template":"t"}},
+    {"id":"b","label":"B","initialSection":"s1","model":{"on":{"activated":"app.hy"}},"sections":[
+      {"id":"s1","label":"S1","card":{"id":"cb","type":"html","template":"t"},"model":{"on":{"activated":"app.hz"}}},
+      {"id":"s2","label":"S2","card":{"id":"cc","type":"html","template":"t"}}]}]}
+]}

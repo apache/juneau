@@ -119,6 +119,17 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertTrue(body.contains("juneau-view-action-menu"), body);
 	}
 
+	@Test void a06b_triggerIsStyledAndGlyphSized() throws Exception {
+		String css;
+		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.VIEWS_CSS_RESOURCE)) {
+			assertNotNull(in);
+			css = new String(in.readAllBytes(), UTF_8);
+		}
+		// An unstyled trigger is a bare UA button holding an unsized <svg>: an empty box on every row.
+		assertTrue(css.contains(".juneau-view-action-trigger {"), "trigger rule missing");
+		assertTrue(css.contains(".juneau-view-action-trigger svg {"), "trigger glyph size rule missing");
+	}
+
 	@Test void a07_refusalIsVisibleNotSilent() throws Exception {
 		var body = viewsJs();
 		assertTrue(body.contains("function renderRowActionRefusal("), body);

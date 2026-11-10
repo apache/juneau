@@ -64,7 +64,7 @@
 	const JUNEAU_ROW_DETAIL_CONTRACT_VERSION = "1";
 
 	/**
-	 * The nested-table shell contract version (NestedTableDef.CONTRACT_VERSION on the server).  A FOURTH,
+	 * The nested-table shell contract version (NestedSlot contract "2" on the server).  A FOURTH,
 	 * independently-versioned wire contract - deliberately NOT aliased to any of the three above, so a
 	 * nested-table shell revision can never force a VIEW_META / row-detail / action-result / bulk contract bump.
 	 * A nested-table wrapper whose data-juneau-nested-contract differs is refused (fail-loud), leaving the rest of
@@ -73,7 +73,7 @@
 	const JUNEAU_NESTED_CONTRACT_VERSION = "2";
 
 	/**
-	 * The maximum table nesting depth - MUST equal NestedTableDef.MAX_DEPTH on the server.  The page's root table is
+	 * The maximum table nesting depth - MUST equal NestedSlot.MAX_NESTED_DEPTH on the server.  The page's root table is
 	 * depth 1 and a table inside one of its row-detail panels is depth 2; a nested shell that would sit at depth 3
 	 * (i.e. inside a depth-2 table's own detail panel) is a visible refusal here, matching the server's validate().
 	 * This is the topology, not a configurable ceiling - there is no author-declared depth on the wire.
@@ -289,13 +289,6 @@
 			// A slot-built table is not handed back by the paint; take it from the body it was painted into.
 			const table = painted || body.querySelector("table[data-juneau-view]");
 			cardTables.set(card.id, { el: body, table: table });
-			ctx.setApi({
-				reload: function () { return NS.card.reload(card.id); },
-				selection: function () {
-					const st = table.__juneauCtx?.selectionState;
-					return st ? Array.from(st.selected) : [];
-				}
-			});
 			ctx.onDestroy(function () { cardTables.delete(card.id); });
 			return table;
 		}, function (e) {
@@ -2183,8 +2176,8 @@
 
 	/**
 	 * Puts the search box at the canonical {@code search} slot inside the ribbon bar: ahead of the first group
-	 * tagged {@code viewing}/{@code page}/{@code status}, else right after the last group tagged
-	 * {@code entity}/{@code filter}.  Returns false (search not placed) when the bar has no canonically tagged group.
+	 * tagged with a canonical id that sorts after {@code search} (search is first in the canonical order, so every
+	 * other canonical group qualifies).  Returns false (search not placed) when the bar has no such group.
 	 */
 	function placeSearchInRibbon(bar, filterEl) {
 		const order = NS.ribbon?.CANONICAL_GROUPS;
@@ -2197,10 +2190,7 @@
 			bar.insertBefore(filterEl, after);
 			return true;
 		}
-		const before = tagged.findLast(function (c) { return rank(c) < searchRank; });
-		if (!before) return false;
-		bar.insertBefore(filterEl, before.nextSibling);
-		return true;
+		return false;
 	}
 
 	/**
@@ -2229,10 +2219,27 @@
 
 		const right = document.createElement("div");
 		right.className = "juneau-view-toolbar-right";
+		// A ribbon search item leaves a placeholder: the filter box takes its place (or it goes, with no filter box).
+		const slots = bar ? Array.from(bar.querySelectorAll('[data-juneau-slot="search"]')) : [];
+		const slot = slots[0] || null;
+		// Drops every search placeholder, and the group wrapper it leaves empty.
+		const dropSlots = function () {
+			slots.forEach(function (sl) {
+				const g = sl.parentNode;
+				sl.remove();
+				if (g && g !== bar && g.classList?.contains("juneau-view-ribbon-group") && !(g.children?.length || g.childNodes?.length)) g.remove();
+			});
+		};
 		if (filterEl) {
 			const filterInput = filterEl.querySelector("input");
 			if (filterInput) filterInput.setAttribute("aria-label", "Search table");
-			if (!placeSearchInRibbon(bar, filterEl)) right.appendChild(filterEl);
+			if (slot) {
+				filterEl.setAttribute("data-juneau-ribbon-id", slot.getAttribute("data-juneau-ribbon-id") || "search");
+				slot.parentNode.insertBefore(filterEl, slot);
+				dropSlots();
+			} else if (!placeSearchInRibbon(bar, filterEl)) right.appendChild(filterEl);
+		} else {
+			dropSlots();
 		}
 		if (bar) right.appendChild(bar);
 
@@ -3986,6 +3993,7 @@
 			// BEFORE the child row DOM is discarded, same reason as the nested-DataTables teardown right below -
 			// a torn-down region's in-flight fetch is aborted and its bus subscription released while the panel
 			// is still attached, never left to leak with the detached nodes.
+			abortDetailTabs(panel);
 			NS.regions?.teardownRegionsIn(panel);
 			// Destroy any nested DataTables in this panel BEFORE the child row DOM is discarded (otherwise
 			// their listeners/timers leak with the detached nodes).
@@ -3996,6 +4004,7 @@
 			setDetailToggleExpanded(parentTr, false);
 			publishDetail(ctx, parentTr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(parentTr) || 0);
 			notifyPollPausedChange(ctx);
+			modelTable(owningViewTable(parentTr) || ctx.table)?._rowCollapsed(parentTr);
 		}
 		return true;
 	}
@@ -4062,6 +4071,7 @@
 			// DOM is about to be detached).  Region teardown ordered first, matching handleDetailSafeCollapseClick's
 			// own collapse branch above.
 			if (tr._juneauDetailPanel) {
+				abortDetailTabs(tr._juneauDetailPanel);
 				NS.regions?.teardownRegionsIn(tr._juneauDetailPanel);
 				teardownNestedTables(tr._juneauDetailPanel);
 				teardownDetailBarSlot(tr._juneauDetailPanel);
@@ -4071,6 +4081,7 @@
 			setDetailToggleExpanded(tr, false);
 			publishDetail(ctx, tr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(tr) || 0);
 			notifyPollPausedChange(ctx);
+			modelTable(table)?._rowCollapsed(tr);
 			return;
 		}
 		expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row);
@@ -4100,6 +4111,7 @@
 			if (!row?.length || !row.child.isShown()) return;
 			// Removal path 3/5: same region-teardown-first ordering as toggleDetailRow's own collapse branch.
 			if (tr._juneauDetailPanel) {
+				abortDetailTabs(tr._juneauDetailPanel);
 				NS.regions?.teardownRegionsIn(tr._juneauDetailPanel);
 				teardownNestedTables(tr._juneauDetailPanel);
 				teardownDetailBarSlot(tr._juneauDetailPanel);
@@ -4108,6 +4120,7 @@
 			tr.classList.remove("juneau-view-detail-open");
 			setDetailToggleExpanded(tr, false);
 			publishDetail(ctx, tr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(tr) || 0);
+			modelTable(table)?._rowCollapsed(tr);
 			collapsedAny = true;
 		});
 		if (collapsedAny) notifyPollPausedChange(ctx);
@@ -4761,7 +4774,7 @@
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row) {
+	function expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row, initialTabId) {
 		const gen = (ctx._detailGeneration.get(tr) || 0) + 1;
 		ctx._detailGeneration.set(tr, gen);
 		const rowId = tr.getAttribute(ROW_ID_ATTR);
@@ -4773,6 +4786,7 @@
 		panel.dataset.testid = "detail-panel";
 		panel.dataset.juneauDetailState = "loading";
 		panel._juneauParentTr = tr;
+		if (initialTabId != null) panel._juneauInitialTab = String(initialTabId);
 		tr._juneauDetailPanel = panel;
 		panel.appendChild(tpl.content.cloneNode(true));
 		const titleFields = tpl.dataset.juneauTitleFields;
@@ -4807,6 +4821,9 @@
 		notifyPollPausedChange(ctx);
 		// Enhance-on-insert: only now is the clone in the document, so chrome can find and enhance its bar slot.
 		enhanceChromeInPanel(panel);
+		const expandedModel = modelTable(table);
+		if (expandedModel && !(expandedModel._reopenPending && expandedModel.reattachDetail(rowId, panel, rowDataForTr(ctx, tr))))
+			expandedModel._rowExpanded(tr, panel);
 
 		function stillCurrent() {
 			return ctx._detailGeneration.get(tr) === gen && row.child.isShown();
@@ -4829,8 +4846,10 @@
 			return;
 		}
 
-		const url = substituteDetailUrl(tpl.dataset.juneauDetailUrl, rowId);
-		if (!url) {
+		const detailModel = DETAIL_MODELS.get(tpl);
+		const inline = tpl.dataset.juneauDetailMode === "inline";
+		const url = inline ? null : substituteDetailUrl(tpl.dataset.juneauDetailUrl, rowId);
+		if (!inline && !url) {
 			failClosed("error", "detail URL is not a same-origin path template");
 			return;
 		}
@@ -4864,6 +4883,16 @@
 				settleMap();
 				return;
 			}
+			if (detailModel) {
+				const rowData = rowDataForTr(ctx, tr) || {};
+				fillDetailSlots(panel, Object.assign({}, rowData, body.fields));
+				paintTabbedDetail(panel, ctx, table, tr, detailModel, body, rowData, rowId);
+				panel.dataset.juneauDetailState = "ok";
+				renderAsyncStatus(panel, "ok");
+				modelTable(table)?._rowDetailLoaded(tr);
+				settleMap();
+				return;
+			}
 			fillDetailSlots(panel, body.fields);
 			setActionRefEnabled(panel, true);
 			// Layered on top of the lifecycle gate above, never competing with it: this pass only ever disables.
@@ -4875,6 +4904,7 @@
 			// waits for its tab to be activated via the onActivate callback above).  Each nested table runs its OWN
 			// independent GET, scoped to this parent row.
 			initNestedTablesInVisiblePanes(panel, rowId);
+			modelTable(table)?._rowDetailLoaded(tr);
 			settleMap();
 		}
 
@@ -4889,6 +4919,11 @@
 		// are FUNCTION DECLARATIONS and are therefore hoisted to the top of expandDetailRow's body - callable from
 		// here regardless of textual position, which is what lets the fetch move above its own handler.  The one
 		// binding that could have been read early is `url`, and it moves WITH the block that reads it.
+		if (inline) {
+			handleEnvelope({ status: 200, ok: true, text: JSON.stringify({ contractVersion: JUNEAU_ROW_DETAIL_CONTRACT_VERSION, fields: {} }) });
+			if (NS.regions) NS.regions.enrolIn(panel);
+			return;
+		}
 		const inflight = ctx._detailInflight;
 		let req = inflight.get(key);
 		if (!req) {
@@ -5050,6 +5085,7 @@
 		dt.on("preDraw.dt", function (e) {
 			if (e && e.target !== table) return;
 			if (! ctx._shouldCancelPollDraw()) return;
+			idleStaleDetailTabs(table);
 			ctx._pollDrawPending = false;
 			state.busy = false;
 			return false;
@@ -5065,7 +5101,7 @@
 		function poll() {
 			if (document.hidden) return;
 			if (hasInFlightRow(table)) return;
-			if (isPollSuspended(table, ctx, viewDef)) return;
+			if (isPollSuspended(table, ctx, viewDef)) { idleStaleDetailTabs(table); return; }
 			// Marks the reload as timer-originated so ctx._shouldCancelPollDraw can tell it apart from a draw the
 			// operator asked for, and discard it if an editor opens before it lands.
 			ctx._pollDrawPending = true;
@@ -7061,7 +7097,7 @@
 
 		const header = document.createElement("div");
 		header.className = "juneau-view-dialog-header";
-		const figure = buildDialogHeaderFigure(action);
+		const figure = buildDialogHeaderFigure(action, modal);
 		if (figure) header.appendChild(figure);
 		const title = document.createElement("h2");
 		title.className = "juneau-view-dialog-title";
@@ -7154,15 +7190,17 @@
 
 	/**
 	 * Optional leading figure on the dialog header.  Markup is ALWAYS from the icon registry (same trusted
-	 * innerHTML path as toolbarButton) - never live/remote data.
+	 * innerHTML path as toolbarButton) - never live/remote data.  {@code modal.titleIcon} names the icon when the
+	 * dialog has no action.
 	 */
-	function buildDialogHeaderFigure(action) {
-		const name = dialogHeaderIconName(action);
+	function buildDialogHeaderFigure(action, modal) {
+		const titleIcon = (action == null && modal?.titleIcon != null && String(modal.titleIcon) !== "") ? String(modal.titleIcon) : null;
+		const name = titleIcon != null ? titleIcon : dialogHeaderIconName(action);
 		if (! name) return null;
 		const markup = window.JuneauViews?.icons?.resolveIcon ? window.JuneauViews.icons.resolveIcon(name) : null;
 		if (! markup) return null;
 		const b = document.createElement("span");
-		b.className = "juneau-view-dialog-figure";
+		b.className = "juneau-view-dialog-figure" + (titleIcon != null ? " juneau-view-dialog-title-icon" : "");
 		b.setAttribute("aria-hidden", "true");
 		b.innerHTML = markup;
 		return b;
@@ -8736,7 +8774,10 @@
 	 */
 	function stripGeneratedDom(table) {
 		const wrapper = findViewWrapper(table);
-		if (wrapper) {
+		// A nested table's own wrapper is gone by now (destroy() removed it), so the nearest wrapper is the PARENT
+		// table's: its toolbar rows are not this table's to strip.
+		const nestedInPanel = !!table.closest?.(".juneau-view-detail-panel");
+		if (wrapper && !nestedInPanel) {
 			// The toolbar row AND the ribbon-anchored banner host that sits under it (a row-less dialog's refusals
 			// and outcomes): both are this table's generated siblings in the wrapper, and a stale banner must not
 			// survive a re-init.  Same ownership scoping - a nested table's own chrome lives inside `table`.
@@ -9377,6 +9418,7 @@
 	function syncShareableUrlState(table, ctx) {
 		const U = NS.urlState;
 		if (!U || typeof U.writeToAddressBar !== "function") return false;
+		if (typeof U.syncPage === "function") U.syncPage();
 		if (!isShareablePrimaryTable(table, ctx?.viewDef)) return false;
 		const clean = typeof U.cleanAddressEnabled === "function"
 			? U.cleanAddressEnabled(ctx.viewDef, table)
@@ -9413,16 +9455,27 @@
 	 * called from {@code constructTable} on first init AND every Apply rebuild, and a second call never duplicates
 	 * the button.
 	 */
-	function mountCopyLinkButton(table, ctx, toolbarRow) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+	function mountCopyLinkButton(table, ctx, toolbarRow) {
 		if (!ctx?.viewDef) return;
-		if (!isCopyLinkVisible(table, ctx.viewDef)) return;
-		// No URL-state module -> nothing to copy; don't render a button that can only fail.
-		if (!NS.urlState || typeof NS.urlState.buildShareUrl !== "function") return;
 		const host = toolbarRow
 			? (toolbarRow.querySelector(".juneau-view-toolbar-right") || toolbarRow)
 			: (table.parentNode && (table.parentNode.querySelector(".juneau-view-toolbar-right") || table.parentNode));
 		if (!host) return;
 		if (host.querySelector?.(".juneau-view-copylink-btn")) return;
+		const btn = buildCopyLinkButton(table, ctx);
+		if (btn) host.appendChild(btn);
+	}
+
+	/**
+	 * Builds the Copy-link button (not attached), or null when it should not show: no view, the visibility rule
+	 * ({@link #isCopyLinkVisible}) says no, or there is no URL-state module to copy from.  Shared by the auto-mount
+	 * and the ribbon's {@code linkButton} item so the markup is defined once.
+	 */
+	function buildCopyLinkButton(table, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+		if (!ctx?.viewDef) return null;
+		if (!isCopyLinkVisible(table, ctx.viewDef)) return null;
+		// No URL-state module -> nothing to copy; don't render a button that can only fail.
+		if (!NS.urlState || typeof NS.urlState.buildShareUrl !== "function") return null;
 
 		const btn = document.createElement("button");
 		btn.type = "button";
@@ -9447,7 +9500,7 @@
 				announce(table, ANNOUNCE.linkCopyFailed);
 			});
 		});
-		host.appendChild(btn);
+		return btn;
 	}
 
 	/**
@@ -9590,6 +9643,7 @@
 			NS.config.paintHeaderTitles(table, effectiveColumns, ctx);
 		wireHeaderSortSearch(table, ctx);
 		if (ctx._detailInflight) bindDetailInflightDrawGuards(table, ctx);
+		bindModelDrawHooks(table, ctx);
 		ctx.redraw = function () {
 			const d = ctx.dataTable;
 			if (!d) return;
@@ -9604,16 +9658,25 @@
 		if (ctx.selectionState) wireSelectionAndBulkToolbar(table, ctx);
 
 		const pill = buildPagingPill(viewDef, ctx);
+		ctx.hasRowDetail = deps.hasRowDetail;
 		const bar = NS.ribbon?.build ? NS.ribbon.build(viewDef, ctx) : null;
 
 		const wrapper = findViewWrapper(table);
 		const toolbarRow = wrapper ? buildToolbarRow(wrapper, pill, bar) : null;
+		// The search item's handle follows the filter box that took its slot (or goes when there is none).
+		if (bar && ctx._ribbonOwns?.search) {
+			const mt = NS.tables && typeof NS.tables.handle === "function" ? NS.tables.handle(table) : null;
+			const searchDecl = (viewDef.ribbon || []).find(function (r) { return r?.type === "search"; });
+			const sh = mt && mt.ribbon && mt.ribbon.item(searchDecl?.id != null ? String(searchDecl.id) : "search");
+			const fe = toolbarRow && toolbarRow.querySelector(".dataTables_filter, .dt-search");
+			if (sh) { if (fe) sh._attach(fe); else sh._destroy(); }
+		}
 
 		wireToolbarLeftCluster(toolbarRow, ctx);
 		wireTablePolling(table, ctx, viewDef, toolbarRow);
 
 		// Chooser affordance: no-op when juneau-config.js is absent (v4 JS without the opt-in file).
-		if (viewDef.columnConfig && typeof NS.config?.mountChooser === "function")
+		if (viewDef.columnConfig && typeof NS.config?.mountChooser === "function" && !ctx._ribbonOwns?.columnSettings)
 			NS.config.mountChooser(table, ctx, toolbarRow);
 
 		// Last, so the bulk toolbar lands at the far end of the right cluster, after search/ribbon/staleness/chooser.
@@ -9621,7 +9684,7 @@
 
 		// Copy-link affordance (framework parity): independent of columnConfig - shown by default on the page's
 		// primary view (isCopyLinkVisible), with its own opt-outs (viewDef.primary === false / copyLink === false).
-		mountCopyLinkButton(table, ctx, toolbarRow);
+		if (!ctx._ribbonOwns?.linkButton) mountCopyLinkButton(table, ctx, toolbarRow);
 
 		// Shareable URL facet: live address-bar sync + open restore for the primary table.
 		// View Settings stay in the page-state store; this never writes them into ?state=.
@@ -10539,9 +10602,20 @@
 		// leaves that fragment empty - the HTML parser is what fills .content. Paint
 		// into the fragment the expander clones, never the template element's light DOM.
 		const dest = tpl.content;
-		if (detail.title || detail.icon)
+		const tabbed = Array.isArray(detail.tabs);
+		if (detail.tabs !== undefined && !tabbed)
+			error("Juneau view: detail.tabs must be an array; the tab strip is withheld.");
+		if (tabbed) {
+			tpl.dataset.juneauDetailMode = detail.mode || "bean";
+			DETAIL_MODELS.set(tpl, detail);
+		}
+		if (detail.title || detail.icon || (tabbed && Array.isArray(detail.actions) && detail.actions.length))
 			dest.appendChild(buildDetailHeader(detail));
-		if (detail.region)
+		if (tabbed) {
+			const shell = document.createElement("div");
+			shell.setAttribute("data-juneau-detail-tabs", "");
+			dest.appendChild(shell);
+		} else if (detail.region)
 			dest.appendChild(buildDetailRegion(detail.region));
 		if (detail.barSlot && detail.region) {
 			const painted = paintDetailBarSlot(detail.barSlot, "section-title");
@@ -10590,8 +10664,437 @@
 		// RegionDef.config (a job-log region's submit/detail/output) reaches readDeclaredDescriptor as ctx.declared.config.
 		if (region.config && typeof region.config === "object" && !Array.isArray(region.config))
 			declared.config = region.config;
+		if (region.chart && typeof region.chart === "object" && !Array.isArray(region.chart))
+			declared.chart = region.chart;
 		d.dataset.juneauRegionDeclared = JSON.stringify(declared);
 		return d;
+	}
+
+	/** The tab model of each tabbed detail template (kept off the DOM: it is data, not an attribute). */
+	const DETAIL_MODELS = new WeakMap();
+
+	/** Appends the VIEW_META sidecar a nested table needs next to its table, tagged so findNestedSidecar finds it. */
+	function appendNestedSidecar(wrap, nested) {
+		if (!nested?.meta || !nested.view) return;
+		const sc = document.createElement("script");
+		sc.type = "application/json";
+		sc.setAttribute(NESTED_META_ATTR, String(nested.view.id));
+		sc.textContent = JSON.stringify(nested.meta);
+		wrap.appendChild(sc);
+	}
+
+	/** Splits a camelCase / snake_case property name into capitalised words. */
+	function humaniseFieldName(name) {
+		const words = String(name).replaceAll(/([a-z0-9])([A-Z])/g, "$1 $2").replaceAll(/[_-]+/g, " ").trim();
+		return words === "" ? String(name) : words.charAt(0).toUpperCase() + words.slice(1);
+	}
+
+	/** Substitutes {id} and {property} tokens from row data, URL-encoded; null when the result is not a same-origin path. */
+	function substituteHeaderHref(template, rowId, rowData) {
+		if (typeof template !== "string" || !template.startsWith("/") || template.startsWith("//")) return null;
+		const url = template.replaceAll(/\{(\w+)\}/g, function (_, key) {
+			if (key === "id") return encodeURIComponent(String(rowId));
+			const v = rowData && Object.hasOwn(rowData, key) ? rowData[key] : null;
+			return v == null || typeof v === "object" ? "" : encodeURIComponent(String(v));
+		});
+		return url.startsWith("/") && !url.startsWith("//") && isSameOriginUrl(url) ? url : null;
+	}
+
+	function detailActionContent(el, a) {
+		const markup = a.icon && NS.icons?.resolveIcon ? NS.icons.resolveIcon(a.icon) : null;
+		if (markup) {
+			const icon = document.createElement("span");
+			icon.className = "juneau-view-ribbon-icon";
+			icon.setAttribute("aria-hidden", "true");
+			icon.innerHTML = markup;
+			el.appendChild(icon);
+		}
+		if (a.label) {
+			const t = document.createElement("span");
+			t.textContent = String(a.label);
+			el.appendChild(t);
+			if (markup) el.setAttribute("aria-label", String(a.label));
+		}
+	}
+
+	/**
+	 * Paints the header action union into the panel header: a link becomes an anchor, a row-action a button that runs
+	 * the shared row-action dispatch against the parent table captured at expand time.  Handler entries are painted
+	 * by the model layer.
+	 */
+	function paintDetailHeaderActions(panel, detail, table, tr, ctx, rowData, rowId) {
+		let header = panel.querySelector(".juneau-view-detail-header");
+		const list = Array.isArray(detail.actions) ? detail.actions : [];
+		if (!list.length) return;
+		if (!header) {
+			header = document.createElement("div");
+			header.className = "juneau-view-detail-header";
+			panel.insertBefore(header, panel.firstChild);
+		}
+		const box = document.createElement("div");
+		box.className = "juneau-view-detail-actions juneau-model-actions";
+		for (const a of list) {
+			if (!a || typeof a !== "object") continue;
+			const type = a.type || (a.href ? "link" : "row-action");
+			if (type === "link") {
+				const href = substituteHeaderHref(a.href, rowId, rowData);
+				if (!href) { warn("Juneau view: detail link action '" + a.id + "' has an unsafe href; skipped."); continue; }
+				const link = document.createElement("a");
+				link.className = "juneau-view-ribbon-btn juneau-view-detail-action";
+				link.href = href;
+				link.dataset.juneauDetailLinkId = String(a.id);
+				detailActionContent(link, a);
+				box.appendChild(link);
+			} else if (type === "row-action") {
+				const btn = document.createElement("button");
+				btn.type = "button";
+				btn.className = "juneau-view-ribbon-btn juneau-view-detail-action";
+				btn.dataset.juneauDetailHeaderAction = String(a.id);
+				detailActionContent(btn, a);
+				btn.addEventListener("click", function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+					dispatchRowAction(a, table, tr, ctx);
+				});
+				box.appendChild(btn);
+			}
+		}
+		if (box.childNodes.length) header.appendChild(box);
+	}
+
+	/** A tab failed to load: an error status plus a Retry that rebuilds only this tab and hands focus back to its button. */
+	function paintTabError(panel, tab, pane, tabCtx, err) {
+		if (tabCtx?.signal?.aborted || (err && err.name === "AbortError")) return;
+		clearElementChildren(pane);
+		renderAsyncStatus(pane, "error", err?.message ? String(err.message) : "Something went wrong.");
+		const retry = document.createElement("button");
+		retry.type = "button";
+		retry.className = "juneau-view-ribbon-btn juneau-view-detail-retry";
+		retry.textContent = "Retry";
+		retry.addEventListener("click", function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			panel._juneauStrip?.reset(tab.id);
+			const btn = panel.querySelector('[data-juneau-strip-tab="' + String(tab.id).replaceAll('"', "") + '"]');
+			if (btn && typeof btn.focus === "function") btn.focus();
+		});
+		pane.appendChild(retry);
+	}
+
+	/** Aborts every in-flight tab fetch of a detail panel (collapse, redraw). */
+	function abortDetailTabs(panel) {
+		if (panel?._juneauTabsAbort) panel._juneauTabsAbort.abort();
+	}
+
+	/** A poll tick was skipped with panels open: non-active refreshOnPoll tabs go idle so they refetch on activation. */
+	function idleStaleDetailTabs(table) {
+		for (const panel of table.querySelectorAll(".juneau-view-detail-panel")) {
+			const strip = panel._juneauStrip, detail = panel._juneauDetail;
+			if (!strip || !detail || !Array.isArray(detail.tabs)) continue;
+			const active = strip.activeId();
+			for (const t of detail.tabs) if (t.refreshOnPoll && t.id !== active) strip.reset(t.id);
+		}
+	}
+
+	/** Resolves the value map for a fields tab: row data underneath, the detail response on top. */
+	function detailValues(panel) {
+		return Object.assign({}, panel._juneauRowData || {}, panel._juneauValues || {});
+	}
+
+	function paintFieldsTab(panel, detail, tab, pane, ctx, body) {
+		const H = NS.helpers;
+		const values = detailValues(panel);
+		const bean = (body?.meta?.labels) || {};
+		const labels = Object.assign({}, bean, detail.labels || {});
+		const catalog = ctx?.viewDef?.columns || [];
+		function describe(name) {
+			const field = { data: name, label: Object.hasOwn(labels, name) ? labels[name] : null };
+			const col = catalog.find(function (c) { return c && c.data === name; });
+			if (field.label == null) field.label = col?.title != null && col.title !== "" ? col.title : humaniseFieldName(name);
+			if (col?.render) field.render = col.render;
+			if (col?.href) field.href = col.href;
+			return field;
+		}
+		const names = Array.isArray(tab.fields) ? tab.fields : [];
+		const columns = tab.columns || detail.columns;
+		const grouped = new Set();
+		const sections = [];
+		for (const g of tab.groups || []) {
+			const gf = (g.fields || []).filter(function (n) { return names.includes(n); });
+			gf.forEach(function (n) { grouped.add(n); });
+			if (gf.length) sections.push({ title: g.title, fields: gf });
+		}
+		const rest = names.filter(function (n) { return !grouped.has(n); });
+		if (rest.length) sections.push({ title: null, fields: rest });
+		const anyValue = names.some(function (n) { const v = values[n]; return v != null && v !== ""; });
+		clearElementChildren(pane);
+		if (!anyValue) {
+			const p = document.createElement("p");
+			p.className = "juneau-view-detail-empty";
+			p.textContent = "No details available.";
+			pane.appendChild(p);
+			return;
+		}
+		for (const sec of sections) {
+			if (sec.title) {
+				const h = document.createElement("h3");
+				h.className = "juneau-view-detail-group-title";
+				h.textContent = String(sec.title);
+				pane.appendChild(h);
+			}
+			pane.appendChild(H.fieldGrid(sec.fields.map(describe), { values: values, columns: columns }));
+		}
+	}
+
+	function fetchTabFields(panel, detail, tab, rowId, signal) {
+		const base = substituteDetailUrl(detail.endpoint, rowId);
+		if (!base) return Promise.reject(new Error("detail URL is not a same-origin path template"));
+		return fetch(base + "/tab/" + encodeURIComponent(tab.id), { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" }, signal: signal })
+			.then(function (resp) {
+				return readBodyText(resp).then(function (text) {
+					if (!resp.ok) throw new Error("the detail request was refused (" + resp.status + ")");
+					const body = parseJsonSafe(text);
+					if (!detailContractOk(body, "1")) throw new Error("row-detail contract version mismatch");
+					return body;
+				});
+			});
+	}
+
+	/** Client tab renderers by name; written by {@code JuneauViews.detail.register}. */
+	const detailRenderers = new Map();
+
+	function registerDetailRenderer(name, fn) {
+		if (typeof name !== "string" || name.trim() === "") {
+			error("JuneauViews.detail.register: the renderer name must be a non-blank string.");
+			return;
+		}
+		if (typeof fn !== "function") {
+			error("JuneauViews.detail.register: renderer '" + name + "' must be a function.");
+			return;
+		}
+		detailRenderers.set(name, fn);
+	}
+
+	/** The two helpers a client renderer may use; frozen so a renderer cannot widen them. */
+	function detailHelpers() {
+		return Object.freeze({ fieldGrid: NS.helpers?.fieldGrid, renderAsyncStatus: renderAsyncStatus });
+	}
+
+	/** A same-origin JSON GET for a client renderer: {id} substituted, the table's CSRF header, contract checked. */
+	function detailFetch(table, rowId, signal, url, opts) {
+		const target = substituteDetailUrl(url, rowId);
+		if (!target) return Promise.reject(new Error("the request URL is not a same-origin path"));
+		const headers = Object.assign({}, opts?.headers, { "Accept": "application/json" });
+		const token = resolveCsrfToken(table);
+		if (!isBlankToken(token)) headers[resolveCsrfHeaderName(table)] = token;
+		const init = { method: opts?.method || "GET", credentials: "same-origin", headers: headers, signal: signal };
+		if (opts?.body != null) init.body = opts.body;
+		return fetch(target, init).then(function (resp) {
+			return readBodyText(resp).then(function (text) {
+				if (!resp.ok) throw new Error("the request was refused (" + resp.status + ")");
+				const body = parseJsonSafe(text);
+				if (body == null) throw new Error("the response was not JSON");
+				if (!detailContractOk(body, "1")) throw new Error("response contract version mismatch");
+				return body;
+			});
+		});
+	}
+
+	function runClientTab(panel, ctx, table, tab, pane, tabCtx, rowId) {
+		const name = tab.renderer || tab.id;
+		const fn = detailRenderers.get(name);
+		clearElementChildren(pane);
+		if (!fn) {
+			renderAsyncStatus(pane, "error", "Renderer '" + name + "' is not registered");
+			return undefined;
+		}
+		let handle = modelTabHandle(table, rowId, tab.id);
+		if (!handle) handle = { id: tab.id, kind: "detailtab" };
+		if (!Object.hasOwn(handle, "helpers")) Object.defineProperty(handle, "helpers", { value: detailHelpers(), writable: false, configurable: false, enumerable: true });
+		let failed = false;
+		const data = Object.freeze({
+			row: Object.assign({}, panel._juneauRowData || {}),
+			rowId: rowId,
+			pane: pane,
+			signal: tabCtx.signal,
+			refresh: tabCtx.reason || "initial",
+			fetch: function (url, opts) { return detailFetch(table, rowId, tabCtx.signal, url, opts); },
+			fail: function (err) { failed = true; paintTabError(panel, tab, pane, tabCtx, err && typeof err === "object" && "message" in err ? err : new Error(String(err))); },
+			invalidate: function () { if (typeof panel.invalidateTab === "function") panel.invalidateTab(tab.id); }
+		});
+		renderAsyncStatus(pane, "loading");
+		const done = function () {
+			if (tabCtx.signal?.aborted || failed) return;
+			renderAsyncStatus(pane, "ok");
+			if (!pane.childNodes.length && tab.emptyText) renderAsyncStatus(pane, "empty", tab.emptyText);
+		};
+		const r = fn(handle, data);
+		if (r && typeof r.then === "function") return r.then(done);
+		done();
+		return undefined;
+	}
+
+	/** The tab kinds a row detail understands; pinned against the Java enum by a parity test. */
+	const JUNEAU_DETAIL_TAB_KINDS = Object.freeze(["fields", "table", "chart", "client"]);
+
+	function populateTab(panel, ctx, table, detail, tab, pane, tabCtx, rowId, body) {
+		switch (tab.kind) {
+			case "fields": {
+				const names = Array.isArray(tab.fields) ? tab.fields : [];
+				const have = detailValues(panel);
+				const missing = names.some(function (n) { return !Object.hasOwn(have, n); });
+				if (detail.mode === "bean" && detail.endpoint && missing) {
+					renderAsyncStatus(pane, "loading");
+					return fetchTabFields(panel, detail, tab, rowId, tabCtx.signal).then(function (b) {
+						if (tabCtx.signal?.aborted) return;
+						panel._juneauValues = Object.assign(panel._juneauValues || {}, b.fields || {});
+						paintFieldsTab(panel, detail, tab, pane, ctx, b);
+					});
+				}
+				paintFieldsTab(panel, detail, tab, pane, ctx, body);
+				return undefined;
+			}
+			case "table": {
+				if (!tab.nested) throw new Error("table tab '" + tab.id + "' has no nested table");
+				const wrap = buildNestedSlot(tab.nested, table);
+				appendNestedSidecar(wrap, tab.nested);
+				clearElementChildren(pane);
+				pane.appendChild(wrap);
+				initNestedTablesInVisiblePanes(pane, rowId);
+				if (tab.count === "rows" && window.jQuery) {
+					const nt = pane.querySelector("table");
+					if (nt) window.jQuery(nt).on("xhr.dt", function (e, settings, json) {
+						if (json == null || !panel._juneauStrip) return;
+						const total = json.recordsTotal != null ? json.recordsTotal : (Array.isArray(json.data) ? json.data.length : null);
+						if (total != null) panel._juneauStrip.setLabel(tab.id, tab.title + " (" + total + ")");
+					});
+				}
+				return undefined;
+			}
+			case "chart": {
+				if (!tab.region) throw new Error("chart tab '" + tab.id + "' has no region");
+				clearElementChildren(pane);
+				pane.appendChild(buildDetailRegion(tab.region));
+				if (NS.regions) NS.regions.enrolIn(pane);
+				else reportRegionsWithoutRuntime(pane.querySelectorAll("[" + REGION_MARKER + "]"));
+				return undefined;
+			}
+			case "client":
+				return runClientTab(panel, ctx, table, tab, pane, tabCtx, rowId);
+			default:
+				clearElementChildren(pane);
+				renderAsyncStatus(pane, "error", "Unknown tab kind '" + tab.kind + "'.");
+				return undefined;
+		}
+	}
+
+	/** The model RowDetail handle of a row, or null when the object model is not loaded or the row has none. */
+	function modelDetailHandle(table, rowId) {
+		const r = rowId == null ? null : modelTable(table)?.row(String(rowId));
+		return r?.detail || null;
+	}
+
+	function modelTabHandle(table, rowId, tabId) {
+		return modelDetailHandle(table, rowId)?.tab(tabId) || null;
+	}
+
+	/** Builds the tab strip for a tabbed detail panel once its first payload (or the inline row) is in hand. */
+	function paintTabbedDetail(panel, ctx, table, tr, detail, body, rowData, rowId) {
+		const shell = panel.querySelector("[data-juneau-detail-tabs]");
+		if (!shell) return;
+		panel._juneauRowData = rowData || {};
+		panel._juneauValues = body?.fields && typeof body.fields === "object" ? body.fields : {};
+		const ac = new AbortController();
+		panel._juneauTabsAbort = ac;
+		paintDetailHeaderActions(panel, detail, table, tr, ctx, rowData, rowId);
+		const headHandle = modelDetailHandle(table, rowId);
+		if (headHandle) {
+			// Handler entries of the header actions are painted by the model layer, into the header line.
+			headHandle._hooks = Object.assign(headHandle._hooks || {}, {
+				refresh: function () {
+					const dt = ctx.dataTable, row = dt?.row ? dt.row(tr) : null, tpl = findRowDetailTemplate(table);
+					if (!row?.length || !tpl || !row.child.isShown()) return;
+					const active = panel._juneauStrip ? panel._juneauStrip.activeId() : null;
+					const mt = modelTable(table);
+					abortDetailTabs(panel);
+					NS.regions?.teardownRegionsIn(panel);
+					teardownNestedTables(panel);
+					teardownDetailBarSlot(panel);
+					row.child.hide();
+					// The row is closed for a moment: say so on the bus.  The model handles are kept (reattachDetail
+					// below), so the model's collapsed bookkeeping is deliberately not run.
+					tr.classList.remove("juneau-view-detail-open");
+					setDetailToggleExpanded(tr, false);
+					publishDetail(ctx, tr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(tr) || 0);
+					if (mt) mt._reopenPending = true;
+					try { expandDetailRow(table, ctx, ctx.viewDef, tpl, dt, tr, row, active); }
+					finally { if (mt) mt._reopenPending = false; }
+				}
+			});
+			headHandle._paintActions();
+		}
+		if (!NS.helpers?.tabStrip) {
+			renderAsyncStatus(shell, "error", "The tab helpers are not loaded.");
+			return;
+		}
+		const counts = body?.counts && typeof body.counts === "object" ? body.counts : {};
+		const facts = Object.assign({}, rowData || {}, panel._juneauValues);
+		const visible = detail.tabs.filter(function (t) {
+			return !(t.visibleWhen && NS.rules?.testRow && !NS.rules.testRow(t.visibleWhen, facts));
+		});
+		if (!visible.length) {
+			renderAsyncStatus(shell, "empty", "No details available.");
+			return;
+		}
+		const tabs = visible.map(function (t) {
+			const n = counts[t.id];
+			return {
+				id: t.id,
+				label: n == null ? t.title : t.title + " (" + n + ")",
+				lazy: true,
+				populate: function (pane, tabCtx) {
+					const fail = function (err) { paintTabError(panel, t, pane, tabCtx, err); };
+					let r;
+					const loaded = function () {
+						if (tabCtx.signal?.aborted) return;
+						const th = modelTabHandle(table, rowId, t.id);
+						if (th) th._fire("loaded", { count: counts[t.id] });
+					};
+					try { r = populateTab(panel, ctx, table, detail, t, pane, tabCtx, rowId, body); } catch (err) { fail(err); return undefined; }
+					if (r && typeof r.then === "function") return r.then(function () { loaded(); }, fail);
+					loaded();
+					return r;
+				}
+			};
+		});
+		const remembered = panel._juneauInitialTab || ctx._rememberedTab;
+		const active = remembered && visible.some(function (t) { return t.id === remembered; }) ? remembered : null;
+		const seen = new Set();
+		const noCache = detail.cache === "none";
+		let wrapper = null;
+		wrapper = NS.helpers.tabStrip(tabs, {
+			mode: "tab", signal: ac.signal, active: active,
+			onReset: function (id, pane) { NS.regions?.teardownRegionsIn(pane); teardownNestedTables(pane); },
+			onActivate: function (id) {
+				ctx._rememberedTab = id;
+				const dh = modelDetailHandle(table, rowId);
+				if (dh) dh._activeId = id;
+				modelTabHandle(table, rowId, id)?._fire("activated", {});
+				// cache "none": every activation after the first rebuilds the tab.
+				if (noCache && seen.has(id) && wrapper) wrapper.juneauTabs.reset(id);
+				seen.add(id);
+			}
+		});
+		seen.add(wrapper.juneauTabs.activeId());
+		const dhandle = modelDetailHandle(table, rowId);
+		if (dhandle) {
+			dhandle._hooks = Object.assign(dhandle._hooks || {}, { activateTab: function (id) { wrapper.juneauTabs.activate(id); } });
+		}
+		panel._juneauStrip = wrapper.juneauTabs;
+		panel._juneauDetail = detail;
+		panel.invalidateTab = function (id) { if (isAttachedNode(panel)) panel._juneauStrip.reset(id); };
+		panel.invalidateAll = function () { if (isAttachedNode(panel)) panel._juneauStrip.resetAll(); };
+		shell.appendChild(wrapper);
 	}
 
 	function paintDetailBarSlot(bar, anchor) {
@@ -11373,18 +11876,53 @@
 		cardFilterRole: cardFilterRole
 	};
 
+	/** The cmd:<id> op wire names mapped to the DatatablesCard method that runs each. */
+	const DATATABLES_OPS = {};
+	TABLE_OPS.forEach(function (op) { DATATABLES_OPS[op] = "op$" + op; });
+
+	/** The datatables card: a view table in a card, with the page-bus filter role and the table cmd ops. */
+	class DatatablesCard extends (NS.model?.Card || window.JuneauConsole?.Card || class {}) {
+		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
+		static roles = { filter: "filter" };
+		static ops = DATATABLES_OPS;
+		static implicitTopics(spec) { return implicitTopics(spec); }
+
+		render() {
+			this.el.__juneauBus = cardBus(this.spec, this);   // read by initTableFromDef's findBus
+			return NS.card.mountDatatables(this.spec, this.el, this);
+		}
+		refresh() { return NS.card.reload(this.spec.id); }
+		destroy() {
+			NS.card.teardown(this.spec.id);
+			if (this.el) delete this.el.__juneauBus;
+		}
+
+		/** Re-draws the card's table. */
+		reload() { return NS.card.reload(this.spec.id); }
+		/** The ids of the rows currently selected in the card's table. */
+		selection() {
+			const st = cardTables.get(this.spec.id)?.table?.__juneauCtx?.selectionState;
+			return st ? Array.from(st.selected) : [];
+		}
+
+		filter(payload) {
+			const table = this.el.querySelector("table[data-juneau-view]");
+			if (table?.__juneauCtx) filterRole(table, table.__juneauCtx, payload);
+		}
+		_runOp(op, cmd) {
+			const table = this.el.querySelector("table[data-juneau-view]");
+			if (!table?.__juneauCtx)
+				throw busError("E-JS-48", "card '" + this.spec.id + "' (type 'datatables') cannot run op '" + op + "' before its table is mounted");
+			return applyCmd(table, table.__juneauCtx, cmd);
+		}
+	}
+	TABLE_OPS.forEach(function (op) {
+		DatatablesCard.prototype[DATATABLES_OPS[op]] = function (cmd) { return this._runOp(op, cmd); };
+	});
+	NS.DatatablesCard = DatatablesCard;
+
 	window.JuneauConsoleCards ||= [];
-	window.JuneauConsoleCards.push(["datatables", {
-		render: function (card, el, ctx) {
-			el.__juneauBus = NS.tableBus.cardBus(card, ctx);   // read by initTableFromDef's findBus
-			return NS.card.mountDatatables(card, el, ctx);
-		},
-		refresh: function (card) { return NS.card.reload(card.id); },
-		destroy: function (card, el) { NS.card.teardown(card.id); if (el) delete el.__juneauBus; },
-		roles: { filter: NS.tableBus.cardFilterRole },
-		ops: NS.tableBus.cardOps(),
-		implicit: NS.tableBus.implicitTopics
-	}]);
+	window.JuneauConsoleCards.push(["datatables", DatatablesCard]);
 
 	// ==================================================================================================================
 	// PUBLIC API + bootstrap
@@ -11454,6 +11992,7 @@
 		announceMessages: ANNOUNCE,
 		isCopyLinkVisible: isCopyLinkVisible,
 		mountCopyLinkButton: mountCopyLinkButton,
+		buildCopyLinkButton: buildCopyLinkButton,
 		collectLiveUrlState: collectLiveUrlState,
 		applyShareableOpenState: applyShareableOpenState,
 		syncShareableUrlState: syncShareableUrlState,
@@ -11514,6 +12053,7 @@
 		applyActionRefRules: applyActionRefRules,
 		mintActionDescIdentity: mintActionDescIdentity,
 		initDetailsExpander: initDetailsExpander,
+		bindModelDrawHooks: bindModelDrawHooks,
 		collapseAllDetailRows: collapseAllDetailRows,
 		buildDetailsControlColumnDef: buildDetailsControlColumnDef,
 		detailsControlCellMarkup: detailsControlCellMarkup,
@@ -11528,6 +12068,11 @@
 		adjustNestedColumns: adjustNestedColumns,
 		activateNestedTablesInPane: activateNestedTablesInPane,
 		initNestedTablesInVisiblePanes: initNestedTablesInVisiblePanes,
+		buildDetailTemplate: buildDetailTemplate,
+		appendNestedSidecar: appendNestedSidecar,
+		detailTabKinds: JUNEAU_DETAIL_TAB_KINDS,
+		idleStaleDetailTabs: idleStaleDetailTabs,
+		reopenDetailRows: reopenDetailRows,
 		teardownNestedTables: teardownNestedTables,
 		// Table ownership (a nested table lives inside its parent's child row) - exposed for the node harness.
 		isInside: isInside,
@@ -11735,8 +12280,41 @@
 		return { table: table, tr: tr, row: rowDataForTr(ctx, tr) || {}, viewDef: ctx.viewDef || {} };
 	}
 
-	/** The table-handle shape returned by {@code tables.ready} / {@code tables.handle}. */
+	/** The live-table members the model Table delegates to (its own commands run through the table bus). */
+	function tableImpl(el, ctx) {
+		const cmd = function (c) { return applyCmd(el, ctx, Object.assign({ schemaVersion: 1 }, c)); };
+		return {
+			element: el,
+			dataTable: ctx.dataTable,
+			viewDef: ctx.viewDef,
+			contextOf: function (tr) { return { table: el, tr: tr, row: rowDataForTr(ctx, tr) || {}, viewDef: ctx.viewDef }; },
+			reload: function (opts) { if (ctx.dataTable) ctx.dataTable.ajax.reload(null, opts?.resetPaging === true); },
+			selection: function () { return Array.from(ctx.selectionState?.selected || []); },
+			select: function (ids) { return cmd({ op: "select", ids: ids }); },
+			clearSelection: function () { return cmd({ op: "clear-selection" }); },
+			setFilter: function (patch) { return cmd(Object.assign({ op: "set-filter" }, patch)); },
+			pausePolling: function () { return cmd({ op: "pause-polling" }); },
+			resumePolling: function () { return cmd({ op: "resume-polling" }); },
+			collapseAll: function () { return collapseAllDetailRows(el, ctx); },
+			rowCount: function () { return ctx.dataTable?.rows ? ctx.dataTable.rows().count() : 0; },
+			toggleRow: function (tr) {
+				const control = tr?.querySelector ? tr.querySelector("td.juneau-view-detail-control") : null;
+				if (control && ctx.dataTable) toggleDetailRow(el, ctx, ctx.viewDef, findRowDetailTemplate(el), ctx.dataTable, { target: control });
+			}
+		};
+	}
+
+	/** The model Table for a mounted view table, or null when the object model is not loaded. */
+	function modelTable(el) {
+		const ctx = el?.__juneauCtx;
+		const T = NS.model?.Table;
+		return ctx && T && typeof T.fromContext === "function" ? T.fromContext(el, tableImpl(el, ctx)) : null;
+	}
+
+	/** The table-handle shape returned by {@code tables.ready} / {@code tables.handle}: the model Table when loaded. */
 	function hookTableHandleFor(el) {
+		const mt = modelTable(el);
+		if (mt) return mt;
 		const ctx = el.__juneauCtx;
 		return {
 			element: el,
@@ -11744,6 +12322,79 @@
 			viewDef: ctx.viewDef,
 			contextOf: function (tr) { return { table: el, tr: tr, row: rowDataForTr(ctx, tr) || {}, viewDef: ctx.viewDef }; }
 		};
+	}
+
+	/** Re-opens, by row id, the detail panels that were open before a redraw; a row that is gone stays closed. */
+	function reopenDetailRows(table, ctx, mt, rows) {
+		const list = ctx._reopenList || [];
+		ctx._reopenList = [];
+		const tpl = list.length ? findRowDetailTemplate(table) : null;
+		const dt = ctx.dataTable;
+		if (!tpl || !dt) return;
+		for (const o of list) {
+			const n = rows.find(function (r) { return r.key === String(o.rowId); });
+			if (!n) continue;
+			const row = dt.row(n.el);
+			if (!row?.length) continue;
+			if (row.child.isShown()) { abortDetailTabs(n.el._juneauDetailPanel); row.child.hide(); }
+			expandDetailRow(table, ctx, ctx.viewDef, tpl, dt, n.el, row, o.activeTabId);
+		}
+	}
+
+	/**
+	 * Binds the object model to this table's draw cycle: before a draw its row handles are detached (positional ones
+	 * destroyed), after it they are re-made for the rows now present, and a data load fires the table's loaded event.
+	 * Bound on the table's OWN DataTable only; a nested table's bubbling events are ignored.
+	 */
+	function bindModelDrawHooks(table, ctx) {
+		const dt = ctx.dataTable;
+		if (!dt || typeof dt.on !== "function" || ctx._modelDrawBound) return;
+		ctx._modelDrawBound = true;
+		const own = function (e) { return !e || e.target === table; };
+		const rowsNow = function () {
+			return ownNodes(table, table, "tr").filter(function (tr) {
+				return tr.parentNode && !tr.querySelector("." + "juneau-view-detail-panel");
+			}).map(function (tr) {
+				const k = tr.getAttribute(ROW_ID_ATTR);
+				return { key: k != null && k !== "" ? k : null, el: tr, data: rowDataForTr(ctx, tr) };
+			});
+		};
+		let loadedOnce = false;
+		dt.on("preDraw.dt", function (e) {
+			if (!own(e)) return;
+			if (ctx._shouldCancelPollDraw?.()) return;
+			const mt = modelTable(table);
+			ctx._reopenList = [];
+			for (const tr of ownNodes(table, table, "tbody > tr.juneau-view-detail-open")) {
+				const panel = tr._juneauDetailPanel;
+				const id = tr.getAttribute(ROW_ID_ATTR);
+				if (id == null || id === "") continue;
+				ctx._reopenList.push({ rowId: id, activeTabId: panel?._juneauStrip ? panel._juneauStrip.activeId() : null });
+				abortDetailTabs(panel);
+			}
+			ctx._reopenOwned = !!mt && ctx._reopenList.length > 0 && !mt._reopenPending;
+			if (ctx._reopenOwned) mt._reopenPending = true;
+			mt?._beginDraw();
+		});
+		dt.on("draw.dt", function (e) {
+			if (!own(e)) return;
+			const mt = modelTable(table);
+			if (!mt) return;
+			try {
+				const rows = rowsNow();
+				mt._endDraw(rows);
+				reopenDetailRows(table, ctx, mt, rows);
+			} finally {
+				if (ctx._reopenOwned) { mt._reopenPending = false; ctx._reopenOwned = false; }
+			}
+			if (!loadedOnce && Array.isArray(table.__juneauRows)) { loadedOnce = true; mt._fire("loaded", { count: dt.rows().count() }); }
+		});
+		dt.on("xhr.dt", function (e, settings, json) {
+			if (!own(e) || json == null) return;
+			loadedOnce = true;
+			const mt = modelTable(table);
+			if (mt) mt._fire("loaded", { count: json.recordsTotal != null ? json.recordsTotal : dt.rows().count() });
+		});
 	}
 
 	/** The element a CSRF lookup should read: the owning view table of {@code el}, else {@code el} itself. */
@@ -12009,6 +12660,7 @@
 		testRow: function (rules, row) { return evaluateRules(rules, rowRuleScope(row)); }
 	});
 	NS.details = Object.freeze({ fillSlots: fillDetailSlots });
+	NS.detail = Object.freeze({ register: registerDetailRenderer });
 	NS.html = Object.freeze({
 		// NS._render (juneau-renders.js) is a sibling <script>; never assume load order.
 		esc: function (s) { return typeof NS._render?.escHtml === "function" ? NS._render.escHtml(s) : String(s ?? ""); },
@@ -12312,7 +12964,7 @@
 	 * test fails when a frozen namespace is added or removed here without updating it.
 	 */
 	NS.HOOK_NAMESPACES = Object.freeze(["actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
-		"csrf", "rules", "details", "html", "jobs"]);
+		"csrf", "rules", "details", "html", "jobs", "detail"]);
 
 	initCursorTooltip();
 	if (document.readyState === "loading") {

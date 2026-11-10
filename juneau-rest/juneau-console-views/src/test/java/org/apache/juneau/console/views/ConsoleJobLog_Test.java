@@ -67,7 +67,7 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals("polite", r.get("ariaLive"));
 		assertEquals("0", r.get("tabindex"));
 		assertEquals("320px", r.get("height"));
-		assertEquals(List.of("cancel", "job", "phase"), r.get("api"));
+		assertEquals(List.of("cancel", "destroy", "job", "phase", "refresh", "render"), r.get("api"));
 		assertEquals("1", r.get("version"));
 		var s = (Map<?,?>)r.get("state");
 		assertEquals("idle", s.get("phase"));

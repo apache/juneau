@@ -79,6 +79,11 @@
 <symbol id="juneau-sym-forceStop" viewBox="0 0 24 24" fill="none">
 	<path fill="currentColor" d="M9 4.5H15L19.5 9V15L15 19.5H9L4.5 15V9Z"/>
 </symbol>
+<symbol id="juneau-sym-grip" viewBox="0 0 24 24" fill="currentColor">
+<rect x="4.5" y="6" width="15" height="1.5"/>
+<rect x="4.5" y="11.25" width="15" height="1.5"/>
+<rect x="4.5" y="16.5" width="15" height="1.5"/>
+</symbol>
 <symbol id="juneau-sym-last_page" viewBox="0 0 24 24" fill="currentColor">
 <path transform="translate(-3.5 0)" d="M8.3 2l9.5 9.5c.3.3.3.7 0 1L8.3 22c-.3.2-.8.2-1.1 0l-1-1c-.2-.3-.2-.8 0-1.1l7.6-7.4c.2-.3.2-.7 0-1L6.3 4.1C6 3.8 6 3.3 6.3 3l1-1c.3-.2.7-.2 1 0z"/>
 <path transform="translate(3.5 0)" d="M8.3 2l9.5 9.5c.3.3.3.7 0 1L8.3 22c-.3.2-.8.2-1.1 0l-1-1c-.2-.3-.2-.8 0-1.1l7.6-7.4c.2-.3.2-.7 0-1L6.3 4.1C6 3.8 6 3.3 6.3 3l1-1c.3-.2.7-.2 1 0z"/>
@@ -162,6 +167,12 @@
 <g>
 <path fill="none" d="M14.5 14.5L20 20M16 10C16 13.3137 13.3137 16 10 16C6.68629 16 4 13.3137 4 10C4 6.68629 6.68629 4 10 4C13.3137 4 16 6.68629 16 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </g>
+</symbol>
+<symbol id="juneau-sym-trash" viewBox="0 0 24 24" fill="none">
+<path d="M4 7h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt"/>
+<path d="M9 7V4h6v3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="round"/>
+<path d="M6 7l1 13h10l1-13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt" stroke-linejoin="round"/>
+<path d="M10 11v6M14 11v6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="butt"/>
 </symbol>
 <symbol id="juneau-sym-tune" viewBox="0 0 24 24" fill="none">
 <path d="M3 6H21M3 12H21M3 18H21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>

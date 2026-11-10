@@ -72,7 +72,7 @@ class StoreRest_Test extends TestBase {
 
 	@Test void a01_cardOrder() throws Exception {
 		assertPage(page(client(), "/console/store")).isValid()
-			.hasCardOrder("welcome", "stats", "revenue", "orders-trend", "by-species", "by-status", "pets-map", "hours")
+			.hasCardOrder("welcome", "stats", "revenue", "revenue-sw", "orders-sw", "pets-sw", "hours")
 			.hasCard("welcome", "html")
 			.hasCard("stats", "datatables")
 			.hasCard("revenue", "kpi")
@@ -81,6 +81,8 @@ class StoreRest_Test extends TestBase {
 			.hasCard("by-species", "chart")
 			.hasCard("by-status", "chart")
 			.hasCard("pets-map", "chart")
+			.hasCard("revenue-sw", "switcher").hasCard("orders-sw", "switcher").hasCard("pets-sw", "switcher")
+			.hasCard("revenue-chart", "chart")
 			.hasCard("hours", "html");
 		assertContainsAll(page(client(), "/console/store"), "/console/store/recent-orders", "/console/store/fragments/hours");
 	}
@@ -128,24 +130,51 @@ class StoreRest_Test extends TestBase {
 			.hasCardKey("by-status", "/src", "/console/store/stats/status")
 			.hasCardKey("by-status", "/x/field", "status")
 			.hasCardKey("by-status", "/series/0/field", "count")
-			.hasCardKey("orders-trend", "/title", "Orders, last 30 days")
+			.hasCardKey("revenue-sw", "/title", "Revenue, last 30 days")
+			.hasCardKey("orders-sw", "/title", "Orders, last 30 days")
+			.hasCardKey("pets-sw", "/title", "Pets")
 			.hasCardKey("orders-trend", "/x/label", "Day")
 			.hasCardKey("orders-trend", "/series/0/label", "Placed")
 			.hasCardKey("orders-trend", "/series/1/label", "Delivered")
 			.hasCardKey("orders-trend", "/series/1/tone", "ok")
-			.hasCardKey("by-species", "/title", "Pets by species")
 			.hasCardKey("by-species", "/center", "total")
-			.hasCardKey("by-status", "/title", "Pets by status")
 			.hasCardKey("by-status", "/series/0/label", "Pets");
 		var s = "/juneau-console/juneau-charts.js?v=";
 		assertContains(s, html);
-		assertEquals(html.indexOf(s), html.lastIndexOf(s), "the charts runtime is emitted once for four chart cards");
+		assertEquals(html.indexOf(s), html.lastIndexOf(s), "the charts runtime is emitted once for five chart cards");
 	}
 
 	@Test void a06_chartFieldsExistInTheirRows() throws Exception {
 		// Every field a chart card reads must be a key of its endpoint's rows, so renaming one on either side fails here.
 		var cards = assertPage(page(client(), "/console/store")).contract().getList("cards");
-		assertEquals(List.of("orders-trend", "by-species", "by-status", "pets-map"), assertChartFieldsInRows(json(), cards));
+		assertEquals(List.of("revenue-chart", "orders-trend", "by-species", "by-status", "pets-map"), assertChartFieldsInRows(json(), cards));
+		var rev = list(json(), "/console/store/stats/revenue").getMap(0);
+		var ord = list(json(), "/console/store/stats/daily").getMap(0);
+		for (var k : List.of("day", "revenue"))
+			assertTrue(rev.containsKey(k), k);
+		for (var k : List.of("day", "placed", "delivered"))
+			assertTrue(ord.containsKey(k), k);
+	}
+
+	@Test void a07_dataViewColumnsExistInTheirRows() throws Exception {
+		// A table view's column keys must be keys of its endpoint's rows, so a rename on either side fails here.
+		var cards = assertPage(page(client(), "/console/store")).contract().getList("cards");
+		var checked = new ArrayList<String>();
+		for (var top : cards.elements(JsonMap.class)) {
+			if (! "switcher".equals(top.getString("type")))
+				continue;
+			for (var v : top.getList("views").elements(JsonMap.class)) {
+				if (! v.containsKey("card") || ! "datatables".equals(v.getMap("card").getString("type")))
+					continue;
+				var card = v.getMap("card");
+				var t = card.getMap("table");
+				var row = list(json(), t.getString("dataUrl")).getMap(0);
+				for (var col : t.getList("columns").elements(JsonMap.class))
+					assertTrue(row.containsKey(col.getString("key")), card.getString("id") + " column " + col.getString("key"));
+				checked.add(card.getString("id"));
+			}
+		}
+		assertEquals(List.of("revenue-data", "orders-data"), checked);
 	}
 
 	/**
@@ -155,7 +184,21 @@ class StoreRest_Test extends TestBase {
 	 */
 	static List<String> assertChartFieldsInRows(MockRestClient c, JsonList cards) throws Exception {
 		var checked = new ArrayList<String>();
-		for (var o : cards.elements(JsonMap.class)) {
+		var flat = new ArrayList<JsonMap>();
+		for (var top : cards.elements(JsonMap.class)) {
+			if (! "switcher".equals(top.getString("type"))) {
+				flat.add(top);
+				continue;
+			}
+			for (var v : top.getList("views").elements(JsonMap.class)) {
+				if (v.containsKey("card"))
+					flat.add(v.getMap("card"));
+				else
+					for (var sec : v.getList("sections").elements(JsonMap.class))
+						flat.add(sec.getMap("card"));
+			}
+		}
+		for (var o : flat) {
 			if (! "chart".equals(o.getString("type")))
 				continue;
 			var id = o.getString("id");
@@ -348,6 +391,41 @@ class StoreRest_Test extends TestBase {
 			assertEquals(Math.round(expected * 100) / 100d, kpi.get("value", Double.class), 0.001);
 		} finally {
 			store.deleteOrder(pinned.getId(), "test");
+		}
+	}
+
+	@Test void d01_revenueFeed() throws Exception {
+		// Deliver one priced pet today and one a few days back, plus a placed order that must not count.
+		var store = store();
+		var pet = store.getPets().stream().filter(x -> x.getPrice() > 0).findFirst().orElseThrow();
+		var today = LocalDate.ofInstant(store.clock().instant(), ZoneOffset.UTC);
+		var earlier = today.minusDays(3).toString();
+		var made = new ArrayList<Long>();
+		made.add(store.createOrder(new org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(today.toString()), "test").getId());
+		made.add(store.createOrder(new org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.DELIVERED).setShipDate(earlier), "test").getId());
+		made.add(store.createOrder(new org.apache.juneau.petstore.dto.Order().setPetId(pet.getId()).setStatus(OrderStatus.PLACED).setShipDate(earlier), "test").getId());
+		try {
+			var c = json();
+			var rows = list(c, "/console/store/stats/revenue");
+			assertSize(30, rows);
+			assertEquals(today.toString(), rows.getMap(29).getString("day"));
+			assertEquals(today.minusDays(29).toString(), rows.getMap(0).getString("day"));
+			var prices = new HashMap<Long,Double>();
+			for (var p : list(c, "/petstore/pets").elements(JsonMap.class))
+				prices.put(p.getLong("id"), p.get("price", Double.class));
+			var expected = new HashMap<String,Double>();
+			for (var o : list(c, "/petstore/orders").elements(JsonMap.class))
+				if ("DELIVERED".equals(o.getString("status")) && prices.containsKey(o.getLong("petId")))
+					expected.merge(o.getString("shipDate"), prices.get(o.getLong("petId")), Double::sum);
+			for (var r : rows.elements(JsonMap.class)) {
+				assertEquals(new TreeSet<>(List.of("day", "revenue")), new TreeSet<>(r.keySet()));
+				assertEquals(Math.round(expected.getOrDefault(r.getString("day"), 0d) * 100) / 100d, r.get("revenue", Double.class), 0.001, r.getString("day"));
+			}
+			assertTrue(rows.getMap(29).get("revenue", Double.class) >= pet.getPrice() - 0.001);
+			assertTrue(rows.getMap(26).get("revenue", Double.class) >= pet.getPrice() - 0.001);
+		} finally {
+			for (var id : made)
+				store.deleteOrder(id, "test");
 		}
 	}
 }

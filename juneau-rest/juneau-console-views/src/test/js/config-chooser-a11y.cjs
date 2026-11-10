@@ -184,4 +184,170 @@ nameUnsortedToggle.dispatch('change');
 out.sortTabAfterRecheckDraft = sortDialog.ctx._configDraft.sort.map(function (e) { return e.column; });
 NS.config.closeChooserDialog(sortDialog.ctx);
 
-process.stdout.write(JSON.stringify(out));
+// Gear: the chooser header carries a title-icon figure; a plain dialog (no titleIcon) has none.
+NS.icons = { resolveIcon: function (name) { return '<svg data-icon="' + name + '"></svg>'; } };
+const gearDialog = openDialog();
+out.gearPresent = env.document.querySelectorAll('.juneau-view-dialog-title-icon').length === 1;
+NS.config.closeChooserDialog(gearDialog.ctx);
+const plain = NS.init.buildDialogOverlay({ title: 'Plain' }, null, env.document.createElement('table'), null, {}, 'plain-1');
+out.plainNoTitleIcon = plain.dialog.querySelectorAll('.juneau-view-dialog-title-icon').length === 0;
+const actionDlg = NS.init.buildDialogOverlay({ title: 'Act', titleIcon: 'settings' }, { type: 'dialog' }, env.document.createElement('table'), null, {}, 'plain-2');
+out.actionFigureIsNotTitleIcon = actionDlg.dialog.querySelectorAll('.juneau-view-dialog-title-icon').length === 0;
+
+// Left pane: Find box, hidden title, grips, draggable Available rows.
+const dragCatalog = [
+	{ data: 'name', title: 'Name', orderable: true },
+	{ data: 'status', title: 'Status', orderable: true },
+	{ data: 'notes', title: 'Notes', defaultVisible: false },
+	{ data: 'owner', title: 'Owner', defaultVisible: false }
+];
+function openDragDialog() {
+	const table = env.document.createElement('table');
+	const ctx = { viewDef: { columns: dragCatalog, defaultOrder: [{ data: 'name', dir: 'asc' }] } };
+	NS.config.openChooser(table, ctx);
+	return { table: table, ctx: ctx };
+}
+const leftDlg = openDragDialog();
+out.findPlaceholder = env.document.querySelector('.juneau-config-find').placeholder;
+const availTitle = env.document.querySelector('.juneau-config-pane-title');
+out.paneTitleHidden = availTitle.className.indexOf('juneau-config-sr-only') >= 0;
+out.listboxStillLabelled = env.document.querySelector('.juneau-config-avail-list').getAttribute('aria-labelledby') === availTitle.id;
+const availRows = env.document.querySelectorAll('.juneau-config-avail');
+out.availKeys = availRows.map(function (r) { return r.dataset.col; });
+out.availDraggable = availRows.every(function (r) { return r.getAttribute('draggable') === 'true'; });
+out.availHaveGrip = availRows.every(function (r) { return r.querySelectorAll('.juneau-config-grip').length === 1; });
+const gridHandles = env.document.querySelectorAll('.juneau-config-col-handle');
+out.gridHandleHasGrip = gridHandles.length === 2 && gridHandles.every(function (h) { return h.querySelector('.juneau-config-grip') != null; });
+NS.config.closeChooserDialog(leftDlg.ctx);
+
+// Drag from Available into the grid.
+function dAvail(key) { return env.document.querySelectorAll('.juneau-config-avail').find(function (r) { return r.dataset.col === key; }); }
+function dSel(key) { return env.document.querySelectorAll('.juneau-config-col-row').find(function (r) { return r.dataset.col === key; }); }
+function dKeys() { return env.document.querySelectorAll('.juneau-config-col-row').map(function (r) { return r.dataset.col; }); }
+function dnd() { return { effectAllowed: '', dropEffect: '', setData: function () { /* no-op */ } }; }
+const noop = function () { /* no-op */ };
+function dropOn(el, y) { el.getBoundingClientRect = function () { return { top: 0, height: 10 }; }; el.dispatch('drop', { clientY: y, preventDefault: noop, stopPropagation: noop }); }
+
+const d1 = openDragDialog();
+out.dragInitialSelected = dKeys();
+dAvail('notes').dispatch('dragstart', { dataTransfer: dnd() });
+dropOn(dSel('status'), 2);
+out.dropBefore = dKeys();
+out.dropBeforeDirty = d1.ctx._configDirty === true;
+out.rowDropRefocuses = env.getActive() === dSel('notes').querySelector('.juneau-config-col-handle');
+out.dropBeforeAvail = env.document.querySelectorAll('.juneau-config-avail').map(function (r) { return r.dataset.col; });
+NS.config.closeChooserDialog(d1.ctx);
+
+const d2 = openDragDialog();
+dAvail('owner').dispatch('dragstart', { dataTransfer: dnd() });
+dropOn(dSel('name'), 8);
+out.dropAfter = dKeys();
+NS.config.closeChooserDialog(d2.ctx);
+
+const d3 = openDragDialog();
+dAvail('notes').dispatch('dragstart', { dataTransfer: dnd() });
+env.document.querySelector('.juneau-config-col-list').dispatch('drop', { preventDefault: noop, stopPropagation: noop });
+out.dropAppend = dKeys();
+out.listDropRefocuses = env.getActive() === dSel('notes').querySelector('.juneau-config-col-handle');
+NS.config.closeChooserDialog(d3.ctx);
+
+const d4 = openDragDialog();
+dropOn(dSel('status'), 2);
+env.document.querySelector('.juneau-config-col-list').dispatch('drop', { preventDefault: noop, stopPropagation: noop });
+out.dropNoDragNoop = dKeys();
+out.dropNoDragClean = d4.ctx._configDirty !== true;
+NS.config.closeChooserDialog(d4.ctx);
+
+const d5 = openDragDialog();
+dAvail('owner').dispatch('dblclick');
+out.dblclickAdds = dKeys();
+NS.config.closeChooserDialog(d5.ctx);
+
+// A selected-row reorder drag still works.
+const d6 = openDragDialog();
+dSel('name').dispatch('dragstart', { dataTransfer: dnd() });
+dropOn(dSel('status'), 8);
+out.reorderStillWorks = dKeys();
+NS.config.closeChooserDialog(d6.ctx);
+
+// Detail strip.
+const detailCatalog = [
+	{ data: 'name', title: 'Name', orderable: true, search: { type: 'text' }, description: 'The display name.' },
+	{ data: 'danger', title: '<img src=x onerror=alert(1)>', orderable: false, defaultVisible: false, formats: ['date', 'ts-zulu'], description: '<b>x</b>' },
+	{ data: 'id', title: 'Id', pinned: true, defaultVisible: false }
+];
+const detTable = env.document.createElement('table');
+const detCtx = { viewDef: { columns: detailCatalog, defaultOrder: [{ data: 'name', dir: 'asc' }] } };
+NS.config.openChooser(detTable, detCtx);
+const strip = env.document.querySelector('.juneau-config-detail');
+out.detailRole = strip.getAttribute('role');
+out.detailLive = strip.getAttribute('aria-live');
+out.detailDefault = strip.textContent;
+dSel('name').dispatch('click');
+out.detailSelected = strip.textContent;
+dAvail('danger').dispatch('click');
+out.detailAvail = strip.textContent;
+out.detailAvailKey = detCtx._configDetailKey;
+out.detailHostileIsText = strip.querySelectorAll('img').length === 0;
+dSel('id').dispatch('click');
+out.detailPinned = strip.textContent;
+NS.config.closeChooserDialog(detCtx);
+out.detailKeyCleared = detCtx._configDetailKey == null;
+out.detailTextHelperNoCol = NS.config.columnDetailText(null);
+out.detailSearchableFlag = NS.config.columnDetailText({ data: 'q', searchable: true }).indexOf('not searchable') < 0;
+const rep = env.document.createElement('table');
+const repCtx = { viewDef: { columns: [{ data: 'a', title: 'A' }, { data: 'b', title: 'B', defaultVisible: false, description: 'old' }], defaultOrder: [{ data: 'a', dir: 'asc' }] } };
+NS.config.openChooser(rep, repCtx);
+dAvail('b').dispatch('click');
+repCtx.viewDef.columns[1].description = 'fresh';
+dAvail('b').dispatch('dblclick');
+out.detailRepaintedAfterAdd = env.document.querySelector('.juneau-config-detail').textContent.indexOf('fresh') >= 0;
+NS.config.closeChooserDialog(repCtx);
+
+// Reset button.
+const resetDlg = openDragDialog();
+const resetEl = env.document.querySelector('.juneau-config-reset');
+out.resetNotLink = resetEl.className.indexOf('jc-btn-link') < 0 && resetEl.className.indexOf('jc-btn') >= 0;
+resetDlg.ctx._configDraft.visible = ['name'];
+resetEl.dispatch('click');
+out.resetDraftsDefaults = resetDlg.ctx._configDraft.visible.join('/');
+NS.config.closeChooserDialog(resetDlg.ctx);
+
+(async function () {
+	// Compact saved-views row.
+	NS.persistence = { list: function () { return Promise.resolve({ views: [] }); } };
+	const compactDlg = openDragDialog();
+	await Promise.resolve(); await Promise.resolve();
+	const bar = env.document.querySelector('.juneau-config-saved-bar');
+	out.barCompactWhenEmpty = bar.dataset.compact;
+	const moreBtn = env.document.querySelector('.juneau-config-saved-more');
+	const menu = env.document.querySelector('.juneau-config-saved-menu');
+	out.menuClosedInitially = menu.dataset.open !== 'true';
+	moreBtn.dispatch('click');
+	out.menuOpenAfterMore = menu.dataset.open === 'true' && moreBtn.getAttribute('aria-expanded') === 'true';
+	out.menuHoldsActions = menu.querySelectorAll('.juneau-config-saveas').length === 1
+		&& menu.querySelectorAll('.juneau-config-rename').length === 1
+		&& menu.querySelectorAll('.juneau-config-delete').length === 1;
+	out.menuNoHaspopup = moreBtn.getAttribute('aria-haspopup') == null;
+	env.dispatchDocument('click', { target: env.document.body });
+	out.menuClosesOnOutsideClick = menu.dataset.open !== 'true' && moreBtn.getAttribute('aria-expanded') === 'false';
+	moreBtn.dispatch('click');
+	let escStopped = false;
+	bar.dispatch('keydown', { key: 'Escape', stopPropagation: function () { escStopped = true; } });
+	out.menuClosesOnEscape = menu.dataset.open !== 'true' && escStopped;
+	out.escapeRefocusesMore = env.getActive() === moreBtn;
+	env.setActive(null);
+	moreBtn.dispatch('click');
+	const saveAsEl = menu.querySelector('.juneau-config-saveas');
+	menu.dispatch('click', { target: saveAsEl });
+	out.pickClosesMenu = menu.dataset.open !== 'true';
+	NS.config.closeChooserDialog(compactDlg.ctx);
+
+	NS.persistence = { list: function () { return Promise.resolve({ views: [{ name: 'Mine' }] }); } };
+	const fullDlg = openDragDialog();
+	await Promise.resolve(); await Promise.resolve();
+	out.barNotCompactWithViews = env.document.querySelector('.juneau-config-saved-bar').dataset.compact;
+	NS.config.closeChooserDialog(fullDlg.ctx);
+	process.stdout.write(JSON.stringify(out));
+})().catch(function (e) { console.error(e); process.exit(1); });
+

@@ -337,27 +337,69 @@
 	const DEFAULT_ICONS = {
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf", print: "print",
 		refresh: "refresh", collapse: "unfold_less",
-		pausePolling: "pause", dialog: "new", resetDefaults: "restore"
+		pausePolling: "pause", dialog: "new", resetDefaults: "restore",
+		search: "search", linkButton: "link", columnSettings: "tune", publish: "push"
 	};
+
+	/** Glyph hints for common option ids (matched on the lowercased id), so typical filters get a meaningful icon. */
+	const OPTION_ICON_HINTS = {
+		available: "circle_check", pending: "hourglass", sold: "tag", mammals: "paw_print", others: "shapes",
+		active: "user_check", inactive: "user_x", placed: "shopping_cart", approved: "badge_check", delivered: "truck",
+		birds: "bird", fish: "fish", packages: "package", store: "store"
+	};
+
+	/** Distinct glyphs handed to unhinted options by position, so siblings never share an icon (and never the gear). */
+	const OPTION_ICON_CYCLE = ["circle_check", "hourglass", "tag", "shapes", "package", "store", "trending_up", "chart_column"];
 
 	/**
 	 * Resolves the icon NAME (not markup) for a ribbon button - pure, DOM-free.  An explicit `symbol` on the
 	 * action/Opt always wins; otherwise a `defaultKey` (the export button id, or the action `type`) resolves from
-	 * DEFAULT_ICONS; a custom option/optionGroup member with neither falls back to the neutral "tune" glyph, never
-	 * blank/unset.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> draw nothing"
+	 * DEFAULT_ICONS; a custom option/optionGroup member with neither takes the hint for its (lowercased) id, else
+	 * the cycle glyph at its position `index`, never blank/unset and never the settings gear.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> draw nothing"
 	 * fallback both happen in the DOM binding layer, since this pure layer has no access to the registry's
 	 * runtime contents (apps can register icons after page load).
 	 */
-	function resolveButtonIcon(actionOrOpt, defaultKey) {
+	function resolveButtonIcon(actionOrOpt, defaultKey, index) {
 		if (actionOrOpt?.symbol != null) return actionOrOpt.symbol;
 		if (defaultKey != null && Object.hasOwn(DEFAULT_ICONS, defaultKey)) return DEFAULT_ICONS[defaultKey];
-		return "tune";
+		const id = typeof actionOrOpt?.id === "string" ? actionOrOpt.id.toLowerCase() : null;
+		if (id != null && Object.hasOwn(OPTION_ICON_HINTS, id)) return OPTION_ICON_HINTS[id];
+		return OPTION_ICON_CYCLE[(index | 0) % OPTION_ICON_CYCLE.length];
+	}
+
+	/**
+	 * Assigns each sibling option a distinct icon name (pure): an explicit symbol or an id hint is honoured and
+	 * reserved first, then each remaining option takes the first cycle glyph not yet used by a sibling (wrapping
+	 * only when the cycle is exhausted).  Returns the names in the options' order.
+	 */
+	function assignOptionIcons(opts) {
+		const list = opts || [];
+		const used = new Set();
+		const out = list.map(function (o) {
+			if (o?.symbol != null) { used.add(o.symbol); return o.symbol; }
+			const id = typeof o?.id === "string" ? o.id.toLowerCase() : null;
+			if (id != null && Object.hasOwn(OPTION_ICON_HINTS, id)) { used.add(OPTION_ICON_HINTS[id]); return OPTION_ICON_HINTS[id]; }
+			return null;
+		});
+		let n = 0;
+		return out.map(function (name) {
+			if (name != null) return name;
+			const free = OPTION_ICON_CYCLE.find(function (g) { return !used.has(g); });
+			if (free != null) { used.add(free); return free; }
+			return OPTION_ICON_CYCLE[n++ % OPTION_ICON_CYCLE.length];
+		});
 	}
 
 	/**
 	 * The canonical toolbar group ids, in toolbar order.  Only groups tagged with one of these ids are reordered.
 	 */
-	const CANONICAL_GROUPS = ["entity", "filter", "search", "viewing", "page", "status"];
+	// Stock items whose id defaults to their type (a client mirror of the server's default-id map).
+	const RIBBON_DEFAULT_IDS = ["refresh", "collapseAll", "pausePolling", "resetDefaults", "export", "search", "linkButton", "columnSettings"];
+	// Stock items whose default id differs from their type name.
+	const RIBBON_DEFAULT_ID_OF = { linkButton: "link", columnSettings: "columns" };
+	const ribbonDefaultId = function (type) { return Object.hasOwn(RIBBON_DEFAULT_ID_OF, type) ? RIBBON_DEFAULT_ID_OF[type] : type; };
+
+	const CANONICAL_GROUPS = ["search", "entity", "filter", "export", "viewing", "page", "status"];
 
 	/**
 	 * Sorts the groups tagged with a {@link #CANONICAL_GROUPS} id into canonical order, filling the slots those
@@ -391,7 +433,7 @@
 	 * {@link #buildRibbon} is the only caller.
 	 *
 	 * <ul>
-	 * 	<li>Groups tagged with a canonical id ({@code entity|filter|search|viewing|page|status}) sort among themselves
+	 * 	<li>Groups tagged with a canonical id ({@code search|entity|filter|export|viewing|page|status}) sort among themselves
 	 * 		into the slots they occupy (see {@link #sortCanonicalGroups}); other groups keep their position.
 	 * 	<li>An ungrouped {@code refresh} joins the {@code page} group as its last member when the ribbon has one.
 	 * 		Otherwise every ungrouped {@code refresh} is moved to the end, in one trailing cluster keyed by the
@@ -596,6 +638,11 @@
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
 	// buildRibbon(")`, so splitting them into further helpers would reduce test/code locality without reducing
 	// real complexity.
+	/** The id a ribbon item is addressed by: its explicit id, else the stock default for its type. */
+	function rbId(a) {
+		return a.id != null ? String(a.id) : ribbonDefaultId(a.type);
+	}
+
 	/**
 	 * Whether a ribbon item is shown: one with no {@code visibleWhen} always is.  A rule list is tested against the
 	 * page's top-level facts alone (a ribbon item has no row).  Presentation only; a page that somehow loaded this
@@ -610,8 +657,14 @@
 	function buildRibbon(viewDef, ctx) {
 		(ctx._ribbonUnsubs || []).forEach(function (u) { u(); });   // a rebuilt ribbon drops the previous one's listeners
 		ctx._ribbonUnsubs = [];
+		ctx._ribbonOwns = {};   // which auto-mounted toolbar controls this ribbon supplies itself (search, linkButton, columnSettings)
 		ctx.activeState = ctx.activeState || {};
-		const actions = normalizeRibbon(viewDef.ribbon || []).filter(ribbonItemVisible);
+		const declaredItems = normalizeRibbon(viewDef.ribbon || []);
+		// A claim hidden by its visibleWhen still counts, so the toolbar does not auto-mount a duplicate.
+		declaredItems.forEach(function (a) {
+			if ((a.type === "search" || a.type === "linkButton" || a.type === "columnSettings") && !ribbonItemVisible(a)) ctx._ribbonOwns[a.type] = true;
+		});
+		const actions = declaredItems.filter(ribbonItemVisible);
 		if (!actions.length) return null;
 		const rb = ribbonBus(viewDef, ctx);
 
@@ -621,8 +674,19 @@
 		bar.className = "juneau-view-ribbon";
 		bar.dataset.testid = "ribbon";
 
+		const mt = ctx.table && NS.tables && typeof NS.tables.handle === "function" ? NS.tables.handle(ctx.table) : null;
+		const modelOn = !!(mt && typeof mt._ribbonItem === "function");
+		const seenIds = new Set();
+		let curItem = null;     // the model handle of the item being placed, until its first element is placed
+		let curAction = null;   // the declared item being placed
 		let openGroup = null;   // { id, el } - the currently-open adjacent-group wrapper, or null when ungrouped
 		function place(el, groupId) {
+			if (curItem) {
+				const h = curItem;
+				curItem = null;
+				h._attach(el);
+				if (curAction.type === "option") el.addEventListener("click", function () { h._fire("activated", {}); });
+			}
 			if (groupId == null) {
 				openGroup = null;
 				bar.appendChild(el);
@@ -638,7 +702,34 @@
 			openGroup.el.appendChild(el);
 		}
 
+		// A hidden item has no element, so it gets no model handle either: drop the one created for it.
+		function skipItem() {
+			if (curItem) { curItem._destroy(); curItem = null; }
+		}
+
+		// Top-level option toggles in the same group are siblings: give them distinct default icons.
+		const toggleIcons = new Map();
+		const toggleGroups = {};
+		actions.forEach(function (a) { if (a.type === "option") (toggleGroups[a.group || "__ungrouped"] = toggleGroups[a.group || "__ungrouped"] || []).push(a); });
+		Object.keys(toggleGroups).forEach(function (g) {
+			const names = assignOptionIcons(toggleGroups[g]);
+			toggleGroups[g].forEach(function (a, i) { toggleIcons.set(a, names[i]); });
+		});
 		actions.forEach(function (a) { // NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type; complexity is inherent
+			skipItem();   // drop the handle of a previous item that never got an element
+			if (modelOn && a.type !== "divider") {
+				const mid = a.id != null ? String(a.id) : (RIBBON_DEFAULT_IDS.includes(a.type) ? ribbonDefaultId(a.type) : null);
+				if (mid != null && !seenIds.has(mid)) {
+					seenIds.add(mid);
+					curItem = mt._ribbonItem(a);
+					curAction = a;
+				}
+			}
+			if (a.type === "action") {
+				const it = curItem;
+				place(button(a.title || a.label || a.id, resolveButtonIcon(a.icon != null ? { symbol: a.icon } : a, null), function () { const live = ctx.table && NS.tables && typeof NS.tables.handle === "function" ? NS.tables.handle(ctx.table) : null; const cur = live && live.ribbon && typeof live.ribbon.item === "function" ? live.ribbon.item(a.id) : null; const target = cur && cur._attached ? cur : it; if (target) target._click(); }, a.appearance, a.id), a.group || "__ungrouped");
+				return;
+			}
 			if (a.type === "divider") {
 				openGroup = null;
 				const d = document.createElement("span");
@@ -679,14 +770,14 @@
 				for (const id of rendered) {
 					const miss = resolved.missing.find(function (m) { return m.id === id; });
 					if (miss) {
-						const dead = button(id, resolveButtonIcon(null, id), function () { /* disabled: nothing to run */ }, a.appearance);
+						const dead = button(id, resolveButtonIcon(null, id), function () { /* disabled: nothing to run */ }, a.appearance, id);
 						dead.disabled = true;
 						stampChromeTip(dead, fmt(EXPORT_MISSING_MSG, id, EXPORT_LIB_DISPLAY_NAME[miss.needs] || miss.needs));
 						place(dead, exportGroupId);
 					} else {
 						place(button(id, resolveButtonIcon(null, id), function () {
 							ctx.dataTable.button(id + ":name").trigger();
-						}, a.appearance), exportGroupId);
+						}, a.appearance, id), exportGroupId);
 					}
 				}
 				return;
@@ -694,13 +785,43 @@
 			if (a.type === "refresh") {
 				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () {
 					rb.send(rb.target(a), "reload");
-				}, a.appearance), a.group || "__ungrouped");
+				}, a.appearance, rbId(a)), a.group || "__ungrouped");
+				return;
+			}
+			if (a.type === "search") {
+				// A slot the table toolbar fills with the DataTables filter box (see buildToolbarRow).
+				const slot = document.createElement("span");
+				slot.className = "juneau-view-ribbon-search-slot";
+				slot.setAttribute("data-juneau-slot", "search");
+				slot.setAttribute("data-juneau-ribbon-id", rbId(a));
+				place(slot, a.group || "search");
+				ctx._ribbonOwns.search = true;
+				return;
+			}
+			if (a.type === "linkButton") {
+				const lb = NS.init && typeof NS.init.buildCopyLinkButton === "function" ? NS.init.buildCopyLinkButton(ctx.table, ctx) : null;
+				if (!lb) { skipItem(); return; }
+				lb.setAttribute("data-juneau-ribbon-id", rbId(a));
+				place(lb, a.group || "__ungrouped");
+				ctx._ribbonOwns.linkButton = true;
+				return;
+			}
+			if (a.type === "columnSettings") {
+				const cfg = NS.config;
+				const cb = viewDef.columnConfig && cfg && typeof cfg.openChooser === "function" && typeof cfg.buildChooserButton === "function"
+					? cfg.buildChooserButton(ctx.table, ctx, resolveButtonIcon(a, "columnSettings")) : null;
+				if (!cb) { skipItem(); return; }
+				cb.setAttribute("data-juneau-ribbon-id", rbId(a));
+				if (typeof cfg.seedChooserDraft === "function") cfg.seedChooserDraft(ctx.table, ctx);
+				place(cb, a.group || "__ungrouped");
+				ctx._ribbonOwns.columnSettings = true;
 				return;
 			}
 			if (a.type === "collapseAll") {
+				if (!ctx.hasRowDetail) { skipItem(); return; }   // nothing to collapse without a row detail
 				place(button(a.title || "Collapse all", resolveButtonIcon(a, "collapse"), function () {
 					rb.send(rb.target(a), "collapse-all");
-				}, a.appearance), a.group || "__ungrouped");
+				}, a.appearance, rbId(a)), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "publish") {
@@ -708,11 +829,12 @@
 				if (!ctx.bus) {
 					console.error("Juneau view '" + viewDef.id + "': ribbon publish item '" + (a.title || a.topic) +
 						"' needs a console page (no message bus); not rendered.");
+					skipItem();
 					return;
 				}
-				place(button(a.title || a.topic, resolveButtonIcon(a, null), function () {
+				place(button(a.title || a.topic, resolveButtonIcon(a, "publish"), function () {
 					ctx.bus.publish(a.topic, JSON.parse(JSON.stringify(a.payload === undefined ? {} : a.payload))); // NOSONAR javascript:S7784 -- JSON round-trip deliberately normalizes to plain JSON
-				}, a.appearance), a.group || "__ungrouped");
+				}, a.appearance, a.id), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "dialog") {
@@ -724,22 +846,24 @@
 				// the view runtime renders an inert button rather than throwing on click.
 				place(button(a.title || a.id, resolveButtonIcon(a, "dialog"), function () {
 					if (typeof NS.init?.openRibbonDialog === "function") NS.init.openRibbonDialog(a.id, ctx.table, ctx);
-				}, a.appearance), a.group || "__ungrouped");
+				}, a.appearance, a.id), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "resetDefaults") {
+				// Reset persists only through the columnConfig restore path, so without columnConfig it would do nothing.
+				if (!viewDef.columnConfig) { skipItem(); return; }
 				// Puts this table back on its built-in Default view and applies it at once, with no dialog.  The reset
 				// lives in juneau-config.js; a page that loaded the ribbon runtime without it renders an inert button.
 				place(button(a.title || "Reset to defaults", resolveButtonIcon(a, "resetDefaults"), function () {
 					if (typeof NS.config?.resetToDefaultsAndApply === "function") NS.config.resetToDefaultsAndApply(ctx.table, ctx);
-				}, a.appearance), a.group || "__ungrouped");
+				}, a.appearance, rbId(a)), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "pausePolling") {
 				// A pause control on a view that never polls is a lie - wireTablePolling only calls initPolling when
 				// viewDef.pollIntervalMs is set, so there would be no timer for the button to hold.  Skip it.  A
 				// cross-card pause targets ANOTHER table's polling, so only an own-table pause needs this view to poll.
-				if (a.target == null && ! viewDef.pollIntervalMs) return;
+				if (a.target == null && ! viewDef.pollIntervalMs) { skipItem(); return; }
 				// The name stays put across the toggle, as it does for Column search above: an accessible name that
 				// swapped to "Resume auto-refresh" on press would move the state INTO the name, and a screen reader
 				// reading the name and aria-pressed together would then announce it twice and contradict itself.
@@ -752,7 +876,7 @@
 					const pause = ppBtn.getAttribute("aria-pressed") !== "true";
 					rb.send(rb.target(a), pause ? "pause-polling" : "resume-polling");
 					paintPause(pause);
-				}, a.appearance);
+				}, a.appearance, rbId(a));
 				function paintPause(paused) {
 					ppBtn.setAttribute("aria-pressed", paused ? "true" : "false");
 					paintIcon(ppBtn, paused ? "play" : resolveButtonIcon(a, "pausePolling"));
@@ -764,15 +888,18 @@
 				return;
 			}
 			if (a.type === "option") {
-				place(optionToggle(viewDef, a, ctx, rb), a.group || "__ungrouped");
+				place(optionToggle(viewDef, a, ctx, rb, toggleIcons.get(a)), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "optionGroup") {
 				openGroup = null;
-				bar.appendChild(optionGroup(viewDef, a, ctx, rb));
+				const og = optionGroup(viewDef, a, ctx, rb);
+				place(og, null);
 			}
 		});
+		skipItem();
 		rb.listen();
+		if (modelOn) mt._ribbonEnd(bar);
 		return bar;
 	}
 
@@ -813,10 +940,11 @@
 		if (markup != null) b.innerHTML = markup;
 	}
 
-	function button(label, iconName, onClick, appearance) {
+	function button(label, iconName, onClick, appearance, ribbonId) {
 		const b = document.createElement("button");
 		b.type = "button";
 		b.className = "juneau-view-ribbon-btn";
+		if (ribbonId != null) b.setAttribute("data-juneau-ribbon-id", String(ribbonId));
 		stampChromeTip(b, label);
 		paintIcon(b, iconName);
 		if (appearance === "icon") b.classList.add("juneau-view-ribbon-btn--icon");
@@ -824,11 +952,11 @@
 		return b;
 	}
 
-	function optionToggle(viewDef, action, ctx, rb) {
+	function optionToggle(viewDef, action, ctx, rb, iconName) {
 		const target = rb.target(action);
-		const b = button(action.title || action.id, resolveButtonIcon(action, null), function () {
+		const b = button(action.title || action.id, resolveButtonIcon(action.symbol == null && iconName != null ? { symbol: iconName } : action, null), function () {
 			rb.send(target, "set-filter", { options: { [action.id]: !rb.optionsOf(target)[action.id] } });
-		}, action.appearance);
+		}, action.appearance, action.id);
 		function paint(options) { b.setAttribute("aria-pressed", options[action.id] ? "true" : "false"); }
 		rb.onOptions(target, paint);
 		paint(rb.optionsOf(target));
@@ -845,11 +973,12 @@
 			wrap.setAttribute("role", "group");
 			wrap.setAttribute("aria-label", group.title);
 		}
-		(group.options || []).forEach(function (o) {
-			const b = button(o.title || o.id, resolveButtonIcon(o, null), function () {
+		const icons = assignOptionIcons(group.options);
+		(group.options || []).forEach(function (o, i) {
+			const b = button(o.title || o.id, resolveButtonIcon({ symbol: icons[i] }, null), function () {
 				const cur = rb.optionsOf(target)[group.id];
 				rb.send(target, "set-filter", { options: { [group.id]: (cur === o.id && group.deselectable) ? null : o.id } });
-			}, group.appearance);
+			}, group.appearance, o.id);
 			function paint(options) { b.setAttribute("aria-pressed", options[group.id] === o.id ? "true" : "false"); }
 			rb.onOptions(target, paint);
 			paint(rb.optionsOf(target));
@@ -874,8 +1003,15 @@
 		resolveExportButtons: resolveExportButtons,
 		ribbonStorageKey: ribbonStorageKey,
 		resolveButtonIcon: resolveButtonIcon,
+		assignOptionIcons: assignOptionIcons,
+		DEFAULT_ICONS: DEFAULT_ICONS,
+		OPTION_ICON_HINTS: OPTION_ICON_HINTS,
+		OPTION_ICON_CYCLE: OPTION_ICON_CYCLE,
+		button: button,
+		paintIcon: paintIcon,
 		normalizeRibbon: normalizeRibbon,
 		CANONICAL_GROUPS: CANONICAL_GROUPS,
+		stockDefaultIds: RIBBON_DEFAULT_IDS.reduce(function(m, t){ m[t] = ribbonDefaultId(t); return m; }, {}),
 		// binding
 		loadPersistedState: loadPersistedState,
 		persist: persist,

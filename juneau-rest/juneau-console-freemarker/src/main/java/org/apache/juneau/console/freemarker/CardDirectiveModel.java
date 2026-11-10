@@ -226,7 +226,12 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	void recordRequirements(PageCapture cap, String type, String id, List<String> requires, Map<String,Object> body)
 			throws TemplateModelException {
 		try {
-			var bodyPacks = cardTypes.handler(type).requiredPacks(new JsonMap(body));
+			var handler = cardTypes.handler(type);
+			var bodyPacks = handler.requiredPacks(new JsonMap(body));
+			// Nested cards first: a container builds them as it renders, so their runtimes must load ahead of its own.
+			for (var nested : handler.nestedCards(new JsonMap(body)))
+				if (nested.get("type") instanceof String nt && nested.get("id") instanceof String ni)
+					recordRequirements(cap, nt, ni, List.of(), nested);
 			cap.require(requirements.forCard(type, id, requires, bodyPacks));
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());

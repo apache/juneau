@@ -25,10 +25,12 @@
   ],
   "ribbon": [
     {
-      "type": "refresh"
+      "type": "refresh",
+      "id": "refresh"
     },
     {
       "type": "export",
+      "id": "export",
       "buttons": [
         "copy",
         "csv",
@@ -36,13 +38,28 @@
       ]
     },
     {
-      "type": "collapseAll"
+      "type": "collapseAll",
+      "id": "collapseAll"
     },
     {
-      "type": "pausePolling"
+      "type": "pausePolling",
+      "id": "pausePolling"
     },
     {
-      "type": "resetDefaults"
+      "type": "resetDefaults",
+      "id": "resetDefaults"
+    },
+    {
+      "type": "search",
+      "id": "search"
+    },
+    {
+      "type": "linkButton",
+      "id": "link"
+    },
+    {
+      "type": "columnSettings",
+      "id": "columns"
     },
     {
       "type": "dialog",

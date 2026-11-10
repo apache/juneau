@@ -74,6 +74,9 @@ final class RawContentSinkScanner {
 	/** Matches {@code document.write(}. */
 	private static final Pattern JS_DOCUMENT_WRITE = Pattern.compile("document\\.write\\s*\\(");
 
+	/** Matches {@code new Function(} and a bare {@code eval(} call. */
+	private static final Pattern JS_EVAL = Pattern.compile("\\bnew\\s+Function\\s*\\(|(?<![\\w.])eval\\s*\\(");
+
 	/** This module's shipped-JS resource directory, relative to the module root. */
 	private static final String VIEWS_JS_DIR = "src/main/resources/org/apache/juneau/views";
 
@@ -112,15 +115,17 @@ final class RawContentSinkScanner {
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "slot.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-ribbon.js", "b.innerHTML = markup;"),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-helpers.js", "span.innerHTML = markup;"),
-		// First-party icon-registry SVG (resolveIcon), never request/row text: column search and sort glyphs.
-		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "icon.innerHTML = markup;"),
+		// First-party icon-registry SVG (resolveIcon), never request/row text: column search and sort glyphs, detail header actions.
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "icon.innerHTML = markup;", 2),
 		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-views.js", "orderSpan.insertAdjacentHTML(\"afterbegin\", markup);"),
 		new AllowedJsSink(CONSOLE_JS_DIR + "/juneau-console.js", "iconSpan.innerHTML = glyph;"),
 		// Author-trusted markup, NOT inert: a template element keeps scripts from running, but on* handlers fire
 		// after importNode.  footer.text is trusted HTML per the page schema, and the html-card src is a same-origin
 		// endpoint that must escape its own output.  The page author is the trust boundary.
 		new AllowedJsSink(CONSOLE_JS_DIR + "/juneau-console.js", "ftpl.innerHTML = f.text;"),
-		new AllowedJsSink(CONSOLE_JS_DIR + "/juneau-console.js", "tpl.innerHTML = text;")
+		new AllowedJsSink(CONSOLE_JS_DIR + "/juneau-console.js", "tpl.innerHTML = text;"),
+		// The one opt-in inline handler compiler; it only runs on pages that set allowInlineHandlers.
+		new AllowedJsSink(VIEWS_JS_DIR + "/juneau-model-inline.js", "new Function(\"target\", \"event\", body);")
 	);
 
 	/** Shipped JS assets scanned by {@link #scanShippedJs(Path)}, each as a reactor-root-relative path. */
@@ -147,11 +152,14 @@ final class RawContentSinkScanner {
 		CONSOLE_JS_DIR + "/juneau-charts.js",
 		// The job-log runtime renders server-supplied progress lines and outcome messages, so it must stay sink-free.
 		CONSOLE_JS_DIR + "/juneau-joblog.js",
+		CONSOLE_JS_DIR + "/juneau-switcher.js",
 		// The badge runtime renders row/status text into badge nodes, so it must stay sink-free.
 		CONSOLE_JS_DIR + "/juneau-badges.js",
 		// The dashboard runtime renders share-link and saved-state values and data-source dict values, so it must stay sink-free.
 		CONSOLE_JS_DIR + "/juneau-dashboard.js",
 		VIEWS_JS_DIR + "/juneau-bus.js",
+		VIEWS_JS_DIR + "/juneau-model.js",
+		VIEWS_JS_DIR + "/juneau-model-inline.js",
 		VIEWS_JS_DIR + "/juneau-pagestate.js",
 		VIEWS_JS_DIR + "/juneau-search.js",
 		VIEWS_JS_DIR + "/juneau-urlstate.js",
@@ -206,6 +214,7 @@ final class RawContentSinkScanner {
 		addJsHits(file, code, JS_OUTERHTML_ASSIGN, "outerHTML assignment", allowedSnippets, sinks, violations);
 		addJsHits(file, code, JS_INSERT_ADJACENT_HTML, "insertAdjacentHTML( call", allowedSnippets, sinks, violations);
 		addJsHits(file, code, JS_DOCUMENT_WRITE, "document.write( call", allowedSnippets, sinks, violations);
+		addJsHits(file, code, JS_EVAL, "dynamic code evaluation (new Function / eval)", allowedSnippets, sinks, violations);
 		return new Result(sinks, violations);
 	}
 

@@ -203,6 +203,13 @@ class TerminalView_BrowserTest extends TestBase {
 				sendFailure(ex, e);
 			}
 		});
+		server.createContext("/page/juneau-symbols-lucide.svg", ex -> {
+			try {
+				writeBody(ex, 200, "image/svg+xml", resource(ViewsMixin.class, "/org/apache/juneau/views/juneau-symbols-lucide.svg"));
+			} catch (Exception e) {
+				sendFailure(ex, e);
+			}
+		});
 		server.createContext("/page/", ex -> {
 			try {
 				var c = ex.getRequestURI().getPath().substring("/page/".length());

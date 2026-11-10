@@ -49,9 +49,9 @@ class ConsoleCustomCard_BrowserTest extends TestBase {
 	static void probe() throws Exception {
 		// JuneauConsole does not exist before the shell loads, so pre-load registration goes through the queue.
 		var beforeShell = PROBE_EVENTS
-			+ "<script>(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['kpi', function (card, el) { el.textContent = 'kpi:' + card.id; }]);</script>";
+			+ "<script>(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['kpi', class { static lateBase = true; render() { this.el.textContent = 'kpi:' + this.spec.id; } }]);</script>";
 		// After load the card is already mounted as pending; registerCard renders it.
-		var afterShell = "<script>JuneauConsole.registerCard('widget', { render: function (card, el) { el.textContent = 'widget:' + card.id; } });</script>";
+		var afterShell = "<script>JuneauConsole.registerCard('widget', class extends JuneauConsole.Card { render() { this.el.textContent = 'widget:' + this.spec.id; } });</script>";
 		report = ConsoleBrowserFixture.create("custom-card")
 			.page("before", ORIGIN + "/before",
 				contractPage("{\"contractVersion\":\"1\",\"title\":\"T\",\"cards\":[{\"id\":\"k1\",\"type\":\"kpi\",\"title\":\"K\"}]}", "", beforeShell, ""),

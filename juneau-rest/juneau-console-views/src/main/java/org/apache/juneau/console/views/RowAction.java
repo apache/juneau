@@ -116,7 +116,7 @@ import org.apache.juneau.console.widgets.Op;
  *
  * @since 10.0.0
  */
-@BeanType(properties="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer")
+@BeanType(properties="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer,href")
 @SuppressWarnings({
 	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
@@ -303,6 +303,12 @@ public class RowAction {
 	 */
 	public String endpoint;
 
+	/**
+	 * The same-origin path template of a link action (see {@link #link(String,String)}); {@code {id}} and
+	 * {@code {property}} are replaced from the row.
+	 */
+	public String href;
+
 	/** The non-safe HTTP method wire token (see {@link Method#wire()}). */
 	public String method;
 
@@ -370,6 +376,48 @@ public class RowAction {
 		var a = new RowAction();
 		a.id = id;
 		return a;
+	}
+
+	/**
+	 * Starts a link action: a header button that navigates to a same-origin page instead of submitting.
+	 *
+	 * <p>
+	 * A link action has no endpoint, method, form or confirmation.  Row menus ignore it; it shows in a tabbed row
+	 * detail's header.
+	 *
+	 * @param id The stable action id.  Must not be blank.
+	 * @param urlTemplate A same-origin path template; {@code {id}} and {@code {property}} are replaced from the row.
+	 * @return A new link {@link RowAction}.
+	 * @throws IllegalArgumentException If {@code id} is blank or the template is not a same-origin path.
+	 */
+	public static RowAction link(String id, String urlTemplate) {
+		return create(id).href(urlTemplate);
+	}
+
+	/**
+	 * Sets the link target, making this a link action.
+	 *
+	 * @param urlTemplate A same-origin path template starting with {@code /}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If the template is not a same-origin path.
+	 */
+	public RowAction href(String urlTemplate) {
+		if (urlTemplate == null || ! urlTemplate.startsWith("/") || ! RegionDef.isSafeDetailEndpoint(urlTemplate))
+			throw iaex("RowAction '%s' href '%s' must be a same-origin path starting with '/'.", id, urlTemplate);
+		href = urlTemplate;
+		return this;
+	}
+
+	/**
+	 * Checks that this action is coherent: a link action carries nothing a submit would.
+	 *
+	 * @throws IllegalArgumentException If a link action also sets an endpoint, method, form or confirmation.
+	 */
+	void validateLink() {
+		if (href == null)
+			return;
+		if (endpoint != null || method != null || form != null || confirm != null)
+			throw iaex("RowAction '%s' is a link and cannot also set endpoint, method, form or confirm.", id);
 	}
 
 	/**

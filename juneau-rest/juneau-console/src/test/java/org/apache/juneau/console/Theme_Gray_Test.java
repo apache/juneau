@@ -37,8 +37,8 @@ class Theme_Gray_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.GRAY.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is106_mirroringOpensPin() {
-		assertSize(106, Theme.GRAY.getTokens());
+	@Test void a02_tokenCount_is136_mirroringOpensPin() {
+		assertSize(136, Theme.GRAY.getTokens());
 	}
 
 	@Test void a03_name_isGray() {

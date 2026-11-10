@@ -62,7 +62,8 @@ class PublicTypes_Javadoc_Test {
 		CUIF + "Decorator.java", CUIF + "Fn.java", CUIF + "Markers.java", CUIF + "Bands.java", CUIF + "Thresholds.java", CUIF + "Annotations.java",
 		CUIF + "DataSourceDef.java", CUIF + "Derived.java", CD + "SeriesSource.java", CD + "SeriesAggregator.java",
 		CUIF + "Section.java", CUIF + "RangeSection.java", CUIF + "SearchSection.java", CUIF + "ChoiceSection.java",
-		CUIF + "CardSection.java", CUIF + "Rail.java", CUIF + "PersistSpec.java", CUIF + "DashboardSpec.java");
+		CUIF + "CardSection.java", CUIF + "Rail.java", CUIF + "PersistSpec.java", CUIF + "DashboardSpec.java",
+		CUIF + "SwitcherDef.java", CUIF + "SwitcherCardType.java");
 
 	private static void assertHasExampleBlock(Path file) throws IOException {
 		assertTrue(Files.exists(file), () -> "Missing file, update NEW_PUBLIC_TYPE_FILES: '" + file + "'.");

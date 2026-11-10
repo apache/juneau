@@ -629,4 +629,21 @@ class PageSpec_Cards_Test extends TestBase {
 		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg31, CUSTOM));
 		assertTrue(ex.getMessage().contains("<@card id='load'> sanitize= applies only to an html card with src=."), ex::getMessage);
 	}
+
+	@Test void z01_switcherCard_liftsNestedAndPullsPacks() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().card(SwitcherDef.create("sw1")
+			.view("a", "A", v -> v.section(ChartDef.line("c1").src("/x").x("d").series("n", "N").toCardSpec()))
+			.view("t", "T", v -> v.section(CardSpec.of("datatables", "d1").body("dataMode", "client").body("dataUrl", "/x").body("columns", List.of(Map.of("key", "k", "label", "K")))))
+			.toCardSpec()).applyTo(cap, MODEL);
+		var card = cap.unplacedCards().get(0).toMap();
+		assertEquals("switcher", card.get("type"));
+		var views = (List<?>)card.get("views");
+		var d = (Map<?,?>)((Map<?,?>)views.get(1)).get("card");
+		assertNotNull(d.get("table"));
+		var packs = cap.requiredPacks();
+		assertTrue(packs.contains(ToolkitPackRegistry.PACK_SWITCHER), packs.toString());
+		assertTrue(packs.contains(ToolkitPackRegistry.PACK_CHARTS), packs.toString());
+		assertTrue(packs.contains(ToolkitPackRegistry.PACK_DATATABLES_GLUE), packs.toString());
+	}
 }

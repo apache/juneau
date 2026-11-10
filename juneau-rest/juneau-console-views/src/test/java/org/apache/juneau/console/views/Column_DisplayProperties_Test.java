@@ -167,4 +167,18 @@ class Column_DisplayProperties_Test extends TestBase {
 		var ex = assertThrows(IllegalArgumentException.class, () -> target2.column(null));
 		assertEquals("ViewDef 'pets' column must not be null.", ex.getMessage());
 	}
+
+	@Test void a11_description_emittedWhenSet() {
+		var m = Column.create("price").description("List price before tax.").toCatalogMap();
+		assertEquals("List price before tax.", m.get("description"));
+	}
+
+	@Test void a12_description_omittedWhenUnset() {
+		assertFalse(Column.create("price").toCatalogMap().containsKey("description"));
+	}
+
+	@Test void a13_description_getter() {
+		assertEquals("x", Column.create("price").description("x").description());
+		assertNull(Column.create("price").description());
+	}
 }

@@ -1062,4 +1062,15 @@ class ConsoleCharts_Test extends TestBase {
 		assertEquals(1, num(r, "held"));
 		assertEquals(2, num(r, "after"));
 	}
+
+	@Test void z01_mount_drawsRowsIntoABareElement_andRefusesBadInput() {
+		var r = part("mount");
+		assertEquals(true, r.get("returned"));
+		assertEquals(true, r.get("drawn"));
+		assertEquals(1, num(r, "seriesCount"));
+		assertEquals(List.of(3, 5, 4), r.get("placed"));
+		assertEquals("JuneauCharts.mount needs an element to draw into", r.get("bad"));
+		assertEquals("rejected", r.get("failed"));
+		assertEquals(1, num(r, "errorShown"));
+	}
 }

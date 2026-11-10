@@ -30,7 +30,7 @@ class RibbonItem_Test extends TestBase {
 	@Test void a01_refresh_toMap() {
 		var m = RibbonItem.refresh().toMap();
 		assertEquals("refresh", m.get("type"));
-		assertEquals(Set.of("type"), m.keySet());
+		assertEquals(Set.of("type", "id"), m.keySet());
 	}
 
 	@Test void a02_collapseAll_pausePolling_toMap() {
@@ -334,8 +334,7 @@ class RibbonItem_Test extends TestBase {
 
 	@Test void a40_id_rejectedWhereTheRuntimeIgnoresIt() {
 		assertIgnored("divider", RibbonItem.divider().id("x"), "id");
-		var target2 = RibbonItem.export("copy").id("x");
-		assertThrows(IllegalArgumentException.class, target2::toMap);
+		assertEquals("x", RibbonItem.export("copy").id("x").toMap().get("id"));
 	}
 
 	@Test void a41_id_blank_rejected() {
@@ -356,5 +355,52 @@ class RibbonItem_Test extends TestBase {
 	@Test void a43_resetDefaults_target_rejected() {
 		// The reset acts on its own table only; it is not a bus command, so a target is rejected.
 		assertIgnored("resetDefaults", RibbonItem.resetDefaults().target("orders"), "target");
+	}
+
+	@Test void a44_export_allows_id() {
+		assertEquals("exp", RibbonItem.export("csv").id("exp").toMap().get("id"));
+	}
+
+	@Test void a60_search_toMap() {
+		assertEquals(Map.of("type", "search", "id", "search"), RibbonItem.search().toMap());
+	}
+
+	@Test void a61_linkButton_toMap_defaultId() {
+		assertEquals(Map.of("type", "linkButton", "id", "link"), RibbonItem.linkButton().toMap());
+	}
+
+	@Test void a62_columnSettings_toMap_symbolAppearance() {
+		var m = RibbonItem.columnSettings().symbol("tune").appearance("icon").group("viewing").toMap();
+		assertEquals("columnSettings", m.get("type"));
+		assertEquals("columns", m.get("id"));
+		assertEquals("viewing", m.get("group"));
+	}
+
+	@Test void a63_search_rejects_symbol_and_appearance() {
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.search().symbol("x").toMap());
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.search().appearance("icon").toMap());
+	}
+
+	@Test void a64_new_types_listed_in_unknown_type_error() {
+		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "nope")));
+		for (var t : List.of("search", "linkButton", "columnSettings"))
+			assertTrue(e.getMessage().contains(t), t);
+	}
+
+	@Test void a65_new_types_are_handled() {
+		var m = RibbonItem.linkButton().on("activated", "juneau.refresh").toMap();
+		assertTrue(m.containsKey("model"), String.valueOf(m));
+	}
+
+	@Test void a45_publish_without_id_throws() {
+		var pub = RibbonItem.publish("Go", "app.go", null);
+		var items = List.of(pub);
+		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validateList("t", items));
+		assertTrue(e.getMessage().contains("needs an explicit id"), e.getMessage());
+		RibbonItem.validateList("t", List.of(RibbonItem.publish("Go", "app.go", null).id("go")));
+	}
+
+	@Test void a46_divider_needs_no_id() {
+		RibbonItem.validateList("t", List.of(RibbonItem.divider(), RibbonItem.divider()));
 	}
 }

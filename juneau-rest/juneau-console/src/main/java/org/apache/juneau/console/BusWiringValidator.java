@@ -115,6 +115,8 @@ public final class BusWiringValidator {
 	// Topic grammar: one copy, owned by Topics.
 	static final Set<String> FRAMEWORK_FAMILIES = Topics.FRAMEWORK_FAMILIES;
 	static final Pattern TOPIC = Topics.TOPIC;
+	/** Scope placeholders a handler subscription topic may carry. */
+	static final Pattern HANDLER_PLACEHOLDER = Pattern.compile("\\{(rowKey|tabId|cardId)\\}");
 	static final Pattern CUSTOM_DECL = Topics.CUSTOM_PUBLICATION;
 	static final Pattern UNNAMESPACED = Pattern.compile("^([a-z][a-z0-9-]{0,31})(:([A-Za-z0-9_.-]{1,128}|\\*))?$");
 	static final Pattern BRIDGE_ID = Topics.ID;
@@ -188,6 +190,9 @@ public final class BusWiringValidator {
 		final List<Map<?,?>> topics;
 		final List<Map<?,?>> bridges;
 		final Map<String,Map<?,?>> cards = new LinkedHashMap<>();
+		/** Ids of cards found inside another card, and nested ids that repeat another card's id. */
+		final Set<String> nestedIds = new HashSet<>();
+		final Set<String> nestedDuplicates = new TreeSet<>();
 		final List<Map<?,?>> dataSources;
 		final List<Map<?,?>> sections;
 		/** The contract's {@code dashboard} object, or an empty map. */
@@ -212,9 +217,7 @@ public final class BusWiringValidator {
 			this.registry = registry;
 			topics = maps(contract.get("topics"));
 			bridges = maps(contract.get("bridges"));
-			for (var c : maps(contract.get("cards")))
-				if (str(c.get("id")) != null)
-					cards.putIfAbsent(str(c.get("id")), c);
+			flatten(maps(contract.get("cards")), false);
 			dataSources = maps(contract.get("dataSources"));
 			var dash = contract.get("dashboard") instanceof Map<?,?> d ? d : Map.of();
 			dashboard = dash;
@@ -226,6 +229,26 @@ public final class BusWiringValidator {
 			for (var s : sections) if (str(s.get("id")) != null) sectionIds.add(str(s.get("id")));
 			targets.addAll(sourceIds);
 			targets.addAll(sectionIds);
+		}
+
+		// Adds each card, then (recursively) the cards its handler says it holds, so every later pass sees nested cards.
+		void flatten(List<Map<?,?>> list, boolean nested) {
+			for (var c : list) {
+				var id = str(c.get("id"));
+				if (id != null) {
+					if (cards.containsKey(id)) {
+						if (nested || nestedIds.contains(id))
+							nestedDuplicates.add(id);
+					} else {
+						cards.put(id, c);
+					}
+					if (nested)
+						nestedIds.add(id);
+				}
+				var type = str(c.get("type"));
+				if (type != null && registry.isRegistered(type))
+					flatten(maps(registry.handler(type).nestedCards(json(c))), true);
+			}
 		}
 
 		List<Problem> run() {
@@ -478,6 +501,8 @@ public final class BusWiringValidator {
 
 		// R-E6 (E-76 / E-77): ids are unique across cards, data sources and rail sections.
 		void checkIds() {
+			for (var id : nestedDuplicates)
+				add("E-76", "card '%s': %s", id, "id is declared more than once across nested cards");
 			var seenSources = new HashSet<String>();
 			for (var s : dataSources) {
 				var sid = str(s.get("id"));
@@ -599,6 +624,17 @@ public final class BusWiringValidator {
 		void checkSubscription(Map<?,?> card, Map<?,?> sub) {
 			var id = str(card.get("id"));
 			var topic = str(sub.get("topic"));
+			if (sub.get("handler") != null) {
+				// Handler subscription: the topic may carry scope placeholders, which are only known at run time, so a
+				// templated topic is checked for grammar alone.  No role applies (a role is the card class's own method).
+				var templated = topic != null && HANDLER_PLACEHOLDER.matcher(topic).find();
+				var concrete = topic == null ? null : HANDLER_PLACEHOLDER.matcher(topic).replaceAll("x");
+				if (concrete == null || ! TOPIC.matcher(concrete).matches())
+					add("E-40", E40, topic);
+				else if (! templated)
+					checkPublisher(id, topic);
+				return;
+			}
 			if (topic == null || ! TOPIC.matcher(topic).matches())
 				add("E-40", E40, topic);
 			else

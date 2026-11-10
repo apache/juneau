@@ -80,6 +80,7 @@ public final class Column {
 
 	private final String name;
 	private String label;
+	private String description;
 	private SearchType searchType;
 	private SearchOperatorSet operators;  // null means "inherit the table-level set".
 	private Render render;
@@ -112,6 +113,18 @@ public final class Column {
 	 */
 	public Column label(String value) {
 		label = value;
+		return this;
+	}
+
+	/**
+	 * Sets optional help text for this column, shown in the View Settings dialog's detail strip when the column is
+	 * selected.
+	 *
+	 * @param value The help text.  Can be <jk>null</jk> (no help text).
+	 * @return This object.
+	 */
+	public Column description(String value) {
+		description = value;
 		return this;
 	}
 
@@ -207,7 +220,7 @@ public final class Column {
 	}
 
 	/**
-	 * Builds this column's catalog entry: {@code key} and {@code label} plus the display ({@code render},
+	 * Builds this column's catalog entry: {@code key} and {@code label} (and {@code description} when set) plus the display ({@code render},
 	 * {@code href}, {@code className}, {@code defaultVisible}) and search ({@code searchType},
 	 * {@code searchOperators}, {@code customOperators}) metadata, flattened onto one entry, in the form the
 	 * {@code datatables} card type resolves.
@@ -245,6 +258,8 @@ public final class Column {
 		var m = new JsonMap();
 		m.put("key", name);
 		m.put("label", label != null ? label : name);
+		if (description != null)
+			m.put("description", description);
 		if (render != null)
 			m.put("render", render);
 		else if (href != null)
@@ -286,6 +301,11 @@ public final class Column {
 	/** @return The column label, or <jk>null</jk>. */
 	public String label() {
 		return label;
+	}
+
+	/** @return The column help text, or <jk>null</jk>. */
+	public String description() {
+		return description;
 	}
 
 	/** @return The column value type, or <jk>null</jk> if the column is not searchable. */

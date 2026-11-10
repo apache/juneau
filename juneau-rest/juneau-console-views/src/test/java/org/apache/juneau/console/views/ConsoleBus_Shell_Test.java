@@ -65,7 +65,7 @@ class ConsoleBus_Shell_Test extends TestBase {
 
 	@Test void a00_sourceShape() throws Exception {
 		var src = BusHarness.source(CONSOLE_JS);
-		var validate = src.indexOf("paintWiringProblems(doc, bus.wiring.validate(contract, cardTypeTable()));");
+		var validate = src.indexOf("paintWiringProblems(doc, bus.wiring.validate(withNestedCards(contract), cardTypeTable()));");
 		var anchor = src.indexOf("// ---- bus: bridges attach here ----");
 		var wire = src.indexOf("wireCards(doc, bus, contract);");
 		assertTrue(validate > 0 && validate < anchor && anchor < wire, "validate, then the bridge anchor, then wireCards");

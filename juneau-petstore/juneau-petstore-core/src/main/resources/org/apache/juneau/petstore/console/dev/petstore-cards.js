@@ -46,13 +46,19 @@
 
 	var queue = (window.JuneauConsoleCards = window.JuneauConsoleCards || []);
 
+	// Cards extend the console's Card base.  A script that loads before the console flags its classes (lateBase) and
+	// the console puts the base under them when it registers them.
+	var Base = (window.JuneauViews && window.JuneauViews.model && window.JuneauViews.model.Card)
+		|| (window.JuneauConsole && window.JuneauConsole.Card) || class {};
+
 	// kpi: JSON-only (no Java class).  The body is {label, dataUrl}; the endpoint returns {label, value}, plus an
 	// optional unit shown after the value.
-	queue.push(['kpi', {
-		render: function (card, el, ctx) {
-			var b = body(card, el);
-			ctx.paintLoading(b);
-			return ctx.fetchJson(card.dataUrl).then(function (d) {
+	class KpiCard extends Base {
+		static lateBase = true;
+		render() {
+			var card = this.spec, b = body(card, this.el);
+			this.paintLoading(b);
+			return this.fetchJson(card.dataUrl).then(function (d) {
 				var v = document.createElement('div');
 				v.className = 'petstore-kpi-value';
 				v.textContent = d.unit ? d.value + ' ' + d.unit : String(d.value);
@@ -61,10 +67,11 @@
 				l.textContent = d.label || card.label || '';
 				b.replaceChildren(v, l);
 			}, function (err) {
-				if (!ctx.isAbort(err)) ctx.paintError(b, err);
-			});
+				if (!this.isAbort(err)) this.paintError(b, err);
+			}.bind(this));
 		}
-	}]);
+	}
+	queue.push(['kpi', KpiCard]);
 
 	// A custom URL-state directive: ?state=species(CAT) picks the gauge's species, and back/forward restores it.  The
 	// built-in directives drive a datatable; the gauge has none, so it reads and writes the directive itself.  The
@@ -138,27 +145,47 @@
 		});
 	}
 
+	// The card body's gauge, with the species the address bar asks for, if any.  The data URL's species parameter
+	// is set (or added) through URLSearchParams, so the rest of the URL is kept as written.
+	function gaugeOf(card) {
+		var g = card.gauge, s = speciesFromUrl();
+		if (!s) return g;
+		var u = new URL(g.dataUrl, window.location.href);
+		u.searchParams.set('species', s);
+		var dataUrl = u.origin === window.location.origin ? u.pathname + u.search + u.hash : u.href;
+		return Object.assign({}, g, { species: s, dataUrl: dataUrl });
+	}
+
 	// inventory-gauge: the fragment is {gauge:{species, low, high, dataUrl}}, shaped by InventoryGaugeCardType.
-	queue.push(['inventory-gauge', (function () {
-		var reads = new Map();    // card id -> successful reads
-		var below = new Map();    // card id -> true while stock is under low (announced once per crossing)
+	class GaugeCard extends Base {
+		static lateBase = true;
 
-		// The card body's gauge, with the species the address bar asks for, if any.  The data URL's species parameter
-		// is set (or added) through URLSearchParams, so the rest of the URL is kept as written.
-		function gaugeOf(card) {
-			var g = card.gauge, s = speciesFromUrl();
-			if (!s) return g;
-			var u = new URL(g.dataUrl, window.location.href);
-			u.searchParams.set('species', s);
-			var dataUrl = u.origin === window.location.origin ? u.pathname + u.search + u.hash : u.href;
-			return Object.assign({}, g, { species: s, dataUrl: dataUrl });
+		render() {
+			listen();
+			this.readCount = 0;    // successful reads
+			this.below = false;    // true while stock is under low (announced once per crossing)
+			this.paintLoading(body(this.spec, this.el));
+			this.every(30000, function () { this.load(); }.bind(this));
+			return this.load();
 		}
+		// JuneauConsole.refreshCard re-reads the data; it must not start a second timer.
+		refresh() { return this.load(); }
 
-		function load(card, el, ctx) {
-			var g = gaugeOf(card);
-			var b = body(card, el);
-			return ctx.fetchJson(g.dataUrl).then(function (d) {
-				reads.set(card.id, (reads.get(card.id) || 0) + 1);
+		species() { return gaugeOf(this.spec).species; }
+		setSpecies(species) {
+			var s = speciesOf(species);
+			if (!s) return Promise.reject(new Error("Unknown species '" + species + "'"));
+			pushSpecies(s);
+			return this.load();
+		}
+		reads() { return this.readCount || 0; }
+		reload() { return this.load(); }
+
+		load() {
+			var self = this, g = gaugeOf(this.spec);
+			var b = body(this.spec, this.el);
+			return this.fetchJson(g.dataUrl).then(function (d) {
+				self.readCount = (self.readCount || 0) + 1;
 				var pct = Math.max(0, Math.min(100, Math.round(100 * (d.available - g.low) / (g.high - g.low))));
 				var meter = document.createElement('meter');
 				meter.min = g.low;
@@ -170,39 +197,14 @@
 				t.textContent = d.available + ' ' + g.species + ' available (' + pct + '%)';
 				b.replaceChildren(meter, t);
 				var under = d.available < g.low;
-				if (under && !below.get(card.id)) ctx.announce(g.species + ' stock is below ' + g.low);
-				below.set(card.id, under);
+				if (under && !self.below) self.announce(g.species + ' stock is below ' + g.low);
+				self.below = under;
 			}, function (err) {
-				if (!ctx.isAbort(err)) ctx.paintError(b, err);
+				if (!self.isAbort(err)) self.paintError(b, err);
 			});
 		}
-
-		return {
-			render: function (card, el, ctx) {
-				listen();
-				ctx.setApi({
-					species: function () { return gaugeOf(card).species; },
-					setSpecies: function (species) {
-						var s = speciesOf(species);
-						if (!s) return Promise.reject(new Error("Unknown species '" + species + "'"));
-						pushSpecies(s);
-						return load(card, el, ctx);
-					},
-					reads: function () { return reads.get(card.id) || 0; },
-					reload: function () { return load(card, el, ctx); }
-				});
-				ctx.paintLoading(body(card, el));
-				ctx.every(30000, function () { load(card, el, ctx); });
-				return load(card, el, ctx);
-			},
-			// JuneauConsole.refreshCard re-reads the data; it must not start a second timer.
-			refresh: load,
-			destroy: function (card) {
-				reads.delete(card.id);
-				below.delete(card.id);
-			}
-		};
-	})()]);
+	}
+	queue.push(['inventory-gauge', GaugeCard]);
 
 	// petstore.stockTotals: a chart decorator for the stock bands chart.  It reads the frame (numeric columns are
 	// Float64Arrays) and puts the total pet count in the title subtext.  Chart extensions queue on

@@ -47,9 +47,9 @@ public final class CardTypeRegistry {
 
 	/**
 	 * Reserved type names: {@code html} (built in), {@code datatables}, {@code terminal-view},
-	 * {@code terminal}, {@code chart} and {@code job-log} (console-ui-freemarker).
+	 * {@code terminal}, {@code chart}, {@code job-log} and {@code switcher} (console-ui-freemarker).
 	 */
-	public static final Set<String> RESERVED = Set.of("html", "datatables", "terminal-view", "terminal", "chart", "job-log");
+	public static final Set<String> RESERVED = Set.of("html", "datatables", "terminal-view", "terminal", "chart", "job-log", "switcher");
 
 	/** The one simple class name allowed to bind each reserved type (E-22's identity check). */
 	private static final Map<String,String> RESERVED_OWNER_SIMPLE_NAMES = Map.of(
@@ -58,11 +58,15 @@ public final class CardTypeRegistry {
 		"terminal-view", "TerminalViewCardType",
 		"terminal", "TerminalCardType",
 		"chart", "ChartCardType",
-		"job-log", "JobLogCardType"
+		"job-log", "JobLogCardType",
+		"switcher", "SwitcherCardType"
 	);
 
 	/** Reserved body keys (E-23); {@code visibleWhen}, {@code subscribes} and {@code publishes} are deliberately excluded — admitted in any card's body. */
 	private static final Set<String> BASE_KEYS = Set.of("id", "type", "title", "src", "template", "ref");
+
+	/** The nested-card keys that belong to the card, not to its type's body. */
+	private static final Set<String> NESTED_KEPT = Set.of("class", "bare", "model", "sanitize");
 
 	private static final CardTypeRegistry STANDARD = buildStandard();
 
@@ -144,7 +148,10 @@ public final class CardTypeRegistry {
 			publishes = body.remove("publishes");
 		}
 
-		var frag = handler(source.type()).toFragment(source);
+		var h = handler(source.type());
+		var frag = h.toFragment(source);
+		for (var nested : h.nestedCards(frag))
+			liftNested(nested);
 
 		var card = new JsonMap();
 		card.put("id", source.id());
@@ -163,6 +170,34 @@ public final class CardTypeRegistry {
 			card.put("publishes", publishes);
 		card.putAll(frag);
 		return card;
+	}
+
+	// Replaces a nested card map, in place, with the card its own type's handler lifts from it (a nested datatables
+	// catalog becomes a table object).  html cards, unregistered types and already-lifted tables are left alone.
+	private void liftNested(Map<String,Object> m) {
+		if (! (m.get("type") instanceof String type) || ! (m.get("id") instanceof String id) || "html".equals(type) || ! isRegistered(type) || m.containsKey("table"))
+			return;
+		var body = new LinkedHashMap<String,Object>();
+		var kept = new LinkedHashMap<String,Object>();
+		for (var e : m.entrySet()) {
+			if (BASE_KEYS.contains(e.getKey()))
+				continue;
+			if (NESTED_KEPT.contains(e.getKey()))
+				kept.put(e.getKey(), e.getValue());
+			else
+				body.put(e.getKey(), e.getValue());
+		}
+		var source = CardSource.create(type, id).bodyMap(body);
+		if (m.get("title") instanceof String t)
+			source.title(t);
+		if (m.get("src") instanceof String s)
+			source.src(s);
+		if (m.get("template") instanceof String t)
+			source.template(t);
+		var lifted = toCard(source.build());
+		lifted.putAll(kept);
+		m.clear();
+		m.putAll(lifted);
 	}
 
 	/** Builds a {@link CardTypeRegistry} on top of an existing one, or from scratch. */

@@ -152,7 +152,7 @@ class CsrfBoundary_BrowserTest extends TestBase {
 				+ "<body data-juneau-csrf=\"" + attr(tokens.get()) + "\" data-juneau-csrf-header=\"" + CSRF_HEADER + "\">\n"
 				+ "<script type=\"application/json\" id=\"juneau-page\">"
 				+ "{\"contractVersion\":\"1\",\"title\":\"T\",\"cards\":[{\"id\":\"probe\",\"type\":\"probe\"}]}</script>\n"
-				+ "<script>window.JuneauConsoleCards = [[\"probe\", function (card, el, ctx) { window.cardContext = ctx; }]];</script>\n"
+				+ "<script>window.JuneauConsoleCards = [[\"probe\", class { static lateBase = true; render() { window.cardContext = this; } }]];</script>\n"
 				+ "<script src=\"/assets/juneau-console.js\"></script>\n"
 				+ "</body></html>\n");
 		}

@@ -142,6 +142,10 @@ async function runScenario(opts) {
 			return Promise.resolve(jsonResponse(opts.replacementSvg || ''));
 		}
 		if (url.indexOf('ovr') !== -1) return Promise.resolve(jsonResponse(opts.overrideSvg || ''));
+		if (url.indexOf('juneau-symbols-lucide.svg') !== -1) {
+			if (opts.lucide404) return Promise.resolve(jsonResponse('', { status: 404 }));
+			return Promise.resolve(jsonResponse(LUCIDE_SVG));
+		}
 		if (url.indexOf('juneau-symbols-material.svg') !== -1)
 			return Promise.resolve(opts.materialGate).then(function () { return jsonResponse(MATERIAL_SVG); });
 		if (url.indexOf('juneau-symbols.svg') !== -1) return Promise.resolve(jsonResponse(SHIPPED_SVG));
@@ -201,6 +205,14 @@ const MATERIAL_SVG =
 	+ '<symbol id="juneau-sym-copy" viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24"/></symbol>'
 	+ '</svg>';
 
+// A stand-in Lucide base layer: one glyph the shipped set lacks (circle_check) and one it also carries (search),
+// so the shipped copy must win the shared stem.
+const LUCIDE_SVG =
+	'<svg xmlns="http://www.w3.org/2000/svg" display="none">'
+	+ '<symbol id="juneau-sym-circle_check" viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24"/></symbol>'
+	+ '<symbol id="juneau-sym-search" viewBox="0 0 24 24"><rect x="0" y="0" width="24" height="24"/></symbol>'
+	+ '</svg>';
+
 // A partial replacement (the app's set): only two names, so the rest must fall through to shipped.  It also
 // carries a stem the shipped set does NOT have, to prove an app-supplied stem resolves through the layers.
 const REPL_SVG =
@@ -236,6 +248,8 @@ const OVR_SVG =
 			hasLastPage: r.names.indexOf('last_page') !== -1,
 			hasChevronleft: r.names.indexOf('chevronleft') !== -1,
 			hasSearchStem: r.names.indexOf('search') !== -1,
+			hasTrash: r.names.indexOf('trash') !== -1,
+			trashMarkup: probe.NS.icons.resolveIcon('trash') || null,
 			stemsCount: probe.NS.icons.stems().length,
 			nameToStem: {
 				content_copy: probe.NS.icons.nameToStem().content_copy,
@@ -443,6 +457,26 @@ const OVR_SVG =
 			copyWinner: report.stems.copy,
 			spriteHasSearch: s.NS.icons.stems().indexOf('search') !== -1,
 			noWarn: s.warns.length === 0
+		};
+	}
+
+	// The Lucide base layer sits under shipped: its own stems resolve, a shared stem resolves to shipped.
+	{
+		const s = await runScenario({ dev: true });
+		out.s_lucide = {
+			baseLayer: s.report.layers.base,
+			circleWinner: s.report.stems.circle_check,
+			searchWinner: s.report.stems.search,
+			circleResolves: s.NS.icons.nameToStem().circle_check,
+			shippedExcludesLucide: s.NS.icons.stems().indexOf('circle_check') === -1,
+			noWarn: s.warns.length === 0
+		};
+		const f = await runScenario({ dev: true, lucide404: true });
+		out.s_lucide404 = {
+			baseLayer: f.report.layers.base,
+			shippedLayer: f.report.layers.shipped,
+			searchWinner: f.report.stems.search,
+			circleAbsent: f.report.stems.circle_check === undefined
 		};
 	}
 

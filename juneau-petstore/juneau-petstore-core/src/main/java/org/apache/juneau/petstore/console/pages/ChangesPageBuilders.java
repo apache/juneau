@@ -45,19 +45,19 @@ public final class ChangesPageBuilders {
 	public static PageSpec changes() {
 		var selection = SelectionDef.create("id").selectAll(true).scope(SelectionDef.Scope.PERSISTENT).labelField("summary")
 			.selectableWhen(RowActionEnabledRule.of("state", Op.EQ, "PENDING", "Only pending changes can be discarded or applied."));
-		return PageSpec.create().tab("pets/changes").toolkit("views")
+		return PageSpec.create().tab("pets/changes").toolkit("views", "datatables-buttons")
 			.table(TableSpec.create("changes").rowType("PendingChange").dataMode(DataMode.SERVER).dataUrl("/console/pets/changes/query")
 				.defaultOrder("id", Sort.DESC)
 				.columns(
 					Column.create("id").label("Change"),
 					Column.create("summary").label("Change summary"),
 					Column.create("author").label("Author"),
-					Column.create("state").label("State").render("pill"),
+					Column.create("state").label("State").render(PillRenders.changeState()),
 					Column.create("message").label("Message").defaultVisible(false))
-				.ribbon(
-					RibbonItem.option("pending-only").title("Pending only").column("state").value("$eq(PENDING)").defaultOn().group("filter"),
-					RibbonItem.resetDefaults().group("page"),
-					RibbonItem.refresh())
+				.columnConfig(true)
+				.ribbon(Ribbons.standard()
+					.filter(RibbonItem.option("pending-only").title("Pending only").symbol("hourglass").column("state").value("$eq(PENDING)").defaultOn())
+					.build())
 				.rowActions(
 					RowAction.create("retry").label("Retry").endpoint("/console/pets/changes/{id}/retry").method(Method.POST).onSuccess(OnSuccess.REDRAW)
 						.visibleWhen(VisibilityRule.when("state").eq("FAILED")))

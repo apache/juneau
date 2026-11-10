@@ -20,6 +20,7 @@ import static java.nio.charset.StandardCharsets.*;
 
 import java.io.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.console.ops.*;
@@ -94,6 +95,26 @@ public class PetstoreConsoleResource extends PetstoreConsolePage {
 		try (var in = PetstoreConsoleResource.class.getResourceAsStream("petstore.js")) {
 			if (in == null)
 				throw new IllegalStateException("Missing classpath resource 'petstore.js' beside " + PetstoreConsoleResource.class.getName());
+			res.setContentType("text/javascript;charset=utf-8");
+			res.getWriter().write(new String(in.readAllBytes(), UTF_8));
+		}
+	}
+
+	/**
+	 * Serves one of the vendored export libraries ({@code jszip.min.js}, {@code pdfmake.min.js}, {@code vfs_fonts.js})
+	 * that the {@code datatables-export} toolkit pack loads.
+	 *
+	 * @param res The response.
+	 * @param name The library file name; anything outside the fixed list is a 404.
+	 * @throws IOException If the bundled library can't be read.
+	 */
+	@RestGet(path="/export/{name}")
+	public void exportLib(RestResponse res, @Path("name") String name) throws IOException {
+		if (!EXPORT_LIBS.contains(name))
+			throw new NotFound("No such export library");
+		try (var in = PetstoreConsoleResource.class.getResourceAsStream("/htdocs/vendor/" + name)) {
+			if (in == null)
+				throw new IllegalStateException("Missing classpath resource 'htdocs/vendor/" + name + "'");
 			res.setContentType("text/javascript;charset=utf-8");
 			res.getWriter().write(new String(in.readAllBytes(), UTF_8));
 		}

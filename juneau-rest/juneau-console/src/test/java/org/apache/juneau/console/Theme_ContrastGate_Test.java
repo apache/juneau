@@ -113,6 +113,12 @@ class Theme_ContrastGate_Test extends TestBase {
 		var link = rgb(t.get("--jc-link"));
 		var linkVsWash = ratio(link, washed);
 		assertTrue(linkVsWash >= MIN_TEXT, () -> scheme + ": --jc-link vs the washed button is " + String.format("%.2f", linkVsWash) + ":1");
+		// Folder tabs: the unselected label (--jc-pill-neutral-text) over the neutral tab fill is text
+		// (WCAG 1.4.3); the selected tab's accent outline over the card face is a UI boundary (1.4.11).
+		var tabFill = rgb(dark ? darkLayer("--jc-pill-neutral-bg") : t.get("--jc-pill-neutral-bg"));
+		var tabLabel = rgb(dark ? darkLayer("--jc-pill-neutral-text") : t.get("--jc-pill-neutral-text"));
+		var tabLabelVsFill = ratio(tabLabel, tabFill);
+		assertTrue(tabLabelVsFill >= MIN_TEXT, () -> scheme + ": unselected tab label vs --jc-pill-neutral-bg is " + String.format("%.2f", tabLabelVsFill) + ":1");
 		// Secondary buttons: their fill is the surface, so the edge alone identifies them (WCAG 1.4.11).
 		var edge = rgb(dark ? darkLayer("--jc-control-border") : t.get("--jc-border-2"));
 		var edgeVsCard = ratio(edge, cardRgb);

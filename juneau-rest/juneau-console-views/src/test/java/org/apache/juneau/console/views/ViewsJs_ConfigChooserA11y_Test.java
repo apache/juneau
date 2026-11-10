@@ -165,4 +165,52 @@ class ViewsJs_ConfigChooserA11y_Test extends TestBase {
 		assertBean(report(), "sortTabInitialOrder,sortTabDirAfterChange,sortTabAfterUncheckOrder,sortTabAfterUncheckDraft,sortTabAfterRecheckDraft",
 			"[name,status],desc,[status],[status],[status,name]");
 	}
+
+	@Test void e09_chooserHeaderHasGearOnlyForTheChooser() {
+		assertBean(report(), "gearPresent,plainNoTitleIcon,actionFigureIsNotTitleIcon", "true,true,true");
+	}
+
+	@Test void e09b_leftPaneFindGripAndDraggableRows() {
+		assertBean(report(),
+			"findPlaceholder,paneTitleHidden,listboxStillLabelled,availKeys,availDraggable,availHaveGrip,gridHandleHasGrip",
+			"Find...,true,true,[notes,owner],true,true,true");
+	}
+
+	@Test void e10_dropFromAvailableInsertsAtDropPosition() {
+		assertBean(report(),
+			"dragInitialSelected,dropBefore,dropBeforeDirty,dropBeforeAvail,dropAfter,dropAppend",
+			"[name,status],[name,notes,status],true,[owner],[name,owner,status],[name,status,notes]");
+	}
+
+	@Test void e10b_dropRefocusesTheMovedRowsHandle() {
+		assertBean(report(), "rowDropRefocuses,listDropRefocuses", "true,true");
+	}
+
+	@Test void e11_dropWithoutDragIsNoopAndOtherPathsUnchanged() {
+		assertBean(report(), "dropNoDragNoop,dropNoDragClean,dblclickAdds,reorderStillWorks",
+			"[name,status],true,[name,status,owner],[status,name]");
+	}
+
+	@Test void e12_detailStripDefaultsAndUpdatesFromBothPanes() {
+		var r = report();
+		assertBean(r, "detailRole,detailLive,detailDefault,detailAvailKey,detailHostileIsText,detailKeyCleared,detailTextHelperNoCol",
+			"status,polite,Click a column to see details.,danger,true,true,Click a column to see details.");
+		assertEquals("Name \u00b7 name \u00b7 sortable \u00b7 searchable \u00b7 shown by default \u2014 The display name.", r.get("detailSelected"));
+		assertEquals("<img src=x onerror=alert(1)> \u00b7 danger \u00b7 not sortable \u00b7 not searchable \u00b7 formats: date/ts-zulu \u00b7 hidden by default \u2014 <b>x</b>", r.get("detailAvail"));
+		assertEquals("Id \u00b7 id \u00b7 sortable \u00b7 not searchable \u00b7 shown by default \u00b7 pinned", r.get("detailPinned"));
+	}
+
+	@Test void e12b_detailSearchableFlagAndRepaintAfterListChange() {
+		assertBean(report(), "detailSearchableFlag,detailRepaintedAfterAdd", "true,true");
+	}
+
+	@Test void e13_resetIsABorderedButtonThatOnlyDraftsDefaults() {
+		assertBean(report(), "resetNotLink,resetDraftsDefaults", "true,name/status");
+	}
+
+	@Test void e14_savedBarIsCompactOnlyWhenNoSavedViews() {
+		assertBean(report(),
+			"barCompactWhenEmpty,menuClosedInitially,menuOpenAfterMore,menuHoldsActions,barNotCompactWithViews,menuNoHaspopup,menuClosesOnOutsideClick,menuClosesOnEscape,escapeRefocusesMore,pickClosesMenu",
+			"true,true,true,true,false,true,true,true,true,true");
+	}
 }

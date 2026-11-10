@@ -85,7 +85,7 @@ const LAYOUT = () => {
 		hostChildren: kids,
 		headerBeforeBar: !!(q('.juneau-view-dialog-header') && q('.juneau-config-saved-bar')
 			&& q('.juneau-view-dialog-header').getBoundingClientRect().bottom <= q('.juneau-config-saved-bar').getBoundingClientRect().top),
-		barButtons: Array.prototype.map.call(document.querySelectorAll('.juneau-config-saved-bar > button'), (b) => b.textContent),
+		barButtons: Array.prototype.map.call(document.querySelectorAll('.juneau-config-saved-menu > button'), (b) => b.textContent),
 		deleteDanger: !!q('.juneau-config-delete')?.classList.contains('jc-btn-danger'),
 		renameDisabled: !!q('.juneau-config-rename')?.disabled,
 		deleteDisabled: !!q('.juneau-config-delete')?.disabled,
@@ -187,6 +187,7 @@ async function rename(page) {
 		};
 	});
 
+	await page.click('.juneau-config-saved-more');
 	await page.click('.juneau-config-saveas');
 	out.saveAsFieldOpen = await page.evaluate(() => !document.querySelector('.juneau-config-name-field').hidden);
 	await page.fill('.juneau-config-name-input', 'Mine');
@@ -217,6 +218,34 @@ async function rename(page) {
 	await page.waitForFunction(() => document.querySelector('.juneau-config-view-select').value === 'Theirs', null, { timeout: 5000 });
 	out.okStatus = await page.evaluate(status);
 	out.afterRename = await state();
+	return out;
+}
+
+async function dragAndDetail(page) {
+	const out = {};
+	const detail = () => page.evaluate(() => document.querySelector('.juneau-config-detail')?.textContent ?? null);
+	out.findPlaceholder = await page.evaluate(() => document.querySelector('.juneau-config-find')?.placeholder ?? null);
+	out.detailDefault = await detail();
+	// A real mouse drag of an Available row onto the top half of a selected row inserts it before that row.
+	await page.dragAndDrop('.juneau-config-avail[data-col="created"]', '.juneau-config-col-row[data-col="status"]', { targetPosition: { x: 40, y: 2 } });
+	out.afterRowDrop = await page.evaluate(shown);
+	// A real drag onto the bottom half of the last row inserts it after that row.
+	const lastH = await page.evaluate(() => document.querySelector('.juneau-config-col-row[data-col="owner"]').getBoundingClientRect().height);
+	await page.dragAndDrop('.juneau-config-avail[data-col="priority"]', '.juneau-config-col-row[data-col="owner"]', { targetPosition: { x: 40, y: lastH - 2 } });
+	out.afterListDrop = await page.evaluate(shown);
+	out.availAfterDrops = await page.evaluate(available);
+	await page.click('.juneau-config-avail[data-col="region"]');
+	out.detailAvail = await detail();
+	await page.click('.juneau-config-col-row[data-col="name"] .juneau-config-col-name');
+	out.detailSelected = await detail();
+	out.resetIsLink = await page.evaluate(() => document.querySelector('.juneau-config-reset').classList.contains('jc-btn-link'));
+	out.tabs = await page.evaluate(() => {
+		const sel = document.querySelector('.juneau-config-tab[aria-selected="true"]');
+		const un = document.querySelector('.juneau-config-tab[aria-selected="false"]');
+		return { selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
+			dlgBg: getComputedStyle(document.querySelector('.juneau-config-dialog')).backgroundColor,
+			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-accent-wash)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
+	});
 	return out;
 }
 
@@ -257,6 +286,30 @@ async function capture(page, dir, name) {
 			const r = { layout: await page.evaluate(LAYOUT) };
 			r.behaviour = await behaviour(page);
 			r.rename = await rename(page);
+			r.errors = errors;
+			return r;
+		});
+
+		report.chooserLight = await run('chooserLight', 1280, 900, async (page, errors) => {
+			await page.goto(url('open', 'light'));
+			await open(page);
+			const r = await dragAndDetail(page);
+			if (shotDir) await page.screenshot({ path: path.join(shotDir, 'chooser-open-light.png') });
+			r.errors = errors;
+			return r;
+		});
+
+		report.chooserDark = await run('chooserDark', 1280, 900, async (page, errors) => {
+			await page.goto(url('open', 'dark'));
+			await open(page);
+			const r = { tabs: await page.evaluate(() => {
+				const sel = document.querySelector('.juneau-config-tab[aria-selected="true"]');
+				const un = document.querySelector('.juneau-config-tab[aria-selected="false"]');
+				return { selBg: getComputedStyle(sel).backgroundColor, unBg: getComputedStyle(un).backgroundColor,
+					dlgBg: getComputedStyle(document.querySelector('.juneau-config-dialog')).backgroundColor,
+			wash: (function () { const p = document.createElement('div'); p.style.backgroundColor = 'var(--jc-accent-wash)'; document.querySelector('.juneau-config-dialog').appendChild(p); const c = getComputedStyle(p).backgroundColor; p.remove(); return c; })() };
+			}) };
+			if (shotDir) await page.screenshot({ path: path.join(shotDir, 'chooser-open-dark.png') });
 			r.errors = errors;
 			return r;
 		});

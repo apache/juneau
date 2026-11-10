@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -71,6 +72,41 @@ class ChromeCss_ToneContract_Test extends TestBase {
 		assertTrue(start >= 0, () -> "missing badge selector for " + tone.wire());
 		var end = css.indexOf('}', start);
 		assertTrue(css.substring(start, end).contains(prefix), () -> tone.wire() + " badge must use " + prefix);
+	}
+
+	@Test void a05_pillLevelStatusRulesPaintFromThePillPalette() throws IOException {
+		var css = readChromeCss();
+		var palette = Map.of("info", "blue", "success", "green", "warning", "amber", "error", "red", "neutral", "neutral");
+		for (var e : palette.entrySet()) {
+			var rule = ruleFor(css, ".jc-pill.tag.is-" + e.getKey());
+			for (var part : List.of("bg", "text", "border"))
+				assertTrue(rule.contains("var(--jc-pill-" + e.getValue() + "-" + part + ")"), () -> e.getKey() + " rule lacks " + part + ": " + rule);
+			assertFalse(rule.contains("#"), () -> "literal colour in " + e.getKey() + " rule: " + rule);
+		}
+	}
+
+	@Test void a06_pillLevelCategoryRulesPaintFromTheCategoricalPalette() throws IOException {
+		var css = readChromeCss();
+		for (var i = 1; i <= 10; i++) {
+			var n = i;
+			var rule = ruleFor(css, ".jc-pill.tag.is-cat-" + n);
+			for (var part : List.of("bg", "text", "border"))
+				assertTrue(rule.contains("var(--jc-pill-cat-" + n + "-" + part + ")"), () -> "cat-" + n + " rule lacks " + part + ": " + rule);
+			assertFalse(rule.contains("#"), () -> "literal colour in cat-" + n + " rule: " + rule);
+		}
+	}
+
+	@Test void a07_pillLevelRulesFollowTheExampleVocabulary() throws IOException {
+		var css = readChromeCss();
+		assertTrue(css.indexOf(".jc-pill.tag.is-info") > css.indexOf(".tag.stage.failed"),
+			"pill-level rules must come after the example .tag.<domain>.<value> rules so an explicit tone wins a specificity tie");
+	}
+
+	/** The declaration block of the single-selector rule {@code selector}; fails if absent. */
+	private static String ruleFor(String css, String selector) {
+		var m = Pattern.compile("(?m)^" + Pattern.quote(selector) + "\\s*\\{([^}]*)\\}").matcher(css);
+		assertTrue(m.find(), () -> "missing rule " + selector);
+		return m.group(1);
 	}
 
 	private static String readChromeCss() throws IOException {

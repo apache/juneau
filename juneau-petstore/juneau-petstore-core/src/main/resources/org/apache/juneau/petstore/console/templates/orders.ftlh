@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="orders" toolkit="views">
+--><@page tab="orders" toolkit="views,datatables-buttons,datatables-export">
 <@card type="datatables" id="orders" title="Orders">
 {
   rowType: 'Order',
@@ -26,19 +26,23 @@
     { key: 'id', label: 'Id' },
     { key: 'petId', label: 'Pet', href: '/console/pets/{petId}/summary' },
     { key: 'shipDate', label: 'Ship date', render: { id: 'date' } },
-    { key: 'status', label: 'Status', render: { id: 'pill' } }
+    { key: 'status', label: 'Status', render: { id: 'pill', meta: { tones: { PLACED: 'info', APPROVED: 'warning', DELIVERED: 'success' } } } }
   ],
   ribbon: [
-    { type: 'optionGroup', id: 'status', title: 'Order status', group: 'filter', deselectable: true, options: [
-      { id: 'placed', title: 'Placed', column: 'status', value: '$eq(PLACED)' },
-      { id: 'approved', title: 'Approved', column: 'status', value: '$eq(APPROVED)' },
-      { id: 'delivered', title: 'Delivered', column: 'status', value: '$eq(DELIVERED)' }
-    ] },
+    { type: 'search', id: 'search', group: 'search' },
     { type: 'dialog', id: 'new-order', title: '+ New order', symbol: 'plus', group: 'entity',
       form: '/console/orders/new-form', endpoint: '/console/orders', method: 'POST', onSuccess: 'redraw' },
-    { type: 'export', group: 'viewing', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
-    { type: 'resetDefaults', group: 'page' },
-    { type: 'refresh' }
+    { type: 'optionGroup', id: 'status', title: 'Order status', group: 'filter', deselectable: true, options: [
+      { id: 'placed', title: 'Placed', symbol: 'shopping_cart', column: 'status', value: '$eq(PLACED)' },
+      { id: 'approved', title: 'Approved', symbol: 'badge_check', column: 'status', value: '$eq(APPROVED)' },
+      { id: 'delivered', title: 'Delivered', symbol: 'truck', column: 'status', value: '$eq(DELIVERED)' }
+    ] },
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
   ],
   rowActions: [
     { id: 'approve', label: 'Approve', endpoint: '/console/orders/{id}/approve', method: 'POST', onSuccess: 'redraw',

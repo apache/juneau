@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.console;
 
+import java.util.*;
+
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.service.*;
@@ -98,7 +100,27 @@ public abstract class PetstoreConsolePage extends BasicRestServlet {
 		// assetUrl('/console/petstore.js') versions the shared page script served by PetstoreConsoleResource.
 		return ConsoleFreemarkerMixin.create().basePath(TEMPLATES).chromeTemplate("base.ftlh")
 			.adopterAssets(PetstoreConsolePage.class.getClassLoader(), "org/apache/juneau/petstore")
-			.cardType(new InventoryGaugeCardType()).requirePacks("charts").build();
+			.cardType(new InventoryGaugeCardType()).requirePacks("charts")
+			.registerToolkitPack(exportPack()).build();
+	}
+
+	/** Vendored export libraries behind the {@code datatables-export} pack, in load order. */
+	static final List<String> EXPORT_LIBS = List.of("jszip.min.js", "pdfmake.min.js", "vfs_fonts.js");
+
+	/** Mount of the vendored export libraries, under the console root. */
+	static final String EXPORT_MOUNT = "/console/export/";
+
+	/**
+	 * The {@code datatables-export} pack: the JSZip and pdfMake libraries (with fonts) that the DataTables Excel and PDF
+	 * buttons need, served from this console's own {@code /export/*} route.
+	 */
+	private static ToolkitPack exportPack() {
+		return ToolkitPack.create("datatables-export")
+			.js(EXPORT_LIBS)
+			.dependsOn("datatables-buttons")
+			.kind(ToolkitPack.Kind.VENDOR)
+			.resolver((req, path) -> req.getUriResolver().resolve("context:" + EXPORT_MOUNT + path))
+			.build();
 	}
 
 	/**

@@ -95,7 +95,7 @@ async function settled(page) {
 			await page.waitForSelector(DIALOG_READY, { timeout: 5000 });
 			const reopen = await page.evaluate(([row, avail]) => {
 				const a = document.querySelector(avail);
-				return { shown: document.querySelector(row) != null, available: a ? a.textContent.trim() : null };
+				return { shown: document.querySelector(row) != null, available: a ? a.querySelector('.juneau-config-avail-name').textContent.trim() : null };
 			}, [STATUS_ROW, STATUS_AVAIL]);
 			// Finding 2: Apply with the Sort tab visible and nothing touched must not persist "every column" as the sort.
 			const storedSort = await page.evaluate(() => {

@@ -24,6 +24,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.console.*;
+import org.apache.juneau.console.views.*;
 import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
@@ -194,6 +195,9 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 				throw FtlAttrLists.reject(f("Page contract failed schema validation: '%s'.", String.join("; ", findings)));
 		}
 
+		if (cap.allowInlineHandlers())
+			checkInlineCsp(req);
+
 		var out = env.getOut();
 		var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
 		var htmlAttrs = ConsoleChromeMixin.schemeHtmlAttributes(scheme, schemeToggle);
@@ -248,6 +252,10 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
 		for (var src : cap.runtimeJs())
 			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
+		// The inline-handler compiler is the one script that compiles strings; it is not in any pack and is emitted
+		// only for a page that opted in, after the runtime pack (which holds the model it plugs into).
+		if (cap.allowInlineHandlers())
+			out.write("<script" + ConsoleChromeMixin.nonceAttr(nonce) + " src=\"" + attrEscape(ViewsMixin.viewAssetUrl(req, ViewsMixin.MODEL_INLINE_JS_PATH)) + "\" data-toolkit-js></script>\n");
 		// The badge runtime mounts header.badges from the contract on load.  Not a toolkit pack: a chrome-template
 		// <@badge> is only known here, after the page's packs were resolved.
 		if (cap.hasBadges())
@@ -284,5 +292,34 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 	/** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */
 	private static String attrEscape(String s) {
 		return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+	}
+
+	/**
+	 * Fails fast when a page opts in to inline handlers under a CSP that would block them.  Every
+	 * {@code Content-Security-Policy} value already on the response is checked: its effective script directive
+	 * ({@code script-src}, else {@code default-src}) must list {@code 'unsafe-eval'}.  A header added after this point
+	 * is not seen here; the client reports it as a loud failure instead.
+	 */
+	private static void checkInlineCsp(RestRequest req) {
+		var values = req.getResponse().getHttpServletResponse().getHeaders("Content-Security-Policy");
+		if (values == null || values.isEmpty())
+			return;
+		for (var v : values)
+			if (! allowsEval(v))
+				throw new IllegalStateException("allowInlineHandlers(true) needs 'unsafe-eval' in script-src; the response CSP is: " + String.join(", ", values));
+	}
+
+	private static boolean allowsEval(String policy) {
+		String script = null, dflt = null;
+		for (var d : policy.split(";")) {
+			var t = d.trim();
+			var lower = t.toLowerCase(java.util.Locale.ROOT);
+			if (lower.equals("script-src") || lower.startsWith("script-src "))
+				script = t;
+			else if (lower.equals("default-src") || lower.startsWith("default-src "))
+				dflt = t;
+		}
+		var effective = script != null ? script : dflt;
+		return effective == null || effective.toLowerCase(java.util.Locale.ROOT).contains(org.apache.juneau.http.header.ContentSecurityPolicy.Builder.UNSAFE_EVAL);
 	}
 }

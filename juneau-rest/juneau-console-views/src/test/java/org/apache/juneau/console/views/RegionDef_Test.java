@@ -315,4 +315,39 @@ class RegionDef_Test extends TestBase {
 		var shared = List.of("x");
 		RegionDef.create("job").config(Map.of("a", shared, "b", shared)).validate();
 	}
+
+	@Test void chart_validDescriptor() {
+		var r = RegionDef.chart("pet-price", "/c/{id}/price-series").kind("line").x("day").series("price","Price").height(240);
+		r.validate();
+		var m = r.toContractMap();
+		assertEquals("chart", m.get("type"));
+		@SuppressWarnings("unchecked") var c = (Map<String,Object>) m.get("chart");
+		assertEquals("line", c.get("kind"));
+		assertEquals("day", c.get("x"));
+		assertEquals(240, c.get("height"));
+	}
+
+	@Test void chart_requiresSeries() {
+		assertThrows(IllegalArgumentException.class, () -> RegionDef.chart("p","/c").x("d").validate());
+	}
+
+	@Test void chart_requiresX() {
+		assertThrows(IllegalArgumentException.class, () -> RegionDef.chart("p","/c").series("v","V").validate());
+	}
+
+	@Test void chart_kindChecked() {
+		assertThrows(IllegalArgumentException.class, () -> RegionDef.chart("p","/c").kind("pie").x("d").series("v","V").validate());
+	}
+
+	@Test void chart_unsafeDataUrl() {
+		assertThrows(IllegalArgumentException.class, () -> RegionDef.chart("p","https://x/y").x("d").series("v","V").validate());
+	}
+
+	@Test void chart_implicitPopulatorAllowed() {
+		RegionDef.chart("p","/c").x("d").series("v","V").populate("chart").validate();
+	}
+
+	@Test void chart_stillForbidsFields() {
+		assertThrows(IllegalArgumentException.class, () -> RegionDef.chart("p","/c").fields(RegionDef.Field.of("a")).x("d").series("v","V").validate());
+	}
 }

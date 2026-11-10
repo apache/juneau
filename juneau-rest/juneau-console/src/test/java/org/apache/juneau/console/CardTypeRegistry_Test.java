@@ -146,7 +146,7 @@ class CardTypeRegistry_Test {
 		var arg6 = new TestCardType("job-log");
 		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg6));
 		assertEquals("Card type 'job-log' is reserved and cannot be replaced; reserved: "
-			+ "'chart, datatables, html, job-log, terminal, terminal-view'.", ex.getMessage());
+			+ "'chart, datatables, html, job-log, switcher, terminal, terminal-view'.", ex.getMessage());
 	}
 
 	@Test void copy_isIsolatedFromStandard() {

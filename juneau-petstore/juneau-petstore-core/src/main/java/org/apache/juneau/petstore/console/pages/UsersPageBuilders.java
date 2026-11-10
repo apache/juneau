@@ -42,23 +42,24 @@ public final class UsersPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec users() {
-		return PageSpec.create().tab("users").toolkit("views")
+		return PageSpec.create().tab("users").toolkit("views", "datatables-buttons", "datatables-export")
 			.table(TableSpec.create("users").rowType("User").dataMode(DataMode.SERVER).dataUrl("/console/users/query")
 				.defaultOrder("username", Sort.ASC)
 				.columns(
 					Column.create("username").label("Username"),
 					Column.create("firstName").label("First name"),
 					Column.create("lastName").label("Last name"),
-					Column.create("userStatus").label("Status").render("pill"))
-				.ribbon(
-					RibbonItem.optionGroup("userStatus",
-						RibbonItem.option("active").title("Active").column("userStatus").value("$eq(ACTIVE)"),
-						RibbonItem.option("inactive").title("Inactive").column("userStatus").value("$eq(INACTIVE)"))
-						.title("User status").deselectable(true).group("filter"),
-					RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")
-						.form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),
-					RibbonItem.resetDefaults().group("page"),
-					RibbonItem.refresh())
+					Column.create("userStatus").label("Status").render(PillRenders.userStatus()))
+				.columnConfig(true)
+				.ribbon(Ribbons.standard()
+					.create(RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")
+						.form("/console/users/form").endpoint("/console/users").method(Method.POST).onSuccess(OnSuccess.REDRAW))
+					.filter(RibbonItem.optionGroup("userStatus",
+						RibbonItem.option("active").title("Active").symbol("user_check").column("userStatus").value("$eq(ACTIVE)"),
+						RibbonItem.option("inactive").title("Inactive").symbol("user_x").column("userStatus").value("$eq(INACTIVE)"))
+						.title("User status").deselectable(true))
+					.export("excel", "pdf")
+					.build())
 				.rowActions(
 					RowAction.create("edit").label("Edit").form("/console/users/form?username={username}").present(Present.DIALOG)
 						.endpoint("/console/users/{username}").method(Method.PUT).onSuccess(OnSuccess.REDRAW),

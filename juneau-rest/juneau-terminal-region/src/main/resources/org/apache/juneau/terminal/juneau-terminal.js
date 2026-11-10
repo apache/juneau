@@ -1336,9 +1336,6 @@
 		return HANDLES.get(id) || null;
 	}
 
-	/** Host element -> cleanup of the region mounted in it. */
-	const MOUNTED = new WeakMap();
-
 	/** The input link for a card: publishes on term.input and watches the input bridge's state.  Null without one. */
 	function cardLink(ctx) {
 		if (!ctx || typeof ctx.publish !== "function" || typeof ctx.subscribe !== "function")
@@ -1381,35 +1378,38 @@
 		};
 	}
 
-	const cardHandler = {
-		render: function (card, host, ctx) {
-			const prev = MOUNTED.get(host);
-			if (prev)
-				prev();
+	/** The terminal card: mounts a terminal region in the card and wires its input and nudge links to the page bus. */
+	class TerminalCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) {
+		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
+		// This role set must match TerminalCardType.acceptedRoles: the console only routes the roles that a card type accepts.
+		static roles = { "input-status": "inputStatus", nudge: "nudge" };
+		static requiredPacks() { return ["views", "xterm", "terminal"]; }
+
+		render() {
+			if (this.cleanup)
+				this.cleanup();
+			const card = this.spec;
 			const terminal = card.terminal || {};
-			MOUNTED.set(host, mount(host, { id: card.id, ...terminal }, terminal.input === true ? cardLink(ctx) : null, cardNudgeLink(card, ctx)));
-		},
-		destroy: function (card, host) {
-			const cleanup = MOUNTED.get(host);
+			this.cleanup = mount(this.el, { id: card.id, ...terminal }, terminal.input === true ? cardLink(this) : null, cardNudgeLink(card, this));
+		}
+		destroy() {
+			const cleanup = this.cleanup;
 			if (cleanup) {
-				MOUNTED.delete(host);
+				this.cleanup = null;
 				cleanup();
 			}
-		},
-		// This role set must match TerminalCardType.acceptedRoles: the console only routes the roles that a card type accepts.
-		roles: {
-			"input-status": function (payload, meta, card) {
-				const i = card ? INPUTS.get(card.id) : null;
-				if (i)
-					i.onStatus(payload);
-			},
-			nudge: function (payload, meta, card) {
-				const e = card ? NUDGES.get(card.id) : null;
-				if (e)
-					e.nudge(payload);
-			}
 		}
-	};
+		inputStatus(payload) {
+			const i = INPUTS.get(this.spec.id);
+			if (i)
+				i.onStatus(payload);
+		}
+		nudge(payload) {
+			const e = NUDGES.get(this.spec.id);
+			if (e)
+				e.nudge(payload);
+		}
+	}
 
 	window.JuneauTerminal = Object.freeze({
 		mount: mount, createEngine: createEngine, createInput: createInput, linkFor: linkFor, nudgeLinkFor: nudgeLinkFor, fitFont: fitFont,
@@ -1417,5 +1417,5 @@
 		formatSize: formatSize, linkHandlerFor: linkHandlerFor, handle: handle
 	});
 	window.JuneauConsoleCards = window.JuneauConsoleCards || [];
-	window.JuneauConsoleCards.push(["terminal", cardHandler]);
+	window.JuneauConsoleCards.push(["terminal", TerminalCard]);
 })();

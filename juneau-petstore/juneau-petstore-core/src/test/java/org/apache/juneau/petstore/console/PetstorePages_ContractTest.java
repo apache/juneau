@@ -46,11 +46,14 @@ public class PetstorePages_ContractTest extends TestBase {
 
 	static final List<Page> PAGES = List.of(
 		new Page("P1", "/console/store", p -> p.hasActiveNav("store")
-			.hasCardOrder("welcome", "stats", "revenue", "orders-trend", "by-species", "by-status", "pets-map", "hours")
+			.hasCardOrder("welcome", "stats", "revenue", "revenue-sw", "orders-sw", "pets-sw", "hours")
 			.hasCard("welcome", "html").hasCard("stats", "datatables").hasCard("revenue", "kpi").hasCardKey("stats", "/table/quickStats/id", "store")
 			.hasCardKey("stats", "/table/quickStats/items/3/type", "segmented").hasCardKey("stats", "/table/quickStats/items/4/type", "meter")
 			.hasCard("orders-trend", "chart").hasCard("by-species", "chart").hasCard("by-status", "chart")
-			.hasCard("pets-map", "chart")
+			.hasCard("pets-map", "chart").hasCard("revenue-sw", "switcher").hasCard("orders-sw", "switcher").hasCard("pets-sw", "switcher")
+			.hasNestedCard("pets-sw", "pets-map", "chart").hasNestedCard("orders-sw", "orders-trend", "chart")
+			.hasNestedCard("pets-sw", "by-species", "chart").hasNestedCard("pets-sw", "by-status", "chart")
+			.hasNestedCard("revenue-sw", "revenue-chart", "chart")
 			.hasCard("hours", "html")),
 		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs")
 			.hasCardOrder("restock-help", "restock", "jobs", "species", "groom-output", "groom-file", "groom-runs")

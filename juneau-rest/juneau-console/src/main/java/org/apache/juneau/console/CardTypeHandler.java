@@ -84,6 +84,7 @@ public interface CardTypeHandler {
 	/**
 	 * Roles this type accepts in {@code subscribes[].as}, beyond {@code refresh} and {@code params}.
 	 * {@code null} (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.
+	 * For a card class these mirror the keys of its JS {@code static roles}.  A handler subscription ({@code topic} + {@code handler}) names no role and is never checked against this set.
 	 *
 	 * <h4 class='section'>Example:</h4>
 	 * <p class='bjava'>
@@ -100,6 +101,7 @@ public interface CardTypeHandler {
 
 	/**
 	 * {@code cmd:<id>} ops this type handles, beyond the shell's {@code refresh}, for E-43 on a ribbon {@code target}.
+	 * For a card class these mirror the keys of its JS {@code static ops}.
 	 * {@code null} (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports
 	 * an unhandled op at runtime (E-JS-48).
 	 *
@@ -132,4 +134,21 @@ public interface CardTypeHandler {
 	 * @return The pack names; each must be a registered pack.
 	 */
 	default List<String> requiredPacks(JsonMap body) { return List.of(); }
+
+	/**
+	 * The cards this card holds, for a container type such as a switcher.  The registry lifts each one through its own
+	 * type's handler, and the page validators and pack requirements treat them as page cards.  Default: none.
+	 *
+	 * <h4 class='section'>Example:</h4>
+	 * <p class='bjava'>
+	 *   <ja>@Override</ja>
+	 *   <jk>public</jk> List&lt;Map&lt;String,Object&gt;&gt; nestedCards(JsonMap <jv>body</jv>) {
+	 *     <jk>return</jk> (List&lt;Map&lt;String,Object&gt;&gt;)<jv>body</jv>.get(<js>"cards"</js>);
+	 *   }
+	 * </p>
+	 *
+	 * @param body The card's body: this type's fragment, or the card object as the page contract holds it.
+	 * @return The nested card maps themselves (each with {@code id} and {@code type}), not copies, so they can be replaced in place.
+	 */
+	default List<Map<String,Object>> nestedCards(JsonMap body) { return List.of(); }
 }

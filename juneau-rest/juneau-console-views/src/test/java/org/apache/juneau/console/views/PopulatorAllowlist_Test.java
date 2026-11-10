@@ -63,8 +63,8 @@ class PopulatorAllowlist_Test extends TestBase {
 		PopulatorAllowlist.assertAllowed("default", null);
 	}
 
-	@Test void a07_builtinIds_isExactlyDefault() {
-		assertEquals(Set.of("default"), PopulatorAllowlist.BUILTIN_IDS);
+	@Test void a07_builtinIds_isDefaultAndChart() {
+		assertEquals(Set.of("default", "chart"), PopulatorAllowlist.BUILTIN_IDS);
 	}
 
 	/** Locates {@code PopulatorAllowlist.java}'s own source on disk, the same way {@code locateHarness()} does in

@@ -64,7 +64,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 	private static final String E28 = "type='datatables' body is a pre-built SLOT_META envelope; remove 'contractVersion', 'layout' and 'view' and author the catalog form.";
 
 	private static final Set<String> KNOWN_COLUMN_KEYS = Set.of(
-		"key", "data", "label", "title", "search", "render", "href", "className",
+		"key", "data", "label", "title", "description", "search", "render", "href", "className",
 		"orderable", "searchable", "defaultVisible", "pinned", "formats",
 		"searchType", "searchOperators", "customOperators");
 
@@ -257,13 +257,20 @@ public final class DatatablesCardType implements CardTypeHandler {
 		return region instanceof Map<?,?> r && JobLogRegion.POPULATOR.equals(r.get("populate"));
 	}
 
-	/** A datatables card whose detail region is a job-log region needs the {@code joblog} pack's populator. */
+	/**
+	 * A datatables card whose detail region is a job-log region needs the {@code joblog} pack's populator; one whose detail
+	 * has a chart tab needs the {@code charts} pack.
+	 */
 	@Override
 	public List<String> requiredPacks(JsonMap body) {
-		if (body != null && body.get("table") instanceof Map<?,?> table && table.get("detail") instanceof Map<?,?> detail
-				&& isJobLogRegion(detail.get("region")))
-			return List.of(ToolkitPackRegistry.PACK_JOBLOG);
-		return List.of();
+		var packs = new ArrayList<String>();
+		if (body != null && body.get("table") instanceof Map<?,?> table && table.get("detail") instanceof Map<?,?> detail) {
+			if (isJobLogRegion(detail.get("region")))
+				packs.add(ToolkitPackRegistry.PACK_JOBLOG);
+			if (detail.get("tabs") instanceof List<?> tabs && tabs.stream().anyMatch(t -> t instanceof Map<?,?> m && "chart".equals(m.get("kind"))))
+				packs.add(ToolkitPackRegistry.PACK_CHARTS);
+		}
+		return packs;
 	}
 
 	private static void validateRows(CardSource source, JsonMap catalog) {

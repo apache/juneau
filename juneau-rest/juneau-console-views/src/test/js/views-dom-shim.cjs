@@ -309,7 +309,11 @@ function makeEnv() {
 			if (!listeners[type]) listeners[type] = [];
 			listeners[type].push(fn);
 		},
-		removeEventListener: function () { /* no-op */ },
+		removeEventListener: function (type, fn) {
+			const l = listeners[type];
+			const i = l ? l.indexOf(fn) : -1;
+			if (i >= 0) l.splice(i, 1);
+		},
 		getElementById: function (id) { return byId[id] || null; },
 		createElement: function (tag) { return el(tag); },
 		createTextNode: function (v) { return textNode(v); },

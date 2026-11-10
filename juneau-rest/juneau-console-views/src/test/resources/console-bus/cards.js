@@ -19,19 +19,16 @@
  * observable) and records every role call (`filter`, `state`) with its already-mapped payload.
  */
 window.JuneauConsoleCards ||= [];
-window.JuneauConsoleCards.push(['recorder', {
-	render(card, el) {
+window.JuneauConsoleCards.push(['recorder', class {
+	static lateBase = true;
+	static roles = { filter: 'filterRole', state: 'stateRole' };
+	count() {
 		const T = window.__busTest;
-		T.renders[card.id] = (T.renders[card.id] || 0) + 1;
-		el.textContent = 'rendered ' + T.renders[card.id];
-	},
-	refresh(card, el) {
-		const T = window.__busTest;
-		T.renders[card.id] = (T.renders[card.id] || 0) + 1;
-		el.textContent = 'rendered ' + T.renders[card.id];
-	},
-	roles: {
-		filter(payload, meta, card) { window.__busTest.roleCalls.push({ card: card.id, role: 'filter', payload }); },
-		state(payload, meta, card) { window.__busTest.roleCalls.push({ card: card.id, role: 'state', payload }); }
+		T.renders[this.spec.id] = (T.renders[this.spec.id] || 0) + 1;
+		this.el.textContent = 'rendered ' + T.renders[this.spec.id];
 	}
+	render() { this.count(); }
+	refresh() { this.count(); }
+	filterRole(payload) { window.__busTest.roleCalls.push({ card: this.spec.id, role: 'filter', payload }); }
+	stateRole(payload) { window.__busTest.roleCalls.push({ card: this.spec.id, role: 'state', payload }); }
 }]);

@@ -495,7 +495,63 @@ public final class PageContractAssert {
 		for (var o : contract.getList("cards"))
 			if (id.equals(((JsonMap)o).getString("id")))
 				return (JsonMap)o;
+		for (var o : contract.getList("cards")) {
+			var found = findNested((JsonMap)o, id);
+			if (found != null)
+				return found;
+		}
 		throw new AssertionError("no card '" + id + "'; cards: " + cardIds());
+	}
+
+	/**
+	 * Asserts that a card sits inside another card (a switcher view or section).
+	 *
+	 * @param parentId The enclosing card id.
+	 * @param id The nested card id.
+	 * @param type The expected nested card type.
+	 * @return This object.
+	 */
+	public PageContractAssert hasNestedCard(String parentId, String id, String type) {
+		var parent = card(parentId);
+		var found = findNested(parent, id);
+		if (found == null)
+			throw new AssertionError("card '" + parentId + "' does not hold a nested card '" + id + "'");
+		if (neq(type, found.getString("type")))
+			throw new AssertionError("nested card '" + id + "' type: expected '" + type + "' but was '" + found.getString("type") + "'");
+		return this;
+	}
+
+	// Depth-first through views[*].card and views[*].sections[*].card.
+	private static JsonMap findNested(JsonMap card, String id) {
+		if (! (card.get("views") instanceof List<?> views))
+			return null;
+		for (var v : views) {
+			if (! (v instanceof Map<?,?> vm))
+				continue;
+			var candidates = new ArrayList<Object>();
+			candidates.add(vm.get("card"));
+			if (vm.get("sections") instanceof List<?> secs)
+				for (var s : secs)
+					if (s instanceof Map<?,?> sm)
+						candidates.add(sm.get("card"));
+			for (var c : candidates) {
+				if (! (c instanceof Map<?,?> cm))
+					continue;
+				var j = cm instanceof JsonMap jm ? jm : new JsonMap(toStringKeys(cm));
+				if (id.equals(j.getString("id")))
+					return j;
+				var deeper = findNested(j, id);
+				if (deeper != null)
+					return deeper;
+			}
+		}
+		return null;
+	}
+
+	private static Map<String,Object> toStringKeys(Map<?,?> m) {
+		var out = new LinkedHashMap<String,Object>();
+		m.forEach((k, v) -> out.put(String.valueOf(k), v));
+		return out;
 	}
 
 	private List<String> cardIds() {

@@ -164,7 +164,7 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 	}
 
 	@Test void a11_mountChooser_stampsChromeTipNotNativeTitle() throws Exception {
-		var fn = functionBody(configJs(), "function mountChooser(");
+		var fn = functionBody(configJs(), "function buildChooserButton(");
 		assertTrue(fn.contains("stampChromeTip(btn, \"Columns\")"), fn);
 		assertFalse(fn.contains("btn.title = \"Columns\""), fn);
 	}
@@ -199,7 +199,8 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 
 	@Test void a16_openChooser_seedsDraftFromPersistedViewSettings() throws Exception {
 		var fn = functionBody(configJs(), "function openChooser(");
-		assertTrue(fn.contains("resolveLastAppliedViewSettings(table, ctx)"), fn);
+		assertTrue(fn.contains("NS.config.seedChooserDraft(table, ctx)"), fn);
+		assertTrue(functionBody(configJs(), "function seedChooserDraft(").contains("resolveLastAppliedViewSettings(table, ctx)"));
 		// The dialog's committed facets are re-read on open; View Settings are never sourced from the URL.
 		assertFalse(fn.contains("location.search"), fn);
 	}
@@ -404,5 +405,42 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 
 	@Test void q04_draftFromViewSettingsVersionChecksItselfDirectly() {
 		assertBean(report(), "v2DraftMatchesDefaults", "true");
+	}
+
+	@Test void s01_seedChooserDraft_isExported() {
+		assertBean(report(), "seedExported", "true");
+	}
+
+	@Test void s02_seedChooserDraft_seedsOnce() {
+		assertBean((java.util.Map<?,?>)report().get("seedOnce"), "same,snapKept,dirty,hasSnap", "true,true,false,true");
+	}
+
+	@Test void s03_seedChooserDraft_prefersLastAppliedThenDefaults() {
+		assertBean((java.util.Map<?,?>)report().get("seedLastApplied"), "visible,notice", "[B],false");
+		assertBean((java.util.Map<?,?>)report().get("seedResetNotice"), "notice,visible", "true,[A]");
+	}
+
+	@Test void s04_mountAndOpenBothSeedThroughTheSharedHelper() {
+		assertBean(report(), "mountCallsSeed,openCallsSeed", "1,1");
+	}
+
+	@Test void a40_constructTable_defersAutoMountsToTheRibbon() throws Exception {
+		var fn = functionBody(viewsJs(), "function constructTable(");
+		assertTrue(fn.contains("ctx.hasRowDetail = deps.hasRowDetail;"), fn);
+		assertTrue(fn.indexOf("ctx.hasRowDetail = deps.hasRowDetail;") < fn.indexOf("NS.ribbon.build("), fn);
+		assertTrue(fn.contains("!ctx._ribbonOwns?.columnSettings"), fn);
+		assertTrue(fn.contains("!ctx._ribbonOwns?.linkButton"), fn);
+	}
+
+	@Test void a41_mountChooser_seedsOnceThroughTheSharedHelper() throws Exception {
+		var fn = functionBody(configJs(), "function mountChooser(");
+		assertTrue(fn.contains("NS.config.seedChooserDraft(table, ctx)"), fn);
+		assertTrue(fn.contains("buildChooserButton(table, ctx)"), fn);
+	}
+
+	@Test void a09_columnDetailText_paintsViaTextContentOnly() throws Exception {
+		var fn = functionBody(configJs(), "function paintColumnDetail(");
+		assertTrue(fn.contains("paintUserText"), fn);
+		assertFalse(fn.contains("innerHTML"), fn);
 	}
 }

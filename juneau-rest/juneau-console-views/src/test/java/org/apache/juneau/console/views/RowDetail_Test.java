@@ -18,12 +18,16 @@ package org.apache.juneau.console.views;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+import static java.nio.charset.StandardCharsets.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /** {@link RowDetail}: per-row detail panel endpoint, title, icon and region. */
+@SuppressWarnings("unchecked") // Casts parsed maps in assertions.
 class RowDetail_Test extends TestBase {
 
 	private static final String UNSAFE = " is not a safe detail endpoint (same-origin path with an {id} placeholder).";
@@ -119,5 +123,133 @@ class RowDetail_Test extends TestBase {
 		var m = RowDetail.create("/rest/work/data/{id}")
 			.region(RegionDef.create("work-detail").populate("work-detail")).region(null).toMap();
 		assertFalse(m.containsKey("region"));
+	}
+
+	private static String readGolden(String name) throws IOException {
+		try (var in = RowDetail_Test.class.getResourceAsStream(name)) {
+			assertNotNull(in, "missing golden " + name);
+			return new String(in.readAllBytes(), UTF_8).strip();
+		}
+	}
+
+	@Test void a13_v1_create_isByteIdentical() throws Exception {
+		var json = Json5.of(RowDetail.create("/x/{id}").title("T #{id}").icon("link").toMap());
+		assertEquals(readGolden("row-detail-v1.golden.json"), json);
+		assertFalse(json.contains("contractVersion"));
+		assertFalse(json.contains("tabs"));
+	}
+
+	@Test void b01_inline_shape() {
+		var m = RowDetail.inline().title("Change {id}").section("Change", "id", "state").toMap();
+		assertEquals("inline", m.get("mode"));
+		assertNull(m.get("endpoint"));
+		assertEquals("fields", ((List<Map<String,Object>>)m.get("tabs")).get(0).get("kind"));
+	}
+
+	@Test void b02_region_onTabModel_throws() {
+		assertThrows(IllegalStateException.class, () -> RowDetail.inline().region(null));
+	}
+
+	@Test void b03_duplicateTabId_throws() {
+		assertThrows(IllegalArgumentException.class, () ->
+			RowDetail.inline().section("A", "x").section("A", "y").toMap());
+	}
+
+	@Test void b04_noTabsNoSections_generatesFlatDetails() {
+		var tabs = (List<?>) RowDetail.inline().title("T").toMap().get("tabs");
+		assertEquals(1, tabs.size());
+		assertEquals("details", ((Map<?,?>)tabs.get(0)).get("id"));
+	}
+
+	@Test void b05_columnsDefault2_andTabOverrides() {
+		var m = RowDetail.inline().columns(3).section("A", "x").toMap();
+		assertEquals(3, m.get("columns"));
+		assertThrows(IllegalArgumentException.class, () -> RowDetail.inline().columns(5));
+		assertFalse(RowDetail.inline().section("A", "x").toMap().containsKey("columns"));
+	}
+
+	@Test void b06_labelPrecedence_explicitBeatsColumn() {
+		assertEquals("E", RowDetail.resolveLabel("birthDate", "E", "C", "B"));
+		assertEquals("C", RowDetail.resolveLabel("birthDate", null, "C", "B"));
+		assertEquals("B", RowDetail.resolveLabel("birthDate", null, null, "B"));
+		assertEquals("Birth date", RowDetail.resolveLabel("birthDate", null, null, null));
+	}
+
+	@Test void b07_fromBean_modeAndKey() {
+		var d = RowDetail.fromBean(String.class, id -> id);
+		assertEquals("bean", d.section("A", "length").toMap().get("mode"));
+		assertEquals("string", d.key());
+		assertEquals("pet", RowDetail.fromBean(String.class, id -> id).key("pet").key());
+	}
+
+	@Test void b08_cacheNone_emitted_defaultOmitted() {
+		assertEquals("none", RowDetail.inline().cache(DetailTab.Cache.NONE).section("A", "x").toMap().get("cache"));
+		assertFalse(RowDetail.inline().section("A", "x").toMap().containsKey("cache"));
+	}
+
+	@Test void b09_copy_isIndependent() {
+		var a = RowDetail.inline().section("A", "x");
+		var b = a.copy().section("B", "y");
+		assertEquals(1, ((List<?>)a.toMap().get("tabs")).size());
+		assertEquals(2, ((List<?>)b.toMap().get("tabs")).size());
+	}
+
+	@Test void b10_labelsAndFieldsNarrowing() {
+		var m = RowDetail.inline().label("a", "Alpha").fields("a", "b").toMap();
+		assertEquals("{a=Alpha}", m.get("labels").toString());
+		assertEquals("[a, b]", ((Map<?,?>)((List<?>)m.get("tabs")).get(0)).get("fields").toString());
+	}
+
+	@Test void c01_actionTypes() {
+		var d = RowDetail.inline()
+			.action(RowAction.link("open","/p/{id}").label("Open"))
+			.action(RowAction.create("del").label("Delete").endpoint("/p/{id}").method(RowAction.Method.DELETE).confirm("Sure?"))
+			.toMap();
+		var a = (List<Map<String,Object>>) d.get("actions");
+		assertEquals("link", a.get(0).get("type"));
+		assertEquals("row-action", a.get(1).get("type"));
+		assertEquals("/p/{id}", a.get(0).get("href"));
+	}
+
+	@Test void c02_handlerAction_typeHandler() {
+		var d = RowDetail.inline().action(RowAction.link("open","/p/{id}").label("Open"))
+			.action("refresh", "refresh", "pets.refresh").toMap();
+		var a = (List<Map<String,Object>>) d.get("actions");
+		assertEquals("handler", a.get(1).get("type"));
+		assertEquals("link", a.get(0).get("type"));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static List<String> fieldsOf(Map<String,Object> table) {
+		var d = (Map<String,Object>) table.get("detail");
+		var tabs = (List<Map<String,Object>>) d.get("tabs");
+		return (List<String>) tabs.get(0).get("fields");
+	}
+
+	@Test void d01_sharedRowDetail_independentOutputPerTable() {
+		var shared = RowDetail.inline().title("{id}");
+		var a = TableSpec.create("a").dataUrl("/a").columns(Column.create("id"), Column.create("x")).detail(shared).toCardBody();
+		var b = TableSpec.create("b").dataUrl("/b").columns(Column.create("id"), Column.create("y")).detail(shared).toCardBody();
+		assertEquals(List.of("id", "x"), fieldsOf(a));
+		assertEquals(List.of("id", "y"), fieldsOf(b));
+	}
+
+	@Test void d02_detailWithoutRowIdField_failsAtBuild() {
+		var t = TableSpec.create("t").dataUrl("/t").columns(Column.create("label")).detail(RowDetail.inline());
+		assertThrows(IllegalStateException.class, t::toCardBody);
+	}
+
+	@Test void d03_defaultFieldSet_includesHiddenByDefaultColumns() {
+		var t = TableSpec.create("t").dataUrl("/t")
+			.columns(Column.create("id"), Column.create("secretish").defaultVisible(false)).detail(RowDetail.inline()).toCardBody();
+		assertEquals(List.of("id", "secretish"), fieldsOf(t));
+	}
+
+	@Test void d04_columnLabelsFeedDetailLabels() {
+		var t = TableSpec.create("t").dataUrl("/t")
+			.columns(Column.create("id").label("Identifier")).detail(RowDetail.inline().label("id", "Explicit")).toCardBody();
+		@SuppressWarnings("unchecked") var d = (Map<String,Object>) t.get("detail");
+		@SuppressWarnings("unchecked") var labels = (Map<String,String>) d.get("labels");
+		assertEquals("Explicit", labels.get("id"));
 	}
 }

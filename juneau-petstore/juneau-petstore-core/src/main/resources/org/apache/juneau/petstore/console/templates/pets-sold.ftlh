@@ -13,25 +13,31 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page toolkit="views">
+--><@page toolkit="views,datatables-buttons">
 <@card type="datatables" id="sold" title="Sold pets">
 {
   rowType: 'Pet',
   dataMode: 'client',
   dataUrl: '/console/pets/sold/rows',
+  columnConfig: true,
   columns: [
     { key: 'id', label: 'Id' },
     { key: 'name', label: 'Name' },
-    { key: 'species', label: 'Species' },
+    { key: 'species', label: 'Species', render: { id: 'pill', meta: { categorical: true, categories: { DOG: 1, CAT: 2, BIRD: 4, FISH: 6, SNAKE: 7, RABBIT: 9, MOUSE: 10 } } } },
     { key: 'price', label: 'Price (USD)', render: { id: 'decimal', meta: { places: 2 } } }
   ],
   ribbon: [
+    { type: 'search', id: 'search', group: 'search' },
     { type: 'optionGroup', id: 'species', title: 'Species', group: 'filter', options: [
-      { id: 'dogs', title: 'Dogs', column: 'species', value: '$eq(DOG)' },
-      { id: 'cats', title: 'Cats', column: 'species', value: '$eq(CAT)' }
+      { id: 'dogs', title: 'Dogs', symbol: 'paw_print', column: 'species', value: '$eq(DOG)' },
+      { id: 'cats', title: 'Cats', symbol: 'shapes', column: 'species', value: '$eq(CAT)' }
     ] },
-    { type: 'resetDefaults', group: 'page' },
-    { type: 'refresh' }
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
   ]
 }
 </@card>

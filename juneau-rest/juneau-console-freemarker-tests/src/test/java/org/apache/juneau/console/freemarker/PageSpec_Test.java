@@ -90,6 +90,14 @@ class PageSpec_Test extends TestBase {
 		assertEquals(List.of("/js/a.js"), spec.init);
 	}
 
+	@Test void a09b_init_rejectsNonSameOriginPaths() {
+		for (var bad : new String[]{"https://x/y.js", "//x/y.js", "/\\evil.com/x.js", " /a.js"}) {
+			var spec = PageSpec.create();
+			assertThrows(IllegalArgumentException.class, () -> spec.init(bad), bad);
+			assertThrows(IllegalArgumentException.class, () -> spec.script(bad), bad);
+		}
+	}
+
 	@Test void a10_theme_valid_roundTrips() {
 		assertEquals("light-red", PageSpec.create().theme("light-red").theme);
 	}

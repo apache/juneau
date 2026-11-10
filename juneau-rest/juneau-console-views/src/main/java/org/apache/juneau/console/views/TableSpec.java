@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.beanquery.*;
+import org.apache.juneau.console.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.console.widgets.Op;
@@ -63,7 +64,7 @@ import org.apache.juneau.console.widgets.Op;
 	"java:S1192", // Duplicated literals read more clearly inline than as constants.
 	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
-public final class TableSpec {
+public final class TableSpec implements Handled<TableSpec> {
 
 	/** Where a view's rows come from. Wire tokens are lowercase. */
 	public enum DataMode {
@@ -135,8 +136,22 @@ public final class TableSpec {
 	private String cssClass;
 	private final Map<String,Map<String,Object>> urlState = new LinkedHashMap<>();
 
+	private final ModelBlock model;
+
 	private TableSpec(String id) {
 		this.id = id;
+		this.model = new ModelBlock("table", id);
+	}
+
+	@Override /* Handled */
+	public ModelBlock modelBlock() { return model; }
+
+	@Override /* Handled */
+	public TableSpec self() { return this; }
+
+	/** @return Whether this table, its row detail or any of its ribbon items holds an inline handler reference. */
+	public boolean hasInlineHandlers() {
+		return model.hasInline() || ribbon.stream().anyMatch(r -> r.modelBlock().hasInline()) || (detail != null && detail.modelBlock().hasInline());
 	}
 
 	/**
@@ -258,8 +273,21 @@ public final class TableSpec {
 	 * @return This object.
 	 */
 	public TableSpec ribbon(RibbonItem...items) {
+		var next = new ArrayList<>(ribbon);
+		next.addAll(List.of(items));
+		RibbonItem.validateList(id, next);
 		ribbon.addAll(List.of(items));
 		return this;
+	}
+
+	/**
+	 * Appends the ribbon items of a list, such as the result of {@link Ribbons.Standard#build()}.
+	 *
+	 * @param items The items.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public TableSpec ribbon(List<RibbonItem> items) {
+		return ribbon(items.toArray(RibbonItem[]::new));
 	}
 
 	/**
@@ -353,7 +381,7 @@ public final class TableSpec {
 	 * @return This object.
 	 */
 	public TableSpec detail(RowDetail value) {
-		detail = value;
+		detail = value == null ? null : value.copy();
 		return this;
 	}
 
@@ -707,7 +735,7 @@ public final class TableSpec {
 		if (bulk != null && (bulk.actions == null || bulk.actions.isEmpty()))
 			throw isex("TableSpec '%s' sets bulk with no actions.", id);
 		for (var a : rowActions)
-			if (a.endpoint == null || a.endpoint.isBlank())
+			if (a.href == null && (a.endpoint == null || a.endpoint.isBlank()))
 				throw isex("TableSpec '%s' row action '%s' requires an endpoint.", id, a.id);
 		if (bulk != null && bulk.actions != null)
 			for (var a : bulk.actions)
@@ -765,8 +793,8 @@ public final class TableSpec {
 		}
 		if (! rowClassRules.isEmpty())
 			t.put("rowClassRules", List.copyOf(rowClassRules));
-		if (! rowActions.isEmpty())
-			t.put("rowActions", plain(rowActions));
+		if (rowActions.stream().anyMatch(a -> a.href == null))
+			t.put("rowActions", plain(rowActions.stream().filter(a -> a.href == null).toList()));
 		if (selection != null) {
 			var s = new JsonMap();
 			s.put("rowIdField", selection.rowIdField());
@@ -784,7 +812,10 @@ public final class TableSpec {
 			t.put("bulk", b);
 		}
 		if (detail != null)
-			t.put("detail", detail.toMap());
+			t.put("detail", detail.toMap(id, columns, selection == null ? null : selection.rowIdField()));
+		var mm = model.toMap();
+		if (mm != null)
+			t.put("model", mm);
 		if (quickStats != null) {
 			var q = new JsonMap();
 			q.put("id", quickStatsId);

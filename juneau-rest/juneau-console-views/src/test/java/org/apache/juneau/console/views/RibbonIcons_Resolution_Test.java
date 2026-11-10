@@ -89,14 +89,50 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		assertTrue(fnBody.contains(expectedSubstring), fnBody);
 	}
 
+	/** The positional cycle and the id-hint map are what an unhinted or hinted option resolves from. */
+	@Test void a06_optionIconCycleAndHintsAreConcrete() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("const OPTION_ICON_CYCLE = [\"circle_check\", \"hourglass\""), body);
+		assertTrue(body.contains("available: \"circle_check\""), body);
+		assertTrue(body.contains("mammals: \"paw_print\""), body);
+		var fnBody = functionBody(body, "function resolveButtonIcon(");
+		assertTrue(fnBody.contains("OPTION_ICON_HINTS[id]"), fnBody);
+		assertTrue(fnBody.contains("OPTION_ICON_CYCLE[(index | 0) % OPTION_ICON_CYCLE.length]"), fnBody);
+	}
+
 	static Stream<Arguments> a02_functionBodyContainsProvider() {
 		return Stream.of(
 			// resolveButtonIcon: an explicit symbol wins over the default.
 			Arguments.of("function resolveButtonIcon(", ".symbol"),
-			// resolveButtonIcon: a custom option with no symbol falls back to "tune".
-			Arguments.of("function resolveButtonIcon(", "\"tune\""),
+			// resolveButtonIcon: a custom option with no symbol takes an id hint or a positional cycle glyph.
+			Arguments.of("function resolveButtonIcon(", "OPTION_ICON_CYCLE"),
 			// ribbonStorageKey: the storage-key layout is unchanged.
 			Arguments.of("function ribbonStorageKey(", "\"juneau.view.\" + viewId + \".ribbon.\" + optionId"));
+	}
+
+	/** Review fixes: action icon honoured, sibling icons distinct, hidden claims recorded, handles attached. */
+	@Test void a07_ribbonJs_reviewFixes() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("resolveButtonIcon(a.icon != null ? { symbol: a.icon } : a, null)"), body);
+		assertTrue(body.contains("function assignOptionIcons("), body);
+		assertTrue(body.contains("publish: \"push\""), body);
+		var build = functionBody(body, "function buildRibbon(");
+		assertTrue(build.indexOf("_ribbonOwns[a.type] = true") < build.indexOf("declaredItems.filter(ribbonItemVisible)"), build);
+		assertTrue(build.contains("place(og, null)"), build);
+		assertFalse(build.contains("curItem = null;\n\t\t\tif (modelOn"), build);
+	}
+
+	@Test void a08_modelJs_readsDefaultIdsFromRibbon_noDialog() throws Exception {
+		var model = cWithMixin.get(ViewsMixin.MODEL_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(model.contains("NS.ribbon.stockDefaultIds"), model);
+		assertFalse(model.contains("RIBBON_DEFAULT_IDS"), model);
+		var ribbon = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertFalse(ribbon.contains("\"export\", \"dialog\""), ribbon);
+	}
+
+	@Test void a09_iconsJs_registeredStemMissingFromLoadedLayersResolvesNull() throws Exception {
+		var icons = cWithMixin.get("/juneau-icons.js").run().assertStatus(200).getContent().asString();
+		assertTrue(icons.contains("!_mergedStems.includes(NAME_TO_STEM[key])"), icons);
 	}
 
 	@Test void a05_loadPersistedState_routesThroughSyncPersistenceSpi_sameExactKeys() throws Exception {

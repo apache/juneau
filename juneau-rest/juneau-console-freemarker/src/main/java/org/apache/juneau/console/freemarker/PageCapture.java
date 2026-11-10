@@ -147,6 +147,9 @@ public final class PageCapture {
 	private List<String> selected;
 	private List<String> activeNav = List.of();
 	private final List<CardSpec> cards = new ArrayList<>();
+	private boolean allowInline;
+	private boolean emitScripts;
+	private Map<String,Object> rootModel;
 	private final Map<String,Map<String,Object>> topics = new LinkedHashMap<>();
 	private final Map<String,String> topicWhere = new HashMap<>();
 	private final Map<String,Map<String,Object>> bridges = new LinkedHashMap<>();
@@ -866,6 +869,9 @@ public final class PageCapture {
 	 * @return This object.
 	 */
 	public PageCapture mergeInit(List<String> srcs) {
+		for (var u : srcs)
+			if (! SafePathTemplate.isSameOriginPath(u))
+				throw iaex("page script must be a same-origin path; got '%s'.", u);
 		init = mergeUnion(init, srcs);
 		return this;
 	}
@@ -894,6 +900,10 @@ public final class PageCapture {
 	StringWriter consoleBuffer() { return consoleBuffer; }
 	List<String> cssHrefs() { return css; }
 	List<String> initScripts() { return init; }
+	void emitScripts(boolean v) { emitScripts = v; }
+	void allowInlineHandlers(boolean v) { allowInline = v; }
+	boolean allowInlineHandlers() { return allowInline; }
+	void rootModel(Map<String,Object> v) { rootModel = v; }
 	boolean assetsResolved() { return assetsResolved; }
 	List<String> vendorCss() { return vendorCss; }
 	List<String> vendorJs() { return vendorJs; }
@@ -1026,7 +1036,16 @@ public final class PageCapture {
 			m.put("navLayout", navLayout);
 		m.put("nav", navRoot.toList());
 		m.put("activeNav", activeNav);
-		m.put("cards", cards.stream().map(CardSpec::toMap).toList());
+		var cardMaps = cards.stream().map(CardSpec::toMap).toList();
+		m.put("cards", cardMaps);
+		if (! init.isEmpty() && (emitScripts || usesModel(cardMaps)))
+			m.put("scripts", List.copyOf(init));
+		if (allowInline)
+			m.put("allowInlineHandlers", true);
+		if (nn(rootModel))
+			m.put("model", rootModel);
+		if (usesModel(cardMaps))
+			m.put("modelVersion", "1");
 		if (! topics.isEmpty())
 			m.put("topics", List.copyOf(topics.values()));
 		if (! bridges.isEmpty())
@@ -1038,6 +1057,30 @@ public final class PageCapture {
 		if (dashboard != null)
 			m.put("dashboard", dashboard);
 		return scriptSafeJson(Json.DEFAULT.write(m));
+	}
+
+	/** Whether any model block or handler action/subscription is present, so that legacy pages stay byte-identical. */
+	private boolean usesModel(Object cardMaps) {
+		return nn(rootModel) || allowInline || emitScripts || containsModel(cardMaps);
+	}
+
+	// Only the structural places a model block or handler action can live; a publish payload, option or data map that
+	// happens to carry a "model" key must not flip a legacy page.
+	private static boolean containsModel(Object o) {
+		if (o instanceof Collection<?> c)
+			return c.stream().anyMatch(PageCapture::containsModel);
+		if (! (o instanceof Map<?,?> mp))
+			return false;
+		if (mp.get("model") instanceof Map)
+			return true;
+		if (mp.get("subscribes") instanceof Collection<?> subs && subs.stream().anyMatch(x -> x instanceof Map<?,?> sm && sm.get("handler") != null))
+			return true;
+		if (mp.get("ribbon") instanceof Collection<?> rb && rb.stream().anyMatch(x -> x instanceof Map<?,?> im && "handler".equals(im.get("type"))))
+			return true;
+		for (var k : List.of("table", "detail", "tabs", "ribbon", "region"))
+			if (containsModel(mp.get(k)))
+				return true;
+		return false;
 	}
 
 	/**

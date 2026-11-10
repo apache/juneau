@@ -201,7 +201,7 @@ const out = {};
 			ariaLive: o.getAttribute('aria-live'),
 			tabindex: o.getAttribute('tabindex'),
 			height: o.style.height,
-			api: Object.keys(r.w.JuneauConsole.cardApi('rebuild') || {}).sort((a, b) => (a < b ? -1 : Number(a > b))),
+			api: Object.getOwnPropertyNames(Object.getPrototypeOf(r.w.JuneauConsole.cardApi('rebuild'))).filter(k => k !== 'constructor').sort((a, b) => (a < b ? -1 : Number(a > b))),
 			version: r.w.JuneauJobLog?.version,
 			state: state(r),
 			errors: r.errors

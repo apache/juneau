@@ -37,7 +37,7 @@ import org.apache.juneau.console.views.*;
  *
  * @since 10.0.0
  */
-public final class CardSpec {
+public final class CardSpec implements Handled<CardSpec> {
 
 	/** Card types whose schema definition has no {@code bare} property, so a bare card of that type would fail validation. */
 	private static final Set<String> BARE_UNSUPPORTED = Set.of("terminal-view", "terminal");
@@ -54,11 +54,19 @@ public final class CardSpec {
 	private final List<Map<String,Object>> publishes = new ArrayList<>();
 	private final List<Map<String,Object>> subscribes = new ArrayList<>();
 	private List<VisibilityRule> visibleWhen = List.of();
+	private final ModelBlock model;
 
 	private CardSpec(String type, String id) {
 		this.type = type;
 		this.id = id;
+		this.model = new ModelBlock("card", id);
 	}
+
+	@Override /* Handled */
+	public ModelBlock modelBlock() { return model; }
+
+	@Override /* Handled */
+	public CardSpec self() { return this; }
 
 	/** @param id The card id. @return A new {@code html} card. */
 	public static CardSpec html(String id) {
@@ -113,7 +121,7 @@ public final class CardSpec {
 
 	/** @param key A type-specific field. @param value Its value. @return This object. */
 	public CardSpec body(String key, Object value) {
-		if ("publishes".equals(key) || "subscribes".equals(key))
+		if ("publishes".equals(key) || "subscribes".equals(key) || "model".equals(key))
 			throw iaex("card '%s': '%s' is a base key; use %s(...)", id, key, key);
 		body.put(key, value);
 		return this;
@@ -186,6 +194,7 @@ public final class CardSpec {
 	CardSpec wiringFrom(CardSpec other) {
 		publishes.addAll(other.publishes);
 		subscribes.addAll(other.subscribes);
+		model.addAll(other.model);
 		if (! other.visibleWhen.isEmpty())
 			visibleWhen = other.visibleWhen;
 		return this;
@@ -234,6 +243,8 @@ public final class CardSpec {
 		if (! publishes.isEmpty()) m.put("publishes", List.copyOf(publishes));
 		if (! subscribes.isEmpty()) m.put("subscribes", List.copyOf(subscribes));
 		m.putAll(body);
+		var mm = model.toMap();
+		if (mm != null) m.put("model", mm);
 		return m;
 	}
 }

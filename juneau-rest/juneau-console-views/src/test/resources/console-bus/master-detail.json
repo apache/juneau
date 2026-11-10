@@ -17,7 +17,7 @@
           { "type": "option", "id": "mine", "title": "Mine only" },
           { "type": "option", "id": "openOnly", "title": "Open only", "column": "state", "value": "open" },
           { "type": "refresh", "title": "Refresh tasks", "target": "tasks" },
-          { "type": "publish", "title": "Focus east", "topic": "app.region-picked", "payload": { "region": "east" } }
+          { "type": "publish", "id":"pub1", "title": "Focus east", "topic": "app.region-picked", "payload": { "region": "east" } }
         ]
       } },
 

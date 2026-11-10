@@ -765,17 +765,12 @@
 		teardown(el);
 		for (const c of Array.from(el.childNodes))
 			if (!(c.classList && c.classList.contains("jc-card-title"))) el.removeChild(c);
-		const st = { card: card, el: el, ctx: ctx, doc: ctx.document, announce: ctx.announce, rowData: () => null, region: false,
+		const st = { card: card, el: el, ctx: ctx, doc: ctx.document, announce: text => ctx.announce(text), rowData: () => null, region: false,
 			prefs: ctx.prefs(), phase: "idle", seq: 0, job: null, es: null, events: 0, cancelling: false, replaying: false, replayTimer: null,
 			replayCap: null, probe: null, replayCount: 0 };
 		states.set(el, st);
 		build(st);
 		setPhase(st, "idle");
-		ctx.setApi({
-			phase: () => st.phase,
-			job: () => st.job ? Object.assign({}, st.job) : null,
-			cancel: () => cancel(st)
-		});
 		const stored = st.prefs.get("job", null);
 		if (stored != null && !isRef(stored)) forget(st);
 		else if (isRef(stored) && urlMatches(card, stored)) open(st, toJob(stored), true);
@@ -1033,7 +1028,23 @@
 
 	window.JuneauJobLog = Object.freeze({ version: "1", mount: mount });
 
-	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["job-log", { render: render, refresh: refresh, destroy: destroy }]);
+	/** The job-log card: submits a job and streams its log into the card. */
+	class JobLogCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) {
+		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
+
+		render() { return render(this.spec, this.el, this); }
+		refresh() { return refresh(); }
+		destroy() { destroy(this.spec, this.el); }
+
+		/** The run's phase: "idle", "submitting", "running", "done", "failed" or "cancelled". */
+		phase() { const st = states.get(this.el); return st ? st.phase : "idle"; }
+		/** A copy of the current job reference, or null. */
+		job() { const st = states.get(this.el); return st && st.job ? Object.assign({}, st.job) : null; }
+		/** Cancels the running job. */
+		cancel() { const st = states.get(this.el); return st ? cancel(st) : undefined; }
+	}
+
+	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["job-log", JobLogCard]);
 
 	if (!tryRegister()) {
 		const doc = window.document;

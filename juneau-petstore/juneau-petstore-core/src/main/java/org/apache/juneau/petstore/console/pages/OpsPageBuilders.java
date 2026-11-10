@@ -48,7 +48,7 @@ public final class OpsPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec jobs(TerminalDef groomOutput, TerminalDef groomFile) {
-		return PageSpec.create().tab("ops/jobs").toolkit("views")
+		return PageSpec.create().tab("ops/jobs").toolkit("views", "datatables-buttons")
 			.html("restock-help", "Restocking", """
 				<div class="jc-prose"><p>Restock adds new available pets to the store as a background job; progress shows here until it finishes.
 				Submitting twice from the same dialog runs one job.  Give the card below a wait to see a cancel before anything changes, or a longer hold to see one after.</p></div>""")
@@ -60,19 +60,20 @@ public final class OpsPageBuilders {
 				.body("urlParam", "job"))
 			.table(TableSpec.create("jobs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/rows")
 				.pollIntervalMs(2000)
+				.columnConfig(true)
 				.columns(
 					Column.create("jobId").label("Job"),
 					Column.create("submitted").label("Submitted").render("timestamp"),
-					Column.create("state").label("State").render("pill"),
+					Column.create("state").label("State").render(PillRenders.jobState()),
 					Column.create("result.message").label("Result"))
-				.ribbon(
-					RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form").group("entity"),
-					RibbonItem.resetDefaults().group("page"),
-					RibbonItem.refresh().id("refresh")))
+				.ribbon(Ribbons.standard()
+					.create(RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form"))
+					.build()))
 			.table(TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")
 				.pollIntervalMs(2000)
+				.columnConfig(true)
 				.columns(
-					Column.create("species").label("Species"),
+					Column.create("species").label("Species").render(PillRenders.species()),
 					Column.create("available").label("Available"))
 				.detail(RowDetail.create("/console/ops/jobs/species/{id}").region(JobLogRegion.create("restock-species")
 					.submit(JobLogRegion.Submit.create("/console/ops/jobs/species/{id}/restock", "restock-species", "/console/ops/jobs/species/{id}/key")
@@ -81,22 +82,23 @@ public final class OpsPageBuilders {
 						.field(JobLogRegion.Field.of("species").type("hidden").source("row.species")))
 					.detail(JobLogRegion.Detail.of("fieldGrid", RegionDef.Field.of("available").label("Available")))
 					.output(JobLogRegion.Output.field("available").from("row.available"))
-					.toRegion())))
+					.toRegion()))
+				.ribbon(Ribbons.standard().build()))
 			.card(CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()))
 			.card(CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()))
 			.table(TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")
 				.columns(
 					Column.create("pet").label("Pet"),
 					Column.create("submitted").label("Submitted").render("timestamp"),
-					Column.create("state").label("State").render("pill"),
+					Column.create("state").label("State").render(PillRenders.jobState()),
 					Column.create("lines").label("Lines"))
 				.detail(RowDetail.create("/console/ops/jobs/groom-runs/{id}")
 					.region(RegionDef.create("regroom").type(RegionDef.TYPE_ROW_DETAIL).populate("petstore-regroom").allowPopulators("petstore-regroom")))
-				.ribbon(
-					RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form").group("entity"),
-					RibbonItem.collapseAll().group("viewing"),
-					RibbonItem.resetDefaults().group("page"),
-					RibbonItem.refresh().id("groom-refresh")));
+				.columnConfig(true)
+				.ribbon(Ribbons.standard()
+					.create(RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form"))
+					.refreshId("groom-refresh")
+					.build()));
 	}
 
 	/**
@@ -105,17 +107,18 @@ public final class OpsPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec audit() {
-		return PageSpec.create().tab("ops/audit").toolkit("views")
+		return PageSpec.create().tab("ops/audit").toolkit("views", "datatables-buttons")
 			.table(TableSpec.create("audit").dataMode(DataMode.SERVER).dataUrl("/console/ops/audit/query")
 				.operators(SearchOperatorSet.standard())
 				.defaultOrder("at", Sort.DESC)
 				.columns(
 					Column.create("at").label("When").render("timestamp").searchType(SearchType.TIMESTAMP),
 					Column.create("actor").label("Actor").searchType(SearchType.TEXT),
-					Column.create("action").label("Action").searchType(SearchType.TEXT),
-					Column.create("entity").label("Entity").searchType(SearchType.TEXT),
+					Column.create("action").label("Action").render(PillRenders.auditAction()).searchType(SearchType.TEXT),
+					Column.create("entity").label("Entity").render(PillRenders.entity()).searchType(SearchType.TEXT),
 					Column.create("entityId").label("Id").searchType(SearchType.TEXT),
 					Column.create("detail").label("Detail").searchType(SearchType.TEXT))
-				.ribbon(RibbonItem.export("copy", "csv").group("viewing"), RibbonItem.resetDefaults().group("page"), RibbonItem.refresh().id("refresh")));
+				.columnConfig(true)
+				.ribbon(Ribbons.standard().build()));
 	}
 }

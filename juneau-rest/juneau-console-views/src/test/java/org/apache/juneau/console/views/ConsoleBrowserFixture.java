@@ -150,6 +150,13 @@ final class ConsoleBrowserFixture {
 		return this;
 	}
 
+	/** Makes the most recently added case's page response carry the header {@code name: value} (for example a Content-Security-Policy). */
+	ConsoleBrowserFixture pageHeader(String name, String value) {
+		for (var f : ((Map<String,Map<String,Object>>)cases.get(cases.size() - 1).get("pages")).values())
+			((Map<String,Object>)f.computeIfAbsent("headers", k -> new LinkedHashMap<String,String>())).put(name, value);
+		return this;
+	}
+
 	/** Makes the most recently added case run in a {@code width} x {@code height} viewport (default 1280 x 800). */
 	ConsoleBrowserFixture viewport(int width, int height) {
 		cases.get(cases.size() - 1).put("viewport", Map.of("width", width, "height", height));
@@ -263,7 +270,7 @@ final class ConsoleBrowserFixture {
 		Map<String,Object> c = map(
 			"name", caseName,
 			"url", url,
-			"pages", Map.of(q < 0 ? path : path.substring(0, q), Map.of("type", "text/html", "body", html))
+			"pages", new LinkedHashMap<>(Map.of(q < 0 ? path : path.substring(0, q), new LinkedHashMap<>(Map.of("type", "text/html", "body", html))))
 		);
 		var qm = new LinkedHashMap<String,String>();
 		for (var i = 0; i < queries.length; i += 2)
@@ -335,13 +342,21 @@ final class ConsoleBrowserFixture {
 		return viewsPack(true);
 	}
 
+	/**
+	 * The switcher card runtime as an inline {@code <script>} block.  Put it after {@link #viewsPack()} (which carries
+	 * {@code juneau-model.js}) and after any {@code juneau-charts.js} block, and before the shell script.
+	 */
+	static String switcherScript() throws IOException {
+		return "<script>\n" + resource(ConsoleChromeMixin.SWITCHER_JS_RESOURCE) + "\n</script>\n";
+	}
+
 	/** Like {@link #viewsPack()}, and without {@code juneau-bus.js} when {@code withBus} is false (for the missing-bus case). */
 	static String viewsPack(boolean withBus) throws IOException {
 		var nodeModules = Path.of(requiredProperty("juneau.jsTests.dir")).resolve("node_modules");
 		var sb = new StringBuilder();
 		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("jquery/dist/jquery.min.js"))).append("\n</script>\n");
 		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("datatables.net/js/dataTables.min.js"))).append("\n</script>\n");
-		for (var r : List.of(ViewsMixin.BUS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.ICONS_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE,
+		for (var r : List.of(ViewsMixin.BUS_JS_RESOURCE, ViewsMixin.MODEL_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.ICONS_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE,
 				ViewsMixin.PAGESTATE_JS_RESOURCE, ViewsMixin.URLSTATE_JS_RESOURCE, ViewsMixin.RIBBON_JS_RESOURCE,
 				ViewsMixin.DATATABLES_JS_RESOURCE, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.CONFIG_JS_RESOURCE,
 				ViewsMixin.REGIONS_JS_RESOURCE, ViewsMixin.HELPERS_JS_RESOURCE))

@@ -119,6 +119,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.SYMBOLS_SVG_PATH).run().assertStatus(404);
 	}
 
+	@Test void h01d_hostWithoutMixin_symbolsLucideSvgRouteIs404() throws Exception {
+		cNoMixin.get(ViewsMixin.SYMBOLS_LUCIDE_SVG_PATH).run().assertStatus(404);
+	}
+
 	@Test void h01c_hostWithoutMixin_symbolsMaterialSvgRouteIs404() throws Exception {
 		cNoMixin.get(ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH).run().assertStatus(404);
 	}
@@ -190,6 +194,18 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("text/javascript")
 			.assertHeader("Cache-Control").isContains("max-age")
 			.assertContent().asString().isContains("juneau-bus.js");
+	}
+
+	@Test void b04d_modelJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.MODEL_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("JuneauViews");
+		cWithMixin.get(ViewsMixin.MODEL_INLINE_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript");
+		cNoMixin.get(ViewsMixin.MODEL_JS_PATH).run().assertStatus(404);
 	}
 
 	@Test void b12_regionsJs_served() throws Exception {
@@ -339,7 +355,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.BUS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH, ViewsMixin.DATA_JS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.BUS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.SYMBOLS_LUCIDE_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH, ViewsMixin.DATA_JS_PATH, ViewsMixin.MODEL_JS_PATH, ViewsMixin.MODEL_INLINE_JS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -364,9 +380,10 @@ class ViewsMixin_Serving_Test extends TestBase {
 				ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH,
 				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH,
 				ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.BUS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
-				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH,
+				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.SYMBOLS_LUCIDE_SVG_PATH,
 				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH,
-				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH, ViewsMixin.DATA_JS_PATH}) {
+				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH, ViewsMixin.DATA_JS_PATH,
+				ViewsMixin.MODEL_JS_PATH, ViewsMixin.MODEL_INLINE_JS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
 			var url = ViewsMixin.viewAssetUrl(path);
@@ -653,6 +670,25 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cWithMixin.get("/juneau-symbols-key.svg").run().assertStatus(404);
 	}
 
+	@Test void h04b_symbolsSvg_carriesTrash() throws Exception {
+		cWithMixin.get(ViewsMixin.SYMBOLS_SVG_PATH).run().assertStatus(200).assertContent().asString().isContains("id=\"juneau-sym-trash\"");
+	}
+
+	/** The detail header tile, the link-action look and the fields-grid separators are token-based rules in the served CSS. */
+	@Test void o10_viewsCss_hasHeaderTile_linkAction_andFieldSeparators() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var tile = body.indexOf(".juneau-view-detail-header .juneau-view-detail-icon {");
+		assertTrue(tile >= 0, body);
+		assertTrue(body.substring(tile, body.indexOf("}", tile)).contains("background: var(--jc-"), body);
+		var link = body.indexOf("a.juneau-view-detail-action {");
+		assertTrue(link >= 0, body);
+		assertTrue(body.substring(link, body.indexOf("}", link)).contains("text-decoration: none"), body);
+		var sep = body.indexOf(".juneau-view-detail-fields > .juneau-view-detail-field:last-child {");
+		assertTrue(sep >= 0, body);
+		assertTrue(body.substring(sep, body.indexOf("}", sep)).contains("border-bottom: 1px solid transparent"), body);
+		assertFalse(body.contains("slds"), body);
+	}
+
 	@Test void h05_symbolsMaterialSvg_served() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH).run()
 			.assertStatus(200)
@@ -663,6 +699,16 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("viewBox=\"0 -960 960 960\""), body);
 		DualHatGuard.assertClean(body);
 		assertFalse(body.contains("icon-overrides"), body);
+	}
+
+	@Test void h06_symbolsLucideSvg_served() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.SYMBOLS_LUCIDE_SVG_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/svg+xml")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		assertTrue(body.contains("juneau-sym-circle_check"), body);
+		DualHatGuard.assertClean(body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -886,24 +932,29 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains(sel + " {"), body);
 		var start = body.indexOf(sel + " {");
 		var region = body.substring(start, body.indexOf("}", start));
-		assertTrue(region.contains("border-bottom: 1px solid"), region);   // the floor line
+		assertTrue(region.contains("border-bottom-width: 1px") && region.contains("border-bottom-style: solid"), region);   // the floor line
 		assertTrue(region.contains("overflow-x: auto"), region);           // scroll, no "more" menu
 		assertTrue(region.contains("white-space: nowrap"), region);
 
-		// The active tab overlaps the divider (margin-bottom: -1px).
-		assertTrue(body.contains(sel + " .juneau-view-ribbon-btn {"), body);
-		var btnStart = body.indexOf(sel + " .juneau-view-ribbon-btn {");
-		assertTrue(body.substring(btnStart, body.indexOf("}", btnStart)).contains("margin-bottom: -1px"), body);
+		// Only the selected tab overlaps the floor line (margin-bottom: -1px); unselected tabs do not.
+		var selSel = sel + " .juneau-view-ribbon-btn[aria-selected=\"true\"] {";
+		assertTrue(body.contains(selSel), body);
+		var selStart = body.indexOf(selSel);
+		assertTrue(body.substring(selStart, body.indexOf("}", selStart)).contains("margin-bottom: -1px"), body);
 
-		// End caps square off their BOTTOM corners in tab-mode (top radii stay).
-		var firstSel = sel + " .juneau-view-ribbon-btn:first-child {";
-		assertTrue(body.contains(firstSel), body);
-		var fcStart = body.indexOf(firstSel);
-		assertTrue(body.substring(fcStart, body.indexOf("}", fcStart)).contains("border-bottom-left-radius: 0"), body);
-		var lastSel = sel + " .juneau-view-ribbon-btn:last-child {";
-		assertTrue(body.contains(lastSel), body);
-		var lcStart = body.indexOf(lastSel);
-		assertTrue(body.substring(lcStart, body.indexOf("}", lcStart)).contains("border-bottom-right-radius: 0"), body);
+		// Each tab keeps its own rounded top corners; there is no end-cap squaring any more.
+		var btnSel = sel + " .juneau-view-ribbon-btn {";
+		assertTrue(body.contains(btnSel), body);
+		var btnStart = body.indexOf(btnSel);
+		assertTrue(body.substring(btnStart, body.indexOf("}", btnStart)).contains("border-radius: 4px 4px 0 0"), body);
+		assertFalse(body.contains(sel + " .juneau-view-ribbon-btn:first-child {"), body);
+	}
+
+	/** The global folder-tab look: pane-container marker present, the old dialog "folder" nav variant gone. */
+	@Test void o05b_folderTabLook() throws Exception {
+		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(body.contains("[data-juneau-strip-panel]"), body);
+		assertFalse(body.contains("data-nav=\"folder\""), body);
 	}
 
 	/**

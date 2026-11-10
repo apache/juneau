@@ -39,14 +39,15 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * {@link InventoryGaugeCardType}) and two charts: the stock bands and the zoomable prices.
  *
  * <p>
- * Both JS handlers live in {@code petstore-cards.js}, served beside this class, which also shows the card API
+ * Both JS card classes live in {@code petstore-cards.js}, served beside this class, which also shows the card API
  * ({@code JuneauConsole.refreshCard}, {@code JuneauConsole.cardApi}) and the {@code juneau:card-mounted} event.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjs'>
- * 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push([<js>'kpi'</js>, {
- * 		render(card, el, ctx) { ... }
- * 	}]);
+ * 	class KpiCard extends JuneauConsole.Card {
+ * 		render() { ... }
+ * 	}
+ * 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push([<js>'kpi'</js>, KpiCard]);
  * </p>
  * <p class='bcode'>
  * 	GET /console/dev/cards                       the page

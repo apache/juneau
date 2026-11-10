@@ -336,6 +336,17 @@ class Helpers_Test extends TestBase {
 		assertAllTrue(report(), "editableField_selectOptionsRendered", "editableField_selectSavesOptionValue");
 	}
 
+	@Test void g20_tabStrip_newOptions_initialControlsAriaLabelAndPanesOff() {
+		assertAllTrue(report(), "tabStrip_initialFired", "tabStrip_noPanes", "tabStrip_controls", "tabStrip_ariaLabel",
+			"tabStrip_btnClass", "tabStrip_activateReason", "tabStrip_activeId", "tabStrip_tabId", "tabStrip_clickReason",
+			"tabStrip_addTab", "tabStrip_selected");
+	}
+
+	@Test void g21_tabStrip_panelMarkerAndLateTabs() {
+		assertAllTrue(report(), "tabStrip_panelMarker", "tabStrip_noPanelMarker", "tabStrip_addTabLazyPane",
+			"tabStrip_addTabPopulatesOnActivate");
+	}
+
 	@Test void i06_editableField_checkbox_toggleSavesBoolean_rejectRevertsWithInlineAndToast() {
 		assertAllTrue(report(), "editableField_checkboxNoPencil", "editableField_checkboxToggleSavesBoolean",
 			"editableField_checkboxRejectReverts", "editableField_checkboxRejectInline",
@@ -364,5 +375,11 @@ class Helpers_Test extends TestBase {
 
 	@Test void i11_toast_reusesExistingNode_errorIsAlert_infoIsStatus() {
 		assertAllTrue(report(), "toast_reusesExistingNode", "toast_infoRoleIsStatus");
+	}
+
+	@Test void j01_tabStrip_resetApi() {
+		assertAllTrue(report(), "tabReset_frozen", "tabReset_clearsPane", "tabReset_repopulatesOnActivate", "tabReset_abortsPrevious",
+			"tabReset_resetAllClears", "tabReset_activeRepopulatesNow", "tabReset_setLabel", "tabReset_unknownIdNoop",
+			"tabReset_repopulatedAfterResetWhilePending");
 	}
 }

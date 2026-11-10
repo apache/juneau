@@ -43,10 +43,12 @@
   ],
   "ribbon": [
     {
-      "type": "refresh"
+      "type": "refresh",
+      "id": "refresh"
     },
     {
       "type": "export",
+      "id": "export",
       "buttons": [
         "copy",
         "csv"

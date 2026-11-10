@@ -33,8 +33,8 @@
   columns: [
     { key: 'id', label: 'Id' },
     { key: 'name', label: 'Name', render: { id: 'edit', meta: { action: 'rename', column: 'name', input: 'text' } } },
-    { key: 'species', label: 'Species' },
-    { key: 'status', label: 'Status', render: { id: 'pill' } },
+    { key: 'species', label: 'Species', render: { id: 'pill', meta: { categorical: true, categories: { DOG: 1, CAT: 2, BIRD: 4, FISH: 6, SNAKE: 7, RABBIT: 9, MOUSE: 10 } } } },
+    { key: 'status', label: 'Status', render: { id: 'pill', meta: { tones: { AVAILABLE: 'success', PENDING: 'warning', SOLD: 'neutral' } } } },
     { key: 'price', label: 'Price (USD)', render: { id: 'edit', meta: { action: 'reprice', column: 'price', input: 'number' } } }
   ],
   rowActions: [
@@ -48,7 +48,7 @@
     { id: 'sell', label: 'Mark sold', endpoint: '/console/pets/{id}/sell', method: 'POST', onSuccess: 'redraw',
       confirm: "Mark '{name}' sold?", visibleWhen: [ { field: 'status', op: 'ne', value: 'SOLD' } ] }
   ],
-  ribbon: [ { type: 'refresh' } ]
+  ribbon: [ { type: 'refresh', id: 'refresh' } ]
 }
 </@card>
 <#elseif tab == "photo">
@@ -73,7 +73,7 @@
   columns: [
     { key: 'id', label: 'Order', href: '/console/pets/${pet.id?c}/orders/{id}' },
     { key: 'shipDate', label: 'Ship date' },
-    { key: 'status', label: 'Status', render: { id: 'pill' } }
+    { key: 'status', label: 'Status', render: { id: 'pill', meta: { tones: { PLACED: 'info', APPROVED: 'warning', DELIVERED: 'success' } } } }
   ],
   detail: { endpoint: '/console/pets/${pet.id?c}/orders/{id}/detail', title: 'Order {id}' }
 }
@@ -93,7 +93,7 @@
   columns: [
     { key: 'at', label: 'When', render: { id: 'timestamp' } },
     { key: 'actor', label: 'Actor' },
-    { key: 'action', label: 'Action' },
+    { key: 'action', label: 'Action', render: { id: 'pill', meta: { tones: { CREATE: 'success', UPDATE: 'info', DELETE: 'error', DISCARD: 'warning', RESTOCK: 'info' } } } },
     { key: 'detail', label: 'Detail' }
   ]
 }

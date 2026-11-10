@@ -313,4 +313,47 @@ out.intersectSortOrderDropsDuplicates =
 	C.intersectSortOrder([{ column: 'name', dir: 'asc' }, { column: 'name', dir: 'desc' }], ['name']);
 out.intersectSortOrderAbsentIsCatalogOrder = C.intersectSortOrder(undefined, ['name', 'status']);
 
+// -----------------------------------------------------------------------------------------------------------------
+// seedChooserDraft: the single seeding point shared by mountChooser and openChooser.
+// -----------------------------------------------------------------------------------------------------------------
+out.seedExported = typeof C.seedChooserDraft === 'function';
+if (out.seedExported) {
+	const seedCat = [{ data: 'A', title: 'A' }, { data: 'B', title: 'B', defaultVisible: false }];
+	const mkCtx = function () { return { viewDef: { columns: seedCat, columnConfig: true } }; };
+	const tbl = el('table');
+	tbl.dataset = {};
+	{
+		const ctx = mkCtx();
+		C.seedChooserDraft(tbl, ctx);
+		const first = ctx._configDraft;
+		const snap = ctx._configCleanSnapshot;
+		C.seedChooserDraft(tbl, ctx);
+		out.seedOnce = { same: ctx._configDraft === first, snapKept: ctx._configCleanSnapshot === snap, visible: first.visible, dirty: ctx._configDirty, hasSnap: typeof snap === 'string' };
+	}
+	{
+		const ctx = mkCtx();
+		ctx._lastAppliedViewSettings = { draft: { visible: ['B'], order: ['B', 'A'], labels: {}, formats: {}, search: [], sort: [], options: {} }, reset: false };
+		C.seedChooserDraft(tbl, ctx);
+		out.seedLastApplied = { visible: ctx._configDraft.visible, notice: ctx._configResetNotice };
+	}
+	{
+		const ctx = mkCtx();
+		ctx._lastAppliedViewSettings = { draft: null, reset: true };
+		C.seedChooserDraft(tbl, ctx);
+		out.seedResetNotice = { notice: ctx._configResetNotice, visible: ctx._configDraft.visible };
+	}
+	const origSeed = C.seedChooserDraft;
+	{
+		let calls = 0;
+		C.seedChooserDraft = function (t, c) { calls++; return origSeed(t, c); };
+		C.mountChooser(tbl, mkCtx(), el('div'));
+		out.mountCallsSeed = calls;
+		let opened = 0;
+		C.seedChooserDraft = function () { opened++; throw new Error('stop'); };
+		try { C.openChooser(tbl, mkCtx()); } catch (e) { /* the spy aborts openChooser right after seeding */ }
+		out.openCallsSeed = opened;
+		C.seedChooserDraft = origSeed;
+	}
+}
+
 process.stdout.write(JSON.stringify(out));

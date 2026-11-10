@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.console.*;
 import org.apache.juneau.marshall.collections.*;
 
 /**
@@ -61,31 +62,39 @@ import org.apache.juneau.marshall.collections.*;
 	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
 	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
-public final class RibbonItem {
+public final class RibbonItem implements Handled<RibbonItem> {
 
 	private static final List<String> EXPORT_BUTTONS = List.of("copy", "csv", "print", "excel", "pdf");
 	private static final List<String> EXPORT_OPTIONAL = List.of("excel", "pdf");
 	private static final List<String> APPEARANCES = List.of("icon");
 
 	// The keys juneau-ribbon.js reads for each item type (everything else is ignored there, so toMap() rejects it).
-	private static final Set<String> COMMON = Set.of("type", "id", "title", "group", "appearance", "symbol", "visibleWhen");
-	private static final Map<String,Set<String>> ALLOWED = Map.of(
-		"refresh", union(COMMON, "target"),
-		"collapseAll", union(COMMON, "target"),
-		"pausePolling", union(COMMON, "target"),
-		"resetDefaults", COMMON,
-		"dialog", union(COMMON, "form", "endpoint", "method", "onSuccess"),
-		"export", Set.of("type", "group", "appearance", "buttons", "optional", "visibleWhen"),
-		"option", union(COMMON, "column", "param", "value", "persist", "default", "target"),
-		"optionGroup", Set.of("type", "id", "title", "group", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),
-		"publish", union(COMMON, "topic", "payload"),
-		"divider", Set.of("type", "visibleWhen")
+	private static final Set<String> COMMON = Set.of("type", "id", "title", "group", "appearance", "symbol", "visibleWhen", "model");
+	private static final Map<String,Set<String>> ALLOWED = Map.ofEntries(
+		Map.entry("refresh", union(COMMON, "target")),
+		Map.entry("collapseAll", union(COMMON, "target")),
+		Map.entry("pausePolling", union(COMMON, "target")),
+		Map.entry("resetDefaults", COMMON),
+		Map.entry("search", Set.of("type", "id", "title", "group", "visibleWhen", "model")),
+		Map.entry("linkButton", COMMON),
+		Map.entry("columnSettings", COMMON),
+		Map.entry("dialog", union(COMMON, "form", "endpoint", "method", "onSuccess")),
+		Map.entry("export", Set.of("type", "id", "group", "appearance", "buttons", "optional", "visibleWhen", "model")),
+		Map.entry("option", union(COMMON, "column", "param", "value", "persist", "default", "target")),
+		Map.entry("optionGroup", Set.of("type", "id", "title", "group", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen", "model")),
+		Map.entry("publish", union(COMMON, "topic", "payload")),
+		Map.entry("action", Set.of("type", "id", "icon", "label", "title", "appearance", "optional", "visibleWhen", "model")),
+		Map.entry("divider", Set.of("type", "visibleWhen", "model"))
 	);
 	private static final java.util.regex.Pattern CARD_ID = java.util.regex.Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 	private static final Set<String> MEMBER_ALLOWED = Set.of("id", "title", "symbol", "column", "param", "value");
 
 	private final String type;
 	private String id;
+	private boolean idExplicit;
+	private String icon;
+	private String label;
+	private final ModelBlock model;
 	private String title;
 	private String group;
 	private String appearance;
@@ -110,6 +119,127 @@ public final class RibbonItem {
 
 	private RibbonItem(String type) {
 		this.type = type;
+		this.model = new ModelBlock("ribbonitem", type);
+	}
+
+	/** The stock item types whose id defaults to the type name; the same map the client applies. */
+	static java.util.Map<String,String> defaultIds() {
+		var m = new java.util.LinkedHashMap<String,String>();
+		for (var t : new String[]{"refresh", "collapseAll", "pausePolling", "resetDefaults", "export"})
+			m.put(t, t);
+		m.put("search", "search");
+		m.put("linkButton", "link");
+		m.put("columnSettings", "columns");
+		return m;
+	}
+
+	private static RibbonItem stockAs(String type, String defaultId) {
+		var r = new RibbonItem(type);
+		r.id = defaultId;
+		return r;
+	}
+
+	private static RibbonItem stock(String type) {
+		var r = new RibbonItem(type);
+		r.id = type;
+		return r;
+	}
+
+	@Override /* Handled */
+	public ModelBlock modelBlock() { return model; }
+
+	@Override /* Handled */
+	public RibbonItem self() { return this; }
+
+	/**
+	 * A custom button whose click runs a handler declared with {@link #action(String,String,String)} or
+	 * {@link #on(String,String)}.
+	 *
+	 * @param id The item's id.  Must not be <jk>null</jk> or blank.
+	 * @return A new {@link RibbonItem}.
+	 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
+	 */
+	public static RibbonItem action(String id) {
+		if (ib(id))
+			throw iaex("RibbonItem action id must not be null or blank.");
+		var r = new RibbonItem("action");
+		r.id = id;
+		r.idExplicit = true;
+		return r;
+	}
+
+	/**
+	 * Sets the icon of an {@code action} item.
+	 *
+	 * @param v The icon name.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public RibbonItem icon(String v) {
+		icon = v;
+		return this;
+	}
+
+	/**
+	 * Sets the label of an {@code action} item.
+	 *
+	 * @param v The label.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public RibbonItem label(String v) {
+		label = v;
+		return this;
+	}
+
+	/**
+	 * Validates a whole ribbon: every non-divider item has an id (a {@code publish} needs an explicit one), a second
+	 * stock item of the same kind needs an explicit id, and ids are unique.
+	 *
+	 * @param tableId The owning table id, for messages.
+	 * @param items The items, in order.
+	 * @throws IllegalArgumentException If a rule is broken.
+	 */
+	static void validateList(String tableId, List<RibbonItem> items) {
+		var seen = new HashMap<String,Integer>();
+		for (var i = 0; i < items.size(); i++) {
+			var it = items.get(i);
+			if ("divider".equals(it.type))
+				continue;
+			if (it.id == null)
+				throw iaex("table '%s' ribbon item %s: a %s item needs an explicit id(...).", tableId, i, it.type);
+			var prev = seen.put(it.id, i);
+			if (prev != null) {
+				if (! it.idExplicit)
+					throw iaex("table '%s' ribbon item %s: a second %s item (also item %s) needs an explicit id(...).", tableId, i, it.type, prev);
+				throw iaex("table '%s' ribbon item %s: duplicate id '%s' (also item %s).", tableId, i, it.id, prev);
+			}
+		}
+	}
+
+	/**
+	 * The table's search box.  A slot the runtime fills with the table's search field; it takes no symbol or appearance.
+	 *
+	 * @return A new {@link RibbonItem}.
+	 */
+	public static RibbonItem search() {
+		return stockAs("search", "search");
+	}
+
+	/**
+	 * The copy-shareable-link button.
+	 *
+	 * @return A new {@link RibbonItem}.
+	 */
+	public static RibbonItem linkButton() {
+		return stockAs("linkButton", "link");
+	}
+
+	/**
+	 * The button that opens the column chooser (View Settings).
+	 *
+	 * @return A new {@link RibbonItem}.
+	 */
+	public static RibbonItem columnSettings() {
+		return stockAs("columnSettings", "columns");
 	}
 
 	/**
@@ -127,7 +257,7 @@ public final class RibbonItem {
 	 * @return A new {@link RibbonItem}.
 	 */
 	public static RibbonItem refresh() {
-		return new RibbonItem("refresh");
+		return stock("refresh");
 	}
 
 	/**
@@ -136,7 +266,7 @@ public final class RibbonItem {
 	 * @return A new {@link RibbonItem}.
 	 */
 	public static RibbonItem collapseAll() {
-		return new RibbonItem("collapseAll");
+		return stock("collapseAll");
 	}
 
 	/**
@@ -145,7 +275,7 @@ public final class RibbonItem {
 	 * @return A new {@link RibbonItem}.
 	 */
 	public static RibbonItem pausePolling() {
-		return new RibbonItem("pausePolling");
+		return stock("pausePolling");
 	}
 
 	/**
@@ -158,7 +288,7 @@ public final class RibbonItem {
 	 * @return A new {@link RibbonItem}.
 	 */
 	public static RibbonItem resetDefaults() {
-		return new RibbonItem("resetDefaults");
+		return stock("resetDefaults");
 	}
 
 	/**
@@ -178,7 +308,7 @@ public final class RibbonItem {
 	public static RibbonItem export(String...buttons) {
 		for (var b : buttons)
 			checkOneOf(b, EXPORT_BUTTONS, "export button");
-		var r = new RibbonItem("export");
+		var r = stock("export");
 		r.buttons = buttons.length == 0 ? null : List.of(buttons);
 		return r;
 	}
@@ -195,6 +325,7 @@ public final class RibbonItem {
 			throw iaex("RibbonItem dialog action id must not be null or blank.");
 		var r = new RibbonItem("dialog");
 		r.id = actionId;
+		r.idExplicit = true;
 		return r;
 	}
 
@@ -214,6 +345,7 @@ public final class RibbonItem {
 			throw iaex("RibbonItem option id must not be null or blank.");
 		var r = new RibbonItem("option");
 		r.id = id;
+		r.idExplicit = true;
 		return r;
 	}
 
@@ -240,6 +372,7 @@ public final class RibbonItem {
 				throw iaex("RibbonItem optionGroup '%s' member must be an option, not '%s'.", id, m.type);
 		var r = new RibbonItem("optionGroup");
 		r.id = id;
+		r.idExplicit = true;
 		r.options = List.of(members);
 		return r;
 	}
@@ -303,7 +436,7 @@ public final class RibbonItem {
 	 * <p>
 	 * The id is emitted on the item's ribbon entry, where it is scoped to its card (it is not stamped as a DOM id).
 	 * {@link #toMap()} rejects an id on the types the runtime ignores it for
-	 * ({@code divider} and {@code export}).
+	 * ({@code divider}).
 	 *
 	 * @param v The id.  Must not be <jk>null</jk> or blank.
 	 * @return This object.
@@ -313,6 +446,7 @@ public final class RibbonItem {
 		if (ib(v))
 			throw iaex("RibbonItem %s id must not be null or blank.", type);
 		id = v;
+		idExplicit = true;
 		return this;
 	}
 
@@ -335,8 +469,8 @@ public final class RibbonItem {
 	 * Clusters this item with adjacent items sharing the same group name.
 	 *
 	 * <p>
-	 * The toolbar's canonical group ids are {@code entity}, {@code filter}, {@code search}, {@code viewing},
-	 * {@code page} and {@code status}.  Groups using them are sorted into that order among the slots they already
+	 * The toolbar's canonical group ids are {@code search}, {@code entity}, {@code filter}, {@code export},
+	 * {@code viewing}, {@code page} and {@code status}.  Groups using them are sorted into that order among the slots they already
 	 * occupy; groups with any other name keep their declared position.  An ungrouped {@code refresh} joins the
 	 * {@code page} group, last, when one exists.
 	 *
@@ -540,6 +674,10 @@ public final class RibbonItem {
 			m.put("type", type);
 		if (id != null)
 			m.put("id", id);
+		if (icon != null)
+			m.put("icon", icon);
+		if (label != null)
+			m.put("label", label);
 		if (title != null)
 			m.put("title", title);
 		if (group != null)
@@ -583,6 +721,9 @@ public final class RibbonItem {
 		if (options != null) {
 			m.put("options", new JsonList(options.stream().map(o -> o.toMap(false)).toList()));
 		}
+		var mm = model.toMap();
+		if (mm != null)
+			m.put("model", mm);
 		return m;
 	}
 

@@ -128,7 +128,7 @@
 	const REGION_STATE_ATTR = "data-juneau-region-state";
 
 	/** The three region types.  Three, not four: a detail body is one region, not a strip of sections. */
-	const REGION_TYPES = ["row-detail", "card-body", "tab-body"];
+	const REGION_TYPES = ["row-detail", "card-body", "tab-body", "chart"];
 
 	/**
 	 * The reserved populator name, and the whole of the reserved set.  `register("default", ...)` is refused so that
@@ -227,6 +227,7 @@
 	/** Juneau-shipped populators, resolved ahead of the consumer registry.  The reserved default lands here. */
 	const builtins = {};
 	builtins[DEFAULT_POPULATOR_NAME] = function (ctx, container) { return runDefaultPopulate(ctx, container); };
+	builtins.chart = function (ctx, container) { return runChartPopulate(ctx, container); };
 
 	/** Every live region on the page, in enrolment order.  The bus resolves a `{to}` against this. */
 	const liveRegions = [];
@@ -1162,6 +1163,45 @@
 	}
 
 	/**
+	 * The built-in populator of a chart region.  It reads its OWN declared dataUrl (a chart's endpoint is never the
+	 * panel's, so nothing is joined), maps the returned row records through the declared x field and series fields,
+	 * and hands the rows to JuneauCharts.mount.  An empty record list shows the empty status and an absent charting
+	 * runtime shows an error status; neither throws.
+	 */
+	function runChartPopulate(ctx, container) {
+		const chart = ctx.declared.chart;
+		if (!chart || typeof chart !== "object") return Promise.reject(new Error("chart region '" + ctx.key + "' has no chart declaration."));
+		const render = NS.init?.renderAsyncStatus;
+		const status = function (kind, text) { if (typeof render === "function") render(container, kind, text); };
+		const mount = window.JuneauCharts?.mount;
+		if (typeof mount !== "function") {
+			status("error", "charting is not loaded");
+			return Promise.resolve();
+		}
+		const prefetched = ctx.data != null ? Promise.resolve(ctx.data) : ctx.fetchDeclared();
+		return prefetched.then(function (records) {
+			if (ctx.signal.aborted) return;
+			const list = Array.isArray(records) ? records : [];
+			if (!list.length) {
+				status("empty", typeof chart.emptyText === "string" && chart.emptyText ? chart.emptyText : "No data");
+				return;
+			}
+			const fields = [chart.x];
+			(Array.isArray(chart.series) ? chart.series : []).forEach(function (sr) { if (sr && !fields.includes(sr.field)) fields.push(sr.field); });
+			const rows = list.map(function (rec) {
+				const row = {};
+				fields.forEach(function (f) { if (rec && typeof rec === "object" && Object.hasOwn(rec, f)) row[f] = rec[f]; });
+				return row;
+			});
+			clearContainer(container);
+			return Promise.resolve(mount(container, chart, rows)).then(function () {
+				const unmount = window.JuneauCharts?.unmount;
+				return typeof unmount === "function" ? function () { unmount(container); } : undefined;
+			});
+		});
+	}
+
+	/**
 	 * The framework-owned, CSRF-stamped write.  It exists because a populate that paints a button has no other way to
 	 * reach the token: the token is stamped on a host element and read back by the view runtime with a bare
 	 * getAttribute, and a card grid carries no table.  Everything here mirrors the row-action write path rather than
@@ -1296,6 +1336,8 @@
 		if (Array.isArray(body.visibleWhen) && body.visibleWhen.length) declared.visibleWhen = body.visibleWhen;
 		// RegionDef.config: the populator's own declaration (a job-log region's submit/output), passed through as-is.
 		if (body.config && typeof body.config === "object" && !Array.isArray(body.config)) declared.config = body.config;
+		// A chart region's drawing declaration (kind, x, series, height), read by the built-in chart populator.
+		if (body.chart && typeof body.chart === "object" && !Array.isArray(body.chart)) declared.chart = body.chart;
 		return {
 			declared: declared,
 			params: (body.params && typeof body.params === "object" && !Array.isArray(body.params)) ? body.params : {}
@@ -1586,7 +1628,7 @@
 	 * it would on any other settle, so one bad name cannot hold the page's initial broadcast.
 	 */
 	function resolvePopulator(region) {
-		const name = region.populateName == null ? DEFAULT_POPULATOR_NAME : region.populateName;
+		const name = region.populateName == null ? (region.type === "chart" ? "chart" : DEFAULT_POPULATOR_NAME) : region.populateName;
 		const fn = resolve(name);
 		if (typeof fn === "function") return fn;
 		const message = "no populator is registered under the name '" + name + "'.";

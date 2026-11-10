@@ -226,8 +226,9 @@ class TerminalInput_BrowserTest extends TestBase {
 			+ " session: '/rest" + BusEventsMixin.SESSION_PATH + (typist ? "?typist=1" : "") + "',"
 			+ " downstream: ['term.input-status'], upstream: ['term.input']}]});"
 			// The console routes the card's input-status role; here the page does it, through the registered card handler.
-			+ "const role = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1].roles['input-status'];"
-			+ "B.subscribe('term.input-status', function (p, m) { role(p, m, {id: '" + id + "'}); });"
+			+ "const K = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];"
+			+ "const card = Object.create(K.prototype); card.spec = {id: '" + id + "'};"
+			+ "B.subscribe('term.input-status', function (p, m) { K.prototype[K.roles['input-status']].call(card, p, m); });"
 			+ "window.JuneauTerminal.mount(document.getElementById('host'), {id: '" + id + "', refreshMs: 250,"
 			+ (input ? " input: true, inputId: '" + id + "'," : "")
 			+ " bytesUrl: '/rest" + TerminalMixin.TERMINAL_PREFIX + "/" + id + "/bytes',"

@@ -1013,7 +1013,7 @@
 	// container.  Backward-compatible: `tabStrip([{id,label,pane}])` with no opts is unchanged.
 	// ================================================================================================
 
-	function validateTabs(tabs) {
+	function validateTabs(tabs, panesOn) {
 		if (!Array.isArray(tabs) || tabs.length === 0)
 			throw new TypeError("JuneauViews.helpers: tabStrip(tabs, opts) requires a non-empty array of tab entries.");
 		const seen = {};
@@ -1027,7 +1027,7 @@
 			seen[id] = true;
 			const hasPane = Object.hasOwn(t, "pane") && t.pane != null;
 			const hasPopulate = typeof t.populate === "function";
-			if (hasPane === hasPopulate)
+			if (panesOn !== false && hasPane === hasPopulate)
 				throw new TypeError("JuneauViews.helpers: tabStrip entry \"" + id + "\" must supply EXACTLY ONE of `pane` or `populate`.");
 		}
 	}
@@ -1041,8 +1041,9 @@
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 	function tabStrip(tabs, opts) {
-		validateTabs(tabs);
 		opts = opts || {};
+		const panesOn = opts.panes !== false;   // false: a selector only, no pane per tab (the caller owns the display)
+		validateTabs(tabs, panesOn);
 		const mode = opts.mode === "ribbon" ? "ribbon" : "tab";
 		const signal = opts.signal || null;
 		// A per-CALL random id, not a module-level counter: unique across co-existing strips without any
@@ -1054,6 +1055,7 @@
 		strip.className = "juneau-view-ribbon-group juneau-view-helper-tabstrip";
 		strip.setAttribute("role", "tablist");
 		strip.dataset.juneauStripMode = mode;
+		if (opts.ariaLabel) strip.setAttribute("aria-label", String(opts.ariaLabel));
 
 		const paneContainer = document.createElement("div");
 		paneContainer.className = "juneau-view-helper-tabstrip-panes";
@@ -1071,7 +1073,13 @@
 		}
 		const activeId = String(tabs[activeIndex].id);
 
-		const entries = tabs.map(function (t, i) {
+		const entries = [];
+		let tabCount = entries.length;   // per call, not module state
+
+		// Builds one tab (button, and in pane mode its pane) and appends it; the initial tabs and any added later
+		// go through here, so a late tab behaves exactly like an original one.
+		function addTab(t) {
+			const i = tabCount++;
 			const id = String(t.id);
 			const hasPane = Object.hasOwn(t, "pane") && t.pane != null;
 			const hasPopulate = typeof t.populate === "function";
@@ -1079,8 +1087,10 @@
 			const btn = document.createElement("button");
 			btn.type = "button";
 			btn.id = instanceId + "-tab-" + i;
+			btn.className = "juneau-view-ribbon-btn";
 			btn.setAttribute("role", "tab");
 			btn.dataset.juneauStripTab = id;
+			btn.setAttribute("data-tab-id", id);
 			const isActive = id === activeId;
 			btn.setAttribute("aria-selected", isActive ? "true" : "false");
 			btn.tabIndex = isActive ? 0 : -1;
@@ -1089,54 +1099,70 @@
 			labelSpan.textContent = t.label;
 			btn.appendChild(labelSpan);
 
-			const pane = document.createElement("div");
-			pane.id = instanceId + "-panel-" + i;
-			pane.setAttribute("role", "tabpanel");
-			pane.setAttribute("aria-labelledby", btn.id);
-			pane.className = "juneau-view-helper-tabstrip-pane";
-			pane.hidden = !isActive;
-			btn.setAttribute("aria-controls", pane.id);
-
-			if (hasPane) pane.appendChild(t.pane);
-
+			let pane = null;
+			if (panesOn) {
+				pane = document.createElement("div");
+				pane.id = instanceId + "-panel-" + i;
+				pane.setAttribute("role", "tabpanel");
+				pane.setAttribute("aria-labelledby", btn.id);
+				pane.className = "juneau-view-helper-tabstrip-pane";
+				pane.hidden = !isActive;
+				btn.setAttribute("aria-controls", pane.id);
+				if (hasPane) pane.appendChild(t.pane);
+				paneContainer.appendChild(pane);
+			} else if (opts.controls) {
+				btn.setAttribute("aria-controls", String(opts.controls));
+			}
 			strip.appendChild(btn);
-			paneContainer.appendChild(pane);
 
-			return {
+			const entry = {
 				id: id, btn: btn, pane: pane, disabled: !!t.disabled,
-				filled: hasPane, populate: hasPopulate ? t.populate : null,
-				lazy: hasPopulate ? (t.lazy !== false) : false
+				filled: hasPane || !panesOn, populate: hasPopulate ? t.populate : null,
+				lazy: hasPopulate ? (t.lazy !== false) : false,
+				token: 0, ac: null, labelSpan: labelSpan
 			};
-		});
+			entries.push(entry);
+			return entry;
+		}
+		tabs.forEach(addTab);
 
 		function runPopulate(entry, reason) {
 			if (entry.filled || !entry.populate) return;
 			if (signal?.aborted) return; // rule 5: abort prevents any not-yet-run populate from running
 			entry.filled = true; // set BEFORE awaiting: fill-once holds even if activation races the async populate
-			const tabCtx = { tabId: entry.id, reason: reason, signal: signal };
+			const token = ++entry.token;
+			const ac = new AbortController();
+			entry.ac = ac;
+			if (signal) {
+				const onAbort = function () { ac.abort(); };
+				signal.addEventListener("abort", onAbort, { once: true });
+				ac.signal.addEventListener("abort", function () { signal.removeEventListener("abort", onAbort); }, { once: true });
+			}
+			const tabCtx = { tabId: entry.id, reason: reason, signal: ac.signal };
+			const paintError = function (err) {
+				if (token !== entry.token) return; // a reset superseded this run: its failure is stale
+				I.renderAsyncStatus(entry.pane, "error", err?.message ? String(err.message) : "Something went wrong.");
+			};
 			let result;
 			try {
 				result = entry.populate(entry.pane, tabCtx);
 			} catch (err) {
-				I.renderAsyncStatus(entry.pane, "error", err?.message ? String(err.message) : "Something went wrong.");
+				paintError(err);
 				return;
 			}
-			if (result && typeof result.then === "function") {
-				result.then(function () {}, function (err) {
-					I.renderAsyncStatus(entry.pane, "error", err?.message ? String(err.message) : "Something went wrong.");
-				});
-			}
+			if (result && typeof result.then === "function") result.then(function () {}, paintError);
 		}
 
 		// Build-time pass: the eagerly-opened tab (whichever is active) always populates now, with
 		// reason:"initial" - and so does any OTHER tab whose author opted out of laziness (`lazy:false`).
 		// Every remaining lazy, non-active tab waits for its first activation (reason:"activate").
-		entries.forEach(function (entry, i) {
+		entries.forEach(function (entry) {
 			if (entry.filled) return;
 			if (entry.id === activeId || !entry.lazy) runPopulate(entry, "initial");
 		});
 
-		function activate(id) {
+		let currentId = activeId;
+		function activate(id, reason) {
 			let target = null;
 			for (const item of entries) {
 				if (item.id === id) { target = item; break; }
@@ -1146,16 +1172,17 @@
 				const isTarget = e === target;
 				e.btn.setAttribute("aria-selected", isTarget ? "true" : "false");
 				e.btn.tabIndex = isTarget ? 0 : -1;
-				e.pane.hidden = !isTarget;
+				if (e.pane) e.pane.hidden = !isTarget;
 			});
+			currentId = target.id;
 			runPopulate(target, "activate");
-			if (typeof opts.onActivate === "function") opts.onActivate(target.id, target.pane);
+			if (typeof opts.onActivate === "function") opts.onActivate(target.id, target.pane, reason || "activate");
 		}
 
 		strip.addEventListener("click", function (e) {
 			const btn = e.target && typeof e.target.closest === "function" ? e.target.closest("[role=\"tab\"]") : null;
 			if (!btn || (typeof strip.contains === "function" && !strip.contains(btn)) || btn.disabled) return;
-			activate(btn.dataset.juneauStripTab);
+			activate(btn.dataset.juneauStripTab, "click");
 			if (typeof btn.focus === "function") btn.focus();
 		});
 
@@ -1180,14 +1207,58 @@
 			}
 			if (entries[next].disabled) return; // every tab in the strip is disabled - nothing to activate
 			if (typeof e.preventDefault === "function") e.preventDefault();
-			activate(entries[next].id);
+			activate(entries[next].id, "click");
 			if (typeof entries[next].btn.focus === "function") entries[next].btn.focus();
 		});
 
 		const wrapper = document.createElement("div");
 		wrapper.className = "juneau-view-helper-tabstrip-wrapper";
 		wrapper.appendChild(strip);
-		wrapper.appendChild(paneContainer);
+		if (panesOn) {
+			wrapper.appendChild(paneContainer);
+			// The panes are a bordered panel the selected tab joins (the folder-tab look keys off this marker).
+			if (mode === "tab") wrapper.setAttribute("data-juneau-strip-panel", "");
+		}
+		function resetEntry(entry) {
+			if (!entry.populate || !entry.pane) return; // a static pane has nothing to rebuild
+			entry.token++;
+			if (entry.ac) entry.ac.abort();
+			entry.ac = null;
+			if (typeof opts.onReset === "function") {
+				try { opts.onReset(entry.id, entry.pane); } catch (err) { /* a failed release must not block the rebuild */ } // NOSONAR javascript:S2486 -- best-effort release; the rebuild proceeds
+			}
+			entry.pane.textContent = "";
+			entry.filled = false;
+			if (entry.id === currentId) runPopulate(entry, "reset");
+		}
+		function findEntry(id) {
+			for (const e of entries) if (e.id === id) return e;
+			return null;
+		}
+		wrapper.juneauTabs = Object.freeze({
+			activate: function (id) { activate(String(id), "activate"); },
+			activeId: function () { return currentId; },
+			addTab: function (t) {
+				if (t?.id == null || t.label == null) throw new TypeError("JuneauViews.helpers: tabStrip.addTab requires an id and a label.");
+				const id = String(t.id);
+				if (entries.some(function (e) { return e.id === id; }))
+					throw new TypeError("JuneauViews.helpers: tabStrip has a duplicate tab id \"" + id + "\".");
+				return addTab(t) && undefined;
+			},
+			reset: function (id) {
+				const e = findEntry(String(id));
+				if (e) resetEntry(e);
+			},
+			resetAll: function () { entries.slice().forEach(resetEntry); },
+			setLabel: function (id, text) {
+				const e = findEntry(String(id));
+				if (e?.labelSpan) e.labelSpan.textContent = String(text);
+			}
+		});
+		if (opts.activateInitial === true && typeof opts.onActivate === "function") {
+			const first = entries.find(function (e) { return e.id === activeId; });
+			opts.onActivate(activeId, first ? first.pane : null, "initial");
+		}
 		return wrapper;
 	}
 

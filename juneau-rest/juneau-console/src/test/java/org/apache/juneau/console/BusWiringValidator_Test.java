@@ -44,7 +44,18 @@ class BusWiringValidator_Test extends TestBase {
 		@Override public Set<String> acceptedOps() { return ops; }
 	}
 
+	/** A stub container type: its {@code cards} array holds nested cards. */
+	private record Box() implements CardTypeHandler {
+		@Override public String type() { return "box"; }
+		@Override public JsonMap toFragment(CardSource source) { return new JsonMap(); }
+		@Override @SuppressWarnings("unchecked")
+		public List<Map<String,Object>> nestedCards(JsonMap body) {
+			return body.get("cards") instanceof List<?> l ? (List<Map<String,Object>>)l : List.of();
+		}
+	}
+
 	private static final CardTypeRegistry REGISTRY = CardTypeRegistry.standard().copy()
+		.add(new Box())
 		.add(new Stub("grid", Set.of("highlight"), Set.of("reload"), List.of("grid.picked")))
 		.add(new Stub("meter", null, null, List.of()))
 		.build();
@@ -403,5 +414,40 @@ class BusWiringValidator_Test extends TestBase {
 
 	@Test void g20_noDashboard_noE77() throws Exception {
 		assertEquals(List.of(), problems("{\"contractVersion\":\"1\",\"title\":\"T\",\"nav\":[],\"activeNav\":[],\"cards\":[]}"));
+	}
+
+	// ---- nested cards (a container type's nestedCards) -----------------------------------------------------------
+
+	private static final String NESTED_PUB = "{\"id\":\"c\",\"type\":\"html\",\"template\":\"c\",\"publishes\":[{\"topic\":\"c.click\",\"retain\":false}]}";
+	private static final String TOP_SUB = "{\"id\":\"s\",\"type\":\"html\",\"template\":\"s\",\"subscribes\":[{\"topic\":\"c.click\",\"as\":\"refresh\"}]}";
+
+	@Test void n01_nestedPublishCountsForTopLevelSubscriber() throws Exception {
+		assertEquals(List.of(), problems(page("\"cards\":[{\"id\":\"b\",\"type\":\"box\",\"cards\":[" + NESTED_PUB + "]}," + TOP_SUB + "]")));
+	}
+
+	@Test void n02_withoutNestedPublishTheSubscriptionIsUnpublished() throws Exception {
+		var nested = "{\"id\":\"c\",\"type\":\"html\",\"template\":\"c\"}";
+		var ps = problems(page("\"cards\":[{\"id\":\"b\",\"type\":\"box\",\"cards\":[" + nested + "]}," + TOP_SUB + "]"));
+		assertEquals(1, ps.size(), ps.toString());
+		assertTrue(ps.get(0).startsWith("E-41 card 's' subscribes to 'c.click' but nothing publishes it"), ps.get(0));
+	}
+
+	@Test void n03_nestedSubscribeToUnknownTopic() throws Exception {
+		var nested = "{\"id\":\"c\",\"type\":\"html\",\"template\":\"c\",\"subscribes\":[{\"topic\":\"card:gone\",\"as\":\"refresh\"}]}";
+		assertEquals(List.of("E-42 topic 'card:gone' names card 'gone', which is not on this page"),
+			problems(page("\"cards\":[{\"id\":\"b\",\"type\":\"box\",\"cards\":[" + nested + "]}]")));
+	}
+
+	@Test void n04_retainConflictAcrossNesting() throws Exception {
+		var top = "{\"id\":\"a\",\"type\":\"html\",\"template\":\"a\",\"publishes\":[{\"topic\":\"c.click\",\"retain\":true}]}";
+		var ps = problems(page("\"cards\":[" + top + ",{\"id\":\"b\",\"type\":\"box\",\"cards\":[" + NESTED_PUB + "]}]"));
+		assertEquals(1, ps.size(), ps.toString());
+		assertTrue(ps.get(0).startsWith("E-46 topic 'c.click'"), ps.get(0));
+	}
+
+	@Test void n05_duplicateIdAcrossNesting() throws Exception {
+		var top = "{\"id\":\"c\",\"type\":\"html\",\"template\":\"c\"}";
+		assertEquals(List.of("E-76 card 'c': id is declared more than once across nested cards"),
+			problems(page("\"cards\":[" + top + ",{\"id\":\"b\",\"type\":\"box\",\"cards\":[" + top + "]}]")));
 	}
 }

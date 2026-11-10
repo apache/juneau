@@ -86,6 +86,14 @@ function txt(doc, sel) {
 const base = { contractVersion: '1', title: 'T', nav: [], activeNav: [], cards: [] };
 const C = o => ({ ...base, ...o });
 
+// Class-form card from a plain render function (the object/function forms are gone).  The base is put under it by
+// the shell, so it also works in a queue that is filled before the shell has loaded.
+const fnCard = (fn, extra) => {
+	const K = class { static lateBase = true; render() { return fn(this.spec, this.el); } };
+	if (extra) for (const k of Object.keys(extra)) K.prototype[k] = extra[k];
+	return K;
+};
+
 const out = {};
 // Card events settle on a promise, so these fields are filled in once the microtask queue has drained.
 const late = [];
@@ -94,8 +102,8 @@ const late = [];
 {
 	const r = load({
 		queueBefore: [
-			['alpha', (card, el) => { el.textContent = 'alpha:' + card.id; }],
-			['beta', { render(card, el) { el.textContent = 'beta:' + card.id; } }]
+			['alpha', fnCard((card, el) => { el.textContent = 'alpha:' + card.id; })],
+			['beta', fnCard((card, el) => { el.textContent = 'beta:' + card.id; })]
 		]
 	});
 	const res = r.JC.mount(C({ cards: [{ id: 'b1', type: 'beta' }, { id: 'a1', type: 'alpha' }] }), { root: r.doc.body, document: r.doc });
@@ -109,7 +117,7 @@ const late = [];
 // 2. Queue drained after load: a push that arrives after the shell has already run registers immediately.
 {
 	const r = load({});
-	r.sandbox.window.JuneauConsoleCards.push(['gamma', (card, el) => { el.textContent = 'gamma:' + card.id; }]);
+	r.sandbox.window.JuneauConsoleCards.push(['gamma', fnCard((card, el) => { el.textContent = 'gamma:' + card.id; })]);
 	const res = r.JC.mount(C({ cards: [{ id: 'g1', type: 'gamma' }] }), { root: r.doc.body, document: r.doc });
 	out.queueAfter = { threw: r.threw, errors: r.errors, g1: res.cards.g1?.textContent, types: r.JC.cardTypes() };
 }
@@ -128,7 +136,7 @@ const late = [];
 		p3Pending: res.cards.p3?.dataset.juneauCardPending !== undefined
 	};
 	const order = [];
-	r.JC.registerCard('delta', (card, el) => { order.push(card.id); el.appendChild(r.doc.createTextNode('delta:' + card.id)); });
+	r.JC.registerCard('delta', fnCard((card, el) => { order.push(card.id); el.appendChild(r.doc.createTextNode('delta:' + card.id)); }));
 	out.pending = {
 		threw: r.threw, errors: r.errors, beforeReg, order,
 		p1Rendered: res.cards.p1.textContent,
@@ -157,12 +165,12 @@ const late = [];
 {
 	const r = load({});
 	let e20 = null, e21a = null, e21b = null, e23 = null;
-	try { r.JC.registerCard('Bad_Type', () => {}); } catch (e) { e20 = { name: e.name, code: e.code, message: e.message }; }
+	try { r.JC.registerCard('Bad_Type', fnCard(() => {})); } catch (e) { e20 = { name: e.name, code: e.code, message: e.message }; }
 	try { r.JC.registerCard('ok1', 'not-a-fn'); } catch (e) { e21a = { name: e.name, code: e.code, message: e.message }; }
 	try { r.JC.registerCard('ok2', {}); } catch (e) { e21b = { name: e.name, code: e.code, message: e.message }; }
 	const r2 = load({ queueBefore: [['oops', 'nope', 'extra']] });
 	e23 = { threw: r2.threw, errors: r2.errors };
-	r.JC.registerCard('obj', { render(card, el) { el.textContent = 'obj:' + card.id; } });
+	r.JC.registerCard('obj', class extends r.JC.Card { render() { this.el.textContent = 'obj:' + this.spec.id; } });
 	const res = r.JC.mount(C({ cards: [{ id: 'o1', type: 'obj' }] }), { root: r.doc.body, document: r.doc });
 	out.registerErrors = { e20, e21a, e21b, e23, objFormText: res.cards.o1?.textContent };
 }
@@ -172,9 +180,10 @@ const late = [];
 	const r = load({});
 	let calls = 0;
 	const pending = [];
-	r.JC.registerCard('slow', {
-		render(card, el) { el.textContent = 'r' + (++calls); },
-		refresh(card, el) {
+	r.JC.registerCard('slow', class extends r.JC.Card {
+		render() { this.el.textContent = 'r' + (++calls); }
+		refresh() {
+			const el = this.el;
 			return new Promise(resolve => { pending.push(() => { el.textContent = 'r' + (++calls); resolve(); }); });
 		}
 	});
@@ -195,8 +204,9 @@ const late = [];
 {
 	const r = load({});
 	let destroyCount = 0;
-	r.JC.registerCard('withapi', {
-		render(card, el, ctx) { ctx.setApi({ ping: () => 'pong:' + card.id }); },
+	r.JC.registerCard('withapi', class extends r.JC.Card {
+		render() { /* nothing to paint */ }
+		ping() { return 'pong:' + this.spec.id; }
 		destroy() { destroyCount++; }
 	});
 	r.JC.mount(C({ cards: [{ id: 'w1', type: 'withapi' }] }), { root: r.doc.body, document: r.doc });
@@ -214,9 +224,9 @@ const late = [];
 // 8. cardTypes() is sorted; events carry {id, type, el}/{id, type, error}.
 {
 	const r = load({});
-	r.JC.registerCard('zed', (card, el) => { el.textContent = 'zed'; });
-	r.JC.registerCard('aah', (card, el) => { el.textContent = 'aah'; });
-	r.JC.registerCard('mid', (card, el) => { throw new Error('kaput'); });
+	r.JC.registerCard('zed', fnCard((card, el) => { el.textContent = 'zed'; }));
+	r.JC.registerCard('aah', fnCard((card, el) => { el.textContent = 'aah'; }));
+	r.JC.registerCard('mid', fnCard(() => { throw new Error('kaput'); }));
 	r.JC.mount(C({ cards: [{ id: 'z', type: 'zed' }, { id: 'a', type: 'aah' }, { id: 'm', type: 'mid' }] }),
 		{ root: r.doc.body, document: r.doc });
 	out.typesAndEvents = { types: r.JC.cardTypes(), events: null };
@@ -231,7 +241,7 @@ const late = [];
 // but adds no E-JS-8 to the page banner (used by the datatables handler for its card-level failures).
 {
 	const r = load({});
-	r.JC.registerCard('quiet', () => { const e = new Error('painted in the card'); e.cardReported = true; throw e; });
+	r.JC.registerCard('quiet', fnCard(() => { const e = new Error('painted in the card'); e.cardReported = true; throw e; }));
 	r.JC.mount(C({ cards: [{ id: 'q', type: 'quiet' }] }), { root: r.doc.body, document: r.doc });
 	out.cardReported = { errors: r.errors, banner: txt(r.doc, '.jc-console-error'), events: null };
 	late.push(() => { out.cardReported.events = r.cardEvents.map(e => e.kind); });
@@ -242,7 +252,7 @@ const late = [];
 // params; a bare card of a not-yet-registered type is pending with the same host.
 {
 	const r = load({});
-	r.JC.registerCard('chromeless', (card, el) => { el.appendChild(r.doc.createTextNode('body:' + card.id)); });
+	r.JC.registerCard('chromeless', fnCard((card, el) => { el.appendChild(r.doc.createTextNode('body:' + card.id)); }));
 	const res = r.JC.mount(C({ cards: [
 		{ id: 'bc', type: 'chromeless', bare: true, title: 'Hidden', class: 'adopter other' },
 		{ id: 'nc', type: 'chromeless', title: 'Shown' },
@@ -263,7 +273,7 @@ const late = [];
 	};
 	const before = info('lt');
 	before.pending = res.cards.lt.dataset.juneauCardPending !== undefined;
-	r.JC.registerCard('later', (card, el) => { el.appendChild(r.doc.createTextNode('later:' + card.id)); });
+	r.JC.registerCard('later', fnCard((card, el) => { el.appendChild(r.doc.createTextNode('later:' + card.id)); }));
 	out.bareChromeless = {
 		errors: r.errors, bare: info('bc'), normal: info('nc'), strict: info('sb'), params: info('bp'),
 		pendingBefore: before,

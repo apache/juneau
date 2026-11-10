@@ -73,7 +73,7 @@ class ViewsJs_BusWiring_Test extends TestBase {
 	@Test void a00_surface() {
 		assertEquals(true, report().get("hasValidate"), "JuneauViews.bus.wiring.validate exists");
 		assertEquals(List.of(), report().get("emptyContract"));
-		assertSize(() -> "every corpus case ran", 86, cases());
+		assertSize(() -> "every corpus case ran", 91, cases());
 	}
 
 	@TestFactory Stream<DynamicTest> a01_corpus() {

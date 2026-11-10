@@ -27,14 +27,14 @@ import org.junit.jupiter.api.*;
 class RibbonItem_Bus_Test extends TestBase {
 
 	@Test void a01_publish() {
-		var i = RibbonItem.publish("Focus east", "app.region-picked", Map.of("region", "east"));
-		assertEquals("{type:'publish',title:'Focus east',topic:'app.region-picked',payload:{region:'east'}}", Json5.DEFAULT.write(i.toMap()));
-		assertEquals("{type:'publish',title:'Go live',topic:'app.go-live'}",
-			Json5.DEFAULT.write(RibbonItem.publish("Go live", "app.go-live", null).toMap()));
+		var i = RibbonItem.publish("Focus east", "app.region-picked", Map.of("region", "east")).id("focus-east");
+		assertEquals("{type:'publish',id:'focus-east',title:'Focus east',topic:'app.region-picked',payload:{region:'east'}}", Json5.DEFAULT.write(i.toMap()));
+		assertEquals("{type:'publish',id:'go-live',title:'Go live',topic:'app.go-live'}",
+			Json5.DEFAULT.write(RibbonItem.publish("Go live", "app.go-live", null).id("go-live").toMap()));
 	}
 
 	@Test void a02_target_onRefresh() {
-		assertEquals("{type:'refresh',title:'Refresh tasks',target:'tasks'}",
+		assertEquals("{type:'refresh',id:'refresh',title:'Refresh tasks',target:'tasks'}",
 			Json5.DEFAULT.write(RibbonItem.refresh().title("Refresh tasks").target("tasks").toMap()));
 	}
 

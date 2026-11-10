@@ -111,7 +111,7 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 
 	/** The steps that wait for the treemap to draw and install the page helper. */
 	private static List<Map<String,Object>> open() {
-		return List.of(wait(DRAWN), eval(TM), wait(READY), eval(RECORD));
+		return List.of(eval("window.JuneauConsole.cardApi('pets-sw').select('both')"), wait(DRAWN), eval(TM), wait(READY), eval(RECORD));
 	}
 
 	@SafeVarargs

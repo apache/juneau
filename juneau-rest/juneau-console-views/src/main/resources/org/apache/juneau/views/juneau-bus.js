@@ -846,6 +846,12 @@
 
 			cards.forEach(function (c, id) {
 				objs(c.subscribes).forEach(function (s) {
+					if (s.handler !== undefined && s.handler !== null) {
+						// Handler subscription: placeholders are expanded at run time, so a templated topic gets the grammar check only; no role applies.
+						if (typeof s.topic === 'string' && TOPIC_RE.test(s.topic.replace(/\{(rowKey|tabId|cardId)\}/g, 'x')) && !/\{(rowKey|tabId|cardId)\}/.test(s.topic))
+							checkPublisher(id, s.topic);
+						return;
+					}
 					if (typeof s.topic === 'string' && TOPIC_RE.test(s.topic)) checkPublisher(id, s.topic);
 					const as = str(s.as);
 					const t = typeOf(c);

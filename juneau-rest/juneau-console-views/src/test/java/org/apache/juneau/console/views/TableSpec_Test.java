@@ -86,7 +86,8 @@ class TableSpec_Test extends TestBase {
 	@Test void a10_detail_setterAndGetter() {
 		var d = RowDetail.create("/rest/slo/data/{id}");
 		var t = TableSpec.create("slo").detail(d);
-		assertSame(d, t.detail().orElseThrow());
+		assertNotSame(d, t.detail().orElseThrow());   // each table owns a copy
+		assertEquals(d.toMap(), t.detail().orElseThrow().toMap());
 	}
 
 	@Test void a11_pollIntervalMs_nonPositive_rejected() {

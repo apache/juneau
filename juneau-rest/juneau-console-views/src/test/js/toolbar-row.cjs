@@ -67,7 +67,7 @@ function layout(ribbon) {
 	wrapper.appendChild(search);
 	const pill = env.el('div');
 	pill.className = 'juneau-view-pagingpill';
-	const bar = ribbon ? NS.ribbon.build({ ribbon: ribbon }, { dataTable: {}, redraw: function () { /* no-op */ } }) : null;
+	const bar = ribbon ? NS.ribbon.build({ columnConfig: true, ribbon: ribbon }, { hasRowDetail: true, dataTable: {}, redraw: function () { /* no-op */ } }) : null;
 	const row = I.buildToolbarRow(wrapper, pill, bar);
 	const left = row.childNodes[0];
 	const right = row.childNodes[1];
@@ -111,6 +111,35 @@ if (out.hasSeam) {
 
 	// Only groups ranked after search - search goes first.
 	out.onlyAfter_right = layout([action('refresh'), action('resetDefaults', { group: 'page' })]).right;
+
+	// A ribbon `search` item leaves a placeholder: the filter box replaces it in place; no placeholder is left over.
+	{
+		const { env, NS, I } = loadBoth();
+		const wrapper = env.el('div');
+		const search = env.el('div');
+		search.className = 'dt-search';
+		search.appendChild(env.el('input'));
+		wrapper.appendChild(search);
+		const bar = NS.ribbon.build({ ribbon: [
+			action('search', { id: 'search', group: 'search' }), action('option', { id: 'f', group: 'filter', title: 'F' })
+		] }, { dataTable: {}, redraw: function () { /* no-op */ } });
+		const row = I.buildToolbarRow(wrapper, null, bar);
+		const right = row.childNodes[1];
+		out.slot_filterInRibbon = bar.querySelector('.dt-search') === search;
+		out.slot_noPlaceholderLeft = bar.querySelector('[data-juneau-slot="search"]') === null;
+		out.slot_notDuplicatedInRight = right.childNodes.filter(function (c) { return c.className === 'dt-search'; }).length === 0;
+		out.slot_filterTagged = search.getAttribute('data-juneau-ribbon-id');
+		out.slot_inSearchGroup = search.parentNode.getAttribute('data-juneau-group');
+	}
+	// No filter box (searching:false): the placeholder is removed and nothing empty remains.
+	{
+		const { env, NS, I } = loadBoth();
+		const wrapper = env.el('div');
+		const bar = NS.ribbon.build({ ribbon: [action('search', { id: 'search', group: 'search' })] },
+			{ dataTable: {}, redraw: function () { /* no-op */ } });
+		I.buildToolbarRow(wrapper, null, bar);
+		out.slot_removedWithoutFilter = bar.querySelector('[data-juneau-slot="search"]') === null;
+	}
 
 	// No ribbon at all - the right cluster is the search box alone.
 	out.noRibbon_right = layout(null).right;

@@ -70,6 +70,16 @@ class ConsoleChromeMixin_Test extends TestBase {
 			.assertHeader("Cache-Control").isContains("max-age");
 	}
 
+	@Test void a02b_folderTabLook_selectedTabUsesAccentWashNotSolidFill() throws Exception {
+		var body = cWithMixin.get(ConsoleChromeMixin.CHROME_CSS_PATH).run().assertStatus(200).getContent().asString();
+		var sel = ".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {";
+		assertTrue(body.contains(sel), body);
+		var st = body.indexOf(sel);
+		var rule = body.substring(st, body.indexOf("}", st));
+		assertTrue(rule.contains("--jc-accent-wash"), rule);
+		assertFalse(rule.contains("--jc-accent-selected"), rule);
+	}
+
 	@Test void a03_hostExistingRoute_unaffectedByMixin() throws Exception {
 		cWithMixin.get("/items").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("items");
 	}
@@ -127,7 +137,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	@Test void c01_openBlock_containsOnlyJcNames() throws Exception {
 		var body = bodyOf(MockRestClient.buildLax(DefaultHost.class));
 		var block = firstRootBlock(body);
-		var m = Pattern.compile("([a-zA-Z-]++)\\s*:").matcher(block);
+		var m = Pattern.compile("([a-zA-Z0-9-]++)\\s*:").matcher(block);
 		while (m.find())
 			assertTrue(m.group(1).startsWith("--jc-"), () -> "non --jc- name in :root{} block: " + m.group(1));
 	}
@@ -413,13 +423,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 106 = 105 plus --jc-danger-strong (the filled-destructive hover fill); 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
+		// 136 = 106 plus the 30 --jc-pill-cat-N-* categorical pill tokens; 106 = 105 plus --jc-danger-strong (the filled-destructive hover fill); 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
 		// RETAINED as var(--jc-pill-*) aliases for badges/avatars/frozen calendar) plus the 12 --jc-probe-* status
 		// probe tokens (4 statuses x bg/text/dot); the selected-probe ring reuses the existing --jc-accent-selected
 		// token, so the probe family adds exactly 12, not a ring token, plus the 18 --jc-chart-* tokens (8 series slots and 10 chart roles) read by juneau-charts.js.
 		assertBean(Theme.OPEN.getTokens(),
 			"size,--jc-main-bg,--jc-card-bg,--jc-card-padding,--jc-chrome-icon,--jc-text,--jc-text-soft,--jc-card-shadow,--jc-page-nav-hairline,--jc-page-nav-section-font-size,--jc-page-nav-child-font-size",
-			"106,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
+			"136,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-card-surface"));
@@ -468,10 +478,9 @@ class ConsoleChromeMixin_Test extends TestBase {
 		// Substring pin: the two ribbon-format selected-state selectors consume var(--jc-accent-selected),
 		// with no var() fallback. Page Tabs (.jc-nav-tab.active) use wash + top accent instead of this fill.
 		var css = readChromeCss();
-		assertContainsAll(css, ".jc-tab.jc-tab-active,\n.jc-subtab.jc-subtab-active {",
-			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"]:not(.juneau-view-dialog-sections) .juneau-view-ribbon-btn[aria-selected=\"true\"] {");
-		assertEquals(2, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
-			() -> "expected exactly the two ribbon-format selected-state selectors (Page Tabs are wash + top accent), css:\n" + css);
+		assertContainsAll(css, ".jc-tab.jc-tab-active,\n.jc-subtab.jc-subtab-active {");
+		assertEquals(1, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
+			() -> "expected exactly the one solid selected-state selector (Page Tabs, tab-mode strips and dialog sections are wash + top accent), css:\n" + css);
 	}
 
 	@Test void j05b_pageTabsAndSubtabs_useTokenizedBoxAndBoldWhenSelected() throws Exception {
@@ -765,7 +774,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var hover = "{ background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }";
 		assertContainsAll(css,
 			".juneau-view-ribbon-btn[aria-pressed=\"true\"] " + hover,
-			".juneau-view-dialog-sections .juneau-view-ribbon-btn[aria-selected=\"true\"] " + hover,
+			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {\n\tbackground-color: var(--jc-accent-wash);",
 			".juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }");
 		assertFalse(css.contains(".juneau-view-ribbon-btn[aria-pressed=\"true\"] { background-color: var(--jc-accent); color: var(--jc-on-accent);"),
 			() -> "pressed toggle must not keep the solid accent fill, css:\n" + css);

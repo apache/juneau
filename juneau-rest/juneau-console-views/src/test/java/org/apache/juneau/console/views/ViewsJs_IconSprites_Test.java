@@ -219,10 +219,16 @@ class ViewsJs_IconSprites_Test extends TestBase {
 	@Test void b02_shippedOnly_everyNameResolvesToTheShippedLayer() {
 		var s = scenario("s_shipped");
 		var layers = (Map<?,?>) s.get("layers");
-		assertBean(layers, "shipped,replacement,override", "loaded,absent,absent");
+		assertBean(layers, "base,shipped,replacement,override", "loaded,loaded,absent,absent");
 		// sort / first_page / last_page / chevron directions are real shipped stems.
 		assertBean(s, "w_search,w_settings,hasSearchStem,hasSort,hasFirstPage,hasLastPage,hasChevronleft",
 			"shipped,shipped,true,true,true,true,true");
+	}
+
+	@Test void b02b_trashIcon_isShipped_andResolves() {
+		var s = scenario("s_shipped");
+		assertEquals(true, s.get("hasTrash"));
+		assertTrue(String.valueOf(s.get("trashMarkup")).contains("juneau-sym-trash"), () -> String.valueOf(s.get("trashMarkup")));
 	}
 
 	@Test void b03_shippedOnly_publishesTheNameToStemMapAndStemCatalog() {
@@ -230,13 +236,13 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		var n2s = (Map<?,?>) s.get("nameToStem");
 		assertBean(n2s, "content_copy,table,picture_as_pdf,manage_search", "copy,spreadsheet,pdf,toggle_column_search");
 		// stems() returns the shipped stem catalog after load; it matches the injected sprite's symbol count.
-		assertBean(s, "stemsCount,namesCount", "37,37");
+		assertBean(s, "stemsCount,namesCount", "39,40");
 	}
 
 	@Test void b04_partialReplacement_replacedNamesWinAndTheRestFallThrough() {
 		var s = scenario("s_repl");
 		var layers = (Map<?,?>) s.get("layers");
-		assertBean(layers, "shipped,replacement", "loaded,loaded");
+		assertBean(layers, "base,shipped,replacement", "loaded,loaded,loaded");
 		// The two names the partial replacement carries win; a name it omits falls through to shipped.  A stem
 		// present only in the replacement layer still resolves (an app may add a role Juneau lacks).
 		assertBean(s, "w_search,w_settings,w_close,hasClose,w_brandnew", "replacement,replacement,shipped,true,replacement");
@@ -309,7 +315,7 @@ class ViewsJs_IconSprites_Test extends TestBase {
 	@Test void c05_packDuringAnInFlightLoadDropsTheStaleLoadAndKeepsTheGateClosed() {
 		assertBean(scenario("s_pack"),
 			"freshInjectedOnce,staleNotInjected,staleResolvesToCurrent,stemsStillShipped,spriteSymbols,gateStaysClosed",
-			"true,true,true,37,37,true");
+			"true,true,true,39,40,true");
 	}
 
 	@Test void c06_materialPackLayersOverTheShippedSpriteSoMissingStemsFallBack() {
@@ -322,5 +328,15 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		assertBean(scenario("s_newGlyphs"),
 			"plus,play,restore,tune,columns,settings,unknownNull,unknownWarned",
 			"plus,play,restore,tune,tune,settings,true,true");
+	}
+
+	@Test void c08_lucideBaseLayerSitsUnderShipped() {
+		assertBean(scenario("s_lucide"),
+			"baseLayer,circleWinner,searchWinner,circleResolves,shippedExcludesLucide,noWarn",
+			"loaded,base,shipped,circle_check,true,true");
+	}
+
+	@Test void c09_aFailedLucideFetchDegradesToTheShippedGlyphs() {
+		assertBean(scenario("s_lucide404"), "baseLayer,shippedLayer,searchWinner,circleAbsent", "failed,loaded,shipped,true");
 	}
 }

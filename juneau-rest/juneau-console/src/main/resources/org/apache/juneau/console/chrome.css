@@ -999,6 +999,25 @@ body:not(:has(> .jc-header, > .jc-chrome)) .juneau-page-nav { top: 0; }
 .tag.stage.fail,
 .tag.stage.failed { background-color: var(--jc-pill-red-bg); color: var(--jc-pill-red-text); border-color: var(--jc-pill-red-border); }
 
+/* Pill-level tone and category classes.  The client `pill` renderer puts ".is-<tone>" or ".is-cat-<n>" on the pill
+   span itself (values resolved per cell; see the renderer).  Same specificity as the ".tag.status.*" examples above
+   and declared after them, so an explicit tone wins a tie; a consumer rule with more classes still wins. */
+.jc-pill.tag.is-info { background-color: var(--jc-pill-blue-bg); color: var(--jc-pill-blue-text); border-color: var(--jc-pill-blue-border); }
+.jc-pill.tag.is-success { background-color: var(--jc-pill-green-bg); color: var(--jc-pill-green-text); border-color: var(--jc-pill-green-border); }
+.jc-pill.tag.is-warning { background-color: var(--jc-pill-amber-bg); color: var(--jc-pill-amber-text); border-color: var(--jc-pill-amber-border); }
+.jc-pill.tag.is-error { background-color: var(--jc-pill-red-bg); color: var(--jc-pill-red-text); border-color: var(--jc-pill-red-border); }
+.jc-pill.tag.is-neutral { background-color: var(--jc-pill-neutral-bg); color: var(--jc-pill-neutral-text); border-color: var(--jc-pill-neutral-border); }
+.jc-pill.tag.is-cat-1 { background-color: var(--jc-pill-cat-1-bg); color: var(--jc-pill-cat-1-text); border-color: var(--jc-pill-cat-1-border); }
+.jc-pill.tag.is-cat-2 { background-color: var(--jc-pill-cat-2-bg); color: var(--jc-pill-cat-2-text); border-color: var(--jc-pill-cat-2-border); }
+.jc-pill.tag.is-cat-3 { background-color: var(--jc-pill-cat-3-bg); color: var(--jc-pill-cat-3-text); border-color: var(--jc-pill-cat-3-border); }
+.jc-pill.tag.is-cat-4 { background-color: var(--jc-pill-cat-4-bg); color: var(--jc-pill-cat-4-text); border-color: var(--jc-pill-cat-4-border); }
+.jc-pill.tag.is-cat-5 { background-color: var(--jc-pill-cat-5-bg); color: var(--jc-pill-cat-5-text); border-color: var(--jc-pill-cat-5-border); }
+.jc-pill.tag.is-cat-6 { background-color: var(--jc-pill-cat-6-bg); color: var(--jc-pill-cat-6-text); border-color: var(--jc-pill-cat-6-border); }
+.jc-pill.tag.is-cat-7 { background-color: var(--jc-pill-cat-7-bg); color: var(--jc-pill-cat-7-text); border-color: var(--jc-pill-cat-7-border); }
+.jc-pill.tag.is-cat-8 { background-color: var(--jc-pill-cat-8-bg); color: var(--jc-pill-cat-8-text); border-color: var(--jc-pill-cat-8-border); }
+.jc-pill.tag.is-cat-9 { background-color: var(--jc-pill-cat-9-bg); color: var(--jc-pill-cat-9-text); border-color: var(--jc-pill-cat-9-border); }
+.jc-pill.tag.is-cat-10 { background-color: var(--jc-pill-cat-10-bg); color: var(--jc-pill-cat-10-text); border-color: var(--jc-pill-cat-10-border); }
+
 /* Status probes.  A client-side control (see juneau-views.css .jc-probe for the shape/geometry): a status chip with a
    visible dot, sized a touch larger than a pill.  Exactly four statuses paint from the dedicated --jc-probe-* palette
    (light wash + ink + dot fill); the selected probe in a group draws a themed accent ring from --jc-accent-selected.
@@ -1198,21 +1217,31 @@ table.dataTable.display > tbody > tr:hover {
    both the card and the wash (Theme_ContrastGate_Test); :active above stays the solid, momentary fill. */
 .juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }
 
-/* Shared strip widget - TAB-MODE (row-detail multi-section pane switcher).  -views ships the neutral folder-tab
-   SHAPE (floor line + squared bottom caps + overlap, all via currentColor); this themes the floor line with
-   --jc-border and the ONE selected tab with a solid, OPAQUE --jc-accent-selected fill + --jc-on-accent label/mark -
-   the SAME aria-pressed treatment used elsewhere in this file (deliberately, per the operator's WCAG 1.4.11
-   ruling: a tablist's one persistent selection reads fine with the pressed-button treatment, superseding this
-   comment's own prior "NOT the solid aria-pressed fill" framing).  Each var(--jc-*) is the entire value of a
-   color/background-color/border-color property (sink-property discipline - see file header). */
+/* Shared strip widget - TAB-MODE (the global folder-tab look).  -views ships the neutral SHAPE (separate rounded tabs,
+   floor line, only the selected tab overlapping it); this themes it.  Unselected tabs are neutral with a --jc-border
+   edge; the ONE selected tab takes the accent-wash fill (the same wash the pressed toggle uses) with an accent edge, accent ink and bold weight.  A strip that heads a bordered pane container has
+   that container drawn in the accent, so the selected tab and its pane read as one folder.  This supersedes the
+   earlier solid-fill selected tab.  Each var(--jc-*) is the entire value of a color/background-color/border-color
+   property (sink-property discipline - see file header). */
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
-.juneau-view-ribbon-group[data-juneau-strip-mode="tab"]:not(.juneau-view-dialog-sections) .juneau-view-ribbon-btn[aria-selected="true"] {
-	background-color: var(--jc-accent-selected);
-	color: var(--jc-on-accent);
-	border-bottom-color: var(--jc-accent-selected);
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
+	background-color: var(--jc-pill-neutral-bg);
+	color: var(--jc-pill-neutral-text);
+	border-color: var(--jc-border);
 }
-/* In-dialog section tabs are carved out above: their selected tab looks like the ribbon hover instead. */
-.juneau-view-dialog-sections .juneau-view-ribbon-btn[aria-selected="true"] { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:hover:not(:disabled):not([aria-selected="true"]) {
+	background-color: var(--jc-accent-wash);
+	color: var(--jc-link);
+	border-color: var(--jc-accent);
+}
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
+	background-color: var(--jc-accent-wash);
+	color: var(--jc-link);
+	border-color: var(--jc-accent);
+	border-bottom-color: transparent;
+}
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:focus-visible { outline: 2px solid var(--jc-focus); }
+.juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-helper-tabstrip-panes { border-color: var(--jc-accent); }
 
 /* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
    track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
@@ -1509,6 +1538,11 @@ body::after {
   color: var(--jc-on-btn-primary);
 }
 
+.juneau-view-dialog-figure.juneau-view-dialog-title-icon {
+  background-color: var(--jc-border-2);
+  color: var(--jc-white);
+}
+
 .juneau-view-dialog-title {
   color: var(--jc-text);
 }
@@ -1535,15 +1569,6 @@ body::after {
 .juneau-view-dialog-form-row textarea:invalid,
 .juneau-view-dialog-form-row select:invalid {
   border-color: var(--jc-danger);
-}
-
-/* Folder section tabs (data-nav="folder"): a --jc-border edge at rest; hover and selected keep the shared accent
-   edge + wash above (the :not()s leave those states to it). */
-.juneau-view-dialog[data-nav="folder"] .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
-  border-bottom-color: var(--jc-border);
-}
-.juneau-view-dialog[data-nav="folder"] .juneau-view-dialog-sections .juneau-view-ribbon-btn:not(:hover):not([aria-selected="true"]) {
-  border-color: var(--jc-border);
 }
 
 /* Wizard step rail: to-do marks are neutral, the active mark is the primary fill, done marks and the bars after them
@@ -1601,6 +1626,7 @@ body::after {
   border-bottom-color: var(--jc-border);
 }
 .juneau-config-dialog .juneau-config-col-handle,
+.juneau-config-dialog .juneau-config-grip,
 .juneau-config-dialog .juneau-config-col-remove {
   background-color: transparent;
   color: var(--jc-text-muted);
@@ -1936,3 +1962,8 @@ textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
 .juneau-view-staleness { color: var(--jc-text-muted); }
 .juneau-view-staleness[data-state="refreshing"] { color: var(--jc-success); }
 .juneau-view-staleness[data-state="error"] { color: var(--jc-danger-text); }
+
+.juneau-config-dialog .juneau-config-detail {
+  color: var(--jc-text-muted);
+  border-top-color: var(--jc-border);
+}

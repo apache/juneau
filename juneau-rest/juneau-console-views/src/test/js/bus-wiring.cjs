@@ -80,7 +80,7 @@ function datatablesImplicit(card) {
 const types = {
 	html: { roles: [], ops: [], implicit: function () { return []; } },
 	datatables: { roles: ['filter'], ops: TABLE_OPS, implicit: datatablesImplicit },
-	chart: { roles: Object.keys(chartHandler.roles), ops: Object.keys(chartHandler.ops), implicit: chartHandler.implicit }
+	chart: { roles: Object.keys(chartHandler.roles), ops: Object.keys(chartHandler.ops), implicit: chartHandler.implicitTopics }
 };
 Object.keys(corpus.cardTypes).forEach(function (name) {
 	const s = corpus.cardTypes[name];

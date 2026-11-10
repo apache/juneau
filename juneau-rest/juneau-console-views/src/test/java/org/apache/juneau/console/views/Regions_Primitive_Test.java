@@ -328,7 +328,7 @@ class Regions_Primitive_Test extends TestBase {
 		assertEquals(List.of("function", "function", "function", "function"), r.get("tx_exports"), r::toString);
 		assertEquals(RegionDef.CONTRACT_VERSION, r.get("tx_contractVersion"),
 			"the JS contract version must match RegionDef.CONTRACT_VERSION");
-		assertEquals(List.of("row-detail", "card-body", "tab-body"), r.get("tx_regionTypes"), r::toString);
+		assertEquals(List.of("row-detail", "card-body", "tab-body", "chart"), r.get("tx_regionTypes"), r::toString);
 		assertEquals(List.of("default"), r.get("tx_reserved"), r::toString);
 		assertEquals(true, r.get("tx_publishedOnSharedNamespace"), r::toString);
 		var caps = (Map<?,?>)r.get("tx_caps");

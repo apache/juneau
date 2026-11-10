@@ -214,7 +214,7 @@
       "name": "bus-target-and-publish",
       "ribbon": [
         {"type": "refresh", "title": "Refresh tasks", "target": "tasks"},
-        {"type": "publish", "title": "Focus east", "topic": "app.region-picked", "payload": {"region": "east"}}
+        {"type": "publish", "id": "focus-east", "title": "Focus east", "topic": "app.region-picked", "payload": {"region": "east"}}
       ],
       "state": {}, "userSearch": {},
       "expect": {"columnSearches": {}, "queryParams": {}, "search": null, "rowIds": [1, 2, 3, 4, 5, 6]}

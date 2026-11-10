@@ -52,6 +52,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * 	GET /console/store                   the page
  * 	GET /console/store/recent-orders     the ten newest orders
  * 	GET /console/store/stats/daily       {day, placed, delivered} for each recent day
+ * 	GET /console/store/stats/revenue     {day, revenue} for each recent day
  * 	GET /console/store/kpi/revenue       {label, value, unit} for the revenue tile
  * 	GET /console/store/stats/species     {species, count} for each species
  * 	GET /console/store/stats/status      {status, count} for each status
@@ -115,6 +116,26 @@ public class StoreRest extends PetstoreConsolePage {
 		for (var i = 29; i >= 0; i--) {
 			var day = today.minusDays(i).toString();
 			rows.add(JsonMap.of("day", day, "placed", placed.getOrDefault(day, 0), "delivered", delivered.getOrDefault(day, 0)));
+		}
+		return rows;
+	}
+
+	/** @return 30 rows {@code {day, revenue}} ending today, oldest first; revenue sums the prices of the orders delivered on each ship date. */
+	@RestGet(path="/stats/revenue")
+	public JsonList revenueByDay() {
+		var today = LocalDate.ofInstant(store().clock().instant(), ZoneOffset.UTC);
+		var totals = new HashMap<String,Double>();
+		for (var o : store().getOrders()) {
+			if (o.getStatus() == OrderStatus.DELIVERED) {
+				var p = store().getPet(o.getPetId());
+				if (p != null)
+					totals.merge(o.getShipDate(), (double)p.getPrice(), Double::sum);
+			}
+		}
+		var rows = new JsonList();
+		for (var i = 29; i >= 0; i--) {
+			var day = today.minusDays(i).toString();
+			rows.add(JsonMap.of("day", day, "revenue", Math.round(totals.getOrDefault(day, 0d) * 100) / 100d));
 		}
 		return rows;
 	}

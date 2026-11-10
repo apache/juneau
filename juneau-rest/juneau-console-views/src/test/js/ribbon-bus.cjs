@@ -137,7 +137,7 @@ function makeTable(def, card) {
 	const ctx = {
 		table: table, viewDef: def, dataTable: dt, activeState: NS.ribbon.loadPersistedState(def),
 		clientFiltered: def.dataMode !== 'server',
-		selectionState: null, optsColumns: OPTS_COLUMNS, collapses: 0, rowFilterRefreshes: 0
+		selectionState: null, optsColumns: OPTS_COLUMNS, collapses: 0, hasRowDetail: true, rowFilterRefreshes: 0
 	};
 	if (ctx.clientFiltered) ctx.refreshRibbonRowFilter = function () { ctx.rowFilterRefreshes++; };
 	ctx.redraw = function () {

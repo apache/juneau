@@ -1036,21 +1036,25 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Shared strip widget - TAB-MODE shape.  The SAME ".juneau-view-ribbon-group" widget carries an optional
- * "data-juneau-strip-mode" visual flag decoupled from its a11y role: absent (or "ribbon") is the default
- * four-corner segmented pill above (toolbar/paging/pill call sites are unchanged - they emit no attribute);
- * "tab" repaints the SAME connected buttons as a folder-tab strip.  Tab-mode adds a floor/divider line under
- * the strip, SQUARE bottom corners on the end caps (top radii stay), and a 1px downward overlap so the strip's
- * buttons sit ON the floor line and the selected tab's own bottom edge reads as continuous with it.  The strip
- * never wraps and never grows a "more" menu: it scrolls horizontally.  NEUTRAL - shape only (border/floor fall
- * back to currentColor); console-ui's chrome.css layers the themed floor + selected-tab accent over these same
- * selectors.  Row-detail multi-section conversion (juneau-views.js buildDetailStrip) is the first consumer:
- * it stamps data-juneau-strip-mode="tab" + role="tablist" and per-button role="tab"/aria-selected.
+ * Shared strip widget - TAB-MODE shape (the global folder-tab look).  The SAME ".juneau-view-ribbon-group" widget
+ * carries an optional "data-juneau-strip-mode" visual flag decoupled from its a11y role: absent (or "ribbon") is the
+ * default four-corner segmented pill above (toolbar/paging/pill call sites are unchanged - they emit no attribute);
+ * "tab" repaints the SAME buttons as separate folder tabs: each tab keeps its own rounded top corners and a small gap
+ * to its neighbour, and stands on a floor line.  Only the selected tab overlaps the floor line by 1px (its bottom
+ * edge is transparent, so it reads as continuous with the pane below); an unselected tab stops above the line.
+ * Where the strip heads a bordered pane container (data-juneau-strip-panel on the wrapper) the pane's own border is
+ * the floor and the strip draws none.  The strip never wraps and never grows a "more" menu: it scrolls horizontally.
+ * NEUTRAL - shape only (border/floor fall back to currentColor); console-ui's chrome.css layers the themed floor and
+ * the selected-tab wash over these same selectors.  Every tab-mode strip uses it: row-detail sections, in-dialog
+ * sections and the switcher's section strip.
  */
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] {
 	display: flex;
-	align-items: stretch;
-	border-bottom: 1px solid;     /* currentColor floor line - themed by chrome.css */
+	align-items: flex-end;
+	gap: var(--jc-space-1);
+	padding: 0 8px;
+	border-bottom-width: 1px;     /* floor line; colour is currentColor until chrome.css themes it */
+	border-bottom-style: solid;
 	overflow-x: auto;
 	overflow-y: hidden;
 	white-space: nowrap;
@@ -1058,21 +1062,35 @@ table.dataTable thead .sorting_desc_disabled:after {
 
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
 	position: relative;
-	margin-bottom: -1px;          /* buttons overlap the floor line so the selected tab paints over it */
+	margin-bottom: 0;
+	padding: 6px var(--jc-chrome-control-padding-x-wide);
+	font-weight: normal;
+	border-style: solid;
+	border-width: 1px 1px 0;
+	border-radius: 4px 4px 0 0;
 }
 
-/* Square the outer bottom corners on the end caps so they meet the floor line flush (top radii stay). */
-.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:first-child {
-	border-bottom-left-radius: 0;
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
+	margin-bottom: -1px;          /* the selected tab paints over the floor line */
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+	border-bottom-color: transparent;
+	font-weight: 600;
+	z-index: 1;
 }
 
-.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:last-child {
-	border-bottom-right-radius: 0;
+.juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] {
+	border-bottom: 0;             /* the pane container's border is the floor */
 }
 
-.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:only-child {
-	border-bottom-left-radius: 0;
-	border-bottom-right-radius: 0;
+.juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-helper-tabstrip-panes {
+	border-width: 1px;            /* colour is currentColor until chrome.css themes it */
+	border-style: solid;
+	border-radius: 0 4px 4px 4px;
+}
+
+.juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:focus-visible {
+	outline-offset: -3px;
 }
 
 /*
@@ -1101,6 +1119,11 @@ table.dataTable thead .sorting_desc_disabled:after {
 	width: 2em;
 	height: 2em;
 	border-radius: 6px;
+}
+
+.juneau-view-detail-header .juneau-view-detail-icon {
+	background: var(--jc-accent);
+	color: var(--jc-on-accent);
 }
 
 .juneau-view-detail-icon svg {
@@ -2028,6 +2051,11 @@ table.dataTable > tbody > tr.child .jc-card {
 	cursor: pointer;
 }
 
+/* A link action is an anchor wearing the same button look. */
+a.juneau-view-detail-action {
+	text-decoration: none;
+}
+
 .juneau-view-detail-action:hover:not(:disabled) {
 	background: var(--jc-detail-action-hover-bg);
 }
@@ -2125,6 +2153,11 @@ table.dataTable > tbody > tr.child .jc-card {
 .juneau-view-detail-field {
 	padding: var(--jc-space-1) 0;
 	border-bottom: 1px solid var(--jc-detail-field-border);    /* light neutral hairline - see --jc-detail-field-border */
+}
+
+/* Row separators run between fields; the last row of a fields grid has nothing below it to separate from. */
+.juneau-view-detail-fields > .juneau-view-detail-field:last-child {
+	border-bottom: 1px solid transparent;
 }
 
 /*
@@ -2493,6 +2526,10 @@ input[type="checkbox"].jc-editable-field-input {
 	display: block;
 }
 
+.juneau-view-dialog-figure.juneau-view-dialog-title-icon {
+	border-radius: var(--jc-radius);
+}
+
 .juneau-view-dialog-title {
 	margin: 0;
 	font-size: 0.95rem;
@@ -2551,52 +2588,14 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * In-dialog section strip: the same ribbon widget the row-detail sections use, borrowing that consumer's pill shape
- * so a sectioned dialog and a sectioned detail read as one vocabulary.  Panes stack below it in the form's flex
+ * In-dialog section strip: the same ribbon widget the row-detail sections use, wearing the global folder-tab look
+ * (see the tab-mode block above); it only claims the dialog's full width.  Panes stack below it in the form's flex
  * column; only the selected one is unhidden, and the strip itself opens no layer.
- * NEUTRAL - shape only; chrome.css themes the track wash and selected accent pill.
+ * NEUTRAL - shape only; chrome.css themes the floor and the selected tab.
  */
 .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
-	gap: var(--jc-space-1);
 	width: 100%;
 	margin: 0;
-	padding: var(--jc-space-1);
-	border-bottom: none;
-}
-
-.juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
-	margin-bottom: 0;
-	border-left-width: 1px;       /* longhand, not a colourless shorthand - see the segmented-group note above */
-	border-left-style: solid;
-	border-right-width: 1px;
-	border-right-style: solid;
-	border-radius: 999px;
-}
-
-/*
- * Folder inner navigation (ModalDef.nav "folder", stamped as data-nav on the dialog): square-topped tabs standing on
- * the strip's 1px bottom rule, open at the bottom.  Hover and selected share one face (chrome.css); the selected tab
- * is additionally bold.  The extra `.juneau-view-dialog[data-nav]` ancestor out-specifies the pill rules above.
- */
-.juneau-view-dialog[data-nav="folder"] .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] {
-	gap: 2px;
-	padding: 0;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-.juneau-view-dialog[data-nav="folder"] .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
-	height: auto;
-	padding: 6px var(--jc-chrome-control-padding-x-wide);
-	margin-bottom: -1px;
-	border-width: 1px 1px 0;
-	border-style: solid;
-	border-radius: 0.25rem 0.25rem 0 0;
-	font-weight: normal;
-}
-
-.juneau-view-dialog[data-nav="folder"] .juneau-view-ribbon-group.juneau-view-dialog-sections[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
-	font-weight: 600;
 }
 
 /*
@@ -2812,6 +2811,31 @@ input[type="checkbox"].jc-editable-field-input {
 	border-radius: 4px;
 	cursor: pointer;
 	min-width: 5.5em;
+}
+
+/*
+ * The per-row action trigger (the synthetic last column's kebab button).  Without these rules the button is a bare
+ * UA button and its <svg> has no size, so every row shows an empty box.  Shape only; colour follows the cell ink.
+ */
+.juneau-view-action-trigger {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 2px;
+	border: none;
+	border-radius: 4px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	line-height: 0;
+}
+
+.juneau-view-action-trigger svg {
+	width: var(--jc-chrome-glyph-size);
+	height: var(--jc-chrome-glyph-size);
+	fill: currentColor;
 }
 
 /*

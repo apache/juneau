@@ -409,4 +409,43 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 		assertEquals(true, r.get("pp_declaredUntouched"));
 		assertEquals(true, r.get("pp_alreadyStatusStays"));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Claiming items, visibility rules and ribbon ids on buttons
+	//------------------------------------------------------------------------------------------------------------------
+	@Test void j01_searchItemRendersASlotInTheSearchGroupAndClaimsIt() {
+		assertBean(report(), "claim_search_slot,claim_search_group,claim_search_ribbonId,claim_search_owns", "true,search,search,true");
+	}
+
+	@Test void j02_linkButtonRendersClaimsAndHidesWhenNotVisible() {
+		assertBean(report(), "claim_link_rendered,claim_link_ribbonId,claim_link_clicked,claim_link_owns,claim_link_hidden,claim_link_hidden_noOwn,claim_link_noUrlState",
+			"true,link,1,true,true,true,true");
+	}
+
+	@Test void j03_columnSettingsRendersOpensChooserAndHidesWithoutConfig() {
+		assertBean(report(), "claim_cols_rendered,claim_cols_ribbonId,claim_cols_icon,claim_cols_opened,claim_cols_owns,claim_cols_hiddenNoConfig,claim_cols_hiddenNoRuntime",
+			"true,columns,tune,1,true,true,true");
+	}
+
+	@Test void j04_collapseAndResetFollowTheirVisibilityRules() {
+		assertBean(report(), "vis_collapse_noDetail,vis_collapse_withDetail,vis_reset_noConfig,vis_reset_withConfig,vis_bare_bothHidden", "true,true,true,true,true");
+	}
+
+	@Test void j05_everyRenderedButtonCarriesItsRibbonId() {
+		assertEquals("search,copy,csv,link,collapse,columns,reset,refresh", report().get("ids_all"));
+	}
+
+	@Test void j06_ownershipIsResetOnEachBuild() {
+		assertEquals(true, report().get("owns_reset"));
+	}
+
+	@Test void k01_exportGroupSitsBetweenFilterAndViewingAndSearchSortsFirst() {
+		assertEquals("search:s0 filter:f1 export:x1 viewing:v1", report().get("order_exportBetween"));
+		assertEquals("search:s0 entity:e1 filter:f1", report().get("order_oldSearchLast"));
+	}
+
+	@Test void k02_unknownGroupKeepsItsSlotAndRefreshKeepsPage() {
+		assertEquals("zeta:z1 viewing:v1", report().get("order_unknownStays"));
+		assertEquals("export:x1 page:r1", report().get("order_refreshKeepsPage"));
+	}
 }

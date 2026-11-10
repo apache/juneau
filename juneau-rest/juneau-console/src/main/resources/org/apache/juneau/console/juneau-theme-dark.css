@@ -114,6 +114,37 @@ html:root[data-jc-scheme="dark"] {
 	--jc-pill-red-bg: #45201f;
 	--jc-pill-red-text: #f5a9a9;
 	--jc-pill-red-border: #6a3030;
+	/* Categorical pill palette (dark washes, light inks). */
+	--jc-pill-cat-1-bg: #17324a;
+	--jc-pill-cat-1-text: #9fcff5;
+	--jc-pill-cat-1-border: #2a5580;
+	--jc-pill-cat-2-bg: #4a2a10;
+	--jc-pill-cat-2-text: #f5c090;
+	--jc-pill-cat-2-border: #6b4220;
+	--jc-pill-cat-3-bg: #3e2d1e;
+	--jc-pill-cat-3-text: #e6c7a3;
+	--jc-pill-cat-3-border: #5a4430;
+	--jc-pill-cat-4-bg: #3c2447;
+	--jc-pill-cat-4-text: #dcb0ee;
+	--jc-pill-cat-4-border: #5a3a6b;
+	--jc-pill-cat-5-bg: #103b4d;
+	--jc-pill-cat-5-text: #9fdcf2;
+	--jc-pill-cat-5-border: #1f5870;
+	--jc-pill-cat-6-bg: #12403f;
+	--jc-pill-cat-6-text: #9fe0e0;
+	--jc-pill-cat-6-border: #1f5c5a;
+	--jc-pill-cat-7-bg: #3d3615;
+	--jc-pill-cat-7-text: #e8d98a;
+	--jc-pill-cat-7-border: #5a5025;
+	--jc-pill-cat-8-bg: #25285a;
+	--jc-pill-cat-8-text: #b4bcf2;
+	--jc-pill-cat-8-border: #3c4180;
+	--jc-pill-cat-9-bg: #4a1f38;
+	--jc-pill-cat-9-text: #f2a9cf;
+	--jc-pill-cat-9-border: #6b3555;
+	--jc-pill-cat-10-bg: #33363c;
+	--jc-pill-cat-10-text: #d4d7dc;
+	--jc-pill-cat-10-border: #4a4e56;
 	/* The legacy tag palette stays a live reference to the pill palette. */
 	--jc-tag-green-bg: var(--jc-pill-green-bg);
 	--jc-tag-green-text: var(--jc-pill-green-text);

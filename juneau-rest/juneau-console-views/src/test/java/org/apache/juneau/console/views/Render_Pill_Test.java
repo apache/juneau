@@ -124,4 +124,44 @@ class Render_Pill_Test extends TestBase {
 		assertEquals("{\"id\":\"decimal\",\"meta\":{\"places\":2,\"field\":\"price\"}}", Json.of(r));
 		assertEquals(2, ((Map<?,?>)wire(r).get("meta")).get("places"));
 	}
+
+	@Test void b01_tone_wireShapeAndCallOrder() {
+		var r = Render.pill().tone("AVAILABLE", StatusTone.SUCCESS).tone("PENDING", StatusTone.WARNING).tone("SOLD", StatusTone.NEUTRAL);
+		assertEquals("{\"id\":\"pill\",\"meta\":{\"tones\":{\"AVAILABLE\":\"success\",\"PENDING\":\"warning\",\"SOLD\":\"neutral\"}}}", Json.of(r));
+	}
+
+	@Test void b02_tone_reAddReplacesInPlace() {
+		var r = Render.pill().tone("A", StatusTone.INFO).tone("B", StatusTone.ERROR).tone("A", StatusTone.SUCCESS);
+		assertEquals("{\"id\":\"pill\",\"meta\":{\"tones\":{\"A\":\"success\",\"B\":\"error\"}}}", Json.of(r));
+	}
+
+	@Test void b03_tone_rejectsNullAndBlank() {
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().tone(null, StatusTone.INFO));
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().tone("  ", StatusTone.INFO));
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().tone("A", null));
+	}
+
+	@Test void b04_categorical_wireShape() {
+		assertEquals("{\"id\":\"pill\",\"meta\":{\"categorical\":true}}", Json.of(Render.pill().categorical()));
+	}
+
+	@Test void b05_category_wireShapeAndBounds() {
+		var r = Render.pill().categorical().category("DOG", 1).category("CAT", 10);
+		assertEquals("{\"id\":\"pill\",\"meta\":{\"categorical\":true,\"categories\":{\"DOG\":1,\"CAT\":10}}}", Json.of(r));
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().category("X", 0));
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().category("X", 11));
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().category(null, 1));
+		assertThrows(IllegalArgumentException.class, () -> Render.pill().category(" ", 1));
+	}
+
+	@Test void b06_wrongRenderer_throwsIllegalState() {
+		assertThrows(IllegalStateException.class, () -> Render.of("tag").tone("A", StatusTone.INFO));
+		assertThrows(IllegalStateException.class, () -> Render.of("tag").categorical());
+		assertThrows(IllegalStateException.class, () -> Render.of("tag").category("A", 1));
+	}
+
+	@Test void b07_combinesWithColumnWideTone() {
+		var r = Render.pill(StatusTone.INFO).tone("X", StatusTone.ERROR);
+		assertEquals("{\"id\":\"pill\",\"meta\":{\"tone\":\"info\",\"tones\":{\"X\":\"error\"}}}", Json.of(r));
+	}
 }

@@ -13,24 +13,30 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="pets/changes" toolkit="views">
+--><@page tab="pets/changes" toolkit="views,datatables-buttons">
 <@card type="datatables" id="changes" title="Pending changes">
 {
   rowType: 'PendingChange',
   dataMode: 'server',
   dataUrl: '/console/pets/changes/query',
+  columnConfig: true,
   defaultOrder: [ { key: 'id', dir: 'desc' } ],
   columns: [
     { key: 'id', label: 'Change' },
     { key: 'summary', label: 'Change summary' },
     { key: 'author', label: 'Author' },
-    { key: 'state', label: 'State', render: { id: 'pill' } },
+    { key: 'state', label: 'State', render: { id: 'pill', meta: { tones: { PENDING: 'warning', APPLIED: 'success', FAILED: 'error' } } } },
     { key: 'message', label: 'Message', defaultVisible: false }
   ],
   ribbon: [
-    { type: 'option', id: 'pending-only', title: 'Pending only', column: 'state', value: '$eq(PENDING)', default: true, group: 'filter' },
-    { type: 'resetDefaults', group: 'page' },
-    { type: 'refresh' }
+    { type: 'search', id: 'search', group: 'search' },
+    { type: 'option', id: 'pending-only', title: 'Pending only', symbol: 'hourglass', column: 'state', value: '$eq(PENDING)', default: true, group: 'filter' },
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
   ],
   rowActions: [
     { id: 'retry', label: 'Retry', endpoint: '/console/pets/changes/{id}/retry', method: 'POST', onSuccess: 'redraw',

@@ -1,0 +1,1 @@
+["$defs", "$id", "$ref", "$schema", "additionalProperties", "allOf", "anyOf", "const", "default", "description", "enum", "items", "maxLength", "minItems", "minLength", "minimum", "not", "oneOf", "pattern", "properties", "propertyNames", "required", "title", "type"]

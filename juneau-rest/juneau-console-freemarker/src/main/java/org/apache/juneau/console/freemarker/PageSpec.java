@@ -23,6 +23,7 @@ import java.util.function.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.console.*;
@@ -73,7 +74,7 @@ import freemarker.template.*;
 	"java:S3776", // Validation and rendering chains many independent guards; splitting them adds no clarity.
 	"javabugs:S2259" // False positive: each card.accept(c) is guarded by nn(card), which Sonar's flow analysis does not track as a null guard.
 })
-public final class PageSpec {
+public final class PageSpec implements Handled<PageSpec> {
 
 	/** Data-model attribute that carries the spec into the render. */
 	public static final String ATTR = "jcPageSpec";
@@ -84,7 +85,7 @@ public final class PageSpec {
 	 * with their own {@code <@card>} checks.  The other reserved types are seeded as written; adopter types are lifted
 	 * through the registry too.
 	 */
-	private static final Set<String> LIFTED_TYPES = Set.of("chart", "job-log", "terminal");
+	private static final Set<String> LIFTED_TYPES = Set.of("chart", "job-log", "terminal", "switcher");
 	private static final Pattern ATTR_NAME_RE = Pattern.compile("[A-Za-z_:][-A-Za-z0-9_:.]*");
 
 	/** One {@code header(String,String)} passthrough entry. */
@@ -99,6 +100,10 @@ public final class PageSpec {
 	final List<String> toolkits = new ArrayList<>();
 	final List<String> css = new ArrayList<>();
 	final List<String> init = new ArrayList<>();
+	private final ModelBlock model = new ModelBlock("page", "page");
+	private boolean allowInlineHandlers;
+	private final List<TableSpec> tableSpecs = new ArrayList<>();
+	private boolean scriptUsed;
 	final Map<String,Object> attrs = new LinkedHashMap<>();
 	final List<HeaderEntry> headers = new ArrayList<>();
 	String headerSubtitle;
@@ -280,11 +285,43 @@ public final class PageSpec {
 	 *
 	 * @param urls The script URLs.
 	 * @return This object.
+	 * @throws IllegalArgumentException If a URL is not a same-origin path.
 	 */
 	public PageSpec init(String...urls) {
+		for (var u : urls)
+			if (! SafePathTemplate.isSameOriginPath(u))
+				throw iaex("PageSpec script must be a same-origin path; got '%s'.", u);
 		addAllDeduped(init, urls);
 		return this;
 	}
+
+	/**
+	 * Adds page scripts; an alias of {@link #init(String...)} with the same de-duplication.
+	 *
+	 * @param urls The script URLs.
+	 * @return This object.
+	 */
+	public PageSpec script(String...urls) {
+		scriptUsed = true;
+		return init(urls);
+	}
+
+	/**
+	 * Allows inline handler references on this page.
+	 *
+	 * @param v Whether inline handlers are allowed; the default is <jk>false</jk>.
+	 * @return This object.
+	 */
+	public PageSpec allowInlineHandlers(boolean v) {
+		allowInlineHandlers = v;
+		return this;
+	}
+
+	@Override /* Handled */
+	public ModelBlock modelBlock() { return model; }
+
+	@Override /* Handled */
+	public PageSpec self() { return this; }
 
 	private static void addAllDeduped(List<String> target, String...values) {
 		for (var v : values)
@@ -390,6 +427,7 @@ public final class PageSpec {
 			throw iaex("PageSpec.table id '%s' sets src or template; the table supplies the card's data.", table.id());
 		addCard(c);
 		tableBodies.put(table.id(), body);
+		tableSpecs.add(table);
 		return this;
 	}
 
@@ -944,6 +982,13 @@ public final class PageSpec {
 			cap.css(css);
 		if (! init.isEmpty())
 			cap.init(init);
+		if (! allowInlineHandlers && (model.hasInline() || tableSpecs.stream().anyMatch(TableSpec::hasInlineHandlers) || cards.stream().anyMatch(c -> c.modelBlock().hasInline())))
+			throw new IllegalArgumentException("page: an inline handler needs allowInlineHandlers(true).");
+		if (allowInlineHandlers)
+			cap.allowInlineHandlers(true);
+		cap.rootModel(model.toMap());
+		if (scriptUsed)
+			cap.emitScripts(true);
 		if (headerSubtitle != null || headerUserMenu != null)
 			cap.header(h -> {
 				if (headerSubtitle != null)
@@ -1015,7 +1060,7 @@ public final class PageSpec {
 		checkSanitize(card);
 		if (eq(card.type(), "terminal"))
 			return liftTerminal(card, cardModel);
-		if (eq(card.type(), "job-log"))
+		if (eq(card.type(), "job-log") || eq(card.type(), "switcher"))
 			rejectSrcAndTemplate(card);
 		else if (nn(card.template()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.", card.id()));

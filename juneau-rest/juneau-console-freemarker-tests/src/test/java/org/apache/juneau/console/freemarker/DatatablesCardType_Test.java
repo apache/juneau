@@ -178,6 +178,11 @@ class DatatablesCardType_Test extends TestBase {
 			+ "{field} token; aggregate endpoints receive {ids} in the body.", ex.getMessage());
 	}
 
+	@Test void columnDescriptionKey_isAccepted() {
+		var arg = src("t", "{dataUrl:'/x', columns:[{key:'a', description:'Help text.'}]}");
+		assertDoesNotThrow(() -> h.toFragment(arg));
+	}
+
 	@Test void unknownColumnKey_throwsE36() {
 		var arg11 = src("t", "{dataUrl:'/x', columns:[{key:'a', bogus:1}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
@@ -437,6 +442,14 @@ class DatatablesCardType_Test extends TestBase {
 		assertEquals(List.of(), h.requiredPacks(JsonMap.of("table", Map.of("detail", Map.of("region", Map.of("populate", "p"))))));
 		assertEquals(List.of(), h.requiredPacks(new JsonMap()));
 		assertEquals(List.of(), h.requiredPacks(null));
+	}
+
+	@Test void a08b_requiredPacks_chartTabNeedsCharts() {
+		var chartTab = Map.of("id", "t", "kind", "chart");
+		var fieldsTab = Map.of("id", "f", "kind", "fields");
+		assertEquals(List.of("charts"), h.requiredPacks(JsonMap.of("table", Map.of("detail", Map.of("tabs", List.of(fieldsTab, chartTab))))));
+		assertEquals(List.of(), h.requiredPacks(JsonMap.of("table", Map.of("detail", Map.of("tabs", List.of(fieldsTab))))));
+		assertEquals(List.of("joblog"), h.requiredPacks(JsonMap.of("table", Map.of("detail", Map.of("region", Map.of("populate", "job-log"))))));
 	}
 
 	// ---- E-37: quickStats ----

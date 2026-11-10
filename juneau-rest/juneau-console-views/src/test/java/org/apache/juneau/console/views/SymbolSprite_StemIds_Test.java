@@ -49,15 +49,16 @@ class SymbolSprite_StemIds_Test extends TestBase {
 		"juneau-sym-cancel", "juneau-sym-check", "juneau-sym-chevrondown", "juneau-sym-chevronleft",
 		"juneau-sym-chevronright", "juneau-sym-chevronup", "juneau-sym-close", "juneau-sym-collapse_all",
 		"juneau-sym-columns", "juneau-sym-copy", "juneau-sym-csv", "juneau-sym-download", "juneau-sym-edit",
-		"juneau-sym-filter", "juneau-sym-first_page", "juneau-sym-forceStop", "juneau-sym-last_page",
+		"juneau-sym-filter", "juneau-sym-first_page", "juneau-sym-forceStop", "juneau-sym-grip", "juneau-sym-last_page",
 		"juneau-sym-link", "juneau-sym-more", "juneau-sym-new", "juneau-sym-openPr", "juneau-sym-pause", "juneau-sym-pdf",
 		"juneau-sym-play", "juneau-sym-plus", "juneau-sym-print",
 		"juneau-sym-push", "juneau-sym-refresh", "juneau-sym-restore", "juneau-sym-search", "juneau-sym-settings", "juneau-sym-sort",
 		"juneau-sym-spreadsheet", "juneau-sym-stop", "juneau-sym-toggle-deleted",
-		"juneau-sym-toggle_column_search", "juneau-sym-tune"
+		"juneau-sym-toggle_column_search", "juneau-sym-trash", "juneau-sym-tune"
 	);
 
 	/** Ids intentionally present in more than one sprite file (the default pack, its authoring key, the material pack). */
+	private static final String LUCIDE_RESOURCE = "/org/apache/juneau/views/juneau-symbols-lucide.svg";
 	private static final String MATERIAL_RESOURCE = "/org/apache/juneau/views/juneau-symbols-material.svg";
 
 	/** The material pack is not edited by this work; its id set stays as it was. */
@@ -118,7 +119,7 @@ class SymbolSprite_StemIds_Test extends TestBase {
 	}
 
 	@Test void a02_idsAreUniqueWithinEachSpriteFile() throws Exception {
-		for (var resource : List.of(ViewsMixin.SYMBOLS_SVG_RESOURCE, MATERIAL_RESOURCE))
+		for (var resource : List.of(ViewsMixin.SYMBOLS_SVG_RESOURCE, MATERIAL_RESOURCE, LUCIDE_RESOURCE))
 			assertEmpty(() -> "duplicate <symbol> ids within " + resource, duplicates(idList(resource)));
 	}
 
@@ -127,6 +128,12 @@ class SymbolSprite_StemIds_Test extends TestBase {
 		shared.retainAll(new HashSet<>(idList(MATERIAL_RESOURCE)));
 		shared.removeAll(OVERLAY_ALLOWLIST);
 		assertEmpty(() -> "ids present in more than one sprite file but not in OVERLAY_ALLOWLIST", shared);
+	}
+
+	@Test void a03b_lucideIdsDoNotRepeatShippedIds() throws Exception {
+		var shared = new TreeSet<>(actualIds());
+		shared.retainAll(new HashSet<>(idList(LUCIDE_RESOURCE)));
+		assertEmpty(() -> "ids in both the shipped and Lucide sprite files", shared);
 	}
 
 	@Test void a04_materialIdSetIsUnchanged() throws Exception {

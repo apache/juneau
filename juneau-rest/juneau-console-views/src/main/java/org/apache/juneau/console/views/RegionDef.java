@@ -79,7 +79,17 @@ public class RegionDef {
 	/** Wire token for a tab-body region. */
 	public static final String TYPE_TAB_BODY = "tab-body";
 
-	private static final Set<String> TYPES = st(TYPE_ROW_DETAIL, TYPE_CARD_BODY, TYPE_TAB_BODY);
+	/** Wire token for a chart region (drawn by the built-in {@code chart} populator). */
+	public static final String TYPE_CHART = "chart";
+
+	private static final Set<String> TYPES = st(TYPE_ROW_DETAIL, TYPE_CARD_BODY, TYPE_TAB_BODY, TYPE_CHART);
+
+	private static final Set<String> CHART_KINDS = st("line", "bar");
+
+	private String chartKind = "line";
+	private String chartX;
+	private final List<String[]> chartSeries = new ArrayList<>();
+	private int chartHeight;
 
 	/** The reserved renderer name that requires a non-empty {@link #fields} catalog. */
 	private static final String RENDERER_FIELD_GRID = "field-grid";
@@ -205,6 +215,69 @@ public class RegionDef {
 		var r = new RegionDef();
 		r.id = id;
 		return r;
+	}
+
+	/**
+	 * Creates a chart region fed by a same-origin endpoint that returns row records.
+	 *
+	 * <p>
+	 * Configure it with {@link #kind(String)}, {@link #x(String)}, {@link #series(String,String)} and
+	 * {@link #height(int)}.  A chart region uses the built-in {@code chart} populator and carries no field catalog.
+	 *
+	 * @param id This region's own id.
+	 * @param dataUrl The same-origin path the chart fetches its records from.
+	 * @return A new {@link RegionDef} of type {@link #TYPE_CHART}.
+	 */
+	public static RegionDef chart(String id, String dataUrl) {
+		var r = create(id);
+		r.type = TYPE_CHART;
+		r.dataUrl = dataUrl;
+		return r;
+	}
+
+	/**
+	 * Sets the chart kind (chart regions only).
+	 *
+	 * @param value {@code "line"} (the default) or {@code "bar"}.
+	 * @return This object.
+	 */
+	public RegionDef kind(String value) {
+		chartKind = value;
+		return this;
+	}
+
+	/**
+	 * Sets the record field plotted on the x axis (chart regions only).
+	 *
+	 * @param field The field name.
+	 * @return This object.
+	 */
+	public RegionDef x(String field) {
+		chartX = field;
+		return this;
+	}
+
+	/**
+	 * Adds a plotted series (chart regions only).  Repeatable.
+	 *
+	 * @param field The record field holding the series values.
+	 * @param label The series label.
+	 * @return This object.
+	 */
+	public RegionDef series(String field, String label) {
+		chartSeries.add(new String[] { field, label });
+		return this;
+	}
+
+	/**
+	 * Sets the chart height in pixels (chart regions only).
+	 *
+	 * @param value The height; must be positive.  Zero (the default) leaves the height to the client.
+	 * @return This object.
+	 */
+	public RegionDef height(int value) {
+		chartHeight = value;
+		return this;
 	}
 
 	/**
@@ -422,6 +495,7 @@ public class RegionDef {
 		validateDataUrlAndParams();
 		validateTitleFields();
 		validateFields();
+		validateChart();
 		validateConfig();
 	}
 
@@ -466,6 +540,8 @@ public class RegionDef {
 		if (eq(type, TYPE_ROW_DETAIL) && fields != null && !fields.isEmpty())
 			throw iaex("RegionDef '%s' is type '%s' and must not declare fields; a row-detail region's catalog "
 				+ "is an author JS literal, never a projected one.", id, TYPE_ROW_DETAIL);
+		if (eq(type, TYPE_CHART) && fields != null && !fields.isEmpty())
+			throw iaex("RegionDef '%s' is type '%s' and must not declare fields.", id, TYPE_CHART);
 		if (fields != null) {
 			var keys = new HashSet<String>();
 			for (var f : fields) {
@@ -481,6 +557,24 @@ public class RegionDef {
 		if (isDefaultPopulate && isCardOrTab && eq(renderer, RENDERER_FIELD_GRID) && (ie(fields)))
 			throw iaex("RegionDef '%s' declares renderer 'field-grid' under the default populator but no fields; "
 				+ "a field-grid with no catalog would silently paint an unlabeled/empty grid.", id);
+	}
+
+	private void validateChart() {
+		if (! eq(type, TYPE_CHART))
+			return;
+		if (ib(dataUrl))
+			throw iaex("RegionDef '%s' is a chart and needs a dataUrl.", id);
+		if (! CHART_KINDS.contains(chartKind))
+			throw iaex("RegionDef '%s' chart kind must be one of %s, was '%s'.", id, CHART_KINDS, chartKind);
+		if (ib(chartX))
+			throw iaex("RegionDef '%s' chart needs an x field.", id);
+		if (chartSeries.isEmpty())
+			throw iaex("RegionDef '%s' chart needs at least one series.", id);
+		for (var sr : chartSeries)
+			if (ib(sr[0]) || ib(sr[1]))
+				throw iaex("RegionDef '%s' chart series needs a field and a label.", id);
+		if (chartHeight < 0)
+			throw iaex("RegionDef '%s' chart height must not be negative.", id);
 	}
 
 	private void validateConfig() {
@@ -556,6 +650,20 @@ public class RegionDef {
 			m.put("titleFields", titleFields);
 		if (fields != null && !fields.isEmpty()) {
 			m.put("fields", fields.stream().map(Field::toContractMap).toList());
+		}
+		if (eq(type, TYPE_CHART)) {
+			var c = new LinkedHashMap<String,Object>();
+			c.put("kind", chartKind);
+			c.put("x", chartX);
+			c.put("series", chartSeries.stream().map(sr -> {
+				var e = new LinkedHashMap<String,Object>();
+				e.put("field", sr[0]);
+				e.put("label", sr[1]);
+				return e;
+			}).toList());
+			if (chartHeight > 0)
+				c.put("height", chartHeight);
+			m.put("chart", c);
 		}
 		if (visibleWhen != null && !visibleWhen.isEmpty())
 			m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));

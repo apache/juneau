@@ -167,7 +167,7 @@ function dividersOf(bar) {
 }
 
 function buildBar(NS, ribbon) {
-	return NS.ribbon.build({ ribbon: ribbon }, { dataTable: {}, redraw: function () { /* no-op */ } });
+	return NS.ribbon.build({ ribbon: ribbon }, { hasRowDetail: true, dataTable: {}, redraw: function () { /* no-op */ } });
 }
 
 // Case 1 - no refresh action: unaffected. One export cluster, nothing trailing added.
@@ -253,7 +253,7 @@ function buildBar(NS, ribbon) {
 	const { NS } = loadRibbon(true);
 	let collapseAllCalled = 0;
 	const bar = NS.ribbon.build({ ribbon: [action('collapseAll')] }, {
-		dataTable: {}, redraw: function () { /* no-op */ }, collapseAllDetailRows: function () { collapseAllCalled++; }
+		hasRowDetail: true, dataTable: {}, redraw: function () { /* no-op */ }, collapseAllDetailRows: function () { collapseAllCalled++; }
 	});
 	const groups = groupsOf(bar);
 	out.dom_collapseAll_groupCount = groups.length;
@@ -309,7 +309,7 @@ function buildBar(NS, ribbon) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------
-// Canonical toolbar group order (entity|filter|search|viewing|page|status): tagged groups sort among themselves into
+// Canonical toolbar group order (search|entity|filter|export|viewing|page|status): tagged groups sort among themselves into
 // the slots they occupy; other ids keep position; untagged ribbons are unchanged; an ungrouped refresh joins `page`.
 // ------------------------------------------------------------------------------------------------------------------
 if (out.hasNormalizeRibbon) {
@@ -349,6 +349,23 @@ if (out.hasNormalizeRibbon) {
 	];
 	out.order_optionGroupTagged = normalizeRibbon(og).map(keyOf).join(' ');
 
+	// The export group sits between filter and viewing and stays its own cluster; search sorts first.
+	const withExport = [
+		action('collapseAll', { group: 'viewing', title: 'v1' }), action('export', { group: 'export', buttons: ['copy'], title: 'x1' }),
+		action('option', { id: 'f', group: 'filter', title: 'f1' }), action('search', { id: 'search', group: 'search', title: 's0' })
+	];
+	out.order_exportBetween = normalizeRibbon(withExport).map(keyOf).join(' ');
+	out.order_oldSearchLast = normalizeRibbon([
+		action('option', { id: 'e', group: 'entity', title: 'e1' }), action('option', { id: 'f', group: 'filter', title: 'f1' }),
+		action('search', { id: 'search', group: 'search', title: 's0' })
+	]).map(keyOf).join(' ');
+	out.order_unknownStays = normalizeRibbon([
+		action('option', { id: 'z', group: 'zeta', title: 'z1' }), action('option', { id: 'v', group: 'viewing', title: 'v1' })
+	]).map(keyOf).join(' ');
+	out.order_refreshKeepsPage = normalizeRibbon([
+		action('refresh', { id: 'refresh', group: 'page', title: 'r1' }), action('export', { group: 'export', buttons: ['copy'], title: 'x1' })
+	]).map(keyOf).join(' ');
+
 	out.pure_resetDefaults_icon = first.NS.ribbon.resolveButtonIcon(action('resetDefaults'), 'resetDefaults');
 }
 
@@ -373,7 +390,7 @@ if (out.hasNormalizeRibbon) {
 	NS.config = { resetToDefaultsAndApply: function (table, ctx) { calls.push({ table: table, ctx: ctx }); } };
 	const table = env.el('table');
 	const ctx = { table: table, dataTable: {}, redraw: function () { /* no-op */ } };
-	const bar = NS.ribbon.build({ ribbon: [action('resetDefaults', { group: 'page' })] }, ctx);
+	const bar = NS.ribbon.build({ columnConfig: true, ribbon: [action('resetDefaults', { group: 'page' })] }, ctx);
 	const groups = groupsOf(bar);
 	const btn = groups.length ? groups[0].childNodes[0] : null;
 	out.dom_resetDefaults_title = btn ? chromeTip(btn) : null;
@@ -384,7 +401,7 @@ if (out.hasNormalizeRibbon) {
 // DOM: resetDefaults with no config runtime loaded is inert on click rather than throwing.
 {
 	const { NS } = loadRibbon(true);
-	const bar = buildBar(NS, [action('resetDefaults')]);
+	const bar = NS.ribbon.build({ columnConfig: true, ribbon: [action('resetDefaults')] }, { dataTable: {}, redraw: function () { /* no-op */ } });
 	const groups = groupsOf(bar);
 	const btn = groups.length ? groups[0].childNodes[0] : null;
 	let threw = false;
@@ -496,6 +513,134 @@ if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonColumnSearches === 'functio
 	out.split_queryParams = R.ribbonQueryParams(vd, all);
 	out.split_merged = R.mergeColumnSearches({ '1': '$eq(ACTIVE)', '0': '  ' }, { '1': '$eq(DROPPED)', '2': '$ne(Waiting)' });
 	out.split_wrapperRemoved = (R.ribbonToQueryParams === undefined);
+}
+
+// ------------------------------------------------------------------------------------------------------------------
+// Claiming items: search slot, link button, column settings; visibility rules; ids on rendered buttons.
+// ------------------------------------------------------------------------------------------------------------------
+function flat(bar) {
+	const all = [];
+	(function walk(n) { n.childNodes.forEach(function (c) { if (c.nodeType === 1) { all.push(c); walk(c); } }); })(bar);
+	return all;
+}
+function ribbonIds(bar) {
+	return flat(bar).filter(function (c) { return c.getAttribute('data-juneau-ribbon-id') != null; })
+		.map(function (c) { return c.getAttribute('data-juneau-ribbon-id'); }).join(',');
+}
+function claimEnv() {
+	const l = loadRibbon(true);
+	const NS = l.NS, env = l.env;
+	NS.icons = { resolveIcon: function (name) { return '<svg data-icon="' + name + '"></svg>'; } };
+	NS.urlState = { buildShareUrl: function () { return 'u'; } };
+	const log = { link: 0, opened: 0, seeded: 0, chooserIcon: null };
+	NS.init = {
+		buildCopyLinkButton: function (table, ctx) {
+			if ((ctx.viewDef && ctx.viewDef.copyLink === false) || !NS.urlState) return null;
+			const b = env.el('button');
+			b.className = 'juneau-view-ribbon-btn juneau-view-copylink-btn';
+			b.addEventListener('click', function () { log.link++; });
+			return b;
+		}
+	};
+	NS.config = {
+		seedChooserDraft: function () { log.seeded++; },
+		openChooser: function () { log.opened++; },
+		buildChooserButton: function (table, ctx, icon) {
+			if (!ctx.viewDef || !ctx.viewDef.columnConfig) return null;
+			log.chooserIcon = icon;
+			const b = env.el('button');
+			b.className = 'juneau-view-ribbon-btn juneau-config-chooser-btn';
+			b.addEventListener('click', function () { NS.config.openChooser(table, ctx); });
+			return b;
+		},
+		resetToDefaultsAndApply: function () { /* no-op */ }
+	};
+	return { env: env, NS: NS, log: log };
+}
+{
+	const { env, NS } = claimEnv();
+	const ctx = { table: env.el('table'), dataTable: {}, redraw: function () { /* no-op */ } };
+	const bar = NS.ribbon.build({ ribbon: [action('search', { id: 'search', group: 'search' })] }, ctx);
+	const slot = flat(bar).find(function (c) { return c.getAttribute('data-juneau-slot') === 'search'; });
+	out.claim_search_slot = !!slot && slot.className === 'juneau-view-ribbon-search-slot';
+	out.claim_search_group = slot ? slot.parentNode.getAttribute('data-juneau-group') : null;
+	out.claim_search_ribbonId = slot ? slot.getAttribute('data-juneau-ribbon-id') : null;
+	out.claim_search_owns = ctx._ribbonOwns.search === true;
+}
+{
+	const { env, NS, log } = claimEnv();
+	const ctx = { table: env.el('table'), dataTable: {}, viewDef: {}, redraw: function () { /* no-op */ } };
+	const bar = NS.ribbon.build({ ribbon: [action('linkButton', { id: 'link', group: 'export' })] }, ctx);
+	const b = flat(bar).find(function (c) { return /juneau-view-copylink-btn/.test(c.className); });
+	out.claim_link_rendered = !!b;
+	out.claim_link_ribbonId = b ? b.getAttribute('data-juneau-ribbon-id') : null;
+	if (b) b.dispatch('click');
+	out.claim_link_clicked = log.link;
+	out.claim_link_owns = ctx._ribbonOwns.linkButton === true;
+	const ctx2 = { table: env.el('table'), dataTable: {}, viewDef: { copyLink: false }, redraw: function () { /* no-op */ } };
+	const bar2 = NS.ribbon.build({ ribbon: [action('linkButton', { id: 'link' })] }, ctx2);
+	out.claim_link_hidden = !bar2 || !flat(bar2).some(function (c) { return /copylink/.test(c.className); });
+	out.claim_link_hidden_noOwn = !ctx2._ribbonOwns.linkButton;
+	NS.urlState = undefined;
+	const ctx3 = { table: env.el('table'), dataTable: {}, viewDef: {}, redraw: function () { /* no-op */ } };
+	const bar3 = NS.ribbon.build({ ribbon: [action('linkButton', { id: 'link' })] }, ctx3);
+	out.claim_link_noUrlState = !bar3 || !flat(bar3).some(function (c) { return /copylink/.test(c.className); });
+}
+{
+	const { env, NS, log } = claimEnv();
+	const ctx = { table: env.el('table'), dataTable: {}, redraw: function () { /* no-op */ } };
+	const vd = { columnConfig: true, ribbon: [action('columnSettings', { id: 'columns', group: 'viewing' })] };
+	ctx.viewDef = vd;
+	const bar = NS.ribbon.build(vd, ctx);
+	const b = flat(bar).find(function (c) { return /juneau-config-chooser-btn/.test(c.className); });
+	out.claim_cols_rendered = !!b;
+	out.claim_cols_ribbonId = b ? b.getAttribute('data-juneau-ribbon-id') : null;
+	out.claim_cols_icon = log.chooserIcon;
+	if (b) b.dispatch('click');
+	out.claim_cols_opened = log.opened;
+	out.claim_cols_owns = ctx._ribbonOwns.columnSettings === true;
+	const vd2 = { ribbon: [action('columnSettings', { id: 'columns' })] };
+	const bar2 = NS.ribbon.build(vd2, { table: env.el('table'), viewDef: vd2, dataTable: {}, redraw: function () { /* no-op */ } });
+	out.claim_cols_hiddenNoConfig = !bar2 || !flat(bar2).some(function (c) { return /chooser/.test(c.className); });
+	const vd3 = { columnConfig: true, ribbon: [action('columnSettings', { id: 'columns' })] };
+	const saved = NS.config.openChooser;
+	NS.config.openChooser = undefined;
+	NS.config.buildChooserButton = undefined;
+	const bar3 = NS.ribbon.build(vd3, { table: env.el('table'), viewDef: vd3, dataTable: {}, redraw: function () { /* no-op */ } });
+	out.claim_cols_hiddenNoRuntime = !bar3 || !flat(bar3).some(function (c) { return /chooser/.test(c.className); });
+	NS.config.openChooser = saved;
+}
+{
+	const { env, NS } = claimEnv();
+	const mk = function (extra) { return Object.assign({ table: env.el('table'), dataTable: {}, redraw: function () { /* no-op */ } }, extra); };
+	const has = function (bar, title) { return !!bar && flat(bar).some(function (c) { return chromeTip(c) === title; }); };
+	out.vis_collapse_noDetail = !has(NS.ribbon.build({ ribbon: [action('collapseAll', { id: 'collapse' })] }, mk({})), 'Collapse all');
+	out.vis_collapse_withDetail = has(NS.ribbon.build({ ribbon: [action('collapseAll', { id: 'collapse' })] }, mk({ hasRowDetail: true })), 'Collapse all');
+	const noCfg = { ribbon: [action('resetDefaults', { id: 'reset' })] };
+	out.vis_reset_noConfig = !has(NS.ribbon.build(noCfg, mk({ viewDef: noCfg })), 'Reset to defaults');
+	const cfg = { columnConfig: true, ribbon: [action('resetDefaults', { id: 'reset' })] };
+	out.vis_reset_withConfig = has(NS.ribbon.build(cfg, mk({ viewDef: cfg })), 'Reset to defaults');
+	const bare = { ribbon: [action('collapseAll'), action('resetDefaults')] };
+	const bareBar = NS.ribbon.build(bare, mk({ viewDef: bare }));
+	out.vis_bare_bothHidden = !bareBar || flat(bareBar).length === 0;
+	// Ribbon ids on rendered buttons.
+	const full = { columnConfig: true, ribbon: [
+		action('search', { id: 'search', group: 'search' }),
+		action('export', { id: 'export', buttons: ['copy', 'csv'], group: 'export' }),
+		action('linkButton', { id: 'link', group: 'export' }),
+		action('collapseAll', { id: 'collapse', group: 'viewing' }),
+		action('columnSettings', { id: 'columns', group: 'viewing' }),
+		action('resetDefaults', { id: 'reset', group: 'viewing' }),
+		action('refresh', { id: 'refresh', group: 'page' })
+	] };
+	const bar = NS.ribbon.build(full, mk({ viewDef: full, hasRowDetail: true, dataTable: { button: function () { return { trigger: function () { /* no-op */ } }; } } }));
+	out.ids_all = ribbonIds(bar);
+	// Ownership resets per build.
+	const ctx = mk({ viewDef: full });
+	NS.ribbon.build(full, ctx);
+	const slim = { ribbon: [action('refresh')] };
+	NS.ribbon.build(slim, ctx);
+	out.owns_reset = Object.keys(ctx._ribbonOwns).length === 0;
 }
 
 process.stdout.write(JSON.stringify(out));

@@ -291,6 +291,10 @@ await (async function dataPaneTests() {
 // button fires nothing: no listener is ever attached to an individual tab button).
 function stripOf(wrapper) { return wrapper.querySelector('[role="tablist"]'); }
 function tabBtn(wrapper, id) { return wrapper.querySelector('[data-juneau-strip-tab="' + id + '"]'); }
+function tabPane(wrapper, id) {
+	const b = tabBtn(wrapper, id);
+	return wrapper.querySelectorAll('[role="tabpanel"]').find(p => p.getAttribute('aria-labelledby') === b.id);
+}
 function clickTab(wrapper, id) {
 	const btn = tabBtn(wrapper, id);
 	stripOf(wrapper).dispatch('click', { target: btn });
@@ -413,6 +417,43 @@ await (async function tabStripTests() {
 	clickTab(wrapX, 'b');
 	clickTab(wrapX, 'b');
 	out.tabStrip_independentInstances_xRanOnce_yNeverRan = runsX === 1 && runsY === 0;
+
+	// new options: panes:false, controls, ariaLabel, activateInitial, juneauTabs, folder-tab panel marker
+	{
+		const calls = [];
+		const w = H.tabStrip([{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], {
+			mode: 'ribbon', panes: false, controls: 'disp', ariaLabel: 'Revenue views', activateInitial: true,
+			onActivate: function (id, pane, reason) { calls.push([id, pane === null || pane === undefined, reason]); }
+		});
+		out.tabStrip_initialFired = calls.length === 1 && calls[0][0] === 'a' && calls[0][1] === true && calls[0][2] === 'initial';
+		out.tabStrip_noPanes = w.querySelectorAll('.juneau-view-helper-tabstrip-panes').length === 0;
+		const btns = w.querySelectorAll('[role="tab"]');
+		out.tabStrip_controls = btns.length === 2 && btns[0].getAttribute('aria-controls') === 'disp' && btns[1].getAttribute('aria-controls') === 'disp';
+		out.tabStrip_ariaLabel = w.querySelector('[role="tablist"]').getAttribute('aria-label') === 'Revenue views';
+		out.tabStrip_btnClass = btns.every(function (b) { return b.className.indexOf('juneau-view-ribbon-btn') >= 0; });
+		w.juneauTabs.activate('b');
+		out.tabStrip_activateReason = calls.length === 2 && calls[1][0] === 'b' && calls[1][2] === 'activate';
+		out.tabStrip_activeId = w.juneauTabs.activeId() === 'b';
+		out.tabStrip_tabId = btns[0].getAttribute('data-tab-id') === 'a' && btns[1].getAttribute('data-tab-id') === 'b';
+		clickTab(w, 'a');
+		out.tabStrip_clickReason = calls[calls.length - 1][2] === 'click';
+		w.juneauTabs.addTab({ id: 'c', label: 'C' });
+		const after = w.querySelectorAll('[role="tab"]');
+		out.tabStrip_addTab = after.length === 3 && after[2].getAttribute('data-tab-id') === 'c';
+		out.tabStrip_selected = after[0].getAttribute('aria-selected') === 'true' && after[1].getAttribute('aria-selected') === 'false';
+	}
+	{
+		const w = H.tabStrip([{ id: 'a', label: 'A', populate: function () {} }, { id: 'b', label: 'B', populate: function () {} }], { mode: 'tab' });
+		out.tabStrip_panelMarker = w.hasAttribute('data-juneau-strip-panel');
+		const w2 = H.tabStrip([{ id: 'a', label: 'A' }], { mode: 'ribbon', panes: false });
+		out.tabStrip_noPanelMarker = !w2.hasAttribute('data-juneau-strip-panel');
+		const lateRuns = [];
+		const w3 = H.tabStrip([{ id: 'a', label: 'A', populate: function () {} }], { mode: 'tab' });
+		w3.juneauTabs.addTab({ id: 'b', label: 'B', populate: function () { lateRuns.push('b'); } });
+		out.tabStrip_addTabLazyPane = lateRuns.length === 0 && w3.querySelectorAll('[role="tabpanel"]').length === 2;
+		w3.juneauTabs.activate('b');
+		out.tabStrip_addTabPopulatesOnActivate = lateRuns.length === 1;
+	}
 })();
 
 // ================================================================================================
@@ -784,6 +825,53 @@ await (async function editableFieldTests() { // NOSONAR javascript:S3776 -- line
 		&& env.document.body.querySelector('.jc-toast').getAttribute('role') === 'alert';
 	H.toast('info-msg', { tone: 'info', timeoutMs: 0 });
 	out.toast_infoRoleIsStatus = env.document.body.querySelector('.jc-toast').getAttribute('role') === 'status';
+})();
+
+// tabStrip reset / resetAll / setLabel / frozen API
+await (async function tabStripResetTests() {
+	const runs = [];
+	const w = H.tabStrip([
+		{ id: 'a', label: 'A', pane: env.el('div') },
+		{ id: 'b', label: 'B', populate: function (pane) { runs.push('b'); pane.textContent = 'run' + runs.length; } },
+		{ id: 'c', label: 'C', populate: function (pane) { runs.push('c'); pane.textContent = 'c' + runs.length; } }
+	]);
+	const api = w.juneauTabs;
+	out.tabReset_frozen = Object.isFrozen(api) && typeof api.reset === 'function' && typeof api.resetAll === 'function' && typeof api.setLabel === 'function';
+	clickTab(w, 'b');
+	clickTab(w, 'a');
+	api.reset('b');
+	out.tabReset_clearsPane = tabPane(w, 'b').textContent === '' && runs.length === 1;
+	clickTab(w, 'b');
+	out.tabReset_repopulatesOnActivate = runs.length === 2 && tabPane(w, 'b').textContent === 'run2';
+	clickTab(w, 'c');
+	clickTab(w, 'a');
+	api.resetAll();
+	out.tabReset_resetAllClears = tabPane(w, 'b').textContent === '' && tabPane(w, 'c').textContent === '';
+	clickTab(w, 'c');
+	const before = runs.length;
+	api.reset('c');
+	out.tabReset_activeRepopulatesNow = runs.length === before + 1;
+	api.setLabel('a', 'Alpha');
+	out.tabReset_setLabel = tabBtn(w, 'a').textContent === 'Alpha';
+	out.tabReset_unknownIdNoop = (function () { try { api.reset('zzz'); api.setLabel('zzz', 'x'); return true; } catch (e) { return false; } })();
+
+	// a stale async populate must not insert after reset
+	let n = 0;
+	let signal1 = null;
+	const w2 = H.tabStrip([
+		{ id: 'a', label: 'A', pane: env.el('div') },
+		{ id: 'b', label: 'B', populate: function (pane, ctx) {
+			const mine = ++n;
+			if (mine === 1) signal1 = ctx.signal;
+			return new Promise(function (res) { setTimeout(function () { if (!(ctx.signal && ctx.signal.aborted)) pane.textContent += 'v' + mine; res(); }, mine === 1 ? 5 : 1); });
+		} }
+	]);
+	clickTab(w2, 'b');
+	w2.juneauTabs.reset('b');
+	clickTab(w2, 'a'); clickTab(w2, 'b');
+	await new Promise(r => setTimeout(r, 30));
+	out.tabReset_abortsPrevious = !!(signal1 && signal1.aborted);
+	out.tabReset_repopulatedAfterResetWhilePending = n === 2 && tabPane(w2, 'b').textContent === 'v2';
 })();
 
 process.stdout.write(JSON.stringify(out));

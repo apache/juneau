@@ -60,7 +60,7 @@ public final class PetsPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec pets() {
-		return PageSpec.create().tab("pets").toolkit("views", "datatables-buttons").table(petsTable(), "Pets");
+		return PageSpec.create().tab("pets").toolkit("views", "datatables-buttons", "datatables-export").table(petsTable(), "Pets");
 	}
 
 	/**
@@ -90,25 +90,25 @@ public final class PetsPageBuilders {
 			.columns(
 				Column.create("id").label("Id"),
 				Column.create("name").label("Name").href("/console/pets/{id}/summary"),
-				Column.create("species").label("Species"),
-				Column.create("status").label("Status").render("pill"),
+				Column.create("species").label("Species").render(PillRenders.species()),
+				Column.create("status").label("Status").render(PillRenders.petStatus()),
 				Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)),
 				Column.create("tags").label("Tags").defaultVisible(false))
 			.rowClass("status", Op.EQ, "SOLD", "is-muted")
-			.ribbon(
-				RibbonItem.optionGroup("status",
-					RibbonItem.option("available").title("Available").column("status").value("$eq(AVAILABLE)"),
-					RibbonItem.option("pending").title("Pending").column("status").value("$eq(PENDING)"))
-					.title("Pet status").deselectable(true).defaultOption("available").group("filter"),
-				RibbonItem.optionGroup("species",
-					RibbonItem.option("mammals").title("Mammals").column("species").value("$in(DOG,CAT,MOUSE,RABBIT)"),
-					RibbonItem.option("others").title("Others").column("species").value("$in(BIRD,FISH,SNAKE)"))
-					.title("Species").deselectable(true).defaultOption("mammals").group("filter"),
-				RibbonItem.dialog("add-pet").title("+ Add pet").symbol("plus")
-					.form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),
-				RibbonItem.export("copy", "csv").optional("excel", "pdf").group("viewing"),
-				RibbonItem.resetDefaults().group("page"),
-				RibbonItem.refresh())
+			.ribbon(Ribbons.standard()
+				.create(RibbonItem.dialog("add-pet").title("+ Add pet").symbol("plus")
+					.form("/console/pets/form").endpoint("/console/pets").method(Method.POST).onSuccess(OnSuccess.REDRAW))
+				.filter(
+					RibbonItem.optionGroup("status",
+						RibbonItem.option("available").title("Available").symbol("circle_check").column("status").value("$eq(AVAILABLE)"),
+						RibbonItem.option("pending").title("Pending").symbol("hourglass").column("status").value("$eq(PENDING)"))
+						.title("Pet status").deselectable(true).defaultOption("available"),
+					RibbonItem.optionGroup("species",
+						RibbonItem.option("mammals").title("Mammals").symbol("paw_print").column("species").value("$in(DOG,CAT,MOUSE,RABBIT)"),
+						RibbonItem.option("others").title("Others").symbol("shapes").column("species").value("$in(BIRD,FISH,SNAKE)"))
+						.title("Species").deselectable(true).defaultOption("mammals"))
+				.export("excel", "pdf")
+				.build())
 			.rowActions(
 				editPetAction(OnSuccess.MERGE_ROW),
 				RowAction.create("delete").label("Delete").endpoint("/console/pets/{id}").method(Method.DELETE)
@@ -125,20 +125,20 @@ public final class PetsPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec sold() {
-		return PageSpec.create().toolkit("views")
+		return PageSpec.create().toolkit("views", "datatables-buttons")
 			.table(TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")
+				.columnConfig(true)
 				.columns(
 					Column.create("id").label("Id"),
 					Column.create("name").label("Name"),
-					Column.create("species").label("Species"),
+					Column.create("species").label("Species").render(PillRenders.species()),
 					Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)))
-				.ribbon(
-					RibbonItem.optionGroup("species",
-						RibbonItem.option("dogs").title("Dogs").column("species").value("$eq(DOG)"),
-						RibbonItem.option("cats").title("Cats").column("species").value("$eq(CAT)"))
-						.title("Species").group("filter"),
-					RibbonItem.resetDefaults().group("page"),
-					RibbonItem.refresh()), "Sold pets");
+				.ribbon(Ribbons.standard()
+					.filter(RibbonItem.optionGroup("species",
+						RibbonItem.option("dogs").title("Dogs").symbol("paw_print").column("species").value("$eq(DOG)"),
+						RibbonItem.option("cats").title("Cats").symbol("shapes").column("species").value("$eq(CAT)"))
+						.title("Species"))
+					.build()), "Sold pets");
 	}
 
 	/**
@@ -172,8 +172,8 @@ public final class PetsPageBuilders {
 				.columns(
 					Column.create("id").label("Id"),
 					Column.create("name").label("Name").render(Render.of("edit").meta("action", "rename").meta("column", "name").meta("input", "text")),
-					Column.create("species").label("Species"),
-					Column.create("status").label("Status").render("pill"),
+					Column.create("species").label("Species").render(PillRenders.species()),
+					Column.create("status").label("Status").render(PillRenders.petStatus()),
 					Column.create("price").label("Price (USD)").render(Render.of("edit").meta("action", "reprice").meta("column", "price").meta("input", "number")))
 				.rowActions(
 					stage("rename", "Rename"),
@@ -201,7 +201,7 @@ public final class PetsPageBuilders {
 					.columns(
 						Column.create("id").label("Order").href(href + "/orders/{id}"),
 						Column.create("shipDate").label("Ship date"),
-						Column.create("status").label("Status").render("pill"))
+						Column.create("status").label("Status").render(PillRenders.orderStatus()))
 					.detail(RowDetail.create(href + "/orders/{id}/detail").title("Order {id}")), "Orders");
 				if (order != null)
 					p.html("order", "Order " + order.getId(),
@@ -213,7 +213,7 @@ public final class PetsPageBuilders {
 				.columns(
 					Column.create("at").label("When").render("timestamp"),
 					Column.create("actor").label("Actor"),
-					Column.create("action").label("Action"),
+					Column.create("action").label("Action").render(PillRenders.auditAction()),
 					Column.create("detail").label("Detail")), "History");
 		}
 		return p;

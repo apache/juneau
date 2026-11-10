@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="store" toolkit="views" init=["/console/dev/cards/petstore-cards.js"]>
+--><@page tab="store" toolkit="views,datatables-buttons,datatables-export" init=["/console/dev/cards/petstore-cards.js"]>
 <@card type="html" id="welcome" title="Welcome to the petstore">
 <div class="jc-prose"><p>Browse pets, place orders and review what changed. Every page here is built from the same
 Juneau console pieces your own app can use.</p>
@@ -24,11 +24,23 @@ Juneau console pieces your own app can use.</p>
   rowType: 'Order',
   dataMode: 'client',
   dataUrl: '/console/store/recent-orders',
+  columnConfig: true,
+  ribbon: [
+    { type: 'search', id: 'search', group: 'search' },
+    { type: 'dialog', id: 'new-order', title: '+ New order', symbol: 'plus', group: 'entity',
+      form: '/console/orders/new-form', endpoint: '/console/orders', method: 'POST', onSuccess: 'redraw' },
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
+  ],
   columns: [
     { key: 'id', label: 'Order', href: '/console/pets/{petId}/orders/{id}' },
     { key: 'petId', label: 'Pet', href: '/console/pets/{petId}/summary' },
     { key: 'shipDate', label: 'Ship date', render: { id: 'date' } },
-    { key: 'status', label: 'Status', render: { id: 'pill' } }
+    { key: 'status', label: 'Status', render: { id: 'pill', meta: { tones: { PLACED: 'info', APPROVED: 'warning', DELIVERED: 'success' } } } }
   ],
   quickStats: { id: 'store', items: [
     { id: 'available', label: 'Available', value: ${qsAvailable?c} },
@@ -47,27 +59,41 @@ Juneau console pieces your own app can use.</p>
 }
 </@card>
 <@card id="revenue" type="kpi" title="Revenue">{label:'Revenue today', dataUrl:'/console/store/kpi/revenue'}</@card>
-<@card type="chart" id="orders-trend" title="Orders, last 30 days" src="/console/store/stats/daily">
-{ kind: 'line', x: { field: 'day', label: 'Day' },
-  series: [ { field: 'placed', label: 'Placed' }, { field: 'delivered', label: 'Delivered', tone: 'ok' } ],
-  onClick: { href: '/console/orders?state=day({day})' } }
+<@card type="switcher" id="revenue-sw" title="Revenue, last 30 days">
+{ initialView: 'chart',
+  views: [
+    { id: 'chart', label: 'Chart', card: { type: 'chart', id: 'revenue-chart', src: '/console/store/stats/revenue',
+        kind: 'line', x: { field: 'day', label: 'Day' }, series: [ { field: 'revenue', label: 'Revenue' } ] } },
+    { id: 'data', label: 'Data', card: { type: 'datatables', id: 'revenue-data', dataMode: 'client', dataUrl: '/console/store/stats/revenue',
+        columns: [ { key: 'day', label: 'Day' }, { key: 'revenue', label: 'Revenue' } ] } } ] }
 </@card>
-<@card type="chart" id="by-species" title="Pets by species" src="/console/store/stats/species">
-{ kind: 'donut', label: 'species', value: 'count', center: 'total' }
+<@card type="switcher" id="orders-sw" title="Orders, last 30 days">
+{ initialView: 'chart',
+  views: [
+    { id: 'chart', label: 'Chart', card: { type: 'chart', id: 'orders-trend', src: '/console/store/stats/daily',
+        kind: 'line', x: { field: 'day', label: 'Day' },
+        series: [ { field: 'placed', label: 'Placed' }, { field: 'delivered', label: 'Delivered', tone: 'ok' } ],
+        onClick: { href: '/console/orders?state=day({day})' } } },
+    { id: 'data', label: 'Data', card: { type: 'datatables', id: 'orders-data', dataMode: 'client', dataUrl: '/console/store/stats/daily',
+        columns: [ { key: 'day', label: 'Day' }, { key: 'placed', label: 'Placed' }, { key: 'delivered', label: 'Delivered' } ] } } ] }
 </@card>
-<@card type="chart" id="by-status" title="Pets by status" src="/console/store/stats/status">
-{ kind: 'bar', x: { field: 'status' }, series: [ { field: 'count', label: 'Pets' } ] }
-</@card>
-<@card type="chart" id="pets-map" title="Pets by species and status" src="/console/store/stats/pets" publishes="pets-map.click">
-{ helper: { kind: 'treemap', groupBy: ['species', 'status'], label: 'name',
-    color: { field: 'status', legend: [
-      { value: 'AVAILABLE', label: 'Available', tone: 'ok' },
-      { value: 'PENDING', label: 'Pending', tone: 'warning' },
-      { value: 'SOLD', label: 'Sold' } ] },
-    tileFields: ['id', 'name', 'species', 'status'] },
-  on: { click: 'pets-map.click' },
-  onClick: { action: { id: 'edit', label: 'Edit', form: '/console/pets/form?id={id}', present: 'dialog',
-    endpoint: '/console/pets/{id}', method: 'PUT', onSuccess: 'redraw' } } }
+<@card type="switcher" id="pets-sw" title="Pets">
+{ initialView: 'species',
+  views: [
+    { id: 'species', label: 'Species', card: { type: 'chart', id: 'by-species', src: '/console/store/stats/species',
+        kind: 'donut', label: 'species', value: 'count', center: 'total' } },
+    { id: 'status', label: 'Status', card: { type: 'chart', id: 'by-status', src: '/console/store/stats/status',
+        kind: 'bar', x: { field: 'status' }, series: [ { field: 'count', label: 'Pets' } ] } },
+    { id: 'both', label: 'Species and status', card: { type: 'chart', id: 'pets-map', src: '/console/store/stats/pets',
+        publishes: [ { topic: 'pets-map.click', retain: false } ], on: { click: 'pets-map.click' },
+        helper: { kind: 'treemap', groupBy: ['species', 'status'], label: 'name',
+          color: { field: 'status', legend: [
+            { value: 'AVAILABLE', label: 'Available', tone: 'ok' },
+            { value: 'PENDING', label: 'Pending', tone: 'warning' },
+            { value: 'SOLD', label: 'Sold' } ] },
+          tileFields: ['id', 'name', 'species', 'status'] },
+        onClick: { action: { id: 'edit', label: 'Edit', form: '/console/pets/form?id={id}', present: 'dialog',
+          endpoint: '/console/pets/{id}', method: 'PUT', onSuccess: 'redraw' } } } } ] }
 </@card>
 <@card type="html" id="hours" title="Store hours" src="/console/store/fragments/hours"/>
 </@page>

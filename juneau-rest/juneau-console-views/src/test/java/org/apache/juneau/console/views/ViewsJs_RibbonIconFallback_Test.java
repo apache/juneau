@@ -132,4 +132,11 @@ class ViewsJs_RibbonIconFallback_Test extends TestBase {
 		var known = (Map<?,?>)report().get("known");
 		assertBean(known, "built,text,empty,aria", "true,,false,Reload it");
 	}
+
+	@Test void a03_optionIconDefaults_hintsCycleAndKeys() {
+		var icons = (Map<?,?>)report().get("icons");
+		assertBean(icons,
+			"hint_pending,hint_case,explicit_wins,cycle_distinct,cycle_wraps,default_key_unchanged,defaults_new,no_tune_for_options",
+			"hourglass,tag,truck,true,true,content_copy,search|link|tune,true");
+	}
 }

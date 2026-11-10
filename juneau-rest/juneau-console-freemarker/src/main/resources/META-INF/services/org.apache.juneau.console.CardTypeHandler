@@ -2,3 +2,4 @@ org.apache.juneau.console.freemarker.DatatablesCardType
 org.apache.juneau.console.freemarker.TerminalCardType
 org.apache.juneau.console.freemarker.ChartCardType
 org.apache.juneau.console.freemarker.JobLogCardType
+org.apache.juneau.console.freemarker.SwitcherCardType

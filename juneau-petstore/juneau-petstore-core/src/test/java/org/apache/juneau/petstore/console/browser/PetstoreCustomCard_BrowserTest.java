@@ -99,7 +99,7 @@ class PetstoreCustomCard_BrowserTest extends TestBase {
 			Map.of("name", "dup", "path", "/console/dev/cards", "allowFailedLoads", true,
 				"actions", List.of(
 					Map.of("waitFor", RENDERED),
-					Map.of("evaluate", "try { window.JuneauConsole.registerCard('kpi', {render(){}}); window.__dup = 'none'; } catch (e) { window.__dup = e.code + ' ' + e.message; }")),
+					Map.of("evaluate", "try { window.JuneauConsole.registerCard('kpi', class extends window.JuneauConsole.Card { render() {} }); window.__dup = 'none'; } catch (e) { window.__dup = e.code + ' ' + e.message; }")),
 				"queries", Map.of("dup", "window.__dup")),
 			Map.of("name", "stubbed", "path", "/console/dev/cards", "allowFailedLoads", true,
 				"actions", List.of(

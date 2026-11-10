@@ -13,7 +13,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@page tab="pets" toolkit="views,datatables-buttons">
+--><@page tab="pets" toolkit="views,datatables-buttons,datatables-export">
 <@card type="datatables" id="pets" title="Pets">
 {
   rowType: 'Pet',
@@ -27,26 +27,30 @@
   columns: [
     { key: 'id', label: 'Id' },
     { key: 'name', label: 'Name', href: '/console/pets/{id}/summary' },
-    { key: 'species', label: 'Species' },
-    { key: 'status', label: 'Status', render: { id: 'pill' } },
+    { key: 'species', label: 'Species', render: { id: 'pill', meta: { categorical: true, categories: { DOG: 1, CAT: 2, BIRD: 4, FISH: 6, SNAKE: 7, RABBIT: 9, MOUSE: 10 } } } },
+    { key: 'status', label: 'Status', render: { id: 'pill', meta: { tones: { AVAILABLE: 'success', PENDING: 'warning', SOLD: 'neutral' } } } },
     { key: 'price', label: 'Price (USD)', render: { id: 'decimal', meta: { places: 2 } } },
     { key: 'tags', label: 'Tags', defaultVisible: false }
   ],
   rowClassRules: [ { field: 'status', op: 'eq', value: 'SOLD', class: 'is-muted' } ],
   ribbon: [
-    { type: 'optionGroup', id: 'status', title: 'Pet status', group: 'filter', deselectable: true, default: 'available', options: [
-      { id: 'available', title: 'Available', column: 'status', value: '$eq(AVAILABLE)' },
-      { id: 'pending', title: 'Pending', column: 'status', value: '$eq(PENDING)' }
-    ] },
-    { type: 'optionGroup', id: 'species', title: 'Species', group: 'filter', deselectable: true, default: 'mammals', options: [
-      { id: 'mammals', title: 'Mammals', column: 'species', value: '$in(DOG,CAT,MOUSE,RABBIT)' },
-      { id: 'others', title: 'Others', column: 'species', value: '$in(BIRD,FISH,SNAKE)' }
-    ] },
+    { type: 'search', id: 'search', group: 'search' },
     { type: 'dialog', id: 'add-pet', title: '+ Add pet', symbol: 'plus', group: 'entity',
       form: '/console/pets/form', endpoint: '/console/pets', method: 'POST', onSuccess: 'redraw' },
-    { type: 'export', group: 'viewing', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
-    { type: 'resetDefaults', group: 'page' },
-    { type: 'refresh' }
+    { type: 'optionGroup', id: 'status', title: 'Pet status', group: 'filter', deselectable: true, default: 'available', options: [
+      { id: 'available', title: 'Available', symbol: 'circle_check', column: 'status', value: '$eq(AVAILABLE)' },
+      { id: 'pending', title: 'Pending', symbol: 'hourglass', column: 'status', value: '$eq(PENDING)' }
+    ] },
+    { type: 'optionGroup', id: 'species', title: 'Species', group: 'filter', deselectable: true, default: 'mammals', options: [
+      { id: 'mammals', title: 'Mammals', symbol: 'paw_print', column: 'species', value: '$in(DOG,CAT,MOUSE,RABBIT)' },
+      { id: 'others', title: 'Others', symbol: 'shapes', column: 'species', value: '$in(BIRD,FISH,SNAKE)' }
+    ] },
+    { type: 'export', id: 'export', group: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+    { type: 'linkButton', id: 'link', group: 'export' },
+    { type: 'collapseAll', id: 'collapse', group: 'viewing' },
+    { type: 'columnSettings', id: 'columns', group: 'viewing' },
+    { type: 'resetDefaults', id: 'reset', group: 'viewing' },
+    { type: 'refresh', id: 'refresh', group: 'page' }
   ],
   rowActions: [
     { id: 'edit', label: 'Edit', form: '/console/pets/form?id={id}', present: 'dialog',

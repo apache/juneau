@@ -39,12 +39,13 @@
 </@card>
 <@card id="how" title="Writing a card type">
 <div class="jc-prose">
-<p>A card type is a JS handler, and optionally a Java class that validates the body and shapes what the handler
-receives. Push handlers onto <code>window.JuneauConsoleCards</code>; the queue works whether your script loads before
+<p>A card type is a JS class extending the console's Card, and optionally a Java class that validates the body and shapes what the handler
+receives. Push classes onto <code>window.JuneauConsoleCards</code>; the queue works whether your script loads before
 or after the console.</p>
-<pre><code>(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['kpi', {
-  render(card, el, ctx) { ... }
-}]);</code></pre>
+<pre><code>class KpiCard extends JuneauConsole.Card {
+  render() { ... }
+}
+(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['kpi', KpiCard]);</code></pre>
 <p>The gauge's Java side is <code>InventoryGaugeCardType</code>, registered with
 <code>ConsoleFreemarkerMixin.create().cardType(new InventoryGaugeCardType())</code>.</p>
 </div>

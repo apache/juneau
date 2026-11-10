@@ -1192,7 +1192,7 @@ async function section(name, fn) {
 			Object.defineProperty(w, 'JuneauConsoleCards', { configurable: true, get: () => v, set: x => {
 				v = x && !Array.isArray(x) && typeof x.push === 'function' ? { push: e => { if (e?.[0] === 'chart') { handler = e[1]; } return x.push(e); } } : x; } });
 		} });
-		const impl = handler.implicit;
+		const impl = handler.implicitTopics;
 		const pub = (zoom, legend) => ({ id: 'q', publishes: [].concat(zoom === undefined ? [] : [{ topic: 'zoom:q', retain: zoom }], legend === undefined ? [] : [{ topic: 'legend:q', retain: legend }]) });
 		return { none: impl(pub()), zoom: impl(pub(true)), both: impl(pub(true, true)), mixed: impl(pub(false, true)), off: impl(pub(false, false)) };
 	});
@@ -1417,15 +1417,17 @@ async function section(name, fn) {
 	function captureHandler() {
 		const cap = { ctxs: {}, handler: null };
 		cap.before = w => {
+			cap.w = w;
 			const arr = [];
 			const orig = arr.push;
 			arr.push = function (e) {
-				const h = e[1];
-				cap.handler = h;
-				return orig.call(this, [e[0], { ...h, render: (c, el, ctx) => { cap.ctxs[c.id] = ctx; return h.render(c, el, ctx); } }]);
+				cap.handler = e[1];
+				return orig.call(this, e);
 			};
 			w.JuneauConsoleCards = arr;
 		};
+		// Runs the class's refresh() on the card's live instance with a changed spec.
+		cap.refresh = (id, spec, el) => { const i = cap.w.JuneauConsole.cardApi(id); i.spec = spec; i.el = el; return i.refresh(); };
 		return cap;
 	}
 	const actPage = async (cards, h, extra) => page({ topics: [{ topic: 'app.act', retain: false }], cards: cards }, Object.assign(withHook(h), extra || {}));
@@ -1661,7 +1663,7 @@ async function section(name, fn) {
 			onClick: { action: ACT }, topicActions: [{ topic: 'app.mark', action: ACT }] };
 		const r = await page({ topics: [{ topic: 'app.act', retain: false }, { topic: 'app.mark', retain: false }, { topic: 'app.mark2', retain: false }],
 			cards: [card(base)] }, Object.assign(withHook(h), { chartsFirst: true, before: w => { withHook(h).before(w); cap.before(w); } }));
-		const refresh = async next => { await cap.handler.refresh(card(next), host(r, 'rb'), cap.ctxs.rb); await flush(); };
+		const refresh = async next => { await cap.refresh('rb', card(next), host(r, 'rb')); await flush(); };
 		const ends = () => h.runs.map(x => x.a.endpoint);
 		inst(r, 'rb').fire('click', PT);
 		await flush();
@@ -1696,10 +1698,10 @@ async function section(name, fn) {
 			Object.assign(withHook(h), { chartsFirst: true, before: w => { withHook(h).before(w); cap.before(w); } }));
 		const plot = () => one(r, 'ri', '.jc-chart-plot');
 		const out = { first: plot().getAttribute('role') };
-		await cap.handler.refresh(card({ id: 'ri', ...ACT_CLICK }), host(r, 'ri'), cap.ctxs.ri);
+		await cap.refresh('ri', card({ id: 'ri', ...ACT_CLICK }), host(r, 'ri'));
 		await flush();
 		out.added = { role: plot().getAttribute('role'), live: !!one(r, 'ri', '.jc-chart-live') };
-		await cap.handler.refresh(card(plain), host(r, 'ri'), cap.ctxs.ri);
+		await cap.refresh('ri', card(plain), host(r, 'ri'));
 		await flush();
 		out.removed = { role: plot().getAttribute('role'), live: !!one(r, 'ri', '.jc-chart-live') };
 		out.errors = r.errors;
@@ -1763,6 +1765,24 @@ async function section(name, fn) {
 		i.fire('click', PT);
 		await flush();
 		return { held, after: h.runs.length, errors: r.errors };
+	});
+
+	// Public mount: rows drawn into a bare element through the card pipeline, and the refusals.
+	await section('mount', async () => {
+		const r = await page({ cards: [] });
+		const el = r.doc.createElement('div');
+		r.doc.body.appendChild(el);
+		const res = await r.w.JuneauCharts.mount(el, { kind: 'line', x: 'day', series: [{ field: 'placed', label: 'Placed' }] }, ROWS);
+		const i = r.fake.instances.findLast(x => x.el && el.contains(x.el) && !x.disposed);
+		const o = i ? lastOption(i) : null;
+		const bad = await r.w.JuneauCharts.mount(null, { kind: 'line' }, []).then(() => 'resolved', e => String(e.message));
+		const noEc = await page({ cards: [] }, { noEcharts: true });
+		const el2 = noEc.doc.createElement('div');
+		noEc.doc.body.appendChild(el2);
+		const failed = await noEc.w.JuneauCharts.mount(el2, { kind: 'line', x: 'day', series: [{ field: 'placed' }] }, ROWS).then(() => 'resolved', () => 'rejected');
+		return { returned: res !== null && typeof res === 'object', drawn: !!i, seriesCount: o ? o.series.length : -1,
+			placed: i ? col(i, 'placed') : null, bad, failed, errorShown: !!noEc.doc.getElementById && el2.querySelectorAll('.jc-card-error').length,
+			live: r.w.JuneauCharts.__liveCount(), errors: r.errors };
 	});
 
 	// A decorator-timeout timer for a draw that never settles would hold the process for its full 10 s; exit once the

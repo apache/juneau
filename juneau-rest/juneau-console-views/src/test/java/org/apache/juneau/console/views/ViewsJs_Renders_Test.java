@@ -364,6 +364,55 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertBean(r, "pill_toneV1NoClass", "true");
 	}
 
+	@Test void d03b_pill_perValueTones() {
+		var r = report();
+		assertEquals("jc-pill tag status available is-success", r.get("pill_t_success"));
+		assertEquals("jc-pill tag status sold is-neutral", r.get("pill_t_neutralExplicit"));
+		assertEquals("jc-pill tag status other is-neutral", r.get("pill_t_unmappedNeutral"));
+		// An off-palette tone name is ignored; the column uses tones, so the value is the neutral chip.
+		assertEquals("jc-pill tag status bad is-neutral", r.get("pill_t_offPaletteToneIsNeutral"));
+		// Pure legacy pills paint nothing; the column-wide tone now paints the pill; the dot keeps its class.
+		assertEquals("jc-pill tag status whatever", r.get("pill_legacyNoNewKeys"));
+		assertEquals("jc-pill tag status whatever is-warning", r.get("pill_legacyColumnTone"));
+		assertEquals(true, r.get("pill_dotKeepsColumnTone"));
+	}
+
+	@Test void d03c_pill_categoricalPrecedence() {
+		var r = report();
+		assertEquals("jc-pill tag status dog is-cat-1", r.get("pill_c_pin"));
+		assertEquals("jc-pill tag status dog is-cat-10", r.get("pill_c_pinBadSlotFallsToHash"));
+		assertEquals("jc-pill tag status dog is-cat-10", r.get("pill_c_pinNonIntFallsToHash"));
+		assertEquals("jc-pill tag status bird is-cat-3", r.get("pill_c_hash"));
+		assertEquals("jc-pill tag status dog is-error", r.get("pill_c_tonesBeatCategorical"));
+		assertEquals("jc-pill tag status bird is-cat-4", r.get("pill_c_categoriesBeatHash"));
+		assertEquals("jc-pill tag status bird is-cat-3", r.get("pill_c_categoricalBeatsColumnTone"));
+		assertEquals("jc-pill tag status zzz is-neutral", r.get("pill_c_pinOnlyNoCategoricalUnmapped"));
+	}
+
+	@Test void d03d_pill_prototypeKeysAreInert() {
+		var r = report();
+		// Each key is a plain value (neutral chip, because the column declares tones/categories), never a lookup hit.
+		assertEquals(
+			"jc-pill tag status __proto__ is-neutral|jc-pill tag status constructor is-neutral|jc-pill tag status tostring is-neutral|jc-pill tag status hasownproperty is-neutral",
+			r.get("pill_proto"));
+	}
+
+	@Test void d03e_pill_hashVectorsAndPalette() {
+		var r = report();
+		assertEquals("2,10,6,3,6,3,10,4,1,6,1", r.get("pill_slotVectors"));
+		assertEquals(10, ((Number)r.get("pill_slotCount")).intValue());
+		assertEquals("error,info,neutral,success,warning", r.get("pill_tones"));
+	}
+
+	@Test void d03f_pill_hashParityWithJava() {
+		var r = report();
+		var values = new String[] {"BIRD", "Pet", "caf\u00e9", "\ud83d\udc36", "DOG"};
+		var java = new StringJoiner(",");
+		for (var v : values)
+			java.add(String.valueOf(PillPalette.slot(v)));
+		assertEquals(java.toString(), r.get("pill_slotParity"));
+	}
+
 	/**
 	 * The {@code progress} renderer's {@code warn}/{@code exceeds} meta are numeric THRESHOLDS that happen to share two
 	 * spellings with the retired tone names; they stay thresholds.  The bar STATE they drive is painted with the

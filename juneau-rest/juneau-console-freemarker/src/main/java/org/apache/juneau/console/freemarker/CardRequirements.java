@@ -24,7 +24,7 @@ import java.util.*;
  * The toolkit packs each card type requires, plus the per-card {@code requires=} check.
  *
  * <p>
- * Built-in mappings: {@code datatables} &rarr; {@code "datatables-glue"}, {@code terminal} &rarr; {@code "terminal"}, {@code chart} &rarr; {@code "charts"}, {@code job-log} &rarr; {@code "joblog"}.  Apps append more through
+ * Built-in mappings: {@code datatables} &rarr; {@code "datatables-glue"}, {@code terminal} &rarr; {@code "terminal"}, {@code chart} &rarr; {@code "charts"}, {@code job-log} &rarr; {@code "joblog"}, {@code switcher} &rarr; {@code "switcher"}.  Apps append more through
  * {@code ConsoleFreemarkerMixin.Builder.cardRequires(...)}.
  *
  * @since 10.0.0
@@ -46,7 +46,7 @@ final class CardRequirements {
 	}
 
 	/**
-	 * @param type The card type ({@code html}, {@code datatables}, {@code terminal-view}, {@code terminal}).
+	 * @param type The card type ({@code html}, {@code datatables}, {@code terminal-view}, {@code terminal}, {@code switcher}).
 	 * @return The packs the type requires, in order.
 	 */
 	List<String> forType(String type) {
@@ -99,6 +99,7 @@ final class CardRequirements {
 			add("terminal", ToolkitPackRegistry.PACK_TERMINAL);
 			add("chart", ToolkitPackRegistry.PACK_CHARTS);
 			add("job-log", ToolkitPackRegistry.PACK_JOBLOG);
+			add("switcher", ToolkitPackRegistry.PACK_SWITCHER);
 		}
 
 		Builder add(String type, String...names) {

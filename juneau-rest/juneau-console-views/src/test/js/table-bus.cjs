@@ -414,15 +414,19 @@ function recorder(cardId) {
 	const h = reg.length ? reg[0][1] : {};
 	out.handler = {
 		ops: J(Object.keys(h.ops || {})), roles: J(Object.keys(h.roles || {})),
-		implicitIsTableBus: h.implicit === TB.implicitTopics, filterRoleIsTableBus: h.roles?.filter === TB.cardFilterRole
+		implicitIsTableBus: J(h.implicitTopics({ id: 'q', type: 'datatables', table: {} })) === J(TB.implicitTopics({ id: 'q', type: 'datatables', table: {} })), filterRoleIsTableBus: h.roles?.filter === 'filter' && typeof h.prototype.filter === 'function'
 	};
 	const realMount = NS.card.mountDatatables;
 	NS.card.mountDatatables = function () { return 'mounted'; };
 	const rcard = { id: 'rc', type: 'datatables', table: { dataUrl: '/x' } };
 	const rel = env.el('div');
-	const rend = h.render(rcard, rel, { publish: function () {}, subscribe: function () {} });
+	const inst = Object.create(h.prototype);
+	inst._ctx = { publish: function () {}, subscribe: function () {} };
+	inst.el = rel;
+	inst.spec = rcard;
+	const rend = inst.render();
 	out.render = { result: rend, stamped: rel.__juneauBus ? rel.__juneauBus.cardId : null };
-	h.destroy(rcard, rel);
+	inst.destroy();
 	out.render.afterDestroy = rel.__juneauBus === undefined ? 'cleared' : 'kept';
 	NS.card.mountDatatables = realMount;
 	c.host.querySelector('table[data-juneau-view]');

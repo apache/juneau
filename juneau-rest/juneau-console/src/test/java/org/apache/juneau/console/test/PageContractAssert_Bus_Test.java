@@ -78,4 +78,21 @@ class PageContractAssert_Bus_Test extends TestBase {
 			""");
 		PageContractAssert.assertPage(two).subscribes("b", "ssc.focus", "filter").subscribes("b", "ssc.focus", "refresh");
 	}
+
+	private static final String NESTED = page("""
+		{"contractVersion":"1","title":"t","nav":[],"activeNav":[],
+		 "cards":[{"id":"sw","type":"switcher","views":[
+		   {"id":"v","label":"V","sections":[{"id":"s","label":"S","card":{"id":"c","type":"chart","helper":{"kind":"line"},"publishes":[{"topic":"c.click","retain":false}]}}]}]}]}
+		""");
+
+	@Test void c01_nestedCardLookups() {
+		PageContractAssert.assertPage(NESTED)
+			.hasCard("c", "chart")
+			.hasCardKey("c", "/helper/kind", "line")
+			.hasNestedCard("sw", "c", "chart")
+			.publishes("c", "c.click");
+		var a = PageContractAssert.assertPage(NESTED);
+		assertThrows(AssertionError.class, () -> a.hasNestedCard("sw", "nope", "chart"));
+		assertThrows(AssertionError.class, () -> a.hasCardOrder("sw", "c"));
+	}
 }

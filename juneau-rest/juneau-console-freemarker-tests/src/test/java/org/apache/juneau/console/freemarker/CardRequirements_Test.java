@@ -34,6 +34,7 @@ class CardRequirements_Test extends TestBase {
 		assertList(r.forType("terminal"), "terminal");
 		assertList(r.forType("chart"), "charts");
 		assertList(r.forType("job-log"), "joblog");
+		assertList(r.forType("switcher"), "switcher");
 		assertEmpty(r.forType("html"));
 		assertEmpty(r.forType("terminal-view"));
 	}

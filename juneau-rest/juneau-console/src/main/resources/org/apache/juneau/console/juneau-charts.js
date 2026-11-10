@@ -2340,8 +2340,8 @@
 		return runs.length ? Promise.all(runs).then(() => undefined) : undefined;
 	}
 
-	const ops = {};
-	for (const op of OPS) ops[op] = (cmd, card, el) => runOp(op, cmd, el);
+	const OP_METHODS = {};
+	for (const op of OPS) OP_METHODS[op] = "op$" + op;
 
 	// ---- J6. render, refresh, destroy ----
 
@@ -2518,11 +2518,6 @@
 		};
 		states.set(el, st);
 		live.add(st);
-		ctx.setApi({
-			export: (type, opts) => exportImage(st, type, opts),
-			getOption: () => st.marked ? copyOption(st.marked) : null,
-			chart: () => st.inst
-		});
 		wireActions(st);
 		aliasOnConsole();
 		const ec = window.echarts;
@@ -2630,7 +2625,62 @@
 		}
 	}
 
+	let mountSeq = 0;
+	// The abort controller of each element drawn through mount(), so unmount() can stop its in-flight work.
+	const mountCtls = new WeakMap();
+
+	// Draws `rows` (plain records) into `el` as a chart described by `card` (the chart-card fields: kind, x, series, height, ...),
+	// through the same render pipeline a chart card uses, with no page bus and no card shell.  Returns the render promise;
+	// a missing element or ECharts is a rejection, never a half-built chart.
+	function mount(el, card, rows) {
+		if (!el || el.nodeType !== 1 || typeof el.appendChild !== "function")
+			return Promise.reject(new Error("JuneauCharts.mount needs an element to draw into"));
+		if (!isObj(card)) return Promise.reject(new Error("JuneauCharts.mount needs a chart description"));
+		const doc = el.ownerDocument || document;
+		const spec = { ...card, id: typeof card.id === "string" && card.id ? card.id : "mount-" + (++mountSeq), type: "chart",
+			data: Array.isArray(rows) ? rows.slice() : [] };
+		delete spec.src;
+		delete spec.source;
+		delete spec.refreshMs;
+		const ctl = typeof AbortController === "function" ? new AbortController() : null;
+		if (ctl) mountCtls.set(el, ctl);
+		const ctx = {
+			document: doc,
+			signal: ctl ? ctl.signal : undefined,
+			publish: () => {},
+			subscribe: () => () => {},
+			refresh: () => {},
+			every: () => ({ stop: () => {} }),
+			onReady: fn => fn(),
+			paintLoading: target => { target.textContent = ""; },
+			paintError: (...args) => {
+				const t = args.length > 1 ? args[0] : el;
+				const box = doc.createElement("div");
+				box.className = "jc-card-error";
+				box.setAttribute("role", "alert");
+				box.textContent = msgOf(args.at(-1));
+				t.appendChild(box);
+			}
+		};
+		try {
+			return Promise.resolve(render(spec, el, ctx)).then(() => states.get(el)?.inst || null);
+		} catch (e) {
+			return Promise.reject(e);
+		}
+	}
+
+	// Releases a chart drawn by mount(): the instance, its resize observer, its listeners and any in-flight work.
+	// A no-op for an element that holds no mounted chart.
+	function unmount(el) {
+		if (!el || typeof el !== "object") return;
+		const ctl = mountCtls.get(el);
+		if (ctl) { mountCtls.delete(el); ctl.abort(); }
+		teardown(el);
+	}
+
 	const api = Object.freeze({
+		mount: mount,
+		unmount: unmount,
 		fn: registryApi("fn"),
 		decorator: registryApi("decorator"),
 		parser: registryApi("parser"),
@@ -2666,7 +2716,38 @@
 	window.JuneauConsoleCharts = { push: queueEntry };
 	queued.forEach(queueEntry);
 
+	/** The chart card: one ECharts instance per card, driven by the page bus (the `data` role and the chart ops). */
+	class ChartCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) {
+		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
+		static roles = { data: "dataRole" };
+		static ops = OP_METHODS;
+		static implicitTopics(spec) { return implicit(spec); }
+
+		render() { return render(this.spec, this.el, this._ctx); }
+		refresh() { return refresh(this.spec, this.el, this._ctx); }
+		destroy() { destroy(this.spec, this.el); }
+
+		/** Renders the chart to an image (PNG or SVG data URL), or to a download when `opts` asks for it. */
+		export(type, opts) {
+			const st = states.get(this.el);
+			return st ? exportImage(st, type, opts) : undefined;
+		}
+		/** A copy of the option last drawn, or null before the first draw. */
+		getOption() {
+			const st = states.get(this.el);
+			return st && st.marked ? copyOption(st.marked) : null;
+		}
+		/** The live ECharts instance, or null before the first draw. */
+		chart() {
+			const st = states.get(this.el);
+			return st ? st.inst : null;
+		}
+
+		dataRole(payload, meta) { return onHandle(payload, meta, this.spec, this.el); }
+	}
+	for (const op of OPS)
+		ChartCard.prototype[OP_METHODS[op]] = function (cmd) { return runOp(op, cmd, this.el); };
+
 	window.JuneauConsoleCards = window.JuneauConsoleCards || [];
-	window.JuneauConsoleCards.push(["chart",
-		{ render: render, refresh: refresh, destroy: destroy, roles: { data: onHandle }, ops: ops, implicit: implicit }]);
+	window.JuneauConsoleCards.push(["chart", ChartCard]);
 })();

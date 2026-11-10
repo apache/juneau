@@ -1479,6 +1479,10 @@
 		ctx._configVisibleTabs = null;
 		ctx._configResetBtn = null;
 		ctx._configDragKey = null;
+		ctx._configDragFrom = null;
+		ctx._configDetailEl = null;
+		ctx._configDetailKey = null;
+		ctx._configSavedBar = null;
 	}
 
 	/**
@@ -1493,6 +1497,31 @@
 			backdrop.remove();
 			clearChooserRefs(ctx);
 		}
+	}
+
+	const DETAIL_DEFAULT_TEXT = "Click a column to see details.";
+
+	/** One-line facts about a catalog column (plain text; the caller paints it with textContent). */
+	function columnDetailText(col) {
+		if (!col) return DETAIL_DEFAULT_TEXT;
+		const facts = [columnName(col), String(col.data)];
+		facts.push(col.orderable === false ? "not sortable" : "sortable");
+		facts.push(col.search != null || col.searchable === true ? "searchable" : "not searchable");
+		if (Array.isArray(col.formats) && col.formats.length) facts.push("formats: " + col.formats.join("/"));
+		facts.push(col.defaultVisible === false && !col.pinned ? "hidden by default" : "shown by default");
+		if (col.pinned) facts.push("pinned");
+		let text = facts.join(" \u00b7 ");
+		if (col.description) text += " \u2014 " + col.description;
+		return text;
+	}
+
+	/** Shows the facts for the column {@code dataKey} (or the default hint) in the dialog's detail strip. */
+	function paintColumnDetail(ctx, dataKey) {
+		const el = ctx._configDetailEl;
+		if (!el) return;
+		ctx._configDetailKey = dataKey == null ? null : dataKey;
+		const col = dataKey == null ? null : currentCatalog(ctx).find(function (c) { return c?.data === dataKey; });
+		paintUserText(el, columnDetailText(col));
 	}
 
 	function currentCatalog(ctx) {
@@ -1537,6 +1566,7 @@
 	function renderChooserColumnList(ctx) {
 		renderSelectedColumns(ctx);
 		renderAvailableColumns(ctx);
+		paintColumnDetail(ctx, ctx._configDetailKey);
 	}
 
 	function renderSelectedColumns(ctx) {
@@ -1556,19 +1586,65 @@
 	}
 
 	/** Moves the shown column one place up or down (the keyboard alternative to dragging). */
+	/** Moves focus to the drag handle of the selected-column row {@code dataKey} (after a repaint). */
+	function focusSelectedHandle(ctx, dataKey) {
+		const rows = ctx._configListEl?.querySelectorAll?.(".juneau-config-col-row") || [];
+		const row = Array.prototype.find.call(rows, function (r) { return r.dataset.col === dataKey; });
+		row?.querySelector?.(".juneau-config-col-handle")?.focus?.();
+	}
+
 	function nudgeSelectedColumn(ctx, dataKey, delta) {
 		const seq = selectedColumnKeys(ctx._configDraft);
 		const target = seq[seq.indexOf(dataKey) + delta];
 		if (target == null || !reorderSelectedColumn(ctx._configDraft, dataKey, target, delta > 0)) return;
 		markDirty(ctx);
 		renderSelectedColumns(ctx);
-		ctx._configListEl?.querySelector?.(".juneau-config-col-row[data-col=\"" + dataKey + "\"] .juneau-config-col-handle")?.focus?.();
+		focusSelectedHandle(ctx, dataKey);
+	}
+
+	/**
+	 * Applies a drop of the column being dragged.  A column dragged from the Available pane is shown first (appended),
+	 * then placed before/after {@code targetKey} when one is given.  Returns whether the draft changed.
+	 */
+	function dropDraggedColumn(ctx, targetKey, after) {
+		const key = ctx._configDragKey;
+		const from = ctx._configDragFrom;
+		ctx._configDragKey = null;
+		ctx._configDragFrom = null;
+		if (key == null) return false;
+		const draft = ctx._configDraft;
+		if (from === "available") {
+			const added = addColumnToView(draft, key);
+			const moved = targetKey != null && reorderSelectedColumn(draft, key, targetKey, after);
+			return added || moved;
+		}
+		return targetKey != null && reorderSelectedColumn(draft, key, targetKey, after);
+	}
+
+	/** The right pane's empty space accepts an Available-row drop and appends it. */
+	function wireListDrop(ctx, list) {
+		list.addEventListener("dragover", function (e) {
+			if (ctx._configDragFrom !== "available") return;
+			e.preventDefault?.();
+			if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
+		});
+		list.addEventListener("drop", function (e) {
+			if (ctx._configDragKey == null) return;
+			e.preventDefault?.();
+			const droppedKey = ctx._configDragKey;
+			if (dropDraggedColumn(ctx, null, false)) {
+				markDirty(ctx);
+				renderChooserColumnList(ctx);
+				focusSelectedHandle(ctx, droppedKey);
+			}
+		});
 	}
 
 	function wireRowDrag(ctx, row, col) {
 		row.setAttribute("draggable", "true");
 		row.addEventListener("dragstart", function (e) {
 			ctx._configDragKey = col.data;
+			ctx._configDragFrom = "selected";
 			if (e?.dataTransfer) {
 				e.dataTransfer.effectAllowed = "move";
 				e.dataTransfer.setData("text/plain", String(col.data));
@@ -1577,6 +1653,7 @@
 		});
 		row.addEventListener("dragend", function () {
 			ctx._configDragKey = null;
+			ctx._configDragFrom = null;
 			row.classList.remove("juneau-config-col-dragging");
 		});
 		row.addEventListener("dragover", function (e) {
@@ -1585,15 +1662,16 @@
 			if (e.dataTransfer) e.dataTransfer.dropEffect = "move";
 		});
 		row.addEventListener("drop", function (e) {
-			const from = ctx._configDragKey;
-			if (from == null) return;
+			if (ctx._configDragKey == null) return;
 			e.preventDefault?.();
-			ctx._configDragKey = null;
+			e.stopPropagation?.();
 			const rect = typeof row.getBoundingClientRect === "function" ? row.getBoundingClientRect() : null;
 			const after = !!rect && typeof e.clientY === "number" && e.clientY > rect.top + rect.height / 2;
-			if (reorderSelectedColumn(ctx._configDraft, from, col.data, after)) {
+			const droppedKey = ctx._configDragKey;
+			if (dropDraggedColumn(ctx, col.data, after)) {
 				markDirty(ctx);
-				renderSelectedColumns(ctx);
+				renderChooserColumnList(ctx);
+				focusSelectedHandle(ctx, droppedKey);
 			}
 		});
 	}
@@ -1602,17 +1680,30 @@
 	 * One selected-column grid row: drag handle, name, label override, format, spacer, remove.  Every user-controlled
 	 * string goes through {@code paintUserText} / {@code paintUserInput}.
 	 */
+	/** A decorative grip glyph (`drag_handle`, falling back to a text bar when the icon registry or DOMParser is absent). */
+	function buildGrip() {
+		const g = document.createElement("span");
+		g.className = "juneau-config-grip";
+		g.setAttribute("aria-hidden", "true");
+		paintUserText(g, "≡");
+		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon("drag_handle") : null;
+		paintChooserIcon(g, markup);
+		return g;
+	}
+
 	function buildChooserRow(ctx, col, draft) {
 		const row = document.createElement("div");
 		row.className = "juneau-config-col-row";
 		row.dataset.col = col.data;
 		wireRowDrag(ctx, row, col);
+		row.addEventListener("click", function () { paintColumnDetail(ctx, col.data); });
+		row.addEventListener("focusin", function () { paintColumnDetail(ctx, col.data); });
 
 		const handle = document.createElement("button");
 		handle.type = "button";
 		handle.className = "juneau-config-col-handle";
 		handle.setAttribute("aria-label", "Move column " + columnName(col) + " (arrow keys)");
-		paintUserText(handle, "⋮⋮");
+		handle.appendChild(buildGrip());
 		handle.addEventListener("keydown", function (e) {
 			const delta = { ArrowUp: -1, ArrowDown: 1 }[e?.key];
 			if (!delta) return;
@@ -1720,6 +1811,7 @@
 		const list = ctx._configAvailListEl;
 		if (!list || !row) return;
 		ctx._configAvailSelected = row.dataset.col;
+		paintColumnDetail(ctx, row.dataset.col);
 		Array.prototype.forEach.call(list.querySelectorAll(".juneau-config-avail"), function (r) {
 			const on = r === row;
 			r.setAttribute("aria-selected", on ? "true" : "false");
@@ -1745,7 +1837,24 @@
 		row.setAttribute("role", "option");
 		row.setAttribute("aria-selected", col.data === ctx._configAvailSelected ? "true" : "false");
 		row.tabIndex = tabStop ? 0 : -1;
-		paintUserText(row, columnName(col));
+		row.setAttribute("draggable", "true");
+		row.appendChild(buildGrip());
+		const rowName = document.createElement("span");
+		rowName.className = "juneau-config-avail-name";
+		paintUserText(rowName, columnName(col));
+		row.appendChild(rowName);
+		row.addEventListener("dragstart", function (e) {
+			ctx._configDragKey = col.data;
+			ctx._configDragFrom = "available";
+			if (e?.dataTransfer) {
+				e.dataTransfer.effectAllowed = "move";
+				e.dataTransfer.setData("text/plain", String(col.data));
+			}
+		});
+		row.addEventListener("dragend", function () {
+			ctx._configDragKey = null;
+			ctx._configDragFrom = null;
+		});
 		row.addEventListener("click", function () { selectAvailableRow(ctx, row); });
 		row.addEventListener("dblclick", function () { addAvailableColumn(ctx, col.data); });
 		row.addEventListener("keydown", function (e) {
@@ -1768,14 +1877,14 @@
 		const availPane = document.createElement("div");
 		availPane.className = "juneau-config-avail-pane";
 		const availTitle = document.createElement("div");
-		availTitle.className = "juneau-config-pane-title";
+		availTitle.className = "juneau-config-pane-title juneau-config-sr-only";
 		availTitle.id = "juneau-config-" + seq + "-avail-title";
 		paintUserText(availTitle, "Available columns");
 		availPane.appendChild(availTitle);
 		const find = document.createElement("input");
 		find.type = "search";
 		find.className = "juneau-config-find";
-		find.placeholder = "Find";
+		find.placeholder = "Find...";
 		find.setAttribute("aria-label", "Find columns");
 		find.addEventListener("input", function () { renderAvailableColumns(ctx); });
 		ctx._configFindEl = find;
@@ -1803,9 +1912,20 @@
 		const list = document.createElement("div");
 		list.className = "juneau-config-col-list";
 		ctx._configListEl = list;
+		wireListDrop(ctx, list);
 		selPane.appendChild(list);
 		panes.appendChild(selPane);
-		return panes;
+		const wrap = document.createElement("div");
+		wrap.className = "juneau-config-view-tab";
+		wrap.appendChild(panes);
+		const detail = document.createElement("div");
+		detail.className = "juneau-config-detail";
+		detail.setAttribute("role", "status");
+		detail.setAttribute("aria-live", "polite");
+		ctx._configDetailEl = detail;
+		paintUserText(detail, DETAIL_DEFAULT_TEXT);
+		wrap.appendChild(detail);
+		return wrap;
 	}
 
 	function fillViewSelect(ctx, listing) {
@@ -1818,6 +1938,7 @@
 		sel.appendChild(defOpt);
 		const views = listing?.views ? listing.views : [];
 		ctx._configViewNames = [];
+		if (ctx._configSavedBar) ctx._configSavedBar.dataset.compact = views.length ? "false" : "true";
 		views.forEach(function (v) {
 			const n = (v?.name != null) ? String(v.name) : String(v);
 			ctx._configViewNames.push(n);
@@ -2307,6 +2428,23 @@
 	}
 
 	/**
+	 * Seeds {@code ctx._configDraft} once: the last-applied View Settings when present (the memoized read shared with
+	 * {@code go()}'s restore), else catalog defaults.  A schemaVersion mismatch (or missing/non-object blob) discards
+	 * the whole blob and arms a one-time notice, shown by {@code openChooser}; {@code readViewSettings} deleting the
+	 * blob on detection is what makes it "once".  Also takes the clean snapshot the dirty check compares against.
+	 */
+	function seedChooserDraft(table, ctx) {
+		if (ctx._configDraft == null) {
+			const resolved = resolveLastAppliedViewSettings(table, ctx);
+			ctx._configDraft = resolved.draft != null ? resolved.draft : defaultDraftForCtx(ctx);
+			ctx._configResetNotice = !!resolved.reset;
+			ctx._configDirty = false;
+		}
+		if (ctx._configCleanSnapshot == null)
+			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
+	}
+
+	/**
 	 * The toolbar's Reset: puts {@code table} back on its built-in Default view (columns, sort, search and options)
 	 * and applies it at once, with no dialog.  Clears the active saved-view name (best-effort, like the chooser's
 	 * own select) and never touches chooser DOM, so it works whether or not the View Settings dialog was ever opened.
@@ -2333,21 +2471,7 @@
 			NS.init.renderDialogDepthRefusal?.(ctx);
 			return;
 		}
-		if (!ctx._configDraft) {
-			// Seed the dialog from the last-applied View Settings when present, else catalog defaults.  A
-			// schemaVersion mismatch (or missing/non-object blob) discards the whole blob and shows a one-time
-			// notice rather than silently reverting; readViewSettings deleting the blob on
-			// detection is what makes the notice "once" - a later re-open finds nothing stored, not a mismatch.
-			// Routed through the shared helper so this is the SAME read `go()`'s construction-time restore
-			// already consumed - never a second independent read of the same blob.
-			const resolved = resolveLastAppliedViewSettings(table, ctx);
-			ctx._configDraft = resolved.draft != null
-				? resolved.draft
-				: draftFromSavedView(currentCatalog(ctx), null, ctxDefaultOrder(ctx));
-			ctx._configResetNotice = resolved.reset;
-		}
-		if (ctx._configCleanSnapshot == null)
-			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
+		NS.config.seedChooserDraft(table, ctx);
 		ctx._configVisibleTabs = visibleConfigTabs(ctx.viewDef);
 
 		const seq = ++configDialogSeq;
@@ -2362,12 +2486,12 @@
 
 		const resetBtn = document.createElement("button");
 		resetBtn.type = "button";
-		resetBtn.className = "jc-btn jc-btn-link juneau-config-reset";
+		resetBtn.className = "jc-btn juneau-config-reset";
 		paintUserText(resetBtn, "Reset to defaults");
 		resetBtn.addEventListener("click", function () { resetDraftToDefaults(ctx); });
 
 		const ui = NS.init.buildDialogOverlay({
-			title: "View Settings", nav: "folder", confirmLabel: "Apply", body: body, leadActions: [resetBtn]
+			title: "View Settings", titleIcon: "settings", nav: "folder", confirmLabel: "Apply", body: body, leadActions: [resetBtn]
 		}, null, table, null, ctx, "config-" + seq);
 		const backdrop = ui.backdrop;
 		const dialog = ui.dialog;
@@ -2518,6 +2642,8 @@
 	function buildSavedViewsBar(table, ctx, idPrefix) {
 		const bar = document.createElement("div");
 		bar.className = "juneau-config-saved-bar";
+		bar.dataset.compact = "true";
+		ctx._configSavedBar = bar;
 
 		const sel = document.createElement("select");
 		sel.className = "juneau-config-view-select";
@@ -2538,13 +2664,45 @@
 		});
 		bar.appendChild(sel);
 
+		const more = document.createElement("button");
+		more.type = "button";
+		more.className = "jc-btn juneau-config-saved-more";
+		more.setAttribute("aria-label", "View actions");
+		more.setAttribute("aria-expanded", "false");
+		paintUserText(more, "\u2026");
+		const menu = document.createElement("div");
+		menu.className = "juneau-config-saved-menu";
+		const outsideClick = function (e) {
+			if (!bar.contains(e.target)) setMenuOpen(false, false);
+		};
+		const setMenuOpen = function (open, refocus) {
+			menu.dataset.open = open ? "true" : "false";
+			more.setAttribute("aria-expanded", open ? "true" : "false");
+			document.removeEventListener("click", outsideClick);
+			if (open) document.addEventListener("click", outsideClick);
+			else if (refocus) more.focus();
+		};
+		more.addEventListener("click", function () { setMenuOpen(menu.dataset.open !== "true", true); });
+		bar.addEventListener("keydown", function (e) {
+			if (e.key === "Escape" && menu.dataset.open === "true" && bar.dataset.compact === "true") {
+				e.stopPropagation();
+				if (e.preventDefault) e.preventDefault();
+				setMenuOpen(false, true);
+			}
+		});
+		menu.addEventListener("click", function (e) {
+			if (e.target !== menu && bar.dataset.compact === "true") setMenuOpen(false, false); // the picked action (name field) takes focus itself
+		});
+		bar.appendChild(more);
+		bar.appendChild(menu);
+
 		const saveAsBtn = document.createElement("button");
 		saveAsBtn.type = "button";
 		saveAsBtn.className = "jc-btn juneau-config-saveas";
 		paintUserText(saveAsBtn, "Save as…");
 		saveAsBtn.addEventListener("click", function () { openNameField(ctx, "saveas"); });
 		ctx._configSaveAsBtn = saveAsBtn;
-		bar.appendChild(saveAsBtn);
+		menu.appendChild(saveAsBtn);
 
 		const renameBtn = document.createElement("button");
 		renameBtn.type = "button";
@@ -2554,7 +2712,7 @@
 			if (ctx._configActiveName != null) openNameField(ctx, "rename");
 		});
 		ctx._configRenameBtn = renameBtn;
-		bar.appendChild(renameBtn);
+		menu.appendChild(renameBtn);
 
 		const delBtn = document.createElement("button");
 		delBtn.type = "button";
@@ -2585,7 +2743,7 @@
 			});
 		});
 		ctx._configDeleteBtn = delBtn;
-		bar.appendChild(delBtn);
+		menu.appendChild(delBtn);
 
 		const dirty = document.createElement("span");
 		dirty.className = "juneau-config-dirty";
@@ -2683,6 +2841,22 @@
 	}
 
 	/**
+	 * Builds the Columns button (not attached) that opens the chooser.  Shared by the toolbar auto-mount and the
+	 * ribbon's {@code columnSettings} item so the markup is defined once.  {@code iconName} defaults to the gear.
+	 */
+	function buildChooserButton(table, ctx, iconName) {
+		const btn = document.createElement("button");
+		btn.type = "button";
+		btn.className = "juneau-view-ribbon-btn juneau-config-chooser-btn";
+		stampChromeTip(btn, "Columns");
+		paintUserText(btn, "Columns");
+		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon(iconName || "tune") : null;
+		paintChooserIcon(btn, markup);
+		btn.addEventListener("click", function () { openChooser(table, ctx); });
+		return btn;
+	}
+
+	/**
 	 * Wires the Columns affordance onto the table toolbar when {@code columnConfig} is present.  Called from
 	 * {@code constructTable} on first init AND every Apply rebuild.
 	 */
@@ -2692,25 +2866,9 @@
 		if (!host) return;
 		if (host.querySelector?.(".juneau-config-chooser-btn")) return;
 
-		const btn = document.createElement("button");
-		btn.type = "button";
-		btn.className = "juneau-view-ribbon-btn juneau-config-chooser-btn";
-		stampChromeTip(btn, "Columns");
-		paintUserText(btn, "Columns");
-		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon("tune") : null;
-		paintChooserIcon(btn, markup);
-		btn.addEventListener("click", function () { openChooser(table, ctx); });
-		host.appendChild(btn);
+		host.appendChild(buildChooserButton(table, ctx));
 
-		if (ctx._configDraft == null) {
-			// Single seeding point: the last-applied View Settings (memoized read shared with go()'s restore), else
-			// catalog defaults.  The one-time schemaVersion-reset notice is armed here and shown by openChooser.
-			const resolved = resolveLastAppliedViewSettings(table, ctx);
-			ctx._configDraft = resolved.draft != null ? resolved.draft : defaultDraftForCtx(ctx);
-			ctx._configResetNotice = !!resolved.reset;
-			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
-			ctx._configDirty = false;
-		}
+		NS.config.seedChooserDraft(table, ctx);
 	}
 
 	NS.config.sanitizeColumnTitlesForDataTables = sanitizeColumnTitlesForDataTables;
@@ -2721,11 +2879,14 @@
 	NS.config.moveColumn = moveColumn;
 	NS.config.selectedColumnKeys = selectedColumnKeys;
 	NS.config.reorderSelectedColumn = reorderSelectedColumn;
+	NS.config.columnDetailText = columnDetailText;
 	NS.config.addColumnToView = addColumnToView;
 	NS.config.renameSavedView = renameSavedView;
 	NS.config.defaultDraftFromCatalog = defaultDraftFromCatalog;
 	NS.config.draftFromSavedView = draftFromSavedView;
+	NS.config.seedChooserDraft = seedChooserDraft;
 	NS.config.mountChooser = mountChooser;
+	NS.config.buildChooserButton = buildChooserButton;
 	NS.config.openChooser = openChooser;
 	NS.config.closeChooserDialog = closeChooserDialog;
 	NS.config.applyDraft = applyDraft;

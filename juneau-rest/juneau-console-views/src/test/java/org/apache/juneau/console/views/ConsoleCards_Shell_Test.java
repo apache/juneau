@@ -179,8 +179,8 @@ class ConsoleCards_Shell_Test extends TestBase {
 	@Test void a05_registerCardErrorsVerbatim() {
 		var c = cards("registerErrors");
 		assertEquals(Map.of("name", "JuneauConsoleError", "code", "E-JS-20", "message", "card type 'Bad_Type' must match /^[a-z][a-z0-9-]{0,31}$/"), c.get("e20"));
-		assertEquals(Map.of("name", "JuneauConsoleError", "code", "E-JS-21", "message", "card type 'ok1' handler must be a function or an object with render(); got 'string'"), c.get("e21a"));
-		assertEquals(Map.of("name", "JuneauConsoleError", "code", "E-JS-21", "message", "card type 'ok2' handler must be a function or an object with render(); got 'object'"), c.get("e21b"));
+		assertEquals(Map.of("name", "JuneauConsoleError", "code", "E-JS-21", "message", "card type 'ok1': registerCard now takes a JuneauViews.model.Card subclass (class X extends JuneauViews.model.Card { render() {...} }); the object form was removed"), c.get("e21a"));
+		assertEquals(Map.of("name", "JuneauConsoleError", "code", "E-JS-21", "message", "card type 'ok2': registerCard now takes a JuneauViews.model.Card subclass (class X extends JuneauViews.model.Card { render() {...} }); the object form was removed"), c.get("e21b"));
 		var e23 = map(c.get("e23"));
 		var threw = map(e23.get("threw"));
 		assertEquals("E-JS-23", threw.get("code"));

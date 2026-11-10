@@ -91,7 +91,11 @@ class PetstoreChart_BrowserTest extends TestBase {
 		report = run("chart", base, List.of(
 			Map.of("name", "store", "path", "/console/store",
 				"actions", List.of(
-					Map.of("waitFor", drawn("orders-trend", "by-species", "by-status", "pets-map")),
+					Map.of("waitFor", drawn("revenue-chart", "orders-trend", "by-species")),
+					Map.of("evaluate", "window.JuneauConsole.cardApi('pets-sw').select('status')"),
+					Map.of("waitFor", drawn("by-status")),
+					Map.of("evaluate", "window.JuneauConsole.cardApi('pets-sw').select('both')"),
+					Map.of("waitFor", drawn("pets-map")),
 					Map.of("waitFor", "!!document.querySelector('#revenue-body .petstore-kpi-value')")),
 				"queries", Map.of(
 					"trend", option("orders-trend") + ".series.map(function (s) { return s.name; })",
@@ -137,7 +141,8 @@ class PetstoreChart_BrowserTest extends TestBase {
 		assertList(query(c, "trend"), "Placed", "Delivered");
 		assertString("pie", query(c, "speciesType"));
 		assertString("bar", query(c, "statusType"));
-		assertEquals(4, ((Number)query(c, "live")).intValue());
+		// Revenue, orders and the three pets views: a view the switcher has built stays alive when hidden.
+		assertEquals(5, ((Number)query(c, "live")).intValue());
 	}
 
 	@Test void a02_revenueTileShowsTheServerValue() throws Exception {

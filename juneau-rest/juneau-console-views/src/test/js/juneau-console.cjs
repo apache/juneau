@@ -308,7 +308,7 @@ out.errors = {};
 // trying to register the type before an auto-mounting load.
 (function () {
 	const r = run(undefined, []);
-	r.JC.registerCard('boom', function () { throw new Error('kaput'); });
+	r.JC.registerCard('boom', class extends r.JC.Card { render() { throw new Error('kaput'); } });
 	let threw2 = null, result2 = null;
 	try {
 		result2 = r.JC.mount(C({ cards: [{ id: 'b', type: 'boom' }] }), { root: r.doc.body, document: r.doc });
@@ -324,7 +324,7 @@ out.errors = {};
 
 	// registerCard contract: bad type name.
 	let bad = null;
-	try { r.JC.registerCard('Bad', () => { /* no-op */ }); } catch (error) { bad = { name: error.name, code: error.code }; }
+	try { r.JC.registerCard('Bad', class extends r.JC.Card { render() { /* no-op */ } }); } catch (error) { bad = { name: error.name, code: error.code }; }
 	out.registerBadType = bad;
 })();
 
@@ -361,10 +361,10 @@ out.errors = {};
 // E-JS-12: registerCard called twice for the same type (fatal).
 (function () {
 	const r = run(undefined, []);
-	r.JC.registerCard('dup-type', function () { /* no-op */ });
+	r.JC.registerCard('dup-type', class extends r.JC.Card { render() { /* no-op */ } });
 	let threw2 = null;
 	try {
-		r.JC.registerCard('dup-type', function () { /* no-op */ });
+		r.JC.registerCard('dup-type', class extends r.JC.Card { render() { /* no-op */ } });
 	} catch (error) {
 		threw2 = { name: error.name, code: error.code, message: error.message };
 	}
@@ -387,8 +387,8 @@ out.errors = {};
 //----------------------------------------------------------------------------------------------------------------
 (function customCardType() {
 	const r = run(undefined, []);
-	r.JC.registerCard('kpi', function (card, el0) {
-		el0.textContent = card.title + ': ' + card.value;
+	r.JC.registerCard('kpi', class extends r.JC.Card {
+		render() { this.el.textContent = this.spec.title + ': ' + this.spec.value; }
 	});
 	const result = r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi', title: 'Users', value: 42 }] }), {
 		root: r.doc.body, document: r.doc

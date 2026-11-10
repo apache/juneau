@@ -48,6 +48,7 @@ class ShippedJs_SinkScan_Test extends TestBase {
 		"src/main/resources/org/apache/juneau/views/juneau-terminal-view.js",
 		"../juneau-console/src/main/resources/org/apache/juneau/console/juneau-charts.js",
 		"../juneau-console/src/main/resources/org/apache/juneau/console/juneau-joblog.js",
+		"../juneau-console/src/main/resources/org/apache/juneau/console/juneau-switcher.js",
 		"../juneau-console/src/main/resources/org/apache/juneau/console/juneau-badges.js",
 		"../juneau-console/src/main/resources/org/apache/juneau/console/juneau-dashboard.js",
 		"../juneau-terminal-region/src/main/resources/org/apache/juneau/terminal/juneau-terminal.js",
@@ -160,6 +161,22 @@ class ShippedJs_SinkScan_Test extends TestBase {
 		assertSize(() -> "violations: " + other.violations(), 1, other.violations());
 		var otherTarget = RawContentSinkScanner.scanJsHtmlSinks("x.js", "other.innerHTML = markup;", allowed);
 		assertSize(() -> "violations: " + otherTarget.violations(), 1, otherTarget.violations());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "var f = new Function('a', body);", "eval(x);", "var r = eval (x);" })
+	void b04_evalPatternFlagsNewFunctionAndEval(String src) {
+		var r = RawContentSinkScanner.scanJsHtmlSinks("x.js", src);
+		assertSize(() -> "violations: " + r.violations(), 1, r.violations());
+	}
+
+	@Test void b05_onlyModelInlineMayUseNewFunction() throws Exception {
+		var r = RawContentSinkScanner.scanShippedJs(root());
+		var evals = r.sinks().stream().filter(x -> x.detail().contains("new Function")).toList();
+		assertSize(1, evals);
+		assertTrue(evals.get(0).file().endsWith("/juneau-model-inline.js"), evals.toString());
+		var none = RawContentSinkScanner.scanJsHtmlSinks("x.js", "obj.eval(x); // eval(y)");
+		assertEquals(List.of(), none.sinks());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

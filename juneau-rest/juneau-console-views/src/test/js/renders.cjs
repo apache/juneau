@@ -172,6 +172,35 @@ out.pill_toneAbsentNoClass = pillHtml('open', { field: 'state' }).indexOf('is-')
 out.pill_toneV1NoClass = ['ok', 'warn', 'exceeds', 'accent', 'danger', 'INFO', 'Success'].every(function (t) {
 	return pillHtml('open', { field: 'state', tone: t }).indexOf('is-') < 0;
 });
+// --- Per-value tones / categorical palette ---
+function pillCls(cell, meta) {
+	const m = /^<span class="([^"]*)"/.exec(pillHtml(cell, Object.assign({ field: 'status' }, meta)));
+	return m ? m[1] : '';
+}
+const T = { tones: { AVAILABLE: 'success', SOLD: 'neutral', BAD: 'purple' } };
+out.pill_t_success = pillCls('AVAILABLE', T);
+out.pill_t_neutralExplicit = pillCls('SOLD', T);
+out.pill_t_unmappedNeutral = pillCls('OTHER', T);
+out.pill_t_offPaletteToneIsNeutral = pillCls('BAD', T);
+out.pill_legacyNoNewKeys = pillCls('whatever', {});
+out.pill_legacyColumnTone = pillCls('whatever', { tone: 'warning' });
+out.pill_dotKeepsColumnTone = pillHtml('x', { field: 'status', tone: 'info' }).indexOf('jc-pill-dot is-info') >= 0;
+out.pill_c_pin = pillCls('DOG', { categorical: true, categories: { DOG: 1 } });
+out.pill_c_pinBadSlotFallsToHash = pillCls('DOG', { categorical: true, categories: { DOG: 11 } });
+out.pill_c_pinNonIntFallsToHash = pillCls('DOG', { categorical: true, categories: { DOG: 1.5 } });
+out.pill_c_hash = pillCls('BIRD', { categorical: true });
+out.pill_c_tonesBeatCategorical = pillCls('DOG', { categorical: true, tones: { DOG: 'error' }, categories: { DOG: 3 } });
+out.pill_c_categoriesBeatHash = pillCls('BIRD', { categorical: true, categories: { BIRD: 4 } });
+out.pill_c_categoricalBeatsColumnTone = pillCls('BIRD', { categorical: true, tone: 'info' });
+out.pill_c_pinOnlyNoCategoricalUnmapped = pillCls('ZZZ', { categories: { DOG: 1 } });
+out.pill_proto = ['__proto__', 'constructor', 'toString', 'hasOwnProperty'].map(function (k) {
+	return pillCls(k, { tones: {}, categories: {} });
+}).join('|');
+out.pill_slotVectors = ['', 'DOG', 'CAT', 'BIRD', 'FISH', 'MOUSE', 'RABBIT', 'SNAKE', 'Pet', 'Order', 'User']
+	.map(function (v) { return NS._render.pillSlot(v); }).join(',');
+out.pill_slotParity = ['BIRD', 'Pet', 'caf\u00e9', '\ud83d\udc36', 'DOG']
+	.map(function (v) { return NS._render.pillSlot(v); }).join(',');
+out.pill_slotCount = NS._render.pillCategorySlots;
 // Action-bound variant adds role/tabindex/data-juneau-action ONLY when meta.action is present.
 out.pill_action = pillHtml('open', { field: 'state', action: 'ack' });
 out.pill_actionHasRole = out.pill_action.indexOf('role="button"') >= 0;

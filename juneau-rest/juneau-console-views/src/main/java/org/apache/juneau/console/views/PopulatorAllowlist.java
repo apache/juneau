@@ -46,7 +46,7 @@ public final class PopulatorAllowlist {
 	 * override the entry named <js>"default"</js>: that name is reserved for the framework's own declarative-default
 	 * populator.
 	 */
-	public static final Set<String> BUILTIN_IDS = Set.of("default");
+	public static final Set<String> BUILTIN_IDS = Set.of("default", "chart");
 
 	private PopulatorAllowlist() {}
 

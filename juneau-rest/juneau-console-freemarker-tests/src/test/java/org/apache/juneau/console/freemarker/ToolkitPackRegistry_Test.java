@@ -86,10 +86,10 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest(), List.of(), "");
 		assertList(files(r.runtimeCss()), "juneau-views.css", "juneau-config.css");
 		// JS load order is a contract: bus FIRST (dependency-free; views, regions and the console shell all read
-		// JuneauViews.bus), then renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
+		// JuneauViews.bus), then the client object model (right after the bus, ahead of every consumer), renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
 		// regions, terminal-view, helpers LAST.  The DataTables glue is its own pack now.
 		assertList(files(r.runtimeJs()),
-			"juneau-bus.js", "juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
+			"juneau-bus.js", "juneau-model.js", "juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
 			"juneau-ribbon.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js",
 			"juneau-terminal-view.js", "juneau-helpers.js");
 		// The bus is the very first runtime JS entry.
@@ -255,6 +255,15 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertTrue(js.indexOf("juneau-bus.js") >= 0, () -> "views pack present: " + js);
 		assertEmpty(r.vendorJs());
 		assertContains("/juneau-console/juneau-dashboard.js?v=", r.runtimeJs().get(js.size() - 1));
+	}
+
+	@Test void a22_switcherPack_runtimeJsOnly_dependsOnViews() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_SWITCHER), dummyRequest(), List.of(), "");
+		var js = files(r.runtimeJs());
+		assertEquals("juneau-switcher.js", js.get(js.size() - 1));
+		assertTrue(js.indexOf("juneau-bus.js") >= 0, () -> "views pack present: " + js);
+		assertEmpty(r.vendorJs());
+		assertContains("/juneau-console/juneau-switcher.js?v=", r.runtimeJs().get(js.size() - 1));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

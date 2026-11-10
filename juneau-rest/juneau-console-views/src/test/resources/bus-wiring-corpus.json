@@ -12,7 +12,7 @@
 		},
 		{
 			"name": "c02-spec-5.1-master-detail",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],"selection":{"rowIdField":"id"},"ribbon":[{"type":"refresh"},{"type":"option","id":"mine","title":"Mine only"},{"type":"refresh","title":"Refresh tasks","target":"tasks"},{"type":"publish","title":"Focus east","topic":"app.region-picked","payload":{"region":"east"}}]},"subscribes":[{"topic":"app.region-picked","as":"filter","map":{"columns.region":"region"}}]},{"id":"tasks","type":"datatables","table":{"dataUrl":"/api/changes/{changeId}/tasks","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:changes","as":"params","map":{"changeId":"ids.0"},"whenEmpty":"clear","emptyText":"Select a change to see its tasks."}]},{"id":"byOwner","type":"chart","title":"Open changes by owner","src":"/api/changes/by-owner?q={q}","subscribes":[{"topic":"filter:changes","as":"params","map":{"q":"search"}}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],"selection":{"rowIdField":"id"},"ribbon":[{"type":"refresh"},{"type":"option","id":"mine","title":"Mine only"},{"type":"refresh","title":"Refresh tasks","target":"tasks"},{"type":"publish","id":"pub1", "title":"Focus east","topic":"app.region-picked","payload":{"region":"east"}}]},"subscribes":[{"topic":"app.region-picked","as":"filter","map":{"columns.region":"region"}}]},{"id":"tasks","type":"datatables","table":{"dataUrl":"/api/changes/{changeId}/tasks","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:changes","as":"params","map":{"changeId":"ids.0"},"whenEmpty":"clear","emptyText":"Select a change to see its tasks."}]},{"id":"byOwner","type":"chart","title":"Open changes by owner","src":"/api/changes/by-owner?q={q}","subscribes":[{"topic":"filter:changes","as":"params","map":{"q":"search"}}]}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -108,13 +108,13 @@
 		},
 		{
 			"name": "c13-ribbon-publish-declared",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.go-live","retain":false,"publisher":"ribbon"}],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"publish","title":"Go","topic":"app.go-live"}]}},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"app.go-live","as":"refresh"}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.go-live","retain":false,"publisher":"ribbon"}],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"publish","id":"pub1", "title":"Go","topic":"app.go-live"}]}},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"app.go-live","as":"refresh"}]}]},
 			"expect": [],
 			"expectJs": []
 		},
 		{
 			"name": "c14-ribbon-publish-undeclared",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"publish","title":"Go","topic":"app.go-live"}]}},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"app.go-live","as":"refresh"}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"publish","id":"pub1", "title":"Go","topic":"app.go-live"}]}},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"app.go-live","as":"refresh"}]}]},
 			"expect": [
 				{"code":"E-48","message":"ribbon item #0 (publish) on card 'a': topic 'app.go-live' is not declared in topics or by any card's publishes"}
 			],
@@ -245,7 +245,7 @@
 		},
 		{
 			"name": "c25-ribbon-targets",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"refresh","target":"gone"},{"type":"refresh","target":"h"},{"type":"option","id":"mine","title":"Mine","target":"b"},{"type":"optionGroup","id":"range","title":"Range","target":"b"},{"type":"pausePolling","target":"b"},{"type":"export","target":"b"},{"type":"publish","topic":"cmd:b","payload":{"op":"reload"}},{"type":"publish","title":"Bad","topic":"selection:b"},{"type":"publish","title":"Gone","topic":"cmd:gone"},{"type":"publish","title":"Syntax","topic":"Nope!"}]}},{"id":"b","type":"datatables","table":{"dataUrl":"/api/b","columns":[{"key":"id"}],"ribbon":[{"type":"optionGroup","id":"range","title":"Range"}]}},{"id":"h","type":"html","template":"h"}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"refresh","target":"gone"},{"type":"refresh","target":"h"},{"type":"option","id":"mine","title":"Mine","target":"b"},{"type":"optionGroup","id":"range","title":"Range","target":"b"},{"type":"pausePolling","target":"b"},{"type":"export","target":"b"},{"type":"publish","id":"pub1", "topic":"cmd:b","payload":{"op":"reload"}},{"type":"publish","id":"pub2", "title":"Bad","topic":"selection:b"},{"type":"publish","id":"pub3", "title":"Gone","topic":"cmd:gone"},{"type":"publish","id":"pub4", "title":"Syntax","topic":"Nope!"}]}},{"id":"b","type":"datatables","table":{"dataUrl":"/api/b","columns":[{"key":"id"}],"ribbon":[{"type":"optionGroup","id":"range","title":"Range"}]}},{"id":"h","type":"html","template":"h"}]},
 			"expect": [
 				{"code":"E-42","message":"topic 'cmd:gone' names card 'gone', which is not on this page"},
 				{"code":"E-43","message":"card 'h' (type 'html') does not handle op 'reload'"},
@@ -384,19 +384,19 @@
 		},
 		{
 			"name": "c41-cmd-names-source",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"R","topic":"cmd:orders"}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"R","topic":"cmd:orders"}]}]},
 			"expect": [],
 			"expectJs": []
 		},
 		{
 			"name": "c42-cmd-group-undeclared",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
 			"expect": [{"code":"E-73","message":"'h' sends cmd 'zoomTo' to group '<none>', which no chart card declares"}],
 			"expectJs": []
 		},
 		{
 			"name": "c43-cmd-group-declared",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"group":"g"}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"group":"g"}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -486,7 +486,7 @@
 		},
 		{
 			"name": "c58-group-self-without-group",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"self"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"self"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -552,13 +552,13 @@
 		},
 		{
 			"name": "c69-publish-op-to-source",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"zoomTo"}}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"Z","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"zoomTo"}}]}]},
 			"expect": [{"code":"E-43","message":"card 'orders' (type 'dataSource') does not handle op 'zoomTo'"}],
 			"expectJs": []
 		},
 		{
 			"name": "c70-ribbon-refresh-sends-reload-and-refresh-op-both-accepted-by-source",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"refresh","target":"orders"},{"type":"publish","title":"R","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"refresh"}}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"refresh","target":"orders"},{"type":"publish","id":"pub1", "title":"R","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"refresh"}}]}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -570,13 +570,13 @@
 		},
 		{
 			"name": "c72-group-cmd-lists-groups",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]},{"id":"u","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"group":"g"}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]},{"id":"u","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"group":"g"}]},
 			"expect": [{"code":"E-73","message":"'h' sends cmd 'zoomTo' to group '<none> (page groups: g)', which no chart card declares"}],
 			"expectJs": []
 		},
 		{
 			"name": "c73-group-cmd-needs-chart-target",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"S","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"refresh","target":"group"}},{"type":"publish","title":"P","topic":"cmd:p","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"p","type":"html","template":"p"}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"S","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"refresh","target":"group"}},{"type":"publish","id":"pub2", "title":"P","topic":"cmd:p","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"p","type":"html","template":"p"}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -588,7 +588,7 @@
 		},
 		{
 			"name": "c75-publish-without-op-to-source-passes",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"P","topic":"cmd:orders","payload":{"schemaVersion":1}}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"P","topic":"cmd:orders","payload":{"schemaVersion":1}}]}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -600,7 +600,7 @@
 		},
 		{
 			"name": "c77-publish-reload-op-to-source-passes",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"R","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"reload"}}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","id":"pub1", "title":"R","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"reload"}}]}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -656,6 +656,36 @@
 			"name": "c86-choice-source-undeclared",
 			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[],"dashboard":{"id":"d","grid":1,"panels":[],"rail":{"side":"left","width":280,"sections":[{"id":"reasons","kind":"choice","topic":"filter:reasons","source":"orders","dim":"reason","max":50}]}}},
 			"expect": [{"code":"E-77","message":"dashboard 'd': choice section 'reasons' names source 'orders', which is not a declared data source"}],
+			"expectJs": []
+		},
+		{
+			"name": "handlerSubscription_skips_role_check",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.picked","retain":true,"publisher":"script"}],"cards":[{"id":"g","type":"gauge","subscribes":[{"topic":"app.picked","handler":"onPicked"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "handlerSubscription_topic_template_ok",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.picked","retain":true,"publisher":"script"}],"cards":[{"id":"g","type":"gauge","subscribes":[{"topic":"selection:{rowKey}","handler":"onPicked"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "handlerSubscription_unknown_topic_family_E41_like",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.picked","retain":true,"publisher":"script"}],"cards":[{"id":"g","type":"gauge","subscribes":[{"topic":"app.nothing","handler":"onPicked"}]}]},
+			"expect": [{"code":"E-41","message":"card 'g' subscribes to 'app.nothing' but nothing publishes it"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 'g' subscribes to 'app.nothing' but nothing publishes it"}]
+		},
+		{
+			"name": "roleSubscription_unknown_role_E44_unchanged",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.picked","retain":true,"publisher":"script"}],"cards":[{"id":"g","type":"gauge","subscribes":[{"topic":"app.picked","as":"bogus"}]}]},
+			"expect": [{"code":"E-44","message":"card 'g' (type 'gauge') has no role 'bogus'; accepted: highlight, params, refresh"}],
+			"expectJs": [{"code":"E-JS-47","message":"card 'g' (type 'gauge') does not accept role 'bogus'"}]
+		},
+		{
+			"name": "both_as_and_handler_rejected_by_schema_not_validator",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.picked","retain":true,"publisher":"script"}],"cards":[{"id":"g","type":"gauge","subscribes":[{"topic":"app.picked","as":"bogus","handler":"onPicked"}]}]},
+			"expect": [],
 			"expectJs": []
 		}
 	]

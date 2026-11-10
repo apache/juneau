@@ -326,7 +326,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		var build = fn(body, "function buildDialogOverlay(");
 		assertTrue(build.contains("juneau-view-dialog-header"), build);
 		assertTrue(build.contains("juneau-view-dialog-dismiss"), build);
-		assertTrue(build.contains("buildDialogHeaderFigure(action)"), build);
+		assertTrue(build.contains("buildDialogHeaderFigure(action, modal)"), build);
 		assertTrue(build.contains("insertDialogBarSlot(dialog, header, modal?.barSlot, seq)"), build);
 		assertTrue(build.contains("dismissBtn: dismissBtn"), build);
 		var figure = fn(body, "function buildDialogHeaderFigure(");
