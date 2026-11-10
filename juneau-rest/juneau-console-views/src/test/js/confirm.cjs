@@ -67,7 +67,7 @@ const tick = function () { return new Promise(function (r) { setImmediate(r); })
 	out.header = {
 		present: !!q('.juneau-view-dialog > .juneau-view-dialog-header'),
 		titleInHeader: !!q('.juneau-view-dialog-header > .juneau-view-dialog-title'),
-		title: (q('.juneau-view-dialog-title') || {}).textContent,
+		title: q('.juneau-view-dialog-title')?.textContent,
 		dismissInHeader: !!q('.juneau-view-dialog-header > .juneau-view-dialog-dismiss'),
 		dismissLabel: (q('.juneau-view-dialog-dismiss') || { getAttribute: function () { return null; } }).getAttribute('aria-label')
 	};

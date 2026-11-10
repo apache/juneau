@@ -71,7 +71,7 @@ const LAYOUT = () => {
 		return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width };
 	};
 	const hostEl = q('.juneau-config-body-host');
-	const kids = hostEl ? Array.prototype.map.call(hostEl.children, (c) => c.className.split(' ').filter((n) => n.startsWith('juneau-config-'))[0] || c.className) : [];
+	const kids = hostEl ? Array.prototype.map.call(hostEl.children, (c) => c.className.split(' ').find((n) => n.startsWith('juneau-config-')) || c.className) : [];
 	const actions = q('.juneau-config-dialog .juneau-view-dialog-actions');
 	const footer = actions ? Array.prototype.filter.call(actions.children, (c) => c.tagName === 'BUTTON').map((c) => c.textContent) : [];
 	const reset = q('.juneau-config-reset');

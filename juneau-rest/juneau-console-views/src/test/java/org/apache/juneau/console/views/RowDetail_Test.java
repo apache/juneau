@@ -147,12 +147,13 @@ class RowDetail_Test extends TestBase {
 	}
 
 	@Test void b02_region_onTabModel_throws() {
-		assertThrows(IllegalStateException.class, () -> RowDetail.inline().region(null));
+		var sut1 = RowDetail.inline();
+		assertThrows(IllegalStateException.class, () -> sut1.region(null));
 	}
 
 	@Test void b03_duplicateTabId_throws() {
-		assertThrows(IllegalArgumentException.class, () ->
-			RowDetail.inline().section("A", "x").section("A", "y").toMap());
+		var d = RowDetail.inline().section("A", "x").section("A", "y");
+		assertThrows(IllegalArgumentException.class, () -> d.toMap());
 	}
 
 	@Test void b04_noTabsNoSections_generatesFlatDetails() {
@@ -164,7 +165,8 @@ class RowDetail_Test extends TestBase {
 	@Test void b05_columnsDefault2_andTabOverrides() {
 		var m = RowDetail.inline().columns(3).section("A", "x").toMap();
 		assertEquals(3, m.get("columns"));
-		assertThrows(IllegalArgumentException.class, () -> RowDetail.inline().columns(5));
+		var sut2 = RowDetail.inline();
+		assertThrows(IllegalArgumentException.class, () -> sut2.columns(5));
 		assertFalse(RowDetail.inline().section("A", "x").toMap().containsKey("columns"));
 	}
 

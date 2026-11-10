@@ -60,6 +60,9 @@ import java.util.*;
  * 			.build());
  * </p>
  */
+@SuppressWarnings({
+	"java:S1192" // Ribbon item ids read more clearly inline than as constants.
+})
 public final class Ribbons {
 
 	private static final List<String> VALID_IDS = List.of(
@@ -162,6 +165,9 @@ public final class Ribbons {
 		 * @return An immutable list, for {@link TableSpec#ribbon(List)}.
 		 * @throws IllegalArgumentException If {@link #without(String)} named an id that is not a preset id.
 		 */
+		@SuppressWarnings({
+			"java:S3776" // Branching is inherent to build(), which assembles the ribbon from many optional items.
+		})
 		public List<RibbonItem> build() {
 			for (var w : without)
 				if (! VALID_IDS.contains(w) && ! w.equals(refreshId))

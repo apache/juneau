@@ -48,7 +48,8 @@ class HandledBuilders_Test extends TestBase {
 	}
 
 	@Test void a02_cardBodyRejectsModel() {
-		assertThrows(IllegalArgumentException.class, () -> CardSpec.html("c1").body("model", "x"));
+		var card = CardSpec.html("c1");
+		assertThrows(IllegalArgumentException.class, () -> card.body("model", "x"));
 	}
 
 	@Test void a03_cardCopyKeepsModel() {
@@ -79,7 +80,8 @@ class HandledBuilders_Test extends TestBase {
 	}
 
 	@Test void b03_rootOnOtherThrows() {
-		assertThrows(IllegalArgumentException.class, () -> PageSpec.create().on("rendered", "a.b"));
+		var page = PageSpec.create();
+		assertThrows(IllegalArgumentException.class, () -> page.on("rendered", "a.b"));
 	}
 
 	@Test void b04_inlineNeedsOptIn() {

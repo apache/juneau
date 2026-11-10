@@ -114,7 +114,7 @@ class TerminalProcess_Test extends TestBase {
 		assertEquals(5, p.waitFor(30, TimeUnit.SECONDS));
 		assertTrue(p.isDone());
 		var lines = events(p.eventsFile());
-		assertSize(() -> lines.toString(), 4, lines);
+		assertSize(lines::toString, 4, lines);
 		assertEquals("{\"ev\":\"note\",\"level\":\"warn\",\"text\":\"runner exited without done, exit 5\"}", lines.get(2));
 		assertEquals("{\"ev\":\"done\",\"status\":\"fail\"}", lines.get(3));
 		var page = new TerminalViewPage[1];

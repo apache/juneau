@@ -310,7 +310,8 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 	}
 
 	private static boolean allowsEval(String policy) {
-		String script = null, dflt = null;
+		String script = null;
+		String dflt = null;
 		for (var d : policy.split(";")) {
 			var t = d.trim();
 			var lower = t.toLowerCase(java.util.Locale.ROOT);

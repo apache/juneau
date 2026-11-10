@@ -84,7 +84,8 @@ class Ribbons_Test extends TestBase {
 
 	@Test void a07_without_rejects_unknown_and_type_aliases() {
 		for (var bad : List.of("nope", "collapseAll", "resetDefaults", "columnSettings", "linkButton", "create")) {
-			var e = assertThrows(IllegalArgumentException.class, () -> Ribbons.standard().without(bad).build(), bad);
+			var builder = Ribbons.standard().without(bad);
+			var e = assertThrows(IllegalArgumentException.class, () -> builder.build(), bad);
 			assertTrue(e.getMessage().contains("collapse") && e.getMessage().contains("columns"), "lists valid ids: " + e.getMessage());
 		}
 	}
@@ -110,7 +111,8 @@ class Ribbons_Test extends TestBase {
 
 	@Test void a11_duplicate_id_between_custom_and_preset_throws_at_tableSpec() {
 		var items = Ribbons.standard().create(RibbonItem.dialog("refresh")).build();
-		assertThrows(IllegalArgumentException.class, () -> TableSpec.create("t").ribbon(items));
+		var sut1 = TableSpec.create("t");
+		assertThrows(IllegalArgumentException.class, () -> sut1.ribbon(items));
 	}
 
 	@Test void a12_tableSpec_ribbon_list_equals_varargs() {
@@ -122,7 +124,7 @@ class Ribbons_Test extends TestBase {
 	}
 
 	@Test void a13_preset_validates_in_a_table() {
-		TableSpec.create("t").dataUrl("/d").ribbon(Ribbons.standard().export("excel").build());
+		assertDoesNotThrow(() -> TableSpec.create("t").dataUrl("/d").ribbon(Ribbons.standard().export("excel").build()));
 	}
 
 	@Test void z01_preset_order_matches_the_runtime_canonical_group_order() throws Exception {

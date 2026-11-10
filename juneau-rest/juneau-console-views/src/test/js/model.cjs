@@ -88,7 +88,7 @@ function throws(fn, name) {
 /** Registers one report key; fn may be async.  Run in registration order. */
 function check(key, fn) {
 	pending.push(async () => {
-		try { await fn(); report[key] = true; } catch (e) { report[key] = 'FAIL: ' + (e && e.message); }
+		try { await fn(); report[key] = true; } catch (e) { report[key] = 'FAIL: ' + e?.message; }
 	});
 }
 
@@ -97,7 +97,7 @@ function world(opts) {
 	const s = load(opts);
 	const all = [];
 	const mk = (kind, id, o) => {
-		const h = new s.M.Handle(kind, { title: kind + ':' + id }, Object.assign({ id }, o));
+		const h = new s.M.Handle(kind, { title: kind + ':' + id }, { id, ...o });
 		all.push(h);
 		return h;
 	};
@@ -147,7 +147,8 @@ check('get_returns_same_object', () => {
 	const t = fullTree();
 	attachAll(t);
 	ok(t.M.get(t.row.path) === t.row);
-	ok(t.M.get(t.row.path) === t.M.get(t.row.path));
+	const again = t.M.get(t.row.path);
+	ok(t.M.get(t.row.path) === again);
 });
 check('get_unknown_null', () => { eq(world().M.get('page/nope'), null); });
 check('get_never_creates', () => {
@@ -463,7 +464,7 @@ for (const [cls, kind] of KINDS) {
 		const w = load({ shell: true });
 		const K = w.M[cls];
 		ok(typeof K === 'function', cls + ' missing');
-		const h = new K(Object.assign({ id: 'a1' }, specFor[cls] || {}));
+		const h = new K({ id: 'a1', ...specFor[cls] });
 		// Card extends the shell base, so it is not a Handle subclass: it carries every Handle member instead.
 		ok(cls === 'Card' ? typeof h.closest === 'function' : h instanceof w.M.Handle);
 		eq(h.kind, kind);
@@ -631,7 +632,7 @@ check('Card_shell_assigns_el_and_spec', () => {
 check('Card_registers_and_renders_via_shell', () => {
 	const w = sh();
 	let seen = null;
-	w.JC.registerCard('probe', class extends w.M.Card { render() { seen = this; this.el.appendChild(w.doc.createTextNode('ok')); } });
+	w.JC.registerCard('probe', class extends w.M.Card { render() { seen = this; this.el.appendChild(w.doc.createTextNode('ok')); } }); // NOSONAR javascript:S7740 - the test needs the instance the shell constructs
 	w.JC.mount({ contractVersion: '1', title: 't', nav: [], activeNav: [], cards: [{ id: 'p1', type: 'probe' }] }, { root: w.doc.body, document: w.doc });
 	ok(seen instanceof w.M.Card);
 	eq(seen.id, 'p1');
@@ -649,7 +650,7 @@ check('HtmlCard_instanceof_model_Card', () => {
 });
 // A built-in card script registers its lateBase class whenever it loads; the model may load before or after it.
 const LATE_TYPES = ['datatables', 'chart', 'job-log', 'terminal'];
-const queueLate = win => { for (const t of LATE_TYPES) win.JuneauConsoleCards.push([t, class extends (win.JuneauViews?.model?.Card || win.JuneauConsole?.Card || class {}) { static lateBase = true; render() {} }]); };
+const queueLate = win => { for (const t of LATE_TYPES) win.JuneauConsoleCards.push([t, class extends (win.JuneauViews?.model?.Card || win.JuneauConsole?.Card || class {}) { static lateBase = true; render() { /* no-op */ } }]); }; // NOSONAR javascript:S2094 - an inert fallback base
 const lateCheck = async (w) => {
 	mountPage(w, PAGE({ cards: LATE_TYPES.map((t, i) => ({ id: 'l' + i, type: t })) }));
 	await tick();
@@ -694,7 +695,7 @@ check('DetailTab_setBadge_chip_and_tones', () => {
 	const chip = btn.querySelector('.juneau-view-detail-tab-count');
 	ok(chip, 'chip created');
 	eq(chip.textContent, '5');
-	eq(chip.getAttribute('data-tone'), 'warning');
+	eq(chip.dataset.tone, 'warning');
 	t.setBadge(6);
 	eq(btn.querySelectorAll('.juneau-view-detail-tab-count').length, 1);
 	eq(chip.textContent, '6');
@@ -769,7 +770,7 @@ check('Card_title_label_and_badge', () => {
 const tick = () => new Promise(r => setImmediate(r));
 /** A full attached tree built from the kind classes, with a ribbon-capable sandbox. */
 function T7(opts) {
-	const w = world(Object.assign({ ribbon: true }, opts));
+	const w = world({ ribbon: true, ...opts });
 	const M = w.M;
 	const page = new M.Page({ id: 'instances', title: 'T', nav: [], activeNav: [] }), card = new M.Card({ id: 'list' }), table = new M.Table({});
 	const row = new M.Row({}, { key: '651' }), detail = new M.RowDetail({}), tab = new M.DetailTab({ id: 'orders' });
@@ -823,7 +824,7 @@ check('action_click_payload', () => {
 	ok(bar, 'actions container painted');
 	eq(bar.childNodes.length, 2);
 	const b = bar.childNodes[0];
-	eq(b.getAttribute('data-action-id'), 'go');
+	eq(b.dataset.actionId, 'go');
 	eq(b.getAttribute('type'), 'button');
 	b.dispatch('click', {});
 	bar.childNodes[1].dispatch('click', {});
@@ -838,7 +839,7 @@ check('event_frozen_except_stopPropagation', () => {
 	ok(Object.isFrozen(ev0));
 	eq(typeof ev0.stopPropagation, 'function');
 	throws(() => { ev0.type = 'z'; }, 'TypeError');
-	eq(Object.keys(ev0).sort(), ['meta', 'payload', 'source', 'stopPropagation', 'target', 'type']);
+	eq(Object.keys(ev0).sort((a, b) => (a < b ? -1 : Number(a > b))), ['meta', 'payload', 'source', 'stopPropagation', 'target', 'type']);
 });
 check('event_target_is_declaring_handle', () => {
 	const t = T7(); t.attachAll();
@@ -1000,7 +1001,7 @@ check('handler_throw_painted_E118_target_only', () => {
 	t.card._fire('loaded', {});
 	const slot = t.card.el.querySelector('.jc-card-bus-error');
 	ok(slot, 'painted on the target');
-	eq(slot.getAttribute('data-juneau-error'), 'E-JS-118');
+	eq(slot.dataset.juneauError, 'E-JS-118');
 	ok(slot.textContent.includes('boom') && slot.textContent.includes('bad.throw'));
 	eq(t.page.el.querySelector('.jc-card-bus-error'), null);
 	eq(t.table.el.querySelector('.jc-card-bus-error'), null);
@@ -1013,7 +1014,7 @@ check('handler_rejects_painted_E118', async () => {
 	t.card._fire('loaded', {});
 	await tick(); await tick();
 	const slot = t.card.el.querySelector('.jc-card-bus-error');
-	ok(slot && slot.textContent.includes('nope'));
+	ok(slot?.textContent.includes('nope'));
 });
 check('other_handlers_still_run_after_throw', () => {
 	const t = T7(); t.attachAll();
@@ -1070,7 +1071,7 @@ check('resolve_unknown_E116_painted_inline_others_still_work', () => {
 	t.M.resolveHandlers(t.doc, {});
 	const slot = t.card.el.querySelector('.jc-card-bus-error');
 	ok(slot, 'painted on the owner');
-	eq(slot.getAttribute('data-juneau-error'), 'E-JS-116');
+	eq(slot.dataset.juneauError, 'E-JS-116');
 	ok(slot.textContent.includes('ord.missing'));
 	eq(t.table.el.querySelector('.jc-card-bus-error'), null);
 	t.table._fire('loaded', {});
@@ -1165,10 +1166,10 @@ check('inline_with_compiler_ok', () => {
 // Building the tree from JSON and mounting it
 //-----------------------------------------------------------------------------------------------------------------
 
-const PAGE = o => Object.assign({ contractVersion: '1', modelVersion: '1', id: 'pg', title: 'T', nav: [{ id: 'home', label: 'Home' }], activeNav: ['home'], cards: [] }, o);
-const mountPage = (w, contract, extra) => w.JC.mount(contract, Object.assign({ root: w.doc.body, document: w.doc }, extra));
+const PAGE = o => ({ contractVersion: '1', modelVersion: '1', id: 'pg', title: 'T', nav: [{ id: 'home', label: 'Home' }], activeNav: ['home'], cards: [], ...o });
+const mountPage = (w, contract, extra) => w.JC.mount(contract, { root: w.doc.body, document: w.doc, ...extra });
 const regProbe = (w, log) => {
-	w.JC.registerCard('probe', class extends w.M.Card { render() { if (log) log.push('render:' + this.id); this.el.appendChild(w.doc.createTextNode('p')); } });
+	w.JC.registerCard('probe', class extends w.M.Card { render() { if (log) { log.push('render:' + this.id); } this.el.appendChild(w.doc.createTextNode('p')); } });
 };
 check('fromJSON_builds_page_cards_nav', () => {
 	const w = load({ shell: true, ribbon: true });
@@ -1230,7 +1231,7 @@ check('mount_creates_page_handle_with_paths', () => {
 	regProbe(w);
 	mountPage(w, PAGE({ cards: [{ id: 'p1', type: 'probe' }] }));
 	const page = w.M.page();
-	ok(page && page.attached);
+	ok(page?.attached);
 	ok(w.M.get('page/pg') === page);
 	ok(w.M.get('page/pg/card:p1').attached);
 	eq(page.tabs[0].path, 'page/pg/pagetab:home');
@@ -1283,7 +1284,7 @@ check('second_mount_replaces_page', () => {
 check('premade_handles_win_over_json_instances', () => {
 	const w = load({ shell: true, ribbon: true });
 	let constructed = 0;
-	w.JC.registerCard('probe', class extends w.M.Card { constructor(s, o) { super(s, o); constructed++; } render() {} });
+	w.JC.registerCard('probe', class extends w.M.Card { constructor(s, o) { super(s, o); constructed++; } render() { /* no-op */ } });
 	const pre = new (w.JC.cardClass('probe'))({ id: 'p1' });
 	const before = constructed;
 	mountPage(w, PAGE({ cards: [{ id: 'p1', type: 'probe' }] }), { instances: { p1: pre } });
@@ -1340,7 +1341,7 @@ const prep = (w, c) => {
 	regProbe(w);
 };
 const codesOf = list => list.map(f => f.code);
-const stripForSchema = c => { const x = JSON.parse(JSON.stringify(c)); delete x.id; delete x.modelVersion; for (const n of x.nav || []) if (!n.children) n.href = '/' + n.id; return x; };
+const stripForSchema = c => { const x = structuredClone(c); delete x.id; delete x.modelVersion; for (const n of x.nav || []) { if (!n.children) { n.href = '/' + n.id; } } return x; };
 
 // One mirror per corpus case name (a Java check without its JS twin has no entry here and fails corpus_every_case_has_mirror).
 const MIRRORS = {};
@@ -1351,7 +1352,7 @@ const jsonMirror = c => () => {
 		const base = w.M.validate(stripForSchema(PAGE({})), { schema: SCHEMA });
 		eq(codesOf(base), [], 'a valid page has no findings');
 		const got = w.M.validate(stripForSchema(c.contract), { schema: SCHEMA });
-		ok(got.some(f => f.code === c.jsonCode && /^schema:/.test(f.message)), 'schema finding missing: ' + JSON.stringify(got));
+		ok(got.some(f => f.code === c.jsonCode && f.message.startsWith('schema:')), 'schema finding missing: ' + JSON.stringify(got));
 		return;
 	}
 	if (c.fatal) {
@@ -1438,7 +1439,7 @@ check('schema_pass_opt_in_on_json_mount', () => {
 });
 check('pack_missing_reported', () => {
 	const w = load({ shell: true, ribbon: true });
-	w.JC.registerCard('needy', class extends w.M.Card { static requiredPacks(spec) { return ['nopack']; } render() {} });
+	w.JC.registerCard('needy', class extends w.M.Card { static requiredPacks(spec) { return ['nopack']; } render() { /* no-op */ } });
 	const f = w.M.validate(PAGE({ cards: [{ id: 'n1', type: 'needy' }] }));
 	ok(f.some(x => x.code === 'E-JS-121' && /nopack/.test(x.message)), JSON.stringify(f));
 });
@@ -1447,7 +1448,7 @@ check('pack_missing_reported', () => {
 // Imperative construction and toJSON
 //-----------------------------------------------------------------------------------------------------------------
 
-const ISPEC = o => Object.assign({ id: 'pets', title: 'Pets', nav: [], activeNav: [], modelVersion: '1' }, o);
+const ISPEC = o => ({ id: 'pets', title: 'Pets', nav: [], activeNav: [], modelVersion: '1', ...o });
 const petsTable = () => new (load({ shell: true }).M.Table)({});
 const iw = () => { const w = load({ shell: true, ribbon: true }); w.NS.handlers.register('app.hello', () => {}); regProbe(w); return w; };
 const TBL = { id: 'pets', dataUrl: '/api/pets', selection: { rowIdField: 'id' }, columns: [{ key: 'id' }, { key: 'name' }] };
@@ -1473,7 +1474,7 @@ check('page_add_card_wraps_bare_Table', () => {
 	const page = new w.M.Page(ISPEC()), t = new w.M.Table(TBL);
 	page.add(t);
 	const card = page.card('pets');
-	ok(card && card.spec.type === 'datatables', 'wrapped card');
+	ok(card?.spec.type === 'datatables', 'wrapped card');
 	ok(t.parent === card && t.path === 'page/pets/card:pets/table', t.path);
 	const j = page.toJSON().cards[0];
 	eq(j.id, 'pets'); eq(j.type, 'datatables'); eq(j.table.dataUrl, '/api/pets');
@@ -1586,7 +1587,7 @@ check('toJSON_page_full_contract_validates_against_schema', () => {
 	t.setDetail({ endpoint: '/api/pets/{id}/detail', title: 'Pet' }).addTab({ id: 'orders', title: 'Orders' });
 	const j = page.toJSON();
 	const f = w.M.validate(stripForSchema(j), { schema: SCHEMA });
-	eq(f.filter(x => /^schema:/.test(x.message)), []);
+	eq(f.filter(x => x.message.startsWith('schema:')), []);
 });
 check('toJSON_includes_optional_root_keys', () => {
 	const w = iw();
@@ -1622,7 +1623,11 @@ check('fromJSON_toJSON_roundtrip_equal', () => {
 			ribbon: [{ type: 'refresh' }, { type: 'divider' }, { type: 'option', id: 'mine', title: 'Mine' }],
 			detail: { endpoint: '/d/{id}', tabs: [{ id: 'o', title: 'O', model: { on: { loaded: 'app.hello' } } }], actions: [{ type: 'handler', id: 'rf', handler: 'juneau.refresh' }] } } }
 	] });
-	const canon = v => Array.isArray(v) ? v.map(canon) : (v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, canon(v[k])])) : v);
+	const canon = v => {
+		if (Array.isArray(v)) return v.map(canon);
+		if (v && typeof v === 'object') return Object.fromEntries(Object.keys(v).sort((a, b) => (a < b ? -1 : Number(a > b))).map(k => [k, canon(v[k])]));
+		return v;
+	};
 	eq(canon(w.M.fromJSON(src).toJSON()), canon(src));
 });
 check('build_equals_fromJSON_mount', () => {
@@ -1670,7 +1675,7 @@ check('imperative_bad_handler_throws_E114_E123_E119_at_call', () => {
 check('prebuilt_handles_win_over_shell_instances', () => {
 	const w = iw();
 	let built = 0;
-	w.JC.registerCard('counted', class extends w.M.Card { constructor(s, o) { super(s, o); built++; } render() {} });
+	w.JC.registerCard('counted', class extends w.M.Card { constructor(s, o) { super(s, o); built++; } render() { /* no-op */ } });
 	const page = new w.M.Page(ISPEC({ id: 'pg' }));
 	const c = page.addCard('counted', { id: 'k1' });
 	const before = built;

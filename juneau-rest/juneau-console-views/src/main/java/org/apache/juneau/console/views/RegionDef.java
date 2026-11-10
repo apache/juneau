@@ -56,6 +56,7 @@ import org.apache.juneau.terminal.report.TerminalViewChecks;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S1192", // The "chart" literal at the toContractMap call is a map key, not the region type.
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	"java:S3776" // validate*() and toContractMap() (also in Field) chain many independent null/blank guards; each is trivial, so splitting adds no clarity
 })

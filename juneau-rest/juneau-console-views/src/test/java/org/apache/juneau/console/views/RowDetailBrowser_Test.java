@@ -62,6 +62,7 @@ class RowDetailBrowser_Test extends org.apache.juneau.TestBase {
 			.eval("window.__probe.selected = Array.from(document.querySelectorAll('#t1-body [role=tab]')).map(function (t) { return t.getAttribute('aria-selected'); });"
 				+ "window.__probe.visiblePanes = Array.from(document.querySelectorAll('#t1-body [role=tabpanel]')).filter(function (p) { return !p.hidden; }).length;")
 			.run();
+		tables();
 	}
 
 	@Test void a01_expandPaintsTabStrip_andSelectingSecondTabSwitchesPane() {
@@ -112,8 +113,7 @@ class RowDetailBrowser_Test extends org.apache.juneau.TestBase {
 
 	private static Map<String,Map<String,Object>> tableReport;
 
-	@BeforeAll
-	static void tables() throws Exception {
+	private static void tables() throws Exception {
 		var f = ConsoleBrowserFixture.create("row-detail-model");
 		for (var id : List.of("pa", "pb")) {
 			f.asset("/api/" + id, "[{\"id\":\"r1\",\"name\":\"Rex\"}]", "application/json")

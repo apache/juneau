@@ -83,7 +83,7 @@ class LucideSprite_Provenance_Test extends TestBase {
 
 	@Test void a04_docNamesTheTagAndLicenses() throws Exception {
 		var md = read("juneau-symbols-lucide-provenance.md");
-		assertTrue(Pattern.compile("v?\\d+\\.\\d+\\.\\d+").matcher(md).find());
+		assertTrue(Pattern.compile("v?+\\d++\\.\\d++\\.\\d++").matcher(md).find());
 		assertTrue(md.contains("ISC"));
 		assertTrue(md.contains("MIT"));
 	}

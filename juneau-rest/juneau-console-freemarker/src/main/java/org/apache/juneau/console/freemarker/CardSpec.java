@@ -25,7 +25,7 @@ import org.apache.juneau.console.views.*;
 
 /**
  * Type-agnostic card entry in the page contract: {@code id}, {@code type}, optional {@code src},
- * {@code title}, {@code template}, plus a type-specific body map. C2 extends the card grammar.
+ * {@code title}, {@code template}, plus a type-specific body map.
  *
  * <h2 class='section'>Example:</h2>
  * <p class='bjava'>

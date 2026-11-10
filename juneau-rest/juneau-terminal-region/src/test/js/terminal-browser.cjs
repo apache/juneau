@@ -267,7 +267,7 @@ const CASES = [
 	['b24_toolbarControlsUseTheStandardButtonKinds', async function (page) {
 		await open(page, { log: Buffer.from('hello\r\n') });
 		const r = await page.evaluate(function () {
-			const q = function (s) { return document.querySelector(s); };
+			const q = function (s) { return document.querySelector(s); }; // NOSONAR javascript:S7721 - serialized into the page, so it must stay self-contained
 			const cs = function (s) { return getComputedStyle(q(s)); };
 			return {
 				copy: q('button.juneau-term-copy').classList.contains('jc-btn'),
@@ -281,7 +281,7 @@ const CASES = [
 		});
 		expect(r.copy && r.loadAll, 'Copy and Load all carry jc-btn: ' + JSON.stringify(r));
 		expect(!r.search, 'the Search input does not carry jc-btn');
-		expect(r.followTag === 'LABEL' && /flex$/.test(r.followDisplay) && r.followEdge === 'solid 1px', 'Follow is a toggle-styled label: ' + JSON.stringify(r));
+		expect(r.followTag === 'LABEL' && r.followDisplay.endsWith('flex') && r.followEdge === 'solid 1px', 'Follow is a toggle-styled label: ' + JSON.stringify(r));
 		expect(r.copyEdge === 'solid 1px', 'the fallback edge without chrome.css: ' + r.copyEdge);
 	}],
 	// The bytes endpoint answers 404: a one-line muted panel, no red badge, no toolbar, no screen.

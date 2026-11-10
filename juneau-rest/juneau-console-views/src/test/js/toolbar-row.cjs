@@ -76,7 +76,7 @@ function layout(ribbon) {
 		n.childNodes.forEach(function (c) {
 			if (c.className === 'dt-search') names.push('search');
 			else if (c.className === 'juneau-view-ribbon') walk(c);
-			else if (c.className === 'juneau-view-ribbon-group') names.push(c.getAttribute('data-juneau-group') || 'untagged');
+			else if (c.className === 'juneau-view-ribbon-group') names.push(c.dataset.juneauGroup || 'untagged');
 		});
 	})(right);
 	return {
@@ -128,8 +128,8 @@ if (out.hasSeam) {
 		out.slot_filterInRibbon = bar.querySelector('.dt-search') === search;
 		out.slot_noPlaceholderLeft = bar.querySelector('[data-juneau-slot="search"]') === null;
 		out.slot_notDuplicatedInRight = right.childNodes.filter(function (c) { return c.className === 'dt-search'; }).length === 0;
-		out.slot_filterTagged = search.getAttribute('data-juneau-ribbon-id');
-		out.slot_inSearchGroup = search.parentNode.getAttribute('data-juneau-group');
+		out.slot_filterTagged = search.dataset.juneauRibbonId;
+		out.slot_inSearchGroup = search.parentNode.dataset.juneauGroup;
 	}
 	// No filter box (searching:false): the placeholder is removed and nothing empty remains.
 	{

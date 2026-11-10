@@ -111,12 +111,12 @@ async function scenario(detail, opts) {
 	await flush(12);
 	const mt = NS.tables.handle(table);
 	return { env, NS, I, M, calls, panel: state.panel, mt, ctx, table,
-		detail: function () { const r = mt.row('s-7'); return r && r.detail; } };
+		detail: function () { const r = mt.row('s-7'); return r?.detail; } };
 }
 
 function clickTab(panel, id) {
 	const list = panel.querySelector('[role="tablist"]');
-	const btn = panel.querySelectorAll('[role="tab"]').filter(function (b) { return b.dataset.juneauStripTab === id; })[0];
+	const btn = panel.querySelectorAll('[role="tab"]').find(function (b) { return b.dataset.juneauStripTab === id; });
 	list.dispatch('click', { target: btn, preventDefault: function () {}, stopPropagation: function () {} });
 }
 
@@ -125,7 +125,7 @@ function clickTab(panel, id) {
 	const d = s.detail();
 	out.detail_exists = !!d;
 	out.tab_handles = d ? d.tabs.map(function (t) { return t.id; }).join('|') : null;
-	out.tab_lookup = !!(d && d.tab('b') && d.tab('b').id === 'b');
+	out.tab_lookup = !!(d?.tab('b')?.id === 'b');
 	out.loaded_once_with_count = s.calls.filter(function (c) { return c.indexOf('loaded:') === 0; }).join('|');
 	out.rendered_fired = s.calls.indexOf('rendered:rowdetail') >= 0;
 
@@ -142,7 +142,7 @@ function clickTab(panel, id) {
 
 	// handler action painted into the model actions box and invokes the registered handler
 	const box = s.panel.querySelector('.juneau-model-actions');
-	const goBtn = box && box.querySelector('[data-action-id="go"]');
+	const goBtn = box?.querySelector('[data-action-id="go"]');
 	out.action_painted = !!goBtn;
 	if (goBtn) goBtn.dispatch('click', {});
 	out.action_invoked = s.calls.filter(function (c) { return c.indexOf('go:') === 0; }).join('|');
@@ -152,7 +152,7 @@ function clickTab(panel, id) {
 	const t = await scenario(DETAIL, { throwOnGo: true });
 	const tb = t.panel.querySelector('.juneau-model-actions');
 	let threw = false;
-	try { tb.querySelector('[data-action-id="go"]').dispatch('click', {}); } catch (e) { threw = true; }
+	try { tb.querySelector('[data-action-id="go"]').dispatch('click', {}); } catch (e) { threw = true; } // NOSONAR javascript:S2486 - the throw is the outcome under test
 	clickTab(t.panel, 'b');
 	await flush(6);
 	out.throwing_handler_contained = !threw && t.calls.indexOf('activated:b') >= 0;

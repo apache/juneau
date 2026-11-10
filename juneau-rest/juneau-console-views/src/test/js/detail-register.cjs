@@ -106,14 +106,14 @@ async function scenario(detail, opts) {
 	await flush(12);
 	const mt = NS.tables.handle(table);
 	return { env, NS, I, M, calls, recFetch, rec: loaded.rec, panel: state.panel, mt, ctx, table,
-		detail: function () { const r = mt.row('s-7'); return r && r.detail; } };
+		detail: function () { const r = mt.row('s-7'); return r?.detail; } };
 }
 
 
 const CLIENT = function (extra) {
 	return {
 		mode: 'inline', title: 'Pet {id}',
-		tabs: [Object.assign({ id: 'c', kind: 'client', title: 'Custom', renderer: 'pet-labels', emptyText: 'Nothing here' }, extra || {})]
+		tabs: [{ id: 'c', kind: 'client', title: 'Custom', renderer: 'pet-labels', emptyText: 'Nothing here', ...extra }]
 	};
 };
 
@@ -132,23 +132,23 @@ function statusText(pane) { return pane.querySelectorAll('[role="status"]').map(
 	const a = await scenario(CLIENT(), { setup: function (NS, calls, env) {
 		NS.detail.register('pet-labels', function (tab, data) {
 			count++;
-			seen = { tabId: tab.id, kind: tab.kind, keys: Object.keys(data).sort().join(','), frozen: Object.isFrozen(data),
+			seen = { tabId: tab.id, kind: tab.kind, keys: Object.keys(data).sort((a, b) => (a < b ? -1 : Number(a > b))).join(','), frozen: Object.isFrozen(data),
 				rowId: data.rowId, name: data.row.name, hidden: data.row.hidden, refresh: data.refresh, hasPane: !!data.pane, hasSignal: !!data.signal,
-				helperKeys: Object.keys(tab.helpers).sort().join(','), helpersFrozen: Object.isFrozen(tab.helpers),
+				helperKeys: Object.keys(tab.helpers).sort((a, b) => (a < b ? -1 : Number(a > b))).join(','), helpersFrozen: Object.isFrozen(tab.helpers),
 				fieldGrid: typeof tab.helpers.fieldGrid, status: typeof tab.helpers.renderAsyncStatus };
-			try { tab.helpers.extra = 1; } catch (e) { /* strict mode */ }
-			try { tab.helpers = {}; } catch (e) { /* strict mode */ }
-			seen.helpersStill = Object.keys(tab.helpers).sort().join(',');
+			try { tab.helpers.extra = 1; } catch (e) { /* strict mode */ } // NOSONAR javascript:S2486 - strict mode rejects the write, which is the point
+			try { tab.helpers = {}; } catch (e) { /* strict mode */ } // NOSONAR javascript:S2486 - strict mode rejects the write, which is the point
+			seen.helpersStill = Object.keys(tab.helpers).sort((a, b) => (a < b ? -1 : Number(a > b))).join(',');
 			write(env, data.pane, 'rendered');
 		});
 	}});
 	out.reg_calledOnce = count === 1;
 	out.reg_tab = seen && seen.tabId + ':' + seen.kind;
-	out.reg_dataKeys = seen && seen.keys;
-	out.reg_dataFrozen = seen && seen.frozen;
+	out.reg_dataKeys = seen?.keys;
+	out.reg_dataFrozen = seen?.frozen;
 	out.reg_row = seen && seen.rowId + ':' + seen.name + ':' + seen.hidden;
-	out.reg_refresh = seen && seen.refresh;
-	out.reg_paneSignal = seen && seen.hasPane && seen.hasSignal;
+	out.reg_refresh = seen?.refresh;
+	out.reg_paneSignal = seen?.hasPane && seen.hasSignal;
 	out.reg_helpers = seen && seen.helperKeys + ':' + seen.helpersFrozen + ':' + seen.fieldGrid + ':' + seen.status + ':' + seen.helpersStill;
 	out.reg_painted = a.panel.querySelectorAll('[role="tabpanel"]').map(function (p) { return p.textContent; }).join('|').indexOf('rendered') >= 0;
 
@@ -194,16 +194,16 @@ function statusText(pane) { return pane.querySelectorAll('[role="status"]').map(
 	out.fetch_proto = (fetchResults.proto || '').indexOf('err:') === 0;
 	out.fetch_bad = (fetchResults.bad || '').indexOf('err:') === 0;
 	out.fetch_contract = (fetchResults.contract || '').indexOf('err:') === 0;
-	const good = f.recFetch.filter(function (r) { return r.url.indexOf('/api/pet/') === 0; })[0];
-	out.fetch_url = good && good.url;
-	out.fetch_accept = good && good.init && good.init.headers && good.init.headers.Accept;
-	out.fetch_csrf = !!(good && good.init && Object.values(good.init.headers || {}).indexOf('tok-1') >= 0);
+	const good = f.recFetch.find(function (r) { return r.url.indexOf('/api/pet/') === 0; });
+	out.fetch_url = good?.url;
+	out.fetch_accept = good?.init?.headers?.Accept;
+	out.fetch_csrf = !!(good?.init && Object.values(good.init.headers || {}).indexOf('tok-1') >= 0);
 	out.fetch_noEvilRequest = f.recFetch.every(function (r) { return r.url.indexOf('evil') < 0; });
 
 	// --- throw -> error with Retry; Retry re-runs
 	let runs = 0;
 	const t = await scenario(CLIENT(), { setup: function (NS, calls, env) {
-		NS.detail.register('pet-labels', function (tab, data) { runs++; if (runs === 1) throw new Error('kaput'); write(env, data.pane, 'recovered'); });
+		NS.detail.register('pet-labels', function (tab, data) { runs++; if (runs === 1) { throw new Error('kaput'); } write(env, data.pane, 'recovered'); });
 	}});
 	out.throw_status = statusText(t.panel);
 	const retry = t.panel.querySelector('.juneau-view-detail-retry');

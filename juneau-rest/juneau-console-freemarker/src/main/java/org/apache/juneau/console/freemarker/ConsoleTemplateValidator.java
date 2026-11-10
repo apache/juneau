@@ -432,7 +432,7 @@ public final class ConsoleTemplateValidator {
 	private static final Set<String> RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");
 
 	/**
-	 * The C2 card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.
+	 * The card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.
 	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code </@card}.
 	 */
 	@SuppressWarnings({

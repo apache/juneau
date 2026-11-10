@@ -47,7 +47,8 @@ class NestedSlot_Test extends TestBase {
 	}
 
 	@Test void a02_noRowsDataUrl_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> NestedSlot.of(TableSpec.create("t"), "petId"));
+		var t = TableSpec.create("t");
+		assertThrows(IllegalArgumentException.class, () -> NestedSlot.of(t, "petId"));
 	}
 
 	@Test void a03_depthOver2_rejected() {

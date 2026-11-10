@@ -40,6 +40,10 @@ import org.apache.juneau.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Map keys read more clearly inline than as constants.
+	"java:S3776" // Branching is inherent to validate and toMap, which check many independent tab settings.
+})
 public final class DetailTab implements Handled<DetailTab> {
 
 	/** The tab kinds. */
@@ -98,8 +102,8 @@ public final class DetailTab implements Handled<DetailTab> {
 		}
 	}
 
-	private static final Pattern ID = Pattern.compile("[a-z][a-z0-9-]{0,31}");
-	private static final Pattern RENDERER = Pattern.compile("[A-Za-z][A-Za-z0-9._-]{0,63}");
+	private static final Pattern ID_GRAMMAR = Pattern.compile("[a-z][a-z0-9-]{0,31}");
+	private static final Pattern RENDERER_GRAMMAR = Pattern.compile("[A-Za-z][A-Za-z0-9._-]{0,63}");
 
 	private record Group(String title, List<String> fields) {}
 
@@ -323,7 +327,14 @@ public final class DetailTab implements Handled<DetailTab> {
 	}
 
 	static String slug(String t) {
-		return t.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-").replaceAll("^-+|-+$", "");
+		var s = t.toLowerCase(Locale.ROOT).replaceAll("[^a-z0-9]+", "-");
+		var b = 0;
+		var e = s.length();
+		while (b < e && s.charAt(b) == '-')
+			b++;
+		while (e > b && s.charAt(e - 1) == '-')
+			e--;
+		return s.substring(b, e);
 	}
 
 	Kind kind() {
@@ -344,8 +355,8 @@ public final class DetailTab implements Handled<DetailTab> {
 
 	private void validate() {
 		var rid = resolvedId();
-		if (! ID.matcher(rid).matches())
-			throw iaex("DetailTab '%s' id '%s' must match %s.", title, rid, ID.pattern());
+		if (! ID_GRAMMAR.matcher(rid).matches())
+			throw iaex("DetailTab '%s' id '%s' must match %s.", title, rid, ID_GRAMMAR.pattern());
 		if (endpoint != null && ! RegionDef.isSafeDetailEndpoint(endpoint))
 			throw iaex("DetailTab '%s' endpoint '%s' is not a same-origin path.", rid, endpoint);
 		if (countFromRows && kind != Kind.TABLE)
@@ -363,8 +374,8 @@ public final class DetailTab implements Handled<DetailTab> {
 					throw iaex("DetailTab '%s' needs a chart region.", rid);
 			}
 			case CLIENT -> {
-				if (renderer == null || ! RENDERER.matcher(renderer).matches())
-					throw iaex("DetailTab '%s' renderer '%s' must match %s.", rid, renderer, RENDERER.pattern());
+				if (renderer == null || ! RENDERER_GRAMMAR.matcher(renderer).matches())
+					throw iaex("DetailTab '%s' renderer '%s' must match %s.", rid, renderer, RENDERER_GRAMMAR.pattern());
 			}
 		}
 	}

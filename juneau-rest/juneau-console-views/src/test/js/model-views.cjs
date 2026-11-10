@@ -44,7 +44,7 @@ function eq(a, b, msg) {
 }
 function check(key, fn) {
 	pending.push(async () => {
-		try { await fn(); report[key] = true; } catch (e) { report[key] = 'FAIL: ' + (e && e.message); }
+		try { await fn(); report[key] = true; } catch (e) { report[key] = 'FAIL: ' + e?.message; }
 	});
 }
 const tick = () => new Promise(r => setImmediate(r));
@@ -58,7 +58,7 @@ function fakeDt(tableEl, doc) {
 	const dt = {
 		log: log,
 		setCount: n => { count = n; },
-		on: (evt, fn) => { (handlers[evt] = handlers[evt] || []).push(fn); return dt; },
+		on: (evt, fn) => { handlers[evt] ||= []; handlers[evt].push(fn); return dt; },
 		fire: (evt, e, ...rest) => { (handlers[evt] || []).forEach(fn => fn(e, ...rest)); },
 		closeAllChildren: () => { for (const s of states.values()) s.shown = false; },
 		row: tr => {
@@ -88,8 +88,7 @@ function fakeDt(tableEl, doc) {
 }
 
 /** A fresh sandbox with all six scripts, a model tree built from `table` JSON, and a bound view table. */
-function mk(tableJson, opts) {
-	opts = opts || {};
+function mk(tableJson) {
 	const errors = [];
 	const con = Object.assign(Object.create(console), { error: (...a) => errors.push(a.join(' ')), warn: (...a) => errors.push('WARN ' + a.join(' ')) });
 	const env = makeEnv();
@@ -153,7 +152,7 @@ function mk(tableJson, opts) {
 
 	const drawn = [];
 	function rowsDom(ids) {
-		while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+		while (tbody.firstChild) tbody.firstChild.remove();
 		drawn.length = 0;
 		for (const id of ids) {
 			const tr = env.el('tr');
@@ -306,7 +305,7 @@ check('ribbon_item_handles_by_id', () => {
 	ok(bar, 'no bar');
 	const r = w.t.ribbon;
 	ok(r, 'no ribbon handle');
-	for (const id of ['refresh', 'mine', 'go']) ok(r.item(id) && r.item(id).attached && r.item(id).el, 'item ' + id);
+	for (const id of ['refresh', 'mine', 'go']) ok(r.item(id)?.attached && r.item(id).el, 'item ' + id);
 });
 check('ribbon_missing_id_custom_item_E121', () => {
 	const w = mk({ ribbon: [{ type: 'publish', topic: 'a.b' }] });
@@ -326,8 +325,8 @@ check('ribbon_new_item_types_have_handles', () => {
 	const w = mk({ ribbon: [{ type: 'search', id: 'search' }, { type: 'linkButton', id: 'link' }, { type: 'columnSettings', id: 'columns' }, { type: 'refresh', id: 'refresh' }], columnConfig: true });
 	ribbonOf(w);
 	// This harness loads no config or init builders, so only the search slot has an element; link and columns are skipped.
-	ok(w.t.ribbon.item('search') && w.t.ribbon.item('search').attached, 'search handle');
-	ok(w.t.ribbon.item('refresh') && w.t.ribbon.item('refresh').attached, 'refresh handle');
+	ok(w.t.ribbon.item('search')?.attached, 'search handle');
+	ok(w.t.ribbon.item('refresh')?.attached, 'refresh handle');
 	ok(!w.t.ribbon.item('link') && !w.t.ribbon.item('columns'), 'a skipped item must leave no handle');
 });
 check('ribbon_hidden_items_leave_no_handle', () => {

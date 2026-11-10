@@ -17,9 +17,9 @@
 // Handlers the JS-only model pages declare by name.  Loaded by the shell (page "scripts") or by a plain script tag.
 (function () {
 	"use strict";
-	var probe = window.__probe = window.__probe || {};
+	const probe = window.__probe = window.__probe || {};
 	probe.log = probe.log || [];
-	var H = window.JuneauViews.handlers;
+	const H = window.JuneauViews.handlers;
 	H.register("app.go", function (target) { probe.log.push("go:" + target.id); });
 	H.register("app.boom", function () { throw new Error("kaboom"); });
 	H.register("app.pageLoaded", function () { probe.log.push("pageLoaded"); });

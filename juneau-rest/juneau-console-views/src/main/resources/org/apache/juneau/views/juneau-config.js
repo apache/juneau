@@ -1505,8 +1505,8 @@
 	function columnDetailText(col) {
 		if (!col) return DETAIL_DEFAULT_TEXT;
 		const facts = [columnName(col), String(col.data)];
-		facts.push(col.orderable === false ? "not sortable" : "sortable");
-		facts.push(col.search != null || col.searchable === true ? "searchable" : "not searchable");
+		facts.push(col.orderable === false ? "not sortable" : "sortable",
+		col.search != null || col.searchable === true ? "searchable" : "not searchable");
 		if (Array.isArray(col.formats) && col.formats.length) facts.push("formats: " + col.formats.join("/"));
 		facts.push(col.defaultVisible === false && !col.pinned ? "hidden by default" : "shown by default");
 		if (col.pinned) facts.push("pinned");

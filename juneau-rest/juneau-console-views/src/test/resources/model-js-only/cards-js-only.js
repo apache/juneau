@@ -18,16 +18,16 @@
 // juneau.countLabel.  Loaded by a plain script tag after the console and views scripts.
 (function () {
 	"use strict";
-	var M = window.JuneauViews.model;
-	var page = new M.Page({ title: "Pets", nav: [], activeNav: [], modelVersion: "1" });
-	var pets = new M.Table({
+	const M = window.JuneauViews.model;
+	const page = new M.Page({ title: "Pets", nav: [], activeNav: [], modelVersion: "1" });
+	const pets = new M.Table({
 		id: "pets", dataMode: "client", dataUrl: "/api/pets", selection: { rowIdField: "id", selectAll: true, scope: "persistent" },
 		columns: [{ key: "id", label: "Id" }, { key: "name", label: "Name" }],
 		ribbon: [{ type: "action", id: "reload", icon: "refresh-cw" }]
 	});
-	var reload = pets.ribbon.item("reload") || pets.ribbon.addItem({ type: "action", id: "reload", icon: "refresh-cw" });
+	const reload = pets.ribbon.item("reload") || pets.ribbon.addItem({ type: "action", id: "reload", icon: "refresh-cw" });
 	reload.action("click", "refresh-cw", "juneau.refreshClosest", { kind: "table" });
-	var detail = pets.setDetail({ endpoint: "/api/pets/{id}/detail", title: "Pet {id}", labels: { id: "Id", name: "Name" }, model: { actions: [{ id: "refresh", icon: "refresh-cw", handler: "juneau.refresh" }] } });
+	const detail = pets.setDetail({ endpoint: "/api/pets/{id}/detail", title: "Pet {id}", labels: { id: "Id", name: "Name" }, model: { actions: [{ id: "refresh", icon: "refresh-cw", handler: "juneau.refresh" }] } });
 	detail.addTab({ id: "info", title: "Info", kind: "fields", fields: ["name"] });
 	detail.addTab({
 		id: "orders", title: "Orders", kind: "table", refreshOnPoll: window.__refreshOnPoll ? true : undefined,

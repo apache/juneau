@@ -18,7 +18,6 @@ import static org.junit.jupiter.api.Assumptions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.console.*;
 import org.junit.jupiter.api.*;
 
 /**

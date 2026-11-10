@@ -350,7 +350,7 @@ if (out.seedExported) {
 		out.mountCallsSeed = calls;
 		let opened = 0;
 		C.seedChooserDraft = function () { opened++; throw new Error('stop'); };
-		try { C.openChooser(tbl, mkCtx()); } catch (e) { /* the spy aborts openChooser right after seeding */ }
+		try { C.openChooser(tbl, mkCtx()); } catch (e) { /* the spy aborts openChooser right after seeding */ } // NOSONAR javascript:S2486 - the spy aborts openChooser on purpose
 		out.openCallsSeed = opened;
 		C.seedChooserDraft = origSeed;
 	}

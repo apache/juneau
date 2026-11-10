@@ -207,6 +207,10 @@ function makeEnv() {
 			remove: function () {
 				if (this.parentNode) this.parentNode.removeChild(this); // NOSONAR javascript:S7762 -- this IS the shim's remove(); it must delegate to the shim's own removeChild().
 			},
+			/** Inserts `c` as this node's previous sibling, like the real `ChildNode.before`. */
+			before: function (c) {
+				if (this.parentNode) this.parentNode.insertBefore(c, this);
+			},
 			insertBefore: function (c, ref) {
 				c.remove();
 				const i = this.childNodes.indexOf(ref);

@@ -76,7 +76,6 @@ class RowDetailLeak_BrowserTest extends TestBase {
 
 	@BeforeAll
 	static void run() throws Exception {
-		var open = "#pets-body .juneau-view-detail-toggle";
 		var cycle = "var p = window.__probe = window.__probe || {}; (async function () { try {"
 			+ "  var tog = function () { document.querySelector('#pets-body .juneau-view-detail-toggle').click(); };"
 			+ "  p.base = { c: __charts(), t: __tables() };"

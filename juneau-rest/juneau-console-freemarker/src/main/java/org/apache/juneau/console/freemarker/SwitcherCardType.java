@@ -65,6 +65,9 @@ public final class SwitcherCardType implements CardTypeHandler {
 		return frag;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to walking a switcher body's views and sections.
+	})
 	@Override
 	public List<Map<String,Object>> nestedCards(JsonMap body) {
 		var out = new ArrayList<Map<String,Object>>();

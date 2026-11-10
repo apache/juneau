@@ -443,7 +443,7 @@
 	function pillSlot(value) {
 		let h = 0x811c9dc5;
 		const s = String(value);
-		for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193);
+		for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193); // NOSONAR javascript:S7758 - the hash runs over UTF-16 code units, matching the Java twin
 		return ((h >>> 0) % PILL_CATEGORY_SLOTS) + 1;
 	}
 

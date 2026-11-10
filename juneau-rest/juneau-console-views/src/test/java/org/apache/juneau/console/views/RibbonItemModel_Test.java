@@ -55,13 +55,16 @@ class RibbonItemModel_Test extends TestBase {
 	}
 
 	@Test void a04_secondStockOfSameKindNeedsExplicitId() {
-		var e = assertThrows(IllegalArgumentException.class, () -> table(RibbonItem.refresh(), RibbonItem.refresh()));
+		var r1 = RibbonItem.refresh();
+		var r2 = RibbonItem.refresh();
+		var e = assertThrows(IllegalArgumentException.class, () -> table(r1, r2));
 		assertTrue(e.getMessage().contains("t1"), e.getMessage());
 		table(RibbonItem.refresh(), RibbonItem.refresh().id("refresh2"));
 	}
 
 	@Test void a05_publishRequiresExplicitId() {
-		assertThrows(IllegalArgumentException.class, () -> table(RibbonItem.publish("T", "app.x", null)));
+		var noId = RibbonItem.publish("T", "app.x", null);
+		assertThrows(IllegalArgumentException.class, () -> table(noId));
 		table(RibbonItem.publish("T", "app.x", null).id("p"));
 	}
 
@@ -71,7 +74,9 @@ class RibbonItemModel_Test extends TestBase {
 	}
 
 	@Test void a07_duplicateIdsThrow() {
-		assertThrows(IllegalArgumentException.class, () -> table(RibbonItem.action("a"), RibbonItem.action("a")));
+		var a1 = RibbonItem.action("a");
+		var a2 = RibbonItem.action("a");
+		assertThrows(IllegalArgumentException.class, () -> table(a1, a2));
 	}
 
 	@Test void a08_modelKeyAllowedOnEveryType() {
@@ -81,7 +86,8 @@ class RibbonItemModel_Test extends TestBase {
 	}
 
 	@Test void a09_onlyActivatedEvent() {
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().on("loaded", "a.b"));
+		var sut1 = RibbonItem.refresh();
+		assertThrows(IllegalArgumentException.class, () -> sut1.on("loaded", "a.b"));
 	}
 
 	@Test void a10_inlineSurfacesThroughTable() {

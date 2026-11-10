@@ -21,6 +21,9 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /** Tabbed row details in {@code juneau-views.js}: template branch, inline and bean expand, header actions, sidecar. */
+@SuppressWarnings({
+	"java:S5976" // Each test asserts different report keys; parameterizing would obscure them.
+})
 class RowDetailTabs_Test extends TestBase {
 
 	private static Map<?,?> report() {

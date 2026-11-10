@@ -364,7 +364,7 @@
 		if (defaultKey != null && Object.hasOwn(DEFAULT_ICONS, defaultKey)) return DEFAULT_ICONS[defaultKey];
 		const id = typeof actionOrOpt?.id === "string" ? actionOrOpt.id.toLowerCase() : null;
 		if (id != null && Object.hasOwn(OPTION_ICON_HINTS, id)) return OPTION_ICON_HINTS[id];
-		return OPTION_ICON_CYCLE[(index | 0) % OPTION_ICON_CYCLE.length];
+		return OPTION_ICON_CYCLE[(index | 0) % OPTION_ICON_CYCLE.length]; // NOSONAR javascript:S7767 - an undefined index must count as zero, which Math.trunc does not do
 	}
 
 	/**
@@ -428,6 +428,9 @@
 		});
 	}
 
+	/** True for an ungrouped refresh action, the one normalizeRibbon moves to the far-right cluster. */
+	function isMoving(a) { return a.type === "refresh" && a.group == null; }
+
 	/**
 	 * Puts the ribbon in toolbar order before {@link #buildRibbon} renders it.  Pure and DOM-free;
 	 * {@link #buildRibbon} is the only caller.
@@ -456,7 +459,6 @@
 		actions = actions || [];
 		if (actions.some(function (a) { return a.type === "pausePolling" && a.group !== "status"; }))
 			actions = actions.map(function (a) { return a.type === "pausePolling" ? { ...a, group: "status" } : a; });
-		const isMoving = function (a) { return a.type === "refresh" && a.group == null; };
 		const moving = actions.filter(isMoving);
 		if (!moving.length) return sortCanonicalGroups(actions);
 		const kept = actions.filter(function (a) { return !isMoving(a); });
@@ -710,7 +712,12 @@
 		// Top-level option toggles in the same group are siblings: give them distinct default icons.
 		const toggleIcons = new Map();
 		const toggleGroups = {};
-		actions.forEach(function (a) { if (a.type === "option") (toggleGroups[a.group || "__ungrouped"] = toggleGroups[a.group || "__ungrouped"] || []).push(a); });
+		actions.forEach(function (a) {
+			if (a.type !== "option") return;
+			const key = a.group || "__ungrouped";
+			toggleGroups[key] ||= [];
+			toggleGroups[key].push(a);
+		});
 		Object.keys(toggleGroups).forEach(function (g) {
 			const names = assignOptionIcons(toggleGroups[g]);
 			toggleGroups[g].forEach(function (a, i) { toggleIcons.set(a, names[i]); });
@@ -718,7 +725,9 @@
 		actions.forEach(function (a) { // NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type; complexity is inherent
 			skipItem();   // drop the handle of a previous item that never got an element
 			if (modelOn && a.type !== "divider") {
-				const mid = a.id != null ? String(a.id) : (RIBBON_DEFAULT_IDS.includes(a.type) ? ribbonDefaultId(a.type) : null);
+				let mid = null;
+				if (a.id != null) mid = String(a.id);
+				else if (RIBBON_DEFAULT_IDS.includes(a.type)) mid = ribbonDefaultId(a.type);
 				if (mid != null && !seenIds.has(mid)) {
 					seenIds.add(mid);
 					curItem = mt._ribbonItem(a);
@@ -727,7 +736,7 @@
 			}
 			if (a.type === "action") {
 				const it = curItem;
-				place(button(a.title || a.label || a.id, resolveButtonIcon(a.icon != null ? { symbol: a.icon } : a, null), function () { const live = ctx.table && NS.tables && typeof NS.tables.handle === "function" ? NS.tables.handle(ctx.table) : null; const cur = live && live.ribbon && typeof live.ribbon.item === "function" ? live.ribbon.item(a.id) : null; const target = cur && cur._attached ? cur : it; if (target) target._click(); }, a.appearance, a.id), a.group || "__ungrouped");
+				place(button(a.title || a.label || a.id, resolveButtonIcon(a.icon != null ? { symbol: a.icon } : a, null), function () { const live = ctx.table && NS.tables && typeof NS.tables.handle === "function" ? NS.tables.handle(ctx.table) : null; const cur = typeof live?.ribbon?.item === "function" ? live.ribbon.item(a.id) : null; const target = cur?._attached ? cur : it; if (target) target._click(); }, a.appearance, a.id), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "divider") {
@@ -792,8 +801,8 @@
 				// A slot the table toolbar fills with the DataTables filter box (see buildToolbarRow).
 				const slot = document.createElement("span");
 				slot.className = "juneau-view-ribbon-search-slot";
-				slot.setAttribute("data-juneau-slot", "search");
-				slot.setAttribute("data-juneau-ribbon-id", rbId(a));
+				slot.dataset.juneauSlot = "search";
+				slot.dataset.juneauRibbonId = rbId(a);
 				place(slot, a.group || "search");
 				ctx._ribbonOwns.search = true;
 				return;
@@ -801,7 +810,7 @@
 			if (a.type === "linkButton") {
 				const lb = NS.init && typeof NS.init.buildCopyLinkButton === "function" ? NS.init.buildCopyLinkButton(ctx.table, ctx) : null;
 				if (!lb) { skipItem(); return; }
-				lb.setAttribute("data-juneau-ribbon-id", rbId(a));
+				lb.dataset.juneauRibbonId = rbId(a);
 				place(lb, a.group || "__ungrouped");
 				ctx._ribbonOwns.linkButton = true;
 				return;
@@ -811,7 +820,7 @@
 				const cb = viewDef.columnConfig && cfg && typeof cfg.openChooser === "function" && typeof cfg.buildChooserButton === "function"
 					? cfg.buildChooserButton(ctx.table, ctx, resolveButtonIcon(a, "columnSettings")) : null;
 				if (!cb) { skipItem(); return; }
-				cb.setAttribute("data-juneau-ribbon-id", rbId(a));
+				cb.dataset.juneauRibbonId = rbId(a);
 				if (typeof cfg.seedChooserDraft === "function") cfg.seedChooserDraft(ctx.table, ctx);
 				place(cb, a.group || "__ungrouped");
 				ctx._ribbonOwns.columnSettings = true;
@@ -908,7 +917,7 @@
 	 * find the {@code search} slot among the rendered groups.  Other ids are left unmarked.
 	 */
 	function stampCanonicalGroup(wrap, groupId) {
-		if (CANONICAL_GROUPS.includes(groupId)) wrap.setAttribute("data-juneau-group", groupId);
+		if (CANONICAL_GROUPS.includes(groupId)) wrap.dataset.juneauGroup = groupId;
 	}
 
 	function stampChromeTip(el, text) {
@@ -944,7 +953,7 @@
 		const b = document.createElement("button");
 		b.type = "button";
 		b.className = "juneau-view-ribbon-btn";
-		if (ribbonId != null) b.setAttribute("data-juneau-ribbon-id", String(ribbonId));
+		if (ribbonId != null) b.dataset.juneauRibbonId = String(ribbonId);
 		stampChromeTip(b, label);
 		paintIcon(b, iconName);
 		if (appearance === "icon") b.classList.add("juneau-view-ribbon-btn--icon");

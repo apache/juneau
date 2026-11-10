@@ -377,12 +377,15 @@ class RibbonItem_Test extends TestBase {
 	}
 
 	@Test void a63_search_rejects_symbol_and_appearance() {
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.search().symbol("x").toMap());
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.search().appearance("icon").toMap());
+		var sut1 = RibbonItem.search().symbol("x");
+		assertThrows(IllegalArgumentException.class, () -> sut1.toMap());
+		var sut2 = RibbonItem.search().appearance("icon");
+		assertThrows(IllegalArgumentException.class, () -> sut2.toMap());
 	}
 
 	@Test void a64_new_types_listed_in_unknown_type_error() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "nope")));
+		var unknown = Map.<String,Object>of("type", "nope");
+		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(unknown));
 		for (var t : List.of("search", "linkButton", "columnSettings"))
 			assertTrue(e.getMessage().contains(t), t);
 	}

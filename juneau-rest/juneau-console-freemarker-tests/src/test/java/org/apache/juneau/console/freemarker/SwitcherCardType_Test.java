@@ -86,22 +86,27 @@ class SwitcherCardType_Test extends TestBase {
 	}
 
 	@Test void a08_invalid() {
-		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src("{views:[]}")));
+		var empty = src("{views:[]}");
+		var badId = src("{views:[{id:'a.b',label:'A',card:{id:'c',type:'html'}}]}");
+		var nested = src("{views:[{id:'a',label:'A',card:{id:'c',type:'switcher'}}]}");
+		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(empty));
 		assertEquals("<@card id='sw'> SwitcherDef 'sw' requires at least one view.", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src("{views:[{id:'a.b',label:'A',card:{id:'c',type:'html'}}]}")));
+		e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(badId));
 		assertTrue(e.getMessage().contains("view id 'a.b' must match"), e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src("{views:[{id:'a',label:'A',card:{id:'c',type:'switcher'}}]}")));
+		e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(nested));
 		assertTrue(e.getMessage().contains("cannot hold a switcher"), e.getMessage());
 	}
 
 	@Test void a09_nestedBadSrcRejectedByItsOwnHandler() {
-		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src(
-			"{views:[{id:'a',label:'A',card:{id:'c1',type:'chart',src:'http://evil/x',kind:'line',x:{field:'d'},series:['n']}}]}")));
+		var bad = src(
+			"{views:[{id:'a',label:'A',card:{id:'c1',type:'chart',src:'http://evil/x',kind:'line',x:{field:'d'},series:['n']}}]}");
+		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(bad));
 		assertTrue(e.getMessage().contains("same-origin"), e.getMessage());
 	}
 
 	@Test void a10_requiresJsonBody() {
-		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(src("plain")));
+		var plain = src("plain");
+		var e = assertThrows(IllegalArgumentException.class, () -> REG.toCard(plain));
 		assertTrue(e.getMessage().contains("type='switcher' requires a JSON5 body."), e.getMessage());
 	}
 }

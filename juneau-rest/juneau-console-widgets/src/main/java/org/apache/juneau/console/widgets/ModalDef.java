@@ -731,6 +731,11 @@ public class ModalDef implements Widget {
 		return this;
 	}
 
+	/** The message for a token that is neither of its two allowed values. */
+	private static String notOneOf(String what, String a, String b, String actual) {
+		return what + " must be '" + a + "' or '" + b + "', not '" + actual + "'.";
+	}
+
 	/**
 	 * Fail-closed bean validation.
 	 *
@@ -752,11 +757,6 @@ public class ModalDef implements Widget {
 	 *
 	 * @throws IllegalArgumentException If this modal is not well-formed.
 	 */
-	/** The message for a token that is neither of its two allowed values. */
-	private static String notOneOf(String what, String a, String b, String actual) {
-		return what + " must be '" + a + "' or '" + b + "', not '" + actual + "'.";
-	}
-
 	@Override
 	public void validate() {
 		if (ib(title))

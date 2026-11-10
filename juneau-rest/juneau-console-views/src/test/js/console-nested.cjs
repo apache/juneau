@@ -121,7 +121,7 @@ async function page(contract, opts) {
  */
 function toCardClass(h) {
 	if (typeof h === 'function') return h;
-	const K = class {};
+	const K = class {}; // NOSONAR javascript:S2094 - a bare card type for the fixture
 	K.lateBase = true;
 	const P = K.prototype;
 	if (h.render) P.render = function () { return h.render(this.spec, this.el, this); };
@@ -229,7 +229,7 @@ async function main() {
 	}
 	// n5. nestedCards on a registered class: its specs are declared and validated before the nested card is built.
 	{
-		const Sw = class {};
+		const Sw = class {}; // NOSONAR javascript:S2094 - a bare card type for the fixture
 		Sw.lateBase = true;
 		Sw.nestedCards = spec => spec.views.map(v => v.card);
 		Sw.prototype.render = function () {};
@@ -239,4 +239,4 @@ async function main() {
 	}
 }
 
-main().then(() => { process.stdout.write(JSON.stringify(out)); }).catch(e => { process.stdout.write(JSON.stringify({ harnessError: String(e && e.stack || e) })); });
+main().then(() => { process.stdout.write(JSON.stringify(out)); }).catch(e => { process.stdout.write(JSON.stringify({ harnessError: String(e?.stack || e) })); });

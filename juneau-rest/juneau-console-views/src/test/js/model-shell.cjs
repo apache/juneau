@@ -92,9 +92,9 @@ function load(opts) {
 	const JC = env.window.JuneauConsole;
 	return {
 		env, doc, errors, warns, cardEvents, intervals, sandbox, JC, threw,
-		bus: env.window.JuneauViews && env.window.JuneauViews.bus,
+		bus: env.window.JuneauViews?.bus,
 		bannerText: () => { const b = doc.querySelector('.jc-console-error'); return b ? b.textContent : ''; },
-		bannerCodes: () => doc.querySelectorAll('.jc-console-error-item').map(e => e.getAttribute('data-juneau-error')),
+		bannerCodes: () => doc.querySelectorAll('.jc-console-error-item').map(e => e.dataset.juneauError),
 		scripts: () => doc.querySelectorAll('script[src]'),
 		cardEl: id => doc.getElementById(id),
 		mount: contract => JC.mount(contract, { root: doc.body, document: doc }),
@@ -141,7 +141,7 @@ const report = {};
 	const members = (fn, opts) => {
 		const s = load(opts);
 		let inst = null;
-		s.JC.registerCard('probe', class extends Base(s) { render() { inst = this; return fn ? fn(this, s) : undefined; } });
+		s.JC.registerCard('probe', class extends Base(s) { render() { inst = this; return fn ? fn(this, s) : undefined; } }); // NOSONAR javascript:S7740 - the test needs the instance the shell constructs
 		s.mount(C({ cards: [{ id: 'p1', type: 'probe' }] }));
 		return { s, inst };
 	};
@@ -166,7 +166,7 @@ const report = {};
 		let got = null, err = null;
 		s.JC.registerCard('probe', class extends Base(s) { render() { try { got = this.template('p1') != null; } catch (e) { err = e.message; } } });
 		const t = s.doc.createElement('template');
-		t.setAttribute('data-card', 'p1');
+		t.dataset.card = 'p1';
 		s.doc.body.appendChild(t);
 		s.mount(C({ cards: [{ id: 'p1', type: 'probe' }] }));
 		return { got, err };
@@ -195,7 +195,7 @@ const report = {};
 		inst.paintLoading();
 		const loading = !!s.cardEl('p1').querySelector('.jc-card-loading');
 		inst.paintError(new Error('boom'));
-		const e1 = (s.cardEl('p1').querySelector('.jc-card-error') || {}).textContent;
+		const e1 = s.cardEl('p1').querySelector('.jc-card-error')?.textContent;
 		const t = s.doc.createElement('div');
 		s.cardEl('p1').appendChild(t);
 		inst.paintError(t, new Error('two'));
@@ -240,13 +240,13 @@ const report = {};
 	})();
 
 	// ---- registration, roles/ops, cardApi ----
-	const cls = s => class extends Base(s) { render() {} };
+	const cls = s => class extends Base(s) { render() { /* no-op */ } };
 	report.register_objectForm_E21 = (() => { const s = load(); return codeOf(() => s.JC.registerCard('legacy', { render() {} })); })();
-	report.register_objectForm_message = (() => { const s = load(); return (errInfo(() => s.JC.registerCard('legacy', { render() {} })) || {}).msg; })();
+	report.register_objectForm_message = (() => { const s = load(); return errInfo(() => s.JC.registerCard('legacy', { render() { /* no-op */ } }))?.msg; })();
 	report.register_functionForm_E21 = (() => { const s = load(); return codeOf(() => s.JC.registerCard('legacy', () => {})); })();
 	report.register_string_E21 = (() => { const s = load(); return codeOf(() => s.JC.registerCard('legacy', 'nope')); })();
-	report.register_missingRoleMethod_E21 = (() => { const s = load(); return errInfo(() => s.JC.registerCard('mt', class extends Base(s) { static roles = { r: 'nope' }; render() {} })); })();
-	report.register_missingOpMethod_E21 = (() => { const s = load(); return errInfo(() => s.JC.registerCard('mt', class extends Base(s) { static ops = { 'do-it': 'nope' }; render() {} })); })();
+	report.register_missingRoleMethod_E21 = (() => { const s = load(); return errInfo(() => s.JC.registerCard('mt', class extends Base(s) { static roles = { r: 'nope' }; render() { /* no-op */ } })); })();
+	report.register_missingOpMethod_E21 = (() => { const s = load(); return errInfo(() => s.JC.registerCard('mt', class extends Base(s) { static ops = { 'do-it': 'nope' }; render() { /* no-op */ } })); })();
 	report.register_class_ok = (() => { const s = load(); s.JC.registerCard('okc', cls(s)); return s.JC.cardTypes().includes('okc'); })();
 	report.register_duplicate_E12 = (() => { const s = load(); s.JC.registerCard('okc', cls(s)); return codeOf(() => s.JC.registerCard('okc', cls(s))); })();
 	report.queue_accepts_class = (() => { const s = load(); s.sandbox.window.JuneauConsoleCards.push(['qc', cls(s)]); return s.JC.cardTypes().includes('qc'); })();
@@ -266,7 +266,10 @@ const report = {};
 		const s = load();
 		const types = ['datatables', 'chart', 'terminal', 'job-log'];
 		const made = {}, rendered = [];
-		for (const t of types) s.JC.registerCard(t, made[t] = class extends Base(s) { render() { rendered.push(this.spec.id); } });
+		for (const t of types) {
+			made[t] = class extends Base(s) { render() { rendered.push(this.spec.id); } };
+			s.JC.registerCard(t, made[t]);
+		}
 		s.mount(C({ cards: types.map((t, i) => ({ id: 'b' + i, type: t })) }));
 		s.ready();
 		return rendered.length === types.length && types.map((t, i) => s.JC.cardApi('b' + i) instanceof made[t]);
@@ -278,7 +281,7 @@ const report = {};
 		const s = load();
 		s.JC.registerCard('meter', class extends Base(s) {
 			static roles = { highlight: 'hl' };
-			render() {}
+			render() { /* no-op */ }
 			hl(payload, meta) { got.push({ payload, hasMeta: meta != null && typeof meta === 'object' }); }
 		});
 		s.mount(C({ topics: [{ topic: 'app.level', publisher: 'script' }],
@@ -319,7 +322,7 @@ const report = {};
 	};
 	report.cmd_op_receives_full_cmd = await (async () => {
 		const { s, got } = await opPage((s, got) => {
-			s.JC.registerCard('op', class extends Base(s) { static ops = { 'do-it': 'doIt' }; render() {} doIt(cmd) { got.push(cmd); } });
+			s.JC.registerCard('op', class extends Base(s) { static ops = { 'do-it': 'doIt' }; render() { /* no-op */ } doIt(cmd) { got.push(cmd); } });
 		});
 		s.bus.publish('cmd:o1', { schemaVersion: 1, op: 'do-it', ids: [1], resetPaging: true, options: { a: 1 }, target: 'g' });
 		return got[0] ? { op: got[0].op, ids: got[0].ids, resetPaging: got[0].resetPaging, options: got[0].options, target: got[0].target } : null;
@@ -333,15 +336,15 @@ const report = {};
 		return got;
 	})();
 	report.cmd_unknown_op_E48 = await (async () => {
-		const { s } = await opPage((s) => { s.JC.registerCard('op', class extends Base(s) { render() {} }); });
+		const { s } = await opPage((s) => { s.JC.registerCard('op', class extends Base(s) { render() { /* no-op */ } }); });
 		s.bus.publish('cmd:o1', { schemaVersion: 1, op: 'explode' });
-		const inline = s.cardEl('o1').querySelectorAll('.jc-card-bus-error').map(n => n.getAttribute('data-juneau-error'));
+		const inline = s.cardEl('o1').querySelectorAll('.jc-card-bus-error').map(n => n.dataset.juneauError);
 		return inline;
 	})();
 	report.cardApi_returns_instance = (() => {
 		const s = load();
 		let inst = null;
-		s.JC.registerCard('probe', class extends Base(s) { render() { inst = this; } });
+		s.JC.registerCard('probe', class extends Base(s) { render() { inst = this; } }); // NOSONAR javascript:S7740 - the test needs the instance the shell constructs
 		s.mount(C({ cards: [{ id: 'p1', type: 'probe' }] }));
 		return s.JC.cardApi('p1') === inst && inst instanceof Base(s);
 	})();
@@ -356,19 +359,19 @@ const report = {};
 	report.cardTypeTable_reads_static_maps = (() => {
 		const s = load();
 		let table = null;
-		s.JC.registerCard('tt', class extends Base(s) { static roles = { alpha: 'a', 'beta-x': 'b' }; static ops = { 'op-one': 'o' }; render() {} a() {} b() {} o() {} });
+		s.JC.registerCard('tt', class extends Base(s) { static roles = { alpha: 'a', 'beta-x': 'b' }; static ops = { 'op-one': 'o' }; render() { /* no-op */ } a() { /* no-op */ } b() { /* no-op */ } o() { /* no-op */ } });
 		const orig = s.bus.wiring.validate;
 		s.bus.wiring.validate = (contract, t) => { table = t; return orig(contract, t); };
 		s.mount(C({ cards: [{ id: 't1', type: 'tt' }] }));
 		s.ready();
-		return table ? { roles: table.tt.roles, ops: table.tt.ops, builtins: Object.keys(table).sort() } : null;
+		return table ? { roles: table.tt.roles, ops: table.tt.ops, builtins: Object.keys(table).sort((a, b) => (a < b ? -1 : Number(a > b))) } : null;
 	})();
 	report.implicitTopics_function_form = (() => {
 		const s = load();
 		let table = null;
 		s.JC.registerCard('grid', class extends Base(s) {
 			static implicitTopics(spec) { return ['selection:' + spec.id, spec.detail ? 'detail:' + spec.id : 'plain:' + spec.id]; }
-			render() {}
+			render() { /* no-op */ }
 		});
 		const orig = s.bus.wiring.validate;
 		s.bus.wiring.validate = (contract, t) => { table = t; return orig(contract, t); };
@@ -378,7 +381,7 @@ const report = {};
 	})();
 	report.implicitTopics_claimed = (() => {
 		const s = load();
-		s.JC.registerCard('grid', class extends Base(s) { static implicitTopics(spec) { return ['selection:' + spec.id]; } render() {} });
+		s.JC.registerCard('grid', class extends Base(s) { static implicitTopics(spec) { return ['selection:' + spec.id]; } render() { /* no-op */ } });
 		s.mount(C({ cards: [{ id: 'a', type: 'grid' }] }));
 		s.ready();
 		const t = s.bus.topics().find(x => x.topic === 'selection:a');
@@ -387,7 +390,7 @@ const report = {};
 	report.builtin_html_renders = (() => {
 		const s = load();
 		const t = s.doc.createElement('template');
-		t.setAttribute('data-card', 'h1');
+		t.dataset.card = 'h1';
 		t.appendChild(s.doc.createTextNode('hello html'));
 		s.doc.body.appendChild(t);
 		s.mount(C({ cards: [{ id: 'h1', type: 'html', template: 'h1' }] }));
@@ -400,7 +403,7 @@ const report = {};
 		s.env.window.JuneauViews.terminalView = { mount: (body, spec) => { calls.push(body.id); } };
 		s.mount(C({ cards: [{ id: 'tv', type: 'terminal-view' }] }));
 		s.ready();
-		return { calls, marker: s.cardEl('tv').getAttribute('data-juneau-card'), errors: s.errors };
+		return { calls, marker: s.cardEl('tv').dataset.juneauCard ?? null, errors: s.errors };
 	})();
 	report.lifecycle_render_refresh_destroy_order = await (async () => {
 		const log = [];
@@ -425,7 +428,7 @@ const report = {};
 	})();
 	report.destroy_throw_painted_E8 = (() => {
 		const s = load();
-		s.JC.registerCard('lc', class extends Base(s) { render() {} destroy() { throw new Error('bad destroy'); } });
+		s.JC.registerCard('lc', class extends Base(s) { render() { /* no-op */ } destroy() { throw new Error('bad destroy'); } });
 		s.mount(C({ cards: [{ id: 'l1', type: 'lc' }] }));
 		let threw = null;
 		try { s.JC.destroyCard('l1'); } catch (e) { threw = e.code || String(e); }
@@ -479,7 +482,7 @@ const report = {};
 		return { codes: s.bannerCodes(), appended: s.scripts().length };
 	})();
 	report.scripts_backslash_E124 = await (async () => {
-		const s = scriptPage({ scripts: ['/\\evil.test/x.js'] });
+		const s = scriptPage({ scripts: [String.raw`/\evil.test/x.js`] });
 		s.ready();
 		await tickN(3);
 		return { codes: s.bannerCodes(), appended: s.scripts().length };
@@ -495,7 +498,7 @@ const report = {};
 	report.scripts_malformedExistingSrc_notAMatch = await (async () => {
 		const s = load();
 		const tag = s.doc.createElement('script');
-		tag.setAttribute('src', 'http://[bad');
+		tag.setAttribute('src', 'http://[bad'); // NOSONAR javascript:S5332 - a deliberately malformed URL literal, never fetched
 		s.doc.body.appendChild(tag);
 		s.mount(C({ scripts: ['/a.js'] }));
 		s.ready();
@@ -571,14 +574,14 @@ const report = {};
 	})();
 	report.model_never_loaded_is_painted = (() => {
 		const s = load();
-		s.JC.registerCard('probe', class extends Base(s) { render() {} });
+		s.JC.registerCard('probe', class extends Base(s) { render() { /* no-op */ } });
 		s.mount(C({ modelVersion: '1', nav: [{ id: 'h', label: 'H' }], activeNav: ['h'], cards: [{ id: 'm1', type: 'probe', model: { on: { loaded: 'a.b' } } }] }));
 		s.ready();
 		return s.bannerCodes();
 	})();
 	report.scripts_only_without_model_is_quiet = (() => {
 		const s = load();
-		s.JC.registerCard('probe', class extends Base(s) { render() {} });
+		s.JC.registerCard('probe', class extends Base(s) { render() { /* no-op */ } });
 		s.mount(C({ nav: [{ id: 'h', label: 'H' }], activeNav: ['h'], cards: [{ id: 'p1', type: 'probe' }] }));
 		s.ready();
 		return s.bannerCodes();
@@ -590,7 +593,7 @@ const report = {};
 		s.JC.registerCard('probe', class extends Base(s) { render() { this.el.appendChild(s.doc.createTextNode('ok')); } });
 		s.mount(C({ cards: [{ id: 'p1', type: 'probe' }], nav: [{ id: 'h', label: 'H' }], activeNav: ['h'] }));
 		const api = s.JC.cardApi('p1');
-		return { sameType: api instanceof Base(s), text: s.cardEl('p1').textContent, noModel: !(s.env.window.JuneauViews && s.env.window.JuneauViews.model), errors: s.errors };
+		return { sameType: api instanceof Base(s), text: s.cardEl('p1').textContent, noModel: !s.env.window.JuneauViews?.model, errors: s.errors };
 	})();
 
 	process.stdout.write(JSON.stringify(report));

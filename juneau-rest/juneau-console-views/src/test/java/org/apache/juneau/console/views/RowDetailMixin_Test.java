@@ -67,7 +67,7 @@ class RowDetailMixin_Test extends TestBase {
 	static final RowDetail BOOM = RowDetail.fromBean(Pet.class, id -> { throw new IllegalStateException("lookup failed"); }).key("boom")
 		.tab(DetailTab.fields("Info", "name").count(id -> { throw new IllegalStateException("count failed"); }));
 
-	static final RowDetail BADCOUNT = RowDetail.fromBean(Pet.class, id -> new Pet(id)).key("badcount")
+	static final RowDetail BADCOUNT = RowDetail.fromBean(Pet.class, Pet::new).key("badcount")
 		.tab(DetailTab.fields("Info", "name").count(id -> { throw new IllegalStateException("count failed"); }));
 
 	@Rest
@@ -119,9 +119,7 @@ class RowDetailMixin_Test extends TestBase {
 	}
 
 	@Test void a06_duplicateKey_failsStartup() {
-		var mixin = new RowDetailMixin() {
-			@Override public Collection<RowDetail> rowDetails() { return List.of(PET, RowDetail.fromBean(Pet.class, id -> null)); }
-		};
+		RowDetailMixin mixin = () -> List.of(PET, RowDetail.fromBean(Pet.class, id -> null));
 		assertThrows(IllegalStateException.class, mixin::rowDetailIndex);
 	}
 

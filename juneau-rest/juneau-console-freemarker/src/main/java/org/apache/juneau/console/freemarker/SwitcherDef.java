@@ -45,10 +45,13 @@ import org.apache.juneau.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Map keys read more clearly inline than as constants.
+})
 public final class SwitcherDef {
 
 	/** The grammar of a view or section id. */
-	static final Pattern ID = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
+	static final Pattern ID_GRAMMAR = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 
 	private static final String DEFAULT_SECTION = "main";
 
@@ -219,6 +222,9 @@ public final class SwitcherDef {
 	 * @param body The body holding {@code views} and optionally {@code initialView}.
 	 * @throws IllegalArgumentException On the first problem found.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to validate(), which checks many view/section combinations.
+	})
 	public static void validate(String id, Map<String,?> body) {
 		var who = "SwitcherDef '" + id + "'";
 		if (! (body.get("views") instanceof List<?> views) || views.isEmpty())
@@ -229,8 +235,8 @@ public final class SwitcherDef {
 			if (! (o instanceof Map<?,?> v))
 				throw iaex("%s views must be objects.", who);
 			var vid = String.valueOf(v.get("id"));
-			if (! (v.get("id") instanceof String) || ! ID.matcher(vid).matches())
-				throw iaex("%s view id '%s' must match %s.", who, vid, ID.pattern());
+			if (! (v.get("id") instanceof String) || ! ID_GRAMMAR.matcher(vid).matches())
+				throw iaex("%s view id '%s' must match %s.", who, vid, ID_GRAMMAR.pattern());
 			if (! viewIds.add(vid))
 				throw iaex("%s view id '%s' is declared more than once.", who, vid);
 			if (! (v.get("label") instanceof String))
@@ -249,8 +255,8 @@ public final class SwitcherDef {
 					if (! (so instanceof Map<?,?> s))
 						throw iaex("%s view '%s' sections must be objects.", who, vid);
 					var sid = String.valueOf(s.get("id"));
-					if (! (s.get("id") instanceof String) || ! ID.matcher(sid).matches())
-						throw iaex("%s view '%s' section id '%s' must match %s.", who, vid, sid, ID.pattern());
+					if (! (s.get("id") instanceof String) || ! ID_GRAMMAR.matcher(sid).matches())
+						throw iaex("%s view '%s' section id '%s' must match %s.", who, vid, sid, ID_GRAMMAR.pattern());
 					if (! sectionIds.add(sid))
 						throw iaex("%s view '%s' section id '%s' is declared more than once.", who, vid, sid);
 					if (! (s.get("label") instanceof String))

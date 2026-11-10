@@ -91,7 +91,6 @@ class ModelValidation_Corpus_Test extends TestBase {
 				return;
 			var kinds = new HashMap<String,String>();
 			var blocks = new HashMap<String,ModelBlock>();
-			var last = "";
 			var steps = (List<Map<String,Object>>)c.get("build");
 			// Replay: each step must be accepted until the last one, which must be refused.
 			for (var i = 0; i < steps.size(); i++) {

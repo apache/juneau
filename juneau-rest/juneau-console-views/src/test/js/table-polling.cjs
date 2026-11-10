@@ -136,7 +136,7 @@ function makeTable() {
 	};
 	dt.fire = function (ev, target) {
 		const extra = Array.prototype.slice.call(arguments, 2);
-		(handlers[ev] || []).forEach(function (fn) { fn.apply(null, [{ target: target === undefined ? table : target }].concat(extra)); });
+		(handlers[ev] || []).forEach(function (fn) { fn({ target: target === undefined ? table : target }, ...extra); });
 	};
 	/**
 	 * Lands a response the way DataTables does: preDraw.dt first, and if ANY handler returns false the draw is

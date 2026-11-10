@@ -182,7 +182,7 @@ public interface RowDetailMixin {
 	private static List<String> titleFields(RowDetail d) {
 		var out = new ArrayList<String>();
 		if (d.titleTemplate() != null) {
-			var m = Pattern.compile("\\{([A-Za-z_][A-Za-z0-9_]*)\\}").matcher(d.titleTemplate());
+			var m = Pattern.compile("\\{([A-Za-z_]\\w*)\\}").matcher(d.titleTemplate());
 			while (m.find())
 				out.add(m.group(1));
 		}

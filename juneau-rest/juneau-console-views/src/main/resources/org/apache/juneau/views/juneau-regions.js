@@ -1628,7 +1628,8 @@
 	 * it would on any other settle, so one bad name cannot hold the page's initial broadcast.
 	 */
 	function resolvePopulator(region) {
-		const name = region.populateName == null ? (region.type === "chart" ? "chart" : DEFAULT_POPULATOR_NAME) : region.populateName;
+		let name = region.populateName;
+		if (name == null) name = region.type === "chart" ? "chart" : DEFAULT_POPULATOR_NAME;
 		const fn = resolve(name);
 		if (typeof fn === "function") return fn;
 		const message = "no populator is registered under the name '" + name + "'.";

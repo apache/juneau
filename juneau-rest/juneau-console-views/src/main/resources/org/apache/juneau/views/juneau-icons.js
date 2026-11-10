@@ -237,7 +237,9 @@
 		// paints, so an override/replacement sprite wins even for a glyph drawn before the sprite loaded.
 		// Once the layers have loaded, a registered name whose stem no layer supplied (e.g. a Lucide-only glyph after a
 		// failed base-layer fetch) would paint an empty host; report it unknown so callers fall back instead.
-		const key = Object.hasOwn(registry, name) ? name : (stem !== name && Object.hasOwn(registry, stem) ? stem : null);
+		let key = null;
+		if (Object.hasOwn(registry, name)) key = name;
+		else if (stem !== name && Object.hasOwn(registry, stem)) key = stem;
 		if (key != null) {
 			if (_mergedStems && Object.hasOwn(NAME_TO_STEM, key) && !_mergedStems.includes(NAME_TO_STEM[key]))
 				return null;

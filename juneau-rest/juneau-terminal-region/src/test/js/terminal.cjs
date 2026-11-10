@@ -260,7 +260,7 @@ test('c01_cardHandlerIsQueued', function (t) {
 	const q = t.win.JuneauConsoleCards;
 	expect(Array.isArray(q) && q.length === 1 && q[0][0] === 'terminal', 'queued as ["terminal", handler]');
 	expect(typeof q[0][1] === 'function' && typeof q[0][1].prototype.render === 'function' && typeof q[0][1].prototype.destroy === 'function', 'render and destroy');
-	expectSame(Object.keys(q[0][1].roles).sort(), ['input-status', 'nudge'], 'the card roles');
+	expectSame(Object.keys(q[0][1].roles).sort((a, b) => (a < b ? -1 : Number(a > b))), ['input-status', 'nudge'], 'the card roles');
 	expectSame(q[0][1].requiredPacks({}), ['views', 'xterm', 'terminal'], 'the packs the card needs');
 	const pushed = [];
 	const g = { TextEncoder: TextEncoder, AbortController: AbortController, URL: URL, console: console };

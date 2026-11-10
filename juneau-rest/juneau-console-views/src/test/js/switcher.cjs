@@ -95,12 +95,14 @@ async function page(contract, opts) {
 	const r = { env, doc, errors, hist, renders, refreshes, destroys, store, sandbox, threw: null };
 	try {
 		for (const s of sources) load(s);
-			if (opts.loadTwice) { try { load(switcherSrc); } catch (e) { r.secondLoadThrew = e.code || String(e); } }
+			if (opts.loadTwice) {
+			try { load(switcherSrc); } catch (e) { r.secondLoadThrew = e.code || String(e); }
+		}
 	} catch (e) {
 		r.threw = { code: e.code, message: e.message };
 	}
 	r.JC = env.window.JuneauConsole;
-	r.U = env.window.JuneauViews && env.window.JuneauViews.urlState;
+	r.U = env.window.JuneauViews?.urlState;
 	await tick();
 	try { env.fireDOMContentLoaded(); } catch (e) { r.readyThrew = { code: e.code, message: e.message }; }
 	await tick();
@@ -109,7 +111,7 @@ async function page(contract, opts) {
 
 function toCardClass(h) {
 	// Derived (so the constructor chain reaches the Card base the shell puts under it) and flagged lateBase.
-	const K = class extends (class {}) {};
+	const K = class extends (class {}) {}; // NOSONAR javascript:S2094 - an inert base standing in for the Card base
 	K.lateBase = true;
 	const P = K.prototype;
 	P.render = function () { return h.render(this.spec, this.el, this); };
@@ -193,7 +195,7 @@ async function main() {
 		r.JC.cardApi('a').select('v2');
 		const afterA = r.hist.at(-1);
 		r.JC.cardApi('b').select('v3');
-		r.hist.length >= 0;
+		if (r.hist.length <= base) { throw new Error("second select wrote no history entry"); }
 		const both = r.hist.at(-1);
 		r.JC.cardApi('a').select('v1');
 		r.JC.cardApi('b').select('v1');
@@ -236,7 +238,7 @@ async function main() {
 		const r = await page(withSwitchers(baseSpec()));
 		api(r).select('v3');
 		r.JC.destroyCard('sw1');
-		out.s10 = { destroyed: r.destroys.slice().sort(), api: codeOf(() => r.JC.cardApi('c4')), source: !/sw\(/.test(r.hist.at(-1)) };
+		out.s10 = { destroyed: r.destroys.slice().sort((a, b) => (a < b ? -1 : Number(a > b))), api: codeOf(() => r.JC.cardApi('c4')), source: !/sw\(/.test(r.hist.at(-1)) };
 	}
 	// s11. Nested cards keep their api; the view lists them; a nested switcher is rejected.
 	{
@@ -252,4 +254,4 @@ async function main() {
 	}
 }
 
-main().then(() => { process.stdout.write(JSON.stringify(out)); }).catch(e => { process.stdout.write(JSON.stringify({ harnessError: String(e && e.stack || e), partial: out })); });
+main().then(() => { process.stdout.write(JSON.stringify(out)); }).catch(e => { process.stdout.write(JSON.stringify({ harnessError: String(e?.stack || e), partial: out })); });

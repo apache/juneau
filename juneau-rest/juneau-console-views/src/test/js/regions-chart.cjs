@@ -59,7 +59,7 @@ async function scenario(opts) {
 			return Promise.resolve(JSON.stringify({ contractVersion: '1', fields: opts.records || RECORDS }));
 		} });
 	});
-	const el = H.mkRegion(env, { id: 'price', type: 'chart', declared: Object.assign({}, DECLARED, opts.declared || {}) });
+	const el = H.mkRegion(env, { id: 'price', type: 'chart', declared: { ...DECLARED, ...opts.declared } });
 	R.initRegion(el);
 	await H.flush(20);
 	return { el: el, mounts: mounts, fetches: fetches, rec: rec, R: R };
@@ -75,11 +75,11 @@ async function scenario(opts) {
 		out.sameEl = m.el === s.el;
 		out.rows = m.rows;
 		out.card = m.card;
-		out.state = s.el.getAttribute('data-juneau-region-state');
+		out.state = s.el.dataset.juneauRegionState;
 		out.errors = s.rec.errors;
 	}
 	{
-		const s = await scenario({ records: [], declared: { chart: Object.assign({}, DECLARED.chart, { emptyText: 'No prices' }) } });
+		const s = await scenario({ records: [], declared: { chart: { ...DECLARED.chart, emptyText: 'No prices' } } });
 		out.emptyMounts = s.mounts.length;
 		out.emptyText = statusText(s.el);
 	}
@@ -93,4 +93,4 @@ async function scenario(opts) {
 		out.absentErrors = s.rec.errors.length;
 	}
 	process.stdout.write(JSON.stringify(out) + '\n', function () { process.exit(0); });
-})().catch(function (e) { out.crash = String(e && e.stack || e); process.stdout.write(JSON.stringify(out) + '\n', function () { process.exit(0); }); });
+})().catch(function (e) { out.crash = String(e?.stack || e); process.stdout.write(JSON.stringify(out) + '\n', function () { process.exit(0); }); });

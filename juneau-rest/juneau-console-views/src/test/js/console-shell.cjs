@@ -69,8 +69,8 @@ const PROBE = function (arg) {
 		const a = r.querySelector('[aria-current="page"]');
 		const rr = r.getBoundingClientRect(), ar = a ? a.getBoundingClientRect() : null;
 		return { cls: r.className, scrollWidth: r.scrollWidth, clientWidth: r.clientWidth, scrollLeft: Math.round(r.scrollLeft),
-			start: r.getAttribute('data-overflow-start'), end: r.getAttribute('data-overflow-end'), tabindex: r.getAttribute('tabindex'),
-			mask: getComputedStyle(r).webkitMaskImage || getComputedStyle(r).maskImage,
+			start: r.dataset.overflowStart ?? null, end: r.dataset.overflowEnd ?? null, tabindex: r.getAttribute('tabindex'),
+			mask: getComputedStyle(r).webkitMaskImage || getComputedStyle(r).maskImage, // NOSONAR javascript:S1874 - the prefixed property is the fallback this check reads
 			activeVisible: ar ? ar.left >= rr.left - 1 && ar.right <= rr.right + 1 : null };
 	});
 	out.childRows = document.querySelectorAll('nav.juneau-page-nav .juneau-page-nav-children').length;

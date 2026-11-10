@@ -20,8 +20,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
-import org.apache.juneau.console.*;
-
 /**
  * Serializes a {@link TableSpec} into the nested-table slot a tabbed {@link RowDetail} carries.
  *
@@ -30,6 +28,9 @@ import org.apache.juneau.console.*;
  * ({@code meta}) and, when declared, the nested table's selection and row detail.  A nested table sits at depth two;
  * a table that itself declares a nested-table tab would sit at depth three and is rejected.
  */
+@SuppressWarnings({
+	"java:S1192" // Map keys read more clearly inline than as constants.
+})
 final class NestedSlot {
 
 	/** The deepest table nesting: the page table is depth one, a table inside its row detail is depth two. */
@@ -45,6 +46,9 @@ final class NestedSlot {
 	 * @return The slot map, in fixed key order.
 	 * @throws IllegalArgumentException If the table is unusable or would exceed {@link #MAX_NESTED_DEPTH}.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to of(), which validates and reshapes the nested table body.
+	})
 	static Map<String,Object> of(TableSpec view, String scopeParam) {
 		if (view == null)
 			throw iaex("A nested table is required.");
@@ -64,7 +68,12 @@ final class NestedSlot {
 			var cm = new LinkedHashMap<String,Object>();
 			for (var e : ((Map<?,?>)c).entrySet()) {
 				var k = (String)e.getKey();
-				cm.put("key".equals(k) ? "data" : "label".equals(k) ? "title" : k, e.getValue());
+				var renamed = k;
+				if ("key".equals(k))
+					renamed = "data";
+				else if ("label".equals(k))
+					renamed = "title";
+				cm.put(renamed, e.getValue());
 			}
 			cols.add(cm);
 		}

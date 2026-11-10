@@ -45,7 +45,7 @@ async function scenario(detail, opts) {
 	const signals = [];
 	env.setFetch(function (url, init) {
 		fetches.push(String(url));
-		signals.push(init && init.signal);
+		signals.push(init?.signal);
 		if (opts.hang && String(url).includes('/tab/')) return new Promise(function () {});
 		return Promise.resolve({
 			ok: true, status: 200,
@@ -126,7 +126,7 @@ async function scenario(detail, opts) {
 	out.inline_noFetch = inline.fetches.length === 0;
 	out.inline_tabLabels = textsOf(tabsOf(inline.panel)).join('|');
 	const slots = inline.panel.querySelectorAll('[data-juneau-field]');
-	out.inline_values = slots.map(s => s.getAttribute('data-juneau-field') + '=' + s.textContent).join('|');
+	out.inline_values = slots.map(s => s.dataset.juneauField + '=' + s.textContent).join('|');
 	out.inline_groupTitle = textsOf(inline.panel.querySelectorAll('.juneau-view-detail-group-title')).join('|');
 	out.inline_state = inline.panel.dataset.juneauDetailState;
 	out.inline_labelFromColumn = textsOf(inline.panel.querySelectorAll('.juneau-view-detail-field-title')).join('|');
@@ -193,9 +193,9 @@ async function scenario(detail, opts) {
 		I.appendNestedSidecar(wrap, { view: { id: 'orders' }, meta: { contractVersion: '5', dataUrl: '/o' } });
 		const sc = wrap.querySelectorAll('[data-juneau-nested-meta]');
 		out.sidecar_count = sc.length;
-		out.sidecar_id = sc[0] && sc[0].getAttribute('data-juneau-nested-meta');
+		out.sidecar_id = sc[0]?.dataset.juneauNestedMeta;
 		out.sidecar_json = sc[0] ? JSON.parse(sc[0].textContent).dataUrl : null;
-		out.sidecar_type = sc[0] && sc[0].type;
+		out.sidecar_type = sc[0]?.type;
 	}
 
 	// --- lazy load, per-row cache, cache none, invalidate, abort, polling idle, remembered tab, re-open
@@ -239,12 +239,12 @@ async function scenario(detail, opts) {
 	const fetchesBeforeInvalidate = tabFetches(lazy);
 	lazy.panel.invalidateAll();
 	await flush(12);
-	out.invalidate_activeRepopulated = lazy.panel.querySelectorAll('[role="tabpanel"]')[1].childNodes.length > 0 && tabFetches(lazy) === fetchesBeforeInvalidate + 1 && lazy.fetches[lazy.fetches.length - 1].includes('/tab/b');
+	out.invalidate_activeRepopulated = lazy.panel.querySelectorAll('[role="tabpanel"]')[1].childNodes.length > 0 && tabFetches(lazy) === fetchesBeforeInvalidate + 1 && lazy.fetches.at(-1).includes('/tab/b');
 
 	// collapse aborts in-flight tab fetches
 	const hung = await scenario(lazyDetail(), { hang: true });
 	await clickTab(hung, 1);
-	const tabSignal = hung.signals[hung.signals.length - 1];
+	const tabSignal = hung.signals.at(-1);
 	out.abort_inflightBefore = !!tabSignal && tabSignal.aborted === false;
 	hung.click();
 	await flush(12);

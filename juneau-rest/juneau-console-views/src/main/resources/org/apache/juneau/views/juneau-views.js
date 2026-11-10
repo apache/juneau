@@ -1668,7 +1668,7 @@
 		// The magnifying glass sits just left of the sort control, after the title.  With no sort control on the
 		// column it becomes the last control instead.
 		const orderSpan = flex.querySelector("span.dt-column-order");
-		if (orderSpan) flex.insertBefore(icon, orderSpan); else flex.appendChild(icon);
+		if (orderSpan) flex.insertBefore(icon, orderSpan); else flex.appendChild(icon); // NOSONAR javascript:S7768 - a Java test pins this call text
 		// Reflect an already-applied filter (e.g. one restored from saved state or the URL) with the active class.
 		const current = getColumnExpr(ctx, col);
 		if (current) icon.classList.add("is-active");
@@ -2184,10 +2184,10 @@
 		if (!bar || !order) return false;
 		const searchRank = order.indexOf("search");
 		const tagged = Array.from(bar.childNodes).filter(function (c) { return c.getAttribute?.("data-juneau-group"); });
-		const rank = function (c) { return order.indexOf(c.getAttribute("data-juneau-group")); };
+		const rank = function (c) { return order.indexOf(c.dataset.juneauGroup); };
 		const after = tagged.find(function (c) { return rank(c) > searchRank; });
 		if (after) {
-			bar.insertBefore(filterEl, after);
+			after.before(filterEl);
 			return true;
 		}
 		return false;
@@ -2234,7 +2234,7 @@
 			const filterInput = filterEl.querySelector("input");
 			if (filterInput) filterInput.setAttribute("aria-label", "Search table");
 			if (slot) {
-				filterEl.setAttribute("data-juneau-ribbon-id", slot.getAttribute("data-juneau-ribbon-id") || "search");
+				filterEl.dataset.juneauRibbonId = slot.dataset.juneauRibbonId || "search";
 				slot.parentNode.insertBefore(filterEl, slot);
 				dropSlots();
 			} else if (!placeSearchInRibbon(bar, filterEl)) right.appendChild(filterEl);
@@ -4774,7 +4774,7 @@
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row, initialTabId) {
+	function expandDetailRow(table, ctx, viewDef, tpl, dt, tr, row, initialTabId) { // NOSONAR javascript:S107,javascript:S3776 - one expand sequence sharing the detail context
 		const gen = (ctx._detailGeneration.get(tr) || 0) + 1;
 		ctx._detailGeneration.set(tr, gen);
 		const rowId = tr.getAttribute(ROW_ID_ATTR);
@@ -4885,7 +4885,7 @@
 			}
 			if (detailModel) {
 				const rowData = rowDataForTr(ctx, tr) || {};
-				fillDetailSlots(panel, Object.assign({}, rowData, body.fields));
+				fillDetailSlots(panel, { ...rowData, ...body.fields });
 				paintTabbedDetail(panel, ctx, table, tr, detailModel, body, rowData, rowId);
 				panel.dataset.juneauDetailState = "ok";
 				renderAsyncStatus(panel, "ok");
@@ -9080,7 +9080,7 @@
 			if (! group) {
 				group = document.createElement("span");
 				group.className = "juneau-view-ribbon-group";
-				group.setAttribute("data-juneau-group", "status");
+				group.dataset.juneauGroup = "status";
 				rightCluster.appendChild(group);
 			}
 			group.insertBefore(staleness, group.firstChild);
@@ -9597,7 +9597,7 @@
 		ctx.refreshRibbonRowFilter();
 	}
 
-	function constructTable(table, viewDef, effectiveColumns, ctx) {
+	function constructTable(table, viewDef, effectiveColumns, ctx) { // NOSONAR javascript:S3776 - the table construction sequence; its steps share local state
 		const $ = window.jQuery;
 		restoreHeaderShell(table, ctx);
 		clearReinitNotice(table);
@@ -9667,8 +9667,8 @@
 		if (bar && ctx._ribbonOwns?.search) {
 			const mt = NS.tables && typeof NS.tables.handle === "function" ? NS.tables.handle(table) : null;
 			const searchDecl = (viewDef.ribbon || []).find(function (r) { return r?.type === "search"; });
-			const sh = mt && mt.ribbon && mt.ribbon.item(searchDecl?.id != null ? String(searchDecl.id) : "search");
-			const fe = toolbarRow && toolbarRow.querySelector(".dataTables_filter, .dt-search");
+			const sh = mt?.ribbon?.item(searchDecl?.id != null ? String(searchDecl.id) : "search");
+			const fe = toolbarRow?.querySelector(".dataTables_filter, .dt-search");
 			if (sh) { if (fe) sh._attach(fe); else sh._destroy(); }
 		}
 
@@ -10581,7 +10581,7 @@
 		return div;
 	}
 
-	function buildDetailTemplate(detail, parentTable) {
+	function buildDetailTemplate(detail, parentTable) { // NOSONAR javascript:S3776 - one template builder; splitting it would scatter the tab wiring
 		const tpl = document.createElement("template");
 		tpl.dataset.juneauRowDetail = "1";
 		tpl.dataset.juneauDetailContract = detail.contractVersion || JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
@@ -10613,7 +10613,7 @@
 			dest.appendChild(buildDetailHeader(detail));
 		if (tabbed) {
 			const shell = document.createElement("div");
-			shell.setAttribute("data-juneau-detail-tabs", "");
+			shell.dataset.juneauDetailTabs = "";
 			dest.appendChild(shell);
 		} else if (detail.region)
 			dest.appendChild(buildDetailRegion(detail.region));
@@ -10764,7 +10764,7 @@
 
 	/** A tab failed to load: an error status plus a Retry that rebuilds only this tab and hands focus back to its button. */
 	function paintTabError(panel, tab, pane, tabCtx, err) {
-		if (tabCtx?.signal?.aborted || (err && err.name === "AbortError")) return;
+		if (tabCtx?.signal?.aborted || err?.name === "AbortError") return;
 		clearElementChildren(pane);
 		renderAsyncStatus(pane, "error", err?.message ? String(err.message) : "Something went wrong.");
 		const retry = document.createElement("button");
@@ -10798,14 +10798,14 @@
 
 	/** Resolves the value map for a fields tab: row data underneath, the detail response on top. */
 	function detailValues(panel) {
-		return Object.assign({}, panel._juneauRowData || {}, panel._juneauValues || {});
+		return { ...panel._juneauRowData, ...panel._juneauValues };
 	}
 
 	function paintFieldsTab(panel, detail, tab, pane, ctx, body) {
 		const H = NS.helpers;
 		const values = detailValues(panel);
 		const bean = (body?.meta?.labels) || {};
-		const labels = Object.assign({}, bean, detail.labels || {});
+		const labels = { ...bean, ...detail.labels };
 		const catalog = ctx?.viewDef?.columns || [];
 		function describe(name) {
 			const field = { data: name, label: Object.hasOwn(labels, name) ? labels[name] : null };
@@ -10884,7 +10884,7 @@
 	function detailFetch(table, rowId, signal, url, opts) {
 		const target = substituteDetailUrl(url, rowId);
 		if (!target) return Promise.reject(new Error("the request URL is not a same-origin path"));
-		const headers = Object.assign({}, opts?.headers, { "Accept": "application/json" });
+		const headers = { ...opts?.headers, "Accept": "application/json" };
 		const token = resolveCsrfToken(table);
 		if (!isBlankToken(token)) headers[resolveCsrfHeaderName(table)] = token;
 		const init = { method: opts?.method || "GET", credentials: "same-origin", headers: headers, signal: signal };
@@ -10913,7 +10913,7 @@
 		if (!Object.hasOwn(handle, "helpers")) Object.defineProperty(handle, "helpers", { value: detailHelpers(), writable: false, configurable: false, enumerable: true });
 		let failed = false;
 		const data = Object.freeze({
-			row: Object.assign({}, panel._juneauRowData || {}),
+			row: { ...panel._juneauRowData },
 			rowId: rowId,
 			pane: pane,
 			signal: tabCtx.signal,
@@ -10937,7 +10937,7 @@
 	/** The tab kinds a row detail understands; pinned against the Java enum by a parity test. */
 	const JUNEAU_DETAIL_TAB_KINDS = Object.freeze(["fields", "table", "chart", "client"]);
 
-	function populateTab(panel, ctx, table, detail, tab, pane, tabCtx, rowId, body) {
+	function populateTab(panel, ctx, table, detail, tab, pane, tabCtx, rowId, body) { // NOSONAR javascript:S107,javascript:S3776 - one switch over the tab kinds sharing the detail paint context
 		switch (tab.kind) {
 			case "fields": {
 				const names = Array.isArray(tab.fields) ? tab.fields : [];
@@ -10965,7 +10965,8 @@
 					const nt = pane.querySelector("table");
 					if (nt) window.jQuery(nt).on("xhr.dt", function (e, settings, json) {
 						if (json == null || !panel._juneauStrip) return;
-						const total = json.recordsTotal != null ? json.recordsTotal : (Array.isArray(json.data) ? json.data.length : null);
+						let total = json.recordsTotal;
+						if (total == null) total = Array.isArray(json.data) ? json.data.length : null;
 						if (total != null) panel._juneauStrip.setLabel(tab.id, tab.title + " (" + total + ")");
 					});
 				}
@@ -10999,7 +11000,7 @@
 	}
 
 	/** Builds the tab strip for a tabbed detail panel once its first payload (or the inline row) is in hand. */
-	function paintTabbedDetail(panel, ctx, table, tr, detail, body, rowData, rowId) {
+	function paintTabbedDetail(panel, ctx, table, tr, detail, body, rowData, rowId) { // NOSONAR javascript:S107 - the detail paint context is already one flat argument list
 		const shell = panel.querySelector("[data-juneau-detail-tabs]");
 		if (!shell) return;
 		panel._juneauRowData = rowData || {};
@@ -11038,7 +11039,7 @@
 			return;
 		}
 		const counts = body?.counts && typeof body.counts === "object" ? body.counts : {};
-		const facts = Object.assign({}, rowData || {}, panel._juneauValues);
+		const facts = { ...rowData, ...panel._juneauValues };
 		const visible = detail.tabs.filter(function (t) {
 			return !(t.visibleWhen && NS.rules?.testRow && !NS.rules.testRow(t.visibleWhen, facts));
 		});
@@ -11881,7 +11882,7 @@
 	TABLE_OPS.forEach(function (op) { DATATABLES_OPS[op] = "op$" + op; });
 
 	/** The datatables card: a view table in a card, with the page-bus filter role and the table cmd ops. */
-	class DatatablesCard extends (NS.model?.Card || window.JuneauConsole?.Card || class {}) {
+	class DatatablesCard extends (NS.model?.Card || window.JuneauConsole?.Card || class {}) { // NOSONAR javascript:S2094 - an inert fallback base for when no Card base has loaded
 		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
 		static roles = { filter: "filter" };
 		static ops = DATATABLES_OPS;
@@ -12282,7 +12283,7 @@
 
 	/** The live-table members the model Table delegates to (its own commands run through the table bus). */
 	function tableImpl(el, ctx) {
-		const cmd = function (c) { return applyCmd(el, ctx, Object.assign({ schemaVersion: 1 }, c)); };
+		const cmd = function (c) { return applyCmd(el, ctx, { schemaVersion: 1, ...c }); };
 		return {
 			element: el,
 			dataTable: ctx.dataTable,
@@ -12292,7 +12293,7 @@
 			selection: function () { return Array.from(ctx.selectionState?.selected || []); },
 			select: function (ids) { return cmd({ op: "select", ids: ids }); },
 			clearSelection: function () { return cmd({ op: "clear-selection" }); },
-			setFilter: function (patch) { return cmd(Object.assign({ op: "set-filter" }, patch)); },
+			setFilter: function (patch) { return cmd({ op: "set-filter", ...patch }); },
 			pausePolling: function () { return cmd({ op: "pause-polling" }); },
 			resumePolling: function () { return cmd({ op: "resume-polling" }); },
 			collapseAll: function () { return collapseAllDetailRows(el, ctx); },

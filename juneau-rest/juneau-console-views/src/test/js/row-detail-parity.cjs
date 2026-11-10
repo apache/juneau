@@ -79,10 +79,10 @@ if (!goldenPath) {
 	await flush(12);
 
 	const tabs = panel.querySelectorAll('[role="tab"]');
-	out.tabIds = tabs.map(function (t) { return t.getAttribute('data-tab-id'); }).join('|');
+	out.tabIds = tabs.map(function (t) { return t.dataset.tabId; }).join('|');
 	out.tabLabels = tabs.map(function (t) { return t.textContent; }).join('|');
 	const link = panel.querySelectorAll('a')[0];
-	out.headerLinkId = link ? link.getAttribute('data-juneau-detail-link-id') : null;
+	out.headerLinkId = link ? link.dataset.juneauDetailLinkId : null;
 	out.headerLinkHref = link ? (link.getAttribute('href') || link.href) : null;
 	out.noFetch = fetches.length === 0;
 	process.stdout.write(JSON.stringify(out));

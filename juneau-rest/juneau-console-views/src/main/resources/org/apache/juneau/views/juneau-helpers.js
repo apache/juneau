@@ -1040,7 +1040,7 @@
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function tabStrip(tabs, opts) {
+	function tabStrip(tabs, opts) { // NOSONAR javascript:S3776 - one flat strip builder; splitting it would scatter the tab bookkeeping
 		opts = opts || {};
 		const panesOn = opts.panes !== false;   // false: a selector only, no pane per tab (the caller owns the display)
 		validateTabs(tabs, panesOn);
@@ -1090,7 +1090,7 @@
 			btn.className = "juneau-view-ribbon-btn";
 			btn.setAttribute("role", "tab");
 			btn.dataset.juneauStripTab = id;
-			btn.setAttribute("data-tab-id", id);
+			btn.dataset.tabId = id;
 			const isActive = id === activeId;
 			btn.setAttribute("aria-selected", isActive ? "true" : "false");
 			btn.tabIndex = isActive ? 0 : -1;
@@ -1217,7 +1217,7 @@
 		if (panesOn) {
 			wrapper.appendChild(paneContainer);
 			// The panes are a bordered panel the selected tab joins (the folder-tab look keys off this marker).
-			if (mode === "tab") wrapper.setAttribute("data-juneau-strip-panel", "");
+			if (mode === "tab") wrapper.dataset.juneauStripPanel = "";
 		}
 		function resetEntry(entry) {
 			if (!entry.populate || !entry.pane) return; // a static pane has nothing to rebuild

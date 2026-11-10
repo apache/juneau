@@ -149,6 +149,7 @@ class ConsoleModel_BrowserTest extends TestBase {
 			"other", "#h2")
 			.pageHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'");
 		report = f.run();
+		tableProbe();
 	}
 
 	private static final String WAIT = "window.__w = function (fn) { return new Promise(function (res) { var n = 0; (function t() { if (fn() || n++ > 160) res(); else setTimeout(t, 50); })(); }); };"
@@ -231,16 +232,15 @@ class ConsoleModel_BrowserTest extends TestBase {
 
 	private static String LIFE_PACK;
 
-	private static final String H_ = "var H = window.JuneauViews.handlers; ";
+	private static final String HANDLERS_JS = "var H = window.JuneauViews.handlers; ";
 	/** The detail-count handler variants: update the detail header, update the row, tell an ancestor. */
 	private static final Map<String,String> VARIANTS = Map.of(
-		"jsHdr", H_ + "H.register('pets.ordersInHeader', function (tab, e) { tab.closest('rowdetail').setBadge(e.payload.count, 'info'); }); window.__ordersHandler = 'pets.ordersInHeader';",
-		"jsRow", H_ + "H.register('pets.ordersOnRow', function (tab, e) { tab.closest('row').setBadge(e.payload.count, 'info'); }); window.__ordersHandler = 'pets.ordersOnRow';",
-		"jsEmit", H_ + "H.register('pets.ordersEmit', function (tab, e) { tab.emit('orders-counted', { count: e.payload.count }); }); window.__ordersHandler = 'pets.ordersEmit';"
+		"jsHdr", HANDLERS_JS + "H.register('pets.ordersInHeader', function (tab, e) { tab.closest('rowdetail').setBadge(e.payload.count, 'info'); }); window.__ordersHandler = 'pets.ordersInHeader';",
+		"jsRow", HANDLERS_JS + "H.register('pets.ordersOnRow', function (tab, e) { tab.closest('row').setBadge(e.payload.count, 'info'); }); window.__ordersHandler = 'pets.ordersOnRow';",
+		"jsEmit", HANDLERS_JS + "H.register('pets.ordersEmit', function (tab, e) { tab.emit('orders-counted', { count: e.payload.count }); }); window.__ordersHandler = 'pets.ordersEmit';"
 			+ " window.__onPage = function (page) { page.on('orders-counted', function (ev) { (window.__probe = window.__probe || {}).emitted = { path: ev.source.path, count: ev.payload.count }; }); };");
 
-	@BeforeAll
-	static void tableProbe() throws Exception {
+	private static void tableProbe() throws Exception {
 		var many = new String[10];
 		Arrays.fill(many, "[{\"id\":\"p1\",\"name\":\"Rex\"}]");
 		var detailBodies = new String[40];

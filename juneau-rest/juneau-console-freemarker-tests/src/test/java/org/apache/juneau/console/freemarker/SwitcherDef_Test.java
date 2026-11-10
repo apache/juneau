@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.console.*;
 import org.junit.jupiter.api.*;
 
 class SwitcherDef_Test extends TestBase {

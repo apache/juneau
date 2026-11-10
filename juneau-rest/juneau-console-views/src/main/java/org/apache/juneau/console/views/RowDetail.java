@@ -47,6 +47,10 @@ import org.apache.juneau.marshall.marshaller.Json;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Map keys read more clearly inline than as constants.
+	"java:S3776" // Branching is inherent to toMap() and tabModelMap(), which serialize many optional settings.
+})
 public final class RowDetail implements Handled<RowDetail> {
 
 	/** The contract version for the detail GET response (the card fragment itself carries no version). */
@@ -88,7 +92,13 @@ public final class RowDetail implements Handled<RowDetail> {
 		this.lookup = lookup;
 		this.tabModel = mode != null;
 		this.resolved = resolved;
-		this.model = new ModelBlock("rowdetail", endpoint != null ? endpoint : beanType != null ? beanType.getSimpleName() : "inline");
+		this.model = new ModelBlock("rowdetail", modelId(endpoint, beanType));
+	}
+
+	private static String modelId(String endpoint, Class<?> beanType) {
+		if (endpoint != null)
+			return endpoint;
+		return beanType != null ? beanType.getSimpleName() : "inline";
 	}
 
 	@Override /* Handled */
@@ -282,6 +292,9 @@ public final class RowDetail implements Handled<RowDetail> {
 	Class<?> beanType() { return beanType; }
 
 	/** @return The bean lookup of a bean-backed detail, or <jk>null</jk>. */
+	@SuppressWarnings({
+		"java:S1452" // The lookup result type is the caller's bean type, unknown to this class.
+	})
 	Function<String,?> lookup() { return lookup; }
 
 	/** @return The tabs declared on this detail. */
@@ -309,8 +322,7 @@ public final class RowDetail implements Handled<RowDetail> {
 
 	/** @return The bean property names that may be served: readable and not ignored. */
 	Set<String> servableProperties() {
-		var p = eligibleBeanProperties();
-		return p == null ? Set.of() : p;
+		return eligibleBeanProperties();
 	}
 
 	/** @return The URL key of a bean-backed detail, or <jk>null</jk>. */
@@ -432,14 +444,18 @@ public final class RowDetail implements Handled<RowDetail> {
 		if (! tabModel)
 			return plainMap();
 		var names = cols.stream().map(Column::name).toList();
-		var idField = rowIdField != null ? rowIdField : names.contains("id") ? "id" : names.contains("name") ? "name" : null;
+		var idField = rowIdField;
+		if (idField == null && names.contains("id"))
+			idField = "id";
+		if (idField == null && names.contains("name"))
+			idField = "name";
 		if (idField == null)
 			throw isex("table '%s' has a detail but no resolvable row id field.", tableId);
 		var c = copy();
 		if (c.narrowedFields.isEmpty()) {
 			var eligible = eligibleBeanProperties();
 			for (var col : cols)
-				if (eligible == null || eligible.contains(col.name()))
+				if (beanType == null || eligible.contains(col.name()))
 					c.narrowedFields.add(col.name());
 		}
 		for (var col : cols)
@@ -454,7 +470,7 @@ public final class RowDetail implements Handled<RowDetail> {
 
 	private Set<String> eligibleBeanProperties() {
 		if (beanType == null)
-			return null;
+			return Set.of();
 		var bm = org.apache.juneau.marshall.MarshallingContext.DEFAULT.getBeanMeta(beanType);
 		var out = new LinkedHashSet<String>();
 		if (bm != null)
@@ -468,7 +484,9 @@ public final class RowDetail implements Handled<RowDetail> {
 		var m = new JsonMap();
 		if (mode != null)
 			m.put("mode", mode);
-		var ep = endpoint != null ? endpoint : "bean".equals(mode) ? "/row-detail/" + key + "/{id}" : null;
+		var ep = endpoint;
+		if (ep == null && "bean".equals(mode))
+			ep = "/row-detail/" + key + "/{id}";
 		if (ep != null)
 			m.put("endpoint", ep);
 		if (title != null)
@@ -544,9 +562,9 @@ public final class RowDetail implements Handled<RowDetail> {
 		var mm = model.toMap();
 		if (mm != null) {
 			mm = new LinkedHashMap<>(mm);
-			var actions = mm.remove("actions");
-			if (actions != null)
-				m.put("actions", actions);
+			var modelActions = mm.remove("actions");
+			if (modelActions != null)
+				m.put("actions", modelActions);
 			if (! mm.isEmpty())
 				m.put("model", mm);
 		}

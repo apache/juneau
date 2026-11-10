@@ -308,7 +308,7 @@
 		return Promise.resolve().then(() => f(url, init)).then(res => {
 			if (!res?.ok) {
 				let cancelled;
-				try {
+				try { // NOSONAR javascript:S4822 - the cancel promise is captured and given a catch right after the block
 					if (res?.body && typeof res.body.cancel === "function")
 						cancelled = res.body.cancel();
 				} catch (error_) { /* the stream is already closed */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it

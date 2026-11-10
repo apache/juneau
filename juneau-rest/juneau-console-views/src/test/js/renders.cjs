@@ -174,7 +174,7 @@ out.pill_toneV1NoClass = ['ok', 'warn', 'exceeds', 'accent', 'danger', 'INFO', '
 });
 // --- Per-value tones / categorical palette ---
 function pillCls(cell, meta) {
-	const m = /^<span class="([^"]*)"/.exec(pillHtml(cell, Object.assign({ field: 'status' }, meta)));
+	const m = /^<span class="([^"]*)"/.exec(pillHtml(cell, { field: 'status', ...meta }));
 	return m ? m[1] : '';
 }
 const T = { tones: { AVAILABLE: 'success', SOLD: 'neutral', BAD: 'purple' } };

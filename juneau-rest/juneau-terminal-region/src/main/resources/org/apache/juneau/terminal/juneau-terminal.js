@@ -1379,7 +1379,7 @@
 	}
 
 	/** The terminal card: mounts a terminal region in the card and wires its input and nudge links to the page bus. */
-	class TerminalCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) {
+	class TerminalCard extends (window.JuneauViews?.model?.Card || window.JuneauConsole?.Card || class {}) { // NOSONAR javascript:S2094 - an inert fallback base for when no Card base has loaded
 		static lateBase = true;   // the shell puts the Card base under this class if it loaded first
 		// This role set must match TerminalCardType.acceptedRoles: the console only routes the roles that a card type accepts.
 		static roles = { "input-status": "inputStatus", nudge: "nudge" };

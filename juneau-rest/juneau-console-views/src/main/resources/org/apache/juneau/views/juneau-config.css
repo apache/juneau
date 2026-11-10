@@ -121,8 +121,11 @@
 }
 
 .juneau-config-dialog .juneau-config-avail {
+	display: flex;
+	align-items: center;
+	gap: var(--jc-space-2);
 	padding: var(--jc-space-1) var(--jc-space-2);
-	cursor: default;
+	cursor: grab;
 	user-select: none;
 }
 
@@ -301,13 +304,6 @@
 	overflow: hidden;
 	clip-path: inset(50%);
 	white-space: nowrap;
-}
-
-.juneau-config-dialog .juneau-config-avail {
-	display: flex;
-	align-items: center;
-	gap: var(--jc-space-2);
-	cursor: grab;
 }
 
 .juneau-config-dialog .juneau-config-grip {

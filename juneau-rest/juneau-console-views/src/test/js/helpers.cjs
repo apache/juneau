@@ -434,19 +434,19 @@ await (async function tabStripTests() {
 		w.juneauTabs.activate('b');
 		out.tabStrip_activateReason = calls.length === 2 && calls[1][0] === 'b' && calls[1][2] === 'activate';
 		out.tabStrip_activeId = w.juneauTabs.activeId() === 'b';
-		out.tabStrip_tabId = btns[0].getAttribute('data-tab-id') === 'a' && btns[1].getAttribute('data-tab-id') === 'b';
+		out.tabStrip_tabId = btns[0].dataset.tabId === 'a' && btns[1].dataset.tabId === 'b';
 		clickTab(w, 'a');
-		out.tabStrip_clickReason = calls[calls.length - 1][2] === 'click';
+		out.tabStrip_clickReason = calls.at(-1)[2] === 'click';
 		w.juneauTabs.addTab({ id: 'c', label: 'C' });
 		const after = w.querySelectorAll('[role="tab"]');
-		out.tabStrip_addTab = after.length === 3 && after[2].getAttribute('data-tab-id') === 'c';
+		out.tabStrip_addTab = after.length === 3 && after[2].dataset.tabId === 'c';
 		out.tabStrip_selected = after[0].getAttribute('aria-selected') === 'true' && after[1].getAttribute('aria-selected') === 'false';
 	}
 	{
 		const w = H.tabStrip([{ id: 'a', label: 'A', populate: function () {} }, { id: 'b', label: 'B', populate: function () {} }], { mode: 'tab' });
-		out.tabStrip_panelMarker = w.hasAttribute('data-juneau-strip-panel');
+		out.tabStrip_panelMarker = 'juneauStripPanel' in w.dataset;
 		const w2 = H.tabStrip([{ id: 'a', label: 'A' }], { mode: 'ribbon', panes: false });
-		out.tabStrip_noPanelMarker = !w2.hasAttribute('data-juneau-strip-panel');
+		out.tabStrip_noPanelMarker = !('juneauStripPanel' in w2.dataset);
 		const lateRuns = [];
 		const w3 = H.tabStrip([{ id: 'a', label: 'A', populate: function () {} }], { mode: 'tab' });
 		w3.juneauTabs.addTab({ id: 'b', label: 'B', populate: function () { lateRuns.push('b'); } });
@@ -853,7 +853,7 @@ await (async function tabStripResetTests() {
 	out.tabReset_activeRepopulatesNow = runs.length === before + 1;
 	api.setLabel('a', 'Alpha');
 	out.tabReset_setLabel = tabBtn(w, 'a').textContent === 'Alpha';
-	out.tabReset_unknownIdNoop = (function () { try { api.reset('zzz'); api.setLabel('zzz', 'x'); return true; } catch (e) { return false; } })();
+	out.tabReset_unknownIdNoop = (function () { try { api.reset('zzz'); api.setLabel('zzz', 'x'); return true; } catch (e) { return false; /* a throw is reported as false */ } })(); // NOSONAR javascript:S2486 - a throw is reported as false, which is what the check asserts
 
 	// a stale async populate must not insert after reset
 	let n = 0;
@@ -863,14 +863,14 @@ await (async function tabStripResetTests() {
 		{ id: 'b', label: 'B', populate: function (pane, ctx) {
 			const mine = ++n;
 			if (mine === 1) signal1 = ctx.signal;
-			return new Promise(function (res) { setTimeout(function () { if (!(ctx.signal && ctx.signal.aborted)) pane.textContent += 'v' + mine; res(); }, mine === 1 ? 5 : 1); });
+			return new Promise(function (res) { setTimeout(function () { if (!ctx.signal?.aborted) { pane.textContent += 'v' + mine; } res(); }, mine === 1 ? 5 : 1); });
 		} }
 	]);
 	clickTab(w2, 'b');
 	w2.juneauTabs.reset('b');
 	clickTab(w2, 'a'); clickTab(w2, 'b');
 	await new Promise(r => setTimeout(r, 30));
-	out.tabReset_abortsPrevious = !!(signal1 && signal1.aborted);
+	out.tabReset_abortsPrevious = !!signal1?.aborted;
 	out.tabReset_repopulatedAfterResetWhilePending = n === 2 && tabPane(w2, 'b').textContent === 'v2';
 })();
 

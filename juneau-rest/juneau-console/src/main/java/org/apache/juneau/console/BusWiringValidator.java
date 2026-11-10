@@ -780,7 +780,7 @@ public final class BusWiringValidator {
 
 		/**
 		 * The option ids a card declares on its own ribbon: its untargeted (or self-targeted) {@code option} and
-		 * {@code optionGroup} items.  C2's {@code tableCatalog} has no {@code filterOptions} key, so the ribbon is the
+		 * {@code optionGroup} items.  The {@code tableCatalog} has no {@code filterOptions} key, so the ribbon is the
 		 * only place an option id can be declared.
 		 */
 		Set<String> declaredOptions(Map<?,?> card) {

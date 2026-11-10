@@ -122,7 +122,7 @@ async function page(contract, opts) {
  * last argument, an implicit(spec) function) into a card class; the shell puts its Card base under it at registration.
  */
 function toCardClass(h) {
-	const K = class {};
+	const K = class {}; // NOSONAR javascript:S2094 - a bare card type for the fixture
 	K.lateBase = true;
 	const P = K.prototype;
 	if (h.render) P.render = function () { return h.render(this.spec, this.el, this); };
