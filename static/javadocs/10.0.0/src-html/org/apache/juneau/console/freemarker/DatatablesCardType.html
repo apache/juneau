@@ -77,7 +77,7 @@
 <span class="source-line-no">064</span><span id="line-64">   private static final String E28 = "type='datatables' body is a pre-built SLOT_META envelope; remove 'contractVersion', 'layout' and 'view' and author the catalog form.";</span>
 <span class="source-line-no">065</span><span id="line-65"></span>
 <span class="source-line-no">066</span><span id="line-66">   private static final Set&lt;String&gt; KNOWN_COLUMN_KEYS = Set.of(</span>
-<span class="source-line-no">067</span><span id="line-67">      "key", "data", "label", "title", "search", "render", "href", "className",</span>
+<span class="source-line-no">067</span><span id="line-67">      "key", "data", "label", "title", "description", "search", "render", "href", "className",</span>
 <span class="source-line-no">068</span><span id="line-68">      "orderable", "searchable", "defaultVisible", "pinned", "formats",</span>
 <span class="source-line-no">069</span><span id="line-69">      "searchType", "searchOperators", "customOperators");</span>
 <span class="source-line-no">070</span><span id="line-70"></span>
@@ -270,219 +270,226 @@
 <span class="source-line-no">257</span><span id="line-257">      return region instanceof Map&lt;?,?&gt; r &amp;&amp; JobLogRegion.POPULATOR.equals(r.get("populate"));</span>
 <span class="source-line-no">258</span><span id="line-258">   }</span>
 <span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   /** A datatables card whose detail region is a job-log region needs the {@code joblog} pack's populator. */</span>
-<span class="source-line-no">261</span><span id="line-261">   @Override</span>
-<span class="source-line-no">262</span><span id="line-262">   public List&lt;String&gt; requiredPacks(JsonMap body) {</span>
-<span class="source-line-no">263</span><span id="line-263">      if (body != null &amp;&amp; body.get("table") instanceof Map&lt;?,?&gt; table &amp;&amp; table.get("detail") instanceof Map&lt;?,?&gt; detail</span>
-<span class="source-line-no">264</span><span id="line-264">            &amp;&amp; isJobLogRegion(detail.get("region")))</span>
-<span class="source-line-no">265</span><span id="line-265">         return List.of(ToolkitPackRegistry.PACK_JOBLOG);</span>
-<span class="source-line-no">266</span><span id="line-266">      return List.of();</span>
-<span class="source-line-no">267</span><span id="line-267">   }</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">   private static void validateRows(CardSource source, JsonMap catalog) {</span>
-<span class="source-line-no">270</span><span id="line-270">      var rows = catalog.get("rows");</span>
-<span class="source-line-no">271</span><span id="line-271">      if (! (rows instanceof List&lt;?&gt; list))</span>
-<span class="source-line-no">272</span><span id="line-272">         throw source.error("type='datatables' 'rows' must be an array of objects.");</span>
-<span class="source-line-no">273</span><span id="line-273">      for (var r : list)</span>
-<span class="source-line-no">274</span><span id="line-274">         if (! (r instanceof Map&lt;?, ?&gt;))</span>
-<span class="source-line-no">275</span><span id="line-275">            throw source.error("type='datatables' each 'rows' element must be an object.");</span>
-<span class="source-line-no">276</span><span id="line-276">      if (eq("server", catalog.getString("dataMode")))</span>
-<span class="source-line-no">277</span><span id="line-277">         throw source.error("type='datatables' inline 'rows' cannot be combined with dataMode:'server'; use 'dataUrl'.");</span>
-<span class="source-line-no">278</span><span id="line-278">      if (nn(catalog.get("pollIntervalMs")))</span>
-<span class="source-line-no">279</span><span id="line-279">         throw source.error("type='datatables' inline 'rows' cannot be combined with 'pollIntervalMs' (nothing to poll); use 'dataUrl'.");</span>
-<span class="source-line-no">280</span><span id="line-280">      if (list.size() &gt; ROWS_WARN_THRESHOLD)</span>
-<span class="source-line-no">281</span><span id="line-281">         LOG.log(Level.WARNING, "&lt;@card type=\"datatables\"&gt; inline 'rows' has {0} entries; prefer 'dataUrl' for large data sets.", list.size());</span>
-<span class="source-line-no">282</span><span id="line-282">   }</span>
-<span class="source-line-no">283</span><span id="line-283"></span>
-<span class="source-line-no">284</span><span id="line-284">   private static String columnIdent(Map&lt;String,Object&gt; col) {</span>
-<span class="source-line-no">285</span><span id="line-285">      var data = col.get("data");</span>
-<span class="source-line-no">286</span><span id="line-286">      var key = col.get("key");</span>
-<span class="source-line-no">287</span><span id="line-287">      var fallback = nn(key) ? key.toString() : null;</span>
-<span class="source-line-no">288</span><span id="line-288">      return nn(data) ? data.toString() : fallback;</span>
+<span class="source-line-no">260</span><span id="line-260">   /**</span>
+<span class="source-line-no">261</span><span id="line-261">    * A datatables card whose detail region is a job-log region needs the {@code joblog} pack's populator; one whose detail</span>
+<span class="source-line-no">262</span><span id="line-262">    * has a chart tab needs the {@code charts} pack.</span>
+<span class="source-line-no">263</span><span id="line-263">    */</span>
+<span class="source-line-no">264</span><span id="line-264">   @Override</span>
+<span class="source-line-no">265</span><span id="line-265">   public List&lt;String&gt; requiredPacks(JsonMap body) {</span>
+<span class="source-line-no">266</span><span id="line-266">      var packs = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">267</span><span id="line-267">      if (body != null &amp;&amp; body.get("table") instanceof Map&lt;?,?&gt; table &amp;&amp; table.get("detail") instanceof Map&lt;?,?&gt; detail) {</span>
+<span class="source-line-no">268</span><span id="line-268">         if (isJobLogRegion(detail.get("region")))</span>
+<span class="source-line-no">269</span><span id="line-269">            packs.add(ToolkitPackRegistry.PACK_JOBLOG);</span>
+<span class="source-line-no">270</span><span id="line-270">         if (detail.get("tabs") instanceof List&lt;?&gt; tabs &amp;&amp; tabs.stream().anyMatch(t -&gt; t instanceof Map&lt;?,?&gt; m &amp;&amp; "chart".equals(m.get("kind"))))</span>
+<span class="source-line-no">271</span><span id="line-271">            packs.add(ToolkitPackRegistry.PACK_CHARTS);</span>
+<span class="source-line-no">272</span><span id="line-272">      }</span>
+<span class="source-line-no">273</span><span id="line-273">      return packs;</span>
+<span class="source-line-no">274</span><span id="line-274">   }</span>
+<span class="source-line-no">275</span><span id="line-275"></span>
+<span class="source-line-no">276</span><span id="line-276">   private static void validateRows(CardSource source, JsonMap catalog) {</span>
+<span class="source-line-no">277</span><span id="line-277">      var rows = catalog.get("rows");</span>
+<span class="source-line-no">278</span><span id="line-278">      if (! (rows instanceof List&lt;?&gt; list))</span>
+<span class="source-line-no">279</span><span id="line-279">         throw source.error("type='datatables' 'rows' must be an array of objects.");</span>
+<span class="source-line-no">280</span><span id="line-280">      for (var r : list)</span>
+<span class="source-line-no">281</span><span id="line-281">         if (! (r instanceof Map&lt;?, ?&gt;))</span>
+<span class="source-line-no">282</span><span id="line-282">            throw source.error("type='datatables' each 'rows' element must be an object.");</span>
+<span class="source-line-no">283</span><span id="line-283">      if (eq("server", catalog.getString("dataMode")))</span>
+<span class="source-line-no">284</span><span id="line-284">         throw source.error("type='datatables' inline 'rows' cannot be combined with dataMode:'server'; use 'dataUrl'.");</span>
+<span class="source-line-no">285</span><span id="line-285">      if (nn(catalog.get("pollIntervalMs")))</span>
+<span class="source-line-no">286</span><span id="line-286">         throw source.error("type='datatables' inline 'rows' cannot be combined with 'pollIntervalMs' (nothing to poll); use 'dataUrl'.");</span>
+<span class="source-line-no">287</span><span id="line-287">      if (list.size() &gt; ROWS_WARN_THRESHOLD)</span>
+<span class="source-line-no">288</span><span id="line-288">         LOG.log(Level.WARNING, "&lt;@card type=\"datatables\"&gt; inline 'rows' has {0} entries; prefer 'dataUrl' for large data sets.", list.size());</span>
 <span class="source-line-no">289</span><span id="line-289">   }</span>
 <span class="source-line-no">290</span><span id="line-290"></span>
-<span class="source-line-no">291</span><span id="line-291">   private static final Set&lt;String&gt; QUICK_STAT_KINDS = Set.of("tile", "meter", "segmented");</span>
-<span class="source-line-no">292</span><span id="line-292"></span>
-<span class="source-line-no">293</span><span id="line-293">   /** E-37: the quickStats strip is a non-empty list of uniquely-identified items, each well-formed for its kind. */</span>
-<span class="source-line-no">294</span><span id="line-294">   private static void checkQuickStats(CardSource source, Map&lt;String,Object&gt; catalog) {</span>
-<span class="source-line-no">295</span><span id="line-295">      if (! catalog.containsKey("quickStats"))</span>
-<span class="source-line-no">296</span><span id="line-296">         return;</span>
-<span class="source-line-no">297</span><span id="line-297">      if (! (catalog.get("quickStats") instanceof Map&lt;?,?&gt; qs) || ! (qs.get("items") instanceof List&lt;?&gt; items) || items.isEmpty())</span>
-<span class="source-line-no">298</span><span id="line-298">         throw source.error("quickStats items must be a non-empty array.");</span>
-<span class="source-line-no">299</span><span id="line-299">      var ids = new HashSet&lt;String&gt;();</span>
-<span class="source-line-no">300</span><span id="line-300">      for (var o : items) {</span>
-<span class="source-line-no">301</span><span id="line-301">         if (! (o instanceof Map&lt;?,?&gt; item))</span>
-<span class="source-line-no">302</span><span id="line-302">            throw source.error("quickStats items must be objects.");</span>
-<span class="source-line-no">303</span><span id="line-303">         if (! (item.get("id") instanceof String id) || id.isBlank())</span>
-<span class="source-line-no">304</span><span id="line-304">            throw source.error("quickStats item ids must be non-blank strings.");</span>
-<span class="source-line-no">305</span><span id="line-305">         if (! ids.add(id))</span>
-<span class="source-line-no">306</span><span id="line-306">            throw source.error("quickStats item '%s': duplicate id.", id);</span>
-<span class="source-line-no">307</span><span id="line-307">         checkQuickStatItem(source, id, item);</span>
-<span class="source-line-no">308</span><span id="line-308">      }</span>
-<span class="source-line-no">309</span><span id="line-309">   }</span>
-<span class="source-line-no">310</span><span id="line-310"></span>
-<span class="source-line-no">311</span><span id="line-311">   private static void checkQuickStatItem(CardSource source, String id, Map&lt;?,?&gt; item) {</span>
-<span class="source-line-no">312</span><span id="line-312">      var hasSegments = item.containsKey("segments");</span>
-<span class="source-line-no">313</span><span id="line-313">      var hasMax = item.containsKey("max");</span>
-<span class="source-line-no">314</span><span id="line-314">      var type = item.get("type");</span>
-<span class="source-line-no">315</span><span id="line-315">      String kind;</span>
-<span class="source-line-no">316</span><span id="line-316">      if (type == null) {</span>
-<span class="source-line-no">317</span><span id="line-317">         if (hasSegments &amp;&amp; hasMax)</span>
-<span class="source-line-no">318</span><span id="line-318">            throw source.error("quickStats item '%s': has both segments and max; set type.", id);</span>
-<span class="source-line-no">319</span><span id="line-319">         var unsegmented = hasMax ? "meter" : "tile";</span>
-<span class="source-line-no">320</span><span id="line-320">         kind = hasSegments ? "segmented" : unsegmented;</span>
-<span class="source-line-no">321</span><span id="line-321">      } else {</span>
-<span class="source-line-no">322</span><span id="line-322">         if (! (type instanceof String t) || ! QUICK_STAT_KINDS.contains(t))</span>
-<span class="source-line-no">323</span><span id="line-323">            throw source.error("quickStats item '%s': unknown type '%s'.", id, type);</span>
-<span class="source-line-no">324</span><span id="line-324">         var fits = switch (t) {</span>
-<span class="source-line-no">325</span><span id="line-325">            case "tile" -&gt; ! hasSegments &amp;&amp; ! hasMax;</span>
-<span class="source-line-no">326</span><span id="line-326">            case "meter" -&gt; hasMax &amp;&amp; ! hasSegments;</span>
-<span class="source-line-no">327</span><span id="line-327">            default -&gt; hasSegments &amp;&amp; ! hasMax;</span>
-<span class="source-line-no">328</span><span id="line-328">         };</span>
-<span class="source-line-no">329</span><span id="line-329">         if (! fits)</span>
-<span class="source-line-no">330</span><span id="line-330">            throw source.error("quickStats item '%s': type '%s' does not match its shape.", id, t);</span>
-<span class="source-line-no">331</span><span id="line-331">         kind = t;</span>
-<span class="source-line-no">332</span><span id="line-332">      }</span>
-<span class="source-line-no">333</span><span id="line-333">      if (! kind.equals("tile") &amp;&amp; (! (item.get("label") instanceof String lbl) || lbl.isBlank()))</span>
-<span class="source-line-no">334</span><span id="line-334">         throw source.error("quickStats item '%s': a %s item needs a non-blank label.", id, kind);</span>
-<span class="source-line-no">335</span><span id="line-335">      switch (kind) {</span>
-<span class="source-line-no">336</span><span id="line-336">         case "meter" -&gt; {</span>
-<span class="source-line-no">337</span><span id="line-337">            if (! (item.get("value") instanceof Number v) || ! Double.isFinite(v.doubleValue()) || v.doubleValue() &lt; 0)</span>
-<span class="source-line-no">338</span><span id="line-338">               throw source.error("quickStats item '%s': meter value must be a number &gt;= 0.", id);</span>
-<span class="source-line-no">339</span><span id="line-339">            if (! (item.get("max") instanceof Number m) || ! Double.isFinite(m.doubleValue()) || m.doubleValue() &lt;= 0)</span>
-<span class="source-line-no">340</span><span id="line-340">               throw source.error("quickStats item '%s': meter max must be a number &gt; 0.", id);</span>
-<span class="source-line-no">341</span><span id="line-341">            if (item.containsKey("text") &amp;&amp; ! (item.get("text") instanceof String))</span>
-<span class="source-line-no">342</span><span id="line-342">               throw source.error("quickStats item '%s': text must be a string.", id);</span>
-<span class="source-line-no">343</span><span id="line-343">            checkQuickStatTone(source, id, item.get("tone"));</span>
-<span class="source-line-no">344</span><span id="line-344">         }</span>
-<span class="source-line-no">345</span><span id="line-345">         case "segmented" -&gt; {</span>
-<span class="source-line-no">346</span><span id="line-346">            if (item.containsKey("tone") || item.containsKey("text"))</span>
-<span class="source-line-no">347</span><span id="line-347">               throw source.error("quickStats item '%s': a segmented item takes no tone or text; tone each segment.", id);</span>
-<span class="source-line-no">348</span><span id="line-348">            if (! (item.get("segments") instanceof List&lt;?&gt; segs) || segs.isEmpty() || segs.size() &gt; QuickStat.MAX_SEGMENTS)</span>
-<span class="source-line-no">349</span><span id="line-349">               throw source.error("quickStats item '%s': segments must be an array of 1 to %s objects.", id, QuickStat.MAX_SEGMENTS);</span>
-<span class="source-line-no">350</span><span id="line-350">            for (var i = 0; i &lt; segs.size(); i++) {</span>
-<span class="source-line-no">351</span><span id="line-351">               if (! (segs.get(i) instanceof Map&lt;?,?&gt; s) || ! (s.get("label") instanceof String l) || l.isBlank()</span>
-<span class="source-line-no">352</span><span id="line-352">                     || ! (s.get("count") instanceof Number c) || ! isWholeNonNegative(c.doubleValue()))</span>
-<span class="source-line-no">353</span><span id="line-353">                  throw source.error("quickStats item '%s': segment %s must be an object with a non-blank label and a whole count &gt;= 0.", id, i + 1);</span>
-<span class="source-line-no">354</span><span id="line-354">               checkQuickStatTone(source, id, " segment " + (i + 1), s.get("tone"));</span>
-<span class="source-line-no">355</span><span id="line-355">            }</span>
-<span class="source-line-no">356</span><span id="line-356">         }</span>
-<span class="source-line-no">357</span><span id="line-357">         default -&gt; checkQuickStatTone(source, id, item.get("tone"));</span>
-<span class="source-line-no">358</span><span id="line-358">      }</span>
-<span class="source-line-no">359</span><span id="line-359">   }</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   private static boolean isWholeNonNegative(double d) {</span>
-<span class="source-line-no">362</span><span id="line-362">      return Double.isFinite(d) &amp;&amp; d &gt;= 0 &amp;&amp; d == Math.rint(d);</span>
-<span class="source-line-no">363</span><span id="line-363">   }</span>
-<span class="source-line-no">364</span><span id="line-364"></span>
-<span class="source-line-no">365</span><span id="line-365">   private static void checkQuickStatTone(CardSource source, String id, Object tone) {</span>
-<span class="source-line-no">366</span><span id="line-366">      checkQuickStatTone(source, id, "", tone);</span>
-<span class="source-line-no">367</span><span id="line-367">   }</span>
-<span class="source-line-no">368</span><span id="line-368"></span>
-<span class="source-line-no">369</span><span id="line-369">   private static void checkQuickStatTone(CardSource source, String id, String where, Object tone) {</span>
-<span class="source-line-no">370</span><span id="line-370">      if (tone != null &amp;&amp; ! (tone instanceof String t &amp;&amp; StatusTone.WIRE_TOKENS.contains(t)))</span>
-<span class="source-line-no">371</span><span id="line-371">         throw source.error("quickStats item '%s'%s: tone '%s' is not one of neutral, info, success, warning, error.", id, where, tone);</span>
-<span class="source-line-no">372</span><span id="line-372">   }</span>
-<span class="source-line-no">373</span><span id="line-373"></span>
-<span class="source-line-no">374</span><span id="line-374">   /** E-31: a {@code contractVersion} key anywhere in the catalog (table, detail, quickStats, bulk) — JS stamps versions. */</span>
-<span class="source-line-no">375</span><span id="line-375">   private static void checkNoContractVersion(CardSource source, Object node, String where) {</span>
-<span class="source-line-no">376</span><span id="line-376">      if (node instanceof Map&lt;?,?&gt; m) {</span>
-<span class="source-line-no">377</span><span id="line-377">         if (m.containsKey("contractVersion"))</span>
-<span class="source-line-no">378</span><span id="line-378">            throw source.error("'%s' sets contractVersion; remove it, the console stamps contract versions.", where);</span>
-<span class="source-line-no">379</span><span id="line-379">         for (var e : m.entrySet())</span>
-<span class="source-line-no">380</span><span id="line-380">            checkNoContractVersion(source, e.getValue(), String.valueOf(e.getKey()));</span>
-<span class="source-line-no">381</span><span id="line-381">      } else if (node instanceof List&lt;?&gt; l) {</span>
-<span class="source-line-no">382</span><span id="line-382">         for (var v : l)</span>
-<span class="source-line-no">383</span><span id="line-383">            checkNoContractVersion(source, v, where);</span>
-<span class="source-line-no">384</span><span id="line-384">      }</span>
-<span class="source-line-no">385</span><span id="line-385">   }</span>
-<span class="source-line-no">386</span><span id="line-386"></span>
-<span class="source-line-no">387</span><span id="line-387">   @SuppressWarnings({</span>
-<span class="source-line-no">388</span><span id="line-388">      "unchecked" // Narrows a JSON-shaped Map&lt;?,?&gt; to Map&lt;String,Object&gt;; its keys are always strings.</span>
-<span class="source-line-no">389</span><span id="line-389">   })</span>
-<span class="source-line-no">390</span><span id="line-390">   private static void resolveSearch(CardSource source, Map&lt;String,Object&gt; col, String ident) {</span>
-<span class="source-line-no">391</span><span id="line-391">      var searchType = str(col.get("searchType"));</span>
-<span class="source-line-no">392</span><span id="line-392">      if (ib(searchType))</span>
-<span class="source-line-no">393</span><span id="line-393">         return; // Non-searchable column: no search block.</span>
-<span class="source-line-no">394</span><span id="line-394">      if (n(SearchType.fromWire(searchType)))</span>
-<span class="source-line-no">395</span><span id="line-395">         throw source.error("column '%s' searchType '%s' is unknown; known: '%s'.", ident, searchType, knownSearchTypes());</span>
-<span class="source-line-no">396</span><span id="line-396"></span>
-<span class="source-line-no">397</span><span id="line-397">      var customs = new LinkedHashMap&lt;String,String&gt;(); // name -&gt; help</span>
-<span class="source-line-no">398</span><span id="line-398">      if (col.get("customOperators") instanceof List&lt;?&gt; cs)</span>
-<span class="source-line-no">399</span><span id="line-399">         for (var raw : cs) {</span>
-<span class="source-line-no">400</span><span id="line-400">            if (! (raw instanceof Map&lt;?,?&gt;))</span>
-<span class="source-line-no">401</span><span id="line-401">               throw source.error("column '%s' each customOperator must be an object.", ident);</span>
-<span class="source-line-no">402</span><span id="line-402">            var cm = (Map&lt;String,Object&gt;) raw;</span>
-<span class="source-line-no">403</span><span id="line-403">            customs.put(str(cm.get("name")), str(cm.get("help")));</span>
-<span class="source-line-no">404</span><span id="line-404">         }</span>
-<span class="source-line-no">405</span><span id="line-405"></span>
-<span class="source-line-no">406</span><span id="line-406">      List&lt;String&gt; allow = null;</span>
-<span class="source-line-no">407</span><span id="line-407">      if (col.get("searchOperators") instanceof List&lt;?&gt; a) {</span>
-<span class="source-line-no">408</span><span id="line-408">         allow = new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">409</span><span id="line-409">         for (var n : a) {</span>
-<span class="source-line-no">410</span><span id="line-410">            var name = str(n);</span>
-<span class="source-line-no">411</span><span id="line-411">            if (! customs.containsKey(name) &amp;&amp; n(SearchOperatorSet.standard().get(name)))</span>
-<span class="source-line-no">412</span><span id="line-412">               throw source.error("column '%s' searchOperators names unknown operator '%s'; known: '%s'.",</span>
-<span class="source-line-no">413</span><span id="line-413">                  ident, name, knownOperators(customs.keySet()));</span>
-<span class="source-line-no">414</span><span id="line-414">            allow.add(name);</span>
-<span class="source-line-no">415</span><span id="line-415">         }</span>
-<span class="source-line-no">416</span><span id="line-416">      }</span>
-<span class="source-line-no">417</span><span id="line-417"></span>
-<span class="source-line-no">418</span><span id="line-418">      var customOps = new ArrayList&lt;Map&lt;String,String&gt;&gt;();</span>
-<span class="source-line-no">419</span><span id="line-419">      for (var e : customs.entrySet()) {</span>
-<span class="source-line-no">420</span><span id="line-420">         var m = new LinkedHashMap&lt;String,String&gt;();</span>
-<span class="source-line-no">421</span><span id="line-421">         m.put("name", e.getKey());</span>
-<span class="source-line-no">422</span><span id="line-422">         m.put("help", e.getValue());</span>
-<span class="source-line-no">423</span><span id="line-423">         customOps.add(m);</span>
-<span class="source-line-no">424</span><span id="line-424">      }</span>
-<span class="source-line-no">425</span><span id="line-425">      var search = Column.searchMeta(ident, searchType, allow, customOps);</span>
-<span class="source-line-no">426</span><span id="line-426">      col.put("search", search);</span>
-<span class="source-line-no">427</span><span id="line-427">      col.remove("searchType");</span>
-<span class="source-line-no">428</span><span id="line-428">      col.remove("searchOperators");</span>
-<span class="source-line-no">429</span><span id="line-429">      col.remove("customOperators");</span>
-<span class="source-line-no">430</span><span id="line-430">   }</span>
-<span class="source-line-no">431</span><span id="line-431"></span>
-<span class="source-line-no">432</span><span id="line-432">   private static String knownSearchTypes() {</span>
-<span class="source-line-no">433</span><span id="line-433">      return Arrays.stream(SearchType.values()).map(SearchType::wire).collect(Collectors.joining(", "));</span>
-<span class="source-line-no">434</span><span id="line-434">   }</span>
-<span class="source-line-no">435</span><span id="line-435"></span>
-<span class="source-line-no">436</span><span id="line-436">   private static String knownOperators(Set&lt;String&gt; customNames) {</span>
-<span class="source-line-no">437</span><span id="line-437">      var names = new TreeSet&lt;String&gt;(customNames);</span>
-<span class="source-line-no">438</span><span id="line-438">      for (var op : SearchOperatorSet.standard().operators())</span>
-<span class="source-line-no">439</span><span id="line-439">         names.add(op.name());</span>
-<span class="source-line-no">440</span><span id="line-440">      return String.join(", ", names);</span>
+<span class="source-line-no">291</span><span id="line-291">   private static String columnIdent(Map&lt;String,Object&gt; col) {</span>
+<span class="source-line-no">292</span><span id="line-292">      var data = col.get("data");</span>
+<span class="source-line-no">293</span><span id="line-293">      var key = col.get("key");</span>
+<span class="source-line-no">294</span><span id="line-294">      var fallback = nn(key) ? key.toString() : null;</span>
+<span class="source-line-no">295</span><span id="line-295">      return nn(data) ? data.toString() : fallback;</span>
+<span class="source-line-no">296</span><span id="line-296">   }</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   private static final Set&lt;String&gt; QUICK_STAT_KINDS = Set.of("tile", "meter", "segmented");</span>
+<span class="source-line-no">299</span><span id="line-299"></span>
+<span class="source-line-no">300</span><span id="line-300">   /** E-37: the quickStats strip is a non-empty list of uniquely-identified items, each well-formed for its kind. */</span>
+<span class="source-line-no">301</span><span id="line-301">   private static void checkQuickStats(CardSource source, Map&lt;String,Object&gt; catalog) {</span>
+<span class="source-line-no">302</span><span id="line-302">      if (! catalog.containsKey("quickStats"))</span>
+<span class="source-line-no">303</span><span id="line-303">         return;</span>
+<span class="source-line-no">304</span><span id="line-304">      if (! (catalog.get("quickStats") instanceof Map&lt;?,?&gt; qs) || ! (qs.get("items") instanceof List&lt;?&gt; items) || items.isEmpty())</span>
+<span class="source-line-no">305</span><span id="line-305">         throw source.error("quickStats items must be a non-empty array.");</span>
+<span class="source-line-no">306</span><span id="line-306">      var ids = new HashSet&lt;String&gt;();</span>
+<span class="source-line-no">307</span><span id="line-307">      for (var o : items) {</span>
+<span class="source-line-no">308</span><span id="line-308">         if (! (o instanceof Map&lt;?,?&gt; item))</span>
+<span class="source-line-no">309</span><span id="line-309">            throw source.error("quickStats items must be objects.");</span>
+<span class="source-line-no">310</span><span id="line-310">         if (! (item.get("id") instanceof String id) || id.isBlank())</span>
+<span class="source-line-no">311</span><span id="line-311">            throw source.error("quickStats item ids must be non-blank strings.");</span>
+<span class="source-line-no">312</span><span id="line-312">         if (! ids.add(id))</span>
+<span class="source-line-no">313</span><span id="line-313">            throw source.error("quickStats item '%s': duplicate id.", id);</span>
+<span class="source-line-no">314</span><span id="line-314">         checkQuickStatItem(source, id, item);</span>
+<span class="source-line-no">315</span><span id="line-315">      }</span>
+<span class="source-line-no">316</span><span id="line-316">   }</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   private static void checkQuickStatItem(CardSource source, String id, Map&lt;?,?&gt; item) {</span>
+<span class="source-line-no">319</span><span id="line-319">      var hasSegments = item.containsKey("segments");</span>
+<span class="source-line-no">320</span><span id="line-320">      var hasMax = item.containsKey("max");</span>
+<span class="source-line-no">321</span><span id="line-321">      var type = item.get("type");</span>
+<span class="source-line-no">322</span><span id="line-322">      String kind;</span>
+<span class="source-line-no">323</span><span id="line-323">      if (type == null) {</span>
+<span class="source-line-no">324</span><span id="line-324">         if (hasSegments &amp;&amp; hasMax)</span>
+<span class="source-line-no">325</span><span id="line-325">            throw source.error("quickStats item '%s': has both segments and max; set type.", id);</span>
+<span class="source-line-no">326</span><span id="line-326">         var unsegmented = hasMax ? "meter" : "tile";</span>
+<span class="source-line-no">327</span><span id="line-327">         kind = hasSegments ? "segmented" : unsegmented;</span>
+<span class="source-line-no">328</span><span id="line-328">      } else {</span>
+<span class="source-line-no">329</span><span id="line-329">         if (! (type instanceof String t) || ! QUICK_STAT_KINDS.contains(t))</span>
+<span class="source-line-no">330</span><span id="line-330">            throw source.error("quickStats item '%s': unknown type '%s'.", id, type);</span>
+<span class="source-line-no">331</span><span id="line-331">         var fits = switch (t) {</span>
+<span class="source-line-no">332</span><span id="line-332">            case "tile" -&gt; ! hasSegments &amp;&amp; ! hasMax;</span>
+<span class="source-line-no">333</span><span id="line-333">            case "meter" -&gt; hasMax &amp;&amp; ! hasSegments;</span>
+<span class="source-line-no">334</span><span id="line-334">            default -&gt; hasSegments &amp;&amp; ! hasMax;</span>
+<span class="source-line-no">335</span><span id="line-335">         };</span>
+<span class="source-line-no">336</span><span id="line-336">         if (! fits)</span>
+<span class="source-line-no">337</span><span id="line-337">            throw source.error("quickStats item '%s': type '%s' does not match its shape.", id, t);</span>
+<span class="source-line-no">338</span><span id="line-338">         kind = t;</span>
+<span class="source-line-no">339</span><span id="line-339">      }</span>
+<span class="source-line-no">340</span><span id="line-340">      if (! kind.equals("tile") &amp;&amp; (! (item.get("label") instanceof String lbl) || lbl.isBlank()))</span>
+<span class="source-line-no">341</span><span id="line-341">         throw source.error("quickStats item '%s': a %s item needs a non-blank label.", id, kind);</span>
+<span class="source-line-no">342</span><span id="line-342">      switch (kind) {</span>
+<span class="source-line-no">343</span><span id="line-343">         case "meter" -&gt; {</span>
+<span class="source-line-no">344</span><span id="line-344">            if (! (item.get("value") instanceof Number v) || ! Double.isFinite(v.doubleValue()) || v.doubleValue() &lt; 0)</span>
+<span class="source-line-no">345</span><span id="line-345">               throw source.error("quickStats item '%s': meter value must be a number &gt;= 0.", id);</span>
+<span class="source-line-no">346</span><span id="line-346">            if (! (item.get("max") instanceof Number m) || ! Double.isFinite(m.doubleValue()) || m.doubleValue() &lt;= 0)</span>
+<span class="source-line-no">347</span><span id="line-347">               throw source.error("quickStats item '%s': meter max must be a number &gt; 0.", id);</span>
+<span class="source-line-no">348</span><span id="line-348">            if (item.containsKey("text") &amp;&amp; ! (item.get("text") instanceof String))</span>
+<span class="source-line-no">349</span><span id="line-349">               throw source.error("quickStats item '%s': text must be a string.", id);</span>
+<span class="source-line-no">350</span><span id="line-350">            checkQuickStatTone(source, id, item.get("tone"));</span>
+<span class="source-line-no">351</span><span id="line-351">         }</span>
+<span class="source-line-no">352</span><span id="line-352">         case "segmented" -&gt; {</span>
+<span class="source-line-no">353</span><span id="line-353">            if (item.containsKey("tone") || item.containsKey("text"))</span>
+<span class="source-line-no">354</span><span id="line-354">               throw source.error("quickStats item '%s': a segmented item takes no tone or text; tone each segment.", id);</span>
+<span class="source-line-no">355</span><span id="line-355">            if (! (item.get("segments") instanceof List&lt;?&gt; segs) || segs.isEmpty() || segs.size() &gt; QuickStat.MAX_SEGMENTS)</span>
+<span class="source-line-no">356</span><span id="line-356">               throw source.error("quickStats item '%s': segments must be an array of 1 to %s objects.", id, QuickStat.MAX_SEGMENTS);</span>
+<span class="source-line-no">357</span><span id="line-357">            for (var i = 0; i &lt; segs.size(); i++) {</span>
+<span class="source-line-no">358</span><span id="line-358">               if (! (segs.get(i) instanceof Map&lt;?,?&gt; s) || ! (s.get("label") instanceof String l) || l.isBlank()</span>
+<span class="source-line-no">359</span><span id="line-359">                     || ! (s.get("count") instanceof Number c) || ! isWholeNonNegative(c.doubleValue()))</span>
+<span class="source-line-no">360</span><span id="line-360">                  throw source.error("quickStats item '%s': segment %s must be an object with a non-blank label and a whole count &gt;= 0.", id, i + 1);</span>
+<span class="source-line-no">361</span><span id="line-361">               checkQuickStatTone(source, id, " segment " + (i + 1), s.get("tone"));</span>
+<span class="source-line-no">362</span><span id="line-362">            }</span>
+<span class="source-line-no">363</span><span id="line-363">         }</span>
+<span class="source-line-no">364</span><span id="line-364">         default -&gt; checkQuickStatTone(source, id, item.get("tone"));</span>
+<span class="source-line-no">365</span><span id="line-365">      }</span>
+<span class="source-line-no">366</span><span id="line-366">   }</span>
+<span class="source-line-no">367</span><span id="line-367"></span>
+<span class="source-line-no">368</span><span id="line-368">   private static boolean isWholeNonNegative(double d) {</span>
+<span class="source-line-no">369</span><span id="line-369">      return Double.isFinite(d) &amp;&amp; d &gt;= 0 &amp;&amp; d == Math.rint(d);</span>
+<span class="source-line-no">370</span><span id="line-370">   }</span>
+<span class="source-line-no">371</span><span id="line-371"></span>
+<span class="source-line-no">372</span><span id="line-372">   private static void checkQuickStatTone(CardSource source, String id, Object tone) {</span>
+<span class="source-line-no">373</span><span id="line-373">      checkQuickStatTone(source, id, "", tone);</span>
+<span class="source-line-no">374</span><span id="line-374">   }</span>
+<span class="source-line-no">375</span><span id="line-375"></span>
+<span class="source-line-no">376</span><span id="line-376">   private static void checkQuickStatTone(CardSource source, String id, String where, Object tone) {</span>
+<span class="source-line-no">377</span><span id="line-377">      if (tone != null &amp;&amp; ! (tone instanceof String t &amp;&amp; StatusTone.WIRE_TOKENS.contains(t)))</span>
+<span class="source-line-no">378</span><span id="line-378">         throw source.error("quickStats item '%s'%s: tone '%s' is not one of neutral, info, success, warning, error.", id, where, tone);</span>
+<span class="source-line-no">379</span><span id="line-379">   }</span>
+<span class="source-line-no">380</span><span id="line-380"></span>
+<span class="source-line-no">381</span><span id="line-381">   /** E-31: a {@code contractVersion} key anywhere in the catalog (table, detail, quickStats, bulk) — JS stamps versions. */</span>
+<span class="source-line-no">382</span><span id="line-382">   private static void checkNoContractVersion(CardSource source, Object node, String where) {</span>
+<span class="source-line-no">383</span><span id="line-383">      if (node instanceof Map&lt;?,?&gt; m) {</span>
+<span class="source-line-no">384</span><span id="line-384">         if (m.containsKey("contractVersion"))</span>
+<span class="source-line-no">385</span><span id="line-385">            throw source.error("'%s' sets contractVersion; remove it, the console stamps contract versions.", where);</span>
+<span class="source-line-no">386</span><span id="line-386">         for (var e : m.entrySet())</span>
+<span class="source-line-no">387</span><span id="line-387">            checkNoContractVersion(source, e.getValue(), String.valueOf(e.getKey()));</span>
+<span class="source-line-no">388</span><span id="line-388">      } else if (node instanceof List&lt;?&gt; l) {</span>
+<span class="source-line-no">389</span><span id="line-389">         for (var v : l)</span>
+<span class="source-line-no">390</span><span id="line-390">            checkNoContractVersion(source, v, where);</span>
+<span class="source-line-no">391</span><span id="line-391">      }</span>
+<span class="source-line-no">392</span><span id="line-392">   }</span>
+<span class="source-line-no">393</span><span id="line-393"></span>
+<span class="source-line-no">394</span><span id="line-394">   @SuppressWarnings({</span>
+<span class="source-line-no">395</span><span id="line-395">      "unchecked" // Narrows a JSON-shaped Map&lt;?,?&gt; to Map&lt;String,Object&gt;; its keys are always strings.</span>
+<span class="source-line-no">396</span><span id="line-396">   })</span>
+<span class="source-line-no">397</span><span id="line-397">   private static void resolveSearch(CardSource source, Map&lt;String,Object&gt; col, String ident) {</span>
+<span class="source-line-no">398</span><span id="line-398">      var searchType = str(col.get("searchType"));</span>
+<span class="source-line-no">399</span><span id="line-399">      if (ib(searchType))</span>
+<span class="source-line-no">400</span><span id="line-400">         return; // Non-searchable column: no search block.</span>
+<span class="source-line-no">401</span><span id="line-401">      if (n(SearchType.fromWire(searchType)))</span>
+<span class="source-line-no">402</span><span id="line-402">         throw source.error("column '%s' searchType '%s' is unknown; known: '%s'.", ident, searchType, knownSearchTypes());</span>
+<span class="source-line-no">403</span><span id="line-403"></span>
+<span class="source-line-no">404</span><span id="line-404">      var customs = new LinkedHashMap&lt;String,String&gt;(); // name -&gt; help</span>
+<span class="source-line-no">405</span><span id="line-405">      if (col.get("customOperators") instanceof List&lt;?&gt; cs)</span>
+<span class="source-line-no">406</span><span id="line-406">         for (var raw : cs) {</span>
+<span class="source-line-no">407</span><span id="line-407">            if (! (raw instanceof Map&lt;?,?&gt;))</span>
+<span class="source-line-no">408</span><span id="line-408">               throw source.error("column '%s' each customOperator must be an object.", ident);</span>
+<span class="source-line-no">409</span><span id="line-409">            var cm = (Map&lt;String,Object&gt;) raw;</span>
+<span class="source-line-no">410</span><span id="line-410">            customs.put(str(cm.get("name")), str(cm.get("help")));</span>
+<span class="source-line-no">411</span><span id="line-411">         }</span>
+<span class="source-line-no">412</span><span id="line-412"></span>
+<span class="source-line-no">413</span><span id="line-413">      List&lt;String&gt; allow = null;</span>
+<span class="source-line-no">414</span><span id="line-414">      if (col.get("searchOperators") instanceof List&lt;?&gt; a) {</span>
+<span class="source-line-no">415</span><span id="line-415">         allow = new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">416</span><span id="line-416">         for (var n : a) {</span>
+<span class="source-line-no">417</span><span id="line-417">            var name = str(n);</span>
+<span class="source-line-no">418</span><span id="line-418">            if (! customs.containsKey(name) &amp;&amp; n(SearchOperatorSet.standard().get(name)))</span>
+<span class="source-line-no">419</span><span id="line-419">               throw source.error("column '%s' searchOperators names unknown operator '%s'; known: '%s'.",</span>
+<span class="source-line-no">420</span><span id="line-420">                  ident, name, knownOperators(customs.keySet()));</span>
+<span class="source-line-no">421</span><span id="line-421">            allow.add(name);</span>
+<span class="source-line-no">422</span><span id="line-422">         }</span>
+<span class="source-line-no">423</span><span id="line-423">      }</span>
+<span class="source-line-no">424</span><span id="line-424"></span>
+<span class="source-line-no">425</span><span id="line-425">      var customOps = new ArrayList&lt;Map&lt;String,String&gt;&gt;();</span>
+<span class="source-line-no">426</span><span id="line-426">      for (var e : customs.entrySet()) {</span>
+<span class="source-line-no">427</span><span id="line-427">         var m = new LinkedHashMap&lt;String,String&gt;();</span>
+<span class="source-line-no">428</span><span id="line-428">         m.put("name", e.getKey());</span>
+<span class="source-line-no">429</span><span id="line-429">         m.put("help", e.getValue());</span>
+<span class="source-line-no">430</span><span id="line-430">         customOps.add(m);</span>
+<span class="source-line-no">431</span><span id="line-431">      }</span>
+<span class="source-line-no">432</span><span id="line-432">      var search = Column.searchMeta(ident, searchType, allow, customOps);</span>
+<span class="source-line-no">433</span><span id="line-433">      col.put("search", search);</span>
+<span class="source-line-no">434</span><span id="line-434">      col.remove("searchType");</span>
+<span class="source-line-no">435</span><span id="line-435">      col.remove("searchOperators");</span>
+<span class="source-line-no">436</span><span id="line-436">      col.remove("customOperators");</span>
+<span class="source-line-no">437</span><span id="line-437">   }</span>
+<span class="source-line-no">438</span><span id="line-438"></span>
+<span class="source-line-no">439</span><span id="line-439">   private static String knownSearchTypes() {</span>
+<span class="source-line-no">440</span><span id="line-440">      return Arrays.stream(SearchType.values()).map(SearchType::wire).collect(Collectors.joining(", "));</span>
 <span class="source-line-no">441</span><span id="line-441">   }</span>
 <span class="source-line-no">442</span><span id="line-442"></span>
-<span class="source-line-no">443</span><span id="line-443">   /**</span>
-<span class="source-line-no">444</span><span id="line-444">    * E-35: an {@code aggregate} bulk action's endpoint must not contain a {@code {field}} token (aggregate</span>
-<span class="source-line-no">445</span><span id="line-445">    * endpoints receive {@code {ids}} in the body). No {@code &lt;@card id='%s'&gt;} prefix — {@code BulkMutateDef}</span>
-<span class="source-line-no">446</span><span id="line-446">    * raises the identical message with no card in scope.</span>
-<span class="source-line-no">447</span><span id="line-447">    */</span>
-<span class="source-line-no">448</span><span id="line-448">   @SuppressWarnings({</span>
-<span class="source-line-no">449</span><span id="line-449">      "unchecked" // Narrows a JSON-shaped Map&lt;?,?&gt; to Map&lt;String,Object&gt;; its keys are always strings.</span>
-<span class="source-line-no">450</span><span id="line-450">   })</span>
-<span class="source-line-no">451</span><span id="line-451">   private static void checkAggregateEndpoints(JsonMap catalog) {</span>
-<span class="source-line-no">452</span><span id="line-452">      if (! (catalog.get("bulk") instanceof Map&lt;?,?&gt; bulk))</span>
-<span class="source-line-no">453</span><span id="line-453">         return;</span>
-<span class="source-line-no">454</span><span id="line-454">      if (! (bulk.get("actions") instanceof List&lt;?&gt; actions))</span>
-<span class="source-line-no">455</span><span id="line-455">         return;</span>
-<span class="source-line-no">456</span><span id="line-456">      for (var raw : actions) {</span>
-<span class="source-line-no">457</span><span id="line-457">         var action = (Map&lt;String,Object&gt;) raw;</span>
-<span class="source-line-no">458</span><span id="line-458">         var mode = action.get(nn(action.get("mode")) ? "mode" : "bulkMode");</span>
-<span class="source-line-no">459</span><span id="line-459">         if (neq("aggregate", mode))</span>
-<span class="source-line-no">460</span><span id="line-460">            continue;</span>
-<span class="source-line-no">461</span><span id="line-461">         var endpoint = str(action.get("endpoint"));</span>
-<span class="source-line-no">462</span><span id="line-462">         if (nn(endpoint) &amp;&amp; PLACEHOLDER.matcher(endpoint).find())</span>
-<span class="source-line-no">463</span><span id="line-463">            throw iaex(</span>
-<span class="source-line-no">464</span><span id="line-464">               "Bulk action '%s' has mode 'aggregate' but its endpoint '%s' contains a {field} token; "</span>
-<span class="source-line-no">465</span><span id="line-465">               + "aggregate endpoints receive {ids} in the body.", action.get("id"), endpoint);</span>
-<span class="source-line-no">466</span><span id="line-466">      }</span>
-<span class="source-line-no">467</span><span id="line-467">   }</span>
-<span class="source-line-no">468</span><span id="line-468"></span>
-<span class="source-line-no">469</span><span id="line-469">   private static String str(Object o) {</span>
-<span class="source-line-no">470</span><span id="line-470">      return n(o) ? null : o.toString();</span>
-<span class="source-line-no">471</span><span id="line-471">   }</span>
-<span class="source-line-no">472</span><span id="line-472">}</span>
+<span class="source-line-no">443</span><span id="line-443">   private static String knownOperators(Set&lt;String&gt; customNames) {</span>
+<span class="source-line-no">444</span><span id="line-444">      var names = new TreeSet&lt;String&gt;(customNames);</span>
+<span class="source-line-no">445</span><span id="line-445">      for (var op : SearchOperatorSet.standard().operators())</span>
+<span class="source-line-no">446</span><span id="line-446">         names.add(op.name());</span>
+<span class="source-line-no">447</span><span id="line-447">      return String.join(", ", names);</span>
+<span class="source-line-no">448</span><span id="line-448">   }</span>
+<span class="source-line-no">449</span><span id="line-449"></span>
+<span class="source-line-no">450</span><span id="line-450">   /**</span>
+<span class="source-line-no">451</span><span id="line-451">    * E-35: an {@code aggregate} bulk action's endpoint must not contain a {@code {field}} token (aggregate</span>
+<span class="source-line-no">452</span><span id="line-452">    * endpoints receive {@code {ids}} in the body). No {@code &lt;@card id='%s'&gt;} prefix — {@code BulkMutateDef}</span>
+<span class="source-line-no">453</span><span id="line-453">    * raises the identical message with no card in scope.</span>
+<span class="source-line-no">454</span><span id="line-454">    */</span>
+<span class="source-line-no">455</span><span id="line-455">   @SuppressWarnings({</span>
+<span class="source-line-no">456</span><span id="line-456">      "unchecked" // Narrows a JSON-shaped Map&lt;?,?&gt; to Map&lt;String,Object&gt;; its keys are always strings.</span>
+<span class="source-line-no">457</span><span id="line-457">   })</span>
+<span class="source-line-no">458</span><span id="line-458">   private static void checkAggregateEndpoints(JsonMap catalog) {</span>
+<span class="source-line-no">459</span><span id="line-459">      if (! (catalog.get("bulk") instanceof Map&lt;?,?&gt; bulk))</span>
+<span class="source-line-no">460</span><span id="line-460">         return;</span>
+<span class="source-line-no">461</span><span id="line-461">      if (! (bulk.get("actions") instanceof List&lt;?&gt; actions))</span>
+<span class="source-line-no">462</span><span id="line-462">         return;</span>
+<span class="source-line-no">463</span><span id="line-463">      for (var raw : actions) {</span>
+<span class="source-line-no">464</span><span id="line-464">         var action = (Map&lt;String,Object&gt;) raw;</span>
+<span class="source-line-no">465</span><span id="line-465">         var mode = action.get(nn(action.get("mode")) ? "mode" : "bulkMode");</span>
+<span class="source-line-no">466</span><span id="line-466">         if (neq("aggregate", mode))</span>
+<span class="source-line-no">467</span><span id="line-467">            continue;</span>
+<span class="source-line-no">468</span><span id="line-468">         var endpoint = str(action.get("endpoint"));</span>
+<span class="source-line-no">469</span><span id="line-469">         if (nn(endpoint) &amp;&amp; PLACEHOLDER.matcher(endpoint).find())</span>
+<span class="source-line-no">470</span><span id="line-470">            throw iaex(</span>
+<span class="source-line-no">471</span><span id="line-471">               "Bulk action '%s' has mode 'aggregate' but its endpoint '%s' contains a {field} token; "</span>
+<span class="source-line-no">472</span><span id="line-472">               + "aggregate endpoints receive {ids} in the body.", action.get("id"), endpoint);</span>
+<span class="source-line-no">473</span><span id="line-473">      }</span>
+<span class="source-line-no">474</span><span id="line-474">   }</span>
+<span class="source-line-no">475</span><span id="line-475"></span>
+<span class="source-line-no">476</span><span id="line-476">   private static String str(Object o) {</span>
+<span class="source-line-no">477</span><span id="line-477">      return n(o) ? null : o.toString();</span>
+<span class="source-line-no">478</span><span id="line-478">   }</span>
+<span class="source-line-no">479</span><span id="line-479">}</span>
 
 
 

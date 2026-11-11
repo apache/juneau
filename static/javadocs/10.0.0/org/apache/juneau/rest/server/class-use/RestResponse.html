@@ -249,18 +249,40 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Serves one page of the events endpoint (<code>?after=</code>) as JSON.</div>
 </div>
-<div class="col-first even-row-color"><code>default void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">AsyncJobsMixin.</span><code><a href="../../../console/views/AsyncJobsMixin.html#streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">streamJob</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
- <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="col-first even-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../../../console/views/RowDetailMixin.html#rowDetail(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetail</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last even-row-color">
-<div class="block">[GET /juneau-jobs/{jobId}/stream] &mdash; stream a job's progress as Server-Sent Events.</div>
+<div class="block">Serves one row's detail.</div>
+</div>
+<div class="col-first odd-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../../../console/views/RowDetailMixin.html#rowDetailCounts(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetailCounts</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Serves the tab counts of a row.</div>
+</div>
+<div class="col-first even-row-color"><code>default <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">RowDetailMixin.</span><code><a href="../../../console/views/RowDetailMixin.html#rowDetailTab(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetailTab</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tabId,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Serves one tab of a row's detail.</div>
 </div>
 <div class="col-first odd-row-color"><code>default void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">TerminalViewMixin.</span><code><a href="../../../console/views/TerminalViewMixin.html#terminalViewEvents(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalViewEvents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+<div class="col-second odd-row-color"><span class="type-name-label">AsyncJobsMixin.</span><code><a href="../../../console/views/AsyncJobsMixin.html#streamJob(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">streamJob</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;jobId,
  <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">[GET /juneau-jobs/{jobId}/stream] &mdash; stream a job's progress as Server-Sent Events.</div>
+</div>
+<div class="col-first even-row-color"><code>default void</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">TerminalViewMixin.</span><code><a href="../../../console/views/TerminalViewMixin.html#terminalViewEvents(java.lang.String,org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">terminalViewEvents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;runId,
+ <a href="../RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+ <a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color">
 <div class="block">[GET /juneau-terminal-view/{runId}/events] &mdash; one page of events as JSON.</div>
 </div>
 </div>
@@ -328,8 +350,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#script(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">script</a><wbr>(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#exportLib(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">exportLib</a><wbr>(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Serves one of the vendored export libraries (<code>jszip.min.js</code>, <code>pdfmake.min.js</code>, <code>vfs_fonts.js</code>)
+ that the <code>datatables-export</code> toolkit pack loads.</div>
+</div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PetstoreConsoleResource.</span><code><a href="../../../petstore/console/PetstoreConsoleResource.html#script(org.apache.juneau.rest.server.RestResponse)" class="member-name-link">script</a><wbr>(<a href="../RestResponse.html" title="class in org.apache.juneau.rest.server">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Serves <code>petstore.js</code>, the shared page script <code>base.ftlh</code> loads after the toolkit on every page.</div>
 </div>
 </div>

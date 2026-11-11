@@ -878,6 +878,31 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/forms.html#attr-fs-action">action</a> attribute.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#action(java.lang.String)" class="member-name-link">action(String)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">A custom button whose click runs a handler declared with <a href="org/apache/juneau/console/Handled.html#action(java.lang.String,java.lang.String,java.lang.String)"><code>Handled.action(String,String,String)</code></a> or
+ <a href="org/apache/juneau/console/Handled.html#on(java.lang.String,java.lang.String)"><code>Handled.on(String,String)</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#action(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">action(String, String, String)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Adds a click action calling a named handler.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#action(java.lang.String,java.lang.String,java.lang.String,java.util.Map)" class="member-name-link">action(String, String, String, Map&lt;String, Object&gt;)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Adds a click action with a payload.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#action(org.apache.juneau.console.ModelAction)" class="member-name-link">action(ModelAction)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Adds a fully specified action.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#action(org.apache.juneau.console.ModelAction)" class="member-name-link">action(ModelAction)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Adds an action.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#action(org.apache.juneau.console.views.RowAction)" class="member-name-link">action(RowAction)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Adds a header action, shown right-aligned in the detail header.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/widgets/FormDef.Input.html#action(org.apache.juneau.console.widgets.ActionRef)" class="member-name-link">action(ActionRef)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></dt>
 <dd>
 <div class="block">Sets the <code>action</code> target from an <a href="org/apache/juneau/console/widgets/ActionRef.html" title="class in org.apache.juneau.console.widgets"><code>ActionRef</code></a> (stores <a href="org/apache/juneau/console/widgets/ActionRef.html#id"><code>ActionRef.id</code></a>).</div>
@@ -906,6 +931,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/widgets/FormDef.Input.html#actionId(java.lang.String)" class="member-name-link">actionId(String)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></dt>
 <dd>
 <div class="block">Sets the enclosing view's row-action id this <code>action</code> button opens.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#actionMaps()" class="member-name-link">actionMaps()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Returns the actions in insertion order.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/widgets/ActionRef.html" class="type-name-link" title="class in org.apache.juneau.console.widgets">ActionRef</a> - Class in <a href="org/apache/juneau/console/widgets/package-summary.html">org.apache.juneau.console.widgets</a></dt>
 <dd>
@@ -1392,6 +1421,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/bean/jsonschema/JsonTypeArray.html#addAll(org.apache.juneau.bean.jsonschema.JsonType...)" class="member-name-link">addAll(JsonType...)</a> - Method in class org.apache.juneau.bean.jsonschema.<a href="org/apache/juneau/bean/jsonschema/JsonTypeArray.html" title="class in org.apache.juneau.bean.jsonschema">JsonTypeArray</a></dt>
 <dd>
 <div class="block">Convenience method for adding one or more <a href="org/apache/juneau/bean/jsonschema/JsonType.html" title="enum class in org.apache.juneau.bean.jsonschema"><code>JsonType</code></a> objects to this array.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#addAll(org.apache.juneau.console.ModelBlock)" class="member-name-link">addAll(ModelBlock)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Appends every entry of another block to this one.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/utils/CollectionUtils.html#addAll(T%5B%5D,T...)" class="member-name-link">addAll(T[], T...)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/CollectionUtils.html" title="class in org.apache.juneau.commons.utils">CollectionUtils</a></dt>
 <dd>
@@ -3689,6 +3722,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/template/TemplateResolver.Builder.html#allowFunctions(java.lang.String...)" class="member-name-link">allowFunctions(String...)</a> - Method in class org.apache.juneau.commons.template.<a href="org/apache/juneau/commons/template/TemplateResolver.Builder.html" title="class in org.apache.juneau.commons.template">TemplateResolver.Builder</a></dt>
 <dd>
 <div class="block">Adds function-name globs to the default allowlist (<a href="org/apache/juneau/commons/template/SafeFunctions.html#patterns()"><code>SafeFunctions.patterns()</code></a>).</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#allowInlineHandlers(boolean)" class="member-name-link">allowInlineHandlers(boolean)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
+<dd>
+<div class="block">Allows inline handler references on this page.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.Builder.html#allowInsecureHttp(boolean)" class="member-name-link">allowInsecureHttp(boolean)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpProtectedResourceMetadataClient.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpProtectedResourceMetadataClient.Builder</a></dt>
 <dd>
@@ -12932,6 +12969,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Builds the source.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html#build()" class="member-name-link">build()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></dt>
+<dd>
+<div class="block">Builds the items in slot order, each with its canonical group.</div>
+</dd>
 <dt><a href="org/apache/juneau/examples/core/config/store/SqlStore.Builder.html#build()" class="member-name-link">build()</a> - Method in class org.apache.juneau.examples.core.config.store.<a href="org/apache/juneau/examples/core/config/store/SqlStore.Builder.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore.Builder</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/ContactAnnotation.Builder.html#build()" class="member-name-link">build()</a> - Method in class org.apache.juneau.http.<a href="org/apache/juneau/http/ContactAnnotation.Builder.html" title="class in org.apache.juneau.http">ContactAnnotation.Builder</a></dt>
@@ -16166,6 +16207,10 @@ loadScripts(document, 'script');</script>
  falling back to <code>"dev"</code> when unset (e.g. running from an IDE/test classpath rather than a packaged
  jar) - see the class javadoc's version-anchor section.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#builtin(java.lang.String)" class="member-name-link">builtin(String)</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>
+<div class="block">A built-in handler.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/PopulatorAllowlist.html#BUILTIN_IDS" class="member-name-link">BUILTIN_IDS</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/PopulatorAllowlist.html" title="class in org.apache.juneau.console.views">PopulatorAllowlist</a></dt>
 <dd>
 <div class="block">The reserved declarative-default populator name &mdash; the only Juneau-shipped populator today.</div>
@@ -16546,6 +16591,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/DataSourceDef.html#cache(org.apache.juneau.console.freemarker.DataSourceDef.Cache)" class="member-name-link">cache(DataSourceDef.Cache)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/DataSourceDef.html" title="class in org.apache.juneau.console.freemarker">DataSourceDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#cache(org.apache.juneau.console.views.DetailTab.Cache)" class="member-name-link">cache(DetailTab.Cache)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Sets how tab content is cached.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/collections/Cache.html" class="type-name-link" title="class in org.apache.juneau.commons.collections">Cache</a>&lt;<a href="org/apache/juneau/commons/collections/Cache.html" title="type parameter in Cache">K</a>,<wbr><a href="org/apache/juneau/commons/collections/Cache.html" title="type parameter in Cache">V</a>&gt; - Class in <a href="org/apache/juneau/commons/collections/package-summary.html">org.apache.juneau.commons.collections</a></dt>
 <dd>
 <div class="block">Simple in-memory cache for storing and retrieving objects by key.</div>
@@ -17595,6 +17644,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Marker interface for response processors that act as catch-alls — i.e. processors that
  accept any non-null return value when no more-specific processor matches.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/Render.html#categorical()" class="member-name-link">categorical()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Render.html" title="class in org.apache.juneau.console.views">Render</a></dt>
+<dd>
+<div class="block">Colours every distinct value of a <code>pill</code> column from the categorical palette.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/widgets/CalendarDef.html#categories" class="member-name-link">categories</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarDef.html" title="class in org.apache.juneau.console.widgets">CalendarDef</a></dt>
 <dd>
 <div class="block">Declared event categories, in legend display order.</div>
@@ -17606,6 +17659,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/bean/atom/AtomBuilder.html#category(java.lang.String)" class="member-name-link">category(String)</a> - Static method in class org.apache.juneau.bean.atom.<a href="org/apache/juneau/bean/atom/AtomBuilder.html" title="class in org.apache.juneau.bean.atom">AtomBuilder</a></dt>
 <dd>
 <div class="block">Creates a <a href="org/apache/juneau/bean/atom/Category.html" title="class in org.apache.juneau.bean.atom"><code>Category</code></a> element with the specified <a href="org/apache/juneau/bean/atom/Category.html#setTerm(java.lang.String)"><code>Category.setTerm(String)</code></a> attribute.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Render.html#category(java.lang.String,int)" class="member-name-link">category(String, int)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Render.html" title="class in org.apache.juneau.console.views">Render</a></dt>
+<dd>
+<div class="block">Pins one cell value of a <code>pill</code> column to a categorical palette slot.</div>
 </dd>
 <dt><a href="org/apache/juneau/bean/atom/Category.html" class="type-name-link" title="class in org.apache.juneau.bean.atom">Category</a> - Class in <a href="org/apache/juneau/bean/atom/package-summary.html">org.apache.juneau.bean.atom</a></dt>
 <dd>
@@ -18117,6 +18174,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/config/store/FileStore.Builder.html#charset(java.nio.charset.Charset)" class="member-name-link">charset(Charset)</a> - Method in class org.apache.juneau.config.store.<a href="org/apache/juneau/config/store/FileStore.Builder.html" title="class in org.apache.juneau.config.store">FileStore.Builder</a></dt>
 <dd>
 <div class="block">Charset for external files.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RegionDef.html#chart(java.lang.String,java.lang.String)" class="member-name-link">chart(String, String)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
+<dd>
+<div class="block">Creates a chart region fed by a same-origin endpoint that returns row records.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#chart(java.lang.String,org.apache.juneau.console.views.RegionDef)" class="member-name-link">chart(String, RegionDef)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Starts a chart tab.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#CHART" class="member-name-link">CHART</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
+<dd>
+<div class="block">A chart fed by an endpoint.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartCardType.html" class="type-name-link" title="class in org.apache.juneau.console.freemarker">ChartCardType</a> - Class in <a href="org/apache/juneau/console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></dt>
 <dd>
@@ -18898,6 +18967,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/inject/ValueResolver.html#clearTemplateCache()" class="member-name-link">clearTemplateCache()</a> - Static method in class org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/ValueResolver.html" title="class in org.apache.juneau.commons.inject">ValueResolver</a></dt>
 <dd>
 <div class="block">Clears the internal <a href="org/apache/juneau/commons/svl/VarTemplate.html" title="class in org.apache.juneau.commons.svl"><code>VarTemplate</code></a> cache.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#client(java.lang.String,java.lang.String)" class="member-name-link">client(String, String)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Starts a client-rendered tab.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#CLIENT" class="member-name-link">CLIENT</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
+<dd>
+<div class="block">A pane drawn by a client-side renderer.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/TableSpec.DataMode.html#CLIENT" class="member-name-link">CLIENT</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.DataMode.html" title="enum class in org.apache.juneau.console.views">TableSpec.DataMode</a></dt>
 <dd>
@@ -20000,6 +20077,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The column definitions, in insertion order.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#columns(int)" class="member-name-link">columns(int)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets the grid column count of a fields tab.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#columns(int)" class="member-name-link">columns(int)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Sets the default grid column count of the fields tabs.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/beanquery/BeanQueryContext.Builder.html#columns(java.lang.String...)" class="member-name-link">columns(String...)</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/BeanQueryContext.Builder.html" title="class in org.apache.juneau.commons.beanquery">BeanQueryContext.Builder</a></dt>
 <dd>
 <div class="block">Keeps only the specified declared columns, in the specified order.</div>
@@ -20013,6 +20098,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/TableSpec.html#columns(org.apache.juneau.console.views.Column...)" class="member-name-link">columns(Column...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
 <dd>
 <div class="block">Appends columns, in display order.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#columnSettings()" class="member-name-link">columnSettings()</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">The button that opens the column chooser (View Settings).</div>
 </dd>
 <dt><a href="org/apache/juneau/beanquery/sql/ColumnResolver.html#columnSql(java.lang.String)" class="member-name-link">columnSql(String)</a> - Method in interface org.apache.juneau.beanquery.sql.<a href="org/apache/juneau/beanquery/sql/ColumnResolver.html" title="interface in org.apache.juneau.beanquery.sql">ColumnResolver</a></dt>
 <dd>
@@ -23009,6 +23098,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/CardTypeRegistry.html#copy()" class="member-name-link">copy()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#copy()" class="member-name-link">copy()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Returns an independent copy, so a shared instance can be attached to several tables.</div>
+</dd>
 <dt><a href="org/apache/juneau/examples/core/config/store/SqlStore.Builder.html#copy()" class="member-name-link">copy()</a> - Method in class org.apache.juneau.examples.core.config.store.<a href="org/apache/juneau/examples/core/config/store/SqlStore.Builder.html" title="class in org.apache.juneau.examples.core.config.store">SqlStore.Builder</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/classic/BasicStatusLine.html#copy()" class="member-name-link">copy()</a> - Method in class org.apache.juneau.http.classic.<a href="org/apache/juneau/http/classic/BasicStatusLine.html" title="class in org.apache.juneau.http.classic">BasicStatusLine</a></dt>
@@ -23925,6 +24018,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Counts the number of characters in the reader and then closes the reader.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#count(java.util.function.Function)" class="member-name-link">count(Function&lt;String, Integer&gt;)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets a server-side counter shown in the tab label.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/beanquery/BeanQuerySession.html#count(org.apache.juneau.commons.beanquery.BeanQuery)" class="member-name-link">count(BeanQuery)</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/BeanQuerySession.html" title="class in org.apache.juneau.commons.beanquery">BeanQuerySession</a></dt>
 <dd>
 <div class="block">Returns both counts, whatever the <a href="org/apache/juneau/commons/beanquery/CountPolicy.html" title="enum class in org.apache.juneau.commons.beanquery"><code>CountPolicy</code></a>.</div>
@@ -23932,6 +24029,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/utils/StringUtils.html#countChars(java.lang.String,char)" class="member-name-link">countChars(String, char)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" title="class in org.apache.juneau.commons.utils">StringUtils</a></dt>
 <dd>
 <div class="block">Counts the number of occurrences of the specified character in the specified string.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#countFromRows()" class="member-name-link">countFromRows()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Shows the nested table's row count in the tab label once the tab has loaded.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/utils/StringUtils.html#countMatches(java.lang.String,java.lang.String)" class="member-name-link">countMatches(String, String)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" title="class in org.apache.juneau.commons.utils">StringUtils</a></dt>
 <dd>
@@ -23960,6 +24061,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/commons/beanquery/ResolvedQuery.html#counts()" class="member-name-link">counts()</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/ResolvedQuery.html" title="class in org.apache.juneau.commons.beanquery">ResolvedQuery</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#counts(java.lang.String)" class="member-name-link">counts(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Sets a dedicated endpoint for the tab counts.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/beanquery/BeanQuery.Builder.html#counts(org.apache.juneau.commons.beanquery.CountRequest)" class="member-name-link">counts(CountRequest)</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/BeanQuery.Builder.html" title="class in org.apache.juneau.commons.beanquery">BeanQuery.Builder</a></dt>
 <dd>
 <div class="block">Sets the <code>counts</code> option from a <a href="org/apache/juneau/commons/beanquery/CountRequest.html" title="enum class in org.apache.juneau.commons.beanquery"><code>CountRequest</code></a>.</div>
@@ -25841,6 +25946,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/DataSourceDef.html#create(java.lang.String)" class="member-name-link">create(String)</a> - Static method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/DataSourceDef.html" title="class in org.apache.juneau.console.freemarker">DataSourceDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#create(java.lang.String)" class="member-name-link">create(String)</a> - Static method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/ToolkitPack.html#create(java.lang.String)" class="member-name-link">create(String)</a> - Static method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ToolkitPack.html" title="class in org.apache.juneau.console.freemarker">ToolkitPack</a></dt>
 <dd>
 <div class="block">Starts a pack.</div>
@@ -26427,6 +26534,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the job registered under the specified idempotency key, or creates and registers one, throwing when the
  concurrency cap is reached.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html#create(org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">create(RibbonItem...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></dt>
+<dd>
+<div class="block">Adds items to the create slot (group <code>entity</code>); repeatable.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/BulkMutateDef.html#create(org.apache.juneau.console.views.WritePermit,org.apache.juneau.console.views.SelectionDef)" class="member-name-link">create(WritePermit, SelectionDef)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BulkMutateDef.html" title="class in org.apache.juneau.console.views">BulkMutateDef</a></dt>
 <dd>
@@ -31543,6 +31654,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Optional description for the exposed API.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/Column.html#description()" class="member-name-link">description()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Column.html" title="class in org.apache.juneau.console.views">Column</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/Contact.html#description()" class="member-name-link">description()</a> - Element in annotation interface org.apache.juneau.http.<a href="org/apache/juneau/http/Contact.html" title="annotation interface in org.apache.juneau.http">Contact</a></dt>
 <dd>
 <div class="block">Optional description for the exposed API.</div>
@@ -31762,6 +31875,11 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/inject/BeanInstantiator.Builder.html#description(java.lang.String)" class="member-name-link">description(String)</a> - Method in class org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BeanInstantiator.Builder.html" title="class in org.apache.juneau.commons.inject">BeanInstantiator.Builder</a></dt>
 <dd>
 <div class="block">Sets a human-readable description used in log entries and error messages.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Column.html#description(java.lang.String)" class="member-name-link">description(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Column.html" title="class in org.apache.juneau.console.views">Column</a></dt>
+<dd>
+<div class="block">Sets optional help text for this column, shown in the View Settings dialog's detail strip when the column is
+ selected.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/widgets/EventCategory.html#description(java.lang.String)" class="member-name-link">description(String)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/EventCategory.html" title="class in org.apache.juneau.console.widgets">EventCategory</a></dt>
 <dd>
@@ -32177,6 +32295,18 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/petstore/console/pets/PetsRest.html#detailTab(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse,long,java.lang.String)" class="member-name-link">detailTab(RestRequest, RestResponse, long, String)</a> - Method in class org.apache.juneau.petstore.console.pets.<a href="org/apache/juneau/petstore/console/pets/PetsRest.html" title="class in org.apache.juneau.petstore.console.pets">PetsRest</a></dt>
 <dd>
 <div class="block">P4, one tab.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html" class="type-name-link" title="class in org.apache.juneau.console.views">DetailTab</a> - Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">One tab of a tabbed <a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views"><code>RowDetail</code></a>: a fields grid, a nested table, a chart or a client-rendered pane.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Cache.html" class="type-name-link" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a> - Enum Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">How a row detail caches the content of its tabs.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html" class="type-name-link" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a> - Enum Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">The tab kinds.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/MarshalledAs.html#DETECT" class="member-name-link">DETECT</a> - Enum constant in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshalledAs.html" title="enum class in org.apache.juneau.marshall">MarshalledAs</a></dt>
 <dd>
@@ -33594,6 +33724,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the element conversion function for converting elements in <a href="org/apache/juneau/commons/collections/Sets.html#addAny(java.lang.Object...)"><code>Sets.addAny(Object...)</code></a>.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#elementId()" class="member-name-link">elementId()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Returns the element id.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/reflect/ElementInfo.html" class="type-name-link" title="class in org.apache.juneau.commons.reflect">ElementInfo</a> - Class in <a href="org/apache/juneau/commons/reflect/package-summary.html">org.apache.juneau.commons.reflect</a></dt>
 <dd>
 <div class="block">Abstract base class for all reflection wrapper objects providing common modifier checking functionality.</div>
@@ -34166,6 +34300,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/Subscription.html#emptyText(java.lang.String)" class="member-name-link">emptyText(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/Subscription.html" title="class in org.apache.juneau.console">Subscription</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#emptyText(java.lang.String)" class="member-name-link">emptyText(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets the text shown when the tab has nothing to show.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#enabled()" class="member-name-link">enabled()</a> - Method in class org.apache.juneau.rest.server.ops.<a href="org/apache/juneau/rest/server/ops/EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></dt>
 <dd>
 <div class="block">Enables the <code>/echo/*</code> endpoint &mdash; shorthand for <a href="org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#enabled(java.lang.Boolean)"><code>enabled(Boolean.TRUE)</code></a>.</div>
@@ -34552,6 +34690,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/widgets/ModalDef.ChildAction.html#endpoint" class="member-name-link">endpoint</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/ModalDef.ChildAction.html" title="class in org.apache.juneau.console.widgets">ModalDef.ChildAction</a></dt>
 <dd>
 <div class="block">The child's submit endpoint; omitted from the wire when unset.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#endpoint(java.lang.String)" class="member-name-link">endpoint(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets the per-tab GET endpoint.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RibbonItem.html#endpoint(java.lang.String)" class="member-name-link">endpoint(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
 <dd>
@@ -35221,6 +35363,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/views/AsyncJob.Update.html#equals(java.lang.Object)" class="member-name-link">equals(Object)</a> - Method in record class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.Update.html" title="class in org.apache.juneau.console.views">AsyncJob.Update</a></dt>
 <dd>
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
@@ -36679,6 +36823,15 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The ribbon's export menu, offering the named buttons.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html#export(java.lang.String...)" class="member-name-link">export(String...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></dt>
+<dd>
+<div class="block">Adds optional export buttons (for example <code>"excel"</code>, <code>"pdf"</code>) after copy and csv.</div>
+</dd>
+<dt><a href="org/apache/juneau/petstore/console/PetstoreConsoleResource.html#exportLib(org.apache.juneau.rest.server.RestResponse,java.lang.String)" class="member-name-link">exportLib(RestResponse, String)</a> - Method in class org.apache.juneau.petstore.console.<a href="org/apache/juneau/petstore/console/PetstoreConsoleResource.html" title="class in org.apache.juneau.petstore.console">PetstoreConsoleResource</a></dt>
+<dd>
+<div class="block">Serves one of the vendored export libraries (<code>jszip.min.js</code>, <code>pdfmake.min.js</code>, <code>vfs_fonts.js</code>)
+ that the <code>datatables-export</code> toolkit pack loads.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/view/freemarker/FreemarkerDispatcher.Builder.html#exposeFields(boolean)" class="member-name-link">exposeFields(boolean)</a> - Method in class org.apache.juneau.rest.server.view.freemarker.<a href="org/apache/juneau/rest/server/view/freemarker/FreemarkerDispatcher.Builder.html" title="class in org.apache.juneau.rest.server.view.freemarker">FreemarkerDispatcher.Builder</a></dt>
 <dd>
 <div class="block">Sets whether the bridge-default <code>ObjectWrapper</code> exposes public fields (not just
@@ -37459,6 +37612,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Declares top-level fields.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#fields(java.lang.String...)" class="member-name-link">fields(String...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Narrows the fields the generated Details tab shows.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#fields(java.lang.String,java.lang.String...)" class="member-name-link">fields(String, String...)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Starts a fields-grid tab.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/CellPopover.html#fields(org.apache.juneau.console.views.PopoverField...)" class="member-name-link">fields(PopoverField...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/CellPopover.html" title="class in org.apache.juneau.console.views">CellPopover</a></dt>
 <dd>
 <div class="block">Sets the ordered fields.</div>
@@ -37466,6 +37627,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/RegionDef.html#fields(org.apache.juneau.console.views.RegionDef.Field...)" class="member-name-link">fields(RegionDef.Field...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
 <dd>
 <div class="block">Sets the field catalog.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#FIELDS" class="member-name-link">FIELDS</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
+<dd>
+<div class="block">A label/value grid of row fields.</div>
 </dd>
 <dt><a href="org/apache/juneau/bean/html5/HtmlBuilder.html#fieldset()" class="member-name-link">fieldset()</a> - Static method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/HtmlBuilder.html" title="class in org.apache.juneau.bean.html5">HtmlBuilder</a></dt>
 <dd>
@@ -37848,6 +38013,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/collections/FilteredSet.Builder.html#filter(java.util.function.Predicate)" class="member-name-link">filter(Predicate&lt;E&gt;)</a> - Method in class org.apache.juneau.commons.collections.<a href="org/apache/juneau/commons/collections/FilteredSet.Builder.html" title="class in org.apache.juneau.commons.collections">FilteredSet.Builder</a></dt>
 <dd>
 <div class="block">Sets the filter predicate that determines whether elements should be added.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html#filter(org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">filter(RibbonItem...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></dt>
+<dd>
+<div class="block">Adds items to the filter slot (group <code>filter</code>); repeatable.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/beanquery/Filter.html" class="type-name-link" title="interface in org.apache.juneau.commons.beanquery">Filter</a> - Interface in <a href="org/apache/juneau/commons/beanquery/package-summary.html">org.apache.juneau.commons.beanquery</a></dt>
 <dd>
@@ -40395,6 +40564,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/http/header/From.html#%3Cinit%3E(java.util.function.Supplier)" class="member-name-link">From(Supplier&lt;String&gt;)</a> - Constructor for class org.apache.juneau.http.header.<a href="org/apache/juneau/http/header/From.html" title="class in org.apache.juneau.http.header">From</a></dt>
 <dd>
 <div class="block">Constructor with a lazy value supplier.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#fromBean(java.lang.Class,java.util.function.Function)" class="member-name-link">fromBean(Class&lt;T&gt;, Function&lt;String, T&gt;)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Starts a tabbed detail served by <a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views"><code>RowDetailMixin</code></a> from a bean.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/bson/BsonDecimal128.html#fromBigDecimal(java.math.BigDecimal)" class="member-name-link">fromBigDecimal(BigDecimal)</a> - Static method in class org.apache.juneau.marshall.bson.<a href="org/apache/juneau/marshall/bson/BsonDecimal128.html" title="class in org.apache.juneau.marshall.bson">BsonDecimal128</a></dt>
 <dd>
@@ -48476,9 +48649,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The model that generated the content.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/ViewsMixin.html#getModelInlineScript()" class="member-name-link">getModelInlineScript()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
+<dd>
+<div class="block">[GET /juneau-model-inline.js] &mdash; serve the opt-in inline-handler compiler.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/mcp/v20260728/CreateMessageRequest.html#getModelPreferences()" class="member-name-link">getModelPreferences()</a> - Method in class org.apache.juneau.bean.mcp.v20260728.<a href="org/apache/juneau/bean/mcp/v20260728/CreateMessageRequest.html" title="class in org.apache.juneau.bean.mcp.v20260728">CreateMessageRequest</a></dt>
 <dd>
 <div class="block">Model-selection preferences.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/ViewsMixin.html#getModelScript()" class="member-name-link">getModelScript()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
+<dd>
+<div class="block">[GET /juneau-model.js] &mdash; serve the client object model.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/reflect/ElementInfo.html#getModifiers()" class="member-name-link">getModifiers()</a> - Method in class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/ElementInfo.html" title="class in org.apache.juneau.commons.reflect">ElementInfo</a></dt>
 <dd>
@@ -53189,6 +53370,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Java object swaps.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ConsoleChromeMixin.html#getSwitcherJs()" class="member-name-link">getSwitcherJs()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console">ConsoleChromeMixin</a></dt>
+<dd>
+<div class="block">[GET /juneau-console/juneau-switcher.js] &mdash; serve the switcher card runtime.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/ViewsMixin.html#getSymbolsLucideSvg()" class="member-name-link">getSymbolsLucideSvg()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
+<dd>
+<div class="block">[GET /juneau-symbols-lucide.svg] &mdash; serve the Lucide base sprite (the lowest icon layer).</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/ViewsMixin.html#getSymbolsMaterialSvg()" class="member-name-link">getSymbolsMaterialSvg()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
 <dd>
 <div class="block">[GET /juneau-symbols-material.svg] &mdash; serve the opt-in Material Symbols Outlined sprite.</div>
@@ -55161,6 +55350,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Clusters this item with adjacent items sharing the same group name.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#group(java.lang.String,java.lang.String...)" class="member-name-link">group(String, String...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Groups some of a fields tab's fields under a heading.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/beanquery/BeanQuerySyntaxException.Code.html#GROUP_ARITY" class="member-name-link">GROUP_ARITY</a> - Enum constant in enum class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/BeanQuerySyntaxException.Code.html" title="enum class in org.apache.juneau.commons.beanquery">BeanQuerySyntaxException.Code</a></dt>
 <dd>
 <div class="block">A <code>$or</code>/<code>$and</code>/<code>$not</code> group has too few or too many items.</div>
@@ -55555,6 +55748,11 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Validates a loopback callback and exchanges the authorization code for a token.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/Handled.html" class="type-name-link" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="org/apache/juneau/console/Handled.html" title="type parameter in Handled">T</a>&gt; - Interface in <a href="org/apache/juneau/console/package-summary.html">org.apache.juneau.console</a></dt>
+<dd>
+<div class="block">Mixin for element builders that can carry a client object-model block: handler actions, lifecycle bindings and
+ handler subscriptions.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/RestContext.html#handleError(org.apache.juneau.rest.server.RestSession,java.lang.Throwable)" class="member-name-link">handleError(RestSession, Throwable)</a> - Method in class org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/RestContext.html" title="class in org.apache.juneau.rest.server">RestContext</a></dt>
 <dd>
 <div class="block">Method for handling response errors.</div>
@@ -55577,6 +55775,18 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/CardTypeRegistry.html#handler(java.lang.String)" class="member-name-link">handler(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#handler(java.lang.String)" class="member-name-link">handler(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the handler by name.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#handler(org.apache.juneau.console.HandlerRef)" class="member-name-link">handler(HandlerRef)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the handler.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html" class="type-name-link" title="class in org.apache.juneau.console">HandlerRef</a> - Class in <a href="org/apache/juneau/console/package-summary.html">org.apache.juneau.console</a></dt>
+<dd>
+<div class="block">A reference to a client-side handler: a registered name or an opt-in inline body.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/serializer/SerializerSession.html#handleThrown(T)" class="member-name-link">handleThrown(T)</a> - Static method in class org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/SerializerSession.html" title="class in org.apache.juneau.marshall.serializer">SerializerSession</a></dt>
 <dd>
 <div class="block">Converts the specified throwable to either a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> or <a href="org/apache/juneau/marshall/serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer"><code>SerializeException</code></a>.</div>
@@ -56054,6 +56264,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns a hash code value for this object.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#hashCode()" class="member-name-link">hashCode()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/views/AsyncJob.Update.html#hashCode()" class="member-name-link">hashCode()</a> - Method in record class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.Update.html" title="class in org.apache.juneau.console.views">AsyncJob.Update</a></dt>
 <dd>
 <div class="block">Returns a hash code value for this object.</div>
@@ -56527,6 +56739,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns <jk>true</jk> if this request has a body.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#hasInline()" class="member-name-link">hasInline()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Returns whether any entry uses an inline handler.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/TableSpec.html#hasInlineHandlers()" class="member-name-link">hasInlineHandlers()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/marshall/ClassMeta.html#hasInputStreamMutater()" class="member-name-link">hasInputStreamMutater()</a> - Method in class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this class has a transform associated with it that allows it to be created from an InputStream.</div>
@@ -56614,6 +56832,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/test/PageContractAssert.html#hasNavPath(java.lang.String...)" class="member-name-link">hasNavPath(String...)</a> - Method in class org.apache.juneau.console.test.<a href="org/apache/juneau/console/test/PageContractAssert.html" title="class in org.apache.juneau.console.test">PageContractAssert</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/test/PageContractAssert.html#hasNestedCard(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">hasNestedCard(String, String, String)</a> - Method in class org.apache.juneau.console.test.<a href="org/apache/juneau/console/test/PageContractAssert.html" title="class in org.apache.juneau.console.test">PageContractAssert</a></dt>
+<dd>
+<div class="block">Asserts that a card sits inside another card (a switcher view or section).</div>
+</dd>
 <dt><a href="org/apache/juneau/http/classic/header/BasicHeaderIterator.html#hasNext()" class="member-name-link">hasNext()</a> - Method in class org.apache.juneau.http.classic.header.<a href="org/apache/juneau/http/classic/header/BasicHeaderIterator.html" title="class in org.apache.juneau.http.classic.header">BasicHeaderIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/classic/part/BasicPartIterator.html#hasNext()" class="member-name-link">hasNext()</a> - Method in class org.apache.juneau.http.classic.part.<a href="org/apache/juneau/http/classic/part/BasicPartIterator.html" title="class in org.apache.juneau.http.classic.part">BasicPartIterator</a></dt>
@@ -57488,6 +57710,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/views/JobLogRegion.html#height(int)" class="member-name-link">height(int)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/JobLogRegion.html" title="class in org.apache.juneau.console.views">JobLogRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RegionDef.html#height(int)" class="member-name-link">height(int)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
+<dd>
+<div class="block">Sets the chart height in pixels (chart regions only).</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/html5/Canvas.html#height(java.lang.Object)" class="member-name-link">height(Object)</a> - Method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/Canvas.html" title="class in org.apache.juneau.bean.html5">Canvas</a></dt>
 <dd>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#attr-canvas-height">height</a> attribute.</div>
@@ -58155,6 +58381,11 @@ loadScripts(document, 'script');</script>
 <div class="block">Optional <code>{property}</code> URL template consumed by the <code>linked</code> renderer (and any renderer
  that reads it).</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowAction.html#href" class="member-name-link">href</a> - Variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></dt>
+<dd>
+<div class="block">The same-origin path template of a link action (see <a href="org/apache/juneau/console/views/RowAction.html#link(java.lang.String,java.lang.String)"><code>RowAction.link(String,String)</code></a>); <code>{id}</code> and
+ <code>{property}</code> are replaced from the row.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/widgets/CalendarEvent.html#href" class="member-name-link">href</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarEvent.html" title="class in org.apache.juneau.console.widgets">CalendarEvent</a></dt>
 <dd>
 <div class="block">Optional same-origin <b>document</b> URL (<a href="org/apache/juneau/commons/http/SafePathTemplate.html#isSafeDocumentUrl(java.lang.String)"><code>SafePathTemplate.isSafeDocumentUrl(String)</code></a> semantics).</div>
@@ -58194,6 +58425,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/RegionDef.Field.html#href(java.lang.String)" class="member-name-link">href(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></dt>
 <dd>
 <div class="block">Sets the declarative <code>{property}</code> URL template.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowAction.html#href(java.lang.String)" class="member-name-link">href(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></dt>
+<dd>
+<div class="block">Sets the link target, making this a link action.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/widgets/CalendarEvent.html#href(java.lang.String)" class="member-name-link">href(String)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarEvent.html" title="class in org.apache.juneau.console.widgets">CalendarEvent</a></dt>
 <dd>
@@ -59708,6 +59943,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates an <a href="org/apache/juneau/bean/atom/Icon.html" title="class in org.apache.juneau.bean.atom"><code>Icon</code></a> element with the specified <a href="org/apache/juneau/bean/atom/Icon.html#setUri(java.lang.Object)"><code>Icon.setUri(Object)</code></a> attribute.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#icon(java.lang.String)" class="member-name-link">icon(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the icon (a sprite name).</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#icon(java.lang.String)" class="member-name-link">icon(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets the tab icon.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#icon(java.lang.String)" class="member-name-link">icon(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">Sets the icon of an <code>action</code> item.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/RowAction.html#icon(java.lang.String)" class="member-name-link">icon(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></dt>
 <dd>
 <div class="block">Sets the glyph/icon name.</div>
@@ -59840,6 +60087,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/NavNode.html#id()" class="member-name-link">id()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/NavNode.html" title="class in org.apache.juneau.console.freemarker">NavNode</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#id()" class="member-name-link">id()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Returns the action id.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/AsyncJob.html#id()" class="member-name-link">id()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></dt>
 <dd>
 <div class="block">The unguessable capability id &mdash; the whole of the job's access control (see the class javadoc).</div>
@@ -59882,6 +60133,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/bean/html5/HtmlElement.html#id(java.lang.String)" class="member-name-link">id(String)</a> - Method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/HtmlElement.html" title="class in org.apache.juneau.bean.html5">HtmlElement</a></dt>
 <dd>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/dom.html#the-id-attribute">id</a> attribute.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#id(java.lang.String)" class="member-name-link">id(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets the tab id (default: the slug of the title).</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RibbonItem.html#id(java.lang.String)" class="member-name-link">id(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
 <dd>
@@ -61521,6 +61776,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Optional 1-based initial month (<code>1..12</code>); paired with <a href="org/apache/juneau/console/widgets/CalendarDef.html#initialYear"><code>CalendarDef.initialYear</code></a>.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html#initialSection(java.lang.String)" class="member-name-link">initialSection(String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#initialView(java.lang.String)" class="member-name-link">initialView(String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/widgets/CalendarDef.html#initialYear" class="member-name-link">initialYear</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarDef.html" title="class in org.apache.juneau.console.widgets">CalendarDef</a></dt>
 <dd>
 <div class="block">Optional initial year; paired with <a href="org/apache/juneau/console/widgets/CalendarDef.html#initialMonth"><code>CalendarDef.initialMonth</code></a>.</div>
@@ -61589,9 +61848,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Enables <code>@Inject</code> / <code>@Autowired</code> field and method injection on the builder instance.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#inline()" class="member-name-link">inline()</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Starts a tabbed detail fed from the clicked row's own data, with no server round trip.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/header/ContentDisposition.Builder.html#inline()" class="member-name-link">inline()</a> - Method in class org.apache.juneau.http.header.<a href="org/apache/juneau/http/header/ContentDisposition.Builder.html" title="class in org.apache.juneau.http.header">ContentDisposition.Builder</a></dt>
 <dd>
 <div class="block">Sets the disposition-type to <c>inline</c>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#inline(java.lang.String)" class="member-name-link">inline(String)</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>
+<div class="block">An inline handler body, compiled on the client as <code>function(target, event)</code>.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RowAction.Present.html#INLINE" class="member-name-link">INLINE</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.Present.html" title="enum class in org.apache.juneau.console.views">RowAction.Present</a></dt>
 <dd>
@@ -64447,6 +64714,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns <jk>true</jk> if no positional arguments and no named options were captured.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#isEmpty()" class="member-name-link">isEmpty()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Returns whether the block holds nothing.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/part/PartList.html#isEmpty()" class="member-name-link">isEmpty()</a> - Method in class org.apache.juneau.http.part.<a href="org/apache/juneau/http/part/PartList.html" title="class in org.apache.juneau.http.part">PartList</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this list is empty.</div>
@@ -64903,6 +65174,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/reflect/ClassInfo.html#isInjectCollectionType()" class="member-name-link">isInjectCollectionType()</a> - Method in class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></dt>
 <dd>
 <div class="block">Returns <jk>true</jk> if this type is a collection type that should be populated with multiple beans.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#isInline()" class="member-name-link">isInline()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>
+<div class="block">Returns whether this is an inline body.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/v20260728/ElicitationRequests.html#isInputRequired(java.util.Map)" class="member-name-link">isInputRequired(Map&lt;String, Object&gt;)</a> - Static method in class org.apache.juneau.rest.client.mcp.v20260728.<a href="org/apache/juneau/rest/client/mcp/v20260728/ElicitationRequests.html" title="class in org.apache.juneau.rest.client.mcp.v20260728">ElicitationRequests</a></dt>
 <dd>
@@ -69475,6 +69750,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">A strategy like this one, keyed by the given bytes.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#key(java.lang.String)" class="member-name-link">key(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Sets the URL key of a bean-backed detail (default: the decapitalised simple class name).</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/hocon/HoconWriter.html#key(java.lang.String)" class="member-name-link">key(String)</a> - Method in class org.apache.juneau.marshall.hocon.<a href="org/apache/juneau/marshall/hocon/HoconWriter.html" title="class in org.apache.juneau.marshall.hocon">HoconWriter</a></dt>
 <dd>
 <div class="block">Writes the key (unquoted or quoted).</div>
@@ -69780,6 +70059,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the pack kind.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#kind()" class="member-name-link">kind()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Returns the element kind.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/mcp/McpChangeEvent.html#kind()" class="member-name-link">kind()</a> - Method in record class org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpChangeEvent.html" title="class in org.apache.juneau.rest.server.mcp">McpChangeEvent</a></dt>
 <dd>
 <div class="block">Returns the value of the <a href="./org/apache/juneau/rest/server/mcp/McpChangeEvent.html#param-kind"><code>kind</code></a> record component.</div>
@@ -69803,6 +70086,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/bean/html5/Track.html#kind(java.lang.String)" class="member-name-link">kind(String)</a> - Method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/Track.html" title="class in org.apache.juneau.bean.html5">Track</a></dt>
 <dd>
 <div class="block"><a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#attr-track-kind">kind</a> attribute.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RegionDef.html#kind(java.lang.String)" class="member-name-link">kind(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
+<dd>
+<div class="block">Sets the chart kind (chart regions only).</div>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/ToolkitPack.Builder.html#kind(org.apache.juneau.console.freemarker.ToolkitPack.Kind)" class="member-name-link">kind(ToolkitPack.Kind)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ToolkitPack.Builder.html" title="class in org.apache.juneau.console.freemarker">ToolkitPack.Builder</a></dt>
 <dd>
@@ -69937,6 +70224,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/Thresholds.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/Thresholds.html" title="class in org.apache.juneau.console.freemarker">Thresholds</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the visible label.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/Column.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Column.html" title="class in org.apache.juneau.console.views">Column</a></dt>
 <dd>
 <div class="block">Sets the human-readable column label.</div>
@@ -69946,6 +70237,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/RegionDef.Field.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></dt>
 <dd>
 <div class="block">Sets the label.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">Sets the label of an <code>action</code> item.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RowAction.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></dt>
 <dd>
@@ -69962,6 +70257,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/widgets/EventCategory.html#label(java.lang.String)" class="member-name-link">label(String)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/EventCategory.html" title="class in org.apache.juneau.console.widgets">EventCategory</a></dt>
 <dd>
 <div class="block">Sets the legend label.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#label(java.lang.String,java.lang.String)" class="member-name-link">label(String, String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Sets an explicit label for a field.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.html#label(java.util.Map)" class="member-name-link">label(Map&lt;String, String&gt;)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a></dt>
 <dd>
@@ -70620,6 +70919,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/PageCapture.HeaderSpec.html#link(java.lang.String,java.lang.String)" class="member-name-link">link(String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageCapture.HeaderSpec.html" title="class in org.apache.juneau.console.freemarker">PageCapture.HeaderSpec</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RowAction.html#link(java.lang.String,java.lang.String)" class="member-name-link">link(String, String)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></dt>
+<dd>
+<div class="block">Starts a link action: a header button that navigates to a same-origin page instead of submitting.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/atom/AtomBuilder.html#link(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">link(String, String, String)</a> - Static method in class org.apache.juneau.bean.atom.<a href="org/apache/juneau/bean/atom/AtomBuilder.html" title="class in org.apache.juneau.bean.atom">AtomBuilder</a></dt>
 <dd>
 <div class="block">Creates a <a href="org/apache/juneau/bean/atom/Link.html" title="class in org.apache.juneau.bean.atom"><code>Link</code></a> element with the specified <a href="org/apache/juneau/bean/atom/Link.html#setRel(java.lang.String)"><code>Link.setRel(String)</code></a>, <a href="org/apache/juneau/bean/atom/Link.html#setType(java.lang.String)"><code>Link.setType(String)</code></a>, and
@@ -70673,6 +70976,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/widgets/Behavior.html#LINK" class="member-name-link">LINK</a> - Enum constant in enum class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/Behavior.html" title="enum class in org.apache.juneau.console.widgets">Behavior</a></dt>
 <dd>
 <div class="block">Navigate to a same-origin <code>href</code>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#linkButton()" class="member-name-link">linkButton()</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">The copy-shareable-link button.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/utils/CollectionUtils.html#linkedList(T...)" class="member-name-link">linkedList(T...)</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/CollectionUtils.html" title="class in org.apache.juneau.commons.utils">CollectionUtils</a></dt>
 <dd>
@@ -76587,6 +76894,46 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Wiring mode for a <a href="org/apache/juneau/bct/junit/TestBean.html" title="annotation interface in org.apache.juneau.bct.junit"><code>@TestBean</code></a>-declared override.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/ViewsMixin.html#MODEL_INLINE_JS_PATH" class="member-name-link">MODEL_INLINE_JS_PATH</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
+<dd>
+<div class="block">The URL path at which the opt-in inline-handler compiler is served (relative to the host mount).</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/ViewsMixin.html#MODEL_JS_PATH" class="member-name-link">MODEL_JS_PATH</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
+<dd>
+<div class="block">The URL path at which the client object model (<code>JuneauViews.model</code>) is served (relative to the host mount).</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html" class="type-name-link" title="class in org.apache.juneau.console">ModelAction</a> - Class in <a href="org/apache/juneau/console/package-summary.html">org.apache.juneau.console</a></dt>
+<dd>
+<div class="block">A click-triggered action on an element: an icon button that calls a handler.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/CardSpec.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.Section.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.Section.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.Section</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Returns the element's model block.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/TableSpec.html#modelBlock()" class="member-name-link">modelBlock()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html" class="type-name-link" title="class in org.apache.juneau.console">ModelBlock</a> - Class in <a href="org/apache/juneau/console/package-summary.html">org.apache.juneau.console</a></dt>
+<dd>
+<div class="block">The model block of one element: handler actions, lifecycle bindings and handler subscriptions.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#%3Cinit%3E(java.lang.String,java.lang.String)" class="member-name-link">ModelBlock(String, String)</a> - Constructor for class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Creates a block.</div>
+</dd>
 <dt><a href="org/apache/juneau/bean/mcp/v20260728/ModelHint.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp.v20260728">ModelHint</a> - Class in <a href="org/apache/juneau/bean/mcp/v20260728/package-summary.html">org.apache.juneau.bean.mcp.v20260728</a></dt>
 <dd>
 <div class="block">A model family/name hint for <a href="org/apache/juneau/bean/mcp/v20260728/ModelPreferences.html#getHints()"><code>ModelPreferences.getHints()</code></a> (MCP sampling).</div>
@@ -78114,6 +78461,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the pack name.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#name()" class="member-name-link">name()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>
+<div class="block">Returns the handler name.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/Column.html#name()" class="member-name-link">name()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Column.html" title="class in org.apache.juneau.console.views">Column</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/Contact.html#name()" class="member-name-link">name()</a> - Element in annotation interface org.apache.juneau.http.<a href="org/apache/juneau/http/Contact.html" title="annotation interface in org.apache.juneau.http">Contact</a></dt>
@@ -78620,6 +78971,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the name of the column containing configuration entry names.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#named(java.lang.String)" class="member-name-link">named(String)</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>
+<div class="block">A registered handler name.</div>
+</dd>
 <dt><a href="org/apache/juneau/commons/inject/Named.html" class="type-name-link" title="annotation interface in org.apache.juneau.commons.inject">Named</a> - Annotation Interface in <a href="org/apache/juneau/commons/inject/package-summary.html">org.apache.juneau.commons.inject</a></dt>
 <dd>
 <div class="block">Identifies a bean-injection qualifier for constructor/method parameters and fields.</div>
@@ -78998,6 +79353,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Attribute carrying the nested-table parent-scope query parameter name on the nested-table wrapper.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/CardTypeHandler.html#nestedCards(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">nestedCards(JsonMap)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/CardTypeHandler.html" title="interface in org.apache.juneau.console">CardTypeHandler</a></dt>
+<dd>
+<div class="block">The cards this card holds, for a container type such as a switcher.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherCardType.html#nestedCards(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">nestedCards(JsonMap)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherCardType.html" title="class in org.apache.juneau.console.freemarker">SwitcherCardType</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/classic/HttpResponses.html#NETWORK_AUTHENTICATION_REQUIRED" class="member-name-link">NETWORK_AUTHENTICATION_REQUIRED</a> - Static variable in class org.apache.juneau.http.classic.<a href="org/apache/juneau/http/classic/HttpResponses.html" title="class in org.apache.juneau.http.classic">HttpResponses</a></dt>
 <dd>
 <div class="block">A synonym for <a href="org/apache/juneau/http/classic/response/NetworkAuthenticationRequired.html#INSTANCE"><code>NetworkAuthenticationRequired.INSTANCE</code></a>.</div>
@@ -79673,6 +80034,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/reflect/Visibility.html#NONE" class="member-name-link">NONE</a> - Enum constant in enum class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a></dt>
 <dd>
 <div class="block">Ignore all</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Cache.html#NONE" class="member-name-link">NONE</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Cache.html" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a></dt>
+<dd>
+<div class="block">A tab is fetched again each time it is activated.</div>
 </dd>
 <dt><a href="org/apache/juneau/http/remote/RemoteReturn.html#NONE" class="member-name-link">NONE</a> - Enum constant in enum class org.apache.juneau.http.remote.<a href="org/apache/juneau/http/remote/RemoteReturn.html" title="enum class in org.apache.juneau.http.remote">RemoteReturn</a></dt>
 <dd>
@@ -82406,6 +82771,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/time/GranularZonedDateTime.html#of(java.lang.String)" class="member-name-link">of(String)</a> - Static method in class org.apache.juneau.commons.time.<a href="org/apache/juneau/commons/time/GranularZonedDateTime.html" title="class in org.apache.juneau.commons.time">GranularZonedDateTime</a></dt>
 <dd>
 <div class="block">Parses an ISO8601 timestamp string into a GranularZonedDateTime.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#of(java.lang.String)" class="member-name-link">of(String)</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Starts an action.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/TopicDecl.html#of(java.lang.String)" class="member-name-link">of(String)</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a></dt>
 <dd>&nbsp;</dd>
@@ -85735,9 +86104,21 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#on(java.lang.String,java.lang.String)" class="member-name-link">on(String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#on(java.lang.String,java.lang.String)" class="member-name-link">on(String, String)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Binds a lifecycle event to a named handler.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/mock/MockHttpTransport.Builder.html#on(java.lang.String,java.lang.String,org.apache.juneau.rest.mock.MockHttpTransport.RequestHandler)" class="member-name-link">on(String, String, MockHttpTransport.RequestHandler)</a> - Method in class org.apache.juneau.rest.mock.<a href="org/apache/juneau/rest/mock/MockHttpTransport.Builder.html" title="class in org.apache.juneau.rest.mock">MockHttpTransport.Builder</a></dt>
 <dd>
 <div class="block">Registers a handler for the given HTTP method and path.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#on(java.lang.String,org.apache.juneau.console.HandlerRef)" class="member-name-link">on(String, HandlerRef)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Binds a lifecycle event.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#on(java.lang.String,org.apache.juneau.console.HandlerRef)" class="member-name-link">on(String, HandlerRef)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Binds a lifecycle event.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/AppliedAnnotationObject.BuilderT.html#on(org.apache.juneau.commons.reflect.ClassInfo...)" class="member-name-link">on(ClassInfo...)</a> - Method in class org.apache.juneau.commons.<a href="org/apache/juneau/commons/AppliedAnnotationObject.BuilderT.html" title="class in org.apache.juneau.commons">AppliedAnnotationObject.BuilderT</a></dt>
 <dd>
@@ -89374,6 +89755,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The built-in jQuery WebJar pack.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#PACK_SWITCHER" class="member-name-link">PACK_SWITCHER</a> - Static variable in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></dt>
+<dd>
+<div class="block">The switcher card runtime (<code>juneau-switcher.js</code>); depends on the views pack.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#PACK_TERMINAL" class="member-name-link">PACK_TERMINAL</a> - Static variable in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></dt>
 <dd>
 <div class="block">The built-in terminal runtime pack; depends on <code>"views"</code> and <code>"xterm"</code>.</div>
@@ -91533,6 +91918,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets whether polling pauses while an editing surface (an open detail row or action dialog) is bound to this table.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#payload(java.util.Map)" class="member-name-link">payload(Map&lt;String, Object&gt;)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the payload merged into the event payload.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/classic/HttpResponses.html#PAYLOAD_TOO_LARGE" class="member-name-link">PAYLOAD_TOO_LARGE</a> - Static variable in class org.apache.juneau.http.classic.<a href="org/apache/juneau/http/classic/HttpResponses.html" title="class in org.apache.juneau.http.classic">HttpResponses</a></dt>
 <dd>
 <div class="block">A synonym for <a href="org/apache/juneau/http/classic/response/PayloadTooLarge.html#INSTANCE"><code>PayloadTooLarge.INSTANCE</code></a>.</div>
@@ -91685,6 +92074,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.PendingLogin.html#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,java.time.Instant,java.time.Instant)" class="member-name-link">PendingLogin(String, String, String, Instant, Instant)</a> - Constructor for record class org.apache.juneau.rest.server.auth.oidc.rp.<a href="org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a></dt>
 <dd>
 <div class="block">Creates an instance of a <code>PendingLogin</code> record class.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Cache.html#PER_ROW" class="member-name-link">PER_ROW</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Cache.html" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a></dt>
+<dd>
+<div class="block">A tab is fetched once per expanded row (the default).</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RowAction.BulkMode.html#PER_ROW" class="member-name-link">PER_ROW</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowAction.BulkMode.html" title="enum class in org.apache.juneau.console.views">RowAction.BulkMode</a></dt>
 <dd>
@@ -92024,6 +92417,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/Render.html#pill(org.apache.juneau.console.widgets.StatusTone)" class="member-name-link">pill(StatusTone)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Render.html" title="class in org.apache.juneau.console.views">Render</a></dt>
 <dd>
 <div class="block">Creates a <code>pill</code> renderer with an explicit dot tone taken from the <a href="org/apache/juneau/console/widgets/StatusTone.html" title="enum class in org.apache.juneau.console.widgets"><code>StatusTone</code></a> palette.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/PillPalette.html" class="type-name-link" title="class in org.apache.juneau.console.views">PillPalette</a> - Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">The categorical pill palette's slot function.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/bus/BusFrames.html#ping()" class="member-name-link">ping()</a> - Static method in class org.apache.juneau.console.bus.<a href="org/apache/juneau/console/bus/BusFrames.html" title="class in org.apache.juneau.console.bus">BusFrames</a></dt>
 <dd>&nbsp;</dd>
@@ -98296,6 +98693,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets card ids, added to <code>BadgeDef.refreshes</code>, that are allowed to be absent from the page being rendered.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html#refreshId(java.lang.String)" class="member-name-link">refreshId(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></dt>
+<dd>
+<div class="block">Renames the refresh item (default <code>"refresh"</code>).</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/RegionDef.html#refreshMs" class="member-name-link">refreshMs</a> - Variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
 <dd>
 <div class="block">The declared auto-refresh interval, in milliseconds, or <jk>null</jk> for no polling.</div>
@@ -98322,6 +98723,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/terminal/region/TerminalDef.html#refreshMs(long)" class="member-name-link">refreshMs(long)</a> - Method in class org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalDef.html" title="class in org.apache.juneau.terminal.region">TerminalDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#refreshOnPoll(boolean)" class="member-name-link">refreshOnPoll(boolean)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets whether the tab reloads when the table polls.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthToken.html#refreshToken()" class="member-name-link">refreshToken()</a> - Method in record class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthToken.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthToken</a></dt>
 <dd>
 <div class="block">Returns the value of the <a href="./org/apache/juneau/rest/auth/oauth/flow/OAuthToken.html#param-refreshToken"><code>refreshToken</code></a> record component.</div>
@@ -100206,7 +100611,8 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/DatatablesCardType.html#requiredPacks(org.apache.juneau.marshall.collections.JsonMap)" class="member-name-link">requiredPacks(JsonMap)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/DatatablesCardType.html" title="class in org.apache.juneau.console.freemarker">DatatablesCardType</a></dt>
 <dd>
-<div class="block">A datatables card whose detail region is a job-log region needs the <code>joblog</code> pack's populator.</div>
+<div class="block">A datatables card whose detail region is a job-log region needs the <code>joblog</code> pack's populator; one whose detail
+ has a chart tab needs the <code>charts</code> pack.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html#requiredScopes(java.lang.String...)" class="member-name-link">requiredScopes(String...)</a> - Method in class org.apache.juneau.rest.server.auth.oauth.<a href="org/apache/juneau/rest/server/auth/oauth/OAuthIntrospectionValidator.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthIntrospectionValidator.Builder</a></dt>
 <dd>
@@ -100276,7 +100682,7 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/CardTypeRegistry.html#RESERVED" class="member-name-link">RESERVED</a> - Static variable in class org.apache.juneau.console.<a href="org/apache/juneau/console/CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a></dt>
 <dd>
 <div class="block">Reserved type names: <code>html</code> (built in), <code>datatables</code>, <code>terminal-view</code>,
- <code>terminal</code>, <code>chart</code> and <code>job-log</code> (console-ui-freemarker).</div>
+ <code>terminal</code>, <code>chart</code>, <code>job-log</code> and <code>switcher</code> (console-ui-freemarker).</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/function/Memoizer.html#reset()" class="member-name-link">reset()</a> - Method in class org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a></dt>
 <dd>
@@ -102518,6 +102924,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The revenue tile: the summed pet prices of the orders delivered today, by the store clock in UTC.</div>
 </dd>
+<dt><a href="org/apache/juneau/petstore/console/StoreRest.html#revenueByDay()" class="member-name-link">revenueByDay()</a> - Method in class org.apache.juneau.petstore.console.<a href="org/apache/juneau/petstore/console/StoreRest.html" title="class in org.apache.juneau.petstore.console">StoreRest</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/commons/utils/CollectionUtils.html#reverse(E%5B%5D)" class="member-name-link">reverse(E[])</a> - Static method in class org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/CollectionUtils.html" title="class in org.apache.juneau.commons.utils">CollectionUtils</a></dt>
 <dd>
 <div class="block">Reverses the elements in the specified array in-place.</div>
@@ -102593,6 +103001,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/time/format/DateTimeFormatter.html#RFC_1123_DATE_TIME" title="class or interface in java.time.format" class="external-link"><code>DateTimeFormatter.RFC_1123_DATE_TIME</code></a>: <js>"Tue, 3 Jun 2008 11:05:30 GMT"</js>.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/TableSpec.html#ribbon(java.util.List)" class="member-name-link">ribbon(List&lt;RibbonItem&gt;)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
+<dd>
+<div class="block">Appends the ribbon items of a list, such as the result of <a href="org/apache/juneau/console/views/Ribbons.Standard.html#build()"><code>Ribbons.Standard.build()</code></a>.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/TableSpec.html#ribbon(org.apache.juneau.console.views.RibbonItem...)" class="member-name-link">ribbon(RibbonItem...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
 <dd>
 <div class="block">Appends ribbon (toolbar) items, in display order.</div>
@@ -102608,6 +103020,14 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/RibbonItem.html" class="type-name-link" title="class in org.apache.juneau.console.views">RibbonItem</a> - Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
 <dd>
 <div class="block">One ribbon (toolbar) entry above a table.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.html" class="type-name-link" title="class in org.apache.juneau.console.views">Ribbons</a> - Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">Builds the standard table ribbon.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html" class="type-name-link" title="class in org.apache.juneau.console.views">Ribbons.Standard</a> - Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">Builder for the standard table ribbon.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/logging/RichLogger.html" class="type-name-link" title="class in org.apache.juneau.commons.logging">RichLogger</a> - Class in <a href="org/apache/juneau/commons/logging/package-summary.html">org.apache.juneau.commons.logging</a></dt>
 <dd>
@@ -103050,6 +103470,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the authoritative row payload to re-render from.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#ROW_ID" class="member-name-link">ROW_ID</a> - Static variable in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Grammar of a servable row id.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/ViewTable.html#ROW_ID_FIELD_ATTR" class="member-name-link">ROW_ID_FIELD_ATTR</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewTable.html" title="class in org.apache.juneau.console.views">ViewTable</a></dt>
 <dd>
 <div class="block">Attribute carrying <a href="org/apache/juneau/console/views/SelectionDef.html#rowIdField()"><code>SelectionDef.rowIdField()</code></a> &mdash; the row-data key the runtime stamps as each row's stable id.</div>
@@ -103109,9 +103533,33 @@ loadScripts(document, 'script');</script>
 <div class="block">Appends a presence-based row-class rule: a row whose <code>field</code> is <a href="org/apache/juneau/console/widgets/Op.html#PRESENT"><code>present</code></a>/
  <a href="org/apache/juneau/console/widgets/Op.html#ABSENT"><code>absent</code></a> gets <code>cssClass</code> added to its <code>&lt;tr&gt;</code>.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#rowDetail(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetail(String, String, RestResponse)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Serves one row's detail.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/RowDetail.html" class="type-name-link" title="class in org.apache.juneau.console.views">RowDetail</a> - Class in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
 <dd>
 <div class="block">Row-detail panel for a table: the per-row GET endpoint, title template, icon and the row-detail region.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#rowDetailCounts(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetailCounts(String, String, RestResponse)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Serves the tab counts of a row.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#rowDetailIndex()" class="member-name-link">rowDetailIndex()</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Returns the details indexed by key.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html" class="type-name-link" title="interface in org.apache.juneau.console.views">RowDetailMixin</a> - Interface in <a href="org/apache/juneau/console/views/package-summary.html">org.apache.juneau.console.views</a></dt>
+<dd>
+<div class="block">Mixin that serves the bean-backed row details of a resource.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#rowDetails()" class="member-name-link">rowDetails()</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">The bean-backed details this resource serves.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#rowDetailTab(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">rowDetailTab(String, String, String, RestResponse)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Serves one tab of a row's detail.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/parquet/ParquetConfig.html#rowGroupSize()" class="member-name-link">rowGroupSize()</a> - Element in annotation interface org.apache.juneau.marshall.parquet.<a href="org/apache/juneau/marshall/parquet/ParquetConfig.html" title="annotation interface in org.apache.juneau.marshall.parquet">ParquetConfig</a></dt>
 <dd>
@@ -104326,6 +104774,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Handle to one in-flight <a href="org/apache/juneau/rest/server/tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>-managed span.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#scopeParam(java.lang.String)" class="member-name-link">scopeParam(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Sets the query parameter carrying the parent row id to a nested table.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/WwwAuthenticateChallenge.html#scopes()" class="member-name-link">scopes()</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/WwwAuthenticateChallenge.html" title="class in org.apache.juneau.rest.client.mcp.auth">WwwAuthenticateChallenge</a></dt>
 <dd>
 <div class="block">Returns the space-delimited <code>scope</code> param as an order-preserving set.</div>
@@ -104353,6 +104805,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/terminal/region/TerminalEndpoints.html#script()" class="member-name-link">script()</a> - Static method in class org.apache.juneau.terminal.region.<a href="org/apache/juneau/terminal/region/TerminalEndpoints.html" title="class in org.apache.juneau.terminal.region">TerminalEndpoints</a></dt>
 <dd>
 <div class="block">The terminal runtime.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#script(java.lang.String...)" class="member-name-link">script(String...)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
+<dd>
+<div class="block">Adds page scripts; an alias of <a href="org/apache/juneau/console/freemarker/PageSpec.html#init(java.lang.String...)"><code>PageSpec.init(String...)</code></a> with the same de-duplication.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/html/HtmlDocSerializer.Builder.html#script(java.lang.String...)" class="member-name-link">script(String...)</a> - Method in class org.apache.juneau.marshall.html.<a href="org/apache/juneau/marshall/html/HtmlDocSerializer.Builder.html" title="class in org.apache.juneau.marshall.html">HtmlDocSerializer.Builder</a></dt>
 <dd>
@@ -104434,6 +104890,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/reflect/ElementFlag.html#SEALED" class="member-name-link">SEALED</a> - Enum constant in enum class org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/ElementFlag.html" title="enum class in org.apache.juneau.commons.reflect">ElementFlag</a></dt>
 <dd>
 <div class="block">SEALED (is a sealed class)</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#search()" class="member-name-link">search()</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>
+<div class="block">The table's search box.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/beanquery/BeanQuery.Builder.html#search(java.lang.String,java.lang.String)" class="member-name-link">search(String, String)</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/BeanQuery.Builder.html" title="class in org.apache.juneau.commons.beanquery">BeanQuery.Builder</a></dt>
 <dd>
@@ -104580,10 +105040,20 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Writes a section header with optional preceding blank line.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#section(java.lang.String,java.lang.String...)" class="member-name-link">section(String, String...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Adds a fields tab.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html#section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">section(String, String, CardSpec)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html#section(java.lang.String,java.lang.String,org.apache.juneau.console.freemarker.CardSpec,java.util.function.Consumer)" class="member-name-link">section(String, String, CardSpec, Consumer&lt;SwitcherDef.Section&gt;)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/bean/html5/Article.html#section(org.apache.juneau.bean.html5.Section)" class="member-name-link">section(Section)</a> - Method in class org.apache.juneau.bean.html5.<a href="org/apache/juneau/bean/html5/Article.html" title="class in org.apache.juneau.bean.html5">Article</a></dt>
 <dd>
 <div class="block">Adds a section node to this element.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html#section(org.apache.juneau.console.freemarker.CardSpec)" class="member-name-link">section(CardSpec)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/widgets/FormDef.html#section(org.apache.juneau.console.widgets.FormDef.Section)" class="member-name-link">section(FormDef.Section)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/FormDef.html" title="class in org.apache.juneau.console.widgets">FormDef</a></dt>
 <dd>
 <div class="block">Adds one section, making this a multi-section form.</div>
@@ -104836,6 +105306,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Adds a segment to a segmented item.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#SEGMENT" class="member-name-link">SEGMENT</a> - Static variable in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Grammar of a servable detail key or tab id.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/markdown/MarkdownDocParserSession.html#segmentBySections(java.util.List,int)" class="member-name-link">segmentBySections(List&lt;String&gt;, int)</a> - Method in class org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownDocParserSession.html" title="class in org.apache.juneau.marshall.markdown">MarkdownDocParserSession</a></dt>
 <dd>
 <div class="block">Segments document lines into sections by heading level.</div>
@@ -104942,6 +105416,26 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns this builder as its concrete type.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/freemarker/CardSpec.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.Section.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.Section.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.Section</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#self()" class="member-name-link">self()</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Returns this builder.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RibbonItem.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RibbonItem.html" title="class in org.apache.juneau.console.views">RibbonItem</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/TableSpec.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/http/classic/entity/BasicHttpEntity.html#self()" class="member-name-link">self()</a> - Method in class org.apache.juneau.http.classic.entity.<a href="org/apache/juneau/http/classic/entity/BasicHttpEntity.html" title="class in org.apache.juneau.http.classic.entity">BasicHttpEntity</a></dt>
 <dd>
 <div class="block">Returns this object cast to the self type.</div>
@@ -105631,6 +106125,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#series(java.lang.String,java.lang.String)" class="member-name-link">series(String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RegionDef.html#series(java.lang.String,java.lang.String)" class="member-name-link">series(String, String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
+<dd>
+<div class="block">Adds a plotted series (chart regions only).</div>
+</dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#series(java.lang.String,java.lang.String,int)" class="member-name-link">series(String, String, int)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#series(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">series(String, String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
@@ -113539,6 +114037,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html#%3Cinit%3E()" class="member-name-link">Size()</a> - Constructor for class org.apache.juneau.commons.svl.functions.<a href="org/apache/juneau/commons/svl/functions/JsonFunctions.Size.html" title="class in org.apache.juneau.commons.svl.functions">JsonFunctions.Size</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/PillPalette.html#SIZE" class="member-name-link">SIZE</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/PillPalette.html" title="class in org.apache.juneau.console.views">PillPalette</a></dt>
+<dd>
+<div class="block">The number of palette slots (theme tokens <code>--jc-pill-cat-1-*</code> through <code>--jc-pill-cat-10-*</code>).</div>
+</dd>
 <dt><a href="org/apache/juneau/bct/Sizer.html" class="type-name-link" title="interface in org.apache.juneau.bct">Sizer</a>&lt;<a href="org/apache/juneau/bct/Sizer.html" title="type parameter in Sizer">T</a>&gt; - Interface in <a href="org/apache/juneau/bct/package-summary.html">org.apache.juneau.bct</a></dt>
 <dd>
 <div class="block">Functional interface for computing the size of objects in test assertions.</div>
@@ -113678,6 +114180,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/hocon/HoconTokenizer.html#skipWhitespaceAndCommentsExceptNewlines()" class="member-name-link">skipWhitespaceAndCommentsExceptNewlines()</a> - Method in class org.apache.juneau.marshall.hocon.<a href="org/apache/juneau/marshall/hocon/HoconTokenizer.html" title="class in org.apache.juneau.marshall.hocon">HoconTokenizer</a></dt>
 <dd>
 <div class="block">Skips whitespace and comments but stops at newlines.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/PillPalette.html#slot(java.lang.String)" class="member-name-link">slot(String)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/PillPalette.html" title="class in org.apache.juneau.console.views">PillPalette</a></dt>
+<dd>
+<div class="block">Returns the palette slot for a value.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/ViewsMixin.html#SLOT_CONTRACT_VERSION" class="member-name-link">SLOT_CONTRACT_VERSION</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
 <dd>
@@ -114805,6 +115311,10 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/CardTypeRegistry.html#standard()" class="member-name-link">standard()</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/CardTypeRegistry.html" title="class in org.apache.juneau.console">CardTypeRegistry</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.html#standard()" class="member-name-link">standard()</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.html" title="class in org.apache.juneau.console.views">Ribbons</a></dt>
+<dd>
+<div class="block">Starts the standard preset.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/UuidFormat.html#STANDARD" class="member-name-link">STANDARD</a> - Enum constant in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/UuidFormat.html" title="enum class in org.apache.juneau.marshall">UuidFormat</a></dt>
 <dd>
 <div class="block">8-4-4-4-12 hyphenated form (the default).</div>
@@ -116938,6 +117448,18 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Creates or replaces a subscriber.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/Handled.html#subscribe(java.lang.String,java.lang.String)" class="member-name-link">subscribe(String, String)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Subscribes a named handler to a topic.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/Handled.html#subscribe(java.lang.String,org.apache.juneau.console.HandlerRef)" class="member-name-link">subscribe(String, HandlerRef)</a> - Method in interface org.apache.juneau.console.<a href="org/apache/juneau/console/Handled.html" title="interface in org.apache.juneau.console">Handled</a></dt>
+<dd>
+<div class="block">Subscribes a handler to a topic.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#subscribe(java.lang.String,org.apache.juneau.console.HandlerRef)" class="member-name-link">subscribe(String, HandlerRef)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Subscribes a handler to a bus topic.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/AsyncJob.html#subscriberCount()" class="member-name-link">subscriberCount()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/test/PageContractAssert.html#subscribes(java.lang.String,java.lang.String)" class="member-name-link">subscribes(String, String)</a> - Method in class org.apache.juneau.console.test.<a href="org/apache/juneau/console/test/PageContractAssert.html" title="class in org.apache.juneau.console.test">PageContractAssert</a></dt>
@@ -117743,6 +118265,40 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/commons/svl/functions/ConditionalFunctions.Switch.html#%3Cinit%3E()" class="member-name-link">Switch()</a> - Constructor for class org.apache.juneau.commons.svl.functions.<a href="org/apache/juneau/commons/svl/functions/ConditionalFunctions.Switch.html" title="class in org.apache.juneau.commons.svl.functions">ConditionalFunctions.Switch</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/ConsoleChromeMixin.html#SWITCHER_JS_PATH" class="member-name-link">SWITCHER_JS_PATH</a> - Static variable in class org.apache.juneau.console.<a href="org/apache/juneau/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console">ConsoleChromeMixin</a></dt>
+<dd>
+<div class="block">Context-root-absolute path of the switcher card runtime.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ConsoleChromeMixin.html#SWITCHER_JS_PATH_UNPREFIXED" class="member-name-link">SWITCHER_JS_PATH_UNPREFIXED</a> - Static variable in class org.apache.juneau.console.<a href="org/apache/juneau/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console">ConsoleChromeMixin</a></dt>
+<dd>
+<div class="block"><a href="org/apache/juneau/console/ConsoleChromeMixin.html#SWITCHER_JS_PATH"><code>ConsoleChromeMixin.SWITCHER_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ConsoleChromeMixin.html#SWITCHER_JS_RESOURCE" class="member-name-link">SWITCHER_JS_RESOURCE</a> - Static variable in class org.apache.juneau.console.<a href="org/apache/juneau/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console">ConsoleChromeMixin</a></dt>
+<dd>
+<div class="block">Classpath resource behind <a href="org/apache/juneau/console/ConsoleChromeMixin.html#SWITCHER_JS_PATH"><code>ConsoleChromeMixin.SWITCHER_JS_PATH</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherCardType.html" class="type-name-link" title="class in org.apache.juneau.console.freemarker">SwitcherCardType</a> - Class in <a href="org/apache/juneau/console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></dt>
+<dd>
+<div class="block">The built-in <code>switcher</code> card type: a JSON5 body naming <code>views</code>, each holding one <code>card</code> or a list
+ of <code>sections</code> that each hold a card.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherCardType.html#%3Cinit%3E()" class="member-name-link">SwitcherCardType()</a> - Constructor for class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherCardType.html" title="class in org.apache.juneau.console.freemarker">SwitcherCardType</a></dt>
+<dd>
+<div class="block">Public no-arg constructor, required by <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html" class="type-name-link" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a> - Class in <a href="org/apache/juneau/console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></dt>
+<dd>
+<div class="block">Builder for a <code>switcher</code> card: one card slot that shows one of several named views, each holding one card or a
+ strip of sections that each hold a card.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.Section.html" class="type-name-link" title="class in org.apache.juneau.console.freemarker">SwitcherDef.Section</a> - Class in <a href="org/apache/juneau/console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></dt>
+<dd>
+<div class="block">One section of a switcher view.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.View.html" class="type-name-link" title="class in org.apache.juneau.console.freemarker">SwitcherDef.View</a> - Class in <a href="org/apache/juneau/console/freemarker/package-summary.html">org.apache.juneau.console.freemarker</a></dt>
+<dd>
+<div class="block">One view of a switcher.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/classic/HttpResponses.html#SWITCHING_PROTOCOLS" class="member-name-link">SWITCHING_PROTOCOLS</a> - Static variable in class org.apache.juneau.http.classic.<a href="org/apache/juneau/http/classic/HttpResponses.html" title="class in org.apache.juneau.http.classic">HttpResponses</a></dt>
 <dd>
 <div class="block">A synonym for <a href="org/apache/juneau/http/classic/response/SwitchingProtocols.html#INSTANCE"><code>SwitchingProtocols.INSTANCE</code></a>.</div>
@@ -117808,6 +118364,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/marshall/CurrencyFormat.html#SYMBOL" class="member-name-link">SYMBOL</a> - Enum constant in enum class org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/CurrencyFormat.html" title="enum class in org.apache.juneau.marshall">CurrencyFormat</a></dt>
 <dd>
 <div class="block">Currency symbol per <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Currency.html#getSymbol(java.util.Locale)" title="class or interface in java.util" class="external-link"><code>Currency.getSymbol(Locale)</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/ViewsMixin.html#SYMBOLS_LUCIDE_SVG_PATH" class="member-name-link">SYMBOLS_LUCIDE_SVG_PATH</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
+<dd>
+<div class="block">The URL path at which the Lucide base sprite is served (relative to the host mount).</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/ViewsMixin.html#SYMBOLS_MATERIAL_SVG_PATH" class="member-name-link">SYMBOLS_MATERIAL_SVG_PATH</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/ViewsMixin.html" title="class in org.apache.juneau.console.views">ViewsMixin</a></dt>
 <dd>
@@ -118065,6 +118625,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the <code>&lt;@page tab&gt;</code>-equivalent active-nav path.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/RowDetail.html#tab(org.apache.juneau.console.views.DetailTab)" class="member-name-link">tab(DetailTab)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a></dt>
+<dd>
+<div class="block">Adds a tab.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/CollectionFormat.html#TAB" class="member-name-link">TAB</a> - Enum constant in enum class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/CollectionFormat.html" title="enum class in org.apache.juneau.rest.client">CollectionFormat</a></dt>
 <dd>
 <div class="block">Elements joined with <code>\t</code> (tab) — e.g.</div>
@@ -118094,6 +118658,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.html#table(java.lang.String)" class="member-name-link">table(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a></dt>
 <dd>
 <div class="block">Sets the card id this badge is anchored to.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#table(java.lang.String,org.apache.juneau.console.views.TableSpec)" class="member-name-link">table(String, TableSpec)</a> - Static method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Starts a nested-table tab.</div>
 </dd>
 <dt><a href="org/apache/juneau/commons/svl/Structure.html#table(java.util.List,java.util.List)" class="member-name-link">table(List&lt;String&gt;, List&lt;List&lt;?&gt;&gt;)</a> - Static method in class org.apache.juneau.commons.svl.<a href="org/apache/juneau/commons/svl/Structure.html" title="class in org.apache.juneau.commons.svl">Structure</a></dt>
 <dd>
@@ -118135,6 +118703,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/commons/svl/Structure.Kind.html#TABLE" class="member-name-link">TABLE</a> - Enum constant in enum class org.apache.juneau.commons.svl.<a href="org/apache/juneau/commons/svl/Structure.Kind.html" title="enum class in org.apache.juneau.commons.svl">Structure.Kind</a></dt>
 <dd>
 <div class="block">A table with column headers and rows.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#TABLE" class="member-name-link">TABLE</a> - Enum constant in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
+<dd>
+<div class="block">A nested table scoped to the parent row.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/markdown/MarkdownFormat.html#TABLE" class="member-name-link">TABLE</a> - Enum constant in enum class org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownFormat.html" title="enum class in org.apache.juneau.marshall.markdown">MarkdownFormat</a></dt>
 <dd>
@@ -119970,6 +120542,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Sets the page title.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#title(java.lang.String)" class="member-name-link">title(String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/views/CellPopover.html#title(java.lang.String)" class="member-name-link">title(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/CellPopover.html" title="class in org.apache.juneau.console.views">CellPopover</a></dt>
 <dd>
 <div class="block">Sets the optional dialog title.</div>
@@ -121421,9 +121995,13 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#toCardSpec()" class="member-name-link">toCardSpec()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#toCardSpec()" class="member-name-link">toCardSpec()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
+<dd>
+<div class="block">Builds the <code>switcher</code> card entry.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/Column.html#toCatalogMap()" class="member-name-link">toCatalogMap()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Column.html" title="class in org.apache.juneau.console.views">Column</a></dt>
 <dd>
-<div class="block">Builds this column's catalog entry: <code>key</code> and <code>label</code> plus the display (<code>render</code>,
+<div class="block">Builds this column's catalog entry: <code>key</code> and <code>label</code> (and <code>description</code> when set) plus the display (<code>render</code>,
  <code>href</code>, <code>className</code>, <code>defaultVisible</code>) and search (<code>searchType</code>,
  <code>searchOperators</code>, <code>customOperators</code>) metadata, flattened onto one entry, in the form the
  <code>datatables</code> card type resolves.</div>
@@ -121503,6 +122081,8 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/freemarker/DatatablesCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment(CardSource)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/DatatablesCardType.html" title="class in org.apache.juneau.console.freemarker">DatatablesCardType</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/JobLogCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment(CardSource)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/JobLogCardType.html" title="class in org.apache.juneau.console.freemarker">JobLogCardType</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment(CardSource)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherCardType.html" title="class in org.apache.juneau.console.freemarker">SwitcherCardType</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/TerminalCardType.html#toFragment(org.apache.juneau.console.CardSource)" class="member-name-link">toFragment(CardSource)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/TerminalCardType.html" title="class in org.apache.juneau.console.freemarker">TerminalCardType</a></dt>
 <dd>&nbsp;</dd>
@@ -121677,6 +122257,10 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/Thresholds.html#toJson()" class="member-name-link">toJson()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/Thresholds.html" title="class in org.apache.juneau.console.freemarker">Thresholds</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#toJson()" class="member-name-link">toJson()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>
+<div class="block">Returns the contract JSON form.</div>
+</dd>
 <dt><a href="org/apache/juneau/marshall/collections/JsonList.html#toJson()" class="member-name-link">toJson()</a> - Method in class org.apache.juneau.marshall.collections.<a href="org/apache/juneau/marshall/collections/JsonList.html" title="class in org.apache.juneau.marshall.collections">JsonList</a></dt>
 <dd>
 <div class="block">Serializes this list to a standard JSON string.</div>
@@ -122023,10 +122607,22 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">The <c>contract.dataSources[]</c> entry.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#toMap()" class="member-name-link">toMap()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Serializes to the contract shape.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#toMap()" class="member-name-link">toMap()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Serializes to the contract <code>model</code> object.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/Subscription.html#toMap()" class="member-name-link">toMap()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/Subscription.html" title="class in org.apache.juneau.console">Subscription</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/TopicDecl.html#toMap()" class="member-name-link">toMap()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#toMap()" class="member-name-link">toMap()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Serializes this tab to its wire shape.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/JobLogRegion.html#toMap()" class="member-name-link">toMap()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/JobLogRegion.html" title="class in org.apache.juneau.console.views">JobLogRegion</a></dt>
 <dd>
 <div class="block">Returns the config in canonical key order, so the builder and the console-card path emit the same sidecar.</div>
@@ -122307,6 +122903,14 @@ loadScripts(document, 'script');</script>
 </dd>
 <dt><a href="org/apache/juneau/console/freemarker/Thresholds.html#tone(java.lang.String)" class="member-name-link">tone(String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/Thresholds.html" title="class in org.apache.juneau.console.freemarker">Thresholds</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#tone(java.lang.String)" class="member-name-link">tone(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the tone.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Render.html#tone(java.lang.String,org.apache.juneau.console.widgets.StatusTone)" class="member-name-link">tone(String, StatusTone)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Render.html" title="class in org.apache.juneau.console.views">Render</a></dt>
+<dd>
+<div class="block">Maps one cell value to a status tone on a <code>pill</code> renderer.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.html#tone(org.apache.juneau.console.views.BadgeDef.Tone)" class="member-name-link">tone(BadgeDef.Tone)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a></dt>
 <dd>
 <div class="block">Sets this badge's tone.</div>
@@ -122482,6 +123086,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/widgets/CalendarEvent.html#tooltip" class="member-name-link">tooltip</a> - Variable in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarEvent.html" title="class in org.apache.juneau.console.widgets">CalendarEvent</a></dt>
 <dd>
 <div class="block">Optional tooltip; painted with <code>textContent</code>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ModelAction.html#tooltip(java.lang.String)" class="member-name-link">tooltip(String)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelAction.html" title="class in org.apache.juneau.console">ModelAction</a></dt>
+<dd>
+<div class="block">Sets the tooltip.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/widgets/CalendarEvent.html#tooltip(java.lang.String)" class="member-name-link">tooltip(String)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarEvent.html" title="class in org.apache.juneau.console.widgets">CalendarEvent</a></dt>
 <dd>
@@ -123231,6 +123839,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns a string representation of this record class.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/HandlerRef.html#toString()" class="member-name-link">toString()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HandlerRef.html" title="class in org.apache.juneau.console">HandlerRef</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/views/AsyncJob.html#toString()" class="member-name-link">toString()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/AsyncJob.html" title="class in org.apache.juneau.console.views">AsyncJob</a></dt>
 <dd>
 <div class="block">Returns a description that does <b>not</b> include the capability id.</div>
@@ -124738,6 +125348,8 @@ loadScripts(document, 'script');</script>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/JobLogCardType.html#type()" class="member-name-link">type()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/JobLogCardType.html" title="class in org.apache.juneau.console.freemarker">JobLogCardType</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherCardType.html#type()" class="member-name-link">type()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherCardType.html" title="class in org.apache.juneau.console.freemarker">SwitcherCardType</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/freemarker/TerminalCardType.html#type()" class="member-name-link">type()</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/TerminalCardType.html" title="class in org.apache.juneau.console.freemarker">TerminalCardType</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/HtmlCardType.html#type()" class="member-name-link">type()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/HtmlCardType.html" title="class in org.apache.juneau.console">HtmlCardType</a></dt>
@@ -124931,6 +125543,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/console/views/RegionDef.html#TYPE_CARD_BODY" class="member-name-link">TYPE_CARD_BODY</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
 <dd>
 <div class="block">Wire token for a card-body region.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RegionDef.html#TYPE_CHART" class="member-name-link">TYPE_CHART</a> - Static variable in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
+<dd>
+<div class="block">Wire token for a chart region (drawn by the built-in <code>chart</code> populator).</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/parquet/ParquetSchemaElement.html#TYPE_DOUBLE" class="member-name-link">TYPE_DOUBLE</a> - Static variable in class org.apache.juneau.marshall.parquet.<a href="org/apache/juneau/marshall/parquet/ParquetSchemaElement.html" title="class in org.apache.juneau.marshall.parquet">ParquetSchemaElement</a></dt>
 <dd>
@@ -128599,6 +129215,10 @@ loadScripts(document, 'script');</script>
 <div class="block">Checks the static graph: every <code>dependsOn</code> and provided name is registered, there is no cycle, and no
  VENDOR pack depends on a RUNTIME pack.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/ModelBlock.html#validate()" class="member-name-link">validate()</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></dt>
+<dd>
+<div class="block">Re-checks the whole block.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.html#validate()" class="member-name-link">validate()</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a></dt>
 <dd>
 <div class="block">Validates this definition.</div>
@@ -128701,6 +129321,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Validates the supplied SAML 2.0 <code>&lt;samlp:Response&gt;</code> XML, enforcing bearer
  <code>&lt;SubjectConfirmation&gt;</code> against the given <code>recipient</code> for this call.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#validate(java.lang.String,java.util.Map)" class="member-name-link">validate(String, Map&lt;String, ?&gt;)</a> - Static method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
+<dd>
+<div class="block">Validates a switcher body: the shape the builder emits and the page-contract JSON carries.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/PageContractSchema.html#validate(java.lang.String,java.util.Set)" class="member-name-link">validate(String, Set&lt;String&gt;)</a> - Method in class org.apache.juneau.console.<a href="org/apache/juneau/console/PageContractSchema.html" title="class in org.apache.juneau.console">PageContractSchema</a></dt>
 <dd>
@@ -128906,6 +129530,10 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html#validator(org.apache.juneau.rest.server.auth.TokenValidator)" class="member-name-link">validator(TokenValidator)</a> - Method in class org.apache.juneau.rest.server.auth.oauth.<a href="org/apache/juneau/rest/server/auth/oauth/OAuthFilter.Builder.html" title="class in org.apache.juneau.rest.server.auth.oauth">OAuthFilter.Builder</a></dt>
 <dd>
 <div class="block">Sets the <a href="org/apache/juneau/rest/server/auth/TokenValidator.html" title="interface in org.apache.juneau.rest.server.auth"><code>TokenValidator</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/RowDetailMixin.html#validRowId(java.lang.String)" class="member-name-link">validRowId(String)</a> - Method in interface org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></dt>
+<dd>
+<div class="block">Whether <code>id</code> is a servable row id.</div>
 </dd>
 <dt><a href="org/apache/juneau/BeanTester.html#vals()" class="member-name-link">vals()</a> - Method in class org.apache.juneau.<a href="org/apache/juneau/BeanTester.html" title="class in org.apache.juneau">BeanTester</a></dt>
 <dd>
@@ -129940,6 +130568,14 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Cache.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Cache.html" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
+<dd>
+<div class="block">Returns the enum constant of this class with the specified name.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/FieldFormat.html#valueOf(java.lang.String)" class="member-name-link">valueOf(String)</a> - Static method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/FieldFormat.html" title="enum class in org.apache.juneau.console.views">FieldFormat</a></dt>
 <dd>
 <div class="block">Returns the enum constant of this class with the specified name.</div>
@@ -130547,6 +131183,16 @@ the order they are declared.</div>
 the order they are declared.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.Tone.html#values()" class="member-name-link">values()</a> - Static method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.Tone.html" title="enum class in org.apache.juneau.console.views">BadgeDef.Tone</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Cache.html#values()" class="member-name-link">values()</a> - Static method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Cache.html" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a></dt>
+<dd>
+<div class="block">Returns an array containing the constants of this enum class, in
+the order they are declared.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#values()" class="member-name-link">values()</a> - Static method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
 <dd>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
@@ -131534,6 +132180,10 @@ the order they are declared.</div>
 <dd>
 <div class="block">Sets the <a href="org/apache/juneau/marshall/MarshalledProp.html#view()"><code>MarshalledProp.view()</code></a> property on this annotation.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/freemarker/SwitcherDef.html#view(java.lang.String,java.lang.String,java.util.function.Consumer)" class="member-name-link">view(String, String, Consumer&lt;SwitcherDef.View&gt;)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/SwitcherDef.html" title="class in org.apache.juneau.console.freemarker">SwitcherDef</a></dt>
+<dd>
+<div class="block">Adds a view.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/widgets/CalendarDef.html#view(org.apache.juneau.console.widgets.CalendarDef.CalendarView)" class="member-name-link">view(CalendarDef.CalendarView)</a> - Method in class org.apache.juneau.console.widgets.<a href="org/apache/juneau/console/widgets/CalendarDef.html" title="class in org.apache.juneau.console.widgets">CalendarDef</a></dt>
 <dd>
 <div class="block">Sets the view.</div>
@@ -131685,6 +132335,10 @@ the order they are declared.</div>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.html#visibleWhen(org.apache.juneau.console.views.VisibilityRule...)" class="member-name-link">visibleWhen(VisibilityRule...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.html" title="class in org.apache.juneau.console.views">BadgeDef</a></dt>
 <dd>
 <div class="block">Sets the dynamic-visibility rules gating this badge; all must match (AND).</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.html#visibleWhen(org.apache.juneau.console.views.VisibilityRule...)" class="member-name-link">visibleWhen(VisibilityRule...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.html" title="class in org.apache.juneau.console.views">DetailTab</a></dt>
+<dd>
+<div class="block">Hides the tab unless every rule matches.</div>
 </dd>
 <dt><a href="org/apache/juneau/console/views/RegionDef.Field.html#visibleWhen(org.apache.juneau.console.views.VisibilityRule...)" class="member-name-link">visibleWhen(VisibilityRule...)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.Field.html" title="class in org.apache.juneau.console.views">RegionDef.Field</a></dt>
 <dd>
@@ -132182,6 +132836,14 @@ the order they are declared.</div>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/console/views/BadgeDef.Tone.html#wire()" class="member-name-link">wire()</a> - Method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/BadgeDef.Tone.html" title="enum class in org.apache.juneau.console.views">BadgeDef.Tone</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Cache.html#wire()" class="member-name-link">wire()</a> - Method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Cache.html" title="enum class in org.apache.juneau.console.views">DetailTab.Cache</a></dt>
+<dd>
+<div class="block">Returns the wire token.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/DetailTab.Kind.html#wire()" class="member-name-link">wire()</a> - Method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/DetailTab.Kind.html" title="enum class in org.apache.juneau.console.views">DetailTab.Kind</a></dt>
+<dd>
+<div class="block">Returns the wire token.</div>
+</dd>
 <dt><a href="org/apache/juneau/console/views/FieldFormat.html#wire()" class="member-name-link">wire()</a> - Method in enum class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/FieldFormat.html" title="enum class in org.apache.juneau.console.views">FieldFormat</a></dt>
 <dd>
 <div class="block">Returns the lowercase wire token for this format.</div>
@@ -132304,6 +132966,10 @@ the order they are declared.</div>
 <dt><a href="org/apache/juneau/commons/beanquery/SearchOperatorSet.html#without(java.lang.String)" class="member-name-link">without(String)</a> - Method in class org.apache.juneau.commons.beanquery.<a href="org/apache/juneau/commons/beanquery/SearchOperatorSet.html" title="class in org.apache.juneau.commons.beanquery">SearchOperatorSet</a></dt>
 <dd>
 <div class="block">Returns a copy of this set without the named operator.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/views/Ribbons.Standard.html#without(java.lang.String)" class="member-name-link">without(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/Ribbons.Standard.html" title="class in org.apache.juneau.console.views">Ribbons.Standard</a></dt>
+<dd>
+<div class="block">Drops a preset item or export button by id.</div>
 </dd>
 <dt><a href="org/apache/juneau/terminal/report/TerminalEvent.html#withRawOffset(long)" class="member-name-link">withRawOffset(long)</a> - Method in class org.apache.juneau.terminal.report.<a href="org/apache/juneau/terminal/report/TerminalEvent.html" title="class in org.apache.juneau.terminal.report">TerminalEvent</a></dt>
 <dd>
@@ -133343,6 +134009,10 @@ the order they are declared.</div>
 <dl class="index">
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#x(java.lang.String)" class="member-name-link">x(String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/views/RegionDef.html#x(java.lang.String)" class="member-name-link">x(String)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/RegionDef.html" title="class in org.apache.juneau.console.views">RegionDef</a></dt>
+<dd>
+<div class="block">Sets the record field plotted on the x axis (chart regions only).</div>
+</dd>
 <dt><a href="org/apache/juneau/console/freemarker/ChartDef.html#x(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">x(String, String, String)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/ChartDef.html" title="class in org.apache.juneau.console.freemarker">ChartDef</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/server/filter/CsrfBoundary.ForwardedSource.html#X_FORWARDED" class="member-name-link">X_FORWARDED</a> - Enum constant in enum class org.apache.juneau.rest.server.filter.<a href="org/apache/juneau/rest/server/filter/CsrfBoundary.ForwardedSource.html" title="enum class in org.apache.juneau.rest.server.filter">CsrfBoundary.ForwardedSource</a></dt>

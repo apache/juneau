@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="annotations"><a href="../../commons/bean/BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanType</a>(<a href="../../commons/bean/BeanType.html#properties()">properties</a>="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer")
+<div class="type-signature"><span class="annotations"><a href="../../commons/bean/BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanType</a>(<a href="../../commons/bean/BeanType.html#properties()">properties</a>="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer,href")
 </span><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-119">RowAction</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A per-row action descriptor in the <code>VIEW_META</code> wire contract (the transport-agnostic
@@ -265,43 +265,49 @@ loadScripts(document, 'script');</script>
 <div class="block">Optional form-source URL supplying the action's input fields.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#icon" class="member-name-link">icon</a></code></div>
+<div class="col-second even-row-color"><code><a href="#href" class="member-name-link">href</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">The same-origin path template of a link action (see <a href="#link(java.lang.String,java.lang.String)"><code>link(String,String)</code></a>); <code>{id}</code> and
+ <code>{property}</code> are replaced from the row.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#icon" class="member-name-link">icon</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Optional glyph/icon name (resolved by the shared icon registry).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#id" class="member-name-link">id</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#id" class="member-name-link">id</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">The stable action id (menu-item key; also the submit's logical name).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#label" class="member-name-link">label</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#label" class="member-name-link">label</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">The menu-item text.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#method" class="member-name-link">method</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#method" class="member-name-link">method</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">The non-safe HTTP method wire token (see <a href="RowAction.Method.html#wire()"><code>RowAction.Method.wire()</code></a>).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#onSuccess" class="member-name-link">onSuccess</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#onSuccess" class="member-name-link">onSuccess</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Optional success-behavior hint wire token (see <a href="RowAction.OnSuccess.html#wire()"><code>RowAction.OnSuccess.wire()</code></a>).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#present" class="member-name-link">present</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#present" class="member-name-link">present</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Optional presentation hint wire token (see <a href="RowAction.Present.html#wire()"><code>RowAction.Present.wire()</code></a>).</div>
 </div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#tone" class="member-name-link">tone</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#tone" class="member-name-link">tone</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Optional confirmation tone wire token (see <a href="RowAction.Tone.html#wire()"><code>RowAction.Tone.wire()</code></a>).</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#visibleWhen" class="member-name-link">visibleWhen</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#visibleWhen" class="member-name-link">visibleWhen</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">The rules that must all match for this action to render at all.</div>
 </div>
 </div>
@@ -389,14 +395,25 @@ loadScripts(document, 'script');</script>
 <div class="block">Sets the form-source URL supplying the action's input fields.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#href(java.lang.String)" class="member-name-link">href</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlTemplate)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the glyph/icon name.</div>
+<div class="block">Sets the link target, making this a link action.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#icon(java.lang.String)" class="member-name-link">icon</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the glyph/icon name.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#label(java.lang.String)" class="member-name-link">label</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the menu-item text.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#link(java.lang.String,java.lang.String)" class="member-name-link">link</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlTemplate)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Starts a link action: a header button that navigates to a same-origin page instead of submitting.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#method(org.apache.juneau.console.views.RowAction.Method)" class="member-name-link">method</a><wbr>(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;value)</code></div>
@@ -476,58 +493,66 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="href">
+<h3>href</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-310">href</a></span></div>
+<div class="block">The same-origin path template of a link action (see <a href="#link(java.lang.String,java.lang.String)"><code>link(String,String)</code></a>); <code>{id}</code> and
+ <code>{property}</code> are replaced from the row.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="method">
 <h3>method</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-307">method</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-313">method</a></span></div>
 <div class="block">The non-safe HTTP method wire token (see <a href="RowAction.Method.html#wire()"><code>RowAction.Method.wire()</code></a>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="confirm">
 <h3>confirm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-310">confirm</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-316">confirm</a></span></div>
 <div class="block">Optional confirmation prompt shown before the submit, or literal <jk>false</jk> for none (see <a href="#noConfirm()"><code>noConfirm()</code></a>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="confirmTitle">
 <h3>confirmTitle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-313">confirmTitle</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-319">confirmTitle</a></span></div>
 <div class="block">Optional confirm-dialog title when this action is driven in bulk.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="bulkMode">
 <h3>bulkMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-316">bulkMode</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-322">bulkMode</a></span></div>
 <div class="block">Optional bulk-mode wire token (see <a href="RowAction.BulkMode.html#wire()"><code>RowAction.BulkMode.wire()</code></a>); <jk>null</jk> means <code>perRow</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="form">
 <h3>form</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-319">form</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-325">form</a></span></div>
 <div class="block">Optional form-source URL supplying the action's input fields.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="present">
 <h3>present</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-322">present</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-328">present</a></span></div>
 <div class="block">Optional presentation hint wire token (see <a href="RowAction.Present.html#wire()"><code>RowAction.Present.wire()</code></a>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="onSuccess">
 <h3>onSuccess</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-325">onSuccess</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-331">onSuccess</a></span></div>
 <div class="block">Optional success-behavior hint wire token (see <a href="RowAction.OnSuccess.html#wire()"><code>RowAction.OnSuccess.wire()</code></a>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="enabledWhen">
 <h3>enabledWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RowActionEnabledRule.html" title="class in org.apache.juneau.console.views">RowActionEnabledRule</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-336">enabledWhen</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="RowActionEnabledRule.html" title="class in org.apache.juneau.console.views">RowActionEnabledRule</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-342">enabledWhen</a></span></div>
 <div class="block">The row-state rules that must all match for this action to render enabled.
 
  <p>
@@ -540,7 +565,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-349">visibleWhen</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-355">visibleWhen</a></span></div>
 <div class="block">The rules that must all match for this action to render at all.  <jk>null</jk> or empty means always visible.
 
  <p>
@@ -555,21 +580,21 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tone">
 <h3>tone</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-352">tone</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-358">tone</a></span></div>
 <div class="block">Optional confirmation tone wire token (see <a href="RowAction.Tone.html#wire()"><code>RowAction.Tone.wire()</code></a>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="confirmLabel">
 <h3>confirmLabel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-355">confirmLabel</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-361">confirmLabel</a></span></div>
 <div class="block">Optional text of the confirm button; <jk>null</jk> means the action's <a href="#label"><code>label</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="confirmRenderer">
 <h3>confirmRenderer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-358">confirmRenderer</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-364">confirmRenderer</a></span></div>
 <div class="block">Optional name of a confirm renderer registered with the client runtime; <jk>null</jk> means the built-in modal.</div>
 </section>
 </li>
@@ -598,7 +623,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(java.lang.String)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-367">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-373">create</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <div class="block">Starts a new <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a> with the specified stable action id.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -611,9 +636,45 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="link(java.lang.String,java.lang.String)">
+<h3>link</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-393">link</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlTemplate)</span></div>
+<div class="block">Starts a link action: a header button that navigates to a same-origin page instead of submitting.
+
+ <p>
+ A link action has no endpoint, method, form or confirmation.  Row menus ignore it; it shows in a tabbed row
+ detail's header.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - The stable action id.  Must not be blank.</dd>
+<dd><code>urlTemplate</code> - A same-origin path template; <code>{id}</code> and <code>{property}</code> are replaced from the row.</dd>
+<dt>Returns:</dt>
+<dd>A new link <a href="RowAction.html" title="class in org.apache.juneau.console.views"><code>RowAction</code></a>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If <code>id</code> is blank or the template is not a same-origin path.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="href(java.lang.String)">
+<h3>href</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-404">href</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;urlTemplate)</span></div>
+<div class="block">Sets the link target, making this a link action.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>urlTemplate</code> - A same-origin path template starting with <code>/</code>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - If the template is not a same-origin path.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="label(java.lang.String)">
 <h3>label</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-381">label</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-429">label</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the menu-item text.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -626,7 +687,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="icon(java.lang.String)">
 <h3>icon</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-392">icon</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-440">icon</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the glyph/icon name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -639,7 +700,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="endpoint(java.lang.String)">
 <h3>endpoint</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-433">endpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-481">endpoint</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the URL this action submits to.
 
  <p>
@@ -682,7 +743,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="method(org.apache.juneau.console.views.RowAction.Method)">
 <h3>method</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-448">method</a></span><wbr><span class="parameters">(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-496">method</a></span><wbr><span class="parameters">(<a href="RowAction.Method.html" title="enum class in org.apache.juneau.console.views">RowAction.Method</a>&nbsp;value)</span></div>
 <div class="block">Sets the non-safe HTTP method this action submits with.
 
  <p>
@@ -699,7 +760,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="confirm(java.lang.String)">
 <h3>confirm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-470">confirm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-518">confirm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the confirmation prompt shown before the submit.
 
  <p>
@@ -723,7 +784,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bulkMode(org.apache.juneau.console.views.RowAction.BulkMode)">
 <h3>bulkMode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-483">bulkMode</a></span><wbr><span class="parameters">(<a href="RowAction.BulkMode.html" title="enum class in org.apache.juneau.console.views">RowAction.BulkMode</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-531">bulkMode</a></span><wbr><span class="parameters">(<a href="RowAction.BulkMode.html" title="enum class in org.apache.juneau.console.views">RowAction.BulkMode</a>&nbsp;value)</span></div>
 <div class="block">Sets how this action behaves when driven from a bulk-mutate toolbar: one call per selected row
  (<a href="RowAction.BulkMode.html#PER_ROW"><code>RowAction.BulkMode.PER_ROW</code></a>, the default) or a single call carrying every selected id
  (<a href="RowAction.BulkMode.html#AGGREGATE"><code>RowAction.BulkMode.AGGREGATE</code></a>).</div>
@@ -738,7 +799,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="confirmTitle(java.lang.String)">
 <h3>confirmTitle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-494">confirmTitle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-542">confirmTitle</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the confirm dialog's title when this action is driven in bulk (e.g. <code>"Abort {count} pending changes"</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -751,7 +812,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="noConfirm()">
 <h3>noConfirm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-505">noConfirm</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-553">noConfirm</a></span>()</div>
 <div class="block">Marks this action as never requiring a confirm dialog, in bulk or otherwise &mdash; writes a literal
  <jk>false</jk> onto the same <a href="#confirm"><code>confirm</code></a> wire key a confirm message would otherwise occupy.</div>
 <dl class="notes">
@@ -763,7 +824,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="form(java.lang.String)">
 <h3>form</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-543">form</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-591">form</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the form-source URL supplying the action's input fields.
 
  <p>
@@ -803,7 +864,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="present(org.apache.juneau.console.views.RowAction.Present)">
 <h3>present</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-554">present</a></span><wbr><span class="parameters">(<a href="RowAction.Present.html" title="enum class in org.apache.juneau.console.views">RowAction.Present</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-602">present</a></span><wbr><span class="parameters">(<a href="RowAction.Present.html" title="enum class in org.apache.juneau.console.views">RowAction.Present</a>&nbsp;value)</span></div>
 <div class="block">Sets the presentation hint.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -816,7 +877,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="onSuccess(org.apache.juneau.console.views.RowAction.OnSuccess)">
 <h3>onSuccess</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-565">onSuccess</a></span><wbr><span class="parameters">(<a href="RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-613">onSuccess</a></span><wbr><span class="parameters">(<a href="RowAction.OnSuccess.html" title="enum class in org.apache.juneau.console.views">RowAction.OnSuccess</a>&nbsp;value)</span></div>
 <div class="block">Sets the success-behavior hint.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -829,7 +890,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enabledWhen(java.lang.String,org.apache.juneau.console.widgets.Op,java.lang.Object,java.lang.String)">
 <h3>enabledWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-588">enabledWhen</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-636">enabledWhen</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
  <a href="../widgets/Op.html" title="enum class in org.apache.juneau.console.widgets">Op</a>&nbsp;op,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
@@ -857,7 +918,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enabledWhen(java.lang.String,org.apache.juneau.console.widgets.Op,java.lang.String)">
 <h3>enabledWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-605">enabledWhen</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-653">enabledWhen</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;field,
  <a href="../widgets/Op.html" title="enum class in org.apache.juneau.console.widgets">Op</a>&nbsp;op,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;reason)</span></div>
 <div class="block">Gates this action on the presence or absence of a row field.
@@ -879,7 +940,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen(org.apache.juneau.console.views.VisibilityRule...)">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-622">visibleWhen</a></span><wbr><span class="parameters">(<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-670">visibleWhen</a></span><wbr><span class="parameters">(<a href="VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
 <div class="block">Hides this action, per row, unless every rule matches (see <a href="#visibleWhen"><code>visibleWhen</code></a> for the semantics).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -892,7 +953,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="tone(org.apache.juneau.console.views.RowAction.Tone)">
 <h3>tone</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-633">tone</a></span><wbr><span class="parameters">(<a href="RowAction.Tone.html" title="enum class in org.apache.juneau.console.views">RowAction.Tone</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-681">tone</a></span><wbr><span class="parameters">(<a href="RowAction.Tone.html" title="enum class in org.apache.juneau.console.views">RowAction.Tone</a>&nbsp;value)</span></div>
 <div class="block">Sets the confirmation tone.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -905,7 +966,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="confirmLabel(java.lang.String)">
 <h3>confirmLabel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-644">confirmLabel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-692">confirmLabel</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the text of the confirm button.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -918,7 +979,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="confirmRenderer(java.lang.String)">
 <h3>confirmRenderer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-663">confirmRenderer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="RowAction.html" title="class in org.apache.juneau.console.views">RowAction</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/views/RowAction.html#line-711">confirmRenderer</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the name of the confirm renderer to use for this action's confirmation.
 
  <p>

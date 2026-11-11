@@ -228,33 +228,38 @@ loadScripts(document, 'script');</script>
 <div class="block">The built-in jQuery WebJar pack.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#PACK_TERMINAL" class="member-name-link">PACK_TERMINAL</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PACK_SWITCHER" class="member-name-link">PACK_SWITCHER</a></code></div>
 <div class="col-last odd-row-color">
-<div class="block">The built-in terminal runtime pack; depends on <code>"views"</code> and <code>"xterm"</code>.</div>
+<div class="block">The switcher card runtime (<code>juneau-switcher.js</code>); depends on the views pack.</div>
 </div>
 <div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#PACK_VIEWS" class="member-name-link">PACK_VIEWS</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PACK_TERMINAL" class="member-name-link">PACK_TERMINAL</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">The built-in views runtime pack.</div>
+<div class="block">The built-in terminal runtime pack; depends on <code>"views"</code> and <code>"xterm"</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#PACK_XTERM" class="member-name-link">PACK_XTERM</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#PACK_VIEWS" class="member-name-link">PACK_VIEWS</a></code></div>
 <div class="col-last odd-row-color">
+<div class="block">The built-in views runtime pack.</div>
+</div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PACK_XTERM" class="member-name-link">PACK_XTERM</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">The built-in xterm.js WebJar pack (library plus stylesheet).</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></code></div>
-<div class="col-second even-row-color"><code><a href="#VIEWS_RESOLVER" class="member-name-link">VIEWS_RESOLVER</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static final <a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#VIEWS_RESOLVER" class="member-name-link">VIEWS_RESOLVER</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">The default resolver: <a href="../views/ViewsMixin.html#viewAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)"><code>ViewsMixin.viewAssetUrl(RestRequest, String)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#WEBJAR_RESOLVER" class="member-name-link">WEBJAR_RESOLVER</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code>static final <a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></code></div>
+<div class="col-second even-row-color"><code><a href="#WEBJAR_RESOLVER" class="member-name-link">WEBJAR_RESOLVER</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">The WebJar resolver: paths are <a href="../../rest/server/staticfile/WebJarResolver.html#asset(java.lang.String,java.lang.String,java.lang.String)"><code>WebJarResolver.asset(String, String, String)</code></a> ids.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></code></div>
-<div class="col-second even-row-color"><code><a href="#WIDGETS_RESOLVER" class="member-name-link">WIDGETS_RESOLVER</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code>static final <a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#WIDGETS_RESOLVER" class="member-name-link">WIDGETS_RESOLVER</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">The <code>"calendar"</code> pack resolver: <a href="../widgets/WidgetsMixin.html#widgetAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)"><code>WidgetsMixin.widgetAssetUrl(RestRequest, String)</code></a>.</div>
 </div>
 </div>
@@ -514,9 +519,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="PACK_SWITCHER">
+<h3>PACK_SWITCHER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-125">PACK_SWITCHER</a></span></div>
+<div class="block">The switcher card runtime (<code>juneau-switcher.js</code>); depends on the views pack.</div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="see-list">
+<li><a href="../../../../../constant-values.html#org.apache.juneau.console.freemarker.ToolkitPackRegistry.PACK_SWITCHER">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="PACK_ECHARTS">
 <h3>PACK_ECHARTS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-125">PACK_ECHARTS</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-128">PACK_ECHARTS</a></span></div>
 <div class="block">The built-in ECharts WebJar pack (<code>org.webjars.npm:echarts</code>, optional on the classpath).</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -531,7 +551,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="PACK_ECHARTS_GL">
 <h3>PACK_ECHARTS_GL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-128">PACK_ECHARTS_GL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-131">PACK_ECHARTS_GL</a></span></div>
 <div class="block">The built-in echarts-gl WebJar pack; depends on <code>"echarts"</code>; never required by a card type.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -546,7 +566,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="PACK_DATA">
 <h3>PACK_DATA</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-131">PACK_DATA</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-134">PACK_DATA</a></span></div>
 <div class="block">The built-in DataRegistry runtime pack (<code>juneau-data.js</code>); depends on <code>"views"</code>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -561,35 +581,35 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ECHARTS_JS_ASSET">
 <h3>ECHARTS_JS_ASSET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-136">ECHARTS_JS_ASSET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-139">ECHARTS_JS_ASSET</a></span></div>
 <div class="block">The ECharts library asset id, for <a href="#WEBJAR_RESOLVER"><code>WEBJAR_RESOLVER</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ECHARTS_GL_JS_ASSET">
 <h3>ECHARTS_GL_JS_ASSET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-139">ECHARTS_GL_JS_ASSET</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-142">ECHARTS_GL_JS_ASSET</a></span></div>
 <div class="block">The echarts-gl library asset id (path unverified against the WebJar; no module depends on it).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="VIEWS_RESOLVER">
 <h3>VIEWS_RESOLVER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-161">VIEWS_RESOLVER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-164">VIEWS_RESOLVER</a></span></div>
 <div class="block">The default resolver: <a href="../views/ViewsMixin.html#viewAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)"><code>ViewsMixin.viewAssetUrl(RestRequest, String)</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="WIDGETS_RESOLVER">
 <h3>WIDGETS_RESOLVER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-164">WIDGETS_RESOLVER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-167">WIDGETS_RESOLVER</a></span></div>
 <div class="block">The <code>"calendar"</code> pack resolver: <a href="../widgets/WidgetsMixin.html#widgetAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)"><code>WidgetsMixin.widgetAssetUrl(RestRequest, String)</code></a>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="WEBJAR_RESOLVER">
 <h3>WEBJAR_RESOLVER</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-167">WEBJAR_RESOLVER</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.AssetUrlResolver.html" title="interface in org.apache.juneau.console.freemarker">ToolkitPackRegistry.AssetUrlResolver</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-170">WEBJAR_RESOLVER</a></span></div>
 <div class="block">The WebJar resolver: paths are <a href="../../rest/server/staticfile/WebJarResolver.html#asset(java.lang.String,java.lang.String,java.lang.String)"><code>WebJarResolver.asset(String, String, String)</code></a> ids.</div>
 </section>
 </li>
@@ -604,7 +624,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ToolkitPackRegistry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-186">ToolkitPackRegistry</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-189">ToolkitPackRegistry</a></span>()</div>
 <div class="block">Constructs the registry with the built-in packs installed.</div>
 </section>
 </li>
@@ -619,7 +639,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="register(org.apache.juneau.console.freemarker.ToolkitPack)">
 <h3>register</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-268">register</a></span><wbr><span class="parameters">(<a href="ToolkitPack.html" title="class in org.apache.juneau.console.freemarker">ToolkitPack</a>&nbsp;pack)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-276">register</a></span><wbr><span class="parameters">(<a href="ToolkitPack.html" title="class in org.apache.juneau.console.freemarker">ToolkitPack</a>&nbsp;pack)</span></div>
 <div class="block">Registers a pack, replacing any pack with the same name (all of its fields, including <code>dependsOn</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -630,7 +650,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="provide(java.util.Collection)">
 <h3>provide</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-278">provide</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-286">provide</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names)</span></div>
 <div class="block">Marks packs as already loaded by the app: they contribute no URLs, but their dependencies still load.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -643,7 +663,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="contains(java.lang.String)">
 <h3>contains</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-287">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-295">contains</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>name</code> - A pack name.</dd>
@@ -655,7 +675,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="validate()">
 <h3>validate</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-298">validate</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-306">validate</a></span>()</div>
 <div class="block">Checks the static graph: every <code>dependsOn</code> and provided name is registered, there is no cycle, and no
  VENDOR pack depends on a RUNTIME pack.</div>
 <dl class="notes">
@@ -669,7 +689,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="requireKnown(java.util.Collection,java.lang.String)">
 <h3>requireKnown</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-322">requireKnown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-330">requireKnown</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;source)</span></div>
 <div class="block">Checks that every name is a registered pack.</div>
 <dl class="notes">
@@ -684,7 +704,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="reaches(java.lang.String,java.lang.String)">
 <h3>reaches</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-333">reaches</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;root,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-341">reaches</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;root,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;target)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -698,7 +718,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="checkWebJars(java.util.Collection)">
 <h3>checkWebJars</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-345">checkWebJars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roots)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-353">checkWebJars</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;roots)</span></div>
 <div class="block">Probes, at startup, every WebJar the given packs reach: each non-provided VENDOR pack resolved through
  <a href="#WEBJAR_RESOLVER"><code>WEBJAR_RESOLVER</code></a>.</div>
 <dl class="notes">
@@ -714,7 +734,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="resolve(java.util.List,org.apache.juneau.rest.server.RestRequest,java.util.List,java.lang.String)">
 <h3>resolve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.Resolved.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry.Resolved</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-401">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ToolkitPackRegistry.Resolved.html" title="class in org.apache.juneau.console.freemarker">ToolkitPackRegistry.Resolved</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/ToolkitPackRegistry.html#line-409">resolve</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names,
  <a href="../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;pageUrls,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;template)</span></div>

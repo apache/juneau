@@ -77,9 +77,14 @@ loadScripts(document, 'script');</script>
 <div class="inheritance">org.apache.juneau.console.freemarker.CardSpec</div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-40">CardSpec</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
+implements <a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</span></div>
 <div class="block">Type-agnostic card entry in the page contract: <code>id</code>, <code>type</code>, optional <code>src</code>,
  <code>title</code>, <code>template</code>, plus a type-specific body map. C2 extends the card grammar.
 
@@ -127,18 +132,28 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#modelBlock()" class="member-name-link">modelBlock</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the element's model block.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.String,java.lang.String)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#publishes(org.apache.juneau.console.TopicDecl...)" class="member-name-link">publishes</a><wbr>(<a href="../TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a>...&nbsp;v)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#publishes(org.apache.juneau.console.TopicDecl...)" class="member-name-link">publishes</a><wbr>(<a href="../TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a>...&nbsp;v)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Declares custom topics this card's JS publishes; repeatable, appends.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sanitize(boolean)" class="member-name-link">sanitize</a><wbr>(boolean&nbsp;v)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sanitize(boolean)" class="member-name-link">sanitize</a><wbr>(boolean&nbsp;v)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#self()" class="member-name-link">self</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns this builder.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#src(java.lang.String)" class="member-name-link">src</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -170,6 +185,9 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-org.apache.juneau.console.Handled">Methods inherited from interface&nbsp;org.apache.juneau.console.<a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a></h3>
+<code><a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String)">action</a>, <a href="../Handled.html#action(java.lang.String,java.lang.String,java.lang.String,java.util.Map)">action</a>, <a href="../Handled.html#action(org.apache.juneau.console.ModelAction)">action</a>, <a href="../Handled.html#on(java.lang.String,java.lang.String)">on</a>, <a href="../Handled.html#on(java.lang.String,org.apache.juneau.console.HandlerRef)">on</a>, <a href="../Handled.html#subscribe(java.lang.String,java.lang.String)">subscribe</a>, <a href="../Handled.html#subscribe(java.lang.String,org.apache.juneau.console.HandlerRef)">subscribe</a></code></div>
 </section>
 </li>
 </ul>
@@ -182,9 +200,37 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="modelBlock()">
+<h3>modelBlock</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../ModelBlock.html" title="class in org.apache.juneau.console">ModelBlock</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-65">modelBlock</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#modelBlock()">Handled</a></code></span></div>
+<div class="block">Returns the element's model block.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../Handled.html#modelBlock()">modelBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>The block; never <jk>null</jk>.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="self()">
+<h3>self</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-68">self</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../Handled.html#self()">Handled</a></code></span></div>
+<div class="block">Returns this builder.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../Handled.html#self()">self</a></code>&nbsp;in interface&nbsp;<code><a href="../Handled.html" title="interface in org.apache.juneau.console">Handled</a>&lt;<a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a>&gt;</code></dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="html(java.lang.String)">
 <h3>html</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-64">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-72">html</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>id</code> - The card id. @return A new <code>html</code> card.</dd>
@@ -194,7 +240,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-69">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-77">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -205,7 +251,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="title(java.lang.String)">
 <h3>title</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-74">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-82">title</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>v</code> - The card title. @return This object.</dd>
@@ -215,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="src(java.lang.String)">
 <h3>src</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-77">src</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-85">src</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>v</code> - A same-origin URL the card loads. @return This object.</dd>
@@ -225,7 +271,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="template(java.lang.String)">
 <h3>template</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-80">template</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;templateId)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-88">template</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;templateId)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>templateId</code> - The id of a <code>&lt;template data-card&gt;</code> element. @return This object.</dd>
@@ -235,7 +281,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bare(boolean)">
 <h3>bare</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-89">bare</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-97">bare</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>v</code> - Whether the card drops its chrome: an html card is inserted with no wrapper element, any other type keeps a
@@ -249,7 +295,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="sanitize(boolean)">
 <h3>sanitize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-106">sanitize</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-114">sanitize</a></span><wbr><span class="parameters">(boolean&nbsp;v)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>v</code> - Whether an html card's fetched <code>src</code> fragment is rebuilt through the views attribute-allowlist sanitizer instead of being inserted as-is. @return This object.</dd>
@@ -259,7 +305,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cssClass(java.lang.String)">
 <h3>cssClass</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-112">cssClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-120">cssClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;v)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>v</code> - Space-separated CSS class names stamped on the card wrapper element. @return This object.</dd>
@@ -269,7 +315,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="body(java.lang.String,java.lang.Object)">
 <h3>body</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-115">body</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-123">body</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -280,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="publishes(org.apache.juneau.console.TopicDecl...)">
 <h3>publishes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-128">publishes</a></span><wbr><span class="parameters">(<a href="../TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a>...&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-136">publishes</a></span><wbr><span class="parameters">(<a href="../TopicDecl.html" title="class in org.apache.juneau.console">TopicDecl</a>...&nbsp;v)</span></div>
 <div class="block">Declares custom topics this card's JS publishes; repeatable, appends.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -293,7 +339,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="visibleWhen(org.apache.juneau.console.views.VisibilityRule...)">
 <h3>visibleWhen</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-140">visibleWhen</a></span><wbr><span class="parameters">(<a href="../views/VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-148">visibleWhen</a></span><wbr><span class="parameters">(<a href="../views/VisibilityRule.html" title="class in org.apache.juneau.console.views">VisibilityRule</a>...&nbsp;rules)</span></div>
 <div class="block">Sets card-level visibility rules.  The client evaluates them against the page's facts; this only serializes them.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -306,7 +352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="subscribes(org.apache.juneau.console.Subscription...)">
 <h3>subscribes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-153">subscribes</a></span><wbr><span class="parameters">(<a href="../Subscription.html" title="class in org.apache.juneau.console">Subscription</a>...&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="CardSpec.html" title="class in org.apache.juneau.console.freemarker">CardSpec</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-161">subscribes</a></span><wbr><span class="parameters">(<a href="../Subscription.html" title="class in org.apache.juneau.console">Subscription</a>...&nbsp;v)</span></div>
 <div class="block">Wires topics to roles this card's type implements; repeatable, appends.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -319,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="id()">
 <h3>id</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-160">id</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-168">id</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The id.</dd>
@@ -329,7 +375,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="type()">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-163">type</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-171">type</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The type.</dd>
@@ -339,7 +385,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="bodyMap()">
 <h3>bodyMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-216">bodyMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-225">bodyMap</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>An unmodifiable copy of the type-specific body fields, in insertion order.</dd>
@@ -349,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toMap()">
 <h3>toMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-219">toMap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/freemarker/CardSpec.html#line-228">toMap</a></span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The contract entry, common fields first.</dd>

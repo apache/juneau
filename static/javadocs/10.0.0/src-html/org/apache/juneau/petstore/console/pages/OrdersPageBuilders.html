@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44">    * @return The page spec.</span>
 <span class="source-line-no">045</span><span id="line-45">    */</span>
 <span class="source-line-no">046</span><span id="line-46">   public static PageSpec orders() {</span>
-<span class="source-line-no">047</span><span id="line-47">      return PageSpec.create().tab("orders").toolkit("views")</span>
+<span class="source-line-no">047</span><span id="line-47">      return PageSpec.create().tab("orders").toolkit("views", "datatables-buttons", "datatables-export")</span>
 <span class="source-line-no">048</span><span id="line-48">         .table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query").urlState("day", "window")</span>
 <span class="source-line-no">049</span><span id="line-49">            .columnConfig(Map.of("tabs", List.of("columns", "sort")))</span>
 <span class="source-line-no">050</span><span id="line-50">            .defaultOrder("id", Sort.ASC)</span>
@@ -65,30 +65,29 @@
 <span class="source-line-no">052</span><span id="line-52">               Column.create("id").label("Id"),</span>
 <span class="source-line-no">053</span><span id="line-53">               Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),</span>
 <span class="source-line-no">054</span><span id="line-54">               Column.create("shipDate").label("Ship date").render("date"),</span>
-<span class="source-line-no">055</span><span id="line-55">               Column.create("status").label("Status").render("pill"))</span>
-<span class="source-line-no">056</span><span id="line-56">            .ribbon(</span>
-<span class="source-line-no">057</span><span id="line-57">               RibbonItem.optionGroup("status",</span>
-<span class="source-line-no">058</span><span id="line-58">                  RibbonItem.option("placed").title("Placed").column("status").value("$eq(PLACED)"),</span>
-<span class="source-line-no">059</span><span id="line-59">                  RibbonItem.option("approved").title("Approved").column("status").value("$eq(APPROVED)"),</span>
-<span class="source-line-no">060</span><span id="line-60">                  RibbonItem.option("delivered").title("Delivered").column("status").value("$eq(DELIVERED)"))</span>
-<span class="source-line-no">061</span><span id="line-61">                  .title("Order status").deselectable(true).group("filter"),</span>
-<span class="source-line-no">062</span><span id="line-62">               RibbonItem.dialog("new-order").title("+ New order").symbol("plus")</span>
-<span class="source-line-no">063</span><span id="line-63">                  .form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW).group("entity"),</span>
-<span class="source-line-no">064</span><span id="line-64">               RibbonItem.export("copy", "csv").optional("excel", "pdf").group("viewing"),</span>
-<span class="source-line-no">065</span><span id="line-65">               RibbonItem.resetDefaults().group("page"),</span>
-<span class="source-line-no">066</span><span id="line-66">               RibbonItem.refresh())</span>
-<span class="source-line-no">067</span><span id="line-67">            .rowActions(</span>
-<span class="source-line-no">068</span><span id="line-68">               RowAction.create("approve").label("Approve").endpoint("/console/orders/{id}/approve").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
-<span class="source-line-no">069</span><span id="line-69">                  .visibleWhen(VisibilityRule.when("status").eq("PLACED")),</span>
-<span class="source-line-no">070</span><span id="line-70">               RowAction.create("deliver").label("Deliver").endpoint("/console/orders/{id}/deliver").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
-<span class="source-line-no">071</span><span id="line-71">                  .visibleWhen(VisibilityRule.when("status").eq("APPROVED")),</span>
-<span class="source-line-no">072</span><span id="line-72">               RowAction.create("cancel").label("Cancel").form("/console/orders/{id}/cancel-form").present(Present.DIALOG)</span>
-<span class="source-line-no">073</span><span id="line-73">                  .endpoint("/console/orders/{id}").method(Method.DELETE).onSuccess(OnSuccess.REDRAW),</span>
-<span class="source-line-no">074</span><span id="line-74">               RowAction.create("delete").label("Delete").endpoint("/console/orders/{id}").method(Method.DELETE)</span>
-<span class="source-line-no">075</span><span id="line-75">                  .confirm("Delete order '{id}'?").confirmLabel("Delete").tone(Tone.DANGER).confirmRenderer("typed").onSuccess(OnSuccess.REDRAW)),</span>
-<span class="source-line-no">076</span><span id="line-76">            "Orders");</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78">}</span>
+<span class="source-line-no">055</span><span id="line-55">               Column.create("status").label("Status").render(PillRenders.orderStatus()))</span>
+<span class="source-line-no">056</span><span id="line-56">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">057</span><span id="line-57">               .create(RibbonItem.dialog("new-order").title("+ New order").symbol("plus")</span>
+<span class="source-line-no">058</span><span id="line-58">                  .form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
+<span class="source-line-no">059</span><span id="line-59">               .filter(RibbonItem.optionGroup("status",</span>
+<span class="source-line-no">060</span><span id="line-60">                  RibbonItem.option("placed").title("Placed").symbol("shopping_cart").column("status").value("$eq(PLACED)"),</span>
+<span class="source-line-no">061</span><span id="line-61">                  RibbonItem.option("approved").title("Approved").symbol("badge_check").column("status").value("$eq(APPROVED)"),</span>
+<span class="source-line-no">062</span><span id="line-62">                  RibbonItem.option("delivered").title("Delivered").symbol("truck").column("status").value("$eq(DELIVERED)"))</span>
+<span class="source-line-no">063</span><span id="line-63">                  .title("Order status").deselectable(true))</span>
+<span class="source-line-no">064</span><span id="line-64">               .export("excel", "pdf")</span>
+<span class="source-line-no">065</span><span id="line-65">               .build())</span>
+<span class="source-line-no">066</span><span id="line-66">            .rowActions(</span>
+<span class="source-line-no">067</span><span id="line-67">               RowAction.create("approve").label("Approve").endpoint("/console/orders/{id}/approve").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
+<span class="source-line-no">068</span><span id="line-68">                  .visibleWhen(VisibilityRule.when("status").eq("PLACED")),</span>
+<span class="source-line-no">069</span><span id="line-69">               RowAction.create("deliver").label("Deliver").endpoint("/console/orders/{id}/deliver").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
+<span class="source-line-no">070</span><span id="line-70">                  .visibleWhen(VisibilityRule.when("status").eq("APPROVED")),</span>
+<span class="source-line-no">071</span><span id="line-71">               RowAction.create("cancel").label("Cancel").form("/console/orders/{id}/cancel-form").present(Present.DIALOG)</span>
+<span class="source-line-no">072</span><span id="line-72">                  .endpoint("/console/orders/{id}").method(Method.DELETE).onSuccess(OnSuccess.REDRAW),</span>
+<span class="source-line-no">073</span><span id="line-73">               RowAction.create("delete").label("Delete").endpoint("/console/orders/{id}").method(Method.DELETE)</span>
+<span class="source-line-no">074</span><span id="line-74">                  .confirm("Delete order '{id}'?").confirmLabel("Delete").tone(Tone.DANGER).confirmRenderer("typed").onSuccess(OnSuccess.REDRAW)),</span>
+<span class="source-line-no">075</span><span id="line-75">            "Orders");</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77">}</span>
 
 
 

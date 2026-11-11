@@ -75,8 +75,13 @@ loadScripts(document, 'script');</script>
  <code>#juneau-page</code> contract of a rendered page instead of on rendered chrome HTML, and
  <a href="test/AssetResolutionAssert.html" title="class in org.apache.juneau.console.test"><code>AssetResolutionAssert</code></a> asserts that every asset a page links resolves.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.console.views">org.apache.juneau.console.views</a></div>
 <div class="col-last odd-row-color">
+<div class="block">A typed, declarative "rich DataTables view" toolkit that serializes to the frozen <code>VIEW_META</code> JSON wire
+ contract consumed by the first-party client runtime.</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.petstore.console.dev">org.apache.juneau.petstore.console.dev</a></div>
+<div class="col-last even-row-color">
 <div class="block">Petstore console Developer pages: custom cards, themes, rendering flavors and the secure API demo.</div>
 </div>
 </div>
@@ -129,34 +134,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">The two head insertion points for a colour-scheme-aware page.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/PageContractSchema.html#org.apache.juneau.console">PageContractSchema</a></div>
+<div class="col-first even-row-color"><a href="class-use/HandlerRef.html#org.apache.juneau.console">HandlerRef</a></div>
 <div class="col-last even-row-color">
+<div class="block">A reference to a client-side handler: a registered name or an opt-in inline body.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ModelAction.html#org.apache.juneau.console">ModelAction</a></div>
+<div class="col-last odd-row-color">
+<div class="block">A click-triggered action on an element: an icon button that calls a handler.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ModelBlock.html#org.apache.juneau.console">ModelBlock</a></div>
+<div class="col-last even-row-color">
+<div class="block">The model block of one element: handler actions, lifecycle bindings and handler subscriptions.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/PageContractSchema.html#org.apache.juneau.console">PageContractSchema</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Loads <code>juneau-page.schema.json</code> from the classpath and validates contracts against it, plus
  the cross-reference rules R-1..R-4 the schema cannot express.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Subscription.html#org.apache.juneau.console">Subscription</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Subscription.html#org.apache.juneau.console">Subscription</a></div>
+<div class="col-last even-row-color">
 <div class="block">One entry of a card's <code>subscribes</code> list: a concrete topic wired to a role the card type implements.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Subscription.WhenEmpty.html#org.apache.juneau.console">Subscription.WhenEmpty</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Subscription.WhenEmpty.html#org.apache.juneau.console">Subscription.WhenEmpty</a></div>
+<div class="col-last odd-row-color">
 <div class="block">What a subscriber does when the payload is cleared or a mapped path is missing.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/Theme.html#org.apache.juneau.console">Theme</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/Theme.html#org.apache.juneau.console">Theme</a></div>
+<div class="col-last even-row-color">
 <div class="block">The validated token model behind the console's FTL <code>&lt;@theme&gt;</code>/<code>&lt;@token&gt;</code> directives: an immutable theme
  name, an ordered map of leaf tokens (literals) and an ordered map of alias tokens (live <code>var()</code> references).</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/Theme.Builder.html#org.apache.juneau.console">Theme.Builder</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/Theme.Builder.html#org.apache.juneau.console">Theme.Builder</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Builder for <a href="Theme.html" title="class in org.apache.juneau.console"><code>Theme</code></a>.</div>
 </div>
-<div class="col-first odd-row-color"><a href="class-use/TopicDecl.html#org.apache.juneau.console">TopicDecl</a></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><a href="class-use/TopicDecl.html#org.apache.juneau.console">TopicDecl</a></div>
+<div class="col-last even-row-color">
 <div class="block">A custom topic declaration, for a card's <code>publishes</code> or the page's top-level <code>topics</code>.</div>
 </div>
-<div class="col-first even-row-color"><a href="class-use/TopicDecl.Publisher.html#org.apache.juneau.console">TopicDecl.Publisher</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="class-use/TopicDecl.Publisher.html#org.apache.juneau.console">TopicDecl.Publisher</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Who publishes a page-level topic.</div>
 </div>
 </div>
@@ -181,6 +198,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Server half of a console card type: validates an authored card and returns its page-contract fragment.</div>
 </div>
+<div class="col-first odd-row-color"><a href="class-use/Handled.html#org.apache.juneau.console.freemarker">Handled</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Mixin for element builders that can carry a client object-model block: handler actions, lifecycle bindings and
+ handler subscriptions.</div>
+</div>
+<div class="col-first even-row-color"><a href="class-use/ModelBlock.html#org.apache.juneau.console.freemarker">ModelBlock</a></div>
+<div class="col-last even-row-color">
+<div class="block">The model block of one element: handler actions, lifecycle bindings and handler subscriptions.</div>
+</div>
 <div class="col-first odd-row-color"><a href="class-use/Subscription.html#org.apache.juneau.console.freemarker">Subscription</a></div>
 <div class="col-last odd-row-color">
 <div class="block">One entry of a card's <code>subscribes</code> list: a concrete topic wired to a role the card type implements.</div>
@@ -201,6 +227,24 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><a href="class-use/CardTypeRegistry.html#org.apache.juneau.console.test">CardTypeRegistry</a></div>
 <div class="col-last even-row-color">
 <div class="block">The open set of server-side card type handlers.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="org.apache.juneau.console.views">
+<div class="caption"><span>Classes in <a href="package-summary.html">org.apache.juneau.console</a> used by <a href="views/package-summary.html">org.apache.juneau.console.views</a></span></div>
+<div class="summary-table two-column-summary">
+<div class="table-header col-first">Class</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><a href="class-use/Handled.html#org.apache.juneau.console.views">Handled</a></div>
+<div class="col-last even-row-color">
+<div class="block">Mixin for element builders that can carry a client object-model block: handler actions, lifecycle bindings and
+ handler subscriptions.</div>
+</div>
+<div class="col-first odd-row-color"><a href="class-use/ModelBlock.html#org.apache.juneau.console.views">ModelBlock</a></div>
+<div class="col-last odd-row-color">
+<div class="block">The model block of one element: handler actions, lifecycle bindings and handler subscriptions.</div>
 </div>
 </div>
 </section>
