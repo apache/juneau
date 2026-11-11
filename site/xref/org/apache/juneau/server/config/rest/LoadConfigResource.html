@@ -38,7 +38,7 @@
 <a class="jxr_linenumber" name="L30" href="#L30">30</a>  <em class="jxr_javadoccomment"> * Fetches configuration files for a given project and branch,</em>
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  <em class="jxr_javadoccomment"> * combining application defaults with project-specific overrides.</em>
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  @Rest(path = <span class="jxr_string">"/configs/*"</span>)
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  @Rest(path = <span class="jxr_string">"/configs/*"</span>, guards = ConfigApiKeyGuard.<strong class="jxr_keyword">class</strong>)
 <a class="jxr_linenumber" name="L34" href="#L34">34</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="LoadConfigResource" href="../../../../../../org/apache/juneau/server/config/rest/LoadConfigResource.html#LoadConfigResource">LoadConfigResource</a> <strong class="jxr_keyword">extends</strong> RestServlet {
 <a class="jxr_linenumber" name="L35" href="#L35">35</a>  
 <a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">long</strong> serialVersionUID = 8247663789227304097L;
@@ -55,19 +55,25 @@
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  	<strong class="jxr_keyword">public</strong> String gets(@Path(<span class="jxr_string">"project"</span>) String project, @Path(<span class="jxr_string">"branch"</span>) String branch) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">var</strong> config = <strong class="jxr_keyword">new</strong> <a name="GetConfiguration" href="../../../../../../org/apache/juneau/server/config/repository/GetConfiguration.html#GetConfiguration">GetConfiguration</a>(project, branch);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		GetConfiguration config;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			config.execute();
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			config = <strong class="jxr_keyword">new</strong> <a name="GetConfiguration" href="../../../../../../org/apache/juneau/server/config/repository/GetConfiguration.html#GetConfiguration">GetConfiguration</a>(project, branch);
 <a class="jxr_linenumber" name="L53" href="#L53">53</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			<em class="jxr_comment">// A crafted project/branch that escapes the checkout root is rejected by</em>
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<em class="jxr_comment">// FileUtils.resolveSafely(). Map that boundary violation to 403 with a generic</em>
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<em class="jxr_comment">// message so the offending path is never echoed back to the client.</em>
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"Access denied."</span>);
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		}
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  		<strong class="jxr_keyword">return</strong> jsonSerializer.write(config.get());
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	}
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			<em class="jxr_comment">// Malformed project/branch value (empty, '..', backslash, NUL, or '/' in project).</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> BadRequest(<span class="jxr_string">"Invalid project or branch."</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		}
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			config.execute();
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<em class="jxr_comment">// A crafted project/branch that escapes the checkout root is rejected by</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			<em class="jxr_comment">// FileUtils.resolveSafely(). Map that boundary violation to 403 with a generic</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<em class="jxr_comment">// message so the offending path is never echoed back to the client.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"Access denied."</span>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">return</strong> jsonSerializer.write(config.get());
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

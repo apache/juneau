@@ -111,7 +111,7 @@
 <span class="source-line-no">098</span><span id="line-98">   private static final Pattern ASSET_REF = Pattern.compile("\\b(?:src|href)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')");</span>
 <span class="source-line-no">099</span><span id="line-99">   private static final Pattern JUNEAU_ASSET = Pattern.compile("(?:^|/)(?:juneau-[\\w-]+\\.(?:js|css|svg)|juneau-console/chrome\\.css)(?:[?#].*)?$");</span>
 <span class="source-line-no">100</span><span id="line-100">   private static final Set&lt;String&gt; REMOVED_TYPES = Set.of("js", "json", "calendar");</span>
-<span class="source-line-no">101</span><span id="line-101">   private static final Map&lt;String,Set&lt;String&gt;&gt; STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle"));</span>
+<span class="source-line-no">101</span><span id="line-101">   private static final Map&lt;String,Set&lt;String&gt;&gt; STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle", "themeSelector"));</span>
 <span class="source-line-no">102</span><span id="line-102">   private static final Map&lt;String,Set&lt;String&gt;&gt; DIRECTIVES = directives();</span>
 <span class="source-line-no">103</span><span id="line-103"></span>
 <span class="source-line-no">104</span><span id="line-104">   private static Map&lt;String,Set&lt;String&gt;&gt; directives() {</span>

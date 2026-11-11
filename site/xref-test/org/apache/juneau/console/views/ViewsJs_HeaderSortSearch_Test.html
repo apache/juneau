@@ -129,7 +129,7 @@
 <a class="jxr_linenumber" name="L121" href="#L121">121</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(body, <span class="jxr_string">"function openColumnSearchPopover("</span>);
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 		assertTrue(fn.contains(<span class="jxr_string">"juneau-view-col-search-popover-help"</span>), fn);   <em class="jxr_comment">// operator help list</em>
-<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertTrue(fn.contains(<span class="jxr_string">"meta.operators"</span>), fn);                         <em class="jxr_comment">// help sourced from VIEW_META</em>
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> 		assertTrue(fn.contains(<span class="jxr_string">"helpMeta.operators"</span>), fn);                     <em class="jxr_comment">// help sourced from VIEW_META, or the type fallback</em>
 <a class="jxr_linenumber" name="L125" href="#L125">125</a> 		assertTrue(fn.contains(<span class="jxr_string">"evaluateColumnSearchDraft"</span>), fn);              <em class="jxr_comment">// classify draft (dollar/reject/incomplete)</em>
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 		assertTrue(fn.contains(<span class="jxr_string">"Not a valid search for this column."</span>), fn);    <em class="jxr_comment">// reject message</em>
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		assertFalse(fn.contains(<span class="jxr_string">"if (!serverSide) applyValue"</span>), fn);           <em class="jxr_comment">// no live preview</em>

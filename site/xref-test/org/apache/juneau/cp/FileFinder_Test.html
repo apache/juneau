@@ -664,26 +664,52 @@
 <a class="jxr_linenumber" name="L656" href="#L656">656</a> 		assertContains(<span class="jxr_string">"[cp:/files/test1/_a.txt]"</span>, read(x,<span class="jxr_string">"files/test1/_a.txt"</span>));
 <a class="jxr_linenumber" name="L657" href="#L657">657</a> 	}
 <a class="jxr_linenumber" name="L658" href="#L658">658</a> 
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	@Test <strong class="jxr_keyword">void</strong> e03_subclassing() {
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">var</strong> b = (E03a) E03b.create().dir(<span class="jxr_string">"."</span>).caching(100_000_000);
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E03b(b);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		assertInstanceOf(E03b.<strong class="jxr_keyword">class</strong>, x);
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	}
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E03a <strong class="jxr_keyword">extends</strong> FileFinder.Builder {
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 		<strong class="jxr_keyword">protected</strong> E03a() {
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 			<strong class="jxr_keyword">super</strong>(BasicBeanStore.INSTANCE);
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		}
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 	}
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E03b <strong class="jxr_keyword">extends</strong> BasicFileFinder {
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> E03a create() {
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> E03a();
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		}
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		<strong class="jxr_keyword">public</strong> E03b(E03a x) {
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			<strong class="jxr_keyword">super</strong>(x);
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		}
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 	}
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> }
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 	@Test <strong class="jxr_keyword">void</strong> f01_hostileLocale_doesNotEscapeRoot(@org.junit.jupiter.api.io.TempDir Path tmp) <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		<strong class="jxr_keyword">var</strong> root = Files.createDirectories(tmp.resolve(<span class="jxr_string">"root"</span>));
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		Files.writeString(root.resolve(<span class="jxr_string">"file.txt"</span>), <span class="jxr_string">"base"</span>);
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 		Files.writeString(root.resolve(<span class="jxr_string">"file_ja.txt"</span>), <span class="jxr_string">"ja-file"</span>);
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 		Files.createDirectories(root.resolve(<span class="jxr_string">"ja"</span>));
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 		Files.writeString(root.resolve(<span class="jxr_string">"ja"</span>).resolve(<span class="jxr_string">"file.txt"</span>), <span class="jxr_string">"ja-dir"</span>);
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 		Files.writeString(tmp.resolve(<span class="jxr_string">"OUTSIDE.txt"</span>), <span class="jxr_string">"secret"</span>);
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<strong class="jxr_keyword">var</strong> x = FileFinder.create().dir(root.toString()).include(<span class="jxr_string">".*&#92;&#92;.txt"</span>).build();
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<em class="jxr_comment">// Hostile locale: must be not-found, never an exception and never the outside file.</em>
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">var</strong> hostile = <strong class="jxr_keyword">new</strong> Locale(<span class="jxr_string">".."</span>, <span class="jxr_string">".."</span>);
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 		assertDoesNotThrow(() -&gt; assertTrue(x.getStream(<span class="jxr_string">"OUTSIDE.txt"</span>, hostile).isEmpty()));
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 		assertDoesNotThrow(() -&gt; assertTrue(x.getString(<span class="jxr_string">"OUTSIDE.txt"</span>, hostile).isEmpty()));
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 		<em class="jxr_comment">// Control locale.</em>
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 		assertTrue(x.getStream(<span class="jxr_string">"OUTSIDE.txt"</span>, <strong class="jxr_keyword">new</strong> Locale(<span class="jxr_string">"en"</span>, <span class="jxr_string">"US"</span>)).isEmpty());
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 		<em class="jxr_comment">// Legit lookups still work.</em>
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		assertEquals(<span class="jxr_string">"ja-file"</span>, x.getString(<span class="jxr_string">"file.txt"</span>, Locale.JAPANESE).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		assertEquals(<span class="jxr_string">"base"</span>, x.getString(<span class="jxr_string">"file.txt"</span>, <strong class="jxr_keyword">new</strong> Locale(<span class="jxr_string">"fr"</span>)).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<em class="jxr_comment">// Hostile locale on an existing file falls back to the base file (screened candidates skipped).</em>
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 		assertEquals(<span class="jxr_string">"base"</span>, x.getString(<span class="jxr_string">"file.txt"</span>, hostile).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		Files.delete(root.resolve(<span class="jxr_string">"file_ja.txt"</span>));
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<strong class="jxr_keyword">var</strong> y = FileFinder.create().dir(root.toString()).include(<span class="jxr_string">".*&#92;&#92;.txt"</span>).build();
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 		assertEquals(<span class="jxr_string">"ja-dir"</span>, y.getString(<span class="jxr_string">"file.txt"</span>, Locale.JAPANESE).orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 	}
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	@Test <strong class="jxr_keyword">void</strong> e03_subclassing() {
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 		<strong class="jxr_keyword">var</strong> b = (E03a) E03b.create().dir(<span class="jxr_string">"."</span>).caching(100_000_000);
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 		<strong class="jxr_keyword">var</strong> x = <strong class="jxr_keyword">new</strong> E03b(b);
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 		assertInstanceOf(E03b.<strong class="jxr_keyword">class</strong>, x);
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 	}
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E03a <strong class="jxr_keyword">extends</strong> FileFinder.Builder {
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 		<strong class="jxr_keyword">protected</strong> E03a() {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 			<strong class="jxr_keyword">super</strong>(BasicBeanStore.INSTANCE);
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 		}
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 	}
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> E03b <strong class="jxr_keyword">extends</strong> BasicFileFinder {
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> E03a create() {
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> E03a();
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 		}
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 		<strong class="jxr_keyword">public</strong> E03b(E03a x) {
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			<strong class="jxr_keyword">super</strong>(x);
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 		}
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 	}
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

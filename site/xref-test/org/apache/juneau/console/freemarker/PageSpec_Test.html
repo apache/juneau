@@ -251,7 +251,16 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 		assertNull(none.scheme());
 <a class="jxr_linenumber" name="L244" href="#L244">244</a> 		assertFalse(none.schemeToggle());
 <a class="jxr_linenumber" name="L245" href="#L245">245</a> 	}
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> }
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	@Test <strong class="jxr_keyword">void</strong> a29_themeSelector_seedsTheCapture() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 		<strong class="jxr_keyword">var</strong> cap = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		PageSpec.create().themeSelector(<strong class="jxr_keyword">true</strong>).applyTo(cap, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		assertTrue(cap.themeSelector());
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">var</strong> none = <strong class="jxr_keyword">new</strong> PageCapture();
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 		PageSpec.create().applyTo(none, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		assertFalse(none.themeSelector());
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 	}
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

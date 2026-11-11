@@ -369,10 +369,10 @@
 <a class="jxr_linenumber" name="L361" href="#L361">361</a> 		<strong class="jxr_keyword">var</strong> look = m(p(<span class="jxr_string">"main"</span>).get(<span class="jxr_string">"look"</span>));
 <a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<em class="jxr_comment">// The shipped selected folder tab is semibold (600); the stylesheet is the source of truth.</em>
 <a class="jxr_linenumber" name="L363" href="#L363">363</a> 		assertEquals(<span class="jxr_string">"600"</span>, look.get(<span class="jxr_string">"selWeight"</span>), look::toString);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertEquals(<span class="jxr_string">"1px"</span>, look.get(<span class="jxr_string">"selBorderTopWidth"</span>), look::toString);
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertTrue(String.valueOf(look.get(<span class="jxr_string">"selShadow"</span>)).contains(String.valueOf(look.get(<span class="jxr_string">"accent"</span>))), look::toString);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 		assertEquals(<span class="jxr_string">"3px"</span>, look.get(<span class="jxr_string">"selBorderTopWidth"</span>), look::toString);
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 		assertEquals(look.get(<span class="jxr_string">"accent"</span>), look.get(<span class="jxr_string">"selBorderTop"</span>), look::toString);
 <a class="jxr_linenumber" name="L366" href="#L366">366</a> 		assertNotEquals(look.get(<span class="jxr_string">"selBg"</span>), look.get(<span class="jxr_string">"unsBg"</span>), look::toString);
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(look.get(<span class="jxr_string">"panes"</span>), look.get(<span class="jxr_string">"selBorderTop"</span>), look::toString);
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 		assertEquals(look.get(<span class="jxr_string">"accent"</span>), look.get(<span class="jxr_string">"panes"</span>), look::toString);
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test <strong class="jxr_keyword">void</strong> slider_thumbMovesWithSelection() {

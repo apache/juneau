@@ -481,6 +481,11 @@ loadScripts(document, 'script');</script>
  <b>context root</b> (not the page resource) and carrying the same <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code>
  content-sensitive cache-buster <a href="#chromeCssUrl(org.apache.juneau.rest.server.RestRequest)"><code>chromeCssUrl(RestRequest)</code></a> uses.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#themeSelectorHtmlAttributes()" class="member-name-link">themeSelectorHtmlAttributes</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns the <code>&lt;html&gt;</code> start-tag attributes that switch on the theme selector.</div>
+</div>
 </div>
 </div>
 </div>
@@ -556,7 +561,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SCHEME_SCRIPT">
 <h3>SCHEME_SCRIPT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-175">SCHEME_SCRIPT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-180">SCHEME_SCRIPT</a></span></div>
 <div class="block">The inline pre-paint script that picks the page's colour scheme before first paint.
 
  <p>
@@ -566,6 +571,11 @@ loadScripts(document, 'script');</script>
  source, ending at <code>light</code>.
 
  <p>
+ When the root carries <code>data-jc-theme-selector</code>, a stored theme pick that is in the root's
+ <code>data-jc-themes</code> allow-list also re-points the palette link (<code>data-jc-theme-link</code>) as soon as the
+ parser inserts it.
+
+ <p>
  The text is a byte-for-byte constant so <a href="#SCHEME_SCRIPT_CSP_HASH"><code>SCHEME_SCRIPT_CSP_HASH</code></a> is stable. Emit it as the first child
  of <code>&lt;head&gt;</code>, ahead of every stylesheet.</div>
 </section>
@@ -573,7 +583,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SCHEME_SCRIPT_CSP_HASH">
 <h3>SCHEME_SCRIPT_CSP_HASH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-190">SCHEME_SCRIPT_CSP_HASH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-200">SCHEME_SCRIPT_CSP_HASH</a></span></div>
 <div class="block">The CSP source expression for <a href="#SCHEME_SCRIPT"><code>SCHEME_SCRIPT</code></a>: <code>'sha256-&lt;base64&gt;'</code> over its UTF-8 bytes.
 
  <p>
@@ -585,7 +595,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CONSOLE_JS_PATH">
 <h3>CONSOLE_JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-218">CONSOLE_JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-228">CONSOLE_JS_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the console shell script.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -600,7 +610,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CONSOLE_JS_PATH_UNPREFIXED">
 <h3>CONSOLE_JS_PATH_UNPREFIXED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-221">CONSOLE_JS_PATH_UNPREFIXED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-231">CONSOLE_JS_PATH_UNPREFIXED</a></span></div>
 <div class="block"><a href="#CONSOLE_JS_PATH"><code>CONSOLE_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix - see the class javadoc's mount-styles section.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -615,7 +625,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CONSOLE_JS_RESOURCE">
 <h3>CONSOLE_JS_RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-224">CONSOLE_JS_RESOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-234">CONSOLE_JS_RESOURCE</a></span></div>
 <div class="block">Classpath location of the console shell script.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -630,7 +640,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="BADGES_JS_PATH">
 <h3>BADGES_JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-227">BADGES_JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-237">BADGES_JS_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the count-badge script.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -645,7 +655,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="BADGES_JS_PATH_UNPREFIXED">
 <h3>BADGES_JS_PATH_UNPREFIXED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-230">BADGES_JS_PATH_UNPREFIXED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-240">BADGES_JS_PATH_UNPREFIXED</a></span></div>
 <div class="block"><a href="#BADGES_JS_PATH"><code>BADGES_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -660,7 +670,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="BADGES_JS_RESOURCE">
 <h3>BADGES_JS_RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-233">BADGES_JS_RESOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-243">BADGES_JS_RESOURCE</a></span></div>
 <div class="block">Classpath location of the count-badge script.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -675,7 +685,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CHARTS_JS_PATH">
 <h3>CHARTS_JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-236">CHARTS_JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-246">CHARTS_JS_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the chart-card runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -690,7 +700,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CHARTS_JS_PATH_UNPREFIXED">
 <h3>CHARTS_JS_PATH_UNPREFIXED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-239">CHARTS_JS_PATH_UNPREFIXED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-249">CHARTS_JS_PATH_UNPREFIXED</a></span></div>
 <div class="block"><a href="#CHARTS_JS_PATH"><code>CHARTS_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -705,7 +715,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="CHARTS_JS_RESOURCE">
 <h3>CHARTS_JS_RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-242">CHARTS_JS_RESOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-252">CHARTS_JS_RESOURCE</a></span></div>
 <div class="block">Classpath location of the chart-card runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -720,7 +730,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="JOBLOG_JS_PATH">
 <h3>JOBLOG_JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-245">JOBLOG_JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-255">JOBLOG_JS_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the job-log card runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -735,7 +745,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="JOBLOG_JS_PATH_UNPREFIXED">
 <h3>JOBLOG_JS_PATH_UNPREFIXED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-248">JOBLOG_JS_PATH_UNPREFIXED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-258">JOBLOG_JS_PATH_UNPREFIXED</a></span></div>
 <div class="block"><a href="#JOBLOG_JS_PATH"><code>JOBLOG_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -750,7 +760,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="JOBLOG_JS_RESOURCE">
 <h3>JOBLOG_JS_RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-251">JOBLOG_JS_RESOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-261">JOBLOG_JS_RESOURCE</a></span></div>
 <div class="block">Classpath location of the job-log card runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -765,7 +775,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DASHBOARD_JS_PATH">
 <h3>DASHBOARD_JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-254">DASHBOARD_JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-264">DASHBOARD_JS_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the dashboard chrome runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -780,7 +790,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DASHBOARD_JS_PATH_UNPREFIXED">
 <h3>DASHBOARD_JS_PATH_UNPREFIXED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-257">DASHBOARD_JS_PATH_UNPREFIXED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-267">DASHBOARD_JS_PATH_UNPREFIXED</a></span></div>
 <div class="block"><a href="#DASHBOARD_JS_PATH"><code>DASHBOARD_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -795,7 +805,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DASHBOARD_JS_RESOURCE">
 <h3>DASHBOARD_JS_RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-260">DASHBOARD_JS_RESOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-270">DASHBOARD_JS_RESOURCE</a></span></div>
 <div class="block">Classpath resource behind <a href="#DASHBOARD_JS_PATH"><code>DASHBOARD_JS_PATH</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -810,7 +820,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SWITCHER_JS_PATH">
 <h3>SWITCHER_JS_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-263">SWITCHER_JS_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-273">SWITCHER_JS_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the switcher card runtime.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -825,7 +835,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SWITCHER_JS_PATH_UNPREFIXED">
 <h3>SWITCHER_JS_PATH_UNPREFIXED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-266">SWITCHER_JS_PATH_UNPREFIXED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-276">SWITCHER_JS_PATH_UNPREFIXED</a></span></div>
 <div class="block"><a href="#SWITCHER_JS_PATH"><code>SWITCHER_JS_PATH</code></a> minus the <code>/juneau-console</code> prefix.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -840,7 +850,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SWITCHER_JS_RESOURCE">
 <h3>SWITCHER_JS_RESOURCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-269">SWITCHER_JS_RESOURCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-279">SWITCHER_JS_RESOURCE</a></span></div>
 <div class="block">Classpath resource behind <a href="#SWITCHER_JS_PATH"><code>SWITCHER_JS_PATH</code></a>.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -855,7 +865,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SCHEMA_PATH">
 <h3>SCHEMA_PATH</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-272">SCHEMA_PATH</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-282">SCHEMA_PATH</a></span></div>
 <div class="block">Context-root-absolute path of the page-contract schema.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -878,7 +888,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ConsoleChromeMixin</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-394">ConsoleChromeMixin</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-404">ConsoleChromeMixin</a></span>()</div>
 <div class="block">No-arg constructor, mirroring <code>FreemarkerMixin()</code>'s equivalent so a bean-store lookup miss can fall back
  to a default-configured instance without relying on <code>BeanInstantiator</code>'s builder-pattern detection.</div>
 </section>
@@ -886,7 +896,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.console.ConsoleChromeMixin.Builder)">
 <h3>ConsoleChromeMixin</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-403">ConsoleChromeMixin</a></span><wbr><span class="parameters">(<a href="ConsoleChromeMixin.Builder.html" title="class in org.apache.juneau.console">ConsoleChromeMixin.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-413">ConsoleChromeMixin</a></span><wbr><span class="parameters">(<a href="ConsoleChromeMixin.Builder.html" title="class in org.apache.juneau.console">ConsoleChromeMixin.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -905,7 +915,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="roleAliasNames()">
 <h3>roleAliasNames</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-367">roleAliasNames</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-377">roleAliasNames</a></span>()</div>
 <div class="block">Returns the names of the role aliases the chrome declares, such as <code>--jc-surface</code>,
  <code>--jc-danger-text</code> and <code>--jc-header-bg</code>.
 
@@ -922,7 +932,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ConsoleChromeMixin.Builder.html" title="class in org.apache.juneau.console">ConsoleChromeMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-413">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ConsoleChromeMixin.Builder.html" title="class in org.apache.juneau.console">ConsoleChromeMixin.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-423">create</a></span>()</div>
 <div class="block">Creates a new builder.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -933,7 +943,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getChromeCss(org.apache.juneau.rest.server.RestRequest)">
 <h3>getChromeCss</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-425">getChromeCss</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-435">getChromeCss</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">[GET /juneau-console/chrome.css] &mdash; serve the admin-console chrome stylesheet.</div>
 <dl class="notes">
@@ -950,7 +960,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getThemeCss(java.lang.String)">
 <h3>getThemeCss</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-450">getThemeCss</a></span><wbr><span class="parameters">(<a href="../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("file")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-460">getThemeCss</a></span><wbr><span class="parameters">(<a href="../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("file")
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;file)</span></div>
 <div class="block">[GET /juneau-console/themes/{file}] &mdash; serve one of the shipped stock-theme stylesheets.
 
@@ -973,7 +983,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getConsoleJs()">
 <h3>getConsoleJs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-467">getConsoleJs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-477">getConsoleJs</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-console.js] &mdash; serve the console shell.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -984,7 +994,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getBadgesJs()">
 <h3>getBadgesJs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-482">getBadgesJs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-492">getBadgesJs</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-badges.js] &mdash; serve the count-badge script.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -995,7 +1005,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getChartsJs()">
 <h3>getChartsJs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-497">getChartsJs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-507">getChartsJs</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-charts.js] &mdash; serve the chart-card runtime.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1006,7 +1016,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getJobLogJs()">
 <h3>getJobLogJs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-512">getJobLogJs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-522">getJobLogJs</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-joblog.js] &mdash; serve the job-log card runtime.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1017,7 +1027,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDashboardJs()">
 <h3>getDashboardJs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-527">getDashboardJs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-537">getDashboardJs</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-dashboard.js] &mdash; serve the dashboard chrome runtime.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1028,7 +1038,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSwitcherJs()">
 <h3>getSwitcherJs</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-542">getSwitcherJs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-552">getSwitcherJs</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-switcher.js] &mdash; serve the switcher card runtime.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1039,7 +1049,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getPageSchema()">
 <h3>getPageSchema</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-557">getPageSchema</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../http/HttpResource.html" title="interface in org.apache.juneau.http">HttpResource</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-567">getPageSchema</a></span>()</div>
 <div class="block">[GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1050,7 +1060,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="themeAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)">
 <h3>themeAssetUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-584">themeAssetUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-594">themeAssetUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns a real, browser-fetchable URL for a shipped theme stylesheet, resolved against the request's
  <b>context root</b> (not the page resource) and carrying the same <code>?v=&lt;buildVersion&gt;-&lt;hash8&gt;</code>
@@ -1075,7 +1085,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="chromeCssUrl(org.apache.juneau.rest.server.RestRequest)">
 <h3>chromeCssUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-602">chromeCssUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-612">chromeCssUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Returns a real, browser-fetchable URL for the shipped <code>chrome.css</code>, resolved against the request's
  <b>context root</b> (not the page resource) and carrying the same content-sensitive <code>?v=…</code> cache-buster
  the theme stylesheets use.
@@ -1095,7 +1105,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consoleJsUrl(org.apache.juneau.rest.server.RestRequest)">
 <h3>consoleJsUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-612">consoleJsUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-622">consoleJsUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Context-root-absolute, cache-busted URL of the console shell script.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1108,7 +1118,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="badgesJsUrl(org.apache.juneau.rest.server.RestRequest)">
 <h3>badgesJsUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-622">badgesJsUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-632">badgesJsUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</span></div>
 <div class="block">Context-root-absolute, cache-busted URL of the count-badge script.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1121,7 +1131,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="consoleAssetUrl(org.apache.juneau.rest.server.RestRequest,java.lang.String)">
 <h3>consoleAssetUrl</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-635">consoleAssetUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-645">consoleAssetUrl</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;path)</span></div>
 <div class="block">Context-root-absolute, cache-busted URL of a console card runtime; the resolver of the <code>charts</code> and
  <code>joblog</code> toolkit packs.</div>
@@ -1139,7 +1149,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="stockTheme(java.lang.String)">
 <h3>stockTheme</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Theme.html" title="class in org.apache.juneau.console">Theme</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-670">stockTheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Theme.html" title="class in org.apache.juneau.console">Theme</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-680">stockTheme</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Maps one of the <a href="#BUILTIN_THEME_NAMES"><code>BUILTIN_THEME_NAMES</code></a> stock names to its <a href="Theme.html" title="class in org.apache.juneau.console"><code>Theme</code></a> constant.
 
  <p>
@@ -1159,7 +1169,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="overrideBlock(org.apache.juneau.console.Theme)">
 <h3>overrideBlock</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-761">overrideBlock</a></span><wbr><span class="parameters">(<a href="Theme.html" title="class in org.apache.juneau.console">Theme</a>&nbsp;theme)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-771">overrideBlock</a></span><wbr><span class="parameters">(<a href="Theme.html" title="class in org.apache.juneau.console">Theme</a>&nbsp;theme)</span></div>
 <div class="block">Renders a theme's override block: one <code>html:root&amp;#123;...&amp;#125;</code> carrying the theme's leaf tokens, then its
  alias tokens, each in declaration order.
 
@@ -1201,7 +1211,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemeHead(org.apache.juneau.rest.server.RestRequest,java.lang.String,boolean)">
 <h3>schemeHead</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ConsoleChromeMixin.SchemeHead.html" title="class in org.apache.juneau.console">ConsoleChromeMixin.SchemeHead</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-816">schemeHead</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ConsoleChromeMixin.SchemeHead.html" title="class in org.apache.juneau.console">ConsoleChromeMixin.SchemeHead</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-826">schemeHead</a></span><wbr><span class="parameters">(<a href="../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pin,
  boolean&nbsp;toggle)</span></div>
 <div class="block">Returns the colour-scheme head pieces for a page that does not render through the FreeMarker console directive.
@@ -1238,7 +1248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemeHtmlAttributes(java.lang.String,boolean)">
 <h3>schemeHtmlAttributes</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-835">schemeHtmlAttributes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pin,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-845">schemeHtmlAttributes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pin,
  boolean&nbsp;toggle)</span></div>
 <div class="block">Returns the <code>&lt;html&gt;</code> start-tag attributes for a scheme pin and toggle flag.
 
@@ -1257,9 +1267,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="themeSelectorHtmlAttributes()">
+<h3>themeSelectorHtmlAttributes</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-865">themeSelectorHtmlAttributes</a></span>()</div>
+<div class="block">Returns the <code>&lt;html&gt;</code> start-tag attributes that switch on the theme selector.
+
+ <p>
+ <code>data-jc-theme-selector</code> turns the header control and the stored-pick lookup on; <code>data-jc-themes</code>
+ is the space-separated allow-list of <a href="#BUILTIN_THEME_NAMES"><code>BUILTIN_THEME_NAMES</code></a> a stored pick is validated against.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>The attributes, space-separated with no leading space.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="schemeScriptElement(java.lang.String)">
 <h3>schemeScriptElement</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-852">schemeScriptElement</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonce)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-875">schemeScriptElement</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonce)</span></div>
 <div class="block">Returns the <a href="#SCHEME_SCRIPT"><code>SCHEME_SCRIPT</code></a> element, carrying <code>nonce</code> as an attribute when it is not <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1272,7 +1297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="nonceAttr(java.lang.String)">
 <h3>nonceAttr</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-862">nonceAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonce)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-885">nonceAttr</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nonce)</span></div>
 <div class="block">Returns <code> nonce="…"</code> (with a leading space, attribute-escaped) or an empty string for <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1285,7 +1310,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="schemeOverrideBlock(java.util.Map,java.util.Map)">
 <h3>schemeOverrideBlock</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-889">schemeOverrideBlock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;tokens,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/console/ConsoleChromeMixin.html#line-912">schemeOverrideBlock</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;tokens,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;aliases)</span></div>
 <div class="block">Renders the dark-scheme override rule for app-declared dark tokens.
 

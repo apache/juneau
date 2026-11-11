@@ -113,10 +113,10 @@
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	@Test <strong class="jxr_keyword">void</strong> b06_buildPagingPill_navButtonsReferenceTheFourPagingSymbols() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		<strong class="jxr_keyword">var</strong> body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 <a class="jxr_linenumber" name="L107" href="#L107">107</a> 		<strong class="jxr_keyword">var</strong> fnBody = functionBody(body, <span class="jxr_string">"function buildPagingPill("</span>);
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;First page\&quot;, \&quot;first_page\&quot;,"</span>), fnBody);
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;Previous page\&quot;, \&quot;chevron_left\&quot;,"</span>), fnBody);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;Next page\&quot;, \&quot;chevron_right\&quot;,"</span>), fnBody);
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;Last page\&quot;, \&quot;last_page\&quot;,"</span>), fnBody);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;First page\&quot;, \&quot;first_page_thin\&quot;,"</span>), fnBody);
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;Previous page\&quot;, \&quot;chevron_left_thin\&quot;,"</span>), fnBody);
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;Next page\&quot;, \&quot;chevron_right_thin\&quot;,"</span>), fnBody);
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 		assertTrue(fnBody.contains(<span class="jxr_string">"pagingPillButton(\&quot;Last page\&quot;, \&quot;last_page_thin\&quot;,"</span>), fnBody);
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 	}
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Test <strong class="jxr_keyword">void</strong> b03_buildPagingPill_carriesPagingDataTestId() <strong class="jxr_keyword">throws</strong> Exception {

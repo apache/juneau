@@ -420,7 +420,7 @@
 <a class="jxr_linenumber" name="L412" href="#L412">412</a> 
 <a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> scheme : List.of(<span class="jxr_string">"dark"</span>, <span class="jxr_string">"light"</span>)) {
 <a class="jxr_linenumber" name="L414" href="#L414">414</a> 			surface(f, scheme, surfacePage((scheme.equals(<span class="jxr_string">"dark"</span>) ? PIN_DARK : PIN_LIGHT) + <span class="jxr_string">" "</span> + TOGGLE, <span class="jxr_string">""</span>, false));
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			f.click(<span class="jxr_string">".juneau-config-chooser-btn"</span>).click(<span class="jxr_string">".juneau-config-saved-more"</span>).eval(OPEN_OVERLAYS);
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			f.click(<span class="jxr_string">".juneau-config-chooser-btn"</span>).eval(OPEN_OVERLAYS);
 <a class="jxr_linenumber" name="L416" href="#L416">416</a> 			probes(f, TEXT_SURFACES, NON_TEXT_SURFACES, DISABLED_SURFACES);
 <a class="jxr_linenumber" name="L417" href="#L417">417</a> 		}
 <a class="jxr_linenumber" name="L418" href="#L418">418</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> scheme : List.of(<span class="jxr_string">"dark"</span>, <span class="jxr_string">"light"</span>)) {
@@ -431,7 +431,7 @@
 <a class="jxr_linenumber" name="L423" href="#L423">423</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : PALETTES) {
 <a class="jxr_linenumber" name="L424" href="#L424">424</a> 			<strong class="jxr_keyword">if</strong> (! p.equals(<span class="jxr_string">"open"</span>)) {
 <a class="jxr_linenumber" name="L425" href="#L425">425</a> 				surface(f, lightCase(p), surfacePage(PIN_LIGHT + <span class="jxr_string">" "</span> + TOGGLE, <span class="jxr_string">""</span>, false).replace(THEME_CSS, theme(p)));
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 				f.click(<span class="jxr_string">".juneau-config-chooser-btn"</span>).click(<span class="jxr_string">".juneau-config-saved-more"</span>).eval(OPEN_OVERLAYS);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 				f.click(<span class="jxr_string">".juneau-config-chooser-btn"</span>).eval(OPEN_OVERLAYS);
 <a class="jxr_linenumber" name="L427" href="#L427">427</a> 				probes(f, TEXT_SURFACES, NON_TEXT_SURFACES, DISABLED_SURFACES);
 <a class="jxr_linenumber" name="L428" href="#L428">428</a> 			}
 <a class="jxr_linenumber" name="L429" href="#L429">429</a> 			surface(f, <span class="jxr_string">"palette-"</span> + p, surfacePage(PIN_DARK + <span class="jxr_string">" "</span> + TOGGLE, <span class="jxr_string">""</span>, false).replace(THEME_CSS, theme(p)));

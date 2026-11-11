@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * Fetches configuration files for a given project and branch,</span>
 <span class="source-line-no">031</span><span id="line-31"> * combining application defaults with project-specific overrides.</span>
 <span class="source-line-no">032</span><span id="line-32"> */</span>
-<span class="source-line-no">033</span><span id="line-33">@Rest(path = "/configs/*")</span>
+<span class="source-line-no">033</span><span id="line-33">@Rest(path = "/configs/*", guards = ConfigApiKeyGuard.class)</span>
 <span class="source-line-no">034</span><span id="line-34">public class LoadConfigResource extends RestServlet {</span>
 <span class="source-line-no">035</span><span id="line-35"></span>
 <span class="source-line-no">036</span><span id="line-36">   private static final long serialVersionUID = 8247663789227304097L;</span>
@@ -60,19 +60,25 @@
 <span class="source-line-no">047</span><span id="line-47">   public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {</span>
 <span class="source-line-no">048</span><span id="line-48">      var jsonSerializer = JsonSerializer.DEFAULT_READABLE;</span>
 <span class="source-line-no">049</span><span id="line-49"></span>
-<span class="source-line-no">050</span><span id="line-50">      var config = new GetConfiguration(project, branch);</span>
+<span class="source-line-no">050</span><span id="line-50">      GetConfiguration config;</span>
 <span class="source-line-no">051</span><span id="line-51">      try {</span>
-<span class="source-line-no">052</span><span id="line-52">         config.execute();</span>
+<span class="source-line-no">052</span><span id="line-52">         config = new GetConfiguration(project, branch);</span>
 <span class="source-line-no">053</span><span id="line-53">      } catch (@SuppressWarnings("unused") IllegalArgumentException e) {</span>
-<span class="source-line-no">054</span><span id="line-54">         // A crafted project/branch that escapes the checkout root is rejected by</span>
-<span class="source-line-no">055</span><span id="line-55">         // FileUtils.resolveSafely(). Map that boundary violation to 403 with a generic</span>
-<span class="source-line-no">056</span><span id="line-56">         // message so the offending path is never echoed back to the client.</span>
-<span class="source-line-no">057</span><span id="line-57">         throw new Forbidden("Access denied.");</span>
-<span class="source-line-no">058</span><span id="line-58">      }</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">      return jsonSerializer.write(config.get());</span>
-<span class="source-line-no">061</span><span id="line-61">   }</span>
-<span class="source-line-no">062</span><span id="line-62">}</span>
+<span class="source-line-no">054</span><span id="line-54">         // Malformed project/branch value (empty, '..', backslash, NUL, or '/' in project).</span>
+<span class="source-line-no">055</span><span id="line-55">         throw new BadRequest("Invalid project or branch.");</span>
+<span class="source-line-no">056</span><span id="line-56">      }</span>
+<span class="source-line-no">057</span><span id="line-57">      try {</span>
+<span class="source-line-no">058</span><span id="line-58">         config.execute();</span>
+<span class="source-line-no">059</span><span id="line-59">      } catch (@SuppressWarnings("unused") IllegalArgumentException e) {</span>
+<span class="source-line-no">060</span><span id="line-60">         // A crafted project/branch that escapes the checkout root is rejected by</span>
+<span class="source-line-no">061</span><span id="line-61">         // FileUtils.resolveSafely(). Map that boundary violation to 403 with a generic</span>
+<span class="source-line-no">062</span><span id="line-62">         // message so the offending path is never echoed back to the client.</span>
+<span class="source-line-no">063</span><span id="line-63">         throw new Forbidden("Access denied.");</span>
+<span class="source-line-no">064</span><span id="line-64">      }</span>
+<span class="source-line-no">065</span><span id="line-65"></span>
+<span class="source-line-no">066</span><span id="line-66">      return jsonSerializer.write(config.get());</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68">}</span>
 
 
 

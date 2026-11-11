@@ -485,21 +485,28 @@
 <a class="jxr_linenumber" name="L477" href="#L477">477</a> 			}
 <a class="jxr_linenumber" name="L478" href="#L478">478</a> 			<strong class="jxr_keyword">if</strong> (name.isEmpty())
 <a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"File not found."</span>);
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">var</strong> parent = FileUtils.resolveSafely(rootDir, parentPath)
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"File not found."</span>));
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File(parent, name);
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(e.getMessage());
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		}
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> 	}
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">	 * Returns the root directory.</em>
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> <em class="jxr_javadoccomment">	 * @return The root directory.</em>
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	<strong class="jxr_keyword">protected</strong> File getRootDir() { <strong class="jxr_keyword">return</strong> rootDir; }
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> }
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<em class="jxr_comment">// The final segment must be a plain name: no separators, no "." / "..", no NUL.</em>
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 			<strong class="jxr_keyword">if</strong> (name.equals(<span class="jxr_string">"."</span>) || name.equals(<span class="jxr_string">".."</span>) || name.indexOf('&#92;&#92;') &gt;= 0 || name.indexOf('\0') &gt;= 0)
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"Invalid file name."</span>);
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">var</strong> parent = FileUtils.resolveSafely(rootDir, parentPath)
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				.orElseThrow(() -&gt; <strong class="jxr_keyword">new</strong> NotFound(<span class="jxr_string">"File not found."</span>));
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 			<strong class="jxr_keyword">var</strong> target = <strong class="jxr_keyword">new</strong> File(parent, name);
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 			<em class="jxr_comment">// A dangling symlink reports exists()==false but writing through it would create its (possibly outside) target.</em>
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 			<strong class="jxr_keyword">if</strong> (Files.isSymbolicLink(target.toPath()))
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(<span class="jxr_string">"Invalid file name."</span>);
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">return</strong> target;
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		} <strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> Forbidden(e.getMessage());
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 		}
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 	}
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> <em class="jxr_javadoccomment">	 * Returns the root directory.</em>
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> <em class="jxr_javadoccomment">	 * @return The root directory.</em>
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 	<strong class="jxr_keyword">protected</strong> File getRootDir() { <strong class="jxr_keyword">return</strong> rootDir; }
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

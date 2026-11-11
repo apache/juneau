@@ -84,7 +84,7 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  		assertTrue(body.contains(sel), body);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">var</strong> st = body.indexOf(sel);
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  		<strong class="jxr_keyword">var</strong> rule = body.substring(st, body.indexOf(<span class="jxr_string">"}"</span>, st));
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertTrue(rule.contains(<span class="jxr_string">"background-color: var(--jc-card-bg)"</span>) &amp;&amp; rule.contains(<span class="jxr_string">"var(--jc-accent)"</span>), rule);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  		assertTrue(rule.contains(<span class="jxr_string">"background-color: var(--jc-tab-selected-bg, var(--jc-accent-wash))"</span>) &amp;&amp; rule.contains(<span class="jxr_string">"var(--jc-accent)"</span>), rule);
 <a class="jxr_linenumber" name="L80" href="#L80">80</a>  		assertFalse(rule.contains(<span class="jxr_string">"--jc-accent-selected"</span>), rule);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  	}
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
@@ -782,7 +782,7 @@
 <a class="jxr_linenumber" name="L774" href="#L774">774</a> 		<strong class="jxr_keyword">var</strong> hover = <span class="jxr_string">"{ background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }"</span>;
 <a class="jxr_linenumber" name="L775" href="#L775">775</a> 		assertContainsAll(css,
 <a class="jxr_linenumber" name="L776" href="#L776">776</a> 			<span class="jxr_string">".juneau-view-ribbon-btn[aria-pressed=\&quot;true\&quot;] "</span> + hover,
-<a class="jxr_linenumber" name="L777" href="#L777">777</a> 			<span class="jxr_string">".juneau-view-ribbon-group[data-juneau-strip-mode=\&quot;tab\&quot;] .juneau-view-ribbon-btn[aria-selected=\&quot;true\&quot;] {\n\tbackground-color: var(--jc-card-bg);"</span>,
+<a class="jxr_linenumber" name="L777" href="#L777">777</a> 			<span class="jxr_string">".juneau-view-ribbon-group[data-juneau-strip-mode=\&quot;tab\&quot;] .juneau-view-ribbon-btn[aria-selected=\&quot;true\&quot;] {\n\tbackground-color: var(--jc-tab-selected-bg, var(--jc-accent-wash));"</span>,
 <a class="jxr_linenumber" name="L778" href="#L778">778</a> 			<span class="jxr_string">".juneau-view-ribbon-btn:active:not(:disabled) { background-color: var(--jc-accent); color: var(--jc-on-accent); }"</span>);
 <a class="jxr_linenumber" name="L779" href="#L779">779</a> 		assertFalse(css.contains(<span class="jxr_string">".juneau-view-ribbon-btn[aria-pressed=\&quot;true\&quot;] { background-color: var(--jc-accent); color: var(--jc-on-accent);"</span>),
 <a class="jxr_linenumber" name="L780" href="#L780">780</a> 			() -&gt; <span class="jxr_string">"pressed toggle must not keep the solid accent fill, css:\n"</span> + css);

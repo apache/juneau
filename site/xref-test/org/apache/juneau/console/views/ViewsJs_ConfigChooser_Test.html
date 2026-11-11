@@ -415,43 +415,49 @@
 <a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertBean(report(), <span class="jxr_string">"v2DraftMatchesDefaults"</span>, <span class="jxr_string">"true"</span>);
 <a class="jxr_linenumber" name="L408" href="#L408">408</a> 	}
 <a class="jxr_linenumber" name="L409" href="#L409">409</a> 
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@Test <strong class="jxr_keyword">void</strong> s01_seedChooserDraft_isExported() {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertBean(report(), <span class="jxr_string">"seedExported"</span>, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 	}
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	@Test <strong class="jxr_keyword">void</strong> s02_seedChooserDraft_seedsOnce() {
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertBean((java.util.Map&lt;?,?&gt;)report().get(<span class="jxr_string">"seedOnce"</span>), <span class="jxr_string">"same,snapKept,dirty,hasSnap"</span>, <span class="jxr_string">"true,true,false,true"</span>);
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	}
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	@Test <strong class="jxr_keyword">void</strong> s03_seedChooserDraft_prefersLastAppliedThenDefaults() {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertBean((java.util.Map&lt;?,?&gt;)report().get(<span class="jxr_string">"seedLastApplied"</span>), <span class="jxr_string">"visible,notice"</span>, <span class="jxr_string">"[B],false"</span>);
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertBean((java.util.Map&lt;?,?&gt;)report().get(<span class="jxr_string">"seedResetNotice"</span>), <span class="jxr_string">"notice,visible"</span>, <span class="jxr_string">"true,[A]"</span>);
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	}
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	@Test <strong class="jxr_keyword">void</strong> s04_mountAndOpenBothSeedThroughTheSharedHelper() {
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertBean(report(), <span class="jxr_string">"mountCallsSeed,openCallsSeed"</span>, <span class="jxr_string">"1,1"</span>);
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	@Test <strong class="jxr_keyword">void</strong> a40_constructTable_defersAutoMountsToTheRibbon() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(viewsJs(), <span class="jxr_string">"function constructTable("</span>);
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		assertTrue(fn.contains(<span class="jxr_string">"ctx.hasRowDetail = deps.hasRowDetail;"</span>), fn);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertTrue(fn.indexOf(<span class="jxr_string">"ctx.hasRowDetail = deps.hasRowDetail;"</span>) &lt; fn.indexOf(<span class="jxr_string">"NS.ribbon.build("</span>), fn);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertTrue(fn.contains(<span class="jxr_string">"!ctx._ribbonOwns?.columnSettings"</span>), fn);
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertTrue(fn.contains(<span class="jxr_string">"!ctx._ribbonOwns?.linkButton"</span>), fn);
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	}
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	@Test <strong class="jxr_keyword">void</strong> a41_mountChooser_seedsOnceThroughTheSharedHelper() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(configJs(), <span class="jxr_string">"function mountChooser("</span>);
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertTrue(fn.contains(<span class="jxr_string">"NS.config.seedChooserDraft(table, ctx)"</span>), fn);
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertTrue(fn.contains(<span class="jxr_string">"buildChooserButton(table, ctx)"</span>), fn);
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 	@Test <strong class="jxr_keyword">void</strong> d01_columnDetail_unspecifiedSearchableReadsSearchable() {
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">var</strong> text = (String)report().get(<span class="jxr_string">"detailTextDefaultSearchable"</span>);
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertTrue(text.contains(<span class="jxr_string">"searchable"</span>) &amp;&amp; ! text.contains(<span class="jxr_string">"not searchable"</span>), text);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertTrue(((String)report().get(<span class="jxr_string">"detailTextNotSearchable"</span>)).contains(<span class="jxr_string">"not searchable"</span>));
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Test <strong class="jxr_keyword">void</strong> s01_seedChooserDraft_isExported() {
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertBean(report(), <span class="jxr_string">"seedExported"</span>, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 	}
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 	@Test <strong class="jxr_keyword">void</strong> s02_seedChooserDraft_seedsOnce() {
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertBean((java.util.Map&lt;?,?&gt;)report().get(<span class="jxr_string">"seedOnce"</span>), <span class="jxr_string">"same,snapKept,dirty,hasSnap"</span>, <span class="jxr_string">"true,true,false,true"</span>);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	}
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	@Test <strong class="jxr_keyword">void</strong> s03_seedChooserDraft_prefersLastAppliedThenDefaults() {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		assertBean((java.util.Map&lt;?,?&gt;)report().get(<span class="jxr_string">"seedLastApplied"</span>), <span class="jxr_string">"visible,notice"</span>, <span class="jxr_string">"[B],false"</span>);
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		assertBean((java.util.Map&lt;?,?&gt;)report().get(<span class="jxr_string">"seedResetNotice"</span>), <span class="jxr_string">"notice,visible"</span>, <span class="jxr_string">"true,[A]"</span>);
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	}
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	@Test <strong class="jxr_keyword">void</strong> s04_mountAndOpenBothSeedThroughTheSharedHelper() {
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertBean(report(), <span class="jxr_string">"mountCallsSeed,openCallsSeed"</span>, <span class="jxr_string">"1,1"</span>);
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	@Test <strong class="jxr_keyword">void</strong> a40_constructTable_defersAutoMountsToTheRibbon() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(viewsJs(), <span class="jxr_string">"function constructTable("</span>);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		assertTrue(fn.contains(<span class="jxr_string">"ctx.hasRowDetail = deps.hasRowDetail;"</span>), fn);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		assertTrue(fn.indexOf(<span class="jxr_string">"ctx.hasRowDetail = deps.hasRowDetail;"</span>) &lt; fn.indexOf(<span class="jxr_string">"NS.ribbon.build("</span>), fn);
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		assertTrue(fn.contains(<span class="jxr_string">"!ctx._ribbonOwns?.columnSettings"</span>), fn);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		assertTrue(fn.contains(<span class="jxr_string">"!ctx._ribbonOwns?.linkButton"</span>), fn);
 <a class="jxr_linenumber" name="L439" href="#L439">439</a> 	}
 <a class="jxr_linenumber" name="L440" href="#L440">440</a> 
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> a09_columnDetailText_paintsViaTextContentOnly() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(configJs(), <span class="jxr_string">"function paintColumnDetail("</span>);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertTrue(fn.contains(<span class="jxr_string">"paintUserText"</span>), fn);
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertFalse(fn.contains(<span class="jxr_string">"innerHTML"</span>), fn);
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	@Test <strong class="jxr_keyword">void</strong> a41_mountChooser_seedsOnceThroughTheSharedHelper() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(configJs(), <span class="jxr_string">"function mountChooser("</span>);
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		assertTrue(fn.contains(<span class="jxr_string">"NS.config.seedChooserDraft(table, ctx)"</span>), fn);
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		assertTrue(fn.contains(<span class="jxr_string">"buildChooserButton(table, ctx)"</span>), fn);
 <a class="jxr_linenumber" name="L445" href="#L445">445</a> 	}
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> }
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 	@Test <strong class="jxr_keyword">void</strong> a09_columnDetailText_paintsViaTextContentOnly() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">var</strong> fn = functionBody(configJs(), <span class="jxr_string">"function paintColumnDetail("</span>);
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		assertTrue(fn.contains(<span class="jxr_string">"paintUserText"</span>), fn);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		assertFalse(fn.contains(<span class="jxr_string">"innerHTML"</span>), fn);
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 	}
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

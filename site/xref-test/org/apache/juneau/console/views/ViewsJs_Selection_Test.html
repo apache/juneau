@@ -279,7 +279,7 @@
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertTrue(fn.contains(<span class="jxr_string">"selected &#92;&#92;u00b7"</span>), fn);
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
 <a class="jxr_linenumber" name="L273" href="#L273">273</a> 
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Test <strong class="jxr_keyword">void</strong> i03_wireRightCluster_placesBulkToolbarAtFarEndOfRightCluster() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Test <strong class="jxr_keyword">void</strong> i03_wireBulk_placesBulkToolbarInItsOwnRowAboveTheToolbar() <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">var</strong> body = viewsJs();
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		assertTrue(body.contains(<span class="jxr_string">"function wireToolbarRightClusterBulk("</span>));
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">var</strong> leftFn = functionBody(body, <span class="jxr_string">"function wireToolbarLeftCluster("</span>);

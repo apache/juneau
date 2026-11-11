@@ -148,7 +148,7 @@
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 	<em class="jxr_javadoccomment">/** Waits for the Store page to be back, fully loaded, with its revenue card rendered. */</em>
 <a class="jxr_linenumber" name="L142" href="#L142">142</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Map&lt;String,Object&gt;&gt; storeAgain() {
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">return</strong> List.of(wait(<span class="jxr_string">"location.pathname === '/console/store' &amp;&amp; document.readyState === 'complete'"</span>), wait(<span class="jxr_string">"!!document.querySelector('#revenue-body .petstore-kpi-value')"</span>), trail());
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		<strong class="jxr_keyword">return</strong> List.of(wait(<span class="jxr_string">"location.pathname === '/console/store' &amp;&amp; document.readyState === 'complete'"</span>), wait(<span class="jxr_string">"!!document.querySelector('#store-sw')"</span>), trail());
 <a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
 <a class="jxr_linenumber" name="L145" href="#L145">145</a> 
 <a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_javadoccomment">/** Flattens actions and action lists, in order. */</em>

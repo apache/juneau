@@ -31,64 +31,66 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import java.util.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
-<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.console.freemarker.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.console.views.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.console.views.RowAction.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.console.views.TableSpec.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * Builder twin of the Orders page (P5, {@code orders.ftlh}).</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    &lt;jk&gt;return&lt;/jk&gt; &lt;jsm&gt;twin&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, OrdersPageBuilders.&lt;jsm&gt;orders&lt;/jsm&gt;());</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;/p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> */</span>
-<span class="source-line-no">034</span><span id="line-34">@SuppressWarnings({</span>
-<span class="source-line-no">035</span><span id="line-35">   "java:S1192" // Page-definition ids and labels repeat as inline literals by design.</span>
-<span class="source-line-no">036</span><span id="line-36">})</span>
-<span class="source-line-no">037</span><span id="line-37">public final class OrdersPageBuilders {</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">   private OrdersPageBuilders() {}</span>
-<span class="source-line-no">040</span><span id="line-40"></span>
-<span class="source-line-no">041</span><span id="line-41">   /**</span>
-<span class="source-line-no">042</span><span id="line-42">    * P5 Orders.</span>
-<span class="source-line-no">043</span><span id="line-43">    *</span>
-<span class="source-line-no">044</span><span id="line-44">    * @return The page spec.</span>
-<span class="source-line-no">045</span><span id="line-45">    */</span>
-<span class="source-line-no">046</span><span id="line-46">   public static PageSpec orders() {</span>
-<span class="source-line-no">047</span><span id="line-47">      return PageSpec.create().tab("orders").toolkit("views", "datatables-buttons", "datatables-export")</span>
-<span class="source-line-no">048</span><span id="line-48">         .table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query").urlState("day", "window")</span>
-<span class="source-line-no">049</span><span id="line-49">            .columnConfig(Map.of("tabs", List.of("columns", "sort")))</span>
-<span class="source-line-no">050</span><span id="line-50">            .defaultOrder("id", Sort.ASC)</span>
-<span class="source-line-no">051</span><span id="line-51">            .detail(RowDetails.order())</span>
-<span class="source-line-no">052</span><span id="line-52">            .columns(</span>
-<span class="source-line-no">053</span><span id="line-53">               Column.create("id").label("Id"),</span>
-<span class="source-line-no">054</span><span id="line-54">               Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),</span>
-<span class="source-line-no">055</span><span id="line-55">               Column.create("shipDate").label("Ship date").render("date"),</span>
-<span class="source-line-no">056</span><span id="line-56">               Column.create("status").label("Status").render(PillRenders.orderStatus()))</span>
-<span class="source-line-no">057</span><span id="line-57">            .ribbon(Ribbons.standard()</span>
-<span class="source-line-no">058</span><span id="line-58">               .create(RibbonItem.dialog("new-order").title("+ New order").symbol("plus")</span>
-<span class="source-line-no">059</span><span id="line-59">                  .form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
-<span class="source-line-no">060</span><span id="line-60">               .filter(RibbonItem.optionGroup("status",</span>
-<span class="source-line-no">061</span><span id="line-61">                  RibbonItem.option("placed").title("Placed").symbol("shopping_cart").column("status").value("$eq(PLACED)"),</span>
-<span class="source-line-no">062</span><span id="line-62">                  RibbonItem.option("approved").title("Approved").symbol("badge_check").column("status").value("$eq(APPROVED)"),</span>
-<span class="source-line-no">063</span><span id="line-63">                  RibbonItem.option("delivered").title("Delivered").symbol("truck").column("status").value("$eq(DELIVERED)"))</span>
-<span class="source-line-no">064</span><span id="line-64">                  .title("Order status").deselectable(true))</span>
-<span class="source-line-no">065</span><span id="line-65">               .export("excel", "pdf")</span>
-<span class="source-line-no">066</span><span id="line-66">               .build())</span>
-<span class="source-line-no">067</span><span id="line-67">            .rowActions(</span>
-<span class="source-line-no">068</span><span id="line-68">               RowAction.create("approve").label("Approve").endpoint("/console/orders/{id}/approve").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
-<span class="source-line-no">069</span><span id="line-69">                  .visibleWhen(VisibilityRule.when("status").eq("PLACED")),</span>
-<span class="source-line-no">070</span><span id="line-70">               RowAction.create("deliver").label("Deliver").endpoint("/console/orders/{id}/deliver").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
-<span class="source-line-no">071</span><span id="line-71">                  .visibleWhen(VisibilityRule.when("status").eq("APPROVED")),</span>
-<span class="source-line-no">072</span><span id="line-72">               RowAction.create("cancel").label("Cancel").form("/console/orders/{id}/cancel-form").present(Present.DIALOG)</span>
-<span class="source-line-no">073</span><span id="line-73">                  .endpoint("/console/orders/{id}").method(Method.DELETE).onSuccess(OnSuccess.REDRAW),</span>
-<span class="source-line-no">074</span><span id="line-74">               RowAction.create("delete").label("Delete").endpoint("/console/orders/{id}").method(Method.DELETE)</span>
-<span class="source-line-no">075</span><span id="line-75">                  .confirm("Delete order '{id}'?").confirmLabel("Delete").tone(Tone.DANGER).confirmRenderer("typed").onSuccess(OnSuccess.REDRAW)),</span>
-<span class="source-line-no">076</span><span id="line-76">            "Orders");</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78">}</span>
+<span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.beanquery.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.console.freemarker.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.console.views.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.console.views.RowAction.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.console.views.TableSpec.*;</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Builder twin of the Orders page (P5, {@code orders.ftlh}).</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * &lt;h2 class='section'&gt;Example:&lt;/h2&gt;</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;jk&gt;return&lt;/jk&gt; &lt;jsm&gt;twin&lt;/jsm&gt;(&lt;jv&gt;req&lt;/jv&gt;, OrdersPageBuilders.&lt;jsm&gt;orders&lt;/jsm&gt;());</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;/p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> */</span>
+<span class="source-line-no">035</span><span id="line-35">@SuppressWarnings({</span>
+<span class="source-line-no">036</span><span id="line-36">   "java:S1192" // Page-definition ids and labels repeat as inline literals by design.</span>
+<span class="source-line-no">037</span><span id="line-37">})</span>
+<span class="source-line-no">038</span><span id="line-38">public final class OrdersPageBuilders {</span>
+<span class="source-line-no">039</span><span id="line-39"></span>
+<span class="source-line-no">040</span><span id="line-40">   private OrdersPageBuilders() {}</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">   /**</span>
+<span class="source-line-no">043</span><span id="line-43">    * P5 Orders.</span>
+<span class="source-line-no">044</span><span id="line-44">    *</span>
+<span class="source-line-no">045</span><span id="line-45">    * @return The page spec.</span>
+<span class="source-line-no">046</span><span id="line-46">    */</span>
+<span class="source-line-no">047</span><span id="line-47">   public static PageSpec orders() {</span>
+<span class="source-line-no">048</span><span id="line-48">      return PageSpec.create().tab("orders").toolkit("views", "datatables-buttons", "datatables-export")</span>
+<span class="source-line-no">049</span><span id="line-49">         .table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query").urlState("day", "window")</span>
+<span class="source-line-no">050</span><span id="line-50">            .operators(SearchOperatorSet.standard())</span>
+<span class="source-line-no">051</span><span id="line-51">            .columnConfig(Map.of("tabs", List.of("columns", "sort")))</span>
+<span class="source-line-no">052</span><span id="line-52">            .defaultOrder("id", Sort.ASC)</span>
+<span class="source-line-no">053</span><span id="line-53">            .detail(RowDetails.order())</span>
+<span class="source-line-no">054</span><span id="line-54">            .columns(</span>
+<span class="source-line-no">055</span><span id="line-55">               Column.create("id").label("Id").searchType(SearchType.NUMERIC),</span>
+<span class="source-line-no">056</span><span id="line-56">               Column.create("petId").label("Pet").href("/console/pets/{petId}/summary").searchType(SearchType.NUMERIC),</span>
+<span class="source-line-no">057</span><span id="line-57">               Column.create("shipDate").label("Ship date").render("date").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">058</span><span id="line-58">               Column.create("status").label("Status").render(PillRenders.orderStatus()).searchType(SearchType.ENUM))</span>
+<span class="source-line-no">059</span><span id="line-59">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">060</span><span id="line-60">               .create(RibbonItem.dialog("new-order").title("+ New order").symbol("plus")</span>
+<span class="source-line-no">061</span><span id="line-61">                  .form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))</span>
+<span class="source-line-no">062</span><span id="line-62">               .filter(RibbonItem.optionGroup("status",</span>
+<span class="source-line-no">063</span><span id="line-63">                  RibbonItem.option("placed").title("Placed").symbol("shopping_cart").column("status").value("$eq(PLACED)"),</span>
+<span class="source-line-no">064</span><span id="line-64">                  RibbonItem.option("approved").title("Approved").symbol("badge_check").column("status").value("$eq(APPROVED)"),</span>
+<span class="source-line-no">065</span><span id="line-65">                  RibbonItem.option("delivered").title("Delivered").symbol("truck").column("status").value("$eq(DELIVERED)"))</span>
+<span class="source-line-no">066</span><span id="line-66">                  .title("Order status").deselectable(true))</span>
+<span class="source-line-no">067</span><span id="line-67">               .export("excel", "pdf")</span>
+<span class="source-line-no">068</span><span id="line-68">               .build())</span>
+<span class="source-line-no">069</span><span id="line-69">            .rowActions(</span>
+<span class="source-line-no">070</span><span id="line-70">               RowAction.create("approve").label("Approve").endpoint("/console/orders/{id}/approve").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
+<span class="source-line-no">071</span><span id="line-71">                  .visibleWhen(VisibilityRule.when("status").eq("PLACED")),</span>
+<span class="source-line-no">072</span><span id="line-72">               RowAction.create("deliver").label("Deliver").endpoint("/console/orders/{id}/deliver").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
+<span class="source-line-no">073</span><span id="line-73">                  .visibleWhen(VisibilityRule.when("status").eq("APPROVED")),</span>
+<span class="source-line-no">074</span><span id="line-74">               RowAction.create("cancel").label("Cancel").form("/console/orders/{id}/cancel-form").present(Present.DIALOG)</span>
+<span class="source-line-no">075</span><span id="line-75">                  .endpoint("/console/orders/{id}").method(Method.DELETE).onSuccess(OnSuccess.REDRAW),</span>
+<span class="source-line-no">076</span><span id="line-76">               RowAction.create("delete").label("Delete").endpoint("/console/orders/{id}").method(Method.DELETE)</span>
+<span class="source-line-no">077</span><span id="line-77">                  .confirm("Delete order '{id}'?").confirmLabel("Delete").tone(Tone.DANGER).confirmRenderer("typed").onSuccess(OnSuccess.REDRAW)),</span>
+<span class="source-line-no">078</span><span id="line-78">            "Orders");</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80">}</span>
 
 
 

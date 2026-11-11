@@ -116,7 +116,7 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> stem : <strong class="jxr_keyword">new</strong> String[]{
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 			<span class="jxr_string">"copy"</span>, <span class="jxr_string">"csv"</span>, <span class="jxr_string">"spreadsheet"</span>, <span class="jxr_string">"pdf"</span>, <span class="jxr_string">"print"</span>, <span class="jxr_string">"refresh"</span>, <span class="jxr_string">"toggle_column_search"</span>, <span class="jxr_string">"collapse_all"</span>,
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 			<span class="jxr_string">"settings"</span>, <span class="jxr_string">"columns"</span>, <span class="jxr_string">"chevronright"</span>, <span class="jxr_string">"chevronleft"</span>, <span class="jxr_string">"chevronup"</span>, <span class="jxr_string">"chevrondown"</span>,
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<span class="jxr_string">"first_page"</span>, <span class="jxr_string">"last_page"</span>, <span class="jxr_string">"more"</span>, <span class="jxr_string">"sort"</span>, <span class="jxr_string">"filter"</span>, <span class="jxr_string">"search"</span>, <span class="jxr_string">"close"</span>, <span class="jxr_string">"download"</span>, <span class="jxr_string">"edit"</span>,
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			<span class="jxr_string">"first_page"</span>, <span class="jxr_string">"last_page"</span>, <span class="jxr_string">"first_page_thin"</span>, <span class="jxr_string">"last_page_thin"</span>, <span class="jxr_string">"chevron_left_thin"</span>, <span class="jxr_string">"chevron_right_thin"</span>, <span class="jxr_string">"more"</span>, <span class="jxr_string">"sort"</span>, <span class="jxr_string">"filter"</span>, <span class="jxr_string">"search"</span>, <span class="jxr_string">"close"</span>, <span class="jxr_string">"download"</span>, <span class="jxr_string">"edit"</span>,
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<span class="jxr_string">"plus"</span>, <span class="jxr_string">"play"</span>, <span class="jxr_string">"restore"</span>, <span class="jxr_string">"tune"</span>
 <a class="jxr_linenumber" name="L113" href="#L113">113</a> 		})
 <a class="jxr_linenumber" name="L114" href="#L114">114</a> 			assertTrue(svg.contains(<span class="jxr_string">"id=\&quot;juneau-sym-"</span> + stem + <span class="jxr_string">"\&quot;"</span>),
@@ -244,7 +244,7 @@
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> n2s = (Map&lt;?,?&gt;) s.get(<span class="jxr_string">"nameToStem"</span>);
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 		assertBean(n2s, <span class="jxr_string">"content_copy,table,picture_as_pdf,manage_search"</span>, <span class="jxr_string">"copy,spreadsheet,pdf,toggle_column_search"</span>);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 		<em class="jxr_comment">// stems() returns the shipped stem catalog after load; it matches the injected sprite's symbol count.</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertBean(s, <span class="jxr_string">"stemsCount,namesCount"</span>, <span class="jxr_string">"39,40"</span>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		assertBean(s, <span class="jxr_string">"stemsCount,namesCount"</span>, <span class="jxr_string">"43,44"</span>);
 <a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 	@Test <strong class="jxr_keyword">void</strong> b04_partialReplacement_replacedNamesWinAndTheRestFallThrough() {
@@ -323,7 +323,7 @@
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 	@Test <strong class="jxr_keyword">void</strong> c05_packDuringAnInFlightLoadDropsTheStaleLoadAndKeepsTheGateClosed() {
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		assertBean(scenario(<span class="jxr_string">"s_pack"</span>),
 <a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<span class="jxr_string">"freshInjectedOnce,staleNotInjected,staleResolvesToCurrent,stemsStillShipped,spriteSymbols,gateStaysClosed"</span>,
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<span class="jxr_string">"true,true,true,39,40,true"</span>);
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			<span class="jxr_string">"true,true,true,43,44,true"</span>);
 <a class="jxr_linenumber" name="L319" href="#L319">319</a> 	}
 <a class="jxr_linenumber" name="L320" href="#L320">320</a> 
 <a class="jxr_linenumber" name="L321" href="#L321">321</a> 	@Test <strong class="jxr_keyword">void</strong> c06_materialPackLayersOverTheShippedSpriteSoMissingStemsFallBack() {
@@ -335,7 +335,7 @@
 <a class="jxr_linenumber" name="L327" href="#L327">327</a> 	@Test <strong class="jxr_keyword">void</strong> c07_newGlyphNamesResolveToTheirStemsAndColumnsMapsToTune() {
 <a class="jxr_linenumber" name="L328" href="#L328">328</a> 		assertBean(scenario(<span class="jxr_string">"s_newGlyphs"</span>),
 <a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<span class="jxr_string">"plus,play,restore,tune,columns,settings,unknownNull,unknownWarned"</span>,
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<span class="jxr_string">"plus,play,restore,tune,tune,settings,true,true"</span>);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<span class="jxr_string">"plus,play,restore,tune,settings,settings,true,true"</span>);
 <a class="jxr_linenumber" name="L331" href="#L331">331</a> 	}
 <a class="jxr_linenumber" name="L332" href="#L332">332</a> 
 <a class="jxr_linenumber" name="L333" href="#L333">333</a> 	@Test <strong class="jxr_keyword">void</strong> c08_lucideBaseLayerSitsUnderShipped() {

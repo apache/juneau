@@ -20670,6 +20670,12 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Builder class.</div>
 </dd>
+<dt><a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html" class="type-name-link" title="class in org.apache.juneau.server.config.rest">ConfigApiKeyGuard</a> - Class in <a href="org/apache/juneau/server/config/rest/package-summary.html">org.apache.juneau.server.config.rest</a></dt>
+<dd>
+<div class="block">Guard that protects <a href="org/apache/juneau/server/config/rest/LoadConfigResource.html" title="class in org.apache.juneau.server.config.rest"><code>LoadConfigResource</code></a> with a shared API key.</div>
+</dd>
+<dt><a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#%3Cinit%3E()" class="member-name-link">ConfigApiKeyGuard()</a> - Constructor for class org.apache.juneau.server.config.rest.<a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html" title="class in org.apache.juneau.server.config.rest">ConfigApiKeyGuard</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/microservice/console/ConfigCommand.html" class="type-name-link" title="class in org.apache.juneau.microservice.console">ConfigCommand</a> - Class in <a href="org/apache/juneau/microservice/console/package-summary.html">org.apache.juneau.microservice.console</a></dt>
 <dd>
 <div class="block">Implements the 'config' console command to get or set configuration.</div>
@@ -20834,6 +20840,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Applies a DCR-issued registration's <code>client_id</code> and optional <code>client_secret</code> onto an
  <a href="org/apache/juneau/rest/client/mcp/auth/McpTokenProvider.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth"><code>McpTokenProvider.Builder</code></a> (client-credentials / refresh modes).</div>
+</dd>
+<dt><a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#configuredKey()" class="member-name-link">configuredKey()</a> - Method in class org.apache.juneau.server.config.rest.<a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html" title="class in org.apache.juneau.server.config.rest">ConfigApiKeyGuard</a></dt>
+<dd>
+<div class="block">Returns the configured key, or <jk>null</jk> if none is configured or the configuration cannot be read.</div>
 </dd>
 <dt><a href="org/apache/juneau/config/vars/ConfigVar.html" class="type-name-link" title="class in org.apache.juneau.config.vars">ConfigVar</a> - Class in <a href="org/apache/juneau/config/vars/package-summary.html">org.apache.juneau.config.vars</a></dt>
 <dd>
@@ -55458,6 +55468,8 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Checks the current HTTP request and throws a <a href="org/apache/juneau/http/response/BasicHttpException.html" title="class in org.apache.juneau.http.response"><code>BasicHttpException</code></a> if the guard does not permit the request.</div>
 </dd>
+<dt><a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#guard(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.rest.server.RestResponse)" class="member-name-link">guard(RestRequest, RestResponse)</a> - Method in class org.apache.juneau.server.config.rest.<a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html" title="class in org.apache.juneau.server.config.rest">ConfigApiKeyGuard</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/server/Child.html#guards()" class="member-name-link">guards()</a> - Element in annotation interface org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/Child.html" title="annotation interface in org.apache.juneau.rest.server">Child</a></dt>
 <dd>
 <div class="block">Host-seeded <a href="org/apache/juneau/rest/server/Rest.html#guards()"><code>guards</code></a> for this child's endpoints (prepended before the child's own).</div>
@@ -66533,6 +66545,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns <jk>true</jk> if the specified request can pass through this guard.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/guard/RoleBasedRestGuard.html#isRequestAllowed(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">isRequestAllowed(RestRequest)</a> - Method in class org.apache.juneau.rest.server.guard.<a href="org/apache/juneau/rest/server/guard/RoleBasedRestGuard.html" title="class in org.apache.juneau.rest.server.guard">RoleBasedRestGuard</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html#isRequestAllowed(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">isRequestAllowed(RestRequest)</a> - Method in class org.apache.juneau.server.config.rest.<a href="org/apache/juneau/server/config/rest/ConfigApiKeyGuard.html" title="class in org.apache.juneau.server.config.rest">ConfigApiKeyGuard</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="org/apache/juneau/rest/mock/MockServletRequest.html#isRequestedSessionIdFromCookie()" class="member-name-link">isRequestedSessionIdFromCookie()</a> - Method in class org.apache.juneau.rest.mock.<a href="org/apache/juneau/rest/mock/MockServletRequest.html" title="class in org.apache.juneau.rest.mock">MockServletRequest</a></dt>
 <dd>&nbsp;</dd>
@@ -104469,6 +104483,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns whether the granted scopes satisfy every required scope, using exact string equality.</div>
 </dd>
+<dt><a href="org/apache/juneau/console/views/TableSpec.html#savedViewsInRibbon(boolean)" class="member-name-link">savedViewsInRibbon(boolean)</a> - Method in class org.apache.juneau.console.views.<a href="org/apache/juneau/console/views/TableSpec.html" title="class in org.apache.juneau.console.views">TableSpec</a></dt>
+<dd>
+<div class="block">Sets whether the ribbon shows a saved-views drop-down (when the table has two or more views); on by default.</div>
+</dd>
 <dt><a href="org/apache/juneau/petstore/springboot/HelloResource.html#sayHello()" class="member-name-link">sayHello()</a> - Method in class org.apache.juneau.petstore.springboot.<a href="org/apache/juneau/petstore/springboot/HelloResource.html" title="class in org.apache.juneau.petstore.springboot">HelloResource</a></dt>
 <dd>
 <div class="block">GET /hello/* — returns the message provided by the injected Spring bean.</div>
@@ -120084,6 +120102,16 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/petstore/console/pages/DevPageBuilders.html#themes(java.lang.String,boolean,java.util.List)" class="member-name-link">themes(String, boolean, List&lt;String&gt;)</a> - Static method in class org.apache.juneau.petstore.console.pages.<a href="org/apache/juneau/petstore/console/pages/DevPageBuilders.html" title="class in org.apache.juneau.petstore.console.pages">DevPageBuilders</a></dt>
 <dd>
 <div class="block">Themes.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/freemarker/PageCapture.html#themeSelector(boolean)" class="member-name-link">themeSelector(boolean)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageCapture.html" title="class in org.apache.juneau.console.freemarker">PageCapture</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="org/apache/juneau/console/freemarker/PageSpec.html#themeSelector(boolean)" class="member-name-link">themeSelector(boolean)</a> - Method in class org.apache.juneau.console.freemarker.<a href="org/apache/juneau/console/freemarker/PageSpec.html" title="class in org.apache.juneau.console.freemarker">PageSpec</a></dt>
+<dd>
+<div class="block">Adds a header control that lets the visitor pick the stock theme palette, independent of the colour scheme.</div>
+</dd>
+<dt><a href="org/apache/juneau/console/ConsoleChromeMixin.html#themeSelectorHtmlAttributes()" class="member-name-link">themeSelectorHtmlAttributes()</a> - Static method in class org.apache.juneau.console.<a href="org/apache/juneau/console/ConsoleChromeMixin.html" title="class in org.apache.juneau.console">ConsoleChromeMixin</a></dt>
+<dd>
+<div class="block">Returns the <code>&lt;html&gt;</code> start-tag attributes that switch on the theme selector.</div>
 </dd>
 <dt><a href="org/apache/juneau/petstore/console/dev/ThemesRest.html" class="type-name-link" title="class in org.apache.juneau.petstore.console.dev">ThemesRest</a> - Class in <a href="org/apache/juneau/petstore/console/dev/package-summary.html">org.apache.juneau.petstore.console.dev</a></dt>
 <dd>
