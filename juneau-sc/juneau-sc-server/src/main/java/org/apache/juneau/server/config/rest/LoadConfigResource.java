@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.server.config.repository.*;
 
-@Rest(path = "/configs/*")
+@Rest(path = "/configs/*", guards = ApiKeyGuard.class)
 @SuppressWarnings("javadoc")
 public class LoadConfigResource extends RestServlet {
 
@@ -32,7 +32,12 @@ public class LoadConfigResource extends RestServlet {
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
 		var jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 
-		var config = new GetConfiguration(project, branch);
+		GetConfiguration config;
+		try {
+			config = new GetConfiguration(project, branch);
+		} catch (IllegalArgumentException e) {
+			throw new org.apache.juneau.http.response.BadRequest(e.getMessage());
+		}
 		config.execute();
 
 		return jsonSerializer.serialize(config.get());

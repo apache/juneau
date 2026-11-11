@@ -669,4 +669,32 @@ public class FileFinder_Test extends TestBase {  // NOSONAR - Needs to be public
 			super(x);
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Path traversal via malformed locale (CWE-22).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void z01_malformedLocaleDoesNotEscapeRoot(@org.junit.jupiter.api.io.TempDir Path tmp) throws Exception {
+		var web = Files.createDirectory(tmp.resolve("web"));
+		Files.writeString(tmp.resolve("OUTSIDE.txt"), "secret");
+		Files.writeString(web.resolve("file.txt"), "base");
+		Files.writeString(web.resolve("file_ja.txt"), "ja-suffix");
+		Files.createDirectory(web.resolve("ja"));
+		Files.writeString(web.resolve("ja").resolve("dir.txt"), "ja-dir");
+		Files.writeString(web.resolve("dir.txt"), "base-dir");
+
+		var ff = FileFinder.create().dir(web.toString()).include(".*").build();
+
+		assertFalse(ff.getString("OUTSIDE.txt", new Locale("..","..")).isPresent());
+		assertFalse(ff.getString("OUTSIDE.txt", new Locale("..")).isPresent());
+		assertFalse(ff.getString("OUTSIDE.txt", new Locale("en","US")).isPresent());
+		assertFalse(ff.getString("OUTSIDE.txt", null).isPresent());
+
+		// Bad locale still falls through to the plain file.
+		assertEquals("base", ff.getString("file.txt", new Locale("..","..")).orElse(null));
+
+		// Legit localized lookups still work.
+		assertEquals("ja-suffix", ff.getString("file.txt", JAPANESE).orElse(null));
+		assertEquals("ja-dir", ff.getString("dir.txt", JAPANESE).orElse(null));
+	}
 }

@@ -452,7 +452,12 @@ public class FileStore extends ConfigStore {
 
 	@Override /* Overridden from ConfigStore */
 	public synchronized boolean exists(String name) {
-		return Files.exists(resolveFile(name));
+		try {
+			return Files.exists(resolveFile(name));
+		} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+			// Names that escape the store directory are treated as not found.
+			return false;
+		}
 	}
 
 	@Override /* Overridden from ConfigStore */
@@ -570,7 +575,36 @@ public class FileStore extends ConfigStore {
 	}
 
 	private Path resolveFile(String name) {
-		return dir.toPath().resolve(resolveName(name));
+		var p = dir.toPath().resolve(resolveName(name)).normalize();
+		// Absolute names are an existing, supported usage (e.g. @Rest(config="/abs/path.cfg")) and are left alone;
+		// relative names must stay within the store directory.
+		if (! p.startsWith(dir.toPath()) && ! Path.of(name).isAbsolute())
+			throw new IllegalArgumentException("Configuration name escapes the store directory: " + name);
+		// Existing relative targets must also stay within the directory after following symlinks.
+		if (! Path.of(name).isAbsolute() && Files.exists(p)) {
+			try {
+				if (! p.toRealPath().startsWith(dir.toPath().toRealPath()))
+					throw new IllegalArgumentException("Configuration name escapes the store directory: " + name);
+			} catch (IOException e) {
+				throw new IllegalArgumentException("Configuration name could not be resolved: " + name);
+			}
+		}
+		return p;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified name (resolved against the store directory) stays within that directory.
+	 *
+	 * <p>
+	 * Used to prevent existence probes outside of the store directory via relative names (CWE-22).
+	 * Absolute names are an existing supported usage and are not restricted.
+	 */
+	private boolean isContained(String name) {
+		try {
+			return Path.of(name).isAbsolute() || dir.toPath().resolve(name).normalize().startsWith(dir.toPath());
+		} catch (@SuppressWarnings("unused") InvalidPathException e) {
+			return false;
+		}
 	}
 
 	/**
@@ -605,7 +639,7 @@ public class FileStore extends ConfigStore {
 			var n = (String)null;
 
 			// Does file exist as-is?
-			if (fileExists(dir, name))
+			if (isContained(name) && fileExists(dir, name))
 				n = name;
 
 			// Does name already have an extension?
@@ -621,7 +655,7 @@ public class FileStore extends ConfigStore {
 			// Find file with the correct extension.
 			if (n == null) {
 				for (var ext : exts) {
-					if (fileExists(dir, name + '.' + ext)) {
+					if (isContained(name + '.' + ext) && fileExists(dir, name + '.' + ext)) {
 						n = name + '.' + ext;
 						break;
 					}

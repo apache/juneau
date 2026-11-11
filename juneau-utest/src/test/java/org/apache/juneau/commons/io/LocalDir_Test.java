@@ -209,5 +209,36 @@ class LocalDir_Test extends TestBase {
 		var str = dir.toString();
 		assertTrue(str.contains("LocalDir_Test") && str.contains("/"));
 	}
-}
 
+	//====================================================================================================
+	// Path traversal (CWE-22)
+	//====================================================================================================
+	@Test void g01_traversalRejected(@org.junit.jupiter.api.io.TempDir Path tmp) throws Exception {
+		var web = Files.createDirectory(tmp.resolve("web"));
+		Files.writeString(tmp.resolve("OUTSIDE.txt"), "secret");
+		Files.writeString(web.resolve("in.txt"), "ok");
+		var dir = new LocalDir(web);
+		assertNotNull(dir.resolve("in.txt"));
+		assertNull(dir.resolve("missing.txt"));
+		assertThrows(IllegalArgumentException.class, () -> dir.resolve("../OUTSIDE.txt"));
+		assertThrows(IllegalArgumentException.class, () -> dir.resolve("../../OUTSIDE.txt"));
+		assertThrows(IllegalArgumentException.class, () -> dir.resolve(tmp.resolve("OUTSIDE.txt").toString()));
+	}
+
+	@Test void g02_symlinkEscapeRejected(@org.junit.jupiter.api.io.TempDir Path tmp) throws Exception {
+		var web = Files.createDirectory(tmp.resolve("web"));
+		Files.writeString(tmp.resolve("OUTSIDE.txt"), "secret");
+		try {
+			Files.createSymbolicLink(web.resolve("link.txt"), tmp.resolve("OUTSIDE.txt"));
+		} catch (@SuppressWarnings("unused") UnsupportedOperationException | java.io.IOException e) {
+			org.junit.jupiter.api.Assumptions.abort("Symlinks not supported.");
+		}
+		var dir = new LocalDir(web);
+		assertThrows(IllegalArgumentException.class, () -> dir.resolve("link.txt"));
+	}
+
+	@Test void g03_classpathTraversalRejected() {
+		var dir = new LocalDir(LocalDir_Test.class, "files");
+		assertThrows(IllegalArgumentException.class, () -> dir.resolve("../files/test1/_a.txt"));
+	}
+}

@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.commons.time.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
@@ -318,12 +319,14 @@ public class LogsResource extends BasicRestServlet {
 	}
 
 	private File getFile(String path) throws NotFound {
-		if (path == null)
+		if (path == null || path.isEmpty())
 			return logDir;
-		var f = new File(logDir.getAbsolutePath() + '/' + path);
-		if (f.exists())
-			return f;
-		throw new NotFound("File not found.");
+		try {
+			// Rejects '..' traversal and symlinks that escape logDir (CWE-22).
+			return FileUtils.resolveSafely(logDir, path).orElseThrow(() -> new NotFound("File not found."));
+		} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+			throw new Forbidden("Access denied.");
+		}
 	}
 
 	private LogParser getLogParser(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {

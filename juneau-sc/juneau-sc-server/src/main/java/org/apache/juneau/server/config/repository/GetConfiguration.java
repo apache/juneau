@@ -30,12 +30,18 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	private static final String EXT = ".cfg";
 	private static final String BAR = "/";
 
+	// All requests share one git checkout; serialize pull/checkout/pull so concurrent branches cannot interleave.
+	private static final Object GIT_LOCK = new Object();
+
 	private Map<String,ConfigItem> configs = new HashMap<>();
 
 	private String project;
 	private String branch;
 
 	public GetConfiguration(String project, String branch) {
+		// Path variables are URL-decoded after the path is split, so an encoded '%2F' or '..' can survive (CWE-22).
+		validate("project", project, false);
+		validate("branch", branch, true);
 		this.branch = branch;
 		this.project = project;
 	}
@@ -49,37 +55,46 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 
 		var git = config.get("GitServer/gitRemote").orElse(null);
 
-		var gitControl = new GitControl(pathStr, git);
+		synchronized (GIT_LOCK) {
+			var gitControl = new GitControl(pathStr, git);
 
-		var path = new File(pathStr);
+			var path = new File(pathStr);
 
-		if (path.isDirectory()) {
+			if (path.isDirectory()) {
+				gitControl.pullFromRepo();
+			} else {
+				gitControl.cloneRepo();
+			}
+
+			gitControl.branch(branch);
 			gitControl.pullFromRepo();
-		} else {
-			gitControl.cloneRepo();
-		}
 
-		gitControl.branch(branch);
-		gitControl.pullFromRepo();
+			var fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
+			var fileProjectStr = this.project.concat(EXT);
 
-		var fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
-		var fileProjectStr = this.project.concat(EXT);
+			var fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));
+			if (fileDefault.exists()) {
+				var lines = new String(Files.readAllBytes(fileDefault.toPath()));
+				configs.put(APPLICATION, new ConfigItem(lines));
+			}
 
-		var fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));
-		if (fileDefault.exists()) {
-			var lines = new String(Files.readAllBytes(fileDefault.toPath()));
-			configs.put(APPLICATION, new ConfigItem(lines));
-		}
-
-		var fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));
-		if (fileProject.exists()) {
-			var linesProject = new String(Files.readAllBytes(fileProject.toPath()));
-			configs.put(PROJECT, new ConfigItem(linesProject));
+			var fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));
+			if (fileProject.exists()) {
+				var linesProject = new String(Files.readAllBytes(fileProject.toPath()));
+				configs.put(PROJECT, new ConfigItem(linesProject));
+			}
 		}
 	}
 
 	@Override
 	public Map<String,ConfigItem> get() {
 		return configs;
+	}
+
+	// Project becomes a file name, so no separators at all.  Branch is only passed to git as a ref name, so
+	// legitimate names such as "feature/foo" are allowed, but '..', backslash and NUL are not.
+	private static void validate(String name, String value, boolean allowSlash) {
+		if (value == null || value.isEmpty() || value.contains("\\") || value.contains("..") || value.indexOf('\0') >= 0 || (! allowSlash && value.contains("/")))
+			throw new IllegalArgumentException("Invalid " + name + " value.");
 	}
 }

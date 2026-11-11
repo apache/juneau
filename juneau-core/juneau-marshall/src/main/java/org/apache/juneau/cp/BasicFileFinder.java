@@ -164,7 +164,13 @@ public class BasicFileFinder implements FileFinder {
 			List<String> candidateFileNames = getCandidateFileNames(name, locale);
 			paths: for (LocalDir root : roots) {
 				for (var cfn : candidateFileNames) {
-					lf = root.resolve(cfn);
+					if (isInvalidPath(cfn))
+						continue;
+					try {
+						lf = root.resolve(cfn);
+					} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+						lf = null;  // Candidate escapes the root; ignore.
+					}
 					if (nn(lf))
 						break paths;
 				}

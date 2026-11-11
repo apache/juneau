@@ -557,5 +557,47 @@ class FileUtils_Test extends TestBase {
 		var newTime = dir.lastModified();
 		assertTrue(newTime > originalTime || newTime == originalTime + 1000);
 	}
-}
 
+	//====================================================================================================
+	// resolveSafely - symlinks
+	//====================================================================================================
+	private static void link(Path link, Path target) throws IOException {
+		try {
+			Files.createSymbolicLink(link, target);
+		} catch (@SuppressWarnings("unused") UnsupportedOperationException | IOException e) {
+			Assumptions.abort("Symlinks not supported.");
+		}
+	}
+
+	@Test
+	void resolveSafely_symlinkToOutsideFile_rejected() throws Exception {
+		var root = Files.createDirectory(tempDir.resolve("root"));
+		var secret = Files.writeString(tempDir.resolve("secret.txt"), "s");
+		link(root.resolve("link.txt"), secret);
+		assertThrows(IllegalArgumentException.class, () -> FileUtils.resolveSafely(root.toFile(), "link.txt"));
+	}
+
+	@Test
+	void resolveSafely_symlinkToOutsideDir_childRejected() throws Exception {
+		var root = Files.createDirectory(tempDir.resolve("root"));
+		var outside = Files.createDirectory(tempDir.resolve("outside"));
+		Files.writeString(outside.resolve("secret.txt"), "s");
+		link(root.resolve("dirlink"), outside);
+		assertThrows(IllegalArgumentException.class, () -> FileUtils.resolveSafely(root.toFile(), "dirlink"));
+		assertThrows(IllegalArgumentException.class, () -> FileUtils.resolveSafely(root.toFile(), "dirlink/secret.txt"));
+	}
+
+	@Test
+	void resolveSafely_symlinkInsideRoot_allowed() throws Exception {
+		var root = Files.createDirectory(tempDir.resolve("root"));
+		var real = Files.writeString(root.resolve("real.txt"), "r");
+		link(root.resolve("alias.txt"), real);
+		assertTrue(FileUtils.resolveSafely(root.toFile(), "alias.txt").isPresent());
+	}
+
+	@Test
+	void resolveSafely_missingFile_empty() throws Exception {
+		var root = Files.createDirectory(tempDir.resolve("root"));
+		assertTrue(FileUtils.resolveSafely(root.toFile(), "nope.txt").isEmpty());
+	}
+}

@@ -18,10 +18,13 @@ package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.nio.file.*;
+
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents a directory that can be located either on the classpath or in the file system.
@@ -216,19 +219,26 @@ public class LocalDir {
 	 * 	LocalFile <jv>file2</jv> = <jv>dir</jv>.resolve(<js>"pages/about.html"</js>);
 	 * </p>
 	 *
-	 * <h5 class='section'>Security Note:</h5>
+	 * <h5 class='section'>Security (CWE-22 / path-traversal):</h5>
 	 * <p>
-	 * This method does not perform path validation or security checks (e.g., checking for path
-	 * traversal attacks or malformed values). The caller is responsible for ensuring the path
-	 * is safe and valid.
+	 * For filesystem directories, path resolution is delegated to {@link FileUtils#resolveSafely(java.io.File, String)}
+	 * which rejects any resolved path that escapes the configured root (via <js>"../"</js>, absolute-path injection,
+	 * or symlinks pointing outside the root) with an {@link IllegalArgumentException}.
+	 *
+	 * <p>
+	 * For classpath directories, paths containing <js>".."</js> are rejected with an {@link IllegalArgumentException}.
+	 * URL-encoded sequences (e.g. <js>"%2e%2e"</js>) are not decoded and are treated as literal path segments.
 	 *
 	 * @param path The relative path to the file to resolve within this directory.
 	 *             Must be a non-null relative path.
 	 * @return A {@link LocalFile} instance if the file exists and is readable, or <jk>null</jk> if it does not.
+	 * @throws IllegalArgumentException If the path escapes the configured root.
 	 */
 	public LocalFile resolve(String path) {
 		assertArgNotNull("path", path);
 		if (nn(clazz)) {
+			if (path.contains(".."))
+				throw illegalArg("Path escapes configured root directory.");
 			String p;
 			if (clazzPath == null) {
 				// Relative to class package - keep path relative
@@ -246,9 +256,12 @@ public class LocalDir {
 			if (isClasspathFile(clazz.getResource(p)))
 				return new LocalFile(clazz, p);
 		} else {
-			var p = this.path.resolve(path);
-			if (Files.isReadable(p) && ! Files.isDirectory(p))
-				return new LocalFile(p);
+			var opt = FileUtils.resolveSafely(this.path.toFile(), path);
+			if (opt.isPresent()) {
+				var p = opt.get().toPath();
+				if (Files.isReadable(p) && ! Files.isDirectory(p))
+					return new LocalFile(p);
+			}
 		}
 		return null;
 	}
