@@ -182,30 +182,31 @@
 <a class="jxr_linenumber" name="L174" href="#L174">174</a> 				.uri(target2)
 <a class="jxr_linenumber" name="L175" href="#L175">175</a> 				.remoteUrlPolicy(<strong class="jxr_keyword">true</strong>, false)
 <a class="jxr_linenumber" name="L176" href="#L176">176</a> 				.allowedAddressRanges(current.getAllowedAddressRanges())
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.timeout(current.getTimeout());
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<em class="jxr_comment">// Credential headers are forwarded only to the first origin (and never across an https -&gt; http downgrade), so a hop</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<em class="jxr_comment">// that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">var</strong> stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				|| (left &amp;&amp; ! safeMethod(rewriteToGet ? <span class="jxr_string">"GET"</span> : current.getMethod()));
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : initial.getHeaders())
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 				<strong class="jxr_keyword">if</strong> (! (stripCredentials &amp;&amp; RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin())))
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 					builder.header(h.name(), h.value());
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> (! rewriteToGet) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				<strong class="jxr_keyword">var</strong> body = current.getBody();
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">if</strong> (body != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 					<strong class="jxr_keyword">if</strong> (! body.isRepeatable())
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"Redirect (status "</span> + statusCode + <span class="jxr_string">") requires re-sending a "</span>
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 							+ <span class="jxr_string">"non-repeatable request body, which cannot be safely replayed; refusing to follow "</span>
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 							+ <span class="jxr_string">"(fail closed) for a policy-covered @Remote redirect chain: "</span> + target);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 					builder.body(body);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				}
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			}
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			<strong class="jxr_keyword">return</strong> builder.build();
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		} <strong class="jxr_keyword">catch</strong> (URISyntaxException e) {
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"Redirect Location did not form a valid request URI: "</span> + target, e);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 		}
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	}
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> }
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 				.redirectStripHeaders(initial.getRedirectStripHeaders())
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				.timeout(current.getTimeout());
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<em class="jxr_comment">// Credential headers are forwarded only to the first origin (and never across an https -&gt; http downgrade), so a hop</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<em class="jxr_comment">// that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">var</strong> stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				|| (left &amp;&amp; ! safeMethod(rewriteToGet ? <span class="jxr_string">"GET"</span> : current.getMethod()));
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> h : initial.getHeaders())
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				<strong class="jxr_keyword">if</strong> (! (stripCredentials &amp;&amp; RedactedHeaders.isSensitive(h.name(), initial.getRedirectStripHeaders())))
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 					builder.header(h.name(), h.value());
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">if</strong> (! rewriteToGet) {
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">var</strong> body = current.getBody();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				<strong class="jxr_keyword">if</strong> (body != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 					<strong class="jxr_keyword">if</strong> (! body.isRepeatable())
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"Redirect (status "</span> + statusCode + <span class="jxr_string">") requires re-sending a "</span>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 							+ <span class="jxr_string">"non-repeatable request body, which cannot be safely replayed; refusing to follow "</span>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 							+ <span class="jxr_string">"(fail closed) for a policy-covered @Remote redirect chain: "</span> + target);
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					builder.body(body);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				}
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 			}
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">return</strong> builder.build();
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 		} <strong class="jxr_keyword">catch</strong> (URISyntaxException e) {
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="TransportException" href="../../../../../org/apache/juneau/rest/client/TransportException.html#TransportException">TransportException</a>(<span class="jxr_string">"Redirect Location did not form a valid request URI: "</span> + target, e);
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 		}
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	}
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

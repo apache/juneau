@@ -279,7 +279,7 @@
 <span class="source-line-no">266</span><span id="line-266"></span>
 <span class="source-line-no">267</span><span id="line-267">      var queryParams = new LinkedHashMap&lt;String,String&gt;();</span>
 <span class="source-line-no">268</span><span id="line-268">      for (var p : req.getQueryParams())</span>
-<span class="source-line-no">269</span><span id="line-269">         queryParams.put(p.getName(), p.asString().orElse(null));</span>
+<span class="source-line-no">269</span><span id="line-269">         queryParams.put(p.getName(), RedactedQueryParams.isSensitive(p.getName()) ? RedactedHeaders.REDACTED : p.asString().orElse(null));</span>
 <span class="source-line-no">270</span><span id="line-270"></span>
 <span class="source-line-no">271</span><span id="line-271">      var attributes = new LinkedHashMap&lt;String,String&gt;();</span>
 <span class="source-line-no">272</span><span id="line-272">      req.getAttributes().asMap().forEach((k, v) -&gt; attributes.put(k, String.valueOf(v)));</span>
@@ -289,7 +289,7 @@
 <span class="source-line-no">276</span><span id="line-276">      Map&lt;String,Object&gt; out = m(</span>
 <span class="source-line-no">277</span><span id="line-277">         "method", req.getMethod(),</span>
 <span class="source-line-no">278</span><span id="line-278">         "path", sreq.getRequestURI(),</span>
-<span class="source-line-no">279</span><span id="line-279">         "queryString", sreq.getQueryString(),</span>
+<span class="source-line-no">279</span><span id="line-279">         "queryString", sreq.getQueryString() == null ? null : RedactedQueryParams.redactUri("?" + sreq.getQueryString()).substring(1),</span>
 <span class="source-line-no">280</span><span id="line-280">         "pathRemainder", remainder == null ? "" : remainder,</span>
 <span class="source-line-no">281</span><span id="line-281">         "headers", headers,</span>
 <span class="source-line-no">282</span><span id="line-282">         "queryParams", queryParams,</span>

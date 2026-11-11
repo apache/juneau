@@ -532,160 +532,180 @@
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 	<em class="jxr_comment">// Special-case conversions</em>
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
 <a class="jxr_linenumber" name="L526" href="#L526">526</a> 
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findSpecialConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 		<strong class="jxr_keyword">if</strong> (inType == String.<strong class="jxr_keyword">class</strong> &amp;&amp; outType == TimeZone.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;String,TimeZone&gt;) (in, memberOf, session, args) -&gt; TimeZone.getTimeZone(in);
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 		<strong class="jxr_keyword">if</strong> (TimeZone.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == String.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;TimeZone,String&gt;) (in, memberOf, session, args) -&gt; in.getID();
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 		<strong class="jxr_keyword">if</strong> (inType == String.<strong class="jxr_keyword">class</strong> &amp;&amp; outType == Locale.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Locale&gt;) (in, memberOf, session, args) -&gt; Locale.forLanguageTag(in.replace('_', '-'));
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 		<strong class="jxr_keyword">if</strong> (CharSequence.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == Boolean.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; {
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 				<strong class="jxr_keyword">var</strong> s = in.toString();
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 				<strong class="jxr_keyword">if</strong> (s.isEmpty() || eq(s, <span class="jxr_string">"null"</span>))
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 				<strong class="jxr_keyword">return</strong> (O) Boolean.valueOf(s);
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 			};
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		<strong class="jxr_keyword">if</strong> (CharSequence.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == byte[].<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; (O) in.toString().getBytes(StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 	}
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 	<em class="jxr_comment">// Reflection: static factory methods</em>
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findStaticFactory(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		<strong class="jxr_keyword">var</strong> ci = info(outType);
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : FACTORY_METHOD_NAMES) {
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			<strong class="jxr_keyword">var</strong> opt = findStaticMethod(ci, name, inType, outType);
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">if</strong> (opt.isPresent())
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; opt.get().invoke(<strong class="jxr_keyword">null</strong>, in);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		}
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<em class="jxr_comment">// Walk the type hierarchy (superclasses then interfaces) so that e.g. InputStreamReader</em>
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		<em class="jxr_comment">// can be passed to a method declared as fromReader(Reader r).</em>
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c = inType; c != <strong class="jxr_keyword">null</strong> &amp;&amp; c != Object.<strong class="jxr_keyword">class</strong>; c = c.getSuperclass()) {
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">var</strong> inName = c.getSimpleName();
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> prefix : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"from"</span>, <span class="jxr_string">"for"</span>, <span class="jxr_string">"parse"</span>}) {
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 				<strong class="jxr_keyword">var</strong> opt = findStaticMethod(ci, prefix + inName, inType, outType);
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 				<strong class="jxr_keyword">if</strong> (opt.isPresent())
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 					<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; opt.get().invoke(<strong class="jxr_keyword">null</strong>, in);
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			}
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		}
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> iface : allInterfaces(inType)) {
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 			<strong class="jxr_keyword">var</strong> inName = iface.getSimpleName();
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> prefix : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"from"</span>, <span class="jxr_string">"for"</span>, <span class="jxr_string">"parse"</span>}) {
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 				<strong class="jxr_keyword">var</strong> opt = findStaticMethod(ci, prefix + inName, inType, outType);
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 				<strong class="jxr_keyword">if</strong> (opt.isPresent())
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 					<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; opt.get().invoke(<strong class="jxr_keyword">null</strong>, in);
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			}
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		}
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 	}
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Class&lt;?&gt;&gt; allInterfaces(Class&lt;?&gt; c) {
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> ArrayList&lt;Class&lt;?&gt;&gt;();
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x = c; x != <strong class="jxr_keyword">null</strong>; x = x.getSuperclass())
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> iface : x.getInterfaces())
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 				collectInterfaces(iface, result);
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 		<strong class="jxr_keyword">return</strong> result;
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 	}
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> collectInterfaces(Class&lt;?&gt; iface, List&lt;Class&lt;?&gt;&gt; result) {
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 		<strong class="jxr_keyword">if</strong> (!result.contains(iface)) {
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			result.add(iface);
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> parent : iface.getInterfaces())
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 				collectInterfaces(parent, result);
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 		}
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 	}
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;MethodInfo&gt; findStaticMethod(ClassInfo ci, String name, Class&lt;?&gt; inType, Class&lt;?&gt; outType) {
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">return</strong> ci.getPublicMethod(m -&gt;
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 			m.isStatic()
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 			&amp;&amp; m.isNotDeprecated()
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			&amp;&amp; m.hasName(name)
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 			&amp;&amp; m.getParameterCount() == 1
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 			&amp;&amp; m.getParameterTypes().get(0).isAssignableFrom(inType)
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			&amp;&amp; m.hasReturnTypeParent(outType)
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			<em class="jxr_comment">// Exclude generic Object-param factory methods (e.g. List.of(E)) when input is not Object,</em>
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			<em class="jxr_comment">// since type erasure makes E appear as Object at runtime, causing false matches.</em>
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			&amp;&amp; (inType == Object.<strong class="jxr_keyword">class</strong> || m.getParameterTypes().get(0).<strong class="jxr_keyword">inner</strong>() != Object.<strong class="jxr_keyword">class</strong>)
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 		);
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	}
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 	<em class="jxr_comment">// Reflection: public constructors</em>
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findConstructorConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">if</strong> (outType.getEnclosingClass() != <strong class="jxr_keyword">null</strong> &amp;&amp; !Modifier.isStatic(outType.getModifiers())) {
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			<strong class="jxr_keyword">var</strong> enclosing = outType.getEnclosingClass();
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">var</strong> opt = info(outType).getPublicConstructor(c -&gt;
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 				c.getParameterCount() == 2
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 				&amp;&amp; c.isNotDeprecated()
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 				&amp;&amp; c.getParameterTypes().get(0).<strong class="jxr_keyword">inner</strong>() == enclosing
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 				&amp;&amp; c.getParameterTypes().get(1).isAssignableFrom(inType)
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			);
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 				<strong class="jxr_keyword">var</strong> ctor = opt.get();
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 				<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; ctor.newInstance(memberOf, in);
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			}
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		}
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		<strong class="jxr_keyword">var</strong> opt = info(outType).getPublicConstructor(c -&gt;
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			c.getParameterCount() == 1
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 			&amp;&amp; c.isNotDeprecated()
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 			&amp;&amp; c.getParameterTypes().get(0).isAssignableFrom(inType)
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> 		);
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> 			<strong class="jxr_keyword">var</strong> ctor = opt.get();
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; ctor.newInstance(in);
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		}
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	}
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 	<em class="jxr_comment">// Reflection: toX() instance methods</em>
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findToXMethod(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 		<em class="jxr_comment">// Use getNameReadable() so that array types use "Array" suffix (e.g. "toStringArray" for String[]).</em>
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		<em class="jxr_comment">// Use equalsIgnoreCase to match Mutaters' behavior (e.g. "toByteArray" matches "tobyteArray" from byte[]).</em>
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 		<strong class="jxr_keyword">var</strong> methodName = <span class="jxr_string">"to"</span> + info(outType).getNameReadable();
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<strong class="jxr_keyword">var</strong> opt = info(inType).getPublicMethod(m -&gt;
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			m.isNotStatic()
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			&amp;&amp; m.isNotDeprecated()
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			&amp;&amp; m.getParameterCount() == 0
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			&amp;&amp; eqic(m.getNameSimple(), methodName)
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			&amp;&amp; m.hasReturnTypeParent(outType)
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 		);
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 			<strong class="jxr_keyword">var</strong> method = opt.get();
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; method.invoke(in);
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 		}
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	}
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> <em class="jxr_javadoccomment">	 * Resolves a class name without running its static initializer.</em>
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> <em class="jxr_javadoccomment">	 *</em>
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> <em class="jxr_javadoccomment">	 * &lt;p&gt;</em>
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> <em class="jxr_javadoccomment">	 * {@link Class#forName(String)} initializes the class, which would let an input string trigger arbitrary</em>
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> <em class="jxr_javadoccomment">	 * static-initializer code, so the three-argument form with {@code initialize=false} is used instead.</em>
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Class&lt;?&gt; loadClassWithoutInit(String name) {
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 		<strong class="jxr_keyword">var</strong> cl = Thread.currentThread().getContextClassLoader();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 		<strong class="jxr_keyword">if</strong> (cl == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 			cl = BasicConverter.<strong class="jxr_keyword">class</strong>.getClassLoader();
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			<strong class="jxr_keyword">return</strong> Class.forName(name, false, cl);
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		} <strong class="jxr_keyword">catch</strong> (ClassNotFoundException e) {
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Class not found: "</span> + name, e);
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		}
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	}
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findSpecialConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">if</strong> (inType == String.<strong class="jxr_keyword">class</strong> &amp;&amp; outType == TimeZone.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;String,TimeZone&gt;) (in, memberOf, session, args) -&gt; TimeZone.getTimeZone(in);
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 		<strong class="jxr_keyword">if</strong> (TimeZone.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == String.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;TimeZone,String&gt;) (in, memberOf, session, args) -&gt; in.getID();
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 		<strong class="jxr_keyword">if</strong> (inType == String.<strong class="jxr_keyword">class</strong> &amp;&amp; outType == Class.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Class&lt;?&gt;&gt;) (in, memberOf, session, args) -&gt; loadClassWithoutInit(in);
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">if</strong> (inType == String.<strong class="jxr_keyword">class</strong> &amp;&amp; outType == Locale.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			<strong class="jxr_keyword">return</strong> (Conversion&lt;I,O&gt;) (Conversion&lt;String,Locale&gt;) (in, memberOf, session, args) -&gt; Locale.forLanguageTag(in.replace('_', '-'));
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 		<strong class="jxr_keyword">if</strong> (CharSequence.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == Boolean.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; {
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				<strong class="jxr_keyword">var</strong> s = in.toString();
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 				<strong class="jxr_keyword">if</strong> (s.isEmpty() || eq(s, <span class="jxr_string">"null"</span>))
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 				<strong class="jxr_keyword">return</strong> (O) Boolean.valueOf(s);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			};
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		<strong class="jxr_keyword">if</strong> (CharSequence.<strong class="jxr_keyword">class</strong>.isAssignableFrom(inType) &amp;&amp; outType == byte[].<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; (O) in.toString().getBytes(StandardCharsets.UTF_8);
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 	}
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 	<em class="jxr_comment">// Reflection: static factory methods</em>
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findStaticFactory(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">var</strong> ci = info(outType);
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> name : FACTORY_METHOD_NAMES) {
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 			<strong class="jxr_keyword">var</strong> opt = findStaticMethod(ci, name, inType, outType);
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			<strong class="jxr_keyword">if</strong> (opt.isPresent())
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 				<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; opt.get().invoke(<strong class="jxr_keyword">null</strong>, in);
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		}
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<em class="jxr_comment">// Walk the type hierarchy (superclasses then interfaces) so that e.g. InputStreamReader</em>
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		<em class="jxr_comment">// can be passed to a method declared as fromReader(Reader r).</em>
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">for</strong> (Class&lt;?&gt; c = inType; c != <strong class="jxr_keyword">null</strong> &amp;&amp; c != Object.<strong class="jxr_keyword">class</strong>; c = c.getSuperclass()) {
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 			<strong class="jxr_keyword">var</strong> inName = c.getSimpleName();
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> prefix : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"from"</span>, <span class="jxr_string">"for"</span>, <span class="jxr_string">"parse"</span>}) {
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 				<strong class="jxr_keyword">var</strong> opt = findStaticMethod(ci, prefix + inName, inType, outType);
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 				<strong class="jxr_keyword">if</strong> (opt.isPresent())
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 					<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; opt.get().invoke(<strong class="jxr_keyword">null</strong>, in);
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 			}
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 		}
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> iface : allInterfaces(inType)) {
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 			<strong class="jxr_keyword">var</strong> inName = iface.getSimpleName();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> prefix : <strong class="jxr_keyword">new</strong> String[]{<span class="jxr_string">"from"</span>, <span class="jxr_string">"for"</span>, <span class="jxr_string">"parse"</span>}) {
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				<strong class="jxr_keyword">var</strong> opt = findStaticMethod(ci, prefix + inName, inType, outType);
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 				<strong class="jxr_keyword">if</strong> (opt.isPresent())
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 					<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; opt.get().invoke(<strong class="jxr_keyword">null</strong>, in);
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 			}
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 		}
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 	}
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> List&lt;Class&lt;?&gt;&gt; allInterfaces(Class&lt;?&gt; c) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		<strong class="jxr_keyword">var</strong> result = <strong class="jxr_keyword">new</strong> ArrayList&lt;Class&lt;?&gt;&gt;();
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> x = c; x != <strong class="jxr_keyword">null</strong>; x = x.getSuperclass())
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> iface : x.getInterfaces())
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 				collectInterfaces(iface, result);
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 	}
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> collectInterfaces(Class&lt;?&gt; iface, List&lt;Class&lt;?&gt;&gt; result) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 		<strong class="jxr_keyword">if</strong> (!result.contains(iface)) {
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 			result.add(iface);
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> parent : iface.getInterfaces())
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 				collectInterfaces(parent, result);
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		}
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 	}
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 	<strong class="jxr_keyword">private</strong> Optional&lt;MethodInfo&gt; findStaticMethod(ClassInfo ci, String name, Class&lt;?&gt; inType, Class&lt;?&gt; outType) {
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 		<strong class="jxr_keyword">return</strong> ci.getPublicMethod(m -&gt;
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 			m.isStatic()
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 			&amp;&amp; m.isNotDeprecated()
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			&amp;&amp; m.hasName(name)
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 			&amp;&amp; m.getParameterCount() == 1
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 			&amp;&amp; m.getParameterTypes().get(0).isAssignableFrom(inType)
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 			&amp;&amp; m.hasReturnTypeParent(outType)
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 			<em class="jxr_comment">// Exclude generic Object-param factory methods (e.g. List.of(E)) when input is not Object,</em>
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<em class="jxr_comment">// since type erasure makes E appear as Object at runtime, causing false matches.</em>
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 			&amp;&amp; (inType == Object.<strong class="jxr_keyword">class</strong> || m.getParameterTypes().get(0).<strong class="jxr_keyword">inner</strong>() != Object.<strong class="jxr_keyword">class</strong>)
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		);
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 	}
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	<em class="jxr_comment">// Reflection: public constructors</em>
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findConstructorConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 		<strong class="jxr_keyword">if</strong> (outType.getEnclosingClass() != <strong class="jxr_keyword">null</strong> &amp;&amp; !Modifier.isStatic(outType.getModifiers())) {
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> 			<strong class="jxr_keyword">var</strong> enclosing = outType.getEnclosingClass();
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> 			<strong class="jxr_keyword">var</strong> opt = info(outType).getPublicConstructor(c -&gt;
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> 				c.getParameterCount() == 2
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 				&amp;&amp; c.isNotDeprecated()
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 				&amp;&amp; c.getParameterTypes().get(0).<strong class="jxr_keyword">inner</strong>() == enclosing
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 				&amp;&amp; c.getParameterTypes().get(1).isAssignableFrom(inType)
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			);
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 				<strong class="jxr_keyword">var</strong> ctor = opt.get();
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 				<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; ctor.newInstance(memberOf, in);
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			}
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 		}
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 		<strong class="jxr_keyword">var</strong> opt = info(outType).getPublicConstructor(c -&gt;
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			c.getParameterCount() == 1
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			&amp;&amp; c.isNotDeprecated()
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			&amp;&amp; c.getParameterTypes().get(0).isAssignableFrom(inType)
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 		);
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">var</strong> ctor = opt.get();
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; ctor.newInstance(in);
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 		}
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 	}
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 	<em class="jxr_comment">// Reflection: toX() instance methods</em>
 <a class="jxr_linenumber" name="L664" href="#L664">664</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 	<em class="jxr_comment">// Helpers</em>
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T newInstanceOrDefault(Class&lt;?&gt; type, java.util.function.Supplier&lt;T&gt; defaultSupplier) {
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">var</strong> opt = info(type).getPublicConstructor(c -&gt; c.getParameterCount() == 0);
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			<strong class="jxr_keyword">var</strong> ctor = opt.get();
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 				<strong class="jxr_keyword">return</strong> ctor.newInstance();
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) { <em class="jxr_comment">// HTT: constructor would have to throw to reach here</em>
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 				<strong class="jxr_keyword">return</strong> defaultSupplier.get(); <em class="jxr_comment">// HTT</em>
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 			}
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		}
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 		<strong class="jxr_keyword">return</strong> defaultSupplier.get();
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 	}
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> }
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 	<strong class="jxr_keyword">private</strong> &lt;I,O&gt; Conversion&lt;I,O&gt; findToXMethod(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 		<em class="jxr_comment">// Use getNameReadable() so that array types use "Array" suffix (e.g. "toStringArray" for String[]).</em>
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 		<em class="jxr_comment">// Use equalsIgnoreCase to match Mutaters' behavior (e.g. "toByteArray" matches "tobyteArray" from byte[]).</em>
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 		<strong class="jxr_keyword">var</strong> methodName = <span class="jxr_string">"to"</span> + info(outType).getNameReadable();
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 		<strong class="jxr_keyword">var</strong> opt = info(inType).getPublicMethod(m -&gt;
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 			m.isNotStatic()
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 			&amp;&amp; m.isNotDeprecated()
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 			&amp;&amp; m.getParameterCount() == 0
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 			&amp;&amp; eqic(m.getNameSimple(), methodName)
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 			&amp;&amp; m.hasReturnTypeParent(outType)
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 		);
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 			<strong class="jxr_keyword">var</strong> method = opt.get();
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 			<strong class="jxr_keyword">return</strong> (in, memberOf, session, args) -&gt; method.invoke(in);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 		}
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 	}
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 	<em class="jxr_comment">// Helpers</em>
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 	<em class="jxr_comment">//-----------------------------------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 	<strong class="jxr_keyword">private</strong> &lt;T&gt; T newInstanceOrDefault(Class&lt;?&gt; type, java.util.function.Supplier&lt;T&gt; defaultSupplier) {
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 		<strong class="jxr_keyword">var</strong> opt = info(type).getPublicConstructor(c -&gt; c.getParameterCount() == 0);
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 		<strong class="jxr_keyword">if</strong> (opt.isPresent()) {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 			<strong class="jxr_keyword">var</strong> ctor = opt.get();
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 				<strong class="jxr_keyword">return</strong> ctor.newInstance();
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 			} <strong class="jxr_keyword">catch</strong> (@SuppressWarnings(<span class="jxr_string">"unused"</span>) Exception e) { <em class="jxr_comment">// HTT: constructor would have to throw to reach here</em>
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 				<strong class="jxr_keyword">return</strong> defaultSupplier.get(); <em class="jxr_comment">// HTT</em>
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 			}
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 		}
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 		<strong class="jxr_keyword">return</strong> defaultSupplier.get();
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 	}
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

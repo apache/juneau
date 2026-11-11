@@ -91,7 +91,7 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Test <strong class="jxr_keyword">void</strong> a04_altScreenBoxIsDrawn() { ok(<span class="jxr_string">"b04_altScreenBoxIsDrawn"</span>); }
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  	@Test <strong class="jxr_keyword">void</strong> a05_scrollbackAndSearch() { ok(<span class="jxr_string">"b05_scrollbackAndSearch"</span>); }
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Test <strong class="jxr_keyword">void</strong> a06_hashScrollsToTheStepOffset() { ok(<span class="jxr_string">"b06_hashScrollsToTheStepOffset"</span>); }
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a07_fontScalesWithThePanelWhileColsAndRowsStay() { ok(<span class="jxr_string">"b07_fontScalesWithThePanelWhileColsAndRowsStay"</span>); }
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	@Test <strong class="jxr_keyword">void</strong> a07_colsFillTheWidePanelAndFontShrinksOnlyWhenNarrow() { ok(<span class="jxr_string">"b07_colsFillTheWidePanelAndFontShrinksOnlyWhenNarrow"</span>); }
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  	@Test <strong class="jxr_keyword">void</strong> a08_osc52LeavesTheClipboardAlone() { ok(<span class="jxr_string">"b08_osc52LeavesTheClipboardAlone"</span>); }
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  	@Test <strong class="jxr_keyword">void</strong> a09_onlyHttpLinksOpen() { ok(<span class="jxr_string">"b09_onlyHttpLinksOpen"</span>); }
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	@Test <strong class="jxr_keyword">void</strong> a10_rawLinkOnlyForHttpUrls() { ok(<span class="jxr_string">"b10_rawLinkOnlyForHttpUrls"</span>); }
@@ -116,12 +116,13 @@
 <a class="jxr_linenumber" name="L108" href="#L108">108</a> 	@Test <strong class="jxr_keyword">void</strong> a26_defaultEmptyMessage() { ok(<span class="jxr_string">"b26_defaultEmptyMessage"</span>); }
 <a class="jxr_linenumber" name="L109" href="#L109">109</a> 	@Test <strong class="jxr_keyword">void</strong> a27_followToggleButtonFlips() { ok(<span class="jxr_string">"b27_followToggleButtonFlips"</span>); }
 <a class="jxr_linenumber" name="L110" href="#L110">110</a> 	@Test <strong class="jxr_keyword">void</strong> a28_fontSizeTokenOverride() { ok(<span class="jxr_string">"b28_fontSizeTokenOverride"</span>); }
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCaseHasAMethod() {
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + cases.keySet(), 29, cases);
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> }
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 	@Test <strong class="jxr_keyword">void</strong> a29_widePanelFontEqualsToken() { ok(<span class="jxr_string">"b29_widePanelFontEqualsToken"</span>); }
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 	@Test <strong class="jxr_keyword">void</strong> z01_everyCaseHasAMethod() {
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 		<strong class="jxr_keyword">var</strong> cases = (Map&lt;?,?&gt;)report.get(<span class="jxr_string">"cases"</span>);
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		assertSize(() -&gt; <span class="jxr_string">"case count changed; add a method per new case: "</span> + cases.keySet(), 30, cases);
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 	}
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

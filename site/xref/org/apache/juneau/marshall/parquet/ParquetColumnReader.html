@@ -210,38 +210,41 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 	byte[] readFixedLenByteArray(<strong class="jxr_keyword">int</strong> length) <strong class="jxr_keyword">throws</strong> IOException {
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">if</strong> (nextNull)
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> byte[0];
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> byte[length];
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">var</strong> n = 0;
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">while</strong> (n &lt; length) {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">var</strong> r = valueStream.read(b, n, length - n);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">if</strong> (r &lt;= 0)
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			n += r;
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 		}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		<strong class="jxr_keyword">return</strong> b;
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> advanceDefLevel() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		<strong class="jxr_keyword">if</strong> (readCount &gt;= numValues)
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			<strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">if</strong> (maxDefLevel &gt; 0 &amp;&amp; defLevelDecoder != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			defLevel = defLevelDecoder.readInt();
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			nextNull = defLevel &lt; maxDefLevel;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			defLevel = maxDefLevel;
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			nextNull = false;
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		}
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 		readCount++;
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	}
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> readInt32Raw() <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">var</strong> b0 = valueStream.read() &amp; 0xFF;
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		<strong class="jxr_keyword">var</strong> b1 = valueStream.read() &amp; 0xFF;
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 		<strong class="jxr_keyword">var</strong> b2 = valueStream.read() &amp; 0xFF;
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> b3 = valueStream.read() &amp; 0xFF;
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">return</strong> b0 | (b1 &lt;&lt; 8) | (b2 &lt;&lt; 16) | (b3 &lt;&lt; 24);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 	}
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		<em class="jxr_comment">// The length comes from the file's schema metadata, so bound it like a length-prefixed byte array.</em>
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">if</strong> (length &lt; 0 || length &gt; MAX_BYTE_ARRAY_LEN)
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			<strong class="jxr_keyword">throw</strong> ioex(<span class="jxr_string">"Fixed-length byte array length %s is outside 0..%s"</span>, length, MAX_BYTE_ARRAY_LEN);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> b = <strong class="jxr_keyword">new</strong> byte[length];
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> n = 0;
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">while</strong> (n &lt; length) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 			<strong class="jxr_keyword">var</strong> r = valueStream.read(b, n, length - n);
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">if</strong> (r &lt;= 0)
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 			n += r;
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 		}
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">return</strong> b;
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	}
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> advanceDefLevel() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">if</strong> (readCount &gt;= numValues)
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 			<strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 		<strong class="jxr_keyword">if</strong> (maxDefLevel &gt; 0 &amp;&amp; defLevelDecoder != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 			defLevel = defLevelDecoder.readInt();
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 			nextNull = defLevel &lt; maxDefLevel;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			defLevel = maxDefLevel;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 			nextNull = false;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		}
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		readCount++;
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 	}
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">int</strong> readInt32Raw() <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		<strong class="jxr_keyword">var</strong> b0 = valueStream.read() &amp; 0xFF;
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 		<strong class="jxr_keyword">var</strong> b1 = valueStream.read() &amp; 0xFF;
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 		<strong class="jxr_keyword">var</strong> b2 = valueStream.read() &amp; 0xFF;
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 		<strong class="jxr_keyword">var</strong> b3 = valueStream.read() &amp; 0xFF;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		<strong class="jxr_keyword">return</strong> b0 | (b1 &lt;&lt; 8) | (b2 &lt;&lt; 16) | (b3 &lt;&lt; 24);
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 	}
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

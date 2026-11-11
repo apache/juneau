@@ -363,14 +363,20 @@ not permitted.)</div>
 <li>
 <section class="detail" id="setClassNameGuard(java.util.function.Predicate)">
 <h3>setClassNameGuard</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-164">setClassNameGuard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-170">setClassNameGuard</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Installs a global guard that vets class names before the parser path resolves them to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.
 
  <p>
  The guard is consulted for every candidate name (including the nested-type <c>$</c>-rewritten forms)
  before it is passed to <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html#forName(java.lang.String,boolean,java.lang.ClassLoader)" title="class or interface in java.lang" class="external-link"><code>Class.forName(String, boolean, ClassLoader)</code></a>.  Names the guard rejects are
  treated as unresolvable.  This lets a deployment restrict which types may be materialized from parsed
- input to an explicit allow-list.</div>
+ input to an explicit allow-list.
+
+ <p>
+ No guard is installed by default.  Deployments that parse input from untrusted sources and materialize
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> values from it should install one that permits only the expected types.  Classes are
+ resolved without running their static initializers either way, but an allow-list additionally bounds
+ which classes the input may load or name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The guard predicate returning <jk>true</jk> for permitted class names, or <jk>null</jk> to
@@ -381,7 +387,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="format(java.lang.Class,org.apache.juneau.marshall.ClassFormat)">
 <h3>format</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-192">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-198">format</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;value,
  <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>&nbsp;format)</span></div>
 <div class="block">Formats the specified <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a> using this format.
 
@@ -399,7 +405,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="parse(java.lang.String,org.apache.juneau.marshall.ClassFormat,java.lang.ClassLoader)">
 <h3>parse</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-248">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-254">parse</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="ClassFormat.html" title="enum class in org.apache.juneau.marshall">ClassFormat</a>&nbsp;format,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/ClassLoader.html" title="class or interface in java.lang" class="external-link">ClassLoader</a>&nbsp;classLoader)</span></div>
 <div class="block">Parses the specified wire value into a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.
@@ -450,7 +456,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="isNumeric()">
 <h3>isNumeric</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-366">isNumeric</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/org/apache/juneau/marshall/ClassFormat.html#line-372">isNumeric</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this format emits a numeric wire value.
 
  <p>

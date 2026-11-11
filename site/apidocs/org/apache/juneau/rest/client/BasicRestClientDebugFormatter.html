@@ -129,6 +129,11 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <div class="col-last odd-row-color">
 <div class="block">The set of header names whose values are masked.</div>
 </div>
+<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#redactedQueryParams" class="member-name-link">redactedQueryParams</a></code></div>
+<div class="col-last even-row-color">
+<div class="block">The set of query parameter names whose values are masked in the logged URI.</div>
+</div>
 </div>
 </section>
 </li>
@@ -158,43 +163,53 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyCap()" class="member-name-link">bodyCap</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRedactedQueryParams(java.util.Collection)" class="member-name-link">addRedactedQueryParams</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extends the set of masked query parameter names additively (keeps the built-in protections).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyCap()" class="member-name-link">bodyCap</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Maximum number of request/response body bytes to capture for <code>FINEST</code> rendering.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyCap(int)" class="member-name-link">bodyCap</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyCap(int)" class="member-name-link">bodyCap</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Overrides the body capture cap.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyScrubber(org.apache.juneau.http.RestDebugBodyScrubber)" class="member-name-link">bodyScrubber</a><wbr>(<a href="../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#bodyScrubber(org.apache.juneau.http.RestDebugBodyScrubber)" class="member-name-link">bodyScrubber</a><wbr>(<a href="../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sets the body scrubber applied to body text when the <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code> gate is set.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatBasic(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">formatBasic</a><wbr>(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatBasic(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">formatBasic</a><wbr>(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Renders the basic (<code>INFO</code>-tier) portion of a debug record.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatBody(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">formatBody</a><wbr>(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
- <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Renders the body (<code>FINEST</code>-tier) portion of a debug record.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatHeaders(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">formatHeaders</a><wbr>(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatBody(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">formatBody</a><wbr>(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Renders the body (<code>FINEST</code>-tier) portion of a debug record.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#formatHeaders(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)" class="member-name-link">formatHeaders</a><wbr>(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+ <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Renders the headers (<code>FINE</code>-tier) portion of a debug record.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redactedHeaders(java.util.Collection)" class="member-name-link">redactedHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redactedHeaders(java.util.Collection)" class="member-name-link">redactedHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Overrides the redacted-header set.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#redactedQueryParams(java.util.Collection)" class="member-name-link">redactedQueryParams</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Overrides the set of query parameter names whose values are masked in the logged URI.</div>
 </div>
 </div>
 </div>
@@ -239,16 +254,23 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 </section>
 </li>
 <li>
+<section class="detail" id="redactedQueryParams">
+<h3>redactedQueryParams</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-79">redactedQueryParams</a></span></div>
+<div class="block">The set of query parameter names whose values are masked in the logged URI.</div>
+</section>
+</li>
+<li>
 <section class="detail" id="bodyScrubber">
 <h3>bodyScrubber</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-79">bodyScrubber</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-82">bodyScrubber</a></span></div>
 <div class="block">Optional body scrubber applied to body text when the master gate is set.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="bodyCap">
 <h3>bodyCap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-82">bodyCap</a></span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-85">bodyCap</a></span></div>
 <div class="block">The body capture cap in bytes.</div>
 </section>
 </li>
@@ -263,7 +285,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BasicRestClientDebugFormatter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-85">BasicRestClientDebugFormatter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-88">BasicRestClientDebugFormatter</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -278,7 +300,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="redactedHeaders(java.util.Collection)">
 <h3>redactedHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-95">redactedHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-98">redactedHeaders</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
 <div class="block">Overrides the redacted-header set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -289,9 +311,35 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 </section>
 </li>
 <li>
+<section class="detail" id="redactedQueryParams(java.util.Collection)">
+<h3>redactedQueryParams</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-109">redactedQueryParams</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block">Overrides the set of query parameter names whose values are masked in the logged URI.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The new set of parameter names to mask (case-insensitive). Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="addRedactedQueryParams(java.util.Collection)">
+<h3>addRedactedQueryParams</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-120">addRedactedQueryParams</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</span></div>
+<div class="block">Extends the set of masked query parameter names additively (keeps the built-in protections).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - The parameter names to add (case-insensitive). Must not be <jk>null</jk>.</dd>
+<dt>Returns:</dt>
+<dd>This object.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="bodyScrubber(org.apache.juneau.http.RestDebugBodyScrubber)">
 <h3>bodyScrubber</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-110">bodyScrubber</a></span><wbr><span class="parameters">(<a href="../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-137">bodyScrubber</a></span><wbr><span class="parameters">(<a href="../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a>&nbsp;value)</span></div>
 <div class="block">Sets the body scrubber applied to body text when the <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code> gate is set.
 
  <p>
@@ -308,7 +356,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="bodyCap(int)">
 <h3>bodyCap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-121">bodyCap</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-148">bodyCap</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Overrides the body capture cap.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -321,7 +369,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="bodyCap()">
 <h3>bodyCap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-126">bodyCap</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-153">bodyCap</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestClientDebugFormatter.html#bodyCap()">RestClientDebugFormatter</a></code></span></div>
 <div class="block">Maximum number of request/response body bytes to capture for <code>FINEST</code> rendering.</div>
 <dl class="notes">
@@ -335,7 +383,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="formatBasic(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>formatBasic</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-131">formatBasic</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-158">formatBasic</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestClientDebugFormatter.html#formatBasic(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">RestClientDebugFormatter</a></code></span></div>
 <div class="block">Renders the basic (<code>INFO</code>-tier) portion of a debug record.</div>
@@ -353,7 +401,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="formatHeaders(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>formatHeaders</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-158">formatHeaders</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-185">formatHeaders</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestClientDebugFormatter.html#formatHeaders(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">RestClientDebugFormatter</a></code></span></div>
 <div class="block">Renders the headers (<code>FINE</code>-tier) portion of a debug record.</div>
@@ -371,7 +419,7 @@ implements <a href="RestClientDebugFormatter.html" title="interface in org.apach
 <li>
 <section class="detail" id="formatBody(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">
 <h3>formatBody</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-217">formatBody</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#line-244">formatBody</a></span><wbr><span class="parameters">(<a href="RestRequest.html" title="class in org.apache.juneau.rest.client">RestRequest</a>&nbsp;req,
  <a href="RestResponse.html" title="class in org.apache.juneau.rest.client">RestResponse</a>&nbsp;res)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="RestClientDebugFormatter.html#formatBody(org.apache.juneau.rest.client.RestRequest,org.apache.juneau.rest.client.RestResponse)">RestClientDebugFormatter</a></code></span></div>
 <div class="block">Renders the body (<code>FINEST</code>-tier) portion of a debug record.</div>

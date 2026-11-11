@@ -270,49 +270,50 @@
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 
 <a class="jxr_linenumber" name="L263" href="#L263">263</a> 	@Test <strong class="jxr_keyword">void</strong> e04_instructionsAndExamples() {
 <a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">var</strong> r = report();
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertBean(r, <span class="jxr_string">"instructionsHasBare,instructionsOps"</span>, <span class="jxr_string">"true,[$eq,$or]"</span>);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertBean(r, <span class="jxr_string">"examplesText"</span>, <span class="jxr_string">"[err,$or($eq(OPEN),$eq(CLOSED))]"</span>);
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertBean(r, <span class="jxr_string">"examplesNumeric"</span>, <span class="jxr_string">"[$between(1, 100),$and($gt(1),$lt(9))]"</span>);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertBean(r, <span class="jxr_string">"examplesBareAlwaysShown"</span>, <span class="jxr_string">"[err]"</span>);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		assertNull(r.get(<span class="jxr_string">"examplesFilteredByOperators"</span>), r::toString);
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertNull(r.get(<span class="jxr_string">"examplesUncatalogued"</span>), r::toString);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	}
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 	@Test <strong class="jxr_keyword">void</strong> e05_typingDoesNotFilter_applyCommits() {
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		assertBean(report(), <span class="jxr_string">"noLivePreviewApplied,noLivePreviewDraws,applyApplied,applyClosed,applyFocusReturned,applyNoAnnounce"</span>,
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<span class="jxr_string">",0,abc,true,true,true"</span>);
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 	}
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	@Test <strong class="jxr_keyword">void</strong> e06_cancelAndEscLeaveFilter() {
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		assertBean(report(), <span class="jxr_string">"cancelApplied,cancelClosed,cancelAnnounced,escApplied,escClosed"</span>, <span class="jxr_string">"kept,true,true,kept,true"</span>);
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	}
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 	@Test <strong class="jxr_keyword">void</strong> e07_clearRemovesAndCloses() {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		assertBean(report(), <span class="jxr_string">"clearApplied,clearClosed,clearIconInactive"</span>, <span class="jxr_string">",true,true"</span>);
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 	}
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 	@Test <strong class="jxr_keyword">void</strong> e08_incompleteExpressionNeverApplies() {
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		assertBean(report(), <span class="jxr_string">"statusIncompleteWhileTyping,statusIncompleteApplied,statusIncompleteStillOpen,statusIncompleteApplyBlocked"</span>, <span class="jxr_string">"true,,true,true"</span>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test <strong class="jxr_keyword">void</strong> e09_moreTogglesOperatorList() {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		assertBean(report(), <span class="jxr_string">"moreTag,moreInitiallyHidden,moreExpandedAria,moreExpandedVisible,moreRows,moreCollapsedAria,moreCollapsedHidden"</span>,
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<span class="jxr_string">"BUTTON,true,true,true,[$eq,$in],false,true"</span>);
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test <strong class="jxr_keyword">void</strong> e10_moreLinksToDocsWhenConfigured() {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		<strong class="jxr_keyword">var</strong> r = report();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		assertBean(r, <span class="jxr_string">"moreLinkAbsolute"</span>, <span class="jxr_string">"{tag=A,href=https://example.com/search,target=_blank,rel=noopener}"</span>);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertBean(r, <span class="jxr_string">"moreLinkRootRelative"</span>, <span class="jxr_string">"{tag=A,href=/docs/search,target=_blank,rel=noopener}"</span>);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertEquals(<span class="jxr_string">"BUTTON"</span>, ((Map&lt;?,?&gt;) r.get(<span class="jxr_string">"moreLinkUnsafe"</span>)).get(<span class="jxr_string">"tag"</span>), r::toString);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertEquals(<span class="jxr_string">"BUTTON"</span>, ((Map&lt;?,?&gt;) r.get(<span class="jxr_string">"moreLinkProtocolRelative"</span>)).get(<span class="jxr_string">"tag"</span>), r::toString);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertEquals(<span class="jxr_string">"BUTTON"</span>, ((Map&lt;?,?&gt;) r.get(<span class="jxr_string">"moreLinkNone"</span>)).get(<span class="jxr_string">"tag"</span>), r::toString);
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 	}
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 	@Test <strong class="jxr_keyword">void</strong> e11_helpUrlSurvivesCatalogLift() {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		assertBean(report(), <span class="jxr_string">"viewKeysHasHelpUrl"</span>, <span class="jxr_string">"/docs/search"</span>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	}
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> }
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		assertBean(r, <span class="jxr_string">"instructionsHasBare,instructionsHasOps"</span>, <span class="jxr_string">"true,false"</span>);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		assertBean(r, <span class="jxr_string">"helpHiddenBeforeClick,helpShownAfterClick"</span>, <span class="jxr_string">"true,true"</span>);
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 		assertBean(r, <span class="jxr_string">"examplesText"</span>, <span class="jxr_string">"[err,$or($eq(OPEN),$eq(CLOSED))]"</span>);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		assertBean(r, <span class="jxr_string">"examplesNumeric"</span>, <span class="jxr_string">"[$between(1, 100),$and($gt(1),$lt(9))]"</span>);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		assertBean(r, <span class="jxr_string">"examplesBareAlwaysShown"</span>, <span class="jxr_string">"[err]"</span>);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 		assertNull(r.get(<span class="jxr_string">"examplesFilteredByOperators"</span>), r::toString);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		assertNull(r.get(<span class="jxr_string">"examplesUncatalogued"</span>), r::toString);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	}
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 	@Test <strong class="jxr_keyword">void</strong> e05_typingDoesNotFilter_applyCommits() {
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		assertBean(report(), <span class="jxr_string">"noLivePreviewApplied,noLivePreviewDraws,applyApplied,applyClosed,applyFocusReturned,applyNoAnnounce"</span>,
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<span class="jxr_string">",0,abc,true,true,true"</span>);
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 	}
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 	@Test <strong class="jxr_keyword">void</strong> e06_cancelAndEscLeaveFilter() {
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		assertBean(report(), <span class="jxr_string">"cancelApplied,cancelClosed,cancelAnnounced,escApplied,escClosed"</span>, <span class="jxr_string">"kept,true,true,kept,true"</span>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	}
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 	@Test <strong class="jxr_keyword">void</strong> e07_clearRemovesAndCloses() {
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		assertBean(report(), <span class="jxr_string">"clearApplied,clearClosed,clearIconInactive"</span>, <span class="jxr_string">",true,true"</span>);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 	}
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 	@Test <strong class="jxr_keyword">void</strong> e08_incompleteExpressionNeverApplies() {
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		assertBean(report(), <span class="jxr_string">"statusIncompleteWhileTyping,statusIncompleteApplied,statusIncompleteStillOpen,statusIncompleteApplyBlocked"</span>, <span class="jxr_string">"true,,true,true"</span>);
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 	}
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	@Test <strong class="jxr_keyword">void</strong> e09_moreTogglesOperatorList() {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		assertBean(report(), <span class="jxr_string">"moreTag,moreInitiallyHidden,moreExpandedAria,moreExpandedVisible,moreRows,moreCollapsedAria,moreCollapsedHidden"</span>,
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<span class="jxr_string">"BUTTON,true,true,true,[$eq,$in],false,true"</span>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 	}
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	@Test <strong class="jxr_keyword">void</strong> e10_moreLinksToDocsWhenConfigured() {
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">var</strong> r = report();
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		assertBean(r, <span class="jxr_string">"moreLinkAbsolute"</span>, <span class="jxr_string">"{tag=A,href=https://example.com/search,target=_blank,rel=noopener}"</span>);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		assertBean(r, <span class="jxr_string">"moreLinkRootRelative"</span>, <span class="jxr_string">"{tag=A,href=/docs/search,target=_blank,rel=noopener}"</span>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		assertEquals(<span class="jxr_string">"BUTTON"</span>, ((Map&lt;?,?&gt;) r.get(<span class="jxr_string">"moreLinkUnsafe"</span>)).get(<span class="jxr_string">"tag"</span>), r::toString);
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		assertEquals(<span class="jxr_string">"BUTTON"</span>, ((Map&lt;?,?&gt;) r.get(<span class="jxr_string">"moreLinkProtocolRelative"</span>)).get(<span class="jxr_string">"tag"</span>), r::toString);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		assertEquals(<span class="jxr_string">"BUTTON"</span>, ((Map&lt;?,?&gt;) r.get(<span class="jxr_string">"moreLinkNone"</span>)).get(<span class="jxr_string">"tag"</span>), r::toString);
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@Test <strong class="jxr_keyword">void</strong> e11_helpUrlSurvivesCatalogLift() {
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		assertBean(report(), <span class="jxr_string">"viewKeysHasHelpUrl"</span>, <span class="jxr_string">"/docs/search"</span>);
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 	}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

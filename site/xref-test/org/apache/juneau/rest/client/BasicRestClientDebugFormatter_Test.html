@@ -141,297 +141,307 @@
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 		assertFalse(msg.contains(<span class="jxr_string">"\nInjected: yes"</span>), <span class="jxr_string">"header value must not forge a physical line: "</span> + msg);
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> 	}
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 
-<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<em class="jxr_comment">// c — secure-by-default body-dump master gate, renderability, scrubber</em>
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> <em class="jxr_javadoccomment">	 * Runs a POST (with the given request body/content-type) against a stub transport that returns the given</em>
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> <em class="jxr_javadoccomment">	 * response body/content-type/content-encoding, at {@code FINEST}, through a client using {@code formatter},</em>
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> <em class="jxr_javadoccomment">	 * and returns the captured message. The request side always carries a body so both {@code appendBody} call</em>
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> <em class="jxr_javadoccomment">	 * sites run.</em>
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String runBodyTest(String loggerName, BasicRestClientDebugFormatter formatter,
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 			String reqBody, String reqContentType, String resBody, String resContentType, String resContentEncoding)
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 			<strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 		<strong class="jxr_keyword">var</strong> logger = RichLogger.getLogger(loggerName);
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 		<strong class="jxr_keyword">var</strong> prevLevel = logger.getLevel();
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 		logger.setLevel(Level.FINEST);
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = logger.captureEvents(Level.FINEST)) {
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder()
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				.transport(req -&gt; {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 					<strong class="jxr_keyword">if</strong> (req.getBody() != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 						<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 							req.getBody().writeTo(<strong class="jxr_keyword">new</strong> ByteArrayOutputStream());
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 						} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 						}
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					}
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 					<strong class="jxr_keyword">var</strong> b = TransportResponse.builder().statusCode(200).reasonPhrase(<span class="jxr_string">"OK"</span>);
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					<strong class="jxr_keyword">if</strong> (resContentType != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 						b.header(<span class="jxr_string">"Content-Type"</span>, resContentType);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 					<strong class="jxr_keyword">if</strong> (resContentEncoding != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 						b.header(<span class="jxr_string">"Content-Encoding"</span>, resContentEncoding);
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					<strong class="jxr_keyword">return</strong> b.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(resBody.getBytes(StandardCharsets.UTF_8))).build();
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 				})
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 				.debugLoggerName(loggerName)
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				.debugFormatter(formatter)
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 				.build();
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 				<strong class="jxr_keyword">var</strong> res = client.post(<span class="jxr_string">"http://example.com/x"</span>).header(<span class="jxr_string">"Content-Type"</span>, reqContentType)
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 					.bodyString(reqBody).run()) {
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 				res.body().asString();
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			}
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			assertNotNull(c.last());
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">return</strong> c.last().getMessage();
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			logger.setLevel(prevLevel);
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 		}
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	}
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> <em class="jxr_javadoccomment">	 * The direct "{@code d02}-equivalent inversion test". Locks all four RED-proof preconditions:</em>
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> <em class="jxr_javadoccomment">	 * {@code FINEST} capture, a non-empty captured body, the placeholder actually present (not just raw-text</em>
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> <em class="jxr_javadoccomment">	 * absent), and every encoded form of the secret absent (catches a broken fix that removes the plaintext dump</em>
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> <em class="jxr_javadoccomment">	 * but leaves the pre-existing {@code toSpacedHex} block intact).</em>
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	@Test
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">void</strong> c01_bodyGateOff_<strong class="jxr_keyword">default</strong>_suppressesPlaceholder_allEncodingsAbsent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.FALSE);
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"hunter2-PASSWORD"</span>;
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c01"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<span class="jxr_string">"ignored-request-body"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;password\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body suppressed"</span>), msg);
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			assertTrue(msg.contains(<span class="jxr_string">"set JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES to enable"</span>), msg);
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			assertFalse(msg.contains(<span class="jxr_string">"UTF-8---"</span>), msg);
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			assertFalse(msg.contains(<span class="jxr_string">"Content Hex"</span>), msg);
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		}
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	@Test
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">void</strong> c02_bodyGateOff_scrubberNeverInvoked() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.FALSE);
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		<strong class="jxr_keyword">var</strong> invoked = <strong class="jxr_keyword">new</strong> AtomicBoolean(false);
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"do-not-leak"</span>;
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; {
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 				invoked.set(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"SCRUBBED"</span>;
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 			});
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c02"</span>, formatter,
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 			assertFalse(invoked.get(), <span class="jxr_string">"scrubber must not run while the gate is off"</span>);
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body suppressed"</span>), msg);
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 		}
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 	}
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 	@Test
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 	<strong class="jxr_keyword">void</strong> c03_bodyGateOn_nonRenderableContentType_placeholder() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"PLAINTEXT-BINARY-SECRET"</span>;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c03"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				<span class="jxr_string">"prefix-"</span> + secret + <span class="jxr_string">"-suffix"</span>, <span class="jxr_string">"application/octet-stream"</span>,
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<span class="jxr_string">"prefix-"</span> + secret + <span class="jxr_string">"-suffix"</span>, <span class="jxr_string">"multipart/form-data"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body not rendered"</span>), msg);
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 			assertTrue(msg.contains(<span class="jxr_string">"binary/non-renderable content"</span>), msg);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 	}
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> <em class="jxr_javadoccomment">	 * Proves the identity-{@code Content-Encoding} check is wired in: gate on + a</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> <em class="jxr_javadoccomment">	 * renderable {@code Content-Type} + a non-identity {@code Content-Encoding} must still suppress. Forgetting</em>
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">	 * this check would pass every other body-dump test.</em>
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 	@Test
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<strong class="jxr_keyword">void</strong> c04_bodyGateOn_nonIdentityEncoding_placeholder() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"COMPRESSED-SECRET"</span>;
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c04"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"prefix-"</span> + secret, <span class="jxr_string">"application/json"</span>, <span class="jxr_string">"gzip"</span>);
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body not rendered"</span>), msg);
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		}
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 	}
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 	@Test
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">void</strong> c05_bodyGateOn_scrubberThrows_failsClosed() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"throwing-secret"</span>;
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; {
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(body);  <em class="jxr_comment">// must not re-leak the body through the exception message</em>
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 			});
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c05"</span>, formatter,
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 			assertTrue(msg.contains(<span class="jxr_string">"scrubber failed"</span>), msg);
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			assertFalse(msg.contains(<span class="jxr_string">"set JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES"</span>),
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 				<span class="jxr_string">"scrubber-failed placeholder must not use gate-off wording: "</span> + msg);
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		}
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 	}
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 	@Test
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 	<strong class="jxr_keyword">void</strong> c06_bodyGateOn_scrubberReturnsNull_failsClosed() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"null-scrubber-secret"</span>;
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c06"</span>, formatter,
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 			assertTrue(msg.contains(<span class="jxr_string">"scrubber failed"</span>), msg);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		}
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 	}
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	@Test
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 	<strong class="jxr_keyword">void</strong> c07_bodyGateOn_scrubberTransformsText_rawAbsent() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"raw-secret-value"</span>;
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; <span class="jxr_string">"SCRUBBED-OUTPUT"</span>);
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c07"</span>, formatter,
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			assertTrue(msg.contains(<span class="jxr_string">"SCRUBBED-OUTPUT"</span>), msg);
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 			assertAllEncodingsAbsent(msg, secret);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		}
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 	}
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 	@Test
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 	<strong class="jxr_keyword">void</strong> c08_bodyGateOn_noScrubber_dumpsRawSanitized_labelsCorrect() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"plain-visible-secret"</span>;
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c08"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"body-with-"</span> + secret, <span class="jxr_string">"text/plain"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			assertTrue(msg.contains(secret), msg);
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			assertTrue(msg.contains(<span class="jxr_string">"---Response Content---"</span>), msg);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			assertFalse(msg.contains(<span class="jxr_string">"UTF-8---"</span>), msg);
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			assertFalse(msg.contains(<span class="jxr_string">"Content Hex"</span>), msg);
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		}
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 	}
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> <em class="jxr_javadoccomment">	 * Request/response content-type independence (Risk 5): different content types on each side (one renderable,</em>
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> <em class="jxr_javadoccomment">	 * one not) catches a copy/paste bug that resolves the wrong side's {@code Content-Type}. A test using the same</em>
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> <em class="jxr_javadoccomment">	 * content type on both sides could not catch this.</em>
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 	@Test
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	<strong class="jxr_keyword">void</strong> c09_requestResponseContentTypeIndependence() <strong class="jxr_keyword">throws</strong> Exception {
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 		<strong class="jxr_keyword">var</strong> reqSecret = <span class="jxr_string">"request-side-secret"</span>;
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 		<strong class="jxr_keyword">var</strong> resSecret = <span class="jxr_string">"response-side-secret"</span>;
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c09"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 				reqSecret, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"prefix-"</span> + resSecret, <span class="jxr_string">"application/octet-stream"</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			<em class="jxr_comment">// Request side (text/plain) is renderable → dumps raw.</em>
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			assertTrue(msg.contains(reqSecret), msg);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			<em class="jxr_comment">// Response side (application/octet-stream) is not → placeholder, response secret absent.</em>
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body not rendered"</span>), msg);
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 			assertAllEncodingsAbsent(msg, resSecret);
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		}
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 	}
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 	<em class="jxr_comment">// d — env-var master gate parsing (pin-tests ported from the server's truthy table so the</em>
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	<em class="jxr_comment">// duplicated resolution logic can't silently drift from BasicRestDebugFormatter's)</em>
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 	@Test
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 	<strong class="jxr_keyword">void</strong> d01_truthyTable_disable() {
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : Arrays.asList(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, <span class="jxr_string">"   "</span>, <span class="jxr_string">"false"</span>, <span class="jxr_string">"FALSE"</span>, <span class="jxr_string">"0"</span>, <span class="jxr_string">" false "</span>, <span class="jxr_string">" 0 "</span>))
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			assertFalse(BasicRestClientDebugFormatter.parseAllowDumpBodies(v), () -&gt; <span class="jxr_string">"should disable: ["</span> + v + <span class="jxr_string">"]"</span>);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	@Test
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<strong class="jxr_keyword">void</strong> d02_truthyTable_enable() {
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : List.of(<span class="jxr_string">"1"</span>, <span class="jxr_string">"true"</span>, <span class="jxr_string">"yes"</span>, <span class="jxr_string">"on"</span>, <span class="jxr_string">"no"</span>, <span class="jxr_string">"off"</span>, <span class="jxr_string">"please"</span>, <span class="jxr_string">" 1 "</span>))
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 			assertTrue(BasicRestClientDebugFormatter.parseAllowDumpBodies(v), () -&gt; <span class="jxr_string">"should enable: ["</span> + v + <span class="jxr_string">"]"</span>);
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	}
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 	@Test
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 	<strong class="jxr_keyword">void</strong> d03_seam_forcesBothStates_andReadOnce() {
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 			assertTrue(BasicRestClientDebugFormatter.isAllowDumpBodies());
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 			assertTrue(BasicRestClientDebugFormatter.isAllowDumpBodies());  <em class="jxr_comment">// cached; stable across calls</em>
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(false);
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			assertFalse(BasicRestClientDebugFormatter.isAllowDumpBodies());
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 		}
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	}
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 	@Test
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 	<strong class="jxr_keyword">void</strong> d04_noSystemPropertyFallback() {
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 		Assumptions.assumeTrue(System.getenv(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES) == <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 		<strong class="jxr_keyword">var</strong> prev = System.getProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES);
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 		System.setProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES, <span class="jxr_string">"true"</span>);
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// re-resolve from env only</em>
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 			assertFalse(BasicRestClientDebugFormatter.isAllowDumpBodies(), <span class="jxr_string">"a system property must NEVER enable the env-only gate"</span>);
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 				System.clearProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES);
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 				System.setProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES, prev);
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		}
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 	}
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 	<em class="jxr_comment">// e — isBodyRenderable predicate (pin-tests ported from the server's table, per decision 1 —</em>
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 	<em class="jxr_comment">// the duplicated default method must stay byte-identical to RestDebugFormatter's)</em>
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BasicRestClientDebugFormatter f = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter();
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	@Test
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	<strong class="jxr_keyword">void</strong> e01_renderable_textAndStructured() {
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"text/plain"</span>));
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"text/html; charset=utf-8"</span>));
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/json"</span>));
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/json; charset=utf-8"</span>));
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/xml"</span>));
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/hal+json"</span>));
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/atom+xml"</span>));
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/x-www-form-urlencoded"</span>));
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"APPLICATION/JSON"</span>));
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 	@Test
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 	<strong class="jxr_keyword">void</strong> e02_nonRenderable_binaryAndMultipartAndAbsent() {
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"application/octet-stream"</span>));
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"multipart/form-data"</span>));
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"image/png"</span>));
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertFalse(f.isBodyRenderable(<strong class="jxr_keyword">null</strong>));
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">""</span>));
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"   "</span>));
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"; charset=utf-8"</span>));
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> }
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> 	@Test
+<a class="jxr_linenumber" name="L137" href="#L137">137</a> 	<strong class="jxr_keyword">void</strong> b04_queryStringSecrets_maskedInLoggedUri() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 		<strong class="jxr_keyword">var</strong> msg = runAndCapture(getClass().getName() + <span class="jxr_string">".b04"</span>, Level.INFO,
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 			RestClient.builder().transport(req -&gt; responseBuilder(200, <span class="jxr_string">"ok"</span>).build()),
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 			req -&gt; req.queryData(<span class="jxr_string">"access_token"</span>, <span class="jxr_string">"query-secret"</span>).queryData(<span class="jxr_string">"page"</span>, <span class="jxr_string">"2"</span>));
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 		assertFalse(msg.contains(<span class="jxr_string">"query-secret"</span>), msg);
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 		assertTrue(msg.contains(<span class="jxr_string">"access_token=[REDACTED]"</span>), msg);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 		assertTrue(msg.contains(<span class="jxr_string">"page=2"</span>), msg);
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 	}
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 	<em class="jxr_comment">// c — secure-by-default body-dump master gate, renderability, scrubber</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">	 * Runs a POST (with the given request body/content-type) against a stub transport that returns the given</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">	 * response body/content-type/content-encoding, at {@code FINEST}, through a client using {@code formatter},</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">	 * and returns the captured message. The request side always carries a body so both {@code appendBody} call</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> <em class="jxr_javadoccomment">	 * sites run.</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> String runBodyTest(String loggerName, BasicRestClientDebugFormatter formatter,
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 			String reqBody, String reqContentType, String resBody, String resContentType, String resContentEncoding)
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 			<strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 		<strong class="jxr_keyword">var</strong> logger = RichLogger.getLogger(loggerName);
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 		<strong class="jxr_keyword">var</strong> prevLevel = logger.getLevel();
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 		logger.setLevel(Level.FINEST);
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 		<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> c = logger.captureEvents(Level.FINEST)) {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">try</strong> (<strong class="jxr_keyword">var</strong> client = RestClient.builder()
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				.transport(req -&gt; {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 					<strong class="jxr_keyword">if</strong> (req.getBody() != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 						<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 							req.getBody().writeTo(<strong class="jxr_keyword">new</strong> ByteArrayOutputStream());
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 						} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 						}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 					}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 					<strong class="jxr_keyword">var</strong> b = TransportResponse.builder().statusCode(200).reasonPhrase(<span class="jxr_string">"OK"</span>);
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 					<strong class="jxr_keyword">if</strong> (resContentType != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 						b.header(<span class="jxr_string">"Content-Type"</span>, resContentType);
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 					<strong class="jxr_keyword">if</strong> (resContentEncoding != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 						b.header(<span class="jxr_string">"Content-Encoding"</span>, resContentEncoding);
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 					<strong class="jxr_keyword">return</strong> b.body(<strong class="jxr_keyword">new</strong> ByteArrayInputStream(resBody.getBytes(StandardCharsets.UTF_8))).build();
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 				})
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 				.debugLoggerName(loggerName)
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 				.debugFormatter(formatter)
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 				.build();
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 				<strong class="jxr_keyword">var</strong> res = client.post(<span class="jxr_string">"http://example.com/x"</span>).header(<span class="jxr_string">"Content-Type"</span>, reqContentType)
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 					.bodyString(reqBody).run()) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 				res.body().asString();
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			}
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			assertNotNull(c.last());
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">return</strong> c.last().getMessage();
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			logger.setLevel(prevLevel);
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		}
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	}
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> <em class="jxr_javadoccomment">	 * The direct "{@code d02}-equivalent inversion test". Locks all four RED-proof preconditions:</em>
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> <em class="jxr_javadoccomment">	 * {@code FINEST} capture, a non-empty captured body, the placeholder actually present (not just raw-text</em>
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> <em class="jxr_javadoccomment">	 * absent), and every encoded form of the secret absent (catches a broken fix that removes the plaintext dump</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> <em class="jxr_javadoccomment">	 * but leaves the pre-existing {@code toSpacedHex} block intact).</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 	@Test
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 	<strong class="jxr_keyword">void</strong> c01_bodyGateOff_<strong class="jxr_keyword">default</strong>_suppressesPlaceholder_allEncodingsAbsent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.FALSE);
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"hunter2-PASSWORD"</span>;
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c01"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 				<span class="jxr_string">"ignored-request-body"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;password\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body suppressed"</span>), msg);
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 			assertTrue(msg.contains(<span class="jxr_string">"set JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES to enable"</span>), msg);
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			assertFalse(msg.contains(<span class="jxr_string">"UTF-8---"</span>), msg);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			assertFalse(msg.contains(<span class="jxr_string">"Content Hex"</span>), msg);
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 		}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 	@Test
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 	<strong class="jxr_keyword">void</strong> c02_bodyGateOff_scrubberNeverInvoked() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.FALSE);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 		<strong class="jxr_keyword">var</strong> invoked = <strong class="jxr_keyword">new</strong> AtomicBoolean(false);
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"do-not-leak"</span>;
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; {
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				invoked.set(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				<strong class="jxr_keyword">return</strong> <span class="jxr_string">"SCRUBBED"</span>;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 			});
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c02"</span>, formatter,
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 			assertFalse(invoked.get(), <span class="jxr_string">"scrubber must not run while the gate is off"</span>);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body suppressed"</span>), msg);
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 		}
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 	}
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 	@Test
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 	<strong class="jxr_keyword">void</strong> c03_bodyGateOn_nonRenderableContentType_placeholder() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"PLAINTEXT-BINARY-SECRET"</span>;
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c03"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 				<span class="jxr_string">"prefix-"</span> + secret + <span class="jxr_string">"-suffix"</span>, <span class="jxr_string">"application/octet-stream"</span>,
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				<span class="jxr_string">"prefix-"</span> + secret + <span class="jxr_string">"-suffix"</span>, <span class="jxr_string">"multipart/form-data"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body not rendered"</span>), msg);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 			assertTrue(msg.contains(<span class="jxr_string">"binary/non-renderable content"</span>), msg);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 		}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 	}
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> <em class="jxr_javadoccomment">	 * Proves the identity-{@code Content-Encoding} check is wired in: gate on + a</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * renderable {@code Content-Type} + a non-identity {@code Content-Encoding} must still suppress. Forgetting</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * this check would pass every other body-dump test.</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	@Test
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 	<strong class="jxr_keyword">void</strong> c04_bodyGateOn_nonIdentityEncoding_placeholder() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"COMPRESSED-SECRET"</span>;
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c04"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"prefix-"</span> + secret, <span class="jxr_string">"application/json"</span>, <span class="jxr_string">"gzip"</span>);
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body not rendered"</span>), msg);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		}
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 	}
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 	@Test
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">void</strong> c05_bodyGateOn_scrubberThrows_failsClosed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"throwing-secret"</span>;
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(body);  <em class="jxr_comment">// must not re-leak the body through the exception message</em>
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			});
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c05"</span>, formatter,
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			assertTrue(msg.contains(<span class="jxr_string">"scrubber failed"</span>), msg);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 			assertFalse(msg.contains(<span class="jxr_string">"set JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES"</span>),
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				<span class="jxr_string">"scrubber-failed placeholder must not use gate-off wording: "</span> + msg);
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 		}
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	@Test
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 	<strong class="jxr_keyword">void</strong> c06_bodyGateOn_scrubberReturnsNull_failsClosed() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"null-scrubber-secret"</span>;
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c06"</span>, formatter,
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 			assertTrue(msg.contains(<span class="jxr_string">"scrubber failed"</span>), msg);
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		}
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 	}
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 	@Test
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 	<strong class="jxr_keyword">void</strong> c07_bodyGateOn_scrubberTransformsText_rawAbsent() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"raw-secret-value"</span>;
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 			<strong class="jxr_keyword">var</strong> formatter = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter().bodyScrubber((ct, body) -&gt; <span class="jxr_string">"SCRUBBED-OUTPUT"</span>);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c07"</span>, formatter,
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"{\&quot;p\&quot;:\&quot;"</span> + secret + <span class="jxr_string">"\&quot;}"</span>, <span class="jxr_string">"application/json"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			assertTrue(msg.contains(<span class="jxr_string">"SCRUBBED-OUTPUT"</span>), msg);
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			assertAllEncodingsAbsent(msg, secret);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 		}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 	}
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 	@Test
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 	<strong class="jxr_keyword">void</strong> c08_bodyGateOn_noScrubber_dumpsRawSanitized_labelsCorrect() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		<strong class="jxr_keyword">var</strong> secret = <span class="jxr_string">"plain-visible-secret"</span>;
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c08"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				<span class="jxr_string">"ignored"</span>, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"body-with-"</span> + secret, <span class="jxr_string">"text/plain"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			assertTrue(msg.contains(secret), msg);
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			assertTrue(msg.contains(<span class="jxr_string">"---Response Content---"</span>), msg);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			assertFalse(msg.contains(<span class="jxr_string">"UTF-8---"</span>), msg);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			assertFalse(msg.contains(<span class="jxr_string">"Content Hex"</span>), msg);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 		}
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 	}
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> <em class="jxr_javadoccomment">	 * Request/response content-type independence (Risk 5): different content types on each side (one renderable,</em>
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> <em class="jxr_javadoccomment">	 * one not) catches a copy/paste bug that resolves the wrong side's {@code Content-Type}. A test using the same</em>
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> <em class="jxr_javadoccomment">	 * content type on both sides could not catch this.</em>
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 	@Test
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 	<strong class="jxr_keyword">void</strong> c09_requestResponseContentTypeIndependence() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 		<strong class="jxr_keyword">var</strong> reqSecret = <span class="jxr_string">"request-side-secret"</span>;
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 		<strong class="jxr_keyword">var</strong> resSecret = <span class="jxr_string">"response-side-secret"</span>;
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">var</strong> msg = runBodyTest(getClass().getName() + <span class="jxr_string">".c09"</span>, <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter(),
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				reqSecret, <span class="jxr_string">"text/plain"</span>, <span class="jxr_string">"prefix-"</span> + resSecret, <span class="jxr_string">"application/octet-stream"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			<em class="jxr_comment">// Request side (text/plain) is renderable → dumps raw.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			assertTrue(msg.contains(reqSecret), msg);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 			<em class="jxr_comment">// Response side (application/octet-stream) is not → placeholder, response secret absent.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			assertTrue(msg.contains(<span class="jxr_string">"[body not rendered"</span>), msg);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 			assertAllEncodingsAbsent(msg, resSecret);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 		}
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 	}
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 	<em class="jxr_comment">// d — env-var master gate parsing (pin-tests ported from the server's truthy table so the</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 	<em class="jxr_comment">// duplicated resolution logic can't silently drift from BasicRestDebugFormatter's)</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 	@Test
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 	<strong class="jxr_keyword">void</strong> d01_truthyTable_disable() {
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : Arrays.asList(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">""</span>, <span class="jxr_string">"   "</span>, <span class="jxr_string">"false"</span>, <span class="jxr_string">"FALSE"</span>, <span class="jxr_string">"0"</span>, <span class="jxr_string">" false "</span>, <span class="jxr_string">" 0 "</span>))
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 			assertFalse(BasicRestClientDebugFormatter.parseAllowDumpBodies(v), () -&gt; <span class="jxr_string">"should disable: ["</span> + v + <span class="jxr_string">"]"</span>);
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 	}
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 	@Test
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 	<strong class="jxr_keyword">void</strong> d02_truthyTable_enable() {
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> v : List.of(<span class="jxr_string">"1"</span>, <span class="jxr_string">"true"</span>, <span class="jxr_string">"yes"</span>, <span class="jxr_string">"on"</span>, <span class="jxr_string">"no"</span>, <span class="jxr_string">"off"</span>, <span class="jxr_string">"please"</span>, <span class="jxr_string">" 1 "</span>))
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 			assertTrue(BasicRestClientDebugFormatter.parseAllowDumpBodies(v), () -&gt; <span class="jxr_string">"should enable: ["</span> + v + <span class="jxr_string">"]"</span>);
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 	}
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 	@Test
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 	<strong class="jxr_keyword">void</strong> d03_seam_forcesBothStates_andReadOnce() {
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 			assertTrue(BasicRestClientDebugFormatter.isAllowDumpBodies());
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 			assertTrue(BasicRestClientDebugFormatter.isAllowDumpBodies());  <em class="jxr_comment">// cached; stable across calls</em>
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(false);
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 			assertFalse(BasicRestClientDebugFormatter.isAllowDumpBodies());
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 		}
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 	}
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 	@Test
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 	<strong class="jxr_keyword">void</strong> d04_noSystemPropertyFallback() {
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 		Assumptions.assumeTrue(System.getenv(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES) == <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 		<strong class="jxr_keyword">var</strong> prev = System.getProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES);
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 		System.setProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES, <span class="jxr_string">"true"</span>);
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 		<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);  <em class="jxr_comment">// re-resolve from env only</em>
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 			assertFalse(BasicRestClientDebugFormatter.isAllowDumpBodies(), <span class="jxr_string">"a system property must NEVER enable the env-only gate"</span>);
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 			<strong class="jxr_keyword">if</strong> (prev == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				System.clearProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 				System.setProperty(BasicRestClientDebugFormatter.ENV_ALLOW_DUMP_BODIES, prev);
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(<strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 		}
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	<em class="jxr_comment">// e — isBodyRenderable predicate (pin-tests ported from the server's table, per decision 1 —</em>
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<em class="jxr_comment">// the duplicated default method must stay byte-identical to RestDebugFormatter's)</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 	<em class="jxr_comment">// -----------------------------------------------------------------------------------------</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> BasicRestClientDebugFormatter f = <strong class="jxr_keyword">new</strong> BasicRestClientDebugFormatter();
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 	@Test
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	<strong class="jxr_keyword">void</strong> e01_renderable_textAndStructured() {
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"text/plain"</span>));
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"text/html; charset=utf-8"</span>));
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/json"</span>));
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/json; charset=utf-8"</span>));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/xml"</span>));
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/hal+json"</span>));
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/atom+xml"</span>));
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"application/x-www-form-urlencoded"</span>));
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		assertTrue(f.isBodyRenderable(<span class="jxr_string">"APPLICATION/JSON"</span>));
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 	}
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 	@Test
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<strong class="jxr_keyword">void</strong> e02_nonRenderable_binaryAndMultipartAndAbsent() {
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"application/octet-stream"</span>));
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"multipart/form-data"</span>));
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"image/png"</span>));
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		assertFalse(f.isBodyRenderable(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">""</span>));
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"   "</span>));
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		assertFalse(f.isBodyRenderable(<span class="jxr_string">"; charset=utf-8"</span>));
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

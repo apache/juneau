@@ -208,14 +208,14 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 		assertTrue(String.valueOf(c.get(<span class="jxr_string">"detailSelected"</span>)).startsWith(<span class="jxr_string">"Name"</span>), c::toString);
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 	}
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> c02_selectedTabIsWashWithAccentBar() {
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 	@Test <strong class="jxr_keyword">void</strong> c02_selectedTabIsSelectedFillWithoutBar() {
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 		<strong class="jxr_keyword">var</strong> t = obj(obj(report, <span class="jxr_string">"chooserLight"</span>), <span class="jxr_string">"tabs"</span>);
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 		assertNotEquals(t.get(<span class="jxr_string">"selBg"</span>), t.get(<span class="jxr_string">"unBg"</span>), t::toString);
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 		assertEquals(t.get(<span class="jxr_string">"wash"</span>), t.get(<span class="jxr_string">"selBg"</span>), t::toString);
 <a class="jxr_linenumber" name="L207" href="#L207">207</a> 		assertEquals(<span class="jxr_string">"none"</span>, t.get(<span class="jxr_string">"selBar"</span>), t::toString);
 <a class="jxr_linenumber" name="L208" href="#L208">208</a> 	}
 <a class="jxr_linenumber" name="L209" href="#L209">209</a> 
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> c03_selectedTabIsWashWithAccentBar_dark() {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 	@Test <strong class="jxr_keyword">void</strong> c03_selectedTabIsSelectedFillWithoutBar_dark() {
 <a class="jxr_linenumber" name="L211" href="#L211">211</a> 		<strong class="jxr_keyword">var</strong> t = obj(obj(report, <span class="jxr_string">"chooserDark"</span>), <span class="jxr_string">"tabs"</span>);
 <a class="jxr_linenumber" name="L212" href="#L212">212</a> 		assertNotEquals(t.get(<span class="jxr_string">"selBg"</span>), t.get(<span class="jxr_string">"unBg"</span>), t::toString);
 <a class="jxr_linenumber" name="L213" href="#L213">213</a> 		assertEquals(t.get(<span class="jxr_string">"wash"</span>), t.get(<span class="jxr_string">"selBg"</span>), t::toString);

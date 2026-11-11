@@ -735,218 +735,220 @@
 <span class="source-line-no">722</span><span id="line-722">         .uri(resolvedUri)</span>
 <span class="source-line-no">723</span><span id="line-723">         .timeout(timeout)</span>
 <span class="source-line-no">724</span><span id="line-724">         .remoteUrlPolicy(policyEnforced, allowPrivateUrls)</span>
-<span class="source-line-no">725</span><span id="line-725">         .allowedAddressRanges(client.allowedAddressRanges);</span>
-<span class="source-line-no">726</span><span id="line-726"></span>
-<span class="source-line-no">727</span><span id="line-727">      // Headers</span>
-<span class="source-line-no">728</span><span id="line-728">      for (var h : headers) {</span>
-<span class="source-line-no">729</span><span id="line-729">         var v = h.getValue();</span>
-<span class="source-line-no">730</span><span id="line-730">         if (v != null)</span>
-<span class="source-line-no">731</span><span id="line-731">            builder.header(h.getName(), v);</span>
-<span class="source-line-no">732</span><span id="line-732">      }</span>
-<span class="source-line-no">733</span><span id="line-733"></span>
-<span class="source-line-no">734</span><span id="line-734">      if (client.parsers != null || client.defaultParser != null) {</span>
-<span class="source-line-no">735</span><span id="line-735">         var hasAccept = headers.stream().anyMatch(h -&gt; eqic("Accept", h.getName()));</span>
-<span class="source-line-no">736</span><span id="line-736">         if (! hasAccept) {</span>
-<span class="source-line-no">737</span><span id="line-737">            var accept = client.getDefaultAccept();</span>
-<span class="source-line-no">738</span><span id="line-738">            if (accept != null)</span>
-<span class="source-line-no">739</span><span id="line-739">               builder.header("Accept", accept);</span>
-<span class="source-line-no">740</span><span id="line-740">         }</span>
-<span class="source-line-no">741</span><span id="line-741">      }</span>
-<span class="source-line-no">742</span><span id="line-742"></span>
-<span class="source-line-no">743</span><span id="line-743">      // A Content-Type already present in the header list (a caller-supplied @Header param, or a constant header)</span>
-<span class="source-line-no">744</span><span id="line-744">      // wins over the body's own content type, and is never duplicated by it (dedup invariant).</span>
-<span class="source-line-no">745</span><span id="line-745">      var hasContentType = hasHeader("Content-Type");</span>
-<span class="source-line-no">746</span><span id="line-746"></span>
-<span class="source-line-no">747</span><span id="line-747">      // Pre-converted body from body(Object) takes priority</span>
-<span class="source-line-no">748</span><span id="line-748">      if (convertedBody != null) {</span>
-<span class="source-line-no">749</span><span id="line-749">         if (convertedBody.getContentType() != null &amp;&amp; ! hasContentType)</span>
-<span class="source-line-no">750</span><span id="line-750">            builder.header("Content-Type", convertedBody.getContentType());</span>
-<span class="source-line-no">751</span><span id="line-751">         builder.body(convertedBody);</span>
-<span class="source-line-no">752</span><span id="line-752">      } else if (!formData.isEmpty() &amp;&amp; body == null) {</span>
-<span class="source-line-no">753</span><span id="line-753">         // Form body when form data is present and no explicit body was set</span>
-<span class="source-line-no">754</span><span id="line-754">         var formBody = buildFormBody();</span>
-<span class="source-line-no">755</span><span id="line-755">         if (! hasContentType)</span>
-<span class="source-line-no">756</span><span id="line-756">            builder.header("Content-Type", formBody.getContentType());</span>
-<span class="source-line-no">757</span><span id="line-757">         builder.body(TransportBody.of(formBody));</span>
-<span class="source-line-no">758</span><span id="line-758">      } else if (body != null) {</span>
-<span class="source-line-no">759</span><span id="line-759">         if (body.getContentType() != null &amp;&amp; ! hasContentType)</span>
-<span class="source-line-no">760</span><span id="line-760">            builder.header("Content-Type", body.getContentType());</span>
-<span class="source-line-no">761</span><span id="line-761">         builder.body(TransportBody.of(body));</span>
-<span class="source-line-no">762</span><span id="line-762">      }</span>
-<span class="source-line-no">763</span><span id="line-763"></span>
-<span class="source-line-no">764</span><span id="line-764">      return builder.build();</span>
-<span class="source-line-no">765</span><span id="line-765">   }</span>
-<span class="source-line-no">766</span><span id="line-766"></span>
-<span class="source-line-no">767</span><span id="line-767">   private TransportRequest captureRequestBody(TransportRequest request, int cap) {</span>
-<span class="source-line-no">768</span><span id="line-768">      var originalBody = request.getBody();</span>
-<span class="source-line-no">769</span><span id="line-769">      if (originalBody == null) {</span>
-<span class="source-line-no">770</span><span id="line-770">         cachedContent = null;</span>
-<span class="source-line-no">771</span><span id="line-771">         cachedContentLength = 0;</span>
-<span class="source-line-no">772</span><span id="line-772">         return request;</span>
-<span class="source-line-no">773</span><span id="line-773">      }</span>
-<span class="source-line-no">774</span><span id="line-774"></span>
-<span class="source-line-no">775</span><span id="line-775">      var wrappedBody = new HttpBody() {</span>
-<span class="source-line-no">776</span><span id="line-776">         @Override</span>
-<span class="source-line-no">777</span><span id="line-777">         public String getContentType() {</span>
-<span class="source-line-no">778</span><span id="line-778">            return originalBody.getContentType();</span>
-<span class="source-line-no">779</span><span id="line-779">         }</span>
-<span class="source-line-no">780</span><span id="line-780"></span>
-<span class="source-line-no">781</span><span id="line-781">         @Override</span>
-<span class="source-line-no">782</span><span id="line-782">         public long getContentLength() {</span>
-<span class="source-line-no">783</span><span id="line-783">            return originalBody.getContentLength();</span>
-<span class="source-line-no">784</span><span id="line-784">         }</span>
-<span class="source-line-no">785</span><span id="line-785"></span>
-<span class="source-line-no">786</span><span id="line-786">         @Override</span>
-<span class="source-line-no">787</span><span id="line-787">         public void writeTo(OutputStream out) throws IOException {</span>
-<span class="source-line-no">788</span><span id="line-788">            var tee = new BoundedCaptureOutputStream(out, cap);</span>
-<span class="source-line-no">789</span><span id="line-789">            try {</span>
-<span class="source-line-no">790</span><span id="line-790">               originalBody.writeTo(tee);</span>
-<span class="source-line-no">791</span><span id="line-791">            } finally {</span>
-<span class="source-line-no">792</span><span id="line-792">               cachedContent = tee.getCapturedBytes();</span>
-<span class="source-line-no">793</span><span id="line-793">               cachedContentLength = tee.getTotalBytesWritten();</span>
-<span class="source-line-no">794</span><span id="line-794">            }</span>
-<span class="source-line-no">795</span><span id="line-795">         }</span>
-<span class="source-line-no">796</span><span id="line-796"></span>
-<span class="source-line-no">797</span><span id="line-797">         @Override</span>
-<span class="source-line-no">798</span><span id="line-798">         public boolean isRepeatable() {</span>
-<span class="source-line-no">799</span><span id="line-799">            return originalBody.isRepeatable();</span>
-<span class="source-line-no">800</span><span id="line-800">         }</span>
-<span class="source-line-no">801</span><span id="line-801">      };</span>
-<span class="source-line-no">802</span><span id="line-802"></span>
-<span class="source-line-no">803</span><span id="line-803">      var builder = TransportRequest.builder()</span>
-<span class="source-line-no">804</span><span id="line-804">         .method(request.getMethod())</span>
-<span class="source-line-no">805</span><span id="line-805">         .uri(request.getUri())</span>
-<span class="source-line-no">806</span><span id="line-806">         .headers(request.getHeaders())</span>
-<span class="source-line-no">807</span><span id="line-807">         .body(TransportBody.of(wrappedBody))</span>
-<span class="source-line-no">808</span><span id="line-808">         .timeout(request.getTimeout())</span>
-<span class="source-line-no">809</span><span id="line-809">         .remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls())</span>
-<span class="source-line-no">810</span><span id="line-810">         .allowedAddressRanges(request.getAllowedAddressRanges());</span>
-<span class="source-line-no">811</span><span id="line-811">      return builder.build();</span>
-<span class="source-line-no">812</span><span id="line-812">   }</span>
-<span class="source-line-no">813</span><span id="line-813"></span>
-<span class="source-line-no">814</span><span id="line-814">   private String applyPathSubstitutions(String template) {</span>
-<span class="source-line-no">815</span><span id="line-815">      var result = template;</span>
-<span class="source-line-no">816</span><span id="line-816">      Object remainder = null;</span>
-<span class="source-line-no">817</span><span id="line-817">      for (var entry : pathData.entrySet()) {</span>
-<span class="source-line-no">818</span><span id="line-818">         if (eq(entry.getKey(), "/*")) {</span>
-<span class="source-line-no">819</span><span id="line-819">            remainder = entry.getValue();  // @PathRemainder — applied after named substitutions</span>
-<span class="source-line-no">820</span><span id="line-820">            continue;</span>
-<span class="source-line-no">821</span><span id="line-821">         }</span>
-<span class="source-line-no">822</span><span id="line-822">         var replacement = entry.getValue() != null ? entry.getValue().toString() : "";</span>
-<span class="source-line-no">823</span><span id="line-823">         result = result.replace("{" + entry.getKey() + "}", urlEncode(replacement));</span>
-<span class="source-line-no">824</span><span id="line-824">      }</span>
-<span class="source-line-no">825</span><span id="line-825">      if (remainder != null) {</span>
-<span class="source-line-no">826</span><span id="line-826">         var r = remainder.toString();</span>
-<span class="source-line-no">827</span><span id="line-827">         if (! r.isEmpty()) {</span>
-<span class="source-line-no">828</span><span id="line-828">            if (result.endsWith("/*"))</span>
-<span class="source-line-no">829</span><span id="line-829">               result = result.substring(0, result.length() - 2);</span>
-<span class="source-line-no">830</span><span id="line-830">            if (! result.endsWith("/"))</span>
-<span class="source-line-no">831</span><span id="line-831">               result += "/";</span>
-<span class="source-line-no">832</span><span id="line-832">            result += urlEncodePath(r);</span>
-<span class="source-line-no">833</span><span id="line-833">         }</span>
-<span class="source-line-no">834</span><span id="line-834">      }</span>
-<span class="source-line-no">835</span><span id="line-835">      return result;</span>
-<span class="source-line-no">836</span><span id="line-836">   }</span>
-<span class="source-line-no">837</span><span id="line-837"></span>
-<span class="source-line-no">838</span><span id="line-838">   /** URL-encodes a path remainder while preserving {@code /} segment separators. */</span>
-<span class="source-line-no">839</span><span id="line-839">   private static String urlEncodePath(String value) {</span>
-<span class="source-line-no">840</span><span id="line-840">      var segments = value.split("/", -1);</span>
-<span class="source-line-no">841</span><span id="line-841">      var sb = new StringBuilder();</span>
-<span class="source-line-no">842</span><span id="line-842">      for (var i = 0; i &lt; segments.length; i++) {</span>
-<span class="source-line-no">843</span><span id="line-843">         if (i &gt; 0)</span>
-<span class="source-line-no">844</span><span id="line-844">            sb.append('/');</span>
-<span class="source-line-no">845</span><span id="line-845">         sb.append(urlEncode(segments[i]));</span>
-<span class="source-line-no">846</span><span id="line-846">      }</span>
-<span class="source-line-no">847</span><span id="line-847">      return sb.toString();</span>
-<span class="source-line-no">848</span><span id="line-848">   }</span>
-<span class="source-line-no">849</span><span id="line-849"></span>
-<span class="source-line-no">850</span><span id="line-850">   private URI appendQuery(String baseUrl) {</span>
-<span class="source-line-no">851</span><span id="line-851">      if (queryData.isEmpty()) {</span>
-<span class="source-line-no">852</span><span id="line-852">         try {</span>
-<span class="source-line-no">853</span><span id="line-853">            return new URI(baseUrl);</span>
-<span class="source-line-no">854</span><span id="line-854">         } catch (URISyntaxException e) {</span>
-<span class="source-line-no">855</span><span id="line-855">            throw iaex(e, "Invalid URL: %s", baseUrl);</span>
-<span class="source-line-no">856</span><span id="line-856">         }</span>
-<span class="source-line-no">857</span><span id="line-857">      }</span>
-<span class="source-line-no">858</span><span id="line-858">      var sb = new StringBuilder(baseUrl);</span>
-<span class="source-line-no">859</span><span id="line-859">      var first = !baseUrl.contains("?");</span>
-<span class="source-line-no">860</span><span id="line-860">      for (var part : queryData) {</span>
-<span class="source-line-no">861</span><span id="line-861">         var v = part.getValue();</span>
-<span class="source-line-no">862</span><span id="line-862">         if (v == null)</span>
-<span class="source-line-no">863</span><span id="line-863">            continue;</span>
-<span class="source-line-no">864</span><span id="line-864">         sb.append(first ? '?' : '&amp;');</span>
-<span class="source-line-no">865</span><span id="line-865">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
-<span class="source-line-no">866</span><span id="line-866">         first = false;</span>
-<span class="source-line-no">867</span><span id="line-867">      }</span>
-<span class="source-line-no">868</span><span id="line-868">      try {</span>
-<span class="source-line-no">869</span><span id="line-869">         return new URI(sb.toString());</span>
-<span class="source-line-no">870</span><span id="line-870">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">871</span><span id="line-871">         throw iaex(e, "Invalid URL: %s", sb);</span>
-<span class="source-line-no">872</span><span id="line-872">      }</span>
-<span class="source-line-no">873</span><span id="line-873">   }</span>
-<span class="source-line-no">874</span><span id="line-874"></span>
-<span class="source-line-no">875</span><span id="line-875">   private HttpBody buildFormBody() {</span>
-<span class="source-line-no">876</span><span id="line-876">      var sb = new StringBuilder();</span>
-<span class="source-line-no">877</span><span id="line-877">      var first = true;</span>
-<span class="source-line-no">878</span><span id="line-878">      for (var part : formData) {</span>
-<span class="source-line-no">879</span><span id="line-879">         var v = part.getValue();</span>
-<span class="source-line-no">880</span><span id="line-880">         if (v == null)</span>
-<span class="source-line-no">881</span><span id="line-881">            continue;</span>
-<span class="source-line-no">882</span><span id="line-882">         if (!first)</span>
-<span class="source-line-no">883</span><span id="line-883">            sb.append('&amp;');</span>
-<span class="source-line-no">884</span><span id="line-884">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
-<span class="source-line-no">885</span><span id="line-885">         first = false;</span>
-<span class="source-line-no">886</span><span id="line-886">      }</span>
-<span class="source-line-no">887</span><span id="line-887">      final var encoded = sb.toString();</span>
-<span class="source-line-no">888</span><span id="line-888">      return new HttpBody() {</span>
-<span class="source-line-no">889</span><span id="line-889">         @Override public String getContentType() { return "application/x-www-form-urlencoded"; }</span>
-<span class="source-line-no">890</span><span id="line-890">         @Override public long getContentLength() { return encoded.getBytes(StandardCharsets.UTF_8).length; }</span>
-<span class="source-line-no">891</span><span id="line-891">         @Override public void writeTo(OutputStream out) throws IOException { out.write(encoded.getBytes(StandardCharsets.UTF_8)); }</span>
-<span class="source-line-no">892</span><span id="line-892">         @Override public boolean isRepeatable() { return true; }</span>
-<span class="source-line-no">893</span><span id="line-893">      };</span>
-<span class="source-line-no">894</span><span id="line-894">   }</span>
-<span class="source-line-no">895</span><span id="line-895"></span>
-<span class="source-line-no">896</span><span id="line-896">   private static String urlEncode(String value) {</span>
-<span class="source-line-no">897</span><span id="line-897">      return URLEncoder.encode(value, StandardCharsets.UTF_8);</span>
-<span class="source-line-no">898</span><span id="line-898">   }</span>
-<span class="source-line-no">899</span><span id="line-899"></span>
-<span class="source-line-no">900</span><span id="line-900">   private static final class BoundedCaptureOutputStream extends OutputStream {</span>
-<span class="source-line-no">901</span><span id="line-901">      private final OutputStream delegate;</span>
-<span class="source-line-no">902</span><span id="line-902">      private final ByteArrayOutputStream capture = new ByteArrayOutputStream();</span>
-<span class="source-line-no">903</span><span id="line-903">      private final int cap;</span>
-<span class="source-line-no">904</span><span id="line-904">      private long totalBytesWritten;</span>
-<span class="source-line-no">905</span><span id="line-905"></span>
-<span class="source-line-no">906</span><span id="line-906">      BoundedCaptureOutputStream(OutputStream delegate, int cap) {</span>
-<span class="source-line-no">907</span><span id="line-907">         this.delegate = delegate;</span>
-<span class="source-line-no">908</span><span id="line-908">         this.cap = cap;</span>
-<span class="source-line-no">909</span><span id="line-909">      }</span>
-<span class="source-line-no">910</span><span id="line-910"></span>
-<span class="source-line-no">911</span><span id="line-911">      byte[] getCapturedBytes() {</span>
-<span class="source-line-no">912</span><span id="line-912">         return capture.toByteArray();</span>
-<span class="source-line-no">913</span><span id="line-913">      }</span>
-<span class="source-line-no">914</span><span id="line-914"></span>
-<span class="source-line-no">915</span><span id="line-915">      long getTotalBytesWritten() {</span>
-<span class="source-line-no">916</span><span id="line-916">         return totalBytesWritten;</span>
-<span class="source-line-no">917</span><span id="line-917">      }</span>
-<span class="source-line-no">918</span><span id="line-918"></span>
-<span class="source-line-no">919</span><span id="line-919">      @Override</span>
-<span class="source-line-no">920</span><span id="line-920">      public void write(int b) throws IOException {</span>
-<span class="source-line-no">921</span><span id="line-921">         delegate.write(b);</span>
-<span class="source-line-no">922</span><span id="line-922">         totalBytesWritten++;</span>
-<span class="source-line-no">923</span><span id="line-923">         if (capture.size() &lt; cap)</span>
-<span class="source-line-no">924</span><span id="line-924">            capture.write(b);</span>
-<span class="source-line-no">925</span><span id="line-925">      }</span>
-<span class="source-line-no">926</span><span id="line-926"></span>
-<span class="source-line-no">927</span><span id="line-927">      @Override</span>
-<span class="source-line-no">928</span><span id="line-928">      public void write(byte[] b, int off, int len) throws IOException {</span>
-<span class="source-line-no">929</span><span id="line-929">         delegate.write(b, off, len);</span>
-<span class="source-line-no">930</span><span id="line-930">         totalBytesWritten += len;</span>
-<span class="source-line-no">931</span><span id="line-931">         var remaining = cap - capture.size();</span>
-<span class="source-line-no">932</span><span id="line-932">         if (remaining &gt; 0)</span>
-<span class="source-line-no">933</span><span id="line-933">            capture.write(b, off, Math.min(len, remaining));</span>
-<span class="source-line-no">934</span><span id="line-934">      }</span>
-<span class="source-line-no">935</span><span id="line-935">   }</span>
-<span class="source-line-no">936</span><span id="line-936">}</span>
+<span class="source-line-no">725</span><span id="line-725">         .allowedAddressRanges(client.allowedAddressRanges)</span>
+<span class="source-line-no">726</span><span id="line-726">         .redirectStripHeaders(client.redirectStripHeaders);</span>
+<span class="source-line-no">727</span><span id="line-727"></span>
+<span class="source-line-no">728</span><span id="line-728">      // Headers</span>
+<span class="source-line-no">729</span><span id="line-729">      for (var h : headers) {</span>
+<span class="source-line-no">730</span><span id="line-730">         var v = h.getValue();</span>
+<span class="source-line-no">731</span><span id="line-731">         if (v != null)</span>
+<span class="source-line-no">732</span><span id="line-732">            builder.header(h.getName(), v);</span>
+<span class="source-line-no">733</span><span id="line-733">      }</span>
+<span class="source-line-no">734</span><span id="line-734"></span>
+<span class="source-line-no">735</span><span id="line-735">      if (client.parsers != null || client.defaultParser != null) {</span>
+<span class="source-line-no">736</span><span id="line-736">         var hasAccept = headers.stream().anyMatch(h -&gt; eqic("Accept", h.getName()));</span>
+<span class="source-line-no">737</span><span id="line-737">         if (! hasAccept) {</span>
+<span class="source-line-no">738</span><span id="line-738">            var accept = client.getDefaultAccept();</span>
+<span class="source-line-no">739</span><span id="line-739">            if (accept != null)</span>
+<span class="source-line-no">740</span><span id="line-740">               builder.header("Accept", accept);</span>
+<span class="source-line-no">741</span><span id="line-741">         }</span>
+<span class="source-line-no">742</span><span id="line-742">      }</span>
+<span class="source-line-no">743</span><span id="line-743"></span>
+<span class="source-line-no">744</span><span id="line-744">      // A Content-Type already present in the header list (a caller-supplied @Header param, or a constant header)</span>
+<span class="source-line-no">745</span><span id="line-745">      // wins over the body's own content type, and is never duplicated by it (dedup invariant).</span>
+<span class="source-line-no">746</span><span id="line-746">      var hasContentType = hasHeader("Content-Type");</span>
+<span class="source-line-no">747</span><span id="line-747"></span>
+<span class="source-line-no">748</span><span id="line-748">      // Pre-converted body from body(Object) takes priority</span>
+<span class="source-line-no">749</span><span id="line-749">      if (convertedBody != null) {</span>
+<span class="source-line-no">750</span><span id="line-750">         if (convertedBody.getContentType() != null &amp;&amp; ! hasContentType)</span>
+<span class="source-line-no">751</span><span id="line-751">            builder.header("Content-Type", convertedBody.getContentType());</span>
+<span class="source-line-no">752</span><span id="line-752">         builder.body(convertedBody);</span>
+<span class="source-line-no">753</span><span id="line-753">      } else if (!formData.isEmpty() &amp;&amp; body == null) {</span>
+<span class="source-line-no">754</span><span id="line-754">         // Form body when form data is present and no explicit body was set</span>
+<span class="source-line-no">755</span><span id="line-755">         var formBody = buildFormBody();</span>
+<span class="source-line-no">756</span><span id="line-756">         if (! hasContentType)</span>
+<span class="source-line-no">757</span><span id="line-757">            builder.header("Content-Type", formBody.getContentType());</span>
+<span class="source-line-no">758</span><span id="line-758">         builder.body(TransportBody.of(formBody));</span>
+<span class="source-line-no">759</span><span id="line-759">      } else if (body != null) {</span>
+<span class="source-line-no">760</span><span id="line-760">         if (body.getContentType() != null &amp;&amp; ! hasContentType)</span>
+<span class="source-line-no">761</span><span id="line-761">            builder.header("Content-Type", body.getContentType());</span>
+<span class="source-line-no">762</span><span id="line-762">         builder.body(TransportBody.of(body));</span>
+<span class="source-line-no">763</span><span id="line-763">      }</span>
+<span class="source-line-no">764</span><span id="line-764"></span>
+<span class="source-line-no">765</span><span id="line-765">      return builder.build();</span>
+<span class="source-line-no">766</span><span id="line-766">   }</span>
+<span class="source-line-no">767</span><span id="line-767"></span>
+<span class="source-line-no">768</span><span id="line-768">   private TransportRequest captureRequestBody(TransportRequest request, int cap) {</span>
+<span class="source-line-no">769</span><span id="line-769">      var originalBody = request.getBody();</span>
+<span class="source-line-no">770</span><span id="line-770">      if (originalBody == null) {</span>
+<span class="source-line-no">771</span><span id="line-771">         cachedContent = null;</span>
+<span class="source-line-no">772</span><span id="line-772">         cachedContentLength = 0;</span>
+<span class="source-line-no">773</span><span id="line-773">         return request;</span>
+<span class="source-line-no">774</span><span id="line-774">      }</span>
+<span class="source-line-no">775</span><span id="line-775"></span>
+<span class="source-line-no">776</span><span id="line-776">      var wrappedBody = new HttpBody() {</span>
+<span class="source-line-no">777</span><span id="line-777">         @Override</span>
+<span class="source-line-no">778</span><span id="line-778">         public String getContentType() {</span>
+<span class="source-line-no">779</span><span id="line-779">            return originalBody.getContentType();</span>
+<span class="source-line-no">780</span><span id="line-780">         }</span>
+<span class="source-line-no">781</span><span id="line-781"></span>
+<span class="source-line-no">782</span><span id="line-782">         @Override</span>
+<span class="source-line-no">783</span><span id="line-783">         public long getContentLength() {</span>
+<span class="source-line-no">784</span><span id="line-784">            return originalBody.getContentLength();</span>
+<span class="source-line-no">785</span><span id="line-785">         }</span>
+<span class="source-line-no">786</span><span id="line-786"></span>
+<span class="source-line-no">787</span><span id="line-787">         @Override</span>
+<span class="source-line-no">788</span><span id="line-788">         public void writeTo(OutputStream out) throws IOException {</span>
+<span class="source-line-no">789</span><span id="line-789">            var tee = new BoundedCaptureOutputStream(out, cap);</span>
+<span class="source-line-no">790</span><span id="line-790">            try {</span>
+<span class="source-line-no">791</span><span id="line-791">               originalBody.writeTo(tee);</span>
+<span class="source-line-no">792</span><span id="line-792">            } finally {</span>
+<span class="source-line-no">793</span><span id="line-793">               cachedContent = tee.getCapturedBytes();</span>
+<span class="source-line-no">794</span><span id="line-794">               cachedContentLength = tee.getTotalBytesWritten();</span>
+<span class="source-line-no">795</span><span id="line-795">            }</span>
+<span class="source-line-no">796</span><span id="line-796">         }</span>
+<span class="source-line-no">797</span><span id="line-797"></span>
+<span class="source-line-no">798</span><span id="line-798">         @Override</span>
+<span class="source-line-no">799</span><span id="line-799">         public boolean isRepeatable() {</span>
+<span class="source-line-no">800</span><span id="line-800">            return originalBody.isRepeatable();</span>
+<span class="source-line-no">801</span><span id="line-801">         }</span>
+<span class="source-line-no">802</span><span id="line-802">      };</span>
+<span class="source-line-no">803</span><span id="line-803"></span>
+<span class="source-line-no">804</span><span id="line-804">      var builder = TransportRequest.builder()</span>
+<span class="source-line-no">805</span><span id="line-805">         .method(request.getMethod())</span>
+<span class="source-line-no">806</span><span id="line-806">         .uri(request.getUri())</span>
+<span class="source-line-no">807</span><span id="line-807">         .headers(request.getHeaders())</span>
+<span class="source-line-no">808</span><span id="line-808">         .body(TransportBody.of(wrappedBody))</span>
+<span class="source-line-no">809</span><span id="line-809">         .timeout(request.getTimeout())</span>
+<span class="source-line-no">810</span><span id="line-810">         .remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls())</span>
+<span class="source-line-no">811</span><span id="line-811">         .allowedAddressRanges(request.getAllowedAddressRanges())</span>
+<span class="source-line-no">812</span><span id="line-812">         .redirectStripHeaders(request.getRedirectStripHeaders());</span>
+<span class="source-line-no">813</span><span id="line-813">      return builder.build();</span>
+<span class="source-line-no">814</span><span id="line-814">   }</span>
+<span class="source-line-no">815</span><span id="line-815"></span>
+<span class="source-line-no">816</span><span id="line-816">   private String applyPathSubstitutions(String template) {</span>
+<span class="source-line-no">817</span><span id="line-817">      var result = template;</span>
+<span class="source-line-no">818</span><span id="line-818">      Object remainder = null;</span>
+<span class="source-line-no">819</span><span id="line-819">      for (var entry : pathData.entrySet()) {</span>
+<span class="source-line-no">820</span><span id="line-820">         if (eq(entry.getKey(), "/*")) {</span>
+<span class="source-line-no">821</span><span id="line-821">            remainder = entry.getValue();  // @PathRemainder — applied after named substitutions</span>
+<span class="source-line-no">822</span><span id="line-822">            continue;</span>
+<span class="source-line-no">823</span><span id="line-823">         }</span>
+<span class="source-line-no">824</span><span id="line-824">         var replacement = entry.getValue() != null ? entry.getValue().toString() : "";</span>
+<span class="source-line-no">825</span><span id="line-825">         result = result.replace("{" + entry.getKey() + "}", urlEncode(replacement));</span>
+<span class="source-line-no">826</span><span id="line-826">      }</span>
+<span class="source-line-no">827</span><span id="line-827">      if (remainder != null) {</span>
+<span class="source-line-no">828</span><span id="line-828">         var r = remainder.toString();</span>
+<span class="source-line-no">829</span><span id="line-829">         if (! r.isEmpty()) {</span>
+<span class="source-line-no">830</span><span id="line-830">            if (result.endsWith("/*"))</span>
+<span class="source-line-no">831</span><span id="line-831">               result = result.substring(0, result.length() - 2);</span>
+<span class="source-line-no">832</span><span id="line-832">            if (! result.endsWith("/"))</span>
+<span class="source-line-no">833</span><span id="line-833">               result += "/";</span>
+<span class="source-line-no">834</span><span id="line-834">            result += urlEncodePath(r);</span>
+<span class="source-line-no">835</span><span id="line-835">         }</span>
+<span class="source-line-no">836</span><span id="line-836">      }</span>
+<span class="source-line-no">837</span><span id="line-837">      return result;</span>
+<span class="source-line-no">838</span><span id="line-838">   }</span>
+<span class="source-line-no">839</span><span id="line-839"></span>
+<span class="source-line-no">840</span><span id="line-840">   /** URL-encodes a path remainder while preserving {@code /} segment separators. */</span>
+<span class="source-line-no">841</span><span id="line-841">   private static String urlEncodePath(String value) {</span>
+<span class="source-line-no">842</span><span id="line-842">      var segments = value.split("/", -1);</span>
+<span class="source-line-no">843</span><span id="line-843">      var sb = new StringBuilder();</span>
+<span class="source-line-no">844</span><span id="line-844">      for (var i = 0; i &lt; segments.length; i++) {</span>
+<span class="source-line-no">845</span><span id="line-845">         if (i &gt; 0)</span>
+<span class="source-line-no">846</span><span id="line-846">            sb.append('/');</span>
+<span class="source-line-no">847</span><span id="line-847">         sb.append(urlEncode(segments[i]));</span>
+<span class="source-line-no">848</span><span id="line-848">      }</span>
+<span class="source-line-no">849</span><span id="line-849">      return sb.toString();</span>
+<span class="source-line-no">850</span><span id="line-850">   }</span>
+<span class="source-line-no">851</span><span id="line-851"></span>
+<span class="source-line-no">852</span><span id="line-852">   private URI appendQuery(String baseUrl) {</span>
+<span class="source-line-no">853</span><span id="line-853">      if (queryData.isEmpty()) {</span>
+<span class="source-line-no">854</span><span id="line-854">         try {</span>
+<span class="source-line-no">855</span><span id="line-855">            return new URI(baseUrl);</span>
+<span class="source-line-no">856</span><span id="line-856">         } catch (URISyntaxException e) {</span>
+<span class="source-line-no">857</span><span id="line-857">            throw iaex(e, "Invalid URL: %s", baseUrl);</span>
+<span class="source-line-no">858</span><span id="line-858">         }</span>
+<span class="source-line-no">859</span><span id="line-859">      }</span>
+<span class="source-line-no">860</span><span id="line-860">      var sb = new StringBuilder(baseUrl);</span>
+<span class="source-line-no">861</span><span id="line-861">      var first = !baseUrl.contains("?");</span>
+<span class="source-line-no">862</span><span id="line-862">      for (var part : queryData) {</span>
+<span class="source-line-no">863</span><span id="line-863">         var v = part.getValue();</span>
+<span class="source-line-no">864</span><span id="line-864">         if (v == null)</span>
+<span class="source-line-no">865</span><span id="line-865">            continue;</span>
+<span class="source-line-no">866</span><span id="line-866">         sb.append(first ? '?' : '&amp;');</span>
+<span class="source-line-no">867</span><span id="line-867">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
+<span class="source-line-no">868</span><span id="line-868">         first = false;</span>
+<span class="source-line-no">869</span><span id="line-869">      }</span>
+<span class="source-line-no">870</span><span id="line-870">      try {</span>
+<span class="source-line-no">871</span><span id="line-871">         return new URI(sb.toString());</span>
+<span class="source-line-no">872</span><span id="line-872">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">873</span><span id="line-873">         throw iaex(e, "Invalid URL: %s", sb);</span>
+<span class="source-line-no">874</span><span id="line-874">      }</span>
+<span class="source-line-no">875</span><span id="line-875">   }</span>
+<span class="source-line-no">876</span><span id="line-876"></span>
+<span class="source-line-no">877</span><span id="line-877">   private HttpBody buildFormBody() {</span>
+<span class="source-line-no">878</span><span id="line-878">      var sb = new StringBuilder();</span>
+<span class="source-line-no">879</span><span id="line-879">      var first = true;</span>
+<span class="source-line-no">880</span><span id="line-880">      for (var part : formData) {</span>
+<span class="source-line-no">881</span><span id="line-881">         var v = part.getValue();</span>
+<span class="source-line-no">882</span><span id="line-882">         if (v == null)</span>
+<span class="source-line-no">883</span><span id="line-883">            continue;</span>
+<span class="source-line-no">884</span><span id="line-884">         if (!first)</span>
+<span class="source-line-no">885</span><span id="line-885">            sb.append('&amp;');</span>
+<span class="source-line-no">886</span><span id="line-886">         sb.append(urlEncode(part.getName())).append('=').append(urlEncode(v));</span>
+<span class="source-line-no">887</span><span id="line-887">         first = false;</span>
+<span class="source-line-no">888</span><span id="line-888">      }</span>
+<span class="source-line-no">889</span><span id="line-889">      final var encoded = sb.toString();</span>
+<span class="source-line-no">890</span><span id="line-890">      return new HttpBody() {</span>
+<span class="source-line-no">891</span><span id="line-891">         @Override public String getContentType() { return "application/x-www-form-urlencoded"; }</span>
+<span class="source-line-no">892</span><span id="line-892">         @Override public long getContentLength() { return encoded.getBytes(StandardCharsets.UTF_8).length; }</span>
+<span class="source-line-no">893</span><span id="line-893">         @Override public void writeTo(OutputStream out) throws IOException { out.write(encoded.getBytes(StandardCharsets.UTF_8)); }</span>
+<span class="source-line-no">894</span><span id="line-894">         @Override public boolean isRepeatable() { return true; }</span>
+<span class="source-line-no">895</span><span id="line-895">      };</span>
+<span class="source-line-no">896</span><span id="line-896">   }</span>
+<span class="source-line-no">897</span><span id="line-897"></span>
+<span class="source-line-no">898</span><span id="line-898">   private static String urlEncode(String value) {</span>
+<span class="source-line-no">899</span><span id="line-899">      return URLEncoder.encode(value, StandardCharsets.UTF_8);</span>
+<span class="source-line-no">900</span><span id="line-900">   }</span>
+<span class="source-line-no">901</span><span id="line-901"></span>
+<span class="source-line-no">902</span><span id="line-902">   private static final class BoundedCaptureOutputStream extends OutputStream {</span>
+<span class="source-line-no">903</span><span id="line-903">      private final OutputStream delegate;</span>
+<span class="source-line-no">904</span><span id="line-904">      private final ByteArrayOutputStream capture = new ByteArrayOutputStream();</span>
+<span class="source-line-no">905</span><span id="line-905">      private final int cap;</span>
+<span class="source-line-no">906</span><span id="line-906">      private long totalBytesWritten;</span>
+<span class="source-line-no">907</span><span id="line-907"></span>
+<span class="source-line-no">908</span><span id="line-908">      BoundedCaptureOutputStream(OutputStream delegate, int cap) {</span>
+<span class="source-line-no">909</span><span id="line-909">         this.delegate = delegate;</span>
+<span class="source-line-no">910</span><span id="line-910">         this.cap = cap;</span>
+<span class="source-line-no">911</span><span id="line-911">      }</span>
+<span class="source-line-no">912</span><span id="line-912"></span>
+<span class="source-line-no">913</span><span id="line-913">      byte[] getCapturedBytes() {</span>
+<span class="source-line-no">914</span><span id="line-914">         return capture.toByteArray();</span>
+<span class="source-line-no">915</span><span id="line-915">      }</span>
+<span class="source-line-no">916</span><span id="line-916"></span>
+<span class="source-line-no">917</span><span id="line-917">      long getTotalBytesWritten() {</span>
+<span class="source-line-no">918</span><span id="line-918">         return totalBytesWritten;</span>
+<span class="source-line-no">919</span><span id="line-919">      }</span>
+<span class="source-line-no">920</span><span id="line-920"></span>
+<span class="source-line-no">921</span><span id="line-921">      @Override</span>
+<span class="source-line-no">922</span><span id="line-922">      public void write(int b) throws IOException {</span>
+<span class="source-line-no">923</span><span id="line-923">         delegate.write(b);</span>
+<span class="source-line-no">924</span><span id="line-924">         totalBytesWritten++;</span>
+<span class="source-line-no">925</span><span id="line-925">         if (capture.size() &lt; cap)</span>
+<span class="source-line-no">926</span><span id="line-926">            capture.write(b);</span>
+<span class="source-line-no">927</span><span id="line-927">      }</span>
+<span class="source-line-no">928</span><span id="line-928"></span>
+<span class="source-line-no">929</span><span id="line-929">      @Override</span>
+<span class="source-line-no">930</span><span id="line-930">      public void write(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">931</span><span id="line-931">         delegate.write(b, off, len);</span>
+<span class="source-line-no">932</span><span id="line-932">         totalBytesWritten += len;</span>
+<span class="source-line-no">933</span><span id="line-933">         var remaining = cap - capture.size();</span>
+<span class="source-line-no">934</span><span id="line-934">         if (remaining &gt; 0)</span>
+<span class="source-line-no">935</span><span id="line-935">            capture.write(b, off, Math.min(len, remaining));</span>
+<span class="source-line-no">936</span><span id="line-936">      }</span>
+<span class="source-line-no">937</span><span id="line-937">   }</span>
+<span class="source-line-no">938</span><span id="line-938">}</span>
 
 
 

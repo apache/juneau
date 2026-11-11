@@ -317,8 +317,8 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 		assertEquals(<span class="jxr_string">"qux"</span>,x.getX4());
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 	}
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	@Rest(path=<span class="jxr_string">"/C4"</span>)
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 	<em class="jxr_comment">// Typed rethrow on the @Remote client needs the Thrown header, which is opt-in.</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 	@Rest(path=<span class="jxr_string">"/C4"</span>, renderResponseStackTraces=<span class="jxr_string">"true"</span>)
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> C4a <strong class="jxr_keyword">implements</strong> BasicJson5Config {
 <a class="jxr_linenumber" name="L315" href="#L315">315</a> 		@RestOp
 <a class="jxr_linenumber" name="L316" href="#L316">316</a> 		<strong class="jxr_keyword">public</strong> String x1() <strong class="jxr_keyword">throws</strong> C4c {

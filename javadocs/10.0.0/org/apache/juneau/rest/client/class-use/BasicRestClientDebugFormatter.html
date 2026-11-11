@@ -72,19 +72,29 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="../BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#bodyCap(int)" class="member-name-link">bodyCap</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#addRedactedQueryParams(java.util.Collection)" class="member-name-link">addRedactedQueryParams</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Overrides the body capture cap.</div>
+<div class="block">Extends the set of masked query parameter names additively (keeps the built-in protections).</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="../BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#bodyScrubber(org.apache.juneau.http.RestDebugBodyScrubber)" class="member-name-link">bodyScrubber</a><wbr>(<a href="../../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a>&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#bodyCap(int)" class="member-name-link">bodyCap</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Sets the body scrubber applied to body text when the <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code> gate is set.</div>
+<div class="block">Overrides the body capture cap.</div>
 </div>
 <div class="col-first even-row-color"><code><a href="../BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#redactedHeaders(java.util.Collection)" class="member-name-link">redactedHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#bodyScrubber(org.apache.juneau.http.RestDebugBodyScrubber)" class="member-name-link">bodyScrubber</a><wbr>(<a href="../../../http/RestDebugBodyScrubber.html" title="interface in org.apache.juneau.http">RestDebugBodyScrubber</a>&nbsp;value)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Sets the body scrubber applied to body text when the <code>JUNEAU_REST_DEBUG_ALLOW_DUMP_BODIES</code> gate is set.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#redactedHeaders(java.util.Collection)" class="member-name-link">redactedHeaders</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Overrides the redacted-header set.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">BasicRestClientDebugFormatter.</span><code><a href="../BasicRestClientDebugFormatter.html#redactedQueryParams(java.util.Collection)" class="member-name-link">redactedQueryParams</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;value)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Overrides the set of query parameter names whose values are masked in the logged URI.</div>
 </div>
 </div>
 </section>

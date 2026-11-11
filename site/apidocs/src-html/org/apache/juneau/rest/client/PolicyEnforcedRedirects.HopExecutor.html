@@ -187,30 +187,31 @@
 <span class="source-line-no">174</span><span id="line-174">            .uri(target2)</span>
 <span class="source-line-no">175</span><span id="line-175">            .remoteUrlPolicy(true, false)</span>
 <span class="source-line-no">176</span><span id="line-176">            .allowedAddressRanges(current.getAllowedAddressRanges())</span>
-<span class="source-line-no">177</span><span id="line-177">            .timeout(current.getTimeout());</span>
-<span class="source-line-no">178</span><span id="line-178">         // Credential headers are forwarded only to the first origin (and never across an https -&gt; http downgrade), so a hop</span>
-<span class="source-line-no">179</span><span id="line-179">         // that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.</span>
-<span class="source-line-no">180</span><span id="line-180">         var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)</span>
-<span class="source-line-no">181</span><span id="line-181">            || (left &amp;&amp; ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));</span>
-<span class="source-line-no">182</span><span id="line-182">         for (var h : initial.getHeaders())</span>
-<span class="source-line-no">183</span><span id="line-183">            if (! (stripCredentials &amp;&amp; RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin())))</span>
-<span class="source-line-no">184</span><span id="line-184">               builder.header(h.name(), h.value());</span>
-<span class="source-line-no">185</span><span id="line-185">         if (! rewriteToGet) {</span>
-<span class="source-line-no">186</span><span id="line-186">            var body = current.getBody();</span>
-<span class="source-line-no">187</span><span id="line-187">            if (body != null) {</span>
-<span class="source-line-no">188</span><span id="line-188">               if (! body.isRepeatable())</span>
-<span class="source-line-no">189</span><span id="line-189">                  throw new TransportException("Redirect (status " + statusCode + ") requires re-sending a "</span>
-<span class="source-line-no">190</span><span id="line-190">                     + "non-repeatable request body, which cannot be safely replayed; refusing to follow "</span>
-<span class="source-line-no">191</span><span id="line-191">                     + "(fail closed) for a policy-covered @Remote redirect chain: " + target);</span>
-<span class="source-line-no">192</span><span id="line-192">               builder.body(body);</span>
-<span class="source-line-no">193</span><span id="line-193">            }</span>
-<span class="source-line-no">194</span><span id="line-194">         }</span>
-<span class="source-line-no">195</span><span id="line-195">         return builder.build();</span>
-<span class="source-line-no">196</span><span id="line-196">      } catch (URISyntaxException e) {</span>
-<span class="source-line-no">197</span><span id="line-197">         throw new TransportException("Redirect Location did not form a valid request URI: " + target, e);</span>
-<span class="source-line-no">198</span><span id="line-198">      }</span>
-<span class="source-line-no">199</span><span id="line-199">   }</span>
-<span class="source-line-no">200</span><span id="line-200">}</span>
+<span class="source-line-no">177</span><span id="line-177">            .redirectStripHeaders(initial.getRedirectStripHeaders())</span>
+<span class="source-line-no">178</span><span id="line-178">            .timeout(current.getTimeout());</span>
+<span class="source-line-no">179</span><span id="line-179">         // Credential headers are forwarded only to the first origin (and never across an https -&gt; http downgrade), so a hop</span>
+<span class="source-line-no">180</span><span id="line-180">         // that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.</span>
+<span class="source-line-no">181</span><span id="line-181">         var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)</span>
+<span class="source-line-no">182</span><span id="line-182">            || (left &amp;&amp; ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));</span>
+<span class="source-line-no">183</span><span id="line-183">         for (var h : initial.getHeaders())</span>
+<span class="source-line-no">184</span><span id="line-184">            if (! (stripCredentials &amp;&amp; RedactedHeaders.isSensitive(h.name(), initial.getRedirectStripHeaders())))</span>
+<span class="source-line-no">185</span><span id="line-185">               builder.header(h.name(), h.value());</span>
+<span class="source-line-no">186</span><span id="line-186">         if (! rewriteToGet) {</span>
+<span class="source-line-no">187</span><span id="line-187">            var body = current.getBody();</span>
+<span class="source-line-no">188</span><span id="line-188">            if (body != null) {</span>
+<span class="source-line-no">189</span><span id="line-189">               if (! body.isRepeatable())</span>
+<span class="source-line-no">190</span><span id="line-190">                  throw new TransportException("Redirect (status " + statusCode + ") requires re-sending a "</span>
+<span class="source-line-no">191</span><span id="line-191">                     + "non-repeatable request body, which cannot be safely replayed; refusing to follow "</span>
+<span class="source-line-no">192</span><span id="line-192">                     + "(fail closed) for a policy-covered @Remote redirect chain: " + target);</span>
+<span class="source-line-no">193</span><span id="line-193">               builder.body(body);</span>
+<span class="source-line-no">194</span><span id="line-194">            }</span>
+<span class="source-line-no">195</span><span id="line-195">         }</span>
+<span class="source-line-no">196</span><span id="line-196">         return builder.build();</span>
+<span class="source-line-no">197</span><span id="line-197">      } catch (URISyntaxException e) {</span>
+<span class="source-line-no">198</span><span id="line-198">         throw new TransportException("Redirect Location did not form a valid request URI: " + target, e);</span>
+<span class="source-line-no">199</span><span id="line-199">      }</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201">}</span>
 
 
 

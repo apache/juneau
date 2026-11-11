@@ -412,15 +412,39 @@
 <a class="jxr_linenumber" name="L404" href="#L404">404</a> <em class="jxr_javadoccomment">	 */</em>
 <a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> style(HtmlDocSerializerSession session, HtmlWriter&lt;?&gt; w, Object o) <strong class="jxr_keyword">throws</strong> Exception {
 <a class="jxr_linenumber" name="L406" href="#L406">406</a> 		<strong class="jxr_keyword">var</strong> addSpace = Flag.create();
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStylesheet())
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			w.sIf(addSpace.getAndSet()).append(3, <span class="jxr_string">"@import "</span>).q().append(session.resolveUri(session.resolve(s))).q().appendln(<span class="jxr_string">";"</span>);
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		<strong class="jxr_keyword">if</strong> (session.isNowrap())
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			w.appendln(3, <span class="jxr_string">"div.data * {white-space:nowrap;} "</span>);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStyle())
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(s));
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver()))));
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 	}
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> }
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStylesheet()) {
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<em class="jxr_comment">// Resolved like the sibling style/script chrome (request-derived vars refused) and then checked, since the</em>
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 			<em class="jxr_comment">// value is written inside a quoted CSS string: an unsafe value is dropped rather than emitted.</em>
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 			<strong class="jxr_keyword">var</strong> uri = session.resolveUri(session.resolveScriptStyle(s));
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">if</strong> (isSafeStylesheetUri(uri))
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				w.sIf(addSpace.getAndSet()).append(3, <span class="jxr_string">"@import "</span>).q().append(uri).q().appendln(<span class="jxr_string">";"</span>);
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		}
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 		<strong class="jxr_keyword">if</strong> (session.isNowrap())
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			w.appendln(3, <span class="jxr_string">"div.data * {white-space:nowrap;} "</span>);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : session.getStyle())
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(s));
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		session.forEachWidget(x -&gt; w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver()))));
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 	}
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 	<em class="jxr_comment">// A stylesheet URI is written inside a quoted CSS string, so it must not contain a character that ends the string or the</em>
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 	<em class="jxr_comment">// element, and an absolute one must be http(s); relative and root-relative references are allowed.</em>
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isSafeStylesheetUri(String uri) {
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">if</strong> (uri == <strong class="jxr_keyword">null</strong> || uri.isEmpty())
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> i = 0; i &lt; uri.length(); i++) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">var</strong> c = uri.charAt(i);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 			<strong class="jxr_keyword">if</strong> (c &lt; 0x20 || c == 0x7f || c == '&quot;' || c == '&#92;&#92;' || c == '&lt;' || c == '&gt;' || c == '\'' || c == '(' || c == ')')
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		<strong class="jxr_keyword">var</strong> colon = uri.indexOf(':');
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">var</strong> slash = uri.indexOf('/');
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">if</strong> (colon &gt; 0 &amp;&amp; (slash == -1 || colon &lt; slash)) {
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">var</strong> scheme = uri.substring(0, colon);
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"http"</span>.equalsIgnoreCase(scheme) || <span class="jxr_string">"https"</span>.equalsIgnoreCase(scheme);
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		}
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 	}
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

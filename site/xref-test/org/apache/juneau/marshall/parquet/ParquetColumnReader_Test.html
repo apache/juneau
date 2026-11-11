@@ -210,7 +210,22 @@
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 		r.advance(); <em class="jxr_comment">// past the end — no-op, must not throw</em>
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 		assertFalse(r.hasNext());
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 	}
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> }
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 	@Test
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 	<strong class="jxr_keyword">void</strong> z01_readFixedLenByteArray_rejectsOutOfRangeLength() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> ParquetColumnReader(<strong class="jxr_keyword">new</strong> byte[0], 1, 0);
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 		r.advance();
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.readFixedLenByteArray(-1));
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 		assertThrows(IOException.<strong class="jxr_keyword">class</strong>, () -&gt; r.readFixedLenByteArray(Integer.MAX_VALUE));
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 	}
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 	@Test
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 	<strong class="jxr_keyword">void</strong> z02_readFixedLenByteArray_normalLength() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 		<strong class="jxr_keyword">var</strong> r = <strong class="jxr_keyword">new</strong> ParquetColumnReader(<strong class="jxr_keyword">new</strong> byte[] {1, 2, 3, 4}, 1, 0);
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 		r.advance();
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 		assertArrayEquals(<strong class="jxr_keyword">new</strong> byte[] {1, 2, 3, 4}, r.readFixedLenByteArray(4));
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 	}
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

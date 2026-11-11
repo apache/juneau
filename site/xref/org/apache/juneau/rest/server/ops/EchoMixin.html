@@ -274,7 +274,7 @@
 <a class="jxr_linenumber" name="L266" href="#L266">266</a> 
 <a class="jxr_linenumber" name="L267" href="#L267">267</a> 		<strong class="jxr_keyword">var</strong> queryParams = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,String&gt;();
 <a class="jxr_linenumber" name="L268" href="#L268">268</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> p : req.getQueryParams())
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			queryParams.put(p.getName(), p.asString().orElse(<strong class="jxr_keyword">null</strong>));
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 			queryParams.put(p.getName(), RedactedQueryParams.isSensitive(p.getName()) ? RedactedHeaders.REDACTED : p.asString().orElse(<strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L270" href="#L270">270</a> 
 <a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">var</strong> attributes = <strong class="jxr_keyword">new</strong> LinkedHashMap&lt;String,String&gt;();
 <a class="jxr_linenumber" name="L272" href="#L272">272</a> 		req.getAttributes().asMap().forEach((k, v) -&gt; attributes.put(k, String.valueOf(v)));
@@ -284,7 +284,7 @@
 <a class="jxr_linenumber" name="L276" href="#L276">276</a> 		Map&lt;String,Object&gt; out = m(
 <a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<span class="jxr_string">"method"</span>, req.getMethod(),
 <a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<span class="jxr_string">"path"</span>, sreq.getRequestURI(),
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<span class="jxr_string">"queryString"</span>, sreq.getQueryString(),
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 			<span class="jxr_string">"queryString"</span>, sreq.getQueryString() == <strong class="jxr_keyword">null</strong> ? <strong class="jxr_keyword">null</strong> : RedactedQueryParams.redactUri(<span class="jxr_string">"?"</span> + sreq.getQueryString()).substring(1),
 <a class="jxr_linenumber" name="L280" href="#L280">280</a> 			<span class="jxr_string">"pathRemainder"</span>, remainder == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">""</span> : remainder,
 <a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<span class="jxr_string">"headers"</span>, headers,
 <a class="jxr_linenumber" name="L282" href="#L282">282</a> 			<span class="jxr_string">"queryParams"</span>, queryParams,

@@ -135,9 +135,9 @@
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 		}
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 	}
 <a class="jxr_linenumber" name="L129" href="#L129">129</a> 
-<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> d01_titleUsesTheAccent() {
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> 	@Test <strong class="jxr_keyword">void</strong> d01_titleUsesBodyText() {
 <a class="jxr_linenumber" name="L131" href="#L131">131</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> s : SCHEMES)
-<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			assertEquals(probe(s).get(<span class="jxr_string">"accent"</span>), probe(s).get(<span class="jxr_string">"titleColor"</span>), s);
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> 			assertNotEquals(probe(s).get(<span class="jxr_string">"accent"</span>), probe(s).get(<span class="jxr_string">"titleColor"</span>), s);
 <a class="jxr_linenumber" name="L133" href="#L133">133</a> 	}
 <a class="jxr_linenumber" name="L134" href="#L134">134</a> }
 </pre>
