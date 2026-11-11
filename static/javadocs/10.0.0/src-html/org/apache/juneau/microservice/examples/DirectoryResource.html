@@ -490,21 +490,28 @@
 <span class="source-line-no">477</span><span id="line-477">         }</span>
 <span class="source-line-no">478</span><span id="line-478">         if (name.isEmpty())</span>
 <span class="source-line-no">479</span><span id="line-479">            throw new NotFound("File not found.");</span>
-<span class="source-line-no">480</span><span id="line-480">         var parent = FileUtils.resolveSafely(rootDir, parentPath)</span>
-<span class="source-line-no">481</span><span id="line-481">            .orElseThrow(() -&gt; new NotFound("File not found."));</span>
-<span class="source-line-no">482</span><span id="line-482">         return new File(parent, name);</span>
-<span class="source-line-no">483</span><span id="line-483">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">484</span><span id="line-484">         throw new Forbidden(e.getMessage());</span>
-<span class="source-line-no">485</span><span id="line-485">      }</span>
-<span class="source-line-no">486</span><span id="line-486">   }</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   /**</span>
-<span class="source-line-no">489</span><span id="line-489">    * Returns the root directory.</span>
-<span class="source-line-no">490</span><span id="line-490">    *</span>
-<span class="source-line-no">491</span><span id="line-491">    * @return The root directory.</span>
-<span class="source-line-no">492</span><span id="line-492">    */</span>
-<span class="source-line-no">493</span><span id="line-493">   protected File getRootDir() { return rootDir; }</span>
-<span class="source-line-no">494</span><span id="line-494">}</span>
+<span class="source-line-no">480</span><span id="line-480">         // The final segment must be a plain name: no separators, no "." / "..", no NUL.</span>
+<span class="source-line-no">481</span><span id="line-481">         if (name.equals(".") || name.equals("..") || name.indexOf('\\') &gt;= 0 || name.indexOf('\0') &gt;= 0)</span>
+<span class="source-line-no">482</span><span id="line-482">            throw new Forbidden("Invalid file name.");</span>
+<span class="source-line-no">483</span><span id="line-483">         var parent = FileUtils.resolveSafely(rootDir, parentPath)</span>
+<span class="source-line-no">484</span><span id="line-484">            .orElseThrow(() -&gt; new NotFound("File not found."));</span>
+<span class="source-line-no">485</span><span id="line-485">         var target = new File(parent, name);</span>
+<span class="source-line-no">486</span><span id="line-486">         // A dangling symlink reports exists()==false but writing through it would create its (possibly outside) target.</span>
+<span class="source-line-no">487</span><span id="line-487">         if (Files.isSymbolicLink(target.toPath()))</span>
+<span class="source-line-no">488</span><span id="line-488">            throw new Forbidden("Invalid file name.");</span>
+<span class="source-line-no">489</span><span id="line-489">         return target;</span>
+<span class="source-line-no">490</span><span id="line-490">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">491</span><span id="line-491">         throw new Forbidden(e.getMessage());</span>
+<span class="source-line-no">492</span><span id="line-492">      }</span>
+<span class="source-line-no">493</span><span id="line-493">   }</span>
+<span class="source-line-no">494</span><span id="line-494"></span>
+<span class="source-line-no">495</span><span id="line-495">   /**</span>
+<span class="source-line-no">496</span><span id="line-496">    * Returns the root directory.</span>
+<span class="source-line-no">497</span><span id="line-497">    *</span>
+<span class="source-line-no">498</span><span id="line-498">    * @return The root directory.</span>
+<span class="source-line-no">499</span><span id="line-499">    */</span>
+<span class="source-line-no">500</span><span id="line-500">   protected File getRootDir() { return rootDir; }</span>
+<span class="source-line-no">501</span><span id="line-501">}</span>
 
 
 

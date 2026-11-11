@@ -64,559 +64,590 @@
 <span class="source-line-no">051</span><span id="line-51">})</span>
 <span class="source-line-no">052</span><span id="line-52">public class FileStore extends ConfigStore {</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">   /**</span>
-<span class="source-line-no">055</span><span id="line-55">    * Builder class.</span>
-<span class="source-line-no">056</span><span id="line-56">    */</span>
-<span class="source-line-no">057</span><span id="line-57">   public static class Builder extends ConfigStore.Builder&lt;Builder&gt; {</span>
-<span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">      private Charset charset;</span>
-<span class="source-line-no">060</span><span id="line-60">      private boolean enableWatcher;</span>
-<span class="source-line-no">061</span><span id="line-61">      private boolean updateOnWrite;</span>
-<span class="source-line-no">062</span><span id="line-62">      private String directory;</span>
-<span class="source-line-no">063</span><span id="line-63">      private String extensions;</span>
-<span class="source-line-no">064</span><span id="line-64">      private WatcherSensitivity watcherSensitivity;</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">      /**</span>
-<span class="source-line-no">067</span><span id="line-67">       * Constructor, default settings.</span>
-<span class="source-line-no">068</span><span id="line-68">       */</span>
-<span class="source-line-no">069</span><span id="line-69">      protected Builder() {</span>
-<span class="source-line-no">070</span><span id="line-70">         charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());</span>
-<span class="source-line-no">071</span><span id="line-71">         directory = env("ConfigFileStore.directory", ".");</span>
-<span class="source-line-no">072</span><span id="line-72">         enableWatcher = env("ConfigFileStore.enableWatcher", false);</span>
-<span class="source-line-no">073</span><span id="line-73">         extensions = env("ConfigFileStore.extensions", "cfg,yml,yaml");</span>
-<span class="source-line-no">074</span><span id="line-74">         updateOnWrite = env("ConfigFileStore.updateOnWrite", false);</span>
-<span class="source-line-no">075</span><span id="line-75">         watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);</span>
-<span class="source-line-no">076</span><span id="line-76">      }</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">      /**</span>
-<span class="source-line-no">079</span><span id="line-79">       * Copy constructor.</span>
-<span class="source-line-no">080</span><span id="line-80">       *</span>
-<span class="source-line-no">081</span><span id="line-81">       * @param copyFrom The builder to copy from.</span>
-<span class="source-line-no">082</span><span id="line-82">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">083</span><span id="line-83">       */</span>
-<span class="source-line-no">084</span><span id="line-84">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">085</span><span id="line-85">         super(reqnn("copyFrom", copyFrom));</span>
-<span class="source-line-no">086</span><span id="line-86">         charset = copyFrom.charset;</span>
-<span class="source-line-no">087</span><span id="line-87">         directory = copyFrom.directory;</span>
-<span class="source-line-no">088</span><span id="line-88">         enableWatcher = copyFrom.enableWatcher;</span>
-<span class="source-line-no">089</span><span id="line-89">         extensions = copyFrom.extensions;</span>
-<span class="source-line-no">090</span><span id="line-90">         updateOnWrite = copyFrom.updateOnWrite;</span>
-<span class="source-line-no">091</span><span id="line-91">         watcherSensitivity = copyFrom.watcherSensitivity;</span>
-<span class="source-line-no">092</span><span id="line-92">      }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">      /**</span>
-<span class="source-line-no">095</span><span id="line-95">       * Copy constructor.</span>
-<span class="source-line-no">096</span><span id="line-96">       *</span>
-<span class="source-line-no">097</span><span id="line-97">       * @param copyFrom The bean to copy from.</span>
-<span class="source-line-no">098</span><span id="line-98">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">099</span><span id="line-99">       */</span>
-<span class="source-line-no">100</span><span id="line-100">      protected Builder(FileStore copyFrom) {</span>
-<span class="source-line-no">101</span><span id="line-101">         super(reqnn("copyFrom", copyFrom));</span>
-<span class="source-line-no">102</span><span id="line-102">         type(copyFrom.getClass());</span>
-<span class="source-line-no">103</span><span id="line-103">         charset = copyFrom.charset;</span>
-<span class="source-line-no">104</span><span id="line-104">         directory = copyFrom.directory;</span>
-<span class="source-line-no">105</span><span id="line-105">         enableWatcher = copyFrom.enableWatcher;</span>
-<span class="source-line-no">106</span><span id="line-106">         extensions = copyFrom.extensions;</span>
-<span class="source-line-no">107</span><span id="line-107">         updateOnWrite = copyFrom.updateOnWrite;</span>
-<span class="source-line-no">108</span><span id="line-108">         watcherSensitivity = copyFrom.watcherSensitivity;</span>
-<span class="source-line-no">109</span><span id="line-109">      }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">112</span><span id="line-112">      public FileStore build() {</span>
-<span class="source-line-no">113</span><span id="line-113">         return build(FileStore.class);</span>
-<span class="source-line-no">114</span><span id="line-114">      }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">      /**</span>
-<span class="source-line-no">117</span><span id="line-117">       * Charset for external files.</span>
-<span class="source-line-no">118</span><span id="line-118">       *</span>
-<span class="source-line-no">119</span><span id="line-119">       * &lt;p&gt;</span>
-<span class="source-line-no">120</span><span id="line-120">       * Identifies the charset of external files.</span>
-<span class="source-line-no">121</span><span id="line-121">       *</span>
-<span class="source-line-no">122</span><span id="line-122">       * @param value</span>
-<span class="source-line-no">123</span><span id="line-123">       *    The new value for this property.</span>
-<span class="source-line-no">124</span><span id="line-124">       *    &lt;br&gt;The default is the first value found:</span>
-<span class="source-line-no">125</span><span id="line-125">       *    &lt;ul&gt;</span>
-<span class="source-line-no">126</span><span id="line-126">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.charset"&lt;/js&gt;</span>
-<span class="source-line-no">127</span><span id="line-127">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_CHARSET"&lt;/js&gt;</span>
-<span class="source-line-no">128</span><span id="line-128">       *       &lt;li&gt;{@link Charset#defaultCharset()}</span>
-<span class="source-line-no">129</span><span id="line-129">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">130</span><span id="line-130">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">131</span><span id="line-131">       * @return This object.</span>
-<span class="source-line-no">132</span><span id="line-132">       */</span>
-<span class="source-line-no">133</span><span id="line-133">      public Builder charset(Charset value) {</span>
-<span class="source-line-no">134</span><span id="line-134">         charset = reqnn("value", value);</span>
-<span class="source-line-no">135</span><span id="line-135">         return this;</span>
-<span class="source-line-no">136</span><span id="line-136">      }</span>
-<span class="source-line-no">137</span><span id="line-137"></span>
-<span class="source-line-no">138</span><span id="line-138">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">139</span><span id="line-139">      public Builder copy() {</span>
-<span class="source-line-no">140</span><span id="line-140">         return new Builder(this);</span>
-<span class="source-line-no">141</span><span id="line-141">      }</span>
-<span class="source-line-no">142</span><span id="line-142"></span>
-<span class="source-line-no">143</span><span id="line-143">      /**</span>
-<span class="source-line-no">144</span><span id="line-144">       * Local file system directory.</span>
-<span class="source-line-no">145</span><span id="line-145">       *</span>
-<span class="source-line-no">146</span><span id="line-146">       * &lt;p&gt;</span>
-<span class="source-line-no">147</span><span id="line-147">       * Identifies the path of the directory containing the configuration files.</span>
-<span class="source-line-no">148</span><span id="line-148">       *</span>
-<span class="source-line-no">149</span><span id="line-149">       * @param value</span>
-<span class="source-line-no">150</span><span id="line-150">       *    The new value for this property.</span>
-<span class="source-line-no">151</span><span id="line-151">       *    &lt;br&gt;The default is the first value found:</span>
-<span class="source-line-no">152</span><span id="line-152">       *    &lt;ul&gt;</span>
-<span class="source-line-no">153</span><span id="line-153">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.directory"&lt;/js&gt;</span>
-<span class="source-line-no">154</span><span id="line-154">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_DIRECTORY"&lt;/js&gt;</span>
-<span class="source-line-no">155</span><span id="line-155">       *       &lt;li&gt;&lt;js&gt;"."&lt;/js&gt;.</span>
-<span class="source-line-no">156</span><span id="line-156">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">157</span><span id="line-157">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">158</span><span id="line-158">       * @return This object.</span>
-<span class="source-line-no">159</span><span id="line-159">       */</span>
-<span class="source-line-no">160</span><span id="line-160">      public Builder directory(File value) {</span>
-<span class="source-line-no">161</span><span id="line-161">         directory = reqnn("value", value).getAbsolutePath();</span>
-<span class="source-line-no">162</span><span id="line-162">         return this;</span>
-<span class="source-line-no">163</span><span id="line-163">      }</span>
-<span class="source-line-no">164</span><span id="line-164"></span>
-<span class="source-line-no">165</span><span id="line-165">      /**</span>
-<span class="source-line-no">166</span><span id="line-166">       * Local file system directory.</span>
-<span class="source-line-no">167</span><span id="line-167">       *</span>
-<span class="source-line-no">168</span><span id="line-168">       * &lt;p&gt;</span>
-<span class="source-line-no">169</span><span id="line-169">       * Identifies the path of the directory containing the configuration files.</span>
-<span class="source-line-no">170</span><span id="line-170">       *</span>
-<span class="source-line-no">171</span><span id="line-171">       * @param value</span>
-<span class="source-line-no">172</span><span id="line-172">       *    The new value for this property.</span>
-<span class="source-line-no">173</span><span id="line-173">       *    &lt;br&gt;The default is the first value found:</span>
-<span class="source-line-no">174</span><span id="line-174">       *    &lt;ul&gt;</span>
-<span class="source-line-no">175</span><span id="line-175">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.directory"&lt;/js&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_DIRECTORY"&lt;/js&gt;</span>
-<span class="source-line-no">177</span><span id="line-177">       *       &lt;li&gt;&lt;js&gt;"."&lt;/js&gt;</span>
-<span class="source-line-no">178</span><span id="line-178">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">179</span><span id="line-179">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">180</span><span id="line-180">       * @return This object.</span>
-<span class="source-line-no">181</span><span id="line-181">       */</span>
-<span class="source-line-no">182</span><span id="line-182">      public Builder directory(String value) {</span>
-<span class="source-line-no">183</span><span id="line-183">         directory = reqnn("value", value);</span>
-<span class="source-line-no">184</span><span id="line-184">         return this;</span>
-<span class="source-line-no">185</span><span id="line-185">      }</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">      /**</span>
-<span class="source-line-no">188</span><span id="line-188">       * Use watcher.</span>
-<span class="source-line-no">189</span><span id="line-189">       *</span>
-<span class="source-line-no">190</span><span id="line-190">       * &lt;p&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">       * Use a file system watcher for file system changes.</span>
-<span class="source-line-no">192</span><span id="line-192">       *</span>
-<span class="source-line-no">193</span><span id="line-193">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">194</span><span id="line-194">       *    &lt;li class='note'&gt;Calling {@link FileStore#close()} closes the watcher.</span>
-<span class="source-line-no">195</span><span id="line-195">       * &lt;/ul&gt;</span>
-<span class="source-line-no">196</span><span id="line-196">       *</span>
-<span class="source-line-no">197</span><span id="line-197">       * &lt;p&gt;</span>
-<span class="source-line-no">198</span><span id="line-198">       *    The default is the first value found:</span>
-<span class="source-line-no">199</span><span id="line-199">       *    &lt;ul&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.enableWatcher"&lt;/js&gt;</span>
-<span class="source-line-no">201</span><span id="line-201">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_ENABLEWATCHER"&lt;/js&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">       *       &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">203</span><span id="line-203">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">       *</span>
-<span class="source-line-no">205</span><span id="line-205">       * @return This object.</span>
-<span class="source-line-no">206</span><span id="line-206">       */</span>
-<span class="source-line-no">207</span><span id="line-207">      public Builder enableWatcher() {</span>
-<span class="source-line-no">208</span><span id="line-208">         enableWatcher = true;</span>
-<span class="source-line-no">209</span><span id="line-209">         return this;</span>
-<span class="source-line-no">210</span><span id="line-210">      }</span>
-<span class="source-line-no">211</span><span id="line-211"></span>
-<span class="source-line-no">212</span><span id="line-212">      /**</span>
-<span class="source-line-no">213</span><span id="line-213">       * File extensions.</span>
-<span class="source-line-no">214</span><span id="line-214">       *</span>
-<span class="source-line-no">215</span><span id="line-215">       * &lt;p&gt;</span>
-<span class="source-line-no">216</span><span id="line-216">       * Defines what file extensions to search for when the config name does not have an extension.</span>
-<span class="source-line-no">217</span><span id="line-217">       *</span>
-<span class="source-line-no">218</span><span id="line-218">       * @param value</span>
-<span class="source-line-no">219</span><span id="line-219">       *    The new value for this property.</span>
-<span class="source-line-no">220</span><span id="line-220">       *    The default is the first value found:</span>
-<span class="source-line-no">221</span><span id="line-221">       *    &lt;ul&gt;</span>
-<span class="source-line-no">222</span><span id="line-222">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.extensions"&lt;/js&gt;</span>
-<span class="source-line-no">223</span><span id="line-223">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_EXTENSIONS"&lt;/js&gt;</span>
-<span class="source-line-no">224</span><span id="line-224">       *       &lt;li&gt;&lt;js&gt;"cfg"&lt;/js&gt;</span>
-<span class="source-line-no">225</span><span id="line-225">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">226</span><span id="line-226">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">227</span><span id="line-227">       * @return This object.</span>
-<span class="source-line-no">228</span><span id="line-228">       */</span>
-<span class="source-line-no">229</span><span id="line-229">      public Builder extensions(String value) {</span>
-<span class="source-line-no">230</span><span id="line-230">         extensions = reqnn("value", value);</span>
-<span class="source-line-no">231</span><span id="line-231">         return this;</span>
-<span class="source-line-no">232</span><span id="line-232">      }</span>
-<span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">      /**</span>
-<span class="source-line-no">235</span><span id="line-235">       * Update-on-write.</span>
-<span class="source-line-no">236</span><span id="line-236">       *</span>
-<span class="source-line-no">237</span><span id="line-237">       * &lt;p&gt;</span>
-<span class="source-line-no">238</span><span id="line-238">       * When enabled, the {@link FileStore#update(String, String)} method will be called immediately following</span>
-<span class="source-line-no">239</span><span id="line-239">       * calls to {@link FileStore#write(String, String, String)} when the contents are changing.</span>
-<span class="source-line-no">240</span><span id="line-240">       * &lt;br&gt;This allows for more immediate responses to configuration changes on file systems that use</span>
-<span class="source-line-no">241</span><span id="line-241">       * polling watchers.</span>
-<span class="source-line-no">242</span><span id="line-242">       * &lt;br&gt;This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.</span>
-<span class="source-line-no">243</span><span id="line-243">       *</span>
-<span class="source-line-no">244</span><span id="line-244">       * &lt;p&gt;</span>
-<span class="source-line-no">245</span><span id="line-245">       *    The default is the first value found:</span>
-<span class="source-line-no">246</span><span id="line-246">       *    &lt;ul&gt;</span>
-<span class="source-line-no">247</span><span id="line-247">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.updateOnWrite"&lt;/js&gt;</span>
-<span class="source-line-no">248</span><span id="line-248">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_UPDATEONWRITE"&lt;/js&gt;</span>
-<span class="source-line-no">249</span><span id="line-249">       *       &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">250</span><span id="line-250">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">251</span><span id="line-251">       *</span>
-<span class="source-line-no">252</span><span id="line-252">       * @return This object.</span>
-<span class="source-line-no">253</span><span id="line-253">       */</span>
-<span class="source-line-no">254</span><span id="line-254">      public Builder updateOnWrite() {</span>
-<span class="source-line-no">255</span><span id="line-255">         updateOnWrite = true;</span>
-<span class="source-line-no">256</span><span id="line-256">         return this;</span>
-<span class="source-line-no">257</span><span id="line-257">      }</span>
-<span class="source-line-no">258</span><span id="line-258"></span>
-<span class="source-line-no">259</span><span id="line-259">      /**</span>
-<span class="source-line-no">260</span><span id="line-260">       * Watcher sensitivity.</span>
-<span class="source-line-no">261</span><span id="line-261">       *</span>
-<span class="source-line-no">262</span><span id="line-262">       * &lt;p&gt;</span>
-<span class="source-line-no">263</span><span id="line-263">       * Determines how frequently the file system is polled for updates.</span>
-<span class="source-line-no">264</span><span id="line-264">       *</span>
-<span class="source-line-no">265</span><span id="line-265">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
-<span class="source-line-no">266</span><span id="line-266">       *    &lt;li class='note'&gt;This relies on internal Sun packages and may not work on all JVMs.</span>
-<span class="source-line-no">267</span><span id="line-267">       * &lt;/ul&gt;</span>
-<span class="source-line-no">268</span><span id="line-268">       *</span>
-<span class="source-line-no">269</span><span id="line-269">       * @param value</span>
-<span class="source-line-no">270</span><span id="line-270">       *    The new value for this property.</span>
-<span class="source-line-no">271</span><span id="line-271">       *    &lt;br&gt;The default is the first value found:</span>
-<span class="source-line-no">272</span><span id="line-272">       *    &lt;ul&gt;</span>
-<span class="source-line-no">273</span><span id="line-273">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.watcherSensitivity"&lt;/js&gt;</span>
-<span class="source-line-no">274</span><span id="line-274">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_WATCHERSENSITIVITY"&lt;/js&gt;</span>
-<span class="source-line-no">275</span><span id="line-275">       *       &lt;li&gt;{@link WatcherSensitivity#MEDIUM}</span>
-<span class="source-line-no">276</span><span id="line-276">       *    &lt;/ul&gt;</span>
-<span class="source-line-no">277</span><span id="line-277">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">278</span><span id="line-278">       * @return This object.</span>
-<span class="source-line-no">279</span><span id="line-279">       */</span>
-<span class="source-line-no">280</span><span id="line-280">      public Builder watcherSensitivity(WatcherSensitivity value) {</span>
-<span class="source-line-no">281</span><span id="line-281">         watcherSensitivity = reqnn("value", value);</span>
-<span class="source-line-no">282</span><span id="line-282">         return this;</span>
-<span class="source-line-no">283</span><span id="line-283">      }</span>
-<span class="source-line-no">284</span><span id="line-284">   }</span>
-<span class="source-line-no">285</span><span id="line-285"></span>
-<span class="source-line-no">286</span><span id="line-286">   @SuppressWarnings({</span>
-<span class="source-line-no">287</span><span id="line-287">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
-<span class="source-line-no">288</span><span id="line-288">   })</span>
-<span class="source-line-no">289</span><span id="line-289">   class WatcherThread extends Thread {</span>
-<span class="source-line-no">290</span><span id="line-290">      private final WatchService watchService;</span>
-<span class="source-line-no">291</span><span id="line-291"></span>
-<span class="source-line-no">292</span><span id="line-292">      WatcherThread(File dir, WatcherSensitivity s) throws Exception {</span>
-<span class="source-line-no">293</span><span id="line-293">         watchService = FileSystems.getDefault().newWatchService();</span>
-<span class="source-line-no">294</span><span id="line-294">         var kinds = a(ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);</span>
-<span class="source-line-no">295</span><span id="line-295">         var modifier = lookupModifier(s);</span>
-<span class="source-line-no">296</span><span id="line-296">         dir.toPath().register(watchService, kinds, modifier);</span>
-<span class="source-line-no">297</span><span id="line-297">      }</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">      @Override /* Overridden from Thread */</span>
-<span class="source-line-no">300</span><span id="line-300">      public void interrupt() {</span>
-<span class="source-line-no">301</span><span id="line-301">         try {</span>
-<span class="source-line-no">302</span><span id="line-302">            watchService.close();</span>
-<span class="source-line-no">303</span><span id="line-303">         } catch (IOException e) {</span>
-<span class="source-line-no">304</span><span id="line-304">            throw toRex(e); // HTT - watchService.close() doesn't throw in normal operation</span>
-<span class="source-line-no">305</span><span id="line-305">         } finally {</span>
-<span class="source-line-no">306</span><span id="line-306">            super.interrupt();</span>
-<span class="source-line-no">307</span><span id="line-307">         }</span>
-<span class="source-line-no">308</span><span id="line-308">      }</span>
-<span class="source-line-no">309</span><span id="line-309"></span>
-<span class="source-line-no">310</span><span id="line-310">      @SuppressWarnings({</span>
-<span class="source-line-no">311</span><span id="line-311">         "unchecked" // Type erasure requires unchecked casts</span>
-<span class="source-line-no">312</span><span id="line-312">      })</span>
-<span class="source-line-no">313</span><span id="line-313">      @Override /* Overridden from Thread */</span>
-<span class="source-line-no">314</span><span id="line-314">      public void run() {</span>
-<span class="source-line-no">315</span><span id="line-315">         try {</span>
-<span class="source-line-no">316</span><span id="line-316">            WatchKey key;</span>
-<span class="source-line-no">317</span><span id="line-317">            while (nn(key = watchService.take())) {</span>
-<span class="source-line-no">318</span><span id="line-318">               for (var event : key.pollEvents()) {</span>
-<span class="source-line-no">319</span><span id="line-319">                  var kind = event.kind();</span>
-<span class="source-line-no">320</span><span id="line-320">                  if (kind != OVERFLOW) // HTT - OVERFLOW events are rare in tests</span>
-<span class="source-line-no">321</span><span id="line-321">                     FileStore.this.onFileEvent(((WatchEvent&lt;Path&gt;)event));</span>
-<span class="source-line-no">322</span><span id="line-322">               }</span>
-<span class="source-line-no">323</span><span id="line-323">               if (! key.reset()) // HTT - key always resets in test environment</span>
-<span class="source-line-no">324</span><span id="line-324">                  break;</span>
-<span class="source-line-no">325</span><span id="line-325">            }</span>
-<span class="source-line-no">326</span><span id="line-326">         } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
-<span class="source-line-no">327</span><span id="line-327">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">328</span><span id="line-328">         } catch (@SuppressWarnings("unused") ClosedWatchServiceException e) {</span>
-<span class="source-line-no">329</span><span id="line-329">            // Expected on shutdown: interrupt() closes the WatchService while take() is blocked in this loop.</span>
-<span class="source-line-no">330</span><span id="line-330">         } catch (Exception e) {</span>
-<span class="source-line-no">331</span><span id="line-331">            throw toRex(e); // HTT - unexpected exception from watchService.take()</span>
-<span class="source-line-no">332</span><span id="line-332">         }</span>
-<span class="source-line-no">333</span><span id="line-333">      }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">      @SuppressWarnings({</span>
-<span class="source-line-no">336</span><span id="line-336">         "java:S5738" // com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.</span>
-<span class="source-line-no">337</span><span id="line-337">      })</span>
-<span class="source-line-no">338</span><span id="line-338">      private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {</span>
-<span class="source-line-no">339</span><span id="line-339">         try {</span>
-<span class="source-line-no">340</span><span id="line-340">            return switch (s) {</span>
-<span class="source-line-no">341</span><span id="line-341">               case LOW -&gt; com.sun.nio.file.SensitivityWatchEventModifier.LOW;</span>
-<span class="source-line-no">342</span><span id="line-342">               case MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;</span>
-<span class="source-line-no">343</span><span id="line-343">               case HIGH -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;</span>
-<span class="source-line-no">344</span><span id="line-344">            };</span>
-<span class="source-line-no">345</span><span id="line-345">         } catch (@SuppressWarnings("unused") Exception e) {</span>
-<span class="source-line-no">346</span><span id="line-346">            /* Ignore */ // HTT - SensitivityWatchEventModifier exists on all supported JVMs</span>
-<span class="source-line-no">347</span><span id="line-347">         }</span>
-<span class="source-line-no">348</span><span id="line-348">         return null; // HTT - return null is only reached if SensitivityWatchEventModifier is unavailable</span>
-<span class="source-line-no">349</span><span id="line-349">      }</span>
-<span class="source-line-no">350</span><span id="line-350">   }</span>
-<span class="source-line-no">351</span><span id="line-351"></span>
-<span class="source-line-no">352</span><span id="line-352">   /** Default file store, all default values.*/</span>
-<span class="source-line-no">353</span><span id="line-353">   public static final FileStore DEFAULT = FileStore.create().build();</span>
-<span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355">   /**</span>
-<span class="source-line-no">356</span><span id="line-356">    * Creates a new builder for this object.</span>
-<span class="source-line-no">357</span><span id="line-357">    *</span>
-<span class="source-line-no">358</span><span id="line-358">    * @return A new builder.</span>
-<span class="source-line-no">359</span><span id="line-359">    */</span>
-<span class="source-line-no">360</span><span id="line-360">   public static Builder create() {</span>
-<span class="source-line-no">361</span><span id="line-361">      return new Builder();</span>
-<span class="source-line-no">362</span><span id="line-362">   }</span>
-<span class="source-line-no">363</span><span id="line-363"></span>
-<span class="source-line-no">364</span><span id="line-364">   protected final boolean enableWatcher;</span>
-<span class="source-line-no">365</span><span id="line-365">   protected final boolean updateOnWrite;</span>
-<span class="source-line-no">366</span><span id="line-366">   protected final Charset charset;</span>
-<span class="source-line-no">367</span><span id="line-367">   protected final String directory;</span>
-<span class="source-line-no">368</span><span id="line-368">   protected final String extensions;</span>
-<span class="source-line-no">369</span><span id="line-369">   protected final WatcherSensitivity watcherSensitivity;</span>
-<span class="source-line-no">370</span><span id="line-370"></span>
-<span class="source-line-no">371</span><span id="line-371">   private final ConcurrentHashMap&lt;String,String&gt; cache = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">372</span><span id="line-372">   private final ConcurrentHashMap&lt;String,String&gt; nameCache = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">373</span><span id="line-373">   private final File dir;</span>
-<span class="source-line-no">374</span><span id="line-374">   private final String[] exts;</span>
-<span class="source-line-no">375</span><span id="line-375">   private final WatcherThread watcher;</span>
-<span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">   /**</span>
-<span class="source-line-no">378</span><span id="line-378">    * Constructor.</span>
-<span class="source-line-no">379</span><span id="line-379">    *</span>
-<span class="source-line-no">380</span><span id="line-380">    * @param builder The builder for this object.</span>
-<span class="source-line-no">381</span><span id="line-381">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">382</span><span id="line-382">    */</span>
-<span class="source-line-no">383</span><span id="line-383">   public FileStore(Builder builder) {</span>
-<span class="source-line-no">384</span><span id="line-384">      super(builder);</span>
-<span class="source-line-no">385</span><span id="line-385">      directory = builder.directory;</span>
-<span class="source-line-no">386</span><span id="line-386">      extensions = builder.extensions;</span>
-<span class="source-line-no">387</span><span id="line-387">      charset = builder.charset;</span>
-<span class="source-line-no">388</span><span id="line-388">      enableWatcher = builder.enableWatcher;</span>
-<span class="source-line-no">389</span><span id="line-389">      updateOnWrite = builder.updateOnWrite;</span>
-<span class="source-line-no">390</span><span id="line-390">      watcherSensitivity = builder.watcherSensitivity;</span>
-<span class="source-line-no">391</span><span id="line-391">      try {</span>
-<span class="source-line-no">392</span><span id="line-392">         dir = new File(directory).getCanonicalFile();</span>
-<span class="source-line-no">393</span><span id="line-393">         dir.mkdirs();</span>
-<span class="source-line-no">394</span><span id="line-394">         exts = split(extensions).toArray(String[]::new);</span>
-<span class="source-line-no">395</span><span id="line-395">         watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;</span>
-<span class="source-line-no">396</span><span id="line-396">         if (nn(watcher))</span>
-<span class="source-line-no">397</span><span id="line-397">            watcher.start();</span>
-<span class="source-line-no">398</span><span id="line-398">      } catch (Exception e) {</span>
-<span class="source-line-no">399</span><span id="line-399">         throw toRex(e); // HTT - getCanonicalFile() IOException is not normally triggered</span>
-<span class="source-line-no">400</span><span id="line-400">      }</span>
-<span class="source-line-no">401</span><span id="line-401">   }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   @Override /* Overridden from Closeable */</span>
-<span class="source-line-no">404</span><span id="line-404">   public synchronized void close() {</span>
-<span class="source-line-no">405</span><span id="line-405">      if (nn(watcher))</span>
-<span class="source-line-no">406</span><span id="line-406">         watcher.interrupt();</span>
-<span class="source-line-no">407</span><span id="line-407">   }</span>
-<span class="source-line-no">408</span><span id="line-408"></span>
-<span class="source-line-no">409</span><span id="line-409">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">410</span><span id="line-410">   public Builder copy() {</span>
-<span class="source-line-no">411</span><span id="line-411">      return new Builder(this);</span>
-<span class="source-line-no">412</span><span id="line-412">   }</span>
-<span class="source-line-no">413</span><span id="line-413"></span>
-<span class="source-line-no">414</span><span id="line-414">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">415</span><span id="line-415">   public synchronized boolean exists(String name) {</span>
-<span class="source-line-no">416</span><span id="line-416">      return Files.exists(resolveFile(name));</span>
-<span class="source-line-no">417</span><span id="line-417">   }</span>
-<span class="source-line-no">418</span><span id="line-418"></span>
-<span class="source-line-no">419</span><span id="line-419">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">420</span><span id="line-420">   public synchronized String read(String name) throws IOException {</span>
-<span class="source-line-no">421</span><span id="line-421">      name = resolveName(name);</span>
-<span class="source-line-no">422</span><span id="line-422"></span>
-<span class="source-line-no">423</span><span id="line-423">      var p = resolveFile(name);</span>
-<span class="source-line-no">424</span><span id="line-424">      var pName = p.getFileName();</span>
-<span class="source-line-no">425</span><span id="line-425">      if (n(pName))</span>
-<span class="source-line-no">426</span><span id="line-426">         throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</span>
-<span class="source-line-no">427</span><span id="line-427">      name = pName.toString();</span>
+<span class="source-line-no">054</span><span id="line-54">   private static final String MSG_PATH_ESCAPE = "Name escapes configured root directory.";</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   /**</span>
+<span class="source-line-no">057</span><span id="line-57">    * Builder class.</span>
+<span class="source-line-no">058</span><span id="line-58">    */</span>
+<span class="source-line-no">059</span><span id="line-59">   public static class Builder extends ConfigStore.Builder&lt;Builder&gt; {</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">      private Charset charset;</span>
+<span class="source-line-no">062</span><span id="line-62">      private boolean enableWatcher;</span>
+<span class="source-line-no">063</span><span id="line-63">      private boolean updateOnWrite;</span>
+<span class="source-line-no">064</span><span id="line-64">      private String directory;</span>
+<span class="source-line-no">065</span><span id="line-65">      private String extensions;</span>
+<span class="source-line-no">066</span><span id="line-66">      private WatcherSensitivity watcherSensitivity;</span>
+<span class="source-line-no">067</span><span id="line-67"></span>
+<span class="source-line-no">068</span><span id="line-68">      /**</span>
+<span class="source-line-no">069</span><span id="line-69">       * Constructor, default settings.</span>
+<span class="source-line-no">070</span><span id="line-70">       */</span>
+<span class="source-line-no">071</span><span id="line-71">      protected Builder() {</span>
+<span class="source-line-no">072</span><span id="line-72">         charset = env("ConfigFileStore.charset").map(Charset::forName).orElse(Charset.defaultCharset());</span>
+<span class="source-line-no">073</span><span id="line-73">         directory = env("ConfigFileStore.directory", ".");</span>
+<span class="source-line-no">074</span><span id="line-74">         enableWatcher = env("ConfigFileStore.enableWatcher", false);</span>
+<span class="source-line-no">075</span><span id="line-75">         extensions = env("ConfigFileStore.extensions", "cfg,yml,yaml");</span>
+<span class="source-line-no">076</span><span id="line-76">         updateOnWrite = env("ConfigFileStore.updateOnWrite", false);</span>
+<span class="source-line-no">077</span><span id="line-77">         watcherSensitivity = env("ConfigFileStore.watcherSensitivity", WatcherSensitivity.MEDIUM);</span>
+<span class="source-line-no">078</span><span id="line-78">      }</span>
+<span class="source-line-no">079</span><span id="line-79"></span>
+<span class="source-line-no">080</span><span id="line-80">      /**</span>
+<span class="source-line-no">081</span><span id="line-81">       * Copy constructor.</span>
+<span class="source-line-no">082</span><span id="line-82">       *</span>
+<span class="source-line-no">083</span><span id="line-83">       * @param copyFrom The builder to copy from.</span>
+<span class="source-line-no">084</span><span id="line-84">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">085</span><span id="line-85">       */</span>
+<span class="source-line-no">086</span><span id="line-86">      protected Builder(Builder copyFrom) {</span>
+<span class="source-line-no">087</span><span id="line-87">         super(reqnn("copyFrom", copyFrom));</span>
+<span class="source-line-no">088</span><span id="line-88">         charset = copyFrom.charset;</span>
+<span class="source-line-no">089</span><span id="line-89">         directory = copyFrom.directory;</span>
+<span class="source-line-no">090</span><span id="line-90">         enableWatcher = copyFrom.enableWatcher;</span>
+<span class="source-line-no">091</span><span id="line-91">         extensions = copyFrom.extensions;</span>
+<span class="source-line-no">092</span><span id="line-92">         updateOnWrite = copyFrom.updateOnWrite;</span>
+<span class="source-line-no">093</span><span id="line-93">         watcherSensitivity = copyFrom.watcherSensitivity;</span>
+<span class="source-line-no">094</span><span id="line-94">      }</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">      /**</span>
+<span class="source-line-no">097</span><span id="line-97">       * Copy constructor.</span>
+<span class="source-line-no">098</span><span id="line-98">       *</span>
+<span class="source-line-no">099</span><span id="line-99">       * @param copyFrom The bean to copy from.</span>
+<span class="source-line-no">100</span><span id="line-100">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">101</span><span id="line-101">       */</span>
+<span class="source-line-no">102</span><span id="line-102">      protected Builder(FileStore copyFrom) {</span>
+<span class="source-line-no">103</span><span id="line-103">         super(reqnn("copyFrom", copyFrom));</span>
+<span class="source-line-no">104</span><span id="line-104">         type(copyFrom.getClass());</span>
+<span class="source-line-no">105</span><span id="line-105">         charset = copyFrom.charset;</span>
+<span class="source-line-no">106</span><span id="line-106">         directory = copyFrom.directory;</span>
+<span class="source-line-no">107</span><span id="line-107">         enableWatcher = copyFrom.enableWatcher;</span>
+<span class="source-line-no">108</span><span id="line-108">         extensions = copyFrom.extensions;</span>
+<span class="source-line-no">109</span><span id="line-109">         updateOnWrite = copyFrom.updateOnWrite;</span>
+<span class="source-line-no">110</span><span id="line-110">         watcherSensitivity = copyFrom.watcherSensitivity;</span>
+<span class="source-line-no">111</span><span id="line-111">      }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">114</span><span id="line-114">      public FileStore build() {</span>
+<span class="source-line-no">115</span><span id="line-115">         return build(FileStore.class);</span>
+<span class="source-line-no">116</span><span id="line-116">      }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">      /**</span>
+<span class="source-line-no">119</span><span id="line-119">       * Charset for external files.</span>
+<span class="source-line-no">120</span><span id="line-120">       *</span>
+<span class="source-line-no">121</span><span id="line-121">       * &lt;p&gt;</span>
+<span class="source-line-no">122</span><span id="line-122">       * Identifies the charset of external files.</span>
+<span class="source-line-no">123</span><span id="line-123">       *</span>
+<span class="source-line-no">124</span><span id="line-124">       * @param value</span>
+<span class="source-line-no">125</span><span id="line-125">       *    The new value for this property.</span>
+<span class="source-line-no">126</span><span id="line-126">       *    &lt;br&gt;The default is the first value found:</span>
+<span class="source-line-no">127</span><span id="line-127">       *    &lt;ul&gt;</span>
+<span class="source-line-no">128</span><span id="line-128">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.charset"&lt;/js&gt;</span>
+<span class="source-line-no">129</span><span id="line-129">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_CHARSET"&lt;/js&gt;</span>
+<span class="source-line-no">130</span><span id="line-130">       *       &lt;li&gt;{@link Charset#defaultCharset()}</span>
+<span class="source-line-no">131</span><span id="line-131">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">132</span><span id="line-132">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">133</span><span id="line-133">       * @return This object.</span>
+<span class="source-line-no">134</span><span id="line-134">       */</span>
+<span class="source-line-no">135</span><span id="line-135">      public Builder charset(Charset value) {</span>
+<span class="source-line-no">136</span><span id="line-136">         charset = reqnn("value", value);</span>
+<span class="source-line-no">137</span><span id="line-137">         return this;</span>
+<span class="source-line-no">138</span><span id="line-138">      }</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      @Override /* Overridden from Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">141</span><span id="line-141">      public Builder copy() {</span>
+<span class="source-line-no">142</span><span id="line-142">         return new Builder(this);</span>
+<span class="source-line-no">143</span><span id="line-143">      }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">      /**</span>
+<span class="source-line-no">146</span><span id="line-146">       * Local file system directory.</span>
+<span class="source-line-no">147</span><span id="line-147">       *</span>
+<span class="source-line-no">148</span><span id="line-148">       * &lt;p&gt;</span>
+<span class="source-line-no">149</span><span id="line-149">       * Identifies the path of the directory containing the configuration files.</span>
+<span class="source-line-no">150</span><span id="line-150">       *</span>
+<span class="source-line-no">151</span><span id="line-151">       * @param value</span>
+<span class="source-line-no">152</span><span id="line-152">       *    The new value for this property.</span>
+<span class="source-line-no">153</span><span id="line-153">       *    &lt;br&gt;The default is the first value found:</span>
+<span class="source-line-no">154</span><span id="line-154">       *    &lt;ul&gt;</span>
+<span class="source-line-no">155</span><span id="line-155">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.directory"&lt;/js&gt;</span>
+<span class="source-line-no">156</span><span id="line-156">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_DIRECTORY"&lt;/js&gt;</span>
+<span class="source-line-no">157</span><span id="line-157">       *       &lt;li&gt;&lt;js&gt;"."&lt;/js&gt;.</span>
+<span class="source-line-no">158</span><span id="line-158">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">160</span><span id="line-160">       * @return This object.</span>
+<span class="source-line-no">161</span><span id="line-161">       */</span>
+<span class="source-line-no">162</span><span id="line-162">      public Builder directory(File value) {</span>
+<span class="source-line-no">163</span><span id="line-163">         directory = reqnn("value", value).getAbsolutePath();</span>
+<span class="source-line-no">164</span><span id="line-164">         return this;</span>
+<span class="source-line-no">165</span><span id="line-165">      }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">      /**</span>
+<span class="source-line-no">168</span><span id="line-168">       * Local file system directory.</span>
+<span class="source-line-no">169</span><span id="line-169">       *</span>
+<span class="source-line-no">170</span><span id="line-170">       * &lt;p&gt;</span>
+<span class="source-line-no">171</span><span id="line-171">       * Identifies the path of the directory containing the configuration files.</span>
+<span class="source-line-no">172</span><span id="line-172">       *</span>
+<span class="source-line-no">173</span><span id="line-173">       * @param value</span>
+<span class="source-line-no">174</span><span id="line-174">       *    The new value for this property.</span>
+<span class="source-line-no">175</span><span id="line-175">       *    &lt;br&gt;The default is the first value found:</span>
+<span class="source-line-no">176</span><span id="line-176">       *    &lt;ul&gt;</span>
+<span class="source-line-no">177</span><span id="line-177">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.directory"&lt;/js&gt;</span>
+<span class="source-line-no">178</span><span id="line-178">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_DIRECTORY"&lt;/js&gt;</span>
+<span class="source-line-no">179</span><span id="line-179">       *       &lt;li&gt;&lt;js&gt;"."&lt;/js&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">181</span><span id="line-181">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">182</span><span id="line-182">       * @return This object.</span>
+<span class="source-line-no">183</span><span id="line-183">       */</span>
+<span class="source-line-no">184</span><span id="line-184">      public Builder directory(String value) {</span>
+<span class="source-line-no">185</span><span id="line-185">         directory = reqnn("value", value);</span>
+<span class="source-line-no">186</span><span id="line-186">         return this;</span>
+<span class="source-line-no">187</span><span id="line-187">      }</span>
+<span class="source-line-no">188</span><span id="line-188"></span>
+<span class="source-line-no">189</span><span id="line-189">      /**</span>
+<span class="source-line-no">190</span><span id="line-190">       * Use watcher.</span>
+<span class="source-line-no">191</span><span id="line-191">       *</span>
+<span class="source-line-no">192</span><span id="line-192">       * &lt;p&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">       * Use a file system watcher for file system changes.</span>
+<span class="source-line-no">194</span><span id="line-194">       *</span>
+<span class="source-line-no">195</span><span id="line-195">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">196</span><span id="line-196">       *    &lt;li class='note'&gt;Calling {@link FileStore#close()} closes the watcher.</span>
+<span class="source-line-no">197</span><span id="line-197">       * &lt;/ul&gt;</span>
+<span class="source-line-no">198</span><span id="line-198">       *</span>
+<span class="source-line-no">199</span><span id="line-199">       * &lt;p&gt;</span>
+<span class="source-line-no">200</span><span id="line-200">       *    The default is the first value found:</span>
+<span class="source-line-no">201</span><span id="line-201">       *    &lt;ul&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.enableWatcher"&lt;/js&gt;</span>
+<span class="source-line-no">203</span><span id="line-203">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_ENABLEWATCHER"&lt;/js&gt;</span>
+<span class="source-line-no">204</span><span id="line-204">       *       &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">205</span><span id="line-205">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">       *</span>
+<span class="source-line-no">207</span><span id="line-207">       * @return This object.</span>
+<span class="source-line-no">208</span><span id="line-208">       */</span>
+<span class="source-line-no">209</span><span id="line-209">      public Builder enableWatcher() {</span>
+<span class="source-line-no">210</span><span id="line-210">         enableWatcher = true;</span>
+<span class="source-line-no">211</span><span id="line-211">         return this;</span>
+<span class="source-line-no">212</span><span id="line-212">      }</span>
+<span class="source-line-no">213</span><span id="line-213"></span>
+<span class="source-line-no">214</span><span id="line-214">      /**</span>
+<span class="source-line-no">215</span><span id="line-215">       * File extensions.</span>
+<span class="source-line-no">216</span><span id="line-216">       *</span>
+<span class="source-line-no">217</span><span id="line-217">       * &lt;p&gt;</span>
+<span class="source-line-no">218</span><span id="line-218">       * Defines what file extensions to search for when the config name does not have an extension.</span>
+<span class="source-line-no">219</span><span id="line-219">       *</span>
+<span class="source-line-no">220</span><span id="line-220">       * @param value</span>
+<span class="source-line-no">221</span><span id="line-221">       *    The new value for this property.</span>
+<span class="source-line-no">222</span><span id="line-222">       *    The default is the first value found:</span>
+<span class="source-line-no">223</span><span id="line-223">       *    &lt;ul&gt;</span>
+<span class="source-line-no">224</span><span id="line-224">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.extensions"&lt;/js&gt;</span>
+<span class="source-line-no">225</span><span id="line-225">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_EXTENSIONS"&lt;/js&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">       *       &lt;li&gt;&lt;js&gt;"cfg"&lt;/js&gt;</span>
+<span class="source-line-no">227</span><span id="line-227">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">228</span><span id="line-228">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">229</span><span id="line-229">       * @return This object.</span>
+<span class="source-line-no">230</span><span id="line-230">       */</span>
+<span class="source-line-no">231</span><span id="line-231">      public Builder extensions(String value) {</span>
+<span class="source-line-no">232</span><span id="line-232">         extensions = reqnn("value", value);</span>
+<span class="source-line-no">233</span><span id="line-233">         return this;</span>
+<span class="source-line-no">234</span><span id="line-234">      }</span>
+<span class="source-line-no">235</span><span id="line-235"></span>
+<span class="source-line-no">236</span><span id="line-236">      /**</span>
+<span class="source-line-no">237</span><span id="line-237">       * Update-on-write.</span>
+<span class="source-line-no">238</span><span id="line-238">       *</span>
+<span class="source-line-no">239</span><span id="line-239">       * &lt;p&gt;</span>
+<span class="source-line-no">240</span><span id="line-240">       * When enabled, the {@link FileStore#update(String, String)} method will be called immediately following</span>
+<span class="source-line-no">241</span><span id="line-241">       * calls to {@link FileStore#write(String, String, String)} when the contents are changing.</span>
+<span class="source-line-no">242</span><span id="line-242">       * &lt;br&gt;This allows for more immediate responses to configuration changes on file systems that use</span>
+<span class="source-line-no">243</span><span id="line-243">       * polling watchers.</span>
+<span class="source-line-no">244</span><span id="line-244">       * &lt;br&gt;This may cause double-triggering of {@link ConfigStoreListener ConfigStoreListeners}.</span>
+<span class="source-line-no">245</span><span id="line-245">       *</span>
+<span class="source-line-no">246</span><span id="line-246">       * &lt;p&gt;</span>
+<span class="source-line-no">247</span><span id="line-247">       *    The default is the first value found:</span>
+<span class="source-line-no">248</span><span id="line-248">       *    &lt;ul&gt;</span>
+<span class="source-line-no">249</span><span id="line-249">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.updateOnWrite"&lt;/js&gt;</span>
+<span class="source-line-no">250</span><span id="line-250">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_UPDATEONWRITE"&lt;/js&gt;</span>
+<span class="source-line-no">251</span><span id="line-251">       *       &lt;li&gt;&lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">252</span><span id="line-252">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">253</span><span id="line-253">       *</span>
+<span class="source-line-no">254</span><span id="line-254">       * @return This object.</span>
+<span class="source-line-no">255</span><span id="line-255">       */</span>
+<span class="source-line-no">256</span><span id="line-256">      public Builder updateOnWrite() {</span>
+<span class="source-line-no">257</span><span id="line-257">         updateOnWrite = true;</span>
+<span class="source-line-no">258</span><span id="line-258">         return this;</span>
+<span class="source-line-no">259</span><span id="line-259">      }</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">      /**</span>
+<span class="source-line-no">262</span><span id="line-262">       * Watcher sensitivity.</span>
+<span class="source-line-no">263</span><span id="line-263">       *</span>
+<span class="source-line-no">264</span><span id="line-264">       * &lt;p&gt;</span>
+<span class="source-line-no">265</span><span id="line-265">       * Determines how frequently the file system is polled for updates.</span>
+<span class="source-line-no">266</span><span id="line-266">       *</span>
+<span class="source-line-no">267</span><span id="line-267">       * &lt;h4 class='section'&gt;Notes:&lt;/h4&gt;&lt;ul&gt;</span>
+<span class="source-line-no">268</span><span id="line-268">       *    &lt;li class='note'&gt;This relies on internal Sun packages and may not work on all JVMs.</span>
+<span class="source-line-no">269</span><span id="line-269">       * &lt;/ul&gt;</span>
+<span class="source-line-no">270</span><span id="line-270">       *</span>
+<span class="source-line-no">271</span><span id="line-271">       * @param value</span>
+<span class="source-line-no">272</span><span id="line-272">       *    The new value for this property.</span>
+<span class="source-line-no">273</span><span id="line-273">       *    &lt;br&gt;The default is the first value found:</span>
+<span class="source-line-no">274</span><span id="line-274">       *    &lt;ul&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">       *       &lt;li&gt;System property &lt;js&gt;"ConfigFileStore.watcherSensitivity"&lt;/js&gt;</span>
+<span class="source-line-no">276</span><span id="line-276">       *       &lt;li&gt;Environment variable &lt;js&gt;"CONFIGFILESTORE_WATCHERSENSITIVITY"&lt;/js&gt;</span>
+<span class="source-line-no">277</span><span id="line-277">       *       &lt;li&gt;{@link WatcherSensitivity#MEDIUM}</span>
+<span class="source-line-no">278</span><span id="line-278">       *    &lt;/ul&gt;</span>
+<span class="source-line-no">279</span><span id="line-279">       *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">280</span><span id="line-280">       * @return This object.</span>
+<span class="source-line-no">281</span><span id="line-281">       */</span>
+<span class="source-line-no">282</span><span id="line-282">      public Builder watcherSensitivity(WatcherSensitivity value) {</span>
+<span class="source-line-no">283</span><span id="line-283">         watcherSensitivity = reqnn("value", value);</span>
+<span class="source-line-no">284</span><span id="line-284">         return this;</span>
+<span class="source-line-no">285</span><span id="line-285">      }</span>
+<span class="source-line-no">286</span><span id="line-286">   }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   @SuppressWarnings({</span>
+<span class="source-line-no">289</span><span id="line-289">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
+<span class="source-line-no">290</span><span id="line-290">   })</span>
+<span class="source-line-no">291</span><span id="line-291">   class WatcherThread extends Thread {</span>
+<span class="source-line-no">292</span><span id="line-292">      private final WatchService watchService;</span>
+<span class="source-line-no">293</span><span id="line-293"></span>
+<span class="source-line-no">294</span><span id="line-294">      WatcherThread(File dir, WatcherSensitivity s) throws Exception {</span>
+<span class="source-line-no">295</span><span id="line-295">         watchService = FileSystems.getDefault().newWatchService();</span>
+<span class="source-line-no">296</span><span id="line-296">         var kinds = a(ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);</span>
+<span class="source-line-no">297</span><span id="line-297">         var modifier = lookupModifier(s);</span>
+<span class="source-line-no">298</span><span id="line-298">         dir.toPath().register(watchService, kinds, modifier);</span>
+<span class="source-line-no">299</span><span id="line-299">      }</span>
+<span class="source-line-no">300</span><span id="line-300"></span>
+<span class="source-line-no">301</span><span id="line-301">      @Override /* Overridden from Thread */</span>
+<span class="source-line-no">302</span><span id="line-302">      public void interrupt() {</span>
+<span class="source-line-no">303</span><span id="line-303">         try {</span>
+<span class="source-line-no">304</span><span id="line-304">            watchService.close();</span>
+<span class="source-line-no">305</span><span id="line-305">         } catch (IOException e) {</span>
+<span class="source-line-no">306</span><span id="line-306">            throw toRex(e); // HTT - watchService.close() doesn't throw in normal operation</span>
+<span class="source-line-no">307</span><span id="line-307">         } finally {</span>
+<span class="source-line-no">308</span><span id="line-308">            super.interrupt();</span>
+<span class="source-line-no">309</span><span id="line-309">         }</span>
+<span class="source-line-no">310</span><span id="line-310">      }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">      @SuppressWarnings({</span>
+<span class="source-line-no">313</span><span id="line-313">         "unchecked" // Type erasure requires unchecked casts</span>
+<span class="source-line-no">314</span><span id="line-314">      })</span>
+<span class="source-line-no">315</span><span id="line-315">      @Override /* Overridden from Thread */</span>
+<span class="source-line-no">316</span><span id="line-316">      public void run() {</span>
+<span class="source-line-no">317</span><span id="line-317">         try {</span>
+<span class="source-line-no">318</span><span id="line-318">            WatchKey key;</span>
+<span class="source-line-no">319</span><span id="line-319">            while (nn(key = watchService.take())) {</span>
+<span class="source-line-no">320</span><span id="line-320">               for (var event : key.pollEvents()) {</span>
+<span class="source-line-no">321</span><span id="line-321">                  var kind = event.kind();</span>
+<span class="source-line-no">322</span><span id="line-322">                  if (kind != OVERFLOW) // HTT - OVERFLOW events are rare in tests</span>
+<span class="source-line-no">323</span><span id="line-323">                     FileStore.this.onFileEvent(((WatchEvent&lt;Path&gt;)event));</span>
+<span class="source-line-no">324</span><span id="line-324">               }</span>
+<span class="source-line-no">325</span><span id="line-325">               if (! key.reset()) // HTT - key always resets in test environment</span>
+<span class="source-line-no">326</span><span id="line-326">                  break;</span>
+<span class="source-line-no">327</span><span id="line-327">            }</span>
+<span class="source-line-no">328</span><span id="line-328">         } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
+<span class="source-line-no">329</span><span id="line-329">            Thread.currentThread().interrupt();</span>
+<span class="source-line-no">330</span><span id="line-330">         } catch (@SuppressWarnings("unused") ClosedWatchServiceException e) {</span>
+<span class="source-line-no">331</span><span id="line-331">            // Expected on shutdown: interrupt() closes the WatchService while take() is blocked in this loop.</span>
+<span class="source-line-no">332</span><span id="line-332">         } catch (Exception e) {</span>
+<span class="source-line-no">333</span><span id="line-333">            throw toRex(e); // HTT - unexpected exception from watchService.take()</span>
+<span class="source-line-no">334</span><span id="line-334">         }</span>
+<span class="source-line-no">335</span><span id="line-335">      }</span>
+<span class="source-line-no">336</span><span id="line-336"></span>
+<span class="source-line-no">337</span><span id="line-337">      @SuppressWarnings({</span>
+<span class="source-line-no">338</span><span id="line-338">         "java:S5738" // com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.</span>
+<span class="source-line-no">339</span><span id="line-339">      })</span>
+<span class="source-line-no">340</span><span id="line-340">      private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {</span>
+<span class="source-line-no">341</span><span id="line-341">         try {</span>
+<span class="source-line-no">342</span><span id="line-342">            return switch (s) {</span>
+<span class="source-line-no">343</span><span id="line-343">               case LOW -&gt; com.sun.nio.file.SensitivityWatchEventModifier.LOW;</span>
+<span class="source-line-no">344</span><span id="line-344">               case MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;</span>
+<span class="source-line-no">345</span><span id="line-345">               case HIGH -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;</span>
+<span class="source-line-no">346</span><span id="line-346">            };</span>
+<span class="source-line-no">347</span><span id="line-347">         } catch (@SuppressWarnings("unused") Exception e) {</span>
+<span class="source-line-no">348</span><span id="line-348">            /* Ignore */ // HTT - SensitivityWatchEventModifier exists on all supported JVMs</span>
+<span class="source-line-no">349</span><span id="line-349">         }</span>
+<span class="source-line-no">350</span><span id="line-350">         return null; // HTT - return null is only reached if SensitivityWatchEventModifier is unavailable</span>
+<span class="source-line-no">351</span><span id="line-351">      }</span>
+<span class="source-line-no">352</span><span id="line-352">   }</span>
+<span class="source-line-no">353</span><span id="line-353"></span>
+<span class="source-line-no">354</span><span id="line-354">   /** Default file store, all default values.*/</span>
+<span class="source-line-no">355</span><span id="line-355">   public static final FileStore DEFAULT = FileStore.create().build();</span>
+<span class="source-line-no">356</span><span id="line-356"></span>
+<span class="source-line-no">357</span><span id="line-357">   /**</span>
+<span class="source-line-no">358</span><span id="line-358">    * Creates a new builder for this object.</span>
+<span class="source-line-no">359</span><span id="line-359">    *</span>
+<span class="source-line-no">360</span><span id="line-360">    * @return A new builder.</span>
+<span class="source-line-no">361</span><span id="line-361">    */</span>
+<span class="source-line-no">362</span><span id="line-362">   public static Builder create() {</span>
+<span class="source-line-no">363</span><span id="line-363">      return new Builder();</span>
+<span class="source-line-no">364</span><span id="line-364">   }</span>
+<span class="source-line-no">365</span><span id="line-365"></span>
+<span class="source-line-no">366</span><span id="line-366">   protected final boolean enableWatcher;</span>
+<span class="source-line-no">367</span><span id="line-367">   protected final boolean updateOnWrite;</span>
+<span class="source-line-no">368</span><span id="line-368">   protected final Charset charset;</span>
+<span class="source-line-no">369</span><span id="line-369">   protected final String directory;</span>
+<span class="source-line-no">370</span><span id="line-370">   protected final String extensions;</span>
+<span class="source-line-no">371</span><span id="line-371">   protected final WatcherSensitivity watcherSensitivity;</span>
+<span class="source-line-no">372</span><span id="line-372"></span>
+<span class="source-line-no">373</span><span id="line-373">   private final ConcurrentHashMap&lt;String,String&gt; cache = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">374</span><span id="line-374">   private final ConcurrentHashMap&lt;String,String&gt; nameCache = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">375</span><span id="line-375">   private final File dir;</span>
+<span class="source-line-no">376</span><span id="line-376">   private final String[] exts;</span>
+<span class="source-line-no">377</span><span id="line-377">   private final WatcherThread watcher;</span>
+<span class="source-line-no">378</span><span id="line-378"></span>
+<span class="source-line-no">379</span><span id="line-379">   /**</span>
+<span class="source-line-no">380</span><span id="line-380">    * Constructor.</span>
+<span class="source-line-no">381</span><span id="line-381">    *</span>
+<span class="source-line-no">382</span><span id="line-382">    * @param builder The builder for this object.</span>
+<span class="source-line-no">383</span><span id="line-383">    *    &lt;br&gt;Cannot be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">384</span><span id="line-384">    */</span>
+<span class="source-line-no">385</span><span id="line-385">   public FileStore(Builder builder) {</span>
+<span class="source-line-no">386</span><span id="line-386">      super(builder);</span>
+<span class="source-line-no">387</span><span id="line-387">      directory = builder.directory;</span>
+<span class="source-line-no">388</span><span id="line-388">      extensions = builder.extensions;</span>
+<span class="source-line-no">389</span><span id="line-389">      charset = builder.charset;</span>
+<span class="source-line-no">390</span><span id="line-390">      enableWatcher = builder.enableWatcher;</span>
+<span class="source-line-no">391</span><span id="line-391">      updateOnWrite = builder.updateOnWrite;</span>
+<span class="source-line-no">392</span><span id="line-392">      watcherSensitivity = builder.watcherSensitivity;</span>
+<span class="source-line-no">393</span><span id="line-393">      try {</span>
+<span class="source-line-no">394</span><span id="line-394">         dir = new File(directory).getCanonicalFile();</span>
+<span class="source-line-no">395</span><span id="line-395">         dir.mkdirs();</span>
+<span class="source-line-no">396</span><span id="line-396">         exts = split(extensions).toArray(String[]::new);</span>
+<span class="source-line-no">397</span><span id="line-397">         watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;</span>
+<span class="source-line-no">398</span><span id="line-398">         if (nn(watcher))</span>
+<span class="source-line-no">399</span><span id="line-399">            watcher.start();</span>
+<span class="source-line-no">400</span><span id="line-400">      } catch (Exception e) {</span>
+<span class="source-line-no">401</span><span id="line-401">         throw toRex(e); // HTT - getCanonicalFile() IOException is not normally triggered</span>
+<span class="source-line-no">402</span><span id="line-402">      }</span>
+<span class="source-line-no">403</span><span id="line-403">   }</span>
+<span class="source-line-no">404</span><span id="line-404"></span>
+<span class="source-line-no">405</span><span id="line-405">   @Override /* Overridden from Closeable */</span>
+<span class="source-line-no">406</span><span id="line-406">   public synchronized void close() {</span>
+<span class="source-line-no">407</span><span id="line-407">      if (nn(watcher))</span>
+<span class="source-line-no">408</span><span id="line-408">         watcher.interrupt();</span>
+<span class="source-line-no">409</span><span id="line-409">   }</span>
+<span class="source-line-no">410</span><span id="line-410"></span>
+<span class="source-line-no">411</span><span id="line-411">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">412</span><span id="line-412">   public Builder copy() {</span>
+<span class="source-line-no">413</span><span id="line-413">      return new Builder(this);</span>
+<span class="source-line-no">414</span><span id="line-414">   }</span>
+<span class="source-line-no">415</span><span id="line-415"></span>
+<span class="source-line-no">416</span><span id="line-416">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">417</span><span id="line-417">   public synchronized boolean exists(String name) {</span>
+<span class="source-line-no">418</span><span id="line-418">      try {</span>
+<span class="source-line-no">419</span><span id="line-419">         return Files.exists(resolveFile(name));</span>
+<span class="source-line-no">420</span><span id="line-420">      } catch (@SuppressWarnings("unused") IllegalArgumentException e) {</span>
+<span class="source-line-no">421</span><span id="line-421">         return false; // Relative names that escape the store directory are treated as not found.</span>
+<span class="source-line-no">422</span><span id="line-422">      }</span>
+<span class="source-line-no">423</span><span id="line-423">   }</span>
+<span class="source-line-no">424</span><span id="line-424"></span>
+<span class="source-line-no">425</span><span id="line-425">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">426</span><span id="line-426">   public synchronized String read(String name) throws IOException {</span>
+<span class="source-line-no">427</span><span id="line-427">      name = resolveName(name);</span>
 <span class="source-line-no">428</span><span id="line-428"></span>
-<span class="source-line-no">429</span><span id="line-429">      var s = cache.get(name);</span>
-<span class="source-line-no">430</span><span id="line-430">      if (nn(s))</span>
-<span class="source-line-no">431</span><span id="line-431">         return s;</span>
-<span class="source-line-no">432</span><span id="line-432"></span>
-<span class="source-line-no">433</span><span id="line-433">      dir.mkdirs();</span>
+<span class="source-line-no">429</span><span id="line-429">      var p = resolveFile(name);</span>
+<span class="source-line-no">430</span><span id="line-430">      var pName = p.getFileName();</span>
+<span class="source-line-no">431</span><span id="line-431">      if (n(pName))</span>
+<span class="source-line-no">432</span><span id="line-432">         throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</span>
+<span class="source-line-no">433</span><span id="line-433">      name = pName.toString();</span>
 <span class="source-line-no">434</span><span id="line-434"></span>
-<span class="source-line-no">435</span><span id="line-435">      // If file doesn't exist, don't trigger creation.</span>
-<span class="source-line-no">436</span><span id="line-436">      if (! Files.exists(p))</span>
-<span class="source-line-no">437</span><span id="line-437">         return "";</span>
+<span class="source-line-no">435</span><span id="line-435">      var s = cache.get(name);</span>
+<span class="source-line-no">436</span><span id="line-436">      if (nn(s))</span>
+<span class="source-line-no">437</span><span id="line-437">         return s;</span>
 <span class="source-line-no">438</span><span id="line-438"></span>
-<span class="source-line-no">439</span><span id="line-439">      var isWritable = isWritable(p);</span>
-<span class="source-line-no">440</span><span id="line-440">      var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup</span>
-<span class="source-line-no">441</span><span id="line-441">      try (var fc = FileChannel.open(p, oo)) {</span>
-<span class="source-line-no">442</span><span id="line-442">         try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file</span>
-<span class="source-line-no">443</span><span id="line-443">            var buf = ByteBuffer.allocate(1024);</span>
-<span class="source-line-no">444</span><span id="line-444">            var sb = new StringBuilder();</span>
-<span class="source-line-no">445</span><span id="line-445">            while (fc.read(buf) != -1) {</span>
-<span class="source-line-no">446</span><span id="line-446">               sb.append(charset.decode((buf.flip()))); // Fixes Java 11 issue involving overridden flip method.</span>
-<span class="source-line-no">447</span><span id="line-447">               buf.clear();</span>
-<span class="source-line-no">448</span><span id="line-448">            }</span>
-<span class="source-line-no">449</span><span id="line-449">            s = sb.toString();</span>
-<span class="source-line-no">450</span><span id="line-450">            cache.put(name, s);</span>
-<span class="source-line-no">451</span><span id="line-451">         }</span>
-<span class="source-line-no">452</span><span id="line-452">      }</span>
-<span class="source-line-no">453</span><span id="line-453"></span>
-<span class="source-line-no">454</span><span id="line-454">      return cache.get(name);</span>
-<span class="source-line-no">455</span><span id="line-455">   }</span>
-<span class="source-line-no">456</span><span id="line-456"></span>
-<span class="source-line-no">457</span><span id="line-457">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">458</span><span id="line-458">   public synchronized FileStore update(String name, String newContents) {</span>
-<span class="source-line-no">459</span><span id="line-459">      cache.put(name, newContents);</span>
-<span class="source-line-no">460</span><span id="line-460">      super.update(name, newContents);</span>
-<span class="source-line-no">461</span><span id="line-461">      return this;</span>
-<span class="source-line-no">462</span><span id="line-462">   }</span>
-<span class="source-line-no">463</span><span id="line-463"></span>
-<span class="source-line-no">464</span><span id="line-464">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">465</span><span id="line-465">   public synchronized String write(String name, String expectedContents, String newContents) throws IOException {</span>
-<span class="source-line-no">466</span><span id="line-466">      name = resolveName(name);</span>
-<span class="source-line-no">467</span><span id="line-467"></span>
-<span class="source-line-no">468</span><span id="line-468">      // This is a no-op.</span>
-<span class="source-line-no">469</span><span id="line-469">      if (eq(expectedContents, newContents))</span>
-<span class="source-line-no">470</span><span id="line-470">         return null;</span>
-<span class="source-line-no">471</span><span id="line-471"></span>
-<span class="source-line-no">472</span><span id="line-472">      dir.mkdirs();</span>
+<span class="source-line-no">439</span><span id="line-439">      dir.mkdirs();</span>
+<span class="source-line-no">440</span><span id="line-440"></span>
+<span class="source-line-no">441</span><span id="line-441">      // If file doesn't exist, don't trigger creation.</span>
+<span class="source-line-no">442</span><span id="line-442">      if (! Files.exists(p))</span>
+<span class="source-line-no">443</span><span id="line-443">         return "";</span>
+<span class="source-line-no">444</span><span id="line-444"></span>
+<span class="source-line-no">445</span><span id="line-445">      var isWritable = isWritable(p);</span>
+<span class="source-line-no">446</span><span id="line-446">      var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup</span>
+<span class="source-line-no">447</span><span id="line-447">      try (var fc = FileChannel.open(p, oo)) {</span>
+<span class="source-line-no">448</span><span id="line-448">         try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file</span>
+<span class="source-line-no">449</span><span id="line-449">            var buf = ByteBuffer.allocate(1024);</span>
+<span class="source-line-no">450</span><span id="line-450">            var sb = new StringBuilder();</span>
+<span class="source-line-no">451</span><span id="line-451">            while (fc.read(buf) != -1) {</span>
+<span class="source-line-no">452</span><span id="line-452">               sb.append(charset.decode((buf.flip()))); // Fixes Java 11 issue involving overridden flip method.</span>
+<span class="source-line-no">453</span><span id="line-453">               buf.clear();</span>
+<span class="source-line-no">454</span><span id="line-454">            }</span>
+<span class="source-line-no">455</span><span id="line-455">            s = sb.toString();</span>
+<span class="source-line-no">456</span><span id="line-456">            cache.put(name, s);</span>
+<span class="source-line-no">457</span><span id="line-457">         }</span>
+<span class="source-line-no">458</span><span id="line-458">      }</span>
+<span class="source-line-no">459</span><span id="line-459"></span>
+<span class="source-line-no">460</span><span id="line-460">      return cache.get(name);</span>
+<span class="source-line-no">461</span><span id="line-461">   }</span>
+<span class="source-line-no">462</span><span id="line-462"></span>
+<span class="source-line-no">463</span><span id="line-463">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">464</span><span id="line-464">   public synchronized FileStore update(String name, String newContents) {</span>
+<span class="source-line-no">465</span><span id="line-465">      cache.put(name, newContents);</span>
+<span class="source-line-no">466</span><span id="line-466">      super.update(name, newContents);</span>
+<span class="source-line-no">467</span><span id="line-467">      return this;</span>
+<span class="source-line-no">468</span><span id="line-468">   }</span>
+<span class="source-line-no">469</span><span id="line-469"></span>
+<span class="source-line-no">470</span><span id="line-470">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">471</span><span id="line-471">   public synchronized String write(String name, String expectedContents, String newContents) throws IOException {</span>
+<span class="source-line-no">472</span><span id="line-472">      name = resolveName(name);</span>
 <span class="source-line-no">473</span><span id="line-473"></span>
-<span class="source-line-no">474</span><span id="line-474">      var p = resolveFile(name);</span>
-<span class="source-line-no">475</span><span id="line-475">      var pName = p.getFileName();</span>
-<span class="source-line-no">476</span><span id="line-476">      if (n(pName))</span>
-<span class="source-line-no">477</span><span id="line-477">         throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</span>
-<span class="source-line-no">478</span><span id="line-478">      name = pName.toString();</span>
+<span class="source-line-no">474</span><span id="line-474">      // This is a no-op.</span>
+<span class="source-line-no">475</span><span id="line-475">      if (eq(expectedContents, newContents))</span>
+<span class="source-line-no">476</span><span id="line-476">         return null;</span>
+<span class="source-line-no">477</span><span id="line-477"></span>
+<span class="source-line-no">478</span><span id="line-478">      dir.mkdirs();</span>
 <span class="source-line-no">479</span><span id="line-479"></span>
-<span class="source-line-no">480</span><span id="line-480">      var exists = Files.exists(p);</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">      // Don't create the file if we're not going to match.</span>
-<span class="source-line-no">483</span><span id="line-483">      if ((! exists) &amp;&amp; ine(expectedContents))</span>
-<span class="source-line-no">484</span><span id="line-484">         return "";</span>
+<span class="source-line-no">480</span><span id="line-480">      var p = resolveFile(name);</span>
+<span class="source-line-no">481</span><span id="line-481">      var pName = p.getFileName();</span>
+<span class="source-line-no">482</span><span id="line-482">      if (n(pName))</span>
+<span class="source-line-no">483</span><span id="line-483">         throw ioex("Could not resolve a file name from path '%s'.", p); // Real NPE guard: getFileName() can return null when p resolves to a root path (e.g. a caller-supplied absolute name).</span>
+<span class="source-line-no">484</span><span id="line-484">      name = pName.toString();</span>
 <span class="source-line-no">485</span><span id="line-485"></span>
-<span class="source-line-no">486</span><span id="line-486">      if (isWritable(p)) {</span>
-<span class="source-line-no">487</span><span id="line-487">         if (newContents == null)</span>
-<span class="source-line-no">488</span><span id="line-488">            Files.delete(p);</span>
-<span class="source-line-no">489</span><span id="line-489">         else {</span>
-<span class="source-line-no">490</span><span id="line-490">            try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {</span>
-<span class="source-line-no">491</span><span id="line-491">               try (var lock = fc.lock()) {</span>
-<span class="source-line-no">492</span><span id="line-492">                  var currentContents = "";</span>
-<span class="source-line-no">493</span><span id="line-493">                  if (exists) {</span>
-<span class="source-line-no">494</span><span id="line-494">                     var buf = ByteBuffer.allocate(1024);</span>
-<span class="source-line-no">495</span><span id="line-495">                     var sb = new StringBuilder();</span>
-<span class="source-line-no">496</span><span id="line-496">                     while (fc.read(buf) != -1) {</span>
-<span class="source-line-no">497</span><span id="line-497">                        sb.append(charset.decode(buf.flip()));</span>
-<span class="source-line-no">498</span><span id="line-498">                        buf.clear();</span>
-<span class="source-line-no">499</span><span id="line-499">                     }</span>
-<span class="source-line-no">500</span><span id="line-500">                     currentContents = sb.toString();</span>
-<span class="source-line-no">501</span><span id="line-501">                  }</span>
-<span class="source-line-no">502</span><span id="line-502">                  if (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {</span>
-<span class="source-line-no">503</span><span id="line-503">                     if (currentContents == null)</span>
-<span class="source-line-no">504</span><span id="line-504">                        cache.remove(name);</span>
-<span class="source-line-no">505</span><span id="line-505">                     else</span>
-<span class="source-line-no">506</span><span id="line-506">                        cache.put(name, currentContents);</span>
-<span class="source-line-no">507</span><span id="line-507">                     return currentContents;</span>
-<span class="source-line-no">508</span><span id="line-508">                  }</span>
-<span class="source-line-no">509</span><span id="line-509">                  fc.position(0);</span>
-<span class="source-line-no">510</span><span id="line-510">                  fc.write(charset.encode(newContents));</span>
-<span class="source-line-no">511</span><span id="line-511">                  fc.truncate(fc.position()); // Drop leftovers when the new contents are shorter.</span>
-<span class="source-line-no">512</span><span id="line-512">               }</span>
-<span class="source-line-no">513</span><span id="line-513">            }</span>
-<span class="source-line-no">514</span><span id="line-514">         }</span>
-<span class="source-line-no">515</span><span id="line-515">      }</span>
-<span class="source-line-no">516</span><span id="line-516"></span>
-<span class="source-line-no">517</span><span id="line-517">      if (updateOnWrite)</span>
-<span class="source-line-no">518</span><span id="line-518">         update(name, newContents);</span>
-<span class="source-line-no">519</span><span id="line-519">      else</span>
-<span class="source-line-no">520</span><span id="line-520">         cache.remove(name);  // Invalidate the cache.</span>
-<span class="source-line-no">521</span><span id="line-521"></span>
-<span class="source-line-no">522</span><span id="line-522">      return null;</span>
-<span class="source-line-no">523</span><span id="line-523">   }</span>
-<span class="source-line-no">524</span><span id="line-524"></span>
-<span class="source-line-no">525</span><span id="line-525">   private synchronized boolean isWritable(Path p) {</span>
-<span class="source-line-no">526</span><span id="line-526">      try {</span>
-<span class="source-line-no">527</span><span id="line-527">         if (! Files.exists(p)) {</span>
-<span class="source-line-no">528</span><span id="line-528">            Files.createDirectories(p.getParent());</span>
-<span class="source-line-no">529</span><span id="line-529">            if (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions</span>
-<span class="source-line-no">530</span><span id="line-530">               throw ioex("Could not create file: %s", p);</span>
-<span class="source-line-no">531</span><span id="line-531">            }</span>
-<span class="source-line-no">532</span><span id="line-532">         }</span>
-<span class="source-line-no">533</span><span id="line-533">      } catch (@SuppressWarnings("unused") IOException e) {</span>
-<span class="source-line-no">534</span><span id="line-534">         return false; // HTT - IOException from createDirectories/createNewFile requires OS-level restrictions</span>
-<span class="source-line-no">535</span><span id="line-535">      }</span>
-<span class="source-line-no">536</span><span id="line-536">      return Files.isWritable(p);</span>
-<span class="source-line-no">537</span><span id="line-537">   }</span>
-<span class="source-line-no">538</span><span id="line-538"></span>
-<span class="source-line-no">539</span><span id="line-539">   private Path resolveFile(String name) {</span>
-<span class="source-line-no">540</span><span id="line-540">      return dir.toPath().resolve(resolveName(name));</span>
-<span class="source-line-no">541</span><span id="line-541">   }</span>
-<span class="source-line-no">542</span><span id="line-542"></span>
-<span class="source-line-no">543</span><span id="line-543">   /**</span>
-<span class="source-line-no">544</span><span id="line-544">    * Gets called when the watcher service on this store is triggered with a file system change.</span>
-<span class="source-line-no">545</span><span id="line-545">    *</span>
-<span class="source-line-no">546</span><span id="line-546">    * @param e The file system event.</span>
-<span class="source-line-no">547</span><span id="line-547">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">548</span><span id="line-548">    */</span>
-<span class="source-line-no">549</span><span id="line-549">   protected synchronized void onFileEvent(WatchEvent&lt;Path&gt; e) throws IOException {</span>
-<span class="source-line-no">550</span><span id="line-550">      var fn = e.context().getFileName().toString();</span>
-<span class="source-line-no">551</span><span id="line-551"></span>
-<span class="source-line-no">552</span><span id="line-552">      var oldContents = cache.get(fn);</span>
-<span class="source-line-no">553</span><span id="line-553">      cache.remove(fn);</span>
-<span class="source-line-no">554</span><span id="line-554">      var newContents = read(fn);</span>
-<span class="source-line-no">555</span><span id="line-555"></span>
-<span class="source-line-no">556</span><span id="line-556">      if (neq(oldContents, newContents)) { // HTT - requires actual file system watcher event with content change</span>
-<span class="source-line-no">557</span><span id="line-557">         update(fn, newContents);</span>
-<span class="source-line-no">558</span><span id="line-558">      }</span>
-<span class="source-line-no">559</span><span id="line-559">   }</span>
-<span class="source-line-no">560</span><span id="line-560"></span>
-<span class="source-line-no">561</span><span id="line-561">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">562</span><span id="line-562">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">563</span><span id="line-563">      return super.properties()</span>
-<span class="source-line-no">564</span><span id="line-564">         .a("charset", charset)</span>
-<span class="source-line-no">565</span><span id="line-565">         .a("extensions", extensions)</span>
-<span class="source-line-no">566</span><span id="line-566">         .a("updateOnWrite", updateOnWrite);</span>
+<span class="source-line-no">486</span><span id="line-486">      var exists = Files.exists(p);</span>
+<span class="source-line-no">487</span><span id="line-487"></span>
+<span class="source-line-no">488</span><span id="line-488">      // Don't create the file if we're not going to match.</span>
+<span class="source-line-no">489</span><span id="line-489">      if ((! exists) &amp;&amp; ine(expectedContents))</span>
+<span class="source-line-no">490</span><span id="line-490">         return "";</span>
+<span class="source-line-no">491</span><span id="line-491"></span>
+<span class="source-line-no">492</span><span id="line-492">      if (isWritable(p)) {</span>
+<span class="source-line-no">493</span><span id="line-493">         if (newContents == null)</span>
+<span class="source-line-no">494</span><span id="line-494">            Files.delete(p);</span>
+<span class="source-line-no">495</span><span id="line-495">         else {</span>
+<span class="source-line-no">496</span><span id="line-496">            try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {</span>
+<span class="source-line-no">497</span><span id="line-497">               try (var lock = fc.lock()) {</span>
+<span class="source-line-no">498</span><span id="line-498">                  var currentContents = "";</span>
+<span class="source-line-no">499</span><span id="line-499">                  if (exists) {</span>
+<span class="source-line-no">500</span><span id="line-500">                     var buf = ByteBuffer.allocate(1024);</span>
+<span class="source-line-no">501</span><span id="line-501">                     var sb = new StringBuilder();</span>
+<span class="source-line-no">502</span><span id="line-502">                     while (fc.read(buf) != -1) {</span>
+<span class="source-line-no">503</span><span id="line-503">                        sb.append(charset.decode(buf.flip()));</span>
+<span class="source-line-no">504</span><span id="line-504">                        buf.clear();</span>
+<span class="source-line-no">505</span><span id="line-505">                     }</span>
+<span class="source-line-no">506</span><span id="line-506">                     currentContents = sb.toString();</span>
+<span class="source-line-no">507</span><span id="line-507">                  }</span>
+<span class="source-line-no">508</span><span id="line-508">                  if (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {</span>
+<span class="source-line-no">509</span><span id="line-509">                     if (currentContents == null)</span>
+<span class="source-line-no">510</span><span id="line-510">                        cache.remove(name);</span>
+<span class="source-line-no">511</span><span id="line-511">                     else</span>
+<span class="source-line-no">512</span><span id="line-512">                        cache.put(name, currentContents);</span>
+<span class="source-line-no">513</span><span id="line-513">                     return currentContents;</span>
+<span class="source-line-no">514</span><span id="line-514">                  }</span>
+<span class="source-line-no">515</span><span id="line-515">                  fc.position(0);</span>
+<span class="source-line-no">516</span><span id="line-516">                  fc.write(charset.encode(newContents));</span>
+<span class="source-line-no">517</span><span id="line-517">                  fc.truncate(fc.position()); // Drop leftovers when the new contents are shorter.</span>
+<span class="source-line-no">518</span><span id="line-518">               }</span>
+<span class="source-line-no">519</span><span id="line-519">            }</span>
+<span class="source-line-no">520</span><span id="line-520">         }</span>
+<span class="source-line-no">521</span><span id="line-521">      }</span>
+<span class="source-line-no">522</span><span id="line-522"></span>
+<span class="source-line-no">523</span><span id="line-523">      if (updateOnWrite)</span>
+<span class="source-line-no">524</span><span id="line-524">         update(name, newContents);</span>
+<span class="source-line-no">525</span><span id="line-525">      else</span>
+<span class="source-line-no">526</span><span id="line-526">         cache.remove(name);  // Invalidate the cache.</span>
+<span class="source-line-no">527</span><span id="line-527"></span>
+<span class="source-line-no">528</span><span id="line-528">      return null;</span>
+<span class="source-line-no">529</span><span id="line-529">   }</span>
+<span class="source-line-no">530</span><span id="line-530"></span>
+<span class="source-line-no">531</span><span id="line-531">   private synchronized boolean isWritable(Path p) {</span>
+<span class="source-line-no">532</span><span id="line-532">      try {</span>
+<span class="source-line-no">533</span><span id="line-533">         if (! Files.exists(p)) {</span>
+<span class="source-line-no">534</span><span id="line-534">            Files.createDirectories(p.getParent());</span>
+<span class="source-line-no">535</span><span id="line-535">            if (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions</span>
+<span class="source-line-no">536</span><span id="line-536">               throw ioex("Could not create file: %s", p);</span>
+<span class="source-line-no">537</span><span id="line-537">            }</span>
+<span class="source-line-no">538</span><span id="line-538">         }</span>
+<span class="source-line-no">539</span><span id="line-539">      } catch (@SuppressWarnings("unused") IOException e) {</span>
+<span class="source-line-no">540</span><span id="line-540">         return false; // HTT - IOException from createDirectories/createNewFile requires OS-level restrictions</span>
+<span class="source-line-no">541</span><span id="line-541">      }</span>
+<span class="source-line-no">542</span><span id="line-542">      return Files.isWritable(p);</span>
+<span class="source-line-no">543</span><span id="line-543">   }</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   /*</span>
+<span class="source-line-no">546</span><span id="line-546">    * Rejects relative names that resolve (lexically) outside the configured directory, e.g. "../x".</span>
+<span class="source-line-no">547</span><span id="line-547">    * Absolute names are trusted configuration (e.g. @Rest(config="/abs/path.cfg")) and are allowed.</span>
+<span class="source-line-no">548</span><span id="line-548">    * Done before any file-system probe so escaping names are never even tested for existence.</span>
+<span class="source-line-no">549</span><span id="line-549">    */</span>
+<span class="source-line-no">550</span><span id="line-550">   private void checkContained(String name) {</span>
+<span class="source-line-no">551</span><span id="line-551">      try {</span>
+<span class="source-line-no">552</span><span id="line-552">         if (Path.of(name).isAbsolute())</span>
+<span class="source-line-no">553</span><span id="line-553">            return;</span>
+<span class="source-line-no">554</span><span id="line-554">         var root = dir.toPath().toAbsolutePath().normalize();</span>
+<span class="source-line-no">555</span><span id="line-555">         var target = root.resolve(name).normalize();</span>
+<span class="source-line-no">556</span><span id="line-556">         if (! target.startsWith(root))</span>
+<span class="source-line-no">557</span><span id="line-557">            throw new IllegalArgumentException(MSG_PATH_ESCAPE);</span>
+<span class="source-line-no">558</span><span id="line-558">         // Symlinks: if the target (or its nearest existing ancestor) resolves outside the real root, reject.</span>
+<span class="source-line-no">559</span><span id="line-559">         var existing = target;</span>
+<span class="source-line-no">560</span><span id="line-560">         while (existing != null &amp;&amp; ! Files.exists(existing))</span>
+<span class="source-line-no">561</span><span id="line-561">            existing = existing.getParent();</span>
+<span class="source-line-no">562</span><span id="line-562">         if (existing != null &amp;&amp; Files.exists(root) &amp;&amp; ! existing.toRealPath().startsWith(root.toRealPath()))</span>
+<span class="source-line-no">563</span><span id="line-563">            throw new IllegalArgumentException(MSG_PATH_ESCAPE);</span>
+<span class="source-line-no">564</span><span id="line-564">      } catch (@SuppressWarnings("unused") InvalidPathException | IOException e) {</span>
+<span class="source-line-no">565</span><span id="line-565">         throw new IllegalArgumentException(MSG_PATH_ESCAPE);</span>
+<span class="source-line-no">566</span><span id="line-566">      }</span>
 <span class="source-line-no">567</span><span id="line-567">   }</span>
 <span class="source-line-no">568</span><span id="line-568"></span>
-<span class="source-line-no">569</span><span id="line-569">   @Override</span>
-<span class="source-line-no">570</span><span id="line-570">   protected String resolveName(String name) {</span>
-<span class="source-line-no">571</span><span id="line-571">      if (! nameCache.containsKey(name)) {</span>
-<span class="source-line-no">572</span><span id="line-572">         String n = null;</span>
-<span class="source-line-no">573</span><span id="line-573"></span>
-<span class="source-line-no">574</span><span id="line-574">         // Does file exist as-is?</span>
-<span class="source-line-no">575</span><span id="line-575">         if (fileExists(dir, name))</span>
-<span class="source-line-no">576</span><span id="line-576">            n = name;</span>
-<span class="source-line-no">577</span><span id="line-577"></span>
-<span class="source-line-no">578</span><span id="line-578">         // Does name already have an extension?</span>
-<span class="source-line-no">579</span><span id="line-579">         if (n == null) {</span>
-<span class="source-line-no">580</span><span id="line-580">            for (var ext : exts) {</span>
-<span class="source-line-no">581</span><span id="line-581">               if (hasExtension(name, ext)) {</span>
-<span class="source-line-no">582</span><span id="line-582">                  n = name;</span>
-<span class="source-line-no">583</span><span id="line-583">                  break;</span>
-<span class="source-line-no">584</span><span id="line-584">               }</span>
-<span class="source-line-no">585</span><span id="line-585">            }</span>
-<span class="source-line-no">586</span><span id="line-586">         }</span>
-<span class="source-line-no">587</span><span id="line-587"></span>
-<span class="source-line-no">588</span><span id="line-588">         // Find file with the correct extension.</span>
-<span class="source-line-no">589</span><span id="line-589">         if (n == null) {</span>
-<span class="source-line-no">590</span><span id="line-590">            for (var ext : exts) {</span>
-<span class="source-line-no">591</span><span id="line-591">               if (fileExists(dir, name + '.' + ext)) {</span>
-<span class="source-line-no">592</span><span id="line-592">                  n = name + '.' + ext;</span>
-<span class="source-line-no">593</span><span id="line-593">                  break;</span>
-<span class="source-line-no">594</span><span id="line-594">               }</span>
-<span class="source-line-no">595</span><span id="line-595">            }</span>
-<span class="source-line-no">596</span><span id="line-596">         }</span>
-<span class="source-line-no">597</span><span id="line-597"></span>
-<span class="source-line-no">598</span><span id="line-598">         // If file not found, use the default which is the name with the first extension.</span>
-<span class="source-line-no">599</span><span id="line-599">         if (n == null)</span>
-<span class="source-line-no">600</span><span id="line-600">            n = exts.length == 0 ? name : (name + "." + exts[0]);</span>
-<span class="source-line-no">601</span><span id="line-601"></span>
-<span class="source-line-no">602</span><span id="line-602">         nameCache.put(name, n);</span>
-<span class="source-line-no">603</span><span id="line-603">      }</span>
-<span class="source-line-no">604</span><span id="line-604">      return nameCache.get(name);</span>
-<span class="source-line-no">605</span><span id="line-605">   }</span>
-<span class="source-line-no">606</span><span id="line-606">}</span>
+<span class="source-line-no">569</span><span id="line-569">   private Path resolveFile(String name) {</span>
+<span class="source-line-no">570</span><span id="line-570">      return dir.toPath().resolve(resolveName(name));</span>
+<span class="source-line-no">571</span><span id="line-571">   }</span>
+<span class="source-line-no">572</span><span id="line-572"></span>
+<span class="source-line-no">573</span><span id="line-573">   /**</span>
+<span class="source-line-no">574</span><span id="line-574">    * Gets called when the watcher service on this store is triggered with a file system change.</span>
+<span class="source-line-no">575</span><span id="line-575">    *</span>
+<span class="source-line-no">576</span><span id="line-576">    * @param e The file system event.</span>
+<span class="source-line-no">577</span><span id="line-577">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">578</span><span id="line-578">    */</span>
+<span class="source-line-no">579</span><span id="line-579">   protected synchronized void onFileEvent(WatchEvent&lt;Path&gt; e) throws IOException {</span>
+<span class="source-line-no">580</span><span id="line-580">      var fn = e.context().getFileName().toString();</span>
+<span class="source-line-no">581</span><span id="line-581"></span>
+<span class="source-line-no">582</span><span id="line-582">      var oldContents = cache.get(fn);</span>
+<span class="source-line-no">583</span><span id="line-583">      cache.remove(fn);</span>
+<span class="source-line-no">584</span><span id="line-584">      var newContents = read(fn);</span>
+<span class="source-line-no">585</span><span id="line-585"></span>
+<span class="source-line-no">586</span><span id="line-586">      if (neq(oldContents, newContents)) { // HTT - requires actual file system watcher event with content change</span>
+<span class="source-line-no">587</span><span id="line-587">         update(fn, newContents);</span>
+<span class="source-line-no">588</span><span id="line-588">      }</span>
+<span class="source-line-no">589</span><span id="line-589">   }</span>
+<span class="source-line-no">590</span><span id="line-590"></span>
+<span class="source-line-no">591</span><span id="line-591">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">592</span><span id="line-592">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">593</span><span id="line-593">      return super.properties()</span>
+<span class="source-line-no">594</span><span id="line-594">         .a("charset", charset)</span>
+<span class="source-line-no">595</span><span id="line-595">         .a("extensions", extensions)</span>
+<span class="source-line-no">596</span><span id="line-596">         .a("updateOnWrite", updateOnWrite);</span>
+<span class="source-line-no">597</span><span id="line-597">   }</span>
+<span class="source-line-no">598</span><span id="line-598"></span>
+<span class="source-line-no">599</span><span id="line-599">   @Override</span>
+<span class="source-line-no">600</span><span id="line-600">   protected String resolveName(String name) {</span>
+<span class="source-line-no">601</span><span id="line-601">      checkContained(name);</span>
+<span class="source-line-no">602</span><span id="line-602">      if (! nameCache.containsKey(name)) {</span>
+<span class="source-line-no">603</span><span id="line-603">         String n = null;</span>
+<span class="source-line-no">604</span><span id="line-604"></span>
+<span class="source-line-no">605</span><span id="line-605">         // Does file exist as-is?</span>
+<span class="source-line-no">606</span><span id="line-606">         if (fileExists(dir, name))</span>
+<span class="source-line-no">607</span><span id="line-607">            n = name;</span>
+<span class="source-line-no">608</span><span id="line-608"></span>
+<span class="source-line-no">609</span><span id="line-609">         // Does name already have an extension?</span>
+<span class="source-line-no">610</span><span id="line-610">         if (n == null) {</span>
+<span class="source-line-no">611</span><span id="line-611">            for (var ext : exts) {</span>
+<span class="source-line-no">612</span><span id="line-612">               if (hasExtension(name, ext)) {</span>
+<span class="source-line-no">613</span><span id="line-613">                  n = name;</span>
+<span class="source-line-no">614</span><span id="line-614">                  break;</span>
+<span class="source-line-no">615</span><span id="line-615">               }</span>
+<span class="source-line-no">616</span><span id="line-616">            }</span>
+<span class="source-line-no">617</span><span id="line-617">         }</span>
+<span class="source-line-no">618</span><span id="line-618"></span>
+<span class="source-line-no">619</span><span id="line-619">         // Find file with the correct extension.</span>
+<span class="source-line-no">620</span><span id="line-620">         if (n == null) {</span>
+<span class="source-line-no">621</span><span id="line-621">            for (var ext : exts) {</span>
+<span class="source-line-no">622</span><span id="line-622">               if (fileExists(dir, name + '.' + ext)) {</span>
+<span class="source-line-no">623</span><span id="line-623">                  n = name + '.' + ext;</span>
+<span class="source-line-no">624</span><span id="line-624">                  break;</span>
+<span class="source-line-no">625</span><span id="line-625">               }</span>
+<span class="source-line-no">626</span><span id="line-626">            }</span>
+<span class="source-line-no">627</span><span id="line-627">         }</span>
+<span class="source-line-no">628</span><span id="line-628"></span>
+<span class="source-line-no">629</span><span id="line-629">         // If file not found, use the default which is the name with the first extension.</span>
+<span class="source-line-no">630</span><span id="line-630">         if (n == null)</span>
+<span class="source-line-no">631</span><span id="line-631">            n = exts.length == 0 ? name : (name + "." + exts[0]);</span>
+<span class="source-line-no">632</span><span id="line-632"></span>
+<span class="source-line-no">633</span><span id="line-633">         nameCache.put(name, n);</span>
+<span class="source-line-no">634</span><span id="line-634">      }</span>
+<span class="source-line-no">635</span><span id="line-635">      return nameCache.get(name);</span>
+<span class="source-line-no">636</span><span id="line-636">   }</span>
+<span class="source-line-no">637</span><span id="line-637">}</span>
 
 
 
