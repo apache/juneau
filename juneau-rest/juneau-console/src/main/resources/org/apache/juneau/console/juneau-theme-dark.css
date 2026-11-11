@@ -91,6 +91,7 @@ html:root[data-jc-scheme="dark"] {
 	--jc-detail-action-primary-color: #16181d;
 	--jc-detail-action-primary-bg-disabled: #5a616d;
 	--jc-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	--jc-switcher-thumb-shadow: none;
 	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 	--jc-tip-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 	--jc-progress-track: #3a3f48;

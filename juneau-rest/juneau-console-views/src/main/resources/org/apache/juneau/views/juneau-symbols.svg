@@ -79,6 +79,18 @@
 <symbol id="juneau-sym-forceStop" viewBox="0 0 24 24" fill="none">
 	<path fill="currentColor" d="M9 4.5H15L19.5 9V15L15 19.5H9L4.5 15V9Z"/>
 </symbol>
+<symbol id="juneau-sym-chevron_left_thin" viewBox="0 0 24 24" fill="none">
+<path d="M14.5 6L8.5 12l6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="juneau-sym-chevron_right_thin" viewBox="0 0 24 24" fill="none">
+<path d="M9.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="juneau-sym-first_page_thin" viewBox="0 0 24 24" fill="none">
+<path d="M12.5 6l-6 6 6 6M18.5 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
+<symbol id="juneau-sym-last_page_thin" viewBox="0 0 24 24" fill="none">
+<path d="M11.5 6l6 6-6 6M5.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</symbol>
 <symbol id="juneau-sym-grip" viewBox="0 0 24 24" fill="currentColor">
 <rect x="4.5" y="6" width="15" height="1.5"/>
 <rect x="4.5" y="11.25" width="15" height="1.5"/>

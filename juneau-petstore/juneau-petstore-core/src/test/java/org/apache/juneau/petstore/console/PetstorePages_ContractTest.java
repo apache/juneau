@@ -47,8 +47,8 @@ public class PetstorePages_ContractTest extends TestBase {
 
 	static final List<Page> PAGES = List.of(
 		new Page("P1", "/console/store", p -> p.hasActiveNav("store")
-			.hasCardOrder("welcome", "revenue", "store-sw")
-			.hasCard("welcome", "html").hasCard("revenue", "kpi").hasCard("store-sw", "switcher")
+			.hasCardOrder("welcome", "store-sw")
+			.hasCard("welcome", "html").hasCard("store-sw", "switcher")
 			.hasNestedCard("store-sw", "stats", "datatables").hasCardKey("stats", "/table/quickStats/id", "store")
 			.hasCardKey("stats", "/table/quickStats/items/3/type", "segmented").hasCardKey("stats", "/table/quickStats/items/4/type", "meter")
 			.hasNestedCard("store-sw", "revenue-chart", "chart").hasNestedCard("store-sw", "revenue-data", "datatables")

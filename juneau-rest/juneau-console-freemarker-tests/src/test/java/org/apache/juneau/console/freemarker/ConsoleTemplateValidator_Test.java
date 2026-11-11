@@ -143,6 +143,12 @@ class ConsoleTemplateValidator_Test extends TestBase {
 		assertClean("<@console schemeToggle=true><@main/></@console>");
 	}
 
+	@Test void c04b_strictBoolean_consoleThemeSelector() {
+		assertOne("<@console themeSelector=\"yes\"><@main/></@console>", 1, 1, "strict-boolean",
+			"<@console> themeSelector= must be true or false; got 'yes'.");
+		assertClean("<@console themeSelector=true><@main/></@console>");
+	}
+
 	@Test void c05_consoleScheme_isKnown() {
 		assertClean("<@console scheme=\"dark\" schemeToggle=\"false\"><@main/></@console>");
 		assertClean("<@console><@theme name=\"open\"><@token name=\"--jc-link\" value=\"#6cb4ff\" scheme=\"dark\"/></@theme><@main/></@console>");

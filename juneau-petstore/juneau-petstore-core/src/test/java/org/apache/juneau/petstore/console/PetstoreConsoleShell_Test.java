@@ -81,6 +81,7 @@ class PetstoreConsoleShell_Test extends TestBase {
 		assertContains("rel=\"icon\"", html);
 		assertContains("juneau-symbol/paw_print.svg", html);
 		assertContains("paw_print", html);
+		assertContains("\"logo\":{\"symbol\":\"paw_print\"", html);
 	}
 
 	@Test void a09_petPageFaviconResolves() throws Exception {

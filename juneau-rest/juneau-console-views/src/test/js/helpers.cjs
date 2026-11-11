@@ -54,6 +54,7 @@ function throws(fn) { try { fn(); return null; } catch (error) { return error.me
 	out.fieldGrid_fieldCount = fields1.length;
 	out.fieldGrid_titles = fields1.map(f => textOf(f.querySelector('.juneau-view-detail-field-title')));
 	out.fieldGrid_values = fields1.map(f => textOf(f.querySelector('[data-juneau-field]')));
+	out.fieldGrid_inlineLayout = (' ' + grid1.className + ' ').includes(' juneau-view-detail-fields-inline ');
 
 	// (ii) a catalog entry whose data key is ABSENT from values renders EMPTY, never "undefined"
 	const grid2 = H.fieldGrid([{ data: 'missing', label: 'Missing' }], { values: { other: 'x' } });

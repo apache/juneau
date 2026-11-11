@@ -64,7 +64,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 
 	private static final Logger LOG = Logger.getLogger(ConsoleDirectiveModel.class.getName());
 
-	static final Set<String> ATTRS = Set.of("theme", "icon", "favicon", "brand", "title", "chrome", "facts", "scheme", "schemeToggle");
+	static final Set<String> ATTRS = Set.of("theme", "icon", "favicon", "brand", "title", "chrome", "facts", "scheme", "schemeToggle", "themeSelector");
 
 	private final boolean devMode;
 	private final CardTypeRegistry cardTypes;
@@ -112,6 +112,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		var capScheme = nn(cap.scheme()) ? cap.scheme() : ConsoleChromeMixin.SCHEMES.get(0);
 		var scheme = schemeAttr.isEmpty() ? capScheme : schemeAttr;
 		var schemeToggle = FtlAttrLists.strictBoolean(p, NAME, "schemeToggle", cap.schemeToggle());
+		var themeSelector = FtlAttrLists.strictBoolean(p, NAME, "themeSelector", cap.themeSelector());
 
 		var icon = FtlAttrLists.scalar(p, "icon");
 		var favicon = FtlAttrLists.scalar(p, "favicon");
@@ -209,6 +210,8 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		var out = env.getOut();
 		var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
 		var htmlAttrs = ConsoleChromeMixin.schemeHtmlAttributes(scheme, schemeToggle);
+		if (themeSelector)
+			htmlAttrs += (htmlAttrs.isEmpty() ? "" : " ") + ConsoleChromeMixin.themeSelectorHtmlAttributes();
 		out.write("<!DOCTYPE html>\n<html lang=\"en\"" + (htmlAttrs.isEmpty() ? "" : " " + htmlAttrs) + ">\n<head>\n");
 		// The pre-paint scheme script runs before any stylesheet so the first paint already has the right scheme.
 		out.write(ConsoleChromeMixin.schemeScriptElement(nonce) + "\n");
@@ -224,7 +227,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write("<link rel=\"icon\" href=\"" + attrEscape(faviconHref) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.chromeCssUrl(req)) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.themeAssetUrl(req, "dark")) + "\">\n");
-		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\">\n");
+		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\"" + (themeSelector ? " data-jc-theme-link" : "") + ">\n");
 		if (nn(cap.themeOverrideBlock))
 			out.write("<style" + ConsoleChromeMixin.nonceAttr(nonce) + ">" + cap.themeOverrideBlock + "</style>\n");
 		// App CSS that must lose to page-local css=: emitted BEFORE the page css so a page rule still wins.

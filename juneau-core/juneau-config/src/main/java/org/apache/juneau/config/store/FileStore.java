@@ -51,6 +51,8 @@ import org.apache.juneau.commons.collections.*;
 })
 public class FileStore extends ConfigStore {
 
+	private static final String MSG_PATH_ESCAPE = "Name escapes configured root directory.";
+
 	/**
 	 * Builder class.
 	 */
@@ -413,7 +415,11 @@ public class FileStore extends ConfigStore {
 
 	@Override /* Overridden from ConfigStore */
 	public synchronized boolean exists(String name) {
-		return Files.exists(resolveFile(name));
+		try {
+			return Files.exists(resolveFile(name));
+		} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+			return false; // Relative names that escape the store directory are treated as not found.
+		}
 	}
 
 	@Override /* Overridden from ConfigStore */
@@ -536,6 +542,30 @@ public class FileStore extends ConfigStore {
 		return Files.isWritable(p);
 	}
 
+	/*
+	 * Rejects relative names that resolve (lexically) outside the configured directory, e.g. "../x".
+	 * Absolute names are trusted configuration (e.g. @Rest(config="/abs/path.cfg")) and are allowed.
+	 * Done before any file-system probe so escaping names are never even tested for existence.
+	 */
+	private void checkContained(String name) {
+		try {
+			if (Path.of(name).isAbsolute())
+				return;
+			var root = dir.toPath().toAbsolutePath().normalize();
+			var target = root.resolve(name).normalize();
+			if (! target.startsWith(root))
+				throw new IllegalArgumentException(MSG_PATH_ESCAPE);
+			// Symlinks: if the target (or its nearest existing ancestor) resolves outside the real root, reject.
+			var existing = target;
+			while (existing != null && ! Files.exists(existing))
+				existing = existing.getParent();
+			if (existing != null && Files.exists(root) && ! existing.toRealPath().startsWith(root.toRealPath()))
+				throw new IllegalArgumentException(MSG_PATH_ESCAPE);
+		} catch (@SuppressWarnings("unused") InvalidPathException | IOException e) {
+			throw new IllegalArgumentException(MSG_PATH_ESCAPE);
+		}
+	}
+
 	private Path resolveFile(String name) {
 		return dir.toPath().resolve(resolveName(name));
 	}
@@ -568,6 +598,7 @@ public class FileStore extends ConfigStore {
 
 	@Override
 	protected String resolveName(String name) {
+		checkContained(name);
 		if (! nameCache.containsKey(name)) {
 			String n = null;
 

@@ -57,7 +57,7 @@ public final class RowDetails {
 	 * @return A new detail.
 	 */
 	public static RowDetail pet(Function<String,Pet> lookup) {
-		return RowDetail.fromBean(Pet.class, lookup).basePath("/console/pets").title("{name}")
+		return RowDetail.fromBean(Pet.class, lookup).basePath("/console/pets").title("{name}").columns(3)
 			.section("Details", "id", "name", "species", "status", "price", "tags")
 			.label("price", "Price (USD)")
 			.tab(DetailTab.table("Orders", ordersView("pets-orders", "/console/pets/orders/rows")).id("orders").scopeParam("petId").countFromRows())
@@ -76,7 +76,7 @@ public final class RowDetails {
 	 * @return A new detail.
 	 */
 	public static RowDetail soldPet(Function<String,Pet> lookup) {
-		return RowDetail.fromBean(Pet.class, lookup).key("soldPet").basePath("/console/pets").title("{name}")
+		return RowDetail.fromBean(Pet.class, lookup).key("soldPet").basePath("/console/pets").title("{name}").columns(3)
 			.section("Details", "id", "name", "species", "price")
 			.label("price", "Price (USD)")
 			.tab(DetailTab.table("Orders", ordersView("sold-orders", "/console/pets/orders/rows")).id("orders").scopeParam("petId").countFromRows());
@@ -94,7 +94,7 @@ public final class RowDetails {
 	 * @return A new detail.
 	 */
 	public static RowDetail order(Function<String,Order> lookup) {
-		return RowDetail.fromBean(Order.class, lookup).basePath("/console/orders").title("Order {id}")
+		return RowDetail.fromBean(Order.class, lookup).basePath("/console/orders").title("Order {id}").columns(2)
 			.section("Details", "id", "petId", "shipDate", "status")
 			.label("petId", "Pet")
 			.tab(DetailTab.table("Pet", TableSpec.create("order-pet").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/orders/pet/rows")
@@ -120,7 +120,7 @@ public final class RowDetails {
 	 * @return A new detail.
 	 */
 	public static RowDetail user(Function<String,UserView> lookup) {
-		return RowDetail.fromBean(UserView.class, lookup).key("user").basePath("/console/users").title("{username}")
+		return RowDetail.fromBean(UserView.class, lookup).key("user").basePath("/console/users").title("{username}").columns(2)
 			.section("Details", "username", "firstName", "lastName", "userStatus")
 			.label("userStatus", "Status")
 			.tab(DetailTab.table("Orders", ordersView("user-orders", "/console/users/orders/rows")).id("orders").scopeParam("username").countFromRows());

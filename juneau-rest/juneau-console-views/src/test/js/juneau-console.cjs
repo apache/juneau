@@ -527,13 +527,24 @@ out.errors = {};
 (function logoSymbol() {
 	const before = (sandbox, env) => { env.document.createElementNS = (ns, tag) => env.document.createElement(tag); };
 	const tpl = [];
-	const mount = logo => {
-		const r = run(C({ header: { title: 'Pets', logo: logo } }), tpl, { before: before });
+	const addIcons = (src, sb, env) => {
+		before(sb, env);
+		if (src == null) return;
+		const s = env.document.createElement('script');
+		s.setAttribute('src', src);
+		env.document.body.appendChild(s);
+	};
+	const mount = (logo, src) => {
+		const warns = [];
+		const r = run(C({ header: { title: 'Pets', logo: logo } }), tpl, { before: (sb, env) => {
+			addIcons(src, sb, env);
+			sb.console = Object.assign({}, sb.console, { warn: (...a) => warns.push(a.join(' ')) });
+		} });
 		const mark = r.doc.querySelector('.jc-logo-symbol');
 		const use = r.doc.querySelector('use');
 		return { threw: r.threw, banner: bannerText(r.doc), mark: !!mark, role: mark?.getAttribute('role') ?? null,
 			label: mark?.getAttribute('aria-label') ?? null, svg: !!r.doc.querySelector('svg'), href: use?.getAttribute('href') ?? null,
-			bg: (r.doc.querySelector('.jc-logo')?.getAttribute('style') || '').includes('background-image') };
+			bg: (r.doc.querySelector('.jc-logo')?.getAttribute('style') || '').includes('background-image'), warns: warns };
 	};
 	const withIcons = (logo, src) => {
 		const r = run(C({ header: { title: 'Pets', logo: logo } }), tpl, { before: (sb, env) => {
@@ -545,8 +556,9 @@ out.errors = {};
 		return r.doc.querySelector('use')?.getAttribute('href') ?? null;
 	};
 	out.logoSymbol = {
-		ok: mount({ symbol: 'paw_print', alt: 'Pets' }),
-		bad: mount({ symbol: 'Bad Name' }),
+		ok: mount({ symbol: 'paw_print', alt: 'Pets' }, 'juneau-icons.js'),
+		bad: mount({ symbol: 'Bad Name' }, 'juneau-icons.js'),
+		noIcons: mount({ symbol: 'paw_print', alt: 'Pets' }, null),
 		src: mount({ src: '/app/logo.svg' }),
 		sibling: withIcons({ symbol: 'paw_print' }, '/ctx/juneau-icons.js?v=1')
 	};

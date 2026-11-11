@@ -81,6 +81,17 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		assertFalse(defaults.contains("dialog: \"settings\""), defaults);
 	}
 
+	/** The Columns item paints the settings gear; only the glyph changes, the item id stays "columns". */
+	@Test void a09_columnSettingsUsesTheSettingsGlyph() throws Exception {
+		var ribbon = cWithMixin.get(ViewsMixin.RIBBON_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(ribbon.contains("columnSettings: \"settings\""), ribbon);
+		assertFalse(ribbon.contains("columnSettings: \"tune\""), ribbon);
+		var icons = cWithMixin.get(ViewsMixin.ICONS_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(icons.contains("reg(\"columns\", \"settings\")"), icons);
+		var config = cWithMixin.get(ViewsMixin.CONFIG_JS_PATH).run().assertStatus(200).getContent().asString();
+		assertTrue(config.contains("resolveIcon(iconName || \"settings\")"), config);
+	}
+
 	@ParameterizedTest
 	@MethodSource("a02_functionBodyContainsProvider")
 	void a02_functionBodyContainsExpectedSubstring(String functionSignature, String expectedSubstring) throws Exception {

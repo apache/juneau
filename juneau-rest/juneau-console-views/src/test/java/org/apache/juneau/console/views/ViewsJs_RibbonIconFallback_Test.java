@@ -137,6 +137,6 @@ class ViewsJs_RibbonIconFallback_Test extends TestBase {
 		var icons = (Map<?,?>)report().get("icons");
 		assertBean(icons,
 			"hint_pending,hint_case,explicit_wins,cycle_distinct,cycle_wraps,default_key_unchanged,defaults_new,no_tune_for_options",
-			"hourglass,tag,truck,true,true,content_copy,search|link|tune,true");
+			"hourglass,tag,truck,true,true,content_copy,search|link|settings,true");
 	}
 }

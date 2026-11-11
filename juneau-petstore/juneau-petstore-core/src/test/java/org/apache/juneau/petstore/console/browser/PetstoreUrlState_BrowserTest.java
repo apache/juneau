@@ -143,7 +143,7 @@ class PetstoreUrlState_BrowserTest extends TestBase {
 					Map.of("waitFor", "!!window.__rejected")),
 				"queries", Map.of("rejected", "window.__rejected", "search", "location.search", "grew", "history.length - window.__length", "species", SPECIES)),
 			Map.of("name", "store", "path", "/console/store",
-				"actions", List.of(Map.of("waitFor", "!!document.querySelector('#revenue-body .petstore-kpi-value')")),
+				"actions", List.of(Map.of("waitFor", "!!document.querySelector('#store-sw')")),
 				"queries", Map.of("registered", "window.JuneauViews.urlState.hasDirective('species')")),
 			Map.of("name", "ids-link", "waitUntil", "load", "path", "/console/pets?state=ids(" + petA + "," + petB + ")", "capture", PETS_QUERY,
 				"actions", List.of(petsShowing(pets(petA, petB))),

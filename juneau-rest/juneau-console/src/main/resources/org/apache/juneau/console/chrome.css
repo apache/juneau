@@ -754,6 +754,18 @@ body:not(:has(> .jc-header, > .jc-chrome)) .juneau-page-nav { top: 0; }
   border: 0;
   color: var(--jc-pill-neutral-text);
 }
+/* The views sheet restores a side border and a squarer radius on :first-child / :last-child / :only-child, and the
+   ribbon hover paints a bordered wash; all at (0,3,0).  This block is one class stronger so the slider's buttons stay
+   borderless ovals in every position and state, whichever sheet loads last. */
+.juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-group .juneau-view-ribbon-btn,
+.juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-group .juneau-view-ribbon-btn:first-child,
+.juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-group .juneau-view-ribbon-btn:last-child,
+.juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-group .juneau-view-ribbon-btn:only-child,
+.juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-group .juneau-view-ribbon-btn:hover:not(:disabled),
+.juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-group .juneau-view-ribbon-btn:focus-visible {
+  border-width: 0;
+  border-radius: 999px;
+}
 .juneau-switcher-selector[data-juneau-switcher-style="slider"] .juneau-view-ribbon-btn[aria-selected="true"] {
   color: var(--jc-link);
   font-weight: 600;
@@ -765,7 +777,7 @@ body:not(:has(> .jc-header, > .jc-chrome)) .juneau-page-nav { top: 0; }
   left: 0;
   background-color: var(--jc-card-bg);
   border-radius: 999px;
-  box-shadow: var(--jc-card-shadow);
+  box-shadow: var(--jc-switcher-thumb-shadow, var(--jc-card-shadow));
   transition: transform 0.2s ease, width 0.2s ease;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1264,31 +1276,34 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-ribbon-btn[aria-pressed="true"] { background-color: var(--jc-accent-wash); color: var(--jc-link); border-color: var(--jc-accent); }
 
 /* Shared strip widget - TAB-MODE (the global folder-tab look).  -views ships the neutral SHAPE (separate rounded tabs,
-   floor line, only the selected tab overlapping it); this themes it.  Unselected tabs take the neutral grey fill with
-   a --jc-border edge; the ONE selected tab is filled with the card background, carries a 3px accent bar across its top
-   and joins the grey-bordered pane below it.  Detail tabs, dialog sections and View Settings tabs all match these
-   selectors, so they take the same look.  Each var(--jc-*) is the entire value of a color/background-color/
-   border-color property (sink-property discipline - see file header). */
+   floor line, only the selected tab overlapping it); this themes it.  Unselected tabs are card-white with a light
+   --jc-border edge; the ONE selected tab carries a 3px accent bar across its top (every tab reserves that bar as a
+   transparent top edge, so labels share a baseline), an accent edge, bold ink and the --jc-tab-selected-bg wash
+   (default: the accent wash), and joins the accent-bordered, card-filled pane below it.  Detail tabs, dialog sections and
+   View Settings tabs all match these selectors, so they take the same look.  Each var(--jc-*) is the entire value of a color/background-color/border-color property
+   (sink-property discipline - see file header). */
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] { border-bottom-color: var(--jc-border); }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
-	background-color: var(--jc-pill-neutral-bg);
+	background-color: var(--jc-card-bg);
 	color: var(--jc-pill-neutral-text);
 	border-color: var(--jc-border);
+	border-top-color: transparent;
 	border-radius: var(--jc-radius) var(--jc-radius) 0 0;
 }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:hover:not(:disabled):not([aria-selected="true"]) {
 	background-color: var(--jc-accent-wash);
 	color: var(--jc-link);
 	border-color: var(--jc-border);
+	border-top-color: transparent;
 }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn[aria-selected="true"] {
-	background-color: var(--jc-card-bg);
+	background-color: var(--jc-tab-selected-bg, var(--jc-accent-wash));
 	color: var(--jc-link);
-	border-color: var(--jc-border);
-	box-shadow: inset 0 3px 0 0 var(--jc-accent);
+	border-color: var(--jc-accent);
+	border-bottom-color: transparent;
 }
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:focus-visible { outline: 2px solid var(--jc-focus); }
-.juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-helper-tabstrip-panes { border-color: var(--jc-border); }
+.juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-helper-tabstrip-panes { border-color: var(--jc-accent); background-color: var(--jc-card-bg); }
 
 /* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
    track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
@@ -1377,7 +1392,7 @@ table.dataTable.display > tbody > tr:hover {
 .juneau-view-pagingpill > *:last-child:hover:not(:disabled) { border-right-color: var(--jc-accent); }
 .juneau-view-pagingpill-menuwrap { border-color: var(--jc-control-border); }
 .juneau-view-pagingpill-menuwrap:hover { border-top-color: var(--jc-accent); border-bottom-color: var(--jc-accent); }
-.juneau-view-pagingpill-menubtn { color: var(--jc-text-soft); }
+.juneau-view-pagingpill-menubtn { color: var(--jc-text-muted); }
 .juneau-view-pagingpill-menubtn:hover { background-color: var(--jc-accent-wash); color: var(--jc-link); }
 .juneau-view-pagingpill-menubtn[aria-expanded="true"] { background-color: var(--jc-accent); color: var(--jc-on-accent); }
 .juneau-view-pagingpill-menu { border-color: var(--jc-control-border); background-color: var(--jc-control-bg); }
@@ -1425,8 +1440,9 @@ table.dataTable thead > tr > td.dt-ordering-desc .juneau-sort-desc {
   border-color: var(--jc-control-border);
   background-color: var(--jc-control-bg);
   color: var(--jc-text);
-  box-shadow: var(--jc-card-shadow);
+  box-shadow: var(--jc-popover-shadow, var(--jc-card-shadow));
 }
+.juneau-view-col-search-popover-title { color: var(--jc-accent); }
 .juneau-view-col-search-popover-type { color: var(--jc-text-muted); }
 .juneau-view-col-search-popover-examples code {
   background-color: var(--jc-pill-neutral-bg);
@@ -1708,6 +1724,27 @@ body::after {
 }
 .juneau-view-toggle::after {
   background-color: var(--jc-white);
+}
+
+/* Header theme selector (juneau-console.js): a labelled select of the stock palettes. */
+.jc-theme-select {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--jc-space-1);
+  font-size: 0.75rem;
+  color: var(--jc-text);
+}
+.jc-theme-select select {
+  padding: var(--jc-space-1) var(--jc-space-2);
+  border: 1px solid var(--jc-control-border);
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-control-bg);
+  color: var(--jc-text);
+  font: inherit;
+}
+.jc-theme-select select:focus-visible {
+  outline: 2px solid var(--jc-focus);
+  outline-offset: 1px;
 }
 
 /* Header color-scheme control (juneau-console.js): a three-way radio group. */

@@ -259,8 +259,8 @@ const PROBE = async function () {
 			actions: [bulkAction(), bulkAction({ id: 'retry', label: 'Retry' })] }, dom.table, {}, selectionState);
 		const row = document.createElement('div');
 		row.innerHTML = '<div class="juneau-view-toolbar-left"></div><div class="juneau-view-toolbar-right"></div>';
-		init.wireToolbarRightClusterBulk(row, { bulkToolbar: one });
 		document.body.appendChild(row);
+		init.wireToolbarRightClusterBulk(row, { bulkToolbar: one });
 		document.body.appendChild(many.el);
 
 		out.toolbar = { hiddenInitially: one.el.hidden };
@@ -271,7 +271,7 @@ const PROBE = async function () {
 		out.singleActionIsButton = !!one.el.querySelector('button.juneau-view-bulk-action-btn');
 		out.singleActionHasDropdown = !!one.el.querySelector('select');
 		out.singleActionButtonTextWithTwoSelected = one.el.querySelector('.juneau-view-bulk-action-btn').textContent;
-		out.toolbarIsInRightCluster = !!one.el.closest('.juneau-view-toolbar-right') && !one.el.closest('.juneau-view-toolbar-left');
+		out.toolbarIsAboveToolbarRow = one.el.nextElementSibling === row && !one.el.closest('.juneau-view-toolbar-row');
 
 		out.multiActionHasDropdown = !!many.el.querySelector('select.juneau-view-bulk-select');
 		const go = many.el.querySelector('.juneau-view-bulk-go');

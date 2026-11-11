@@ -133,6 +133,7 @@ public final class TableSpec implements Handled<TableSpec> {
 	private boolean primary;
 	private Object columnConfig;
 	private Boolean copyLink;
+	private Boolean savedViewsInRibbon;
 	private Boolean cleanAddress;
 	private Boolean pausePollingWhileEditing;
 	private String cssClass;
@@ -679,6 +680,17 @@ public final class TableSpec implements Handled<TableSpec> {
 	}
 
 	/**
+	 * Sets whether the ribbon shows a saved-views drop-down (when the table has two or more views); on by default.
+	 *
+	 * @param v The new value.
+	 * @return This object.
+	 */
+	public TableSpec savedViewsInRibbon(boolean v) {
+		savedViewsInRibbon = v;
+		return this;
+	}
+
+	/**
 	 * Sets whether the browser address bar is cleaned of the table's view-state parameters.
 	 *
 	 * @param v The new value.
@@ -821,6 +833,8 @@ public final class TableSpec implements Handled<TableSpec> {
 			t.put("columnConfig", columnConfig);
 		if (copyLink != null)
 			t.put("copyLink", copyLink);
+		if (savedViewsInRibbon != null && ! savedViewsInRibbon)
+			t.put("savedViewsInRibbon", false);
 		if (cleanAddress != null)
 			t.put("cleanAddress", cleanAddress);
 		if (pausePollingWhileEditing != null)

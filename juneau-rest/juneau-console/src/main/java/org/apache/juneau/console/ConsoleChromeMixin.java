@@ -169,6 +169,11 @@ public class ConsoleChromeMixin {
 	 * source, ending at {@code light}.
 	 *
 	 * <p>
+	 * When the root carries {@code data-jc-theme-selector}, a stored theme pick that is in the root's
+	 * {@code data-jc-themes} allow-list also re-points the palette link ({@code data-jc-theme-link}) as soon as the
+	 * parser inserts it.
+	 *
+	 * <p>
 	 * The text is a byte-for-byte constant so {@link #SCHEME_SCRIPT_CSP_HASH} is stable. Emit it as the first child
 	 * of {@code <head>}, ahead of every stylesheet.
 	 */
@@ -177,7 +182,12 @@ public class ConsoleChromeMixin {
 		"if(e.hasAttribute(\"data-jc-scheme-toggle\")){try{s=localStorage.getItem(k)}catch(x){}}",
 		"if(s!==\"light\"&&s!==\"dark\"){s=e.getAttribute(\"data-jc-scheme-pin\");}",
 		"if(s!==\"light\"&&s!==\"dark\"){try{s=matchMedia(\"(prefers-color-scheme: dark)\").matches?\"dark\":\"light\"}catch(x){s=\"light\"}}",
-		"e.setAttribute(\"data-jc-scheme\",s);})(document);");
+		"e.setAttribute(\"data-jc-scheme\",s);",
+		"if(e.hasAttribute(\"data-jc-theme-selector\")){try{var t=localStorage.getItem(\"juneau-console:theme\"),a=(e.getAttribute(\"data-jc-themes\")||\"\").split(\" \");",
+		"if(t&&a.indexOf(t)>=0){var o=new MutationObserver(function(){var l=d.querySelector(\"link[data-jc-theme-link]\");",
+		"if(l){o.disconnect();var h=l.getAttribute(\"href\");l.setAttribute(\"data-jc-theme-default\",h);l.setAttribute(\"href\",h.replace(/juneau-theme-[a-z-]+\\.css/,\"juneau-theme-\"+t+\".css\"))}});",
+		"o.observe(e,{childList:true,subtree:true});d.addEventListener(\"DOMContentLoaded\",function(){o.disconnect()})}}catch(x){}}",
+		"})(document);");
 
 	/**
 	 * The CSP source expression for {@link #SCHEME_SCRIPT}: {@code 'sha256-<base64>'} over its UTF-8 bytes.
@@ -841,6 +851,19 @@ public class ConsoleChromeMixin {
 		if (toggle)
 			sb.append(sb.isEmpty() ? "" : " ").append("data-jc-scheme-toggle");
 		return sb.toString();
+	}
+
+	/**
+	 * Returns the {@code <html>} start-tag attributes that switch on the theme selector.
+	 *
+	 * <p>
+	 * {@code data-jc-theme-selector} turns the header control and the stored-pick lookup on; {@code data-jc-themes}
+	 * is the space-separated allow-list of {@link #BUILTIN_THEME_NAMES} a stored pick is validated against.
+	 *
+	 * @return The attributes, space-separated with no leading space.
+	 */
+	public static String themeSelectorHtmlAttributes() {
+		return "data-jc-theme-selector data-jc-themes=\"" + String.join(" ", BUILTIN_THEME_NAMES) + "\"";
 	}
 
 	/**

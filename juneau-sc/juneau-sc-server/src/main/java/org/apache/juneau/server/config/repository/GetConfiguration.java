@@ -38,6 +38,9 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	private static final String PROJECT = "PROJECT";
 	private static final String EXT = ".cfg";
 
+	// Serializes pull/checkout/pull on the single shared checkout so concurrent requests cannot interleave branches.
+	private static final Object GIT_LOCK = new Object();
+
 	private final Map<String,ConfigItem> configs = new HashMap<>();
 
 	@SuppressWarnings({
@@ -53,6 +56,9 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	 * @param branch Branch name.
 	 */
 	public GetConfiguration(String project, String branch) {
+		// Path variables are URL-decoded after the path is split, so an encoded '%2F' or '..' can survive (CWE-22).
+		validate("project", project, false);
+		validate("branch", branch, true);
 		this.branch = branch;
 		this.project = project;
 	}
@@ -76,21 +82,29 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		// Serves as the confinement root for the project/application config file lookups below.
 		var root = new File(pathStr);
 
-		try (var gitControl = new GitControl(pathStr, git)) {
-
-			if (root.isDirectory()) {
-				gitControl.pullFromRepo();
-			} else {
-				gitControl.cloneRepo();
-			}
-
-			gitControl.branch(branch);
-			gitControl.pullFromRepo();
-		}
-
 		var fileDefaultStr = lcr(APPLICATION).concat(EXT);
 		var fileProjectStr = this.project.concat(EXT);
 
+		// The checkout is shared, so the git operations AND the file reads must happen under one lock
+		// (otherwise another request could switch branches between checkout and read).
+		synchronized (GIT_LOCK) {
+			try (var gitControl = new GitControl(pathStr, git)) {
+
+				if (root.isDirectory()) {
+					gitControl.pullFromRepo();
+				} else {
+					gitControl.cloneRepo();
+				}
+
+				gitControl.branch(branch);
+				gitControl.pullFromRepo();
+			}
+
+			readFiles(root, fileDefaultStr, fileProjectStr);
+		}
+	}
+
+	private void readFiles(File root, String fileDefaultStr, String fileProjectStr) throws IOException {
 		// Resolve the config file names under the checkout root through the shared boundary check
 		// so a crafted project name cannot escape the repo directory (empty = file absent).
 		var fileDefault = resolveSafely(root, fileDefaultStr).orElse(null);
@@ -110,5 +124,12 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	@Override
 	public Map<String,ConfigItem> get() {
 		return Map.copyOf(configs);
+	}
+
+	// Project becomes a file name, so no separators at all.  Branch is only passed to git as a ref name, so
+	// legitimate names such as "feature/foo" are allowed, but '..', backslash and NUL are not.
+	private static void validate(String name, String value, boolean allowSlash) {
+		if (value == null || value.isEmpty() || value.contains("\\") || value.contains("..") || value.indexOf('\0') >= 0 || (! allowSlash && value.contains("/")))
+			throw new IllegalArgumentException("Invalid " + name + " value.");
 	}
 }

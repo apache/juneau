@@ -310,6 +310,16 @@ class ConsoleJs_Shell_Test extends TestBase {
 		assertEquals("/ctx/juneau-symbols-lucide.svg#juneau-sym-paw_print", map(r().get("logoSymbol")).get("sibling"));
 	}
 
+	@Test void logoSymbolWithoutIconsScriptDrawsNothingAndWarns() {
+		var none = map(map(r().get("logoSymbol")).get("noIcons"));
+		assertEquals(Boolean.FALSE, none.get("mark"));
+		assertEquals(Boolean.FALSE, none.get("svg"));
+		assertNull(none.get("href"));
+		var warns = (List<?>)none.get("warns");
+		assertEquals(1, warns.size(), () -> String.valueOf(none));
+		assertTrue(String.valueOf(warns.get(0)).contains("juneau-icons.js"), () -> String.valueOf(warns));
+	}
+
 	@Test void logoSymbolBadNameFailsLoud() {
 		var bad = map(map(r().get("logoSymbol")).get("bad"));
 		assertEquals(Boolean.FALSE, bad.get("mark"));

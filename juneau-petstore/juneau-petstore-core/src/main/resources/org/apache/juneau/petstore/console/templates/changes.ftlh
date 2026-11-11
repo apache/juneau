@@ -23,11 +23,11 @@
   defaultOrder: [ { key: 'id', dir: 'desc' } ],
   detail: {"mode":"inline","title":"Change {id}","labels":{"id":"Change","summary":"Change summary","author":"Author","state":"State","message":"Message"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","summary","author","state","message"]}]},
   columns: [
-    { key: 'id', label: 'Change' },
-    { key: 'summary', label: 'Change summary' },
-    { key: 'author', label: 'Author' },
-    { key: 'state', label: 'State', render: { id: 'pill', meta: { tones: { PENDING: 'warning', APPLIED: 'success', FAILED: 'error' } } } },
-    { key: 'message', label: 'Message', defaultVisible: false }
+    { key: 'id', label: 'Change', searchType: 'numeric' },
+    { key: 'summary', label: 'Change summary', searchType: 'text' },
+    { key: 'author', label: 'Author', searchType: 'text' },
+    { key: 'state', label: 'State', render: { id: 'pill', meta: { tones: { PENDING: 'warning', APPLIED: 'success', FAILED: 'error' } } }, searchType: 'enum' },
+    { key: 'message', label: 'Message', searchType: 'text', defaultVisible: false }
   ],
   ribbon: [
     { type: 'search', id: 'search', group: 'search' },

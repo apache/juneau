@@ -445,7 +445,7 @@
 	reg("tune", "tune");
 	reg("settings", "settings");
 	reg("drag_handle", "grip");
-	reg("columns", "tune");
+	reg("columns", "settings");
 	// The original columns gear stem stays shipped (byte-identical artwork to tune) so a host override keyed on it still
 	// has a target; no chrome uses it by default.
 	reg("columns_gear", "columns");
@@ -484,6 +484,11 @@
 		"shopping_cart", "user_check", "user_x", "store", "chart_line", "chart_column", "trending_up"].forEach(function (n) { reg(n, n); });
 	reg("first_page", "first_page");
 	reg("last_page", "last_page");
+	// Thin single-stroke paging glyphs used by the paging pill.
+	reg("chevron_left_thin", "chevron_left_thin");
+	reg("chevron_right_thin", "chevron_right_thin");
+	reg("first_page_thin", "first_page_thin");
+	reg("last_page_thin", "last_page_thin");
 	reg("more_vert", "more");
 	reg("more", "more");
 	reg("sort", "sort", "juneau-view-col-sort-glyph");

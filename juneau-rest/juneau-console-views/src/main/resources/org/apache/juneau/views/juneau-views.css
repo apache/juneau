@@ -130,10 +130,11 @@
 	--jc-card-radius: 6px;
 	--jc-card-gap: 1rem;
 	--jc-tab-compact-font: 0.8125rem;
-	--jc-tab-compact-pad-y: 3px;
+	--jc-tab-compact-pad-y: 2px;
 	--jc-tab-compact-pad-x: 10px;
 	--jc-card-min: 280px;
 	--jc-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+	--jc-switcher-thumb-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
 	/*
 	 * Summary-view zebra: even rows stay #FFFFFF; the odd/first-body stripe is #f3f3f3 so
 	 * row 1 does not blend into the white header.  DataTables may stamp the first row `even`;
@@ -678,7 +679,7 @@ table.dataTable > thead > tr > td {
 	 * second literal of the same value (this file's own "if a value equals a step, spend the step" rule).
 	 */
 	font-size: var(--jc-chrome-font-size-1);   /* reference header type (12px) - see comment above */
-	padding: 4px 5px;
+	padding: 2px 5px;
 	font-weight: normal;
 	text-align: left;
 	vertical-align: middle;
@@ -687,21 +688,10 @@ table.dataTable > thead > tr > td {
 	border-width: 2px 0 1px 0;
 	border-color: var(--jc-table-head-border-top, #e5e5e5) transparent var(--jc-table-head-border-bottom, #6b6b6b) transparent;
 	/*
-	 * Header row HEIGHT (reference-look follow-up): this rule's own `padding: 4px 5px` above is already
-	 * IDENTICAL to the reference thead-th padding, so the padding was never the gap
-	 * between the two.  The extra height the reference renders comes from its VENDORED DataTables theme's sort-icon
-	 * spacer - `span.dt-column-order`, a fixed 12px-wide by 24px-tall box (datatables/datatables.css) holding
-	 * the stacked up/down-chevron pair inside `div.dt-column-header` - sitting in a `display:flex;
-	 * align-items:center` header row, that 24px content-box sets the header ROW's cross-size regardless of
-	 * the label text's own shorter line-height, so the reference header cell totals 4+4 padding + 24 content
-	 * = 32px.  A host with an older/absent DataTables build has no such spacer to reserve that height, so
-	 * this toolkit reserves the SAME 24px directly on the cell's own text line-box instead - a plain, generic
-	 * `line-height`, not a copy of the reference markup/selectors - so the header renders the same 32px total whether
-	 * or not the host's DataTables build happens to ship that spacer.  24px equals the already-declared,
-	 * previously-unspent --jc-space-5 step, so it spends that token rather than writing a second literal of
-	 * the same value (this file's own "if a value equals a step, spend the step" rule).
+	 * Header row HEIGHT: slim, matching the body cell (2px vertical padding, 1.35 line-height).  A header that
+	 * carries the sort-icon spacer (`span.dt-column-order`, a square box sized below) is as tall as that box.
 	 */
-	line-height: var(--jc-space-5);
+	line-height: 1.35;
 	/*
 	 * Header background: EXPLICIT opaque white (reference-look follow-up), not merely "no color set" the
 	 * way the rest of this NEUTRAL file's shape rules stay silent on colour.  The reference `table.dataTable
@@ -728,7 +718,7 @@ table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
 	font-size: 0.8333rem;         /* reference body type; not tokenized, see comment above */
-	padding: 4px 5px;             /* matches the reference thead th / tbody td padding */
+	padding: 2px 5px;             /* slim rows; the header cell rule above uses the same vertical padding */
 	/*
 	 * Body row HEIGHT (reference-look follow-up): the reference sets no explicit min-height on tbody td.
 	 * Its taller body rows come from Bootstrap reboot's body line-height:1.5 (a 20px line box at 10pt) plus the same
@@ -736,7 +726,7 @@ table.dataTable > tbody > tr > td {
 	 * `normal` (~1.2), so pin 1.5 here — a generic ratio, not a design-system token — so every views table matches
 	 * the reference ~28px text-only row (4+4 padding + 20 content) without depending on a host Bootstrap load.
 	 */
-	line-height: 1.5;
+	line-height: 1.35;
 	vertical-align: middle;
 	border-left: 1px solid var(--jc-table-border, #dee2e6);
 	border-right: 1px solid var(--jc-table-border, #dee2e6);
@@ -757,14 +747,14 @@ table.juneau-view-wrap > tbody > tr > th {
 }
 
 /*
- * Options restore: opt-in "comfortable" row density. "Compact" - this file's existing 4px
- * vertical padding above, matching the reference - stays the class-less baseline; checking "Row density: Comfortable" in the
- * Options tab adds this class to the <table> itself and doubles the vertical padding only.
+ * Options restore: opt-in "comfortable" row density. "Compact" - this file's slim 2px
+ * vertical padding above - stays the class-less baseline; checking "Row density: Comfortable" in the
+ * Options tab adds this class to the <table> itself and triples the vertical padding only.
  */
 table.juneau-view-density-comfortable > tbody > tr > td,
 table.juneau-view-density-comfortable > tbody > tr > th {
-	padding-top: 8px;
-	padding-bottom: 8px;
+	padding-top: 6px;
+	padding-bottom: 6px;
 }
 
 /*
@@ -1083,10 +1073,10 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn {
 	position: relative;
 	margin-bottom: 0;
-	padding: 6px var(--jc-chrome-control-padding-x-wide);
+	padding: 4px var(--jc-chrome-control-padding-x-wide);
 	font-weight: normal;
 	border-style: solid;
-	border-width: 1px 1px 0;
+	border-width: 3px 1px 0;      /* the 3px top edge is reserved on every tab so labels line up; the selected tab colours it */
 	border-radius: 4px 4px 0 0;
 }
 
@@ -1106,6 +1096,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 	border-width: 1px;            /* colour is currentColor until chrome.css themes it */
 	border-style: solid;
 	border-radius: 0 4px 4px 4px;
+	padding: var(--jc-space-3);
 }
 
 .juneau-view-ribbon-group[data-juneau-strip-mode="tab"] .juneau-view-ribbon-btn:focus-visible {
@@ -1700,7 +1691,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 .juneau-view-col-search-popover {
 	min-width: 220px;
 	max-width: min(440px, 92vw);
-	padding: 8px 10px;
+	padding: 10px 12px;
 	border: 1px solid;
 	box-sizing: border-box;
 	text-align: left;
@@ -1713,7 +1704,8 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 .juneau-view-col-search-popover-input {
 	box-sizing: border-box;
 	width: 100%;
-	padding: 3px 6px;
+	height: var(--jc-space-5);
+	padding: 0 6px;
 	font: inherit;
 	font-size: var(--jc-chrome-font-size-2);
 	border: 1px solid;
@@ -1780,8 +1772,30 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	align-items: center;
 	margin-top: 6px;
 }
+/* Compact footer buttons at the input's height; the "?" help mark is a small round icon at the trailing edge. */
+.juneau-view-col-search-popover-footer .jc-btn {
+	box-sizing: border-box;
+	height: var(--jc-space-5);
+	padding: 0 10px;
+	line-height: 1;
+	font-size: var(--jc-chrome-font-size-2);
+}
 .juneau-view-col-search-popover-more {
 	margin-left: auto;
+	box-sizing: border-box;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	border: 1px solid var(--jc-control-border);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--jc-text-muted);
+	font: inherit;
+	font-size: var(--jc-chrome-font-size-1);
+	line-height: 1;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
 }
 .juneau-view-col-search-popover-more-list[hidden] {
 	display: none;
@@ -3010,7 +3024,7 @@ input[type="checkbox"].jc-editable-field-input {
 	cursor: pointer;
 }
 
-/* The bulk-actions toolbar - placed at the far end of the unified toolbar row's RIGHT cluster. */
+/* The bulk-actions toolbar - its own row directly above the table toolbar, so the toolbar never shifts sideways. */
 .juneau-view-bulk-toolbar {
 	display: flex;
 	align-items: center;

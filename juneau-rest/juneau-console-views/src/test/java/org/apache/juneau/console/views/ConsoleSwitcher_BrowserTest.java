@@ -361,10 +361,10 @@ class ConsoleSwitcher_BrowserTest extends TestBase {
 		var look = m(p("main").get("look"));
 		// The shipped selected folder tab is semibold (600); the stylesheet is the source of truth.
 		assertEquals("600", look.get("selWeight"), look::toString);
-		assertEquals("1px", look.get("selBorderTopWidth"), look::toString);
-		assertTrue(String.valueOf(look.get("selShadow")).contains(String.valueOf(look.get("accent"))), look::toString);
+		assertEquals("3px", look.get("selBorderTopWidth"), look::toString);
+		assertEquals(look.get("accent"), look.get("selBorderTop"), look::toString);
 		assertNotEquals(look.get("selBg"), look.get("unsBg"), look::toString);
-		assertEquals(look.get("panes"), look.get("selBorderTop"), look::toString);
+		assertEquals(look.get("accent"), look.get("panes"), look::toString);
 	}
 
 	@Test void slider_thumbMovesWithSelection() {

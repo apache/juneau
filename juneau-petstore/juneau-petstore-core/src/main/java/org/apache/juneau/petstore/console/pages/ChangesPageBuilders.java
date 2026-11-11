@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
+import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.console.freemarker.*;
 import org.apache.juneau.console.views.*;
 import org.apache.juneau.console.views.RowAction.*;
@@ -47,14 +48,15 @@ public final class ChangesPageBuilders {
 			.selectableWhen(RowActionEnabledRule.of("state", Op.EQ, "PENDING", "Only pending changes can be discarded or applied."));
 		return PageSpec.create().tab("pets/changes").toolkit("views", "datatables-buttons")
 			.table(TableSpec.create("changes").rowType("PendingChange").dataMode(DataMode.SERVER).dataUrl("/console/pets/changes/query")
+				.operators(SearchOperatorSet.standard())
 				.defaultOrder("id", Sort.DESC)
 				.detail(RowDetails.change())
 				.columns(
-					Column.create("id").label("Change"),
-					Column.create("summary").label("Change summary"),
-					Column.create("author").label("Author"),
-					Column.create("state").label("State").render(PillRenders.changeState()),
-					Column.create("message").label("Message").defaultVisible(false))
+					Column.create("id").label("Change").searchType(SearchType.NUMERIC),
+					Column.create("summary").label("Change summary").searchType(SearchType.TEXT),
+					Column.create("author").label("Author").searchType(SearchType.TEXT),
+					Column.create("state").label("State").render(PillRenders.changeState()).searchType(SearchType.ENUM),
+					Column.create("message").label("Message").searchType(SearchType.TEXT).defaultVisible(false))
 				.columnConfig(true)
 				.ribbon(Ribbons.standard()
 					.filter(RibbonItem.option("pending-only").title("Pending only").symbol("hourglass").column("state").value("$eq(PENDING)").defaultOn())

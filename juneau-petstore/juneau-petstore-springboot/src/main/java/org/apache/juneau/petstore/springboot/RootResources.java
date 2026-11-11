@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.springboot;
 
+import java.time.*;
+
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.html.*;
@@ -102,7 +104,8 @@ public class RootResources extends BasicSpringRestServletGroup {
 	 */
 	@Bean
 	public PetStore petStore() {
-		return PetstoreSeed.create().populate(new PetStore());
+		var now = Clock.systemUTC();
+		return PetstoreSeed.create().clock(now).populate(new PetStore(now));
 	}
 
 	/**

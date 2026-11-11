@@ -121,7 +121,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function openColumnSearchPopover(");
 		assertTrue(fn.contains("juneau-view-col-search-popover-help"), fn);   // operator help list
-		assertTrue(fn.contains("meta.operators"), fn);                         // help sourced from VIEW_META
+		assertTrue(fn.contains("helpMeta.operators"), fn);                     // help sourced from VIEW_META, or the type fallback
 		assertTrue(fn.contains("evaluateColumnSearchDraft"), fn);              // classify draft (dollar/reject/incomplete)
 		assertTrue(fn.contains("Not a valid search for this column."), fn);    // reject message
 		assertFalse(fn.contains("if (!serverSide) applyValue"), fn);           // no live preview

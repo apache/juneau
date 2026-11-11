@@ -334,6 +334,9 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 			for (var j = i + 1; j < FOUR_GLYPHS.size(); j++) {
 				var a = FOUR_GLYPHS.get(i);
 				var b = FOUR_GLYPHS.get(j);
+				// The columns id deliberately draws the settings gear, so that one pair is identical by design.
+				if (a.equals("columns") && b.equals("settings"))
+					continue;
 				var pair = adjacencyDiff(a, b);
 				assertNotNull(pair, () -> "no adjacencyDiffs entry for " + a + " vs " + b + "; the prober's"
 					+ " adjacencies request list must carry every pairwise combination of " + FOUR_GLYPHS);

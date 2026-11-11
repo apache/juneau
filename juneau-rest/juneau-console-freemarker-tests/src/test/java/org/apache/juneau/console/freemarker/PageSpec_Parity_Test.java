@@ -105,7 +105,8 @@ class PageSpec_Parity_Test extends TestBase {
 		Map.entry("23-custom-card-invalid", Cases::customCardInvalid),
 		Map.entry("24-custom-card-markup", Cases::customCardMarkup),
 		Map.entry("25-quick-stats-segmented-meter", Cases::quickStatsSegmentedMeter),
-		Map.entry("27-quick-stats-builder-edge", Cases::quickStatsBuilderEdge));
+		Map.entry("27-quick-stats-builder-edge", Cases::quickStatsBuilderEdge),
+		Map.entry("28-saved-views-off", Cases::savedViewsOff));
 
 	private static String get(String path) throws Exception {
 		try (var c = MockRestClient.buildLax(Host.class); var rsp = c.get(path).run()) {
@@ -156,6 +157,7 @@ class PageSpec_Parity_Test extends TestBase {
 	@Test void case07_rowActionsEnabledWhen() throws Exception { assertParity("07-row-actions-enabled-when", table("t", "rowActions")); }
 	@Test void case08_searchableColumnOperators() throws Exception { assertParity("08-searchable-column-operators", table("t", "columns")); }
 	@Test void case09_serverDataMode() throws Exception { assertParity("09-server-data-mode", table("t", "dataMode")); }
+	@Test void case28_savedViewsOff() throws Exception { assertParity("28-saved-views-off", table("t", "savedViewsInRibbon")); }
 	@Test void case10_quickStats() throws Exception { assertParity("10-quick-stats", table("t", "quickStats")); }
 	@Test void case11_cardRefMiddle() throws Exception { assertParity("11-card-ref-allftl", "11-card-ref", placed("jc-seg-1", "slo", "jc-seg-2")); }
 	@Test void case12_unplacedAppendOrder() throws Exception { assertParity("12-unplaced-appended-allftl", "12-unplaced-appended", placed("jc-seg-1", "first", "second")); }
@@ -335,6 +337,12 @@ class PageSpec_Parity_Test extends TestBase {
 
 		static View serverDataMode(RestRequest req) {
 			var t = TableSpec.create("t").dataUrl("/rest/t/data").dataMode(TableSpec.DataMode.SERVER)
+				.columns(Column.create("id").label("Id"));
+			return PageSpec.create().toolkit("views").table(t).view(req);
+		}
+
+		static View savedViewsOff(RestRequest req) {
+			var t = TableSpec.create("t").dataUrl("/rest/t/data").savedViewsInRibbon(false)
 				.columns(Column.create("id").label("Id"));
 			return PageSpec.create().toolkit("views").table(t).view(req);
 		}

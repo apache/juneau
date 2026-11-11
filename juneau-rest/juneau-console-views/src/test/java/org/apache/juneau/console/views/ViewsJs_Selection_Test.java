@@ -271,7 +271,7 @@ class ViewsJs_Selection_Test extends TestBase {
 		assertTrue(fn.contains("selected \\u00b7"), fn);
 	}
 
-	@Test void i03_wireRightCluster_placesBulkToolbarAtFarEndOfRightCluster() throws Exception {
+	@Test void i03_wireBulk_placesBulkToolbarInItsOwnRowAboveTheToolbar() throws Exception {
 		var body = viewsJs();
 		assertTrue(body.contains("function wireToolbarRightClusterBulk("));
 		var leftFn = functionBody(body, "function wireToolbarLeftCluster(");

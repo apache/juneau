@@ -82,7 +82,11 @@ vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), { window
 const NS = window.JuneauViews;
 const out = { hasConfig: !!NS?.config };
 if (!out.hasConfig) {
-	process.stdout.write(JSON.stringify(out));
+	// A catalog entry that says nothing about searchability is searchable (same default as the header search).
+out.detailTextDefaultSearchable = C.columnDetailText({ data: 'a', title: 'A' });
+out.detailTextNotSearchable = C.columnDetailText({ data: 'a', title: 'A', searchable: false });
+
+process.stdout.write(JSON.stringify(out));
 	process.exit(0);
 }
 
@@ -355,5 +359,9 @@ if (out.seedExported) {
 		C.seedChooserDraft = origSeed;
 	}
 }
+
+// A catalog entry that says nothing about searchability is searchable (same default as the header search).
+out.detailTextDefaultSearchable = C.columnDetailText({ data: 'a', title: 'A' });
+out.detailTextNotSearchable = C.columnDetailText({ data: 'a', title: 'A', searchable: false });
 
 process.stdout.write(JSON.stringify(out));

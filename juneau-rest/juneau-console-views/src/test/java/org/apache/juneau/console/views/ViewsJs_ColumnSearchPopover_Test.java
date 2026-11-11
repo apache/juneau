@@ -187,11 +187,23 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 		assertBean(r, "revertPreApplied,revertPostApplied", ",");
 	}
 
-	@Test void a07_bareValueHelp_rendersBeforeOperatorHelp_andIsAbsentWithoutSearchMeta() {
+	@Test void a07_bareValueHelp_rendersBeforeOperatorHelp_andFallsBackWithoutSearchMeta() {
 		var r = report();
 		assertEquals("Matches any value containing this text (case-insensitive). Use $eq(...) for an exact, case-sensitive match.",
 			r.get("bareHelpText"), r::toString);
-		assertBean(r, "bareHelpAbsentIsNull", "true");
+		assertBean(r, "bareHelpFallbackShown", "true");
+	}
+
+	@Test void a08_columnWithoutSearchBlockStillShowsHelp() {
+		var r = report();
+		assertEquals("Type: TEXT", ((Map<?,?>)r.get("fallbackText")).get("type"), r::toString);
+		assertEquals(Boolean.TRUE, ((Map<?,?>)r.get("fallbackText")).get("bare"), r::toString);
+		assertEquals(Boolean.TRUE, ((Map<?,?>)r.get("fallbackText")).get("examples"), r::toString);
+		assertEquals("Type: TIMESTAMP", ((Map<?,?>)r.get("fallbackTimestamp")).get("type"), r::toString);
+		assertEquals("Type: NUMERIC", ((Map<?,?>)r.get("fallbackNumeric")).get("type"), r::toString);
+		assertEquals("Type: BOOLEAN", ((Map<?,?>)r.get("fallbackBoolean")).get("type"), r::toString);
+		assertTrue(((List<?>)((Map<?,?>)r.get("fallbackNumeric")).get("ops")).contains("$between"), r::toString);
+		assertTrue(((List<?>)((Map<?,?>)r.get("fallbackText")).get("ops")).contains("$or"), r::toString);
 	}
 
 	@Test void b01_announcerIsPolitelyLiveOutsideWrapperAndReusedOnRepeat() {
@@ -245,7 +257,7 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 	}
 
 	@Test void e03_typeLine() {
-		assertBean(report(), "typeLineText,typeLineAbsent", "Type: TEXT,true");
+		assertBean(report(), "typeLineText,typeLineFallback", "Type: TEXT,true");
 	}
 
 	@Test void e04_instructionsAndExamples() {

@@ -109,6 +109,21 @@ class PetstoreSeed_Test extends TestBase {
 			assertTrue(s.getOrders().stream().anyMatch(o -> o.getStatus() == os), "no order with status " + os);
 	}
 
+	@Test void a08b_laterClockKeepsOrdersWithinNinetyDays() {
+		var clock = Clock.fixed(Instant.parse("2027-03-01T12:00:00Z"), ZoneOffset.UTC);
+		var s = PetstoreSeed.create().clock(clock).populate(new PetStore(clock));
+		var today = LocalDate.ofInstant(clock.instant(), ZoneOffset.UTC);
+		var generated = s.getOrders().stream().filter(o -> o.getId() >= 104).toList();
+		assertSize(1997, generated);
+		for (var o : generated) {
+			var shipped = LocalDate.parse(o.getShipDate());
+			assertFalse(shipped.isAfter(today), "order " + o.getId() + " ships after the clock");
+			assertTrue(shipped.isAfter(today.minusDays(90)), "order " + o.getId() + " ships more than 90 days back");
+		}
+		var delivered = generated.stream().filter(o -> o.getStatus() == OrderStatus.DELIVERED).count();
+		assertTrue(delivered > generated.size() / 4 && delivered < generated.size() * 5 / 12, "delivered share was " + delivered + " of " + generated.size());
+	}
+
 	@Test void a09_populateRequiresClassicStore() {
 		var s = PetstoreSeed.create().populate(new PetStore(PetstoreSeed.DEFAULT_CLOCK));
 		var seed = PetstoreSeed.create();

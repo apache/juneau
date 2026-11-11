@@ -30,7 +30,7 @@ import org.apache.juneau.server.config.repository.*;
  * Fetches configuration files for a given project and branch,
  * combining application defaults with project-specific overrides.
  */
-@Rest(path = "/configs/*")
+@Rest(path = "/configs/*", guards = ConfigApiKeyGuard.class)
 public class LoadConfigResource extends RestServlet {
 
 	private static final long serialVersionUID = 8247663789227304097L;
@@ -47,7 +47,13 @@ public class LoadConfigResource extends RestServlet {
 	public String gets(@Path("project") String project, @Path("branch") String branch) throws Exception {
 		var jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 
-		var config = new GetConfiguration(project, branch);
+		GetConfiguration config;
+		try {
+			config = new GetConfiguration(project, branch);
+		} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+			// Malformed project/branch value (empty, '..', backslash, NUL, or '/' in project).
+			throw new BadRequest("Invalid project or branch.");
+		}
 		try {
 			config.execute();
 		} catch (@SuppressWarnings("unused") IllegalArgumentException e) {

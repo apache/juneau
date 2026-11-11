@@ -173,6 +173,9 @@ public class BasicFileFinder implements FileFinder {
 			List<String> candidateFileNames = getCandidateFileNames(name, locale);
 			for (LocalDir root : roots) {
 				for (var cfn : candidateFileNames) {
+					// Locale-derived candidates are screened too; a hostile locale (e.g. "..", "..") must yield not-found.
+					if (isInvalidPath(cfn))
+						continue;
 					lf = root.resolve(cfn);
 					if (nn(lf))
 						break;

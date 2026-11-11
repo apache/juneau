@@ -243,4 +243,13 @@ class PageSpec_Test extends TestBase {
 		assertNull(none.scheme());
 		assertFalse(none.schemeToggle());
 	}
+
+	@Test void a29_themeSelector_seedsTheCapture() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().themeSelector(true).applyTo(cap, null);
+		assertTrue(cap.themeSelector());
+		var none = new PageCapture();
+		PageSpec.create().applyTo(none, null);
+		assertFalse(none.themeSelector());
+	}
 }

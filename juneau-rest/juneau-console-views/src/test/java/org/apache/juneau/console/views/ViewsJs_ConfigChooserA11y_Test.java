@@ -196,8 +196,8 @@ class ViewsJs_ConfigChooserA11y_Test extends TestBase {
 		assertBean(r, "detailRole,detailLive,detailDefault,detailAvailKey,detailHostileIsText,detailKeyCleared,detailTextHelperNoCol",
 			"status,polite,Click a column to see details.,danger,true,true,Click a column to see details.");
 		assertEquals("Name \u00b7 name \u00b7 sortable \u00b7 searchable \u00b7 shown by default \u2014 The display name.", r.get("detailSelected"));
-		assertEquals("<img src=x onerror=alert(1)> \u00b7 danger \u00b7 not sortable \u00b7 not searchable \u00b7 formats: date/ts-zulu \u00b7 hidden by default \u2014 <b>x</b>", r.get("detailAvail"));
-		assertEquals("Id \u00b7 id \u00b7 sortable \u00b7 not searchable \u00b7 shown by default \u00b7 pinned", r.get("detailPinned"));
+		assertEquals("<img src=x onerror=alert(1)> \u00b7 danger \u00b7 not sortable · searchable \u00b7 formats: date/ts-zulu \u00b7 hidden by default \u2014 <b>x</b>", r.get("detailAvail"));
+		assertEquals("Id \u00b7 id \u00b7 sortable · searchable \u00b7 shown by default \u00b7 pinned", r.get("detailPinned"));
 	}
 
 	@Test void e12b_detailSearchableFlagAndRepaintAfterListChange() {
@@ -208,9 +208,9 @@ class ViewsJs_ConfigChooserA11y_Test extends TestBase {
 		assertBean(report(), "resetNotLink,resetDraftsDefaults", "true,name/status");
 	}
 
-	@Test void e14_savedBarIsCompactOnlyWhenNoSavedViews() {
+	@Test void e14_savedBarKeepsSaveInRowAndRenameDeleteInMenu() {
 		assertBean(report(),
-			"barCompactWhenEmpty,menuClosedInitially,menuOpenAfterMore,menuHoldsActions,barNotCompactWithViews,menuNoHaspopup,menuClosesOnOutsideClick,menuClosesOnEscape,escapeRefocusesMore,pickClosesMenu",
-			"true,true,true,true,false,true,true,true,true,true");
+			"rowHoldsSaveAndSaveAs,menuClosedInitially,menuOpenAfterMore,menuHoldsActions,menuNoHaspopup,menuClosesOnOutsideClick,menuClosesOnEscape,escapeRefocusesMore,pickClosesMenu",
+			"true,true,true,true,true,true,true,true,true");
 	}
 }

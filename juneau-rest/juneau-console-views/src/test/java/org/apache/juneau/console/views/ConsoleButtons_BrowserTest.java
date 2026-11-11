@@ -277,11 +277,11 @@ class ConsoleButtons_BrowserTest extends TestBase {
 
 	@Test void a11_dialogSectionSelectedIsFolderTabWithAccentBar() {
 		for (var p : probes()) {
-			eq(p, p.tok("--jc-card-bg"), p.rest("ds1", "background-color"), "dialog section selected fill = card");
-			eq(p, p.tok("--jc-pill-neutral-bg"), p.rest("ds2", "background-color"), "dialog section unselected fill = grey");
+			eq(p, p.tok("--jc-accent-wash"), p.rest("ds1", "background-color"), "dialog section selected fill = accent wash");
+			eq(p, p.tok("--jc-card-bg"), p.rest("ds2", "background-color"), "dialog section unselected fill = card");
 			eq(p, p.tok("--jc-accent-wash"), p.hover("ds2", "background-color"), "dialog section unselected hover = wash");
-			var bar = String.valueOf(p.rest("ds1", "box-shadow"));
-			assertTrue(bar.contains(p.tok("--jc-accent")) && bar.contains("0px 3px 0px 0px inset"), () -> p.name() + ": dialog section accent bar: " + bar);
+			eq(p, p.tok("--jc-accent"), p.rest("ds1", "border-top-color"), "dialog section accent bar");
+			eq(p, "3px", p.rest("ds1", "border-top-width"), "dialog section bar width");
 		}
 	}
 
@@ -291,11 +291,11 @@ class ConsoleButtons_BrowserTest extends TestBase {
 				eq(p, p.tok("--jc-accent-selected"), p.rest(id, "background-color"), id + " solid selected fill");
 				eq(p, p.tok("--jc-on-accent"), p.rest(id, "color"), id + " selected ink");
 			}
-			// A tab-mode strip's selected tab wears the card fill with an accent top bar, not the solid fill.
-			eq(p, p.tok("--jc-card-bg"), p.rest("st1", "background-color"), "st1 folder-tab card fill");
-			eq(p, p.tok("--jc-pill-neutral-bg"), p.rest("st2", "background-color"), "st2 unselected grey fill");
-			var bar = String.valueOf(p.rest("st1", "box-shadow"));
-			assertTrue(bar.contains(p.tok("--jc-accent")) && bar.contains("0px 3px 0px 0px inset"), () -> p.name() + ": st1 accent bar: " + bar);
+			// A tab-mode strip's selected tab wears the accent wash with an accent top bar, not the solid fill.
+			eq(p, p.tok("--jc-accent-wash"), p.rest("st1", "background-color"), "st1 folder-tab wash fill");
+			eq(p, p.tok("--jc-card-bg"), p.rest("st2", "background-color"), "st2 unselected card fill");
+			eq(p, p.tok("--jc-accent"), p.rest("st1", "border-top-color"), "st1 accent bar");
+			eq(p, "3px", p.rest("st1", "border-top-width"), "st1 bar width");
 			eq(p, p.tok("--jc-link"), p.rest("st1", "color"), "st1 selected ink");
 		}
 	}

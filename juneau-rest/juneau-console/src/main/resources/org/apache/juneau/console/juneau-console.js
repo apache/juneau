@@ -238,12 +238,14 @@
 	}
 
 	// The directory the views toolkit scripts load from; the sprite files are served beside juneau-icons.js.
+	// Null when the page carries no juneau-icons.js: there is then no known sprite location (a guess would resolve
+	// against the page's own directory, which is wrong on a nested route).
 	function spriteBase(doc) {
 		for (const script of doc.querySelectorAll("script")) {
 			const m = /^(.*\/)?juneau-icons\.js(\?.*)?$/.exec(script.getAttribute("src") || "");
 			if (m) return m[1] || "";
 		}
-		return "";
+		return null;
 	}
 
 	function el(doc, tag, cls) {
@@ -465,7 +467,110 @@
 		const root = doc.documentElement;
 		const was = root.getAttribute("data-jc-scheme") || "light";
 		root.setAttribute("data-jc-scheme", next);
-		if (next !== was) doc.dispatchEvent(new CustomEvent("juneau:theme-changed", { detail: { scheme: next } }));
+		if (next !== was) doc.dispatchEvent(new CustomEvent("juneau:theme-changed", { detail: { scheme: next, theme: paletteName(doc) } }));
+	}
+
+	// ---- Theme selector --------------------------------------------------------------------------------------------
+	// Independent of the scheme: the server's palette is the default, a stored pick (validated against the
+	// data-jc-themes allow-list) overrides it, and "Page default" clears the pick. The head script applies a stored
+	// pick before first paint; this section keeps the control and the palette link in step afterwards.
+
+	const THEME_KEY = "juneau-console:theme";
+	const PALETTE_RE = /juneau-theme-([a-z0-9-]+)\.css/;
+
+	function themeLink(doc) {
+		return doc.querySelector("link[data-jc-theme-link]");
+	}
+
+	function themeNames(doc) {
+		return (doc.documentElement.getAttribute("data-jc-themes") || "").split(" ").filter(Boolean);
+	}
+
+	function hrefTheme(href) {
+		const m = PALETTE_RE.exec(String(href || ""));
+		return m ? m[1] : null;
+	}
+
+	// The palette now in effect (null when the page links none).
+	function paletteName(doc) {
+		const l = themeLink(doc);
+		return l ? hrefTheme(l.getAttribute("href")) : null;
+	}
+
+	function readStoredTheme(doc) {
+		try {
+			const t = window.localStorage.getItem(THEME_KEY);
+			return t && themeNames(doc).includes(t) ? t : null;
+		} catch (e) {
+			return null;
+		}
+	}
+
+	function themeLabel(name) {
+		return name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, " ");
+	}
+
+	// Points the palette link at a theme (null restores the page default) and announces it once the sheet has loaded.
+	function chooseTheme(doc, name) {
+		const l = themeLink(doc);
+		if (!l) return;
+		const current = l.getAttribute("href");
+		if (!l.hasAttribute("data-jc-theme-default")) l.setAttribute("data-jc-theme-default", current);
+		const base = l.getAttribute("data-jc-theme-default");
+		try {
+			if (name) window.localStorage.setItem(THEME_KEY, name);
+			else window.localStorage.removeItem(THEME_KEY);
+		} catch (e) {
+			// storage is unavailable: the pick lasts for this page only
+		}
+		const next = name ? base.replace(PALETTE_RE, "juneau-theme-" + name + ".css") : base;
+		if (next === current) return;
+		// Announce once the new sheet is in effect. Some browsers skip the load event when a loaded link is re-pointed,
+		// so the sheet itself is polled as well, and a slow or failed fetch still announces after a bounded wait.
+		let done = false;
+		let timer = null;
+		const announce = function () {
+			if (done) return;
+			done = true;
+			l.removeEventListener("load", announce);
+			l.removeEventListener("error", announce);
+			if (timer) window.clearInterval(timer);
+			doc.dispatchEvent(new CustomEvent("juneau:theme-changed", {
+				detail: { scheme: doc.documentElement.getAttribute("data-jc-scheme") || "light", theme: hrefTheme(next) }
+			}));
+		};
+		l.addEventListener("load", announce);
+		l.addEventListener("error", announce);
+		let waited = 0;
+		timer = window.setInterval(function () {
+			waited += 50;
+			if (waited >= 3000 || (l.sheet && l.sheet.href === l.href)) announce();
+		}, 50);
+		l.setAttribute("href", next);
+	}
+
+	// A labelled select: "Page default" first, then each allowed theme.
+	function buildThemeControl(doc) {
+		const wrap = el(doc, "label", "jc-theme-select");
+		const text = el(doc, "span", "jc-theme-select-label");
+		text.textContent = "Theme";
+		const sel = el(doc, "select");
+		sel.setAttribute("aria-label", "Theme");
+		const def = el(doc, "option");
+		def.value = "";
+		def.textContent = "Page default";
+		sel.appendChild(def);
+		for (const n of themeNames(doc)) {
+			const o = el(doc, "option");
+			o.value = n;
+			o.textContent = themeLabel(n);
+			sel.appendChild(o);
+		}
+		sel.value = readStoredTheme(doc) || "";
+		sel.addEventListener("change", function () { chooseTheme(doc, sel.value || null); });
+		wrap.appendChild(text);
+		wrap.appendChild(sel);
+		return wrap;
 	}
 
 	function wireScheme(doc) {
@@ -566,7 +671,11 @@
 				brand = el(doc, "div", "jc-brand");
 			}
 			if (logo.symbol) {
-				if (/^[a-z0-9_]{1,64}$/.test(logo.symbol)) {
+				const drawSymbol = (base, first) => {
+					if (!/^[a-z0-9_]{1,64}$/.test(logo.symbol)) {
+						fail(doc, "E-JS-128", logo.symbol, "header", "logo");
+						return;
+					}
 					const mark = el(doc, "div", "jc-logo jc-logo-symbol");
 					mark.setAttribute("role", "img");
 					mark.setAttribute("aria-label", logo.alt || h.title || "");
@@ -577,13 +686,23 @@
 					svg.setAttribute("aria-hidden", "true");
 					svg.setAttribute("style", "width:100%;height:100%;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round");
 					const use = doc.createElementNS("http://www.w3.org/2000/svg", "use");
-					use.setAttribute("href", spriteBase(doc) + "juneau-symbols-lucide.svg#juneau-sym-" + logo.symbol);
+					use.setAttribute("href", base + "juneau-symbols-lucide.svg#juneau-sym-" + logo.symbol);
 					svg.appendChild(use);
 					mark.appendChild(svg);
-					brand.appendChild(mark);
-				} else {
-					fail(doc, "E-JS-128", logo.symbol, "header", "logo");
-				}
+					if (first) brand.insertBefore(mark, brand.firstChild);
+					else brand.appendChild(mark);
+				};
+				const warnMissing = () => console.warn("[juneau-console] header logo symbol '" + logo.symbol + "' not drawn: the page has no juneau-icons.js script, so the sprite location is unknown");
+				const base = spriteBase(doc);
+				if (base !== null) drawSymbol(base, false);
+				else if (doc.readyState === "loading") {
+					// The shell mounts while the page is still parsing, so a toolkit script listed after it is not in the DOM yet.
+					onReady(doc, () => {
+						const late = spriteBase(doc);
+						if (late === null) warnMissing();
+						else drawSymbol(late, true);
+					});
+				} else warnMissing();
 			}
 			if (logo.src) {
 				if (isSafeHref(logo.src)) {
@@ -609,13 +728,15 @@
 			header.appendChild(brand);
 		}
 		const schemeToggle = doc.documentElement.hasAttribute("data-jc-scheme-toggle");
-		if ((h.links && h.links.length) || s.actions || h.userMenu || schemeToggle) {
+		const themeSelector = doc.documentElement.hasAttribute("data-jc-theme-selector") && !!themeLink(doc);
+		if ((h.links && h.links.length) || s.actions || h.userMenu || schemeToggle || themeSelector) {
 			const actions = el(doc, "div", "jc-header-actions");
 			for (const l of h.links || []) {
 				const a = link(doc, l, "jc-header-link", "header link");
 				if (a) actions.appendChild(a);
 			}
 			if (s.actions) actions.appendChild(clone(doc, tpl.bySlot.get(s.actions)));
+			if (themeSelector) actions.appendChild(buildThemeControl(doc));
 			if (schemeToggle) actions.appendChild(buildSchemeControl(doc));
 			if (h.userMenu) actions.appendChild(renderUserMenu(doc, h.userMenu));
 			header.appendChild(actions);

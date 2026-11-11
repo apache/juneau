@@ -407,6 +407,12 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 		assertBean(report(), "v2DraftMatchesDefaults", "true");
 	}
 
+	@Test void d01_columnDetail_unspecifiedSearchableReadsSearchable() {
+		var text = (String)report().get("detailTextDefaultSearchable");
+		assertTrue(text.contains("searchable") && ! text.contains("not searchable"), text);
+		assertTrue(((String)report().get("detailTextNotSearchable")).contains("not searchable"));
+	}
+
 	@Test void s01_seedChooserDraft_isExported() {
 		assertBean(report(), "seedExported", "true");
 	}

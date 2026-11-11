@@ -135,6 +135,46 @@ class FileUtils_ResolveSafely_Test extends TestBase {
 			() -> FileUtils.resolveSafely(root, "escape"));
 	}
 
+	@Test void t09b_symlinkToOutsideDir_childPath_throwsIAE() throws Exception {
+		var root = Files.createDirectories(tempDir.resolve("r")).toFile();
+		var outsideDir = Files.createDirectories(tempDir.resolve("outsideDir"));
+		Files.writeString(outsideDir.resolve("secret.txt"), "OUTSIDE");
+		try {
+			Files.createSymbolicLink(root.toPath().resolve("dirlink"), outsideDir);
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "Filesystem does not support symbolic links");
+			return;
+		}
+		assertThrows(IllegalArgumentException.class, () -> FileUtils.resolveSafely(root, "dirlink"));
+		assertThrows(IllegalArgumentException.class, () -> FileUtils.resolveSafely(root, "dirlink/secret.txt"));
+		// Missing child under an escaping dir link: never resolves to a usable File.
+		assertTrue(FileUtils.resolveSafely(root, "dirlink/missing.txt").isEmpty());
+	}
+
+	@Test void t09c_symlinkToInsideDir_childPath_resolves() throws Exception {
+		var root = Files.createDirectories(tempDir.resolve("r")).toFile();
+		var sub = Files.createDirectories(root.toPath().resolve("sub"));
+		Files.writeString(sub.resolve("f.txt"), "IN");
+		try {
+			Files.createSymbolicLink(root.toPath().resolve("sublink"), sub);
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "Filesystem does not support symbolic links");
+			return;
+		}
+		assertTrue(FileUtils.resolveSafely(root, "sublink/f.txt").isPresent());
+	}
+
+	@Test void t09d_danglingSymlink_returnsEmpty() throws Exception {
+		var root = Files.createDirectories(tempDir.resolve("r")).toFile();
+		try {
+			Files.createSymbolicLink(root.toPath().resolve("dangling"), tempDir.resolve("nope.txt"));
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "Filesystem does not support symbolic links");
+			return;
+		}
+		assertTrue(FileUtils.resolveSafely(root, "dangling").isEmpty());
+	}
+
 	@Test void t10_urlEncodedTraversal_throwsIAE_orReturnsEmpty() throws Exception {
 		// The helper does not URL-decode — the caller is expected to URL-decode first.
 		// "%2e%2e" is treated as a literal segment, so it does NOT trip the boundary

@@ -338,7 +338,7 @@
 		copy: "content_copy", csv: "csv", excel: "table", pdf: "picture_as_pdf", print: "print",
 		refresh: "refresh", collapse: "unfold_less",
 		pausePolling: "pause", dialog: "new", resetDefaults: "restore",
-		search: "search", linkButton: "link", columnSettings: "tune", publish: "push"
+		search: "search", linkButton: "link", columnSettings: "settings", publish: "push"
 	};
 
 	/** Glyph hints for common option ids (matched on the lowercased id), so typical filters get a meaningful icon. */
@@ -822,6 +822,9 @@
 				if (!cb) { skipItem(); return; }
 				cb.dataset.juneauRibbonId = rbId(a);
 				if (typeof cfg.seedChooserDraft === "function") cfg.seedChooserDraft(ctx.table, ctx);
+				// The saved-views drop-down sits immediately before the gear, in the same group.
+				const views = typeof cfg.buildSavedViewsDropdown === "function" ? cfg.buildSavedViewsDropdown(ctx.table, ctx) : null;
+				if (views) place(views, a.group || "__ungrouped");
 				place(cb, a.group || "__ungrouped");
 				ctx._ribbonOwns.columnSettings = true;
 				return;

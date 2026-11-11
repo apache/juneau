@@ -477,9 +477,16 @@ public class DirectoryResource extends BasicRestServlet {
 			}
 			if (name.isEmpty())
 				throw new NotFound("File not found.");
+			// The final segment must be a plain name: no separators, no "." / "..", no NUL.
+			if (name.equals(".") || name.equals("..") || name.indexOf('\\') >= 0 || name.indexOf('\0') >= 0)
+				throw new Forbidden("Invalid file name.");
 			var parent = FileUtils.resolveSafely(rootDir, parentPath)
 				.orElseThrow(() -> new NotFound("File not found."));
-			return new File(parent, name);
+			var target = new File(parent, name);
+			// A dangling symlink reports exists()==false but writing through it would create its (possibly outside) target.
+			if (Files.isSymbolicLink(target.toPath()))
+				throw new Forbidden("Invalid file name.");
+			return target;
 		} catch (IllegalArgumentException e) {
 			throw new Forbidden(e.getMessage());
 		}

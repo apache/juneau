@@ -38,7 +38,7 @@
 	container-type: inline-size;
 }
 
-/* Saved-views bar: picker, Save as..., Rename, Delete, then the inline name field on its own line when open. */
+/* Saved-views bar: one row of picker, Save, Save as..., "..." and the unsaved note; the name field replaces it while naming. */
 .juneau-config-dialog .juneau-config-saved-bar {
 	display: flex;
 	flex-wrap: wrap;
@@ -263,12 +263,31 @@
 	flex: 1 1 7em;
 }
 
+/* Every sort row has the same height, whether or not it is in the sort order; the controls share one compact height. */
+.juneau-config-dialog .juneau-config-sort-row {
+	flex-wrap: nowrap;
+	box-sizing: border-box;
+	min-height: 2.25rem;
+}
+
+.juneau-config-dialog .juneau-config-sort-row select,
+.juneau-config-dialog .juneau-config-sort-row .jc-btn {
+	box-sizing: border-box;
+	height: 1.75rem;
+	padding-top: 0;
+	padding-bottom: 0;
+	line-height: 1;
+}
+
 .juneau-config-dialog .juneau-config-sort-dir {
-	min-width: 7em;
+	min-width: 6em;
+	flex: 0 0 auto;
 }
 
 .juneau-config-dialog .juneau-config-sort-move {
-	padding: var(--jc-space-1) var(--jc-space-2);
+	padding-left: var(--jc-space-2);
+	padding-right: var(--jc-space-2);
+	flex: 0 0 auto;
 }
 
 .juneau-config-dialog .juneau-config-options {
@@ -326,32 +345,19 @@
 	min-height: var(--jc-space-5, 1.5em);
 }
 
-/* Saved views: the Save as / Rename / Delete group sits inline; with no saved views it folds behind the "..." button. */
+/* Saved views: Rename and Delete fold behind the "..." button; its menu opens on its own line under the row. */
 .juneau-config-dialog .juneau-config-saved-menu {
-	display: contents;
-}
-
-.juneau-config-dialog .juneau-config-saved-more {
 	display: none;
 }
 
-.juneau-config-dialog .juneau-config-saved-bar[data-compact="true"] .juneau-config-saved-more {
-	display: inline-flex;
-}
-
-.juneau-config-dialog .juneau-config-saved-bar[data-compact="true"] .juneau-config-saved-menu {
-	display: none;
-}
-
-.juneau-config-dialog .juneau-config-saved-bar[data-compact="true"] .juneau-config-saved-menu[data-open="true"] {
+.juneau-config-dialog .juneau-config-saved-menu[data-open="true"] {
 	display: flex;
 	align-items: center;
 	gap: var(--jc-space-2);
 	flex: 1 0 100%;
 }
 
-/* Compact mode (no saved views) offers only Save as; Rename and Delete need a saved view. */
-.juneau-config-dialog .juneau-config-saved-bar[data-compact="true"] .juneau-config-rename,
-.juneau-config-dialog .juneau-config-saved-bar[data-compact="true"] .juneau-config-delete {
+/* Naming a view swaps the whole row for the labelled name field. */
+.juneau-config-dialog .juneau-config-saved-bar[data-naming="true"] > :not(.juneau-config-name-field) {
 	display: none;
 }

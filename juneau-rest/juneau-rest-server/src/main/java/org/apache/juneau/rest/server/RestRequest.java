@@ -223,20 +223,36 @@ public class RestRequest extends HttpServletRequestWrapper {
 		return eqic("PUT", method) || eqic("POST", method);
 	}
 
+	private static final java.util.regex.Pattern LANG_RE = java.util.regex.Pattern.compile("[A-Za-z]{2,8}");
+	private static final java.util.regex.Pattern SCRIPT_RE = java.util.regex.Pattern.compile("[A-Za-z]{4}");
+	private static final java.util.regex.Pattern REGION_RE = java.util.regex.Pattern.compile("[A-Za-z]{2}|[0-9]{3}");
+
 	/*
-	 * Converts an Accept-Language value entry to a Locale.
+	 * Converts an Accept-Language range to a Locale.
+	 * Grammar (split on '-'): language (2-8 ASCII letters), optional script (4 ASCII letters, 2nd part),
+	 * optional region (LAST part; 2 ASCII letters or 3 digits).
+	 * Anything else (variants, extensions, extra/empty parts, non-ASCII, '.', '/', '\\', '%', '_', '*') returns null
+	 * so the range is ignored.  The script is accepted but not used (zh-Hans-CN -> zh_CN, zh-Hans -> zh).
 	 */
 	@SuppressWarnings({
 		"java:S1874" // The new Locale(String,String) constructor is not deprecated on the Java 17 baseline; its replacement Locale.of(...) was only added in Java 19.
 	})
-	private static Locale toLocale(String lang) {
+	static Locale toLocale(String lang) {
+		if (lang == null)
+			return null;
+		var parts = lang.trim().split("-", -1);
+		if (! LANG_RE.matcher(parts[0]).matches())
+			return null;
+		var i = 1;
+		if (i < parts.length && SCRIPT_RE.matcher(parts[i]).matches())
+			i++;
 		var country = "";
-		var i = lang.indexOf('-');
-		if (i > -1) {
-			country = lang.substring(i + 1).trim();
-			lang = lang.substring(0, i).trim();
+		if (i < parts.length) {
+			if (i != parts.length - 1 || ! REGION_RE.matcher(parts[i]).matches())
+				return null;
+			country = parts[i];
 		}
-		return new Locale(lang, country);
+		return new Locale(parts[0], country);
 	}
 
 	// Constructor initialized.
@@ -1072,8 +1088,11 @@ public class RestRequest extends HttpServletRequestWrapper {
 			float qValue = 0;
 			for (var r : sr.toList()) {
 				if (r.getQValue() > qValue) {
-					best = toLocale(r.getName());
-					qValue = r.getQValue();
+					var l = toLocale(r.getName());
+					if (nn(l)) {
+						best = l;
+						qValue = r.getQValue();
+					}
 				}
 			}
 		}

@@ -303,6 +303,59 @@ class ConfigFileStoreTest extends TestBase {
 		assertEquals("initial", fs.read("M.cfg"));
 	}
 
+	@Test void c01_pathTraversal_rejected() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertFalse(fs.exists("../x"));
+		assertThrows(IllegalArgumentException.class, () -> fs.read("../x"));
+		assertThrows(IllegalArgumentException.class, () -> fs.write("../x.cfg", null, "foo"));
+		assertThrows(IllegalArgumentException.class, () -> fs.read("sub/../../x"));
+		assertFalse(new File(DIR, "../x.cfg").exists());
+	}
+
+	@Test void c02_absolutePath_allowed() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		var abs = new File(DIR, "../abs.cfg").getCanonicalPath();
+		try {
+			assertFalse(fs.exists(abs));
+			assertNull(fs.write(abs, null, "foo"));
+			assertTrue(fs.exists(abs));
+			assertEquals("foo", fs.read(abs));
+		} finally {
+			new File(abs).delete();
+		}
+	}
+
+	@Test void c03_nestedName_allowed() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertNull(fs.write("sub/N.cfg", null, "foo"));
+		assertEquals("foo", fs.read("sub/N.cfg"));
+		assertTrue(fs.exists("sub/N.cfg"));
+		assertEquals("foo", fs.read("sub/./N"));
+		assertEquals("foo", fs.read("sub/x/../N.cfg"));
+	}
+
+	@Test void c04_symlinkEscape_rejected() throws Exception {
+		var outside = java.nio.file.Files.createTempDirectory("fs-outside");
+		try {
+			var fs = FileStore.create().directory(DIR).build();
+			DIR.mkdirs();
+			var link = DIR.toPath().resolve("lnk");
+			try {
+				java.nio.file.Files.createSymbolicLink(link, outside);
+			} catch (UnsupportedOperationException | IOException e) {
+				org.junit.jupiter.api.Assumptions.assumeTrue(false, "No symlink support");
+				return;
+			}
+			java.nio.file.Files.writeString(outside.resolve("S.cfg"), "secret");
+			assertThrows(IllegalArgumentException.class, () -> fs.read("lnk/S.cfg"));
+			assertThrows(IllegalArgumentException.class, () -> fs.write("lnk/New.cfg", null, "foo"));
+			assertFalse(fs.exists("lnk/S.cfg"));
+			assertFalse(java.nio.file.Files.exists(outside.resolve("New.cfg")));
+		} finally {
+			deleteFile(outside.toFile());
+		}
+	}
+
 	private static void assertFileExists(String name) {
 		assertTrue(new File(DIR, name).exists());
 	}

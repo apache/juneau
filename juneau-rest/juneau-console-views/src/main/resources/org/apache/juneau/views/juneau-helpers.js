@@ -825,7 +825,7 @@
 		}
 
 		const grid = document.createElement("dl");
-		grid.className = "juneau-view-detail-fields juneau-view-helper-field-grid";
+		grid.className = "juneau-view-detail-fields juneau-view-detail-fields-inline juneau-view-helper-field-grid";
 		if (opts.columns != null) {
 			const n = Number(opts.columns);
 			if (n >= 1 && n === Math.floor(n)) {

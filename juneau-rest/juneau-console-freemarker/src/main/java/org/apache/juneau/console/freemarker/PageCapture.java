@@ -141,6 +141,7 @@ public final class PageCapture {
 	private boolean themeFromDirective;
 	private String scheme;
 	private boolean schemeToggle;
+	private boolean themeSelector;
 	private String tab = "";
 	private String navLayout;
 	private String shellUrl;
@@ -310,6 +311,9 @@ public final class PageCapture {
 
 	/** @param value Whether the visitor's stored scheme choice is honoured. @return This object. */
 	public PageCapture schemeToggle(boolean value) { schemeToggle = value; return this; }
+
+	/** @param value Whether the header offers a stock-theme selector. @return This object. */
+	public PageCapture themeSelector(boolean value) { themeSelector = value; return this; }
 
 	/** @param v The {@code <@page tab>} value. @return This object. */
 	public PageCapture tab(String v) { tab = n(v) ? "" : v; return this; }
@@ -935,6 +939,7 @@ public final class PageCapture {
 	String theme() { return theme; }
 	String scheme() { return scheme; }
 	boolean schemeToggle() { return schemeToggle; }
+	boolean themeSelector() { return themeSelector; }
 	String headerSubtitle() { return header.subtitle; }
 	Map<String,Object> headerUserMenu() { return header.userMenu; }
 	boolean hasHeaderTitle() { return nn(header.title); }

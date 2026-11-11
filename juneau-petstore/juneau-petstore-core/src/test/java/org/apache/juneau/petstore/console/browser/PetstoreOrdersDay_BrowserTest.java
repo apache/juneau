@@ -140,7 +140,7 @@ class PetstoreOrdersDay_BrowserTest extends TestBase {
 
 	/** Waits for the Store page to be back, fully loaded, with its revenue card rendered. */
 	private static List<Map<String,Object>> storeAgain() {
-		return List.of(wait("location.pathname === '/console/store' && document.readyState === 'complete'"), wait("!!document.querySelector('#revenue-body .petstore-kpi-value')"), trail());
+		return List.of(wait("location.pathname === '/console/store' && document.readyState === 'complete'"), wait("!!document.querySelector('#store-sw')"), trail());
 	}
 
 	/** Flattens actions and action lists, in order. */

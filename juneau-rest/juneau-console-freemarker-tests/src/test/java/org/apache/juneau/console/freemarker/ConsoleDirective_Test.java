@@ -873,6 +873,14 @@ class ConsoleDirective_Test extends TestBase {
 		public View specToggleAttrFalse(RestRequest req) {
 			return PageSpec.create().schemeToggle(true).template("admin/scheme-toggle-false.ftlh").view(req);
 		}
+		@RestGet(path="/spec-selector")
+		public View specSelector(RestRequest req) {
+			return PageSpec.create().themeSelector(true).template("admin/page-naked.ftlh").view(req);
+		}
+		@RestGet(path="/spec-selector-attr-false")
+		public View specSelectorAttrFalse(RestRequest req) {
+			return PageSpec.create().themeSelector(true).template("admin/scheme-theme-selector-false.ftlh").view(req);
+		}
 	}
 
 	private static String scheme(String path, int status) throws Exception {
@@ -979,5 +987,21 @@ class ConsoleDirective_Test extends TestBase {
 	@Test void s09_specToggle_explicitAttrWins() throws Exception {
 		assertEquals("<html lang=\"en\" data-jc-scheme-toggle>", htmlTag(scheme("/spec-toggle", 200)));
 		assertEquals("<html lang=\"en\">", htmlTag(scheme("/spec-toggle-attr-false", 200)));
+	}
+
+	@Test void s10_themeSelectorAttrs() throws Exception {
+		var themes = String.join(" ", ConsoleChromeMixin.BUILTIN_THEME_NAMES);
+		var body = scheme("/t?n=theme-selector-true", 200);
+		assertEquals("<html lang=\"en\" data-jc-theme-selector data-jc-themes=\"" + themes + "\">", htmlTag(body));
+		assertEquals(1, count(body, "\" data-jc-theme-link>"), () -> body);
+		var off = scheme("/t?n=theme-selector-false", 200);
+		assertEquals("<html lang=\"en\">", htmlTag(off));
+		assertFalse(off.contains("\" data-jc-theme-link>"), () -> off);
+		assertEquals("<html lang=\"en\">", htmlTag(scheme("/t?n=none", 200)));
+	}
+
+	@Test void s11_themeSelector_specAndExplicitAttr() throws Exception {
+		assertTrue(htmlTag(scheme("/spec-selector", 200)).contains("data-jc-theme-selector"));
+		assertEquals("<html lang=\"en\">", htmlTag(scheme("/spec-selector-attr-false", 200)));
 	}
 }

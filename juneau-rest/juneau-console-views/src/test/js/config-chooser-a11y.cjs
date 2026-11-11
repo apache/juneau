@@ -313,20 +313,27 @@ resetEl.dispatch('click');
 out.resetDraftsDefaults = resetDlg.ctx._configDraft.visible.join('/');
 NS.config.closeChooserDialog(resetDlg.ctx);
 
+/** Save and Save as sit in the row itself, never inside the "..." menu. */
+function menu0Free(bar) {
+	const menu = bar.querySelector('.juneau-config-saved-menu');
+	return menu.querySelectorAll('.juneau-config-save').length === 0 && menu.querySelectorAll('.juneau-config-saveas').length === 0;
+}
+
 (async function () {
 	// Compact saved-views row.
 	NS.persistence = { list: function () { return Promise.resolve({ views: [] }); } };
 	const compactDlg = openDragDialog();
 	await Promise.resolve(); await Promise.resolve();
 	const bar = env.document.querySelector('.juneau-config-saved-bar');
-	out.barCompactWhenEmpty = bar.dataset.compact;
+	out.rowHoldsSaveAndSaveAs = bar.querySelectorAll('.juneau-config-save').length === 1
+		&& bar.querySelectorAll('.juneau-config-saveas').length === 1
+		&& menu0Free(bar);
 	const moreBtn = env.document.querySelector('.juneau-config-saved-more');
 	const menu = env.document.querySelector('.juneau-config-saved-menu');
 	out.menuClosedInitially = menu.dataset.open !== 'true';
 	moreBtn.dispatch('click');
 	out.menuOpenAfterMore = menu.dataset.open === 'true' && moreBtn.getAttribute('aria-expanded') === 'true';
-	out.menuHoldsActions = menu.querySelectorAll('.juneau-config-saveas').length === 1
-		&& menu.querySelectorAll('.juneau-config-rename').length === 1
+	out.menuHoldsActions = menu.querySelectorAll('.juneau-config-rename').length === 1
 		&& menu.querySelectorAll('.juneau-config-delete').length === 1;
 	out.menuNoHaspopup = moreBtn.getAttribute('aria-haspopup') == null;
 	env.dispatchDocument('click', { target: env.document.body });
@@ -338,15 +345,14 @@ NS.config.closeChooserDialog(resetDlg.ctx);
 	out.escapeRefocusesMore = env.getActive() === moreBtn;
 	env.setActive(null);
 	moreBtn.dispatch('click');
-	const saveAsEl = menu.querySelector('.juneau-config-saveas');
-	menu.dispatch('click', { target: saveAsEl });
+	const renameEl = menu.querySelector('.juneau-config-rename');
+	menu.dispatch('click', { target: renameEl });
 	out.pickClosesMenu = menu.dataset.open !== 'true';
 	NS.config.closeChooserDialog(compactDlg.ctx);
 
 	NS.persistence = { list: function () { return Promise.resolve({ views: [{ name: 'Mine' }] }); } };
 	const fullDlg = openDragDialog();
 	await Promise.resolve(); await Promise.resolve();
-	out.barNotCompactWithViews = env.document.querySelector('.juneau-config-saved-bar').dataset.compact;
 	NS.config.closeChooserDialog(fullDlg.ctx);
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) { console.error(e); process.exit(1); });

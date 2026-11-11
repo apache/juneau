@@ -412,7 +412,7 @@ class DarkScheme_BrowserTest extends TestBase {
 
 		for (var scheme : List.of("dark", "light")) {
 			surface(f, scheme, surfacePage((scheme.equals("dark") ? PIN_DARK : PIN_LIGHT) + " " + TOGGLE, "", false));
-			f.click(".juneau-config-chooser-btn").click(".juneau-config-saved-more").eval(OPEN_OVERLAYS);
+			f.click(".juneau-config-chooser-btn").eval(OPEN_OVERLAYS);
 			probes(f, TEXT_SURFACES, NON_TEXT_SURFACES, DISABLED_SURFACES);
 		}
 		for (var scheme : List.of("dark", "light")) {
@@ -423,7 +423,7 @@ class DarkScheme_BrowserTest extends TestBase {
 		for (var p : PALETTES) {
 			if (! p.equals("open")) {
 				surface(f, lightCase(p), surfacePage(PIN_LIGHT + " " + TOGGLE, "", false).replace(THEME_CSS, theme(p)));
-				f.click(".juneau-config-chooser-btn").click(".juneau-config-saved-more").eval(OPEN_OVERLAYS);
+				f.click(".juneau-config-chooser-btn").eval(OPEN_OVERLAYS);
 				probes(f, TEXT_SURFACES, NON_TEXT_SURFACES, DISABLED_SURFACES);
 			}
 			surface(f, "palette-" + p, surfacePage(PIN_DARK + " " + TOGGLE, "", false).replace(THEME_CSS, theme(p)));

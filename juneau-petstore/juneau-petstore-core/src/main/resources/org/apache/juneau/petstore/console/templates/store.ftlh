@@ -19,7 +19,6 @@
 Juneau console pieces your own app can use.</p>
 <p data-slot="welcome-note">Signed in as a guest.</p></div>
 </@card>
-<@card id="revenue" type="kpi" title="Revenue">{label:'Revenue today', dataUrl:'/console/store/kpi/revenue'}</@card>
 <@card type="switcher" id="store-sw" style="slider">
 { initialView: 'recent',
   views: [
@@ -39,7 +38,7 @@ Juneau console pieces your own app can use.</p>
           { type: 'resetDefaults', id: 'reset', group: 'viewing' },
           { type: 'refresh', id: 'refresh', group: 'page' }
         ],
-        detail: {"mode":"bean","endpoint":"/console/orders/row-detail/order/{id}","title":"Order {id}","labels":{"petId":"Pet","id":"Order","shipDate":"Ship date","status":"Status"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","petId","shipDate","status"]},{"id":"pet","kind":"table","title":"Pet","nested":{"contractVersion":"2","parentScopeParam":"orderId","view":{"id":"order-pet","columns":[{"data":"id","title":"Id"},{"data":"name","title":"Name","render":{"id":"linked"},"href":"/console/pets/{id}/summary"},{"data":"species","title":"Species"},{"data":"status","title":"Status"},{"data":"price","title":"Price (USD)","render":{"id":"decimal","meta":{"places":2}}}]},"meta":{"contractVersion":"5","id":"order-pet","dataUrl":"/console/orders/pet/rows","dataMode":"client","rowType":"Pet","columns":[{"data":"id","title":"Id"},{"data":"name","title":"Name","render":{"id":"linked"},"href":"/console/pets/{id}/summary"},{"data":"species","title":"Species"},{"data":"status","title":"Status"},{"data":"price","title":"Price (USD)","render":{"id":"decimal","meta":{"places":2}}}]}},"count":"rows"}]},
+        detail: {"mode":"bean","endpoint":"/console/orders/row-detail/order/{id}","title":"Order {id}","columns":2,"labels":{"petId":"Pet","id":"Order","shipDate":"Ship date","status":"Status"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","petId","shipDate","status"]},{"id":"pet","kind":"table","title":"Pet","nested":{"contractVersion":"2","parentScopeParam":"orderId","view":{"id":"order-pet","columns":[{"data":"id","title":"Id"},{"data":"name","title":"Name","render":{"id":"linked"},"href":"/console/pets/{id}/summary"},{"data":"species","title":"Species"},{"data":"status","title":"Status"},{"data":"price","title":"Price (USD)","render":{"id":"decimal","meta":{"places":2}}}]},"meta":{"contractVersion":"5","id":"order-pet","dataUrl":"/console/orders/pet/rows","dataMode":"client","rowType":"Pet","columns":[{"data":"id","title":"Id"},{"data":"name","title":"Name","render":{"id":"linked"},"href":"/console/pets/{id}/summary"},{"data":"species","title":"Species"},{"data":"status","title":"Status"},{"data":"price","title":"Price (USD)","render":{"id":"decimal","meta":{"places":2}}}]}},"count":"rows"}]},
         columns: [
           { key: 'id', label: 'Order', href: '/console/pets/{petId}/orders/{id}' },
           { key: 'petId', label: 'Pet', href: '/console/pets/{petId}/summary' },

@@ -656,6 +656,32 @@ public class FileFinder_Test extends TestBase {
 		assertContains("[cp:/files/test1/_a.txt]", read(x,"files/test1/_a.txt"));
 	}
 
+	@Test void f01_hostileLocale_doesNotEscapeRoot(@org.junit.jupiter.api.io.TempDir Path tmp) throws Exception {
+		var root = Files.createDirectories(tmp.resolve("root"));
+		Files.writeString(root.resolve("file.txt"), "base");
+		Files.writeString(root.resolve("file_ja.txt"), "ja-file");
+		Files.createDirectories(root.resolve("ja"));
+		Files.writeString(root.resolve("ja").resolve("file.txt"), "ja-dir");
+		Files.writeString(tmp.resolve("OUTSIDE.txt"), "secret");
+
+		var x = FileFinder.create().dir(root.toString()).include(".*\\.txt").build();
+
+		// Hostile locale: must be not-found, never an exception and never the outside file.
+		var hostile = new Locale("..", "..");
+		assertDoesNotThrow(() -> assertTrue(x.getStream("OUTSIDE.txt", hostile).isEmpty()));
+		assertDoesNotThrow(() -> assertTrue(x.getString("OUTSIDE.txt", hostile).isEmpty()));
+		// Control locale.
+		assertTrue(x.getStream("OUTSIDE.txt", new Locale("en", "US")).isEmpty());
+		// Legit lookups still work.
+		assertEquals("ja-file", x.getString("file.txt", Locale.JAPANESE).orElse(null));
+		assertEquals("base", x.getString("file.txt", new Locale("fr")).orElse(null));
+		// Hostile locale on an existing file falls back to the base file (screened candidates skipped).
+		assertEquals("base", x.getString("file.txt", hostile).orElse(null));
+		Files.delete(root.resolve("file_ja.txt"));
+		var y = FileFinder.create().dir(root.toString()).include(".*\\.txt").build();
+		assertEquals("ja-dir", y.getString("file.txt", Locale.JAPANESE).orElse(null));
+	}
+
 	@Test void e03_subclassing() {
 		var b = (E03a) E03b.create().dir(".").caching(100_000_000);
 		var x = new E03b(b);

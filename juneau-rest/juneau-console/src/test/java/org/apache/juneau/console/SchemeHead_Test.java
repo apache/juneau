@@ -44,7 +44,12 @@ class SchemeHead_Test extends TestBase {
 		if(e.hasAttribute("data-jc-scheme-toggle")){try{s=localStorage.getItem(k)}catch(x){}}
 		if(s!=="light"&&s!=="dark"){s=e.getAttribute("data-jc-scheme-pin");}
 		if(s!=="light"&&s!=="dark"){try{s=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}catch(x){s="light"}}
-		e.setAttribute("data-jc-scheme",s);})(document);""";
+		e.setAttribute("data-jc-scheme",s);
+		if(e.hasAttribute("data-jc-theme-selector")){try{var t=localStorage.getItem("juneau-console:theme"),a=(e.getAttribute("data-jc-themes")||"").split(" ");
+		if(t&&a.indexOf(t)>=0){var o=new MutationObserver(function(){var l=d.querySelector("link[data-jc-theme-link]");
+		if(l){o.disconnect();var h=l.getAttribute("href");l.setAttribute("data-jc-theme-default",h);l.setAttribute("href",h.replace(/juneau-theme-[a-z-]+\\.css/,"juneau-theme-"+t+".css"))}});
+		o.observe(e,{childList:true,subtree:true});d.addEventListener("DOMContentLoaded",function(){o.disconnect()})}}catch(x){}}
+		})(document);""";
 
 	private static final String SEP = "\n--8<--\n";
 

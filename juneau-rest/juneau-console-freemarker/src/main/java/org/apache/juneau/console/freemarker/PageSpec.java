@@ -97,6 +97,7 @@ public final class PageSpec implements Handled<PageSpec> {
 	String theme;
 	private String scheme;
 	private boolean schemeToggle;
+	private boolean themeSelector;
 	final List<String> toolkits = new ArrayList<>();
 	final List<String> css = new ArrayList<>();
 	final List<String> init = new ArrayList<>();
@@ -255,6 +256,21 @@ public final class PageSpec implements Handled<PageSpec> {
 	 */
 	public PageSpec schemeToggle(boolean value) {
 		schemeToggle = value;
+		return this;
+	}
+
+	/**
+	 * Adds a header control that lets the visitor pick the stock theme palette, independent of the colour scheme.
+	 *
+	 * <p>
+	 * The page's own theme stays the default; a stored pick overrides it.  An explicit
+	 * {@code <@console themeSelector="…">} on the page template wins over this value.
+	 *
+	 * @param value Whether the theme selector is shown.
+	 * @return This object.
+	 */
+	public PageSpec themeSelector(boolean value) {
+		themeSelector = value;
 		return this;
 	}
 
@@ -976,6 +992,8 @@ public final class PageSpec implements Handled<PageSpec> {
 			cap.scheme(scheme);
 		if (schemeToggle)
 			cap.schemeToggle(true);
+		if (themeSelector)
+			cap.themeSelector(true);
 		if (! toolkits.isEmpty())
 			cap.toolkit(toolkits);
 		if (! css.isEmpty())

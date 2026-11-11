@@ -55,31 +55,35 @@ class FolderTabs_Css_Test extends TestBase {
 		return m.find() ? m.group(1) : "";
 	}
 
-	@Test void a01_selectedTab_hasAccentTopBar() throws IOException {
+	@Test void a01_selectedTab_hasAccentEdgeAndNoInsetShadow() throws IOException {
 		var body = ruleBody(chromeCss(), SEL);
-		assertTrue(body.contains("box-shadow: inset 0 3px 0 0 var(--jc-accent)"), body);
+		assertTrue(body.contains("border-color: var(--jc-accent)"), body);
+		assertFalse(body.contains("box-shadow"), body);
+		assertTrue(ruleBody(viewsCss(), TAB_GROUP + " .juneau-view-ribbon-btn").contains("border-width: 3px 1px 0"));
 	}
 
-	@Test void a02_selectedTab_whiteFill_noTransparentBottom() throws IOException {
+	@Test void a02_selectedTab_washFill_joinsPanel() throws IOException {
 		var body = ruleBody(chromeCss(), SEL);
-		assertTrue(body.contains("background-color: var(--jc-card-bg)"), body);
-		assertFalse(body.contains("border-bottom-color: transparent"), body);
-		assertFalse(ruleBody(viewsCss(), SEL).contains("border-bottom-color: transparent"));
+		assertTrue(body.contains("background-color: var(--jc-tab-selected-bg, var(--jc-accent-wash))"), body);
+		assertTrue(body.contains("border-bottom-color: transparent"), body);
 	}
 
 	@Test void a03_selectedTab_overlapsPanelByOnePixel() throws IOException {
 		assertTrue(ruleBody(viewsCss(), SEL).contains("margin-bottom: -1px"));
 	}
 
-	@Test void a04_unselectedTab_greyFill() throws IOException {
+	@Test void a04_unselectedTab_whiteFill_transparentBar() throws IOException {
 		var body = ruleBody(chromeCss(), TAB_GROUP + " .juneau-view-ribbon-btn");
-		assertTrue(body.contains("background-color: var(--jc-pill-neutral-bg)"), body);
+		assertTrue(body.contains("background-color: var(--jc-card-bg)"), body);
+		assertTrue(body.contains("border-top-color: transparent"), body);
 	}
 
-	@Test void a05_panel_hasGreyBorderNotAccent() throws IOException {
-		var body = ruleBody(chromeCss(), ".juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-helper-tabstrip-panes");
-		assertTrue(body.contains("border-color: var(--jc-border)"), body);
-		assertFalse(body.contains("var(--jc-accent)"), body);
+	@Test void a05_panel_hasAccentBorderAndCardFill() throws IOException {
+		var body = chromeCss();
+		var i = body.indexOf(".juneau-view-helper-tabstrip-wrapper[data-juneau-strip-panel] > .juneau-view-helper-tabstrip-panes {");
+		assertTrue(i >= 0);
+		var rule = body.substring(i, body.indexOf('}', i));
+		assertTrue(rule.contains("border-color: var(--jc-accent)") && rule.contains("background-color: var(--jc-card-bg)"), rule);
 	}
 
 	@Test void a06_compactTokensDeclared() throws IOException {
@@ -101,6 +105,7 @@ class FolderTabs_Css_Test extends TestBase {
 		assertTrue(track.contains("background-color: var(--jc-pill-neutral-bg)") && track.contains("border-radius"), track);
 		var thumb = ruleBody(chrome, ".juneau-switcher-thumb");
 		assertTrue(thumb.contains("background-color: var(--jc-card-bg)") && thumb.contains("transition: transform"), thumb);
+		assertTrue(thumb.contains("box-shadow: var(--jc-switcher-thumb-shadow, var(--jc-card-shadow))"), thumb);
 	}
 
 	@Test void b02_reducedMotion() throws IOException {

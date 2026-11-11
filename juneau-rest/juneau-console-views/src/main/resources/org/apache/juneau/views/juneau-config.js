@@ -1465,6 +1465,7 @@
 		ctx._configAvailSelected = null;
 		ctx._configSelectEl = null;
 		ctx._configViewNames = null;
+		ctx._configSaveBtn = null;
 		ctx._configSaveAsBtn = null;
 		ctx._configRenameBtn = null;
 		ctx._configDeleteBtn = null;
@@ -1483,6 +1484,24 @@
 		ctx._configDetailEl = null;
 		ctx._configDetailKey = null;
 		ctx._configSavedBar = null;
+	}
+
+	/** The facets a saved view carries (columns, order, labels, formats), as one comparable string. */
+	function viewFacetKey(draft) {
+		return JSON.stringify([draft.visible, draft.order, draft.labels, draft.formats]);
+	}
+
+	/**
+	 * What the ribbon's saved-views drop-down shows: hidden unless there is at least one saved view (Default plus one
+	 * is two views), one item per view, the current one marked "(modified)" when the table differs from it.
+	 */
+	function ribbonViewsModel(listing, activeName, modified) {
+		const names = (listing?.views || []).map(function (v) { return v?.name != null ? String(v.name) : String(v); });
+		const selected = activeName != null && names.indexOf(activeName) >= 0 ? activeName : null;
+		const items = [{ value: "", label: DEFAULT_VIEW_LABEL }].concat(names.map(function (n) { return { value: n, label: n }; }));
+		const current = items.find(function (i) { return i.value === (selected == null ? "" : selected); });
+		if (modified && current) current.label += " (modified)";
+		return { visible: names.length > 0, items: items, selected: selected == null ? "" : selected };
 	}
 
 	/**
@@ -1506,7 +1525,7 @@
 		if (!col) return DETAIL_DEFAULT_TEXT;
 		const facts = [columnName(col), String(col.data)];
 		facts.push(col.orderable === false ? "not sortable" : "sortable",
-		col.search != null || col.searchable === true ? "searchable" : "not searchable");
+		col.search != null || col.searchable !== false ? "searchable" : "not searchable");
 		if (Array.isArray(col.formats) && col.formats.length) facts.push("formats: " + col.formats.join("/"));
 		facts.push(col.defaultVisible === false && !col.pinned ? "hidden by default" : "shown by default");
 		if (col.pinned) facts.push("pinned");
@@ -1928,7 +1947,78 @@
 		return wrap;
 	}
 
+	/** Whether the live table differs from the saved view {@code activeName} (checked on the columns facets only). */
+	function tableDiffersFromView(table, ctx, activeName) {
+		const applied = ctx._configAppliedKey != null ? ctx._configAppliedKey
+			: viewFacetKey(resolveLastAppliedViewSettings(table, ctx).draft || defaultDraftForCtx(ctx));
+		if (activeName == null) return applied !== viewFacetKey(defaultDraftForCtx(ctx));
+		const saved = ctx._configRibbonSavedKeys?.[activeName];
+		return saved != null && saved !== applied;
+	}
+
+	/** Repaints the ribbon's saved-views drop-down from {@code listing}; a no-op when the table has none. */
+	function refreshRibbonViews(ctx, listing) {
+		const sel = ctx?._configRibbonViewsEl;
+		const table = ctx?._configRibbonTable;
+		if (!sel || !table) return;
+		const active = ctx._configActiveName === undefined ? listing?.active : ctx._configActiveName;
+		const names = (listing?.views || []).map(function (v) { return v?.name != null ? String(v.name) : String(v); });
+		const loads = names.map(function (n) {
+			return NS.persistence.load(table, n).then(function (blob) {
+				ctx._configRibbonSavedKeys = ctx._configRibbonSavedKeys || {};
+				ctx._configRibbonSavedKeys[n] = viewFacetKey(draftFromSavedView(currentCatalog(ctx), blob, ctxDefaultOrder(ctx)));
+			}, function () { /* an unreadable view just never reads as modified */ });
+		});
+		Promise.all(loads).then(function () {
+			const model = ribbonViewsModel(listing, active, tableDiffersFromView(table, ctx, active));
+			while (sel.firstChild) sel.firstChild.remove();
+			model.items.forEach(function (i) {
+				const opt = document.createElement("option");
+				opt.value = i.value;
+				paintUserText(opt, i.label);
+				sel.appendChild(opt);
+			});
+			sel.value = model.selected;
+			sel.hidden = !model.visible;
+		});
+	}
+
+	function reloadRibbonViews(ctx) {
+		const table = ctx?._configRibbonTable;
+		if (!table || !ctx._configRibbonViewsEl) return;
+		NS.persistence.list(table).then(function (listing) { refreshRibbonViews(ctx, listing); }, function () { /* keeps its last state */ });
+	}
+
+	/**
+	 * Builds the saved-views drop-down the ribbon shows right before the gear: choosing a view applies it the same way
+	 * the dialog's select plus Apply does.  Returns {@code null} when the table turned the control off.
+	 */
+	function buildSavedViewsDropdown(table, ctx) {
+		if (ctx?.viewDef?.savedViewsInRibbon === false || !NS.persistence) return null;
+		const sel = document.createElement("select");
+		sel.className = "juneau-config-ribbon-views";
+		sel.setAttribute("aria-label", "Saved views");
+		sel.hidden = true;
+		ctx._configRibbonViewsEl = sel;
+		ctx._configRibbonTable = table;
+		sel.addEventListener("change", function () {
+			const name = sel.value === "" ? null : sel.value;
+			if (!confirmDiscard(ctx)) { reloadRibbonViews(ctx); return; }
+			NS.config.seedChooserDraft(table, ctx);
+			loadNamedView(table, ctx, name).then(function () {
+				const result = applyDraft(table, ctx);
+				if (result?.ok) {
+					NS.persistence.setActive(table, name).catch(function () { /* the view itself already applied; remembering it is best-effort */ });
+				}
+				reloadRibbonViews(ctx);
+			});
+		});
+		reloadRibbonViews(ctx);
+		return sel;
+	}
+
 	function fillViewSelect(ctx, listing) {
+		refreshRibbonViews(ctx, listing);
 		const sel = ctx._configSelectEl;
 		if (!sel) return;
 		while (sel.firstChild) sel.firstChild.remove();
@@ -1938,7 +2028,6 @@
 		sel.appendChild(defOpt);
 		const views = listing?.views ? listing.views : [];
 		ctx._configViewNames = [];
-		if (ctx._configSavedBar) ctx._configSavedBar.dataset.compact = views.length ? "false" : "true";
 		views.forEach(function (v) {
 			const n = (v?.name != null) ? String(v.name) : String(v);
 			ctx._configViewNames.push(n);
@@ -1952,9 +2041,10 @@
 		refreshSavedBarState(ctx);
 	}
 
-	/** Rename and Delete act on a saved view; the reserved Default view has neither. */
+	/** Save, Rename and Delete act on a saved view; the reserved Default view has none of them. */
 	function refreshSavedBarState(ctx) {
 		const isDefault = ctx._configActiveName == null;
+		if (ctx._configSaveBtn) ctx._configSaveBtn.disabled = isDefault;
 		if (ctx._configRenameBtn) ctx._configRenameBtn.disabled = isDefault;
 		if (ctx._configDeleteBtn) ctx._configDeleteBtn.disabled = isDefault;
 	}
@@ -1965,15 +2055,21 @@
 		const input = ctx._configNameInput;
 		if (!field || !input) return;
 		ctx._configNameMode = mode;
-		paintUserInput(input, mode === "rename" ? (ctx._configActiveName || "") : "");
+		const current = ctx._configActiveName == null ? DEFAULT_VIEW_LABEL : ctx._configActiveName;
+		paintUserInput(input, mode === "rename" ? current : current + " copy");
 		paintUserText(ctx._configNameOk, mode === "rename" ? "Rename" : "Save");
+		if (ctx._configSavedBar) ctx._configSavedBar.dataset.naming = "true";
 		field.hidden = false;
 		input.focus?.();
+		input.select?.();
 	}
 
 	function closeNameField(ctx) {
+		const wasOpen = ctx._configNameMode != null;
 		if (ctx._configNameField) ctx._configNameField.hidden = true;
+		if (ctx._configSavedBar) ctx._configSavedBar.dataset.naming = "false";
 		ctx._configNameMode = null;
+		if (wasOpen) (ctx._configSaveAsBtn || ctx._configSelectEl)?.focus?.();
 	}
 
 	/**
@@ -2045,9 +2141,11 @@
 				NS.init.applyRestoredOptionsToLiveGrid(table, ctx, draft.options);
 			writeViewSettings(table, viewSettingsFromDraft(ctx._configDraft));
 			ctx._configCleanSnapshot = snapshotDraft(ctx._configDraft);
+			ctx._configAppliedKey = viewFacetKey(ctx._configDraft);
 			ctx._configDirty = false;
 			refreshChooserDirty(ctx);
 			showChooserStatus(ctx, "", false);
+			reloadRibbonViews(ctx);
 		} else if (result?.reason === "in-flight") {
 			showChooserStatus(ctx, "Finish the in-progress action first.", true);
 		} else if (result && !result.ok) {
@@ -2588,7 +2686,10 @@
 		ctx._configStatusEl = status;
 		body.appendChild(status);
 
-		ui.confirmBtn.addEventListener("click", function () { applyDraft(table, ctx); });
+		ui.confirmBtn.addEventListener("click", function () {
+			// Apply closes the dialog once the view is applied; a failure stays open with its error showing.
+			if (applyDraft(table, ctx)?.ok) closeChooserDialog(ctx);
+		});
 		const dismiss = function () {
 			if (!confirmDiscard(ctx)) return;
 			closeChooserDialog(ctx);
@@ -2636,13 +2737,14 @@
 	}
 
 	/**
-	 * The saved-views bar under the header: picker, Save as..., Rename, Delete, and the inline name field Save as and
-	 * Rename share (a field in the bar, never a second dialog layer).
+	 * The saved-views bar under the header, one row: picker, Save, Save as..., a "..." menu holding Rename and Delete,
+	 * and the "Unsaved changes" note.  Save as and Rename swap the row for one labelled name field (in the bar, never
+	 * a second dialog layer).
 	 */
 	function buildSavedViewsBar(table, ctx, idPrefix) {
 		const bar = document.createElement("div");
 		bar.className = "juneau-config-saved-bar";
-		bar.dataset.compact = "true";
+		bar.dataset.naming = "false";
 		ctx._configSavedBar = bar;
 
 		const sel = document.createElement("select");
@@ -2664,6 +2766,25 @@
 		});
 		bar.appendChild(sel);
 
+		const saveBtn = document.createElement("button");
+		saveBtn.type = "button";
+		saveBtn.className = "jc-btn juneau-config-save";
+		paintUserText(saveBtn, "Save");
+		saveBtn.addEventListener("click", function () {
+			if (ctx._configActiveName == null) return;
+			persistDraft(table, ctx, ctx._configActiveName, false).catch(function () { /* persistDraft already showed the error */ });
+		});
+		ctx._configSaveBtn = saveBtn;
+		bar.appendChild(saveBtn);
+
+		const saveAsBtn = document.createElement("button");
+		saveAsBtn.type = "button";
+		saveAsBtn.className = "jc-btn juneau-config-saveas";
+		paintUserText(saveAsBtn, "Save as\u2026");
+		saveAsBtn.addEventListener("click", function () { openNameField(ctx, "saveas"); });
+		ctx._configSaveAsBtn = saveAsBtn;
+		bar.appendChild(saveAsBtn);
+
 		const more = document.createElement("button");
 		more.type = "button";
 		more.className = "jc-btn juneau-config-saved-more";
@@ -2684,25 +2805,17 @@
 		};
 		more.addEventListener("click", function () { setMenuOpen(menu.dataset.open !== "true", true); });
 		bar.addEventListener("keydown", function (e) {
-			if (e.key === "Escape" && menu.dataset.open === "true" && bar.dataset.compact === "true") {
+			if (e.key === "Escape" && menu.dataset.open === "true") {
 				e.stopPropagation();
 				if (e.preventDefault) e.preventDefault();
 				setMenuOpen(false, true);
 			}
 		});
 		menu.addEventListener("click", function (e) {
-			if (e.target !== menu && bar.dataset.compact === "true") setMenuOpen(false, false); // the picked action (name field) takes focus itself
+			if (e.target !== menu) setMenuOpen(false, false); // the picked action (name field) takes focus itself
 		});
 		bar.appendChild(more);
 		bar.appendChild(menu);
-
-		const saveAsBtn = document.createElement("button");
-		saveAsBtn.type = "button";
-		saveAsBtn.className = "jc-btn juneau-config-saveas";
-		paintUserText(saveAsBtn, "Save as…");
-		saveAsBtn.addEventListener("click", function () { openNameField(ctx, "saveas"); });
-		ctx._configSaveAsBtn = saveAsBtn;
-		menu.appendChild(saveAsBtn);
 
 		const renameBtn = document.createElement("button");
 		renameBtn.type = "button";
@@ -2754,12 +2867,16 @@
 		const field = document.createElement("div");
 		field.className = "juneau-config-name-field";
 		field.hidden = true;
+		const nameLabel = document.createElement("label");
+		nameLabel.className = "juneau-config-name-label";
+		nameLabel.htmlFor = idPrefix + "name";
+		paintUserText(nameLabel, "View name");
 		const input = document.createElement("input");
 		input.type = "text";
 		input.className = "juneau-config-name-input";
 		input.id = idPrefix + "name";
 		input.maxLength = MAX_NAME_LEN;
-		input.setAttribute("aria-label", "View name");
+		input.placeholder = "View name";
 		const ok = document.createElement("button");
 		ok.type = "button";
 		ok.className = "jc-btn jc-btn-primary juneau-config-name-ok";
@@ -2793,6 +2910,7 @@
 			if (e?.key === "Enter") { e.preventDefault?.(); submit(); }
 			else if (e?.key === "Escape") { e.preventDefault?.(); e.stopPropagation?.(); closeNameField(ctx); }
 		});
+		field.appendChild(nameLabel);
 		field.appendChild(input);
 		field.appendChild(ok);
 		field.appendChild(cancel);
@@ -2850,7 +2968,7 @@
 		btn.className = "juneau-view-ribbon-btn juneau-config-chooser-btn";
 		stampChromeTip(btn, "Columns");
 		paintUserText(btn, "Columns");
-		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon(iconName || "tune") : null;
+		const markup = typeof NS.icons?.resolveIcon === "function" ? NS.icons.resolveIcon(iconName || "settings") : null;
 		paintChooserIcon(btn, markup);
 		btn.addEventListener("click", function () { openChooser(table, ctx); });
 		return btn;
@@ -2866,6 +2984,8 @@
 		if (!host) return;
 		if (host.querySelector?.(".juneau-config-chooser-btn")) return;
 
+		const views = buildSavedViewsDropdown(table, ctx);
+		if (views) host.appendChild(views);
 		host.appendChild(buildChooserButton(table, ctx));
 
 		NS.config.seedChooserDraft(table, ctx);
@@ -2887,6 +3007,8 @@
 	NS.config.seedChooserDraft = seedChooserDraft;
 	NS.config.mountChooser = mountChooser;
 	NS.config.buildChooserButton = buildChooserButton;
+	NS.config.buildSavedViewsDropdown = buildSavedViewsDropdown;
+	NS.config.ribbonViewsModel = ribbonViewsModel;
 	NS.config.openChooser = openChooser;
 	NS.config.closeChooserDialog = closeChooserDialog;
 	NS.config.applyDraft = applyDraft;

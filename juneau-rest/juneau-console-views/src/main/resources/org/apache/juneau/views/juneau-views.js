@@ -203,7 +203,7 @@
 
 	// View-level catalog keys copied verbatim onto view (defaultOrder is lifted separately).
 	const VIEW_KEYS = ["dataUrl", "rowType", "dataMode", "ribbon", "pollIntervalMs", "pausePollingWhileEditing",
-		"columnConfig", "cleanAddress", "primary", "copyLink", "rowActions", "rowClassRules", "urlState", "columnSearchHelpUrl"];
+		"columnConfig", "cleanAddress", "primary", "copyLink", "savedViewsInRibbon", "rowActions", "rowClassRules", "urlState", "columnSearchHelpUrl"];
 
 	/**
 	 * Lift a datatables card's author catalog (`card.table`) into the SLOT_META envelope `paintSlotTable` consumes,
@@ -1524,11 +1524,11 @@
 
 		// draw() defaults to resetPaging=true (DataTables 2.1.8), which would jump back to page 0 after
 		// an explicit page("next") / first / previous / last.  false holds the page those calls just set.
-		const firstBtn = pagingPillButton("First page", "first_page", function () { ctx.dataTable.page("first").draw(false); });
-		const prevBtn = pagingPillButton("Previous page", "chevron_left", function () { ctx.dataTable.page("previous").draw(false); });
+		const firstBtn = pagingPillButton("First page", "first_page_thin", function () { ctx.dataTable.page("first").draw(false); });
+		const prevBtn = pagingPillButton("Previous page", "chevron_left_thin", function () { ctx.dataTable.page("previous").draw(false); });
 		const sizeMenu = buildPageSizeMenu(ctx);
-		const nextBtn = pagingPillButton("Next page", "chevron_right", function () { ctx.dataTable.page("next").draw(false); });
-		const lastBtn = pagingPillButton("Last page", "last_page", function () { ctx.dataTable.page("last").draw(false); });
+		const nextBtn = pagingPillButton("Next page", "chevron_right_thin", function () { ctx.dataTable.page("next").draw(false); });
+		const lastBtn = pagingPillButton("Last page", "last_page_thin", function () { ctx.dataTable.page("last").draw(false); });
 		pill.appendChild(firstBtn);
 		pill.appendChild(prevBtn);
 		pill.appendChild(sizeMenu.el);
@@ -1946,6 +1946,36 @@
 		return typeof url === "string" && /^(https?:\/\/|\/)/i.test(url) && isSafeMarkdownHref(url);
 	}
 
+	/** Bare-value help per search type, for columns that shipped no search block (the server's wording). */
+	const COLUMN_SEARCH_BARE_HELP = {
+		text: "Matches any value containing this text (case-insensitive). Use $eq(...) for an exact, case-sensitive match.",
+		numeric: "Matches a number exactly. Use $gt / $gte / $lt / $lte / $between for a range.",
+		timestamp: "Matches an exact instant; a bare date means UTC midnight exactly, so for a whole day use $between(d, d+1).",
+		boolean: "Matches true or false exactly."
+	};
+
+	/**
+	 * The help-only search block for a column that shipped none: its type is read from the column's render id
+	 * (date-like renders are timestamps, {@code decimal} is numeric, {@code bool} is boolean, else text) and its
+	 * operators are the built-ins for that type.  Display only - what a commit does is unchanged.
+	 */
+	function fallbackSearchMeta(ctx, col, search) {
+		const forType = search?.SearchOperators?.forType;
+		if (typeof forType !== "function") return null;
+		const def = (ctx?.optsColumns || [])[col.index()];
+		const dataName = def?.data != null ? String(def.data) : null;
+		const cat = (ctx?.viewDef?.columns || []).find(function (c) { return c?.data != null && String(c.data) === dataName; });
+		const render = String(cat?.render ?? "");
+		let type = "text";
+		if (/^(date|datetime|ts-zulu)\b/.test(render)) type = "timestamp";
+		else if (/^decimal\b/.test(render)) type = "numeric";
+		else if (/^bool\b/.test(render)) type = "boolean";
+		const operators = forType.call(search.SearchOperators, type).map(function (o) {
+			return { name: o.name, minArgs: o.minArgs, maxArgs: o.maxArgs, combinator: o.combinator, custom: false };
+		});
+		return { type: type, operators: operators, bareHelp: COLUMN_SEARCH_BARE_HELP[type] };
+	}
+
 	/** Builds one footer button of the column-search popover. */
 	function columnSearchButton(suffix, label, primary) {
 		const b = document.createElement("button");
@@ -1963,6 +1993,8 @@
 		const current = getColumnExpr(ctx, col);
 		const meta = columnSearchMeta(ctx, col);
 		const search = window.JuneauViews?.search;
+		// Help is shown for every column; one with no search block gets the built-ins for its inferred type.
+		const helpMeta = meta || fallbackSearchMeta(ctx, col, search);
 		// Client-filtered DSL column: commits go through the strict server-parity gate.
 		const dsl = dslColumnInfo(ctx, col);
 		const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
@@ -1984,10 +2016,10 @@
 		status.setAttribute("aria-live", "polite");
 		el.appendChild(heading);
 		el.appendChild(input);
-		if (meta?.type) {
+		if (helpMeta?.type) {
 			const typeLine = document.createElement("div");
 			typeLine.className = "juneau-view-col-search-popover-type";
-			typeLine.textContent = "Type: " + String(meta.type).toUpperCase();
+			typeLine.textContent = "Type: " + String(helpMeta.type).toUpperCase();
 			el.appendChild(typeLine);
 		}
 		const instructions = document.createElement("div");
@@ -1997,17 +2029,17 @@
 		// serialized onto the catalog), so the wording stays in sync with that type automatically. Rendered BEFORE
 		// the per-operator help list below, since a bare value - no "$name(...)" - is the common case. Absent
 		// (older catalog, or no search metadata) is a silent no-op.
-		if (meta?.bareHelp != null && String(meta.bareHelp) !== "") {
+		if (helpMeta?.bareHelp != null && String(helpMeta.bareHelp) !== "") {
 			const bareHelp = document.createElement("div");
 			bareHelp.className = "juneau-view-col-search-popover-barehelp";
-			bareHelp.textContent = String(meta.bareHelp);
+			bareHelp.textContent = String(helpMeta.bareHelp);
 			instructions.appendChild(bareHelp);
 		}
 		// Operator help: rendered straight from the VIEW_META operator list so a developer's custom
 		// operator help shows exactly the way a built-in's does.  Absent when the column shipped no search metadata.
-		const hasOperators = !!(meta && Array.isArray(meta.operators) && meta.operators.length);
+		const hasOperators = !!(helpMeta && Array.isArray(helpMeta.operators) && helpMeta.operators.length);
 		const fillOperatorRows = function (host) {
-			meta.operators.forEach(function (o) {
+			helpMeta.operators.forEach(function (o) {
 				if (!o?.name) return;
 				// on a client-filtered table a custom operator is only offered once the page registered its predicate.
 				if (dsl && o.custom && !(typeof search?.hasCustom === "function" && search.hasCustom(o.name))) return;
@@ -2027,7 +2059,7 @@
 			helpList.className = "juneau-view-col-search-popover-help";
 			fillOperatorRows(helpList);
 			instructions.appendChild(helpList);
-			const examples = columnSearchExamplesFor(meta.type, meta.operators);
+			const examples = columnSearchExamplesFor(helpMeta.type, helpMeta.operators);
 			if (examples.length) {
 				const exList = document.createElement("div");
 				exList.className = "juneau-view-col-search-popover-examples";
@@ -5528,8 +5560,8 @@
 	 * renders as a single "{label} selected ({count})" button, several render as a `<select aria-label="Bulk action">`
 	 * and a Go button that stays disabled until an action is chosen.  The whole toolbar is hidden while nothing is
 	 * selected.  Every trigger goes through confirmBulkAction(...) - a bulk write is never one click from firing.
-	 * Returns `{el, refresh(count)}`; the caller (wireToolbarRightClusterBulk) places `el` at the far end of the
-	 * toolbar row's right cluster.
+	 * Returns `{el, refresh(count)}`; the caller (wireToolbarRightClusterBulk) places `el` in its own row above the
+	 * toolbar row.
 	 */
 	function buildBulkToolbar(bulkDef, table, ctx, selectionState) { // NOSONAR javascript:S3776 -- one builder for the single/dropdown forms; splitting would scatter the shared refresh closure.
 		const actions = bulkDef.actions || [];
@@ -9174,11 +9206,10 @@
 		if (!ctx.bulkToolbar && ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
 	}
 
-	/** Places the bulk toolbar at the FAR END of the toolbar row's right cluster (after search and the ribbon bar). */
+	/** Places the bulk toolbar in its own row directly above the toolbar row, so showing it never shifts the toolbar's controls sideways. */
 	function wireToolbarRightClusterBulk(toolbarRow, ctx) {
 		if (!toolbarRow || !ctx.bulkToolbar) return;
-		const right = toolbarRow.querySelector(".juneau-view-toolbar-right");
-		if (right) right.appendChild(ctx.bulkToolbar.el);
+		toolbarRow.parentNode?.insertBefore(ctx.bulkToolbar.el, toolbarRow);
 	}
 
 	function wireTablePolling(table, ctx, viewDef, toolbarRow) {
@@ -9792,7 +9823,7 @@
 		if (viewDef.columnConfig && typeof NS.config?.mountChooser === "function" && !ctx._ribbonOwns?.columnSettings)
 			NS.config.mountChooser(table, ctx, toolbarRow);
 
-		// Last, so the bulk toolbar lands at the far end of the right cluster, after search/ribbon/staleness/chooser.
+		// Last, so the bulk toolbar row is inserted once the toolbar row is fully built.
 		wireToolbarRightClusterBulk(toolbarRow, ctx);
 
 		// Copy-link affordance (framework parity): independent of columnConfig - shown by default on the page's

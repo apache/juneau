@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
+import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.console.freemarker.*;
 import org.apache.juneau.console.views.*;
 import org.apache.juneau.console.views.RowAction.*;
@@ -44,14 +45,15 @@ public final class UsersPageBuilders {
 	public static PageSpec users() {
 		return PageSpec.create().tab("users").toolkit("views", "datatables-buttons", "datatables-export")
 			.table(TableSpec.create("users").rowType("User").dataMode(DataMode.SERVER).dataUrl("/console/users/query")
+				.operators(SearchOperatorSet.standard())
 				.defaultOrder("username", Sort.ASC)
 				.rowIdField("username")
 				.detail(RowDetails.user())
 				.columns(
-					Column.create("username").label("Username"),
-					Column.create("firstName").label("First name"),
-					Column.create("lastName").label("Last name"),
-					Column.create("userStatus").label("Status").render(PillRenders.userStatus()))
+					Column.create("username").label("Username").searchType(SearchType.TEXT),
+					Column.create("firstName").label("First name").searchType(SearchType.TEXT),
+					Column.create("lastName").label("Last name").searchType(SearchType.TEXT),
+					Column.create("userStatus").label("Status").render(PillRenders.userStatus()).searchType(SearchType.ENUM))
 				.columnConfig(true)
 				.ribbon(Ribbons.standard()
 					.create(RibbonItem.dialog("add-user").title("+ Add user").symbol("plus")

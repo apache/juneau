@@ -105,10 +105,10 @@ class PagingPill_Wiring_Test extends TestBase {
 	@Test void b06_buildPagingPill_navButtonsReferenceTheFourPagingSymbols() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function buildPagingPill(");
-		assertTrue(fnBody.contains("pagingPillButton(\"First page\", \"first_page\","), fnBody);
-		assertTrue(fnBody.contains("pagingPillButton(\"Previous page\", \"chevron_left\","), fnBody);
-		assertTrue(fnBody.contains("pagingPillButton(\"Next page\", \"chevron_right\","), fnBody);
-		assertTrue(fnBody.contains("pagingPillButton(\"Last page\", \"last_page\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"First page\", \"first_page_thin\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"Previous page\", \"chevron_left_thin\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"Next page\", \"chevron_right_thin\","), fnBody);
+		assertTrue(fnBody.contains("pagingPillButton(\"Last page\", \"last_page_thin\","), fnBody);
 	}
 
 	@Test void b03_buildPagingPill_carriesPagingDataTestId() throws Exception {

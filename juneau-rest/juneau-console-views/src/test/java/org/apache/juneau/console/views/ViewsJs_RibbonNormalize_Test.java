@@ -424,7 +424,7 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 
 	@Test void j03_columnSettingsRendersOpensChooserAndHidesWithoutConfig() {
 		assertBean(report(), "claim_cols_rendered,claim_cols_ribbonId,claim_cols_icon,claim_cols_opened,claim_cols_owns,claim_cols_hiddenNoConfig,claim_cols_hiddenNoRuntime",
-			"true,columns,tune,1,true,true,true");
+			"true,columns,settings,1,true,true,true");
 	}
 
 	@Test void j04_collapseAndResetFollowTheirVisibilityRules() {

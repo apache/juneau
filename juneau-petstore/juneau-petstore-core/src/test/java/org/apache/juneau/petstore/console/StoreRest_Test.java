@@ -26,9 +26,14 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.dto.*;
+import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -72,12 +77,10 @@ class StoreRest_Test extends TestBase {
 
 	@Test void a01_cardOrder() throws Exception {
 		assertPage(page(client(), "/console/store")).isValid()
-			.hasCardOrder("welcome", "revenue", "store-sw")
+			.hasCardOrder("welcome", "store-sw")
 			.hasCard("welcome", "html")
 			.hasCard("store-sw", "switcher").hasCardKey("store-sw", "/style", "slider")
 			.hasCard("stats", "datatables")
-			.hasCard("revenue", "kpi")
-			.hasCardKey("revenue", "/dataUrl", "/console/store/kpi/revenue")
 			.hasCard("orders-trend", "chart")
 			.hasCard("by-species", "chart")
 			.hasCard("by-status", "chart")
@@ -399,6 +402,28 @@ class StoreRest_Test extends TestBase {
 		} finally {
 			store.deleteOrder(pinned.getId(), "test");
 		}
+	}
+
+	/** A host whose store is seeded against a later fixed clock, as the running apps seed theirs against the current time. */
+	@Rest(children=PetstoreConsoleResource.class)
+	public static class LaterHost extends BasicRestServletGroup {
+		private static final long serialVersionUID = 1L;
+		static final Clock CLOCK = Clock.fixed(Instant.parse("2027-03-01T12:00:00Z"), ZoneOffset.UTC);
+		static final PetStore STORE = PetstoreSeed.create().clock(CLOCK).populate(new PetStore(CLOCK));
+
+		/** @return The later-clock store. */
+		@Bean public PetStore petStore() {
+			return STORE;
+		}
+	}
+
+	@Test void d02_revenueSeriesOnLaterClockIsNonZero() throws Exception {
+		var c = MockRestClient.create(LaterHost.class).noTrace().ignoreErrors().header("Accept", "application/json").build();
+		var rows = list(c, "/console/store/stats/revenue");
+		assertSize(30, rows);
+		assertEquals("2027-03-01", rows.getMap(29).getString("day"));
+		var total = StreamSupport.stream(rows.elements(JsonMap.class).spliterator(), false).mapToDouble(r -> r.get("revenue", Double.class)).sum();
+		assertTrue(total > 0, "revenue series was all zero");
 	}
 
 	@Test void d01_revenueFeed() throws Exception {

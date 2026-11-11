@@ -98,7 +98,7 @@ public final class ConsoleTemplateValidator {
 	private static final Pattern ASSET_REF = Pattern.compile("\\b(?:src|href)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')");
 	private static final Pattern JUNEAU_ASSET = Pattern.compile("(?:^|/)(?:juneau-[\\w-]+\\.(?:js|css|svg)|juneau-console/chrome\\.css)(?:[?#].*)?$");
 	private static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
-	private static final Map<String,Set<String>> STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle"));
+	private static final Map<String,Set<String>> STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle", "themeSelector"));
 	private static final Map<String,Set<String>> DIRECTIVES = directives();
 
 	private static Map<String,Set<String>> directives() {

@@ -685,7 +685,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("function pack("), body);
 		for (var name : new String[]{
 				"content_copy", "csv", "table", "picture_as_pdf", "refresh", "manage_search", "unfold_less",
-				"first_page", "chevron_left", "chevron_right", "last_page", "tune", "filter_alt", "expand_more", "sort"})
+				"first_page", "chevron_left", "chevron_right", "last_page", "first_page_thin", "chevron_left_thin", "chevron_right_thin", "last_page_thin", "tune", "filter_alt", "expand_more", "sort"})
 			assertTrue(body.contains("\"" + name + "\""), () -> "missing bundled glyph '" + name + "':\n" + body);
 	}
 
@@ -1073,7 +1073,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	@Test void o04_viewsCss_hasCompactDataTableDensityAndHairlineGrid() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
-		assertTrue(body.contains("padding: 4px 5px"), body);
+		assertTrue(body.contains("padding: 2px 5px"), body);
 		// Reference body type: 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
 		// (unchanged, C0016b) via var(--jc-chrome-font-size-1) rather than this cell-level literal.
 		assertTrue(body.contains("font-size: 0.8333rem"), body);
@@ -1123,9 +1123,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 				+ "than a duplicate literal: " + rule);
 		assertTrue(rule.contains("background-color: var(--jc-table-header-bg, #fff)"),
 			() -> "the header cell must be EXPLICIT opaque white, matching the reference white header: " + rule);
-		assertTrue(rule.contains("line-height: var(--jc-space-5)"),
-			() -> "the header row must reserve the reference 24px sort-icon-spacer content height, spent via the "
-				+ "existing --jc-space-5 step (4+4 padding + 24 content = the reference 32px): " + rule);
+		assertTrue(rule.contains("line-height: 1.35") && rule.contains("padding: 2px 5px"),
+			() -> "the header row is slim, matching the body cell (2px vertical padding, 1.35 line-height): " + rule);
 		assertFalse(rule.contains("font-size: 0.8333rem"),
 			() -> "the header must NOT inherit the body row's larger type step: " + rule);
 	}
@@ -1161,8 +1160,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(tbodyRule.contains("border-bottom: none"), tbodyRule);
 		assertFalse(tbodyRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"),
 			() -> "tbody must not restore horizontal cell hairlines via border shorthand: " + tbodyRule);
-		assertTrue(tbodyRule.contains("line-height: 1.5"),
-			() -> "tbody cells must pin the Bootstrap body line-height 1.5 (no min-height on td): " + tbodyRule);
+		assertTrue(tbodyRule.contains("line-height: 1.35"),
+			() -> "tbody cells must pin the slim body line-height 1.35 (no min-height on td): " + tbodyRule);
 		assertFalse(body.contains(".table-bordered"),
 			() -> "do not copy the Bootstrap bordered-table class into Juneau CSS: " + body);
 	}

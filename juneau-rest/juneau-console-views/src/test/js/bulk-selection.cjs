@@ -323,15 +323,15 @@ t('confirmBulkAction_confirmFalse_skipsDialogEntirely', () => {
 	assert.equal(doc.querySelector('.juneau-view-confirm-modal'), null);
 });
 
-t('wireToolbarRightClusterBulk_appendsToRightClusterOnly', () => {
+t('wireToolbarRightClusterBulk_insertsOwnRowAboveToolbarRow', () => {
 	const { doc, NS } = load();
+	const host = doc.createElement('div');
 	const row = doc.createElement('div');
-	const left = doc.createElement('div'); left.className = 'juneau-view-toolbar-left';
-	const right = doc.createElement('div'); right.className = 'juneau-view-toolbar-right';
-	row.appendChild(left); row.appendChild(right);
+	host.appendChild(row);
 	const bulkEl = doc.createElement('div');
 	NS.wireToolbarRightClusterBulk(row, { bulkToolbar: { el: bulkEl } });
-	assert.equal(bulkEl.parentNode, right);
+	assert.equal(bulkEl.parentNode, host);
+	assert.equal(bulkEl.nextSibling, row);
 	NS.wireToolbarRightClusterBulk(null, { bulkToolbar: { el: bulkEl } });
 	NS.wireToolbarRightClusterBulk(row, {});
 });

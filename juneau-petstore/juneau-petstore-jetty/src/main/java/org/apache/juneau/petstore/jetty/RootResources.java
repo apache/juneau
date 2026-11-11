@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.jetty;
 
+import java.time.*;
+
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.html.*;
@@ -127,8 +129,10 @@ public class RootResources extends BasicRestServletGroup {
 	@Bean
 	public PetStore petStore() {
 		var clock = PetstoreSeed.fixedNowClock();
-		if (clock == null)
-			return PetstoreSeed.create().populate(new PetStore());
+		if (clock == null) {
+			var now = Clock.systemUTC();
+			return PetstoreSeed.create().clock(now).populate(new PetStore(now));
+		}
 		return PetstoreSeed.create().clock(clock).populate(new PetStore(clock));
 	}
 

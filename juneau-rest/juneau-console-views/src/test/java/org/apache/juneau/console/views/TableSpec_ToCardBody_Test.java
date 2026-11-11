@@ -196,6 +196,12 @@ class TableSpec_ToCardBody_Test extends TestBase {
 			assertFalse(body.containsKey(key), key);
 	}
 
+	@Test void b03_savedViewsInRibbon_emittedOnlyWhenFalse() {
+		assertFalse(minimal().toCardBody().containsKey("savedViewsInRibbon"));
+		assertFalse(minimal().savedViewsInRibbon(true).toCardBody().containsKey("savedViewsInRibbon"));
+		assertEquals(false, minimal().savedViewsInRibbon(false).toCardBody().get("savedViewsInRibbon"));
+	}
+
 	@Test void b02_viewKeys_emittedWhenSet() {
 		var body = minimal().columnConfig(true).copyLink(true).cleanAddress(true).pausePollingWhileEditing(true).toCardBody();
 		assertPlain(body);

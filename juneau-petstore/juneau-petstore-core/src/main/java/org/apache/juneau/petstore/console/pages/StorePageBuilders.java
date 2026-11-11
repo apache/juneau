@@ -108,8 +108,6 @@ public final class StorePageBuilders {
 				<div class="jc-prose"><p>Browse pets, place orders and review what changed. Every page here is built from the same
 				Juneau console pieces your own app can use.</p>
 				<p data-slot="welcome-note">Signed in as a guest.</p></div>""")
-			.card(CardSpec.of("kpi", "revenue").title("Revenue")
-				.body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))
 			.card(SwitcherDef.create("store-sw").style(SwitcherDef.STYLE_SLIDER).initialView("recent")
 				.view("recent", "Recent orders", v -> v.section(SwitcherCards.table(recentOrders(qs))))
 				.view("revenue", "Revenue", v -> v

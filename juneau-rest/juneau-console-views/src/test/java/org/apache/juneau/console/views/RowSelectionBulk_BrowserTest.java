@@ -44,7 +44,7 @@ import org.junit.jupiter.api.condition.*;
  * 		(at most four in flight) or, for {@code aggregate} mode, as one POST of {@code {ids, idempotencyKey}} answered
  * 		by a {@code BulkResult}; either way the run ends in one summary toast, succeeded and not-found ids leave the
  * 		selection and failed ids stay selected;
- * 	<li>the bulk toolbar sits in the right cluster, is hidden at a zero count, and the independently-versioned bulk
+ * 	<li>the bulk toolbar sits in its own row above the toolbar, is hidden at a zero count, and the independently-versioned bulk
  * 		sidecar is read/contract-checked correctly at runtime (R2).
  * </ul>
  *
@@ -222,13 +222,13 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) Toolbar: single-action button vs. dropdown + Go, right cluster, hidden at a zero count
+	// f) Toolbar: single-action button vs. dropdown + Go, own row above the toolbar, hidden at a zero count
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_singleBulkAction_rendersButtonNotDropdown_inRightCluster() {
+	@Test void f01_singleBulkAction_rendersButtonNotDropdown_aboveToolbarRow() {
 		assertEquals(Boolean.TRUE, report.get("singleActionIsButton"), () -> report.toString());
 		assertEquals(Boolean.FALSE, report.get("singleActionHasDropdown"), () -> report.toString());
-		assertEquals(Boolean.TRUE, report.get("toolbarIsInRightCluster"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("toolbarIsAboveToolbarRow"), () -> report.toString());
 		assertTrue(String.valueOf(report.get("singleActionButtonTextWithTwoSelected")).contains("selected (2)"), () -> report.toString());
 	}
 

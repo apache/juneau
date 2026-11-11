@@ -168,7 +168,7 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	ctx.viewDef.columns[0].search = null;
 	const col = fakeCol(0, headerCell('Status'));
 	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
-	out.bareHelpAbsentIsNull = popEl(ctx).querySelector('.juneau-view-col-search-popover-barehelp') == null;
+	out.bareHelpFallbackShown = popEl(ctx).querySelector('.juneau-view-col-search-popover-barehelp') != null;
 	I.closeColumnSearchPopover(ctx);
 })();
 
@@ -417,7 +417,7 @@ function clickOn(ctx, cls) {
 	const ctx2 = makeCtx('client');
 	ctx2.viewDef.columns[0].search = null;
 	I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx2, env.el('table'));
-	out.typeLineAbsent = popEl(ctx2).querySelector('.juneau-view-col-search-popover-type') == null;
+	out.typeLineFallback = popEl(ctx2).querySelector('.juneau-view-col-search-popover-type') != null;
 	I.closeColumnSearchPopover(ctx2);
 })();
 
@@ -542,6 +542,29 @@ function clickOn(ctx, cls) {
 
 (function viewKeys() {
 	out.viewKeysHasHelpUrl = (NS.card.liftCatalog('t', { dataUrl: '/d', columns: [{ key: 'a', label: 'A' }], columnSearchHelpUrl: '/docs/search' }).view || {}).columnSearchHelpUrl;
+})();
+
+// --- Scenario: a column with NO search block still shows type, plain-value help, operators and examples ---------
+(function fallbackHelp() {
+	function open(render) {
+		const ctx = makeCtx('client');
+		ctx.viewDef.columns[0].search = null;
+		if (render) ctx.viewDef.columns[0].render = render;
+		I.openColumnSearchPopover(makeIcon(), fakeCol(0, headerCell('Status')), ctx, env.el('table'));
+		const el = popEl(ctx);
+		const res = {
+			type: el.querySelector('.juneau-view-col-search-popover-type')?.textContent ?? null,
+			bare: !!el.querySelector('.juneau-view-col-search-popover-barehelp'),
+			ops: el.querySelector('.juneau-view-col-search-popover-help').querySelectorAll('.juneau-view-col-search-popover-help-op').map(function (r) { return r.querySelector('code').textContent; }),
+			examples: !!el.querySelector('.juneau-view-col-search-popover-examples')
+		};
+		I.closeColumnSearchPopover(ctx);
+		return res;
+	}
+	out.fallbackText = open(null);
+	out.fallbackTimestamp = open('datetime');
+	out.fallbackNumeric = open('decimal:2');
+	out.fallbackBoolean = open('bool');
 })();
 
 process.stdout.write(JSON.stringify(out));

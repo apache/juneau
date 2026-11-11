@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
@@ -76,6 +78,26 @@ class RestRequest_Coverage_Test extends TestBase {
 	@Test void a03_localeFromAcceptLanguage_qValueWinner() throws Exception {
 		var c = MockRestClient.create(A.class).plainText().build();
 		c.get("/locale").header("Accept-Language", "fr;q=0.5,de;q=0.9").run().assertContent("de_");
+	}
+
+	@Test void a03b_localeFromAcceptLanguage_malformedIgnored() throws Exception {
+		var c = MockRestClient.create(A.class).plainText().build();
+		// Malformed range is ignored, falling through to the next well-formed one.
+		c.get("/locale").header("Accept-Language", "..-..;q=0.9,fr-CA;q=0.5").run().assertContent("fr_CA");
+		// Malformed-only falls back to the default locale (never ".." ).
+		var r = c.get("/locale").header("Accept-Language", "..-..").run().getContent().asString();
+		assertFalse(r.contains(".."));
+	}
+
+	@Test void a03c_toLocale_wellFormedAndMalformed() {
+		assertEquals(new Locale("en", ""), RestRequest.toLocale("en"));
+		assertEquals(new Locale("en", "US"), RestRequest.toLocale("en-US"));
+		assertEquals(new Locale("fr", "CA"), RestRequest.toLocale("fr-CA"));
+		assertEquals(new Locale("zh", "CN"), RestRequest.toLocale("zh-Hans-CN"));
+		assertEquals(new Locale("es", "419"), RestRequest.toLocale("es-419"));
+		assertEquals(new Locale("zh", ""), RestRequest.toLocale("zh-Hans"));
+		for (var bad : new String[]{"..-..", "..", "../..", "en-..", "e", "en-U", "en-USA", "en-US-x", "", "-", "en-", "123", "en/../x", "en-%2e%2e", "en-x-foo", "en_US", "*", "en-US-POSIX", "en-Latn-US-x", "en--US", "en-Hans-Latn", "en-US-CA", "en.US", "en\\us", "\u00e9n", "en-\u00dcS", "abcdefghi"})
+			assertNull(RestRequest.toLocale(bad), bad);
 	}
 
 	@Test void a04_timeZone_present() throws Exception {

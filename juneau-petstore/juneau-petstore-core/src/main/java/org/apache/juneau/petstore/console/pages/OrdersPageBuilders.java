@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.console.pages;
 
 import java.util.*;
 
+import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.console.freemarker.*;
 import org.apache.juneau.console.views.*;
 import org.apache.juneau.console.views.RowAction.*;
@@ -46,14 +47,15 @@ public final class OrdersPageBuilders {
 	public static PageSpec orders() {
 		return PageSpec.create().tab("orders").toolkit("views", "datatables-buttons", "datatables-export")
 			.table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query").urlState("day", "window")
+				.operators(SearchOperatorSet.standard())
 				.columnConfig(Map.of("tabs", List.of("columns", "sort")))
 				.defaultOrder("id", Sort.ASC)
 				.detail(RowDetails.order())
 				.columns(
-					Column.create("id").label("Id"),
-					Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),
-					Column.create("shipDate").label("Ship date").render("date"),
-					Column.create("status").label("Status").render(PillRenders.orderStatus()))
+					Column.create("id").label("Id").searchType(SearchType.NUMERIC),
+					Column.create("petId").label("Pet").href("/console/pets/{petId}/summary").searchType(SearchType.NUMERIC),
+					Column.create("shipDate").label("Ship date").render("date").searchType(SearchType.TEXT),
+					Column.create("status").label("Status").render(PillRenders.orderStatus()).searchType(SearchType.ENUM))
 				.ribbon(Ribbons.standard()
 					.create(RibbonItem.dialog("new-order").title("+ New order").symbol("plus")
 						.form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW))

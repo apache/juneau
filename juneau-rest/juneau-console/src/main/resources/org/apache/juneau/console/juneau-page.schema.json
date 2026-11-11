@@ -353,6 +353,7 @@
         "cleanAddress":  { "type": "boolean" },
         "primary":       { "type": "boolean" },
         "copyLink":      { "type": "boolean" },
+        "savedViewsInRibbon": { "type": "boolean" },
         "rowClassRules": { "type": "array", "items": { "type": "object" } },
         "rowActions":    { "type": "array", "items": { "$ref": "#/$defs/rowAction" } },
         "rows":          { "type": "array" },

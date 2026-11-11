@@ -278,4 +278,35 @@ class DirectoryResource_PathTraversal_Test extends TestBase {
 				"Symlink-escape response must not leak the outside-root secret");
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Upload final-segment handling
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void t20_uploadThroughDanglingSymlink_doesNotCreateOutsideFile() throws Exception {
+		var outsideNew = tempDir.resolve("outside-dangling-target.txt");
+		Files.deleteIfExists(outsideNew);
+		var link = rootDir.resolve("dangling-link.txt");
+		try {
+			Files.createSymbolicLink(link, outsideNew);
+		} catch (UnsupportedOperationException | IOException e) {
+			assumeTrue(false, "Filesystem does not support symbolic links");
+			return;
+		}
+		try (var c = buildClient()) {
+			var status = c.put("/dangling-link.txt", "ATTACK_PAYLOAD").run().getStatusCode();
+			assertTrue(status == 403 || status == 404, "Expected 403/404, was: " + status);
+			assertFalse(Files.exists(outsideNew), "PUT through a dangling symlink must not create the outside file");
+		} finally {
+			Files.deleteIfExists(link);
+		}
+	}
+
+	@Test void t21_uploadBackslashName_doesNotCreateOutsideFile() throws Exception {
+		try (var c = buildClient()) {
+			var status = c.put("/..%5Coutside-backslash.txt", "ATTACK_PAYLOAD").run().getStatusCode();
+			assertTrue(status == 403 || status == 404, "Expected 403/404, was: " + status);
+			assertFalse(Files.exists(tempDir.resolve("outside-backslash.txt")));
+		}
+	}
 }

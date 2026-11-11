@@ -147,6 +147,29 @@ class ViewSettings_BrowserTest extends TestBase {
 		obj(report, "pages").forEach((k, v) -> assertEquals(List.of(), ((Map<String,Object>)v).get("errors"), k));
 	}
 
+	@Test void c04_applyClosesTheDialogAfterSaveAs() {
+		var a = obj(report, "applyClose");
+		assertEquals(true, a.get("openBeforeApply"), a::toString);
+		assertEquals(false, a.get("openAfterApply"), a::toString);
+		assertEquals("foo", a.get("applied"), a::toString);
+		assertEquals(List.of(), a.get("errors"));
+	}
+
+	@Test void c06_saveFlowIsOneInlineRow() {
+		var f = obj(report, "saveFlow");
+		assertBean(f, "saveDisabledOnDefault,rowSameLine,fieldVisible,selectHiddenWhileNaming,prefill,placeholder,hasLabel,escCancelled,dialogSurvivesEsc,enterSaved,saveEnabledOnNamed,copyPrefill",
+			"true,true,true,true,Default copy,View name,true,true,true,true,true,Bar copy");
+		assertEquals(List.of(), f.get("errors"));
+	}
+
+	@Test void c05_sortRowsShareOneHeightAndCompactControls() {
+		var r = obj(report, "sortRows");
+		assertEquals(true, r.get("hasBoth"), r::toString);
+		assertEquals(num(r, "sorted"), num(r, "unsorted"), r::toString);
+		assertEquals(num(r, "selectHeight"), num(r, "buttonHeight"), r::toString);
+		assertEquals(List.of(), r.get("errors"));
+	}
+
 	@Test void a02_folderTabsInOrder() {
 		var l = wideLayout();
 		assertEquals(List.of("View", "Search", "Sort", "Options"), l.get("tabs"));
@@ -158,7 +181,9 @@ class ViewSettings_BrowserTest extends TestBase {
 		var l = wideLayout();
 		assertEquals(List.of("juneau-config-saved-bar", "juneau-config-tabs", "juneau-config-bodies", "juneau-config-status"), l.get("hostChildren"));
 		assertEquals(true, l.get("headerBeforeBar"));
-		assertEquals(List.of("Save as…", "Rename", "Delete"), l.get("barButtons"));
+		assertEquals(List.of("Save", "Save as…"), l.get("rowButtons"));
+		assertEquals(List.of("Rename", "Delete"), l.get("barButtons"));
+		assertEquals(true, l.get("saveDisabled"));
 		assertEquals(true, l.get("deleteDanger"));
 		// The Default view is active: it can be neither renamed nor deleted.
 		assertEquals(true, l.get("renameDisabled"));
@@ -175,18 +200,18 @@ class ViewSettings_BrowserTest extends TestBase {
 		assertTrue(String.valueOf(c.get("detailSelected")).startsWith("Name"), c::toString);
 	}
 
-	@Test void c02_selectedTabJoinsDialogWithAccentBar() {
+	@Test void c02_selectedTabIsWashWithAccentBar() {
 		var t = obj(obj(report, "chooserLight"), "tabs");
 		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
-		assertEquals(t.get("dlgBg"), t.get("selBg"), t::toString);
-		assertTrue(String.valueOf(t.get("selBar")).contains("0px 3px 0px 0px inset"), t::toString);
+		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
+		assertEquals("none", t.get("selBar"), t::toString);
 	}
 
-	@Test void c03_selectedTabJoinsDialogWithAccentBar_dark() {
+	@Test void c03_selectedTabIsWashWithAccentBar_dark() {
 		var t = obj(obj(report, "chooserDark"), "tabs");
 		assertNotEquals(t.get("selBg"), t.get("unBg"), t::toString);
-		assertEquals(t.get("dlgBg"), t.get("selBg"), t::toString);
-		assertTrue(String.valueOf(t.get("selBar")).contains("0px 3px 0px 0px inset"), t::toString);
+		assertEquals(t.get("wash"), t.get("selBg"), t::toString);
+		assertEquals("none", t.get("selBar"), t::toString);
 	}
 
 	@Test void a04_footerIsResetThenCancelThenApply() {

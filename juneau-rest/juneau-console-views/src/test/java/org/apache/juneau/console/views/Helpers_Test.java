@@ -65,6 +65,10 @@ class Helpers_Test extends TestBase {
 		assertEquals(List.of("alerts-primary", "Platform"), r.get("fieldGrid_values"));
 	}
 
+	@Test void b01a_fieldGrid_usesTheInlineLabelBesideValueLayout() {
+		assertAllTrue(report(), "fieldGrid_inlineLayout");
+	}
+
 	@Test void b02_fieldGrid_missingValuesKey_rendersEmptyNeverUndefined() {
 		assertAllTrue(report(), "fieldGrid_missingKeyRendersEmpty");
 	}
