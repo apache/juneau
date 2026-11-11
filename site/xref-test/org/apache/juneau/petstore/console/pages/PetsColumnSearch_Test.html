@@ -51,7 +51,27 @@
 <a class="jxr_linenumber" name="L43" href="#L43">43</a>  			assertNotNull(column(n).getString(<span class="jxr_string">"searchType"</span>), n);
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  		assertNull(column(<span class="jxr_string">"tags"</span>).getString(<span class="jxr_string">"searchType"</span>));
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  	}
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  }
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	@Test <strong class="jxr_keyword">void</strong> a03_soldColumnsAreSearchable() {
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">var</strong> body = PetsPageBuilders.soldTable().toCardBody();
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : body.getList(<span class="jxr_string">"columns"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>))
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			assertNotNull(c.getString(<span class="jxr_string">"searchType"</span>), c.getString(<span class="jxr_string">"key"</span>));
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	@Test <strong class="jxr_keyword">void</strong> a04_nestedOrdersAndHistoryColumnsAreSearchable() {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">var</strong> detail = PetsPageBuilders.petsTable().toCardBody().getMap(<span class="jxr_string">"detail"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">var</strong> seen = 0;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> tab : detail.getList(<span class="jxr_string">"tabs"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			<strong class="jxr_keyword">if</strong> (! <span class="jxr_string">"table"</span>.equals(tab.getString(<span class="jxr_string">"kind"</span>)))
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  				<strong class="jxr_keyword">continue</strong>;
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">var</strong> c : tab.getMap(<span class="jxr_string">"nested"</span>).getMap(<span class="jxr_string">"meta"</span>).getList(<span class="jxr_string">"columns"</span>).elements(JsonMap.<strong class="jxr_keyword">class</strong>)) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  				assertNotNull(c.getString(<span class="jxr_string">"searchType"</span>), tab.getString(<span class="jxr_string">"id"</span>) + <span class="jxr_string">"."</span> + c.getString(<span class="jxr_string">"data"</span>));
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				seen++;
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			}
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		assertEquals(7, seen);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  	}
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  }
 </pre>
 <hr/>
 <div id="footer">© 2016–2026 <a href="https://www.apache.org/">The Apache Software Foundation</a></div>

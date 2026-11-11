@@ -141,110 +141,113 @@
 <span class="source-line-no">128</span><span id="line-128">    * @return The page spec.</span>
 <span class="source-line-no">129</span><span id="line-129">    */</span>
 <span class="source-line-no">130</span><span id="line-130">   public static PageSpec sold() {</span>
-<span class="source-line-no">131</span><span id="line-131">      return PageSpec.create().toolkit("views", "datatables-buttons")</span>
-<span class="source-line-no">132</span><span id="line-132">         .table(TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")</span>
-<span class="source-line-no">133</span><span id="line-133">            .columnConfig(true)</span>
-<span class="source-line-no">134</span><span id="line-134">            .detail(RowDetails.soldPet())</span>
-<span class="source-line-no">135</span><span id="line-135">            .columns(</span>
-<span class="source-line-no">136</span><span id="line-136">               Column.create("id").label("Id"),</span>
-<span class="source-line-no">137</span><span id="line-137">               Column.create("name").label("Name"),</span>
-<span class="source-line-no">138</span><span id="line-138">               Column.create("species").label("Species").render(PillRenders.species()),</span>
-<span class="source-line-no">139</span><span id="line-139">               Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)))</span>
-<span class="source-line-no">140</span><span id="line-140">            .ribbon(Ribbons.standard()</span>
-<span class="source-line-no">141</span><span id="line-141">               .filter(RibbonItem.optionGroup("species",</span>
-<span class="source-line-no">142</span><span id="line-142">                  RibbonItem.option("dogs").title("Dogs").symbol("paw_print").column("species").value("$eq(DOG)"),</span>
-<span class="source-line-no">143</span><span id="line-143">                  RibbonItem.option("cats").title("Cats").symbol("shapes").column("species").value("$eq(CAT)"))</span>
-<span class="source-line-no">144</span><span id="line-144">                  .title("Species"))</span>
-<span class="source-line-no">145</span><span id="line-145">               .build()), "Sold pets");</span>
-<span class="source-line-no">146</span><span id="line-146">   }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">   /**</span>
-<span class="source-line-no">149</span><span id="line-149">    * P4 one pet, on one tab.</span>
-<span class="source-line-no">150</span><span id="line-150">    *</span>
-<span class="source-line-no">151</span><span id="line-151">    * @param pet The pet.</span>
-<span class="source-line-no">152</span><span id="line-152">    * @param tab The tab: {@code summary}, {@code photo}, {@code orders} or {@code history}.</span>
-<span class="source-line-no">153</span><span id="line-153">    * @param activeNav The active nav path, {@code pets/p&lt;id&gt;/&lt;tab&gt;} or {@code pets/p&lt;id&gt;/orders/o&lt;orderId&gt;}.</span>
-<span class="source-line-no">154</span><span id="line-154">    * @param order The selected order on the orders tab, or &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">155</span><span id="line-155">    * @param roles The viewer's roles.</span>
-<span class="source-line-no">156</span><span id="line-156">    * @param apiCsrf The API's CSRF token for the photo upload form, or &lt;jk&gt;null&lt;/jk&gt; to render the form without one.</span>
-<span class="source-line-no">157</span><span id="line-157">    * @return The page spec.</span>
-<span class="source-line-no">158</span><span id="line-158">    */</span>
-<span class="source-line-no">159</span><span id="line-159">   public static PageSpec pet(Pet pet, String tab, String activeNav, Order order, List&lt;String&gt; roles, String apiCsrf) {</span>
-<span class="source-line-no">160</span><span id="line-160">      var id = pet.getId();</span>
-<span class="source-line-no">161</span><span id="line-161">      var href = "/console/pets/" + id;</span>
-<span class="source-line-no">162</span><span id="line-162">      var p = PageSpec.create().tab(activeNav).toolkit("views").title(pet.getName())</span>
-<span class="source-line-no">163</span><span id="line-163">         .facts(Map.of("viewer", Map.of("roles", roles)))</span>
-<span class="source-line-no">164</span><span id="line-164">         .navUnder("pets", n -&gt; {</span>
-<span class="source-line-no">165</span><span id="line-165">            var node = n.add("p" + id, pet.getName(), href + "/summary");</span>
-<span class="source-line-no">166</span><span id="line-166">            node.add("summary", "Summary", href + "/summary");</span>
-<span class="source-line-no">167</span><span id="line-167">            node.add("photo", "Photo", href + "/photo");</span>
-<span class="source-line-no">168</span><span id="line-168">            var orders = node.add("orders", "Orders", href + "/orders");</span>
-<span class="source-line-no">169</span><span id="line-169">            if (order != null)</span>
-<span class="source-line-no">170</span><span id="line-170">               orders.add("o" + order.getId(), "Order " + order.getId(), href + "/orders/" + order.getId());</span>
-<span class="source-line-no">171</span><span id="line-171">            node.add("history", "History", href + "/history");</span>
-<span class="source-line-no">172</span><span id="line-172">         });</span>
-<span class="source-line-no">173</span><span id="line-173">      var name = escapeHtml(pet.getName());</span>
-<span class="source-line-no">174</span><span id="line-174">      switch (tab) {</span>
-<span class="source-line-no">175</span><span id="line-175">         case "summary" -&gt; p.table(TableSpec.create("pet").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl(href + "/row")</span>
-<span class="source-line-no">176</span><span id="line-176">            .columns(</span>
-<span class="source-line-no">177</span><span id="line-177">               Column.create("id").label("Id"),</span>
-<span class="source-line-no">178</span><span id="line-178">               Column.create("name").label("Name").render(Render.of("edit").meta("action", "rename").meta("column", "name").meta("input", "text")),</span>
-<span class="source-line-no">179</span><span id="line-179">               Column.create("species").label("Species").render(PillRenders.species()),</span>
-<span class="source-line-no">180</span><span id="line-180">               Column.create("status").label("Status").render(PillRenders.petStatus()),</span>
-<span class="source-line-no">181</span><span id="line-181">               Column.create("price").label("Price (USD)").render(Render.of("edit").meta("action", "reprice").meta("column", "price").meta("input", "number")))</span>
-<span class="source-line-no">182</span><span id="line-182">            .rowActions(</span>
-<span class="source-line-no">183</span><span id="line-183">               stage("rename", "Rename"),</span>
-<span class="source-line-no">184</span><span id="line-184">               stage("reprice", "Reprice"),</span>
-<span class="source-line-no">185</span><span id="line-185">               RowAction.create("sell").label("Mark sold").endpoint("/console/pets/{id}/sell").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
-<span class="source-line-no">186</span><span id="line-186">                  .confirm("Mark '{name}' sold?").visibleWhen(VisibilityRule.when("status").ne("SOLD")))</span>
-<span class="source-line-no">187</span><span id="line-187">            .ribbon(RibbonItem.refresh()), pet.getName());</span>
-<span class="source-line-no">188</span><span id="line-188">         case "photo" -&gt; {</span>
-<span class="source-line-no">189</span><span id="line-189">            p.html("photo", "Photo", """</span>
-<span class="source-line-no">190</span><span id="line-190">               &lt;figure class="jc-figure"&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">               &lt;object data="/petstore/pets/%1$s/photo" type="image/png" aria-label="Photo of %2$s"&gt;&lt;p&gt;No photo uploaded for %2$s yet.&lt;/p&gt;&lt;/object&gt;</span>
-<span class="source-line-no">192</span><span id="line-192">               &lt;figcaption&gt;Served by &lt;code&gt;PetPhotoSerializer&lt;/code&gt; from &lt;code&gt;GET /petstore/pets/%1$s/photo&lt;/code&gt;.&lt;/figcaption&gt;</span>
-<span class="source-line-no">193</span><span id="line-193">               &lt;/figure&gt;""".formatted(id, name));</span>
-<span class="source-line-no">194</span><span id="line-194">            if (roles.contains("admin")) {</span>
-<span class="source-line-no">195</span><span id="line-195">               var csrf = apiCsrf == null ? "" : " data-petstore-csrf=\"%s\"".formatted(escapeHtml(apiCsrf));</span>
-<span class="source-line-no">196</span><span id="line-196">               p.html("photo-upload", "Upload photo", """</span>
-<span class="source-line-no">197</span><span id="line-197">                  &lt;form class="jc-form" data-petstore-upload="/petstore/pets/%s/photo"%s&gt;</span>
-<span class="source-line-no">198</span><span id="line-198">                  &lt;input type="file" name="photo" accept="image/png,image/jpeg" aria-label="Photo file"&gt;</span>
-<span class="source-line-no">199</span><span id="line-199">                  &lt;button type="submit" class="jc-button"&gt;Upload&lt;/button&gt;</span>
-<span class="source-line-no">200</span><span id="line-200">                  &lt;/form&gt;""".formatted(id, csrf));</span>
-<span class="source-line-no">201</span><span id="line-201">            }</span>
-<span class="source-line-no">202</span><span id="line-202">         }</span>
-<span class="source-line-no">203</span><span id="line-203">         case "orders" -&gt; {</span>
-<span class="source-line-no">204</span><span id="line-204">            p.table(TableSpec.create("pet-orders").rowType("Order").dataMode(DataMode.CLIENT).dataUrl(href + "/orders/rows")</span>
-<span class="source-line-no">205</span><span id="line-205">               .columns(</span>
-<span class="source-line-no">206</span><span id="line-206">                  Column.create("id").label("Order").href(href + "/orders/{id}"),</span>
-<span class="source-line-no">207</span><span id="line-207">                  Column.create("shipDate").label("Ship date"),</span>
-<span class="source-line-no">208</span><span id="line-208">                  Column.create("status").label("Status").render(PillRenders.orderStatus()))</span>
-<span class="source-line-no">209</span><span id="line-209">               .detail(RowDetail.create(href + "/orders/{id}/detail").title("Order {id}")), "Orders");</span>
-<span class="source-line-no">210</span><span id="line-210">            if (order != null)</span>
-<span class="source-line-no">211</span><span id="line-211">               p.html("order", "Order " + order.getId(),</span>
-<span class="source-line-no">212</span><span id="line-212">                  "&lt;dl class=\"jc-details\"&gt;&lt;dt&gt;Status&lt;/dt&gt;&lt;dd&gt;%s&lt;/dd&gt;&lt;dt&gt;Ship date&lt;/dt&gt;&lt;dd&gt;%s&lt;/dd&gt;&lt;dt&gt;Pet&lt;/dt&gt;&lt;dd&gt;%s&lt;/dd&gt;&lt;/dl&gt;"</span>
-<span class="source-line-no">213</span><span id="line-213">                     .formatted(order.getStatus(), escapeHtml(order.getShipDate() == null ? "" : order.getShipDate()), name));</span>
-<span class="source-line-no">214</span><span id="line-214">         }</span>
-<span class="source-line-no">215</span><span id="line-215">         default -&gt; p.table(TableSpec.create("history").rowType("AuditEntry").dataMode(DataMode.CLIENT).dataUrl(href + "/history/rows")</span>
-<span class="source-line-no">216</span><span id="line-216">            .defaultOrder("at", Sort.DESC)</span>
-<span class="source-line-no">217</span><span id="line-217">            .detail(RowDetails.history())</span>
-<span class="source-line-no">218</span><span id="line-218">            .columns(</span>
-<span class="source-line-no">219</span><span id="line-219">               Column.create("id").label("Id").defaultVisible(false),</span>
-<span class="source-line-no">220</span><span id="line-220">               Column.create("at").label("When").render("timestamp"),</span>
-<span class="source-line-no">221</span><span id="line-221">               Column.create("actor").label("Actor"),</span>
-<span class="source-line-no">222</span><span id="line-222">               Column.create("action").label("Action").render(PillRenders.auditAction()),</span>
-<span class="source-line-no">223</span><span id="line-223">               Column.create("detail").label("Detail")), "History");</span>
-<span class="source-line-no">224</span><span id="line-224">      }</span>
-<span class="source-line-no">225</span><span id="line-225">      return p;</span>
-<span class="source-line-no">226</span><span id="line-226">   }</span>
-<span class="source-line-no">227</span><span id="line-227"></span>
-<span class="source-line-no">228</span><span id="line-228">   // The pencil edit cell commits it; present=inline keeps it out of the row menu.</span>
-<span class="source-line-no">229</span><span id="line-229">   private static RowAction stage(String id, String label) {</span>
-<span class="source-line-no">230</span><span id="line-230">      return RowAction.create(id).label(label).endpoint("/console/pets/{id}/stage").method(Method.POST).noConfirm()</span>
-<span class="source-line-no">231</span><span id="line-231">         .present(Present.INLINE)</span>
-<span class="source-line-no">232</span><span id="line-232">         .visibleWhen(VisibilityRule.when("status").ne("SOLD"));</span>
-<span class="source-line-no">233</span><span id="line-233">   }</span>
-<span class="source-line-no">234</span><span id="line-234">}</span>
+<span class="source-line-no">131</span><span id="line-131">      return PageSpec.create().toolkit("views", "datatables-buttons").table(soldTable(), "Sold pets");</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   static TableSpec soldTable() {</span>
+<span class="source-line-no">135</span><span id="line-135">      return TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")</span>
+<span class="source-line-no">136</span><span id="line-136">            .columnConfig(true)</span>
+<span class="source-line-no">137</span><span id="line-137">            .detail(RowDetails.soldPet())</span>
+<span class="source-line-no">138</span><span id="line-138">            .columns(</span>
+<span class="source-line-no">139</span><span id="line-139">               Column.create("id").label("Id").searchType(SearchType.NUMERIC),</span>
+<span class="source-line-no">140</span><span id="line-140">               Column.create("name").label("Name").searchType(SearchType.TEXT),</span>
+<span class="source-line-no">141</span><span id="line-141">               Column.create("species").label("Species").render(PillRenders.species()).searchType(SearchType.ENUM),</span>
+<span class="source-line-no">142</span><span id="line-142">               Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)).searchType(SearchType.NUMERIC))</span>
+<span class="source-line-no">143</span><span id="line-143">            .ribbon(Ribbons.standard()</span>
+<span class="source-line-no">144</span><span id="line-144">               .filter(RibbonItem.optionGroup("species",</span>
+<span class="source-line-no">145</span><span id="line-145">                  RibbonItem.option("dogs").title("Dogs").symbol("paw_print").column("species").value("$eq(DOG)"),</span>
+<span class="source-line-no">146</span><span id="line-146">                  RibbonItem.option("cats").title("Cats").symbol("shapes").column("species").value("$eq(CAT)"))</span>
+<span class="source-line-no">147</span><span id="line-147">                  .title("Species"))</span>
+<span class="source-line-no">148</span><span id="line-148">               .build());</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">   /**</span>
+<span class="source-line-no">152</span><span id="line-152">    * P4 one pet, on one tab.</span>
+<span class="source-line-no">153</span><span id="line-153">    *</span>
+<span class="source-line-no">154</span><span id="line-154">    * @param pet The pet.</span>
+<span class="source-line-no">155</span><span id="line-155">    * @param tab The tab: {@code summary}, {@code photo}, {@code orders} or {@code history}.</span>
+<span class="source-line-no">156</span><span id="line-156">    * @param activeNav The active nav path, {@code pets/p&lt;id&gt;/&lt;tab&gt;} or {@code pets/p&lt;id&gt;/orders/o&lt;orderId&gt;}.</span>
+<span class="source-line-no">157</span><span id="line-157">    * @param order The selected order on the orders tab, or &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">158</span><span id="line-158">    * @param roles The viewer's roles.</span>
+<span class="source-line-no">159</span><span id="line-159">    * @param apiCsrf The API's CSRF token for the photo upload form, or &lt;jk&gt;null&lt;/jk&gt; to render the form without one.</span>
+<span class="source-line-no">160</span><span id="line-160">    * @return The page spec.</span>
+<span class="source-line-no">161</span><span id="line-161">    */</span>
+<span class="source-line-no">162</span><span id="line-162">   public static PageSpec pet(Pet pet, String tab, String activeNav, Order order, List&lt;String&gt; roles, String apiCsrf) {</span>
+<span class="source-line-no">163</span><span id="line-163">      var id = pet.getId();</span>
+<span class="source-line-no">164</span><span id="line-164">      var href = "/console/pets/" + id;</span>
+<span class="source-line-no">165</span><span id="line-165">      var p = PageSpec.create().tab(activeNav).toolkit("views").title(pet.getName())</span>
+<span class="source-line-no">166</span><span id="line-166">         .facts(Map.of("viewer", Map.of("roles", roles)))</span>
+<span class="source-line-no">167</span><span id="line-167">         .navUnder("pets", n -&gt; {</span>
+<span class="source-line-no">168</span><span id="line-168">            var node = n.add("p" + id, pet.getName(), href + "/summary");</span>
+<span class="source-line-no">169</span><span id="line-169">            node.add("summary", "Summary", href + "/summary");</span>
+<span class="source-line-no">170</span><span id="line-170">            node.add("photo", "Photo", href + "/photo");</span>
+<span class="source-line-no">171</span><span id="line-171">            var orders = node.add("orders", "Orders", href + "/orders");</span>
+<span class="source-line-no">172</span><span id="line-172">            if (order != null)</span>
+<span class="source-line-no">173</span><span id="line-173">               orders.add("o" + order.getId(), "Order " + order.getId(), href + "/orders/" + order.getId());</span>
+<span class="source-line-no">174</span><span id="line-174">            node.add("history", "History", href + "/history");</span>
+<span class="source-line-no">175</span><span id="line-175">         });</span>
+<span class="source-line-no">176</span><span id="line-176">      var name = escapeHtml(pet.getName());</span>
+<span class="source-line-no">177</span><span id="line-177">      switch (tab) {</span>
+<span class="source-line-no">178</span><span id="line-178">         case "summary" -&gt; p.table(TableSpec.create("pet").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl(href + "/row")</span>
+<span class="source-line-no">179</span><span id="line-179">            .columns(</span>
+<span class="source-line-no">180</span><span id="line-180">               Column.create("id").label("Id"),</span>
+<span class="source-line-no">181</span><span id="line-181">               Column.create("name").label("Name").render(Render.of("edit").meta("action", "rename").meta("column", "name").meta("input", "text")),</span>
+<span class="source-line-no">182</span><span id="line-182">               Column.create("species").label("Species").render(PillRenders.species()),</span>
+<span class="source-line-no">183</span><span id="line-183">               Column.create("status").label("Status").render(PillRenders.petStatus()),</span>
+<span class="source-line-no">184</span><span id="line-184">               Column.create("price").label("Price (USD)").render(Render.of("edit").meta("action", "reprice").meta("column", "price").meta("input", "number")))</span>
+<span class="source-line-no">185</span><span id="line-185">            .rowActions(</span>
+<span class="source-line-no">186</span><span id="line-186">               stage("rename", "Rename"),</span>
+<span class="source-line-no">187</span><span id="line-187">               stage("reprice", "Reprice"),</span>
+<span class="source-line-no">188</span><span id="line-188">               RowAction.create("sell").label("Mark sold").endpoint("/console/pets/{id}/sell").method(Method.POST).onSuccess(OnSuccess.REDRAW)</span>
+<span class="source-line-no">189</span><span id="line-189">                  .confirm("Mark '{name}' sold?").visibleWhen(VisibilityRule.when("status").ne("SOLD")))</span>
+<span class="source-line-no">190</span><span id="line-190">            .ribbon(RibbonItem.refresh()), pet.getName());</span>
+<span class="source-line-no">191</span><span id="line-191">         case "photo" -&gt; {</span>
+<span class="source-line-no">192</span><span id="line-192">            p.html("photo", "Photo", """</span>
+<span class="source-line-no">193</span><span id="line-193">               &lt;figure class="jc-figure"&gt;</span>
+<span class="source-line-no">194</span><span id="line-194">               &lt;object data="/petstore/pets/%1$s/photo" type="image/png" aria-label="Photo of %2$s"&gt;&lt;p&gt;No photo uploaded for %2$s yet.&lt;/p&gt;&lt;/object&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">               &lt;figcaption&gt;Served by &lt;code&gt;PetPhotoSerializer&lt;/code&gt; from &lt;code&gt;GET /petstore/pets/%1$s/photo&lt;/code&gt;.&lt;/figcaption&gt;</span>
+<span class="source-line-no">196</span><span id="line-196">               &lt;/figure&gt;""".formatted(id, name));</span>
+<span class="source-line-no">197</span><span id="line-197">            if (roles.contains("admin")) {</span>
+<span class="source-line-no">198</span><span id="line-198">               var csrf = apiCsrf == null ? "" : " data-petstore-csrf=\"%s\"".formatted(escapeHtml(apiCsrf));</span>
+<span class="source-line-no">199</span><span id="line-199">               p.html("photo-upload", "Upload photo", """</span>
+<span class="source-line-no">200</span><span id="line-200">                  &lt;form class="jc-form" data-petstore-upload="/petstore/pets/%s/photo"%s&gt;</span>
+<span class="source-line-no">201</span><span id="line-201">                  &lt;input type="file" name="photo" accept="image/png,image/jpeg" aria-label="Photo file"&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">                  &lt;button type="submit" class="jc-button"&gt;Upload&lt;/button&gt;</span>
+<span class="source-line-no">203</span><span id="line-203">                  &lt;/form&gt;""".formatted(id, csrf));</span>
+<span class="source-line-no">204</span><span id="line-204">            }</span>
+<span class="source-line-no">205</span><span id="line-205">         }</span>
+<span class="source-line-no">206</span><span id="line-206">         case "orders" -&gt; {</span>
+<span class="source-line-no">207</span><span id="line-207">            p.table(TableSpec.create("pet-orders").rowType("Order").dataMode(DataMode.CLIENT).dataUrl(href + "/orders/rows")</span>
+<span class="source-line-no">208</span><span id="line-208">               .columns(</span>
+<span class="source-line-no">209</span><span id="line-209">                  Column.create("id").label("Order").href(href + "/orders/{id}"),</span>
+<span class="source-line-no">210</span><span id="line-210">                  Column.create("shipDate").label("Ship date"),</span>
+<span class="source-line-no">211</span><span id="line-211">                  Column.create("status").label("Status").render(PillRenders.orderStatus()))</span>
+<span class="source-line-no">212</span><span id="line-212">               .detail(RowDetail.create(href + "/orders/{id}/detail").title("Order {id}")), "Orders");</span>
+<span class="source-line-no">213</span><span id="line-213">            if (order != null)</span>
+<span class="source-line-no">214</span><span id="line-214">               p.html("order", "Order " + order.getId(),</span>
+<span class="source-line-no">215</span><span id="line-215">                  "&lt;dl class=\"jc-details\"&gt;&lt;dt&gt;Status&lt;/dt&gt;&lt;dd&gt;%s&lt;/dd&gt;&lt;dt&gt;Ship date&lt;/dt&gt;&lt;dd&gt;%s&lt;/dd&gt;&lt;dt&gt;Pet&lt;/dt&gt;&lt;dd&gt;%s&lt;/dd&gt;&lt;/dl&gt;"</span>
+<span class="source-line-no">216</span><span id="line-216">                     .formatted(order.getStatus(), escapeHtml(order.getShipDate() == null ? "" : order.getShipDate()), name));</span>
+<span class="source-line-no">217</span><span id="line-217">         }</span>
+<span class="source-line-no">218</span><span id="line-218">         default -&gt; p.table(TableSpec.create("history").rowType("AuditEntry").dataMode(DataMode.CLIENT).dataUrl(href + "/history/rows")</span>
+<span class="source-line-no">219</span><span id="line-219">            .defaultOrder("at", Sort.DESC)</span>
+<span class="source-line-no">220</span><span id="line-220">            .detail(RowDetails.history())</span>
+<span class="source-line-no">221</span><span id="line-221">            .columns(</span>
+<span class="source-line-no">222</span><span id="line-222">               Column.create("id").label("Id").defaultVisible(false),</span>
+<span class="source-line-no">223</span><span id="line-223">               Column.create("at").label("When").render("timestamp"),</span>
+<span class="source-line-no">224</span><span id="line-224">               Column.create("actor").label("Actor"),</span>
+<span class="source-line-no">225</span><span id="line-225">               Column.create("action").label("Action").render(PillRenders.auditAction()),</span>
+<span class="source-line-no">226</span><span id="line-226">               Column.create("detail").label("Detail")), "History");</span>
+<span class="source-line-no">227</span><span id="line-227">      }</span>
+<span class="source-line-no">228</span><span id="line-228">      return p;</span>
+<span class="source-line-no">229</span><span id="line-229">   }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">   // The pencil edit cell commits it; present=inline keeps it out of the row menu.</span>
+<span class="source-line-no">232</span><span id="line-232">   private static RowAction stage(String id, String label) {</span>
+<span class="source-line-no">233</span><span id="line-233">      return RowAction.create(id).label(label).endpoint("/console/pets/{id}/stage").method(Method.POST).noConfirm()</span>
+<span class="source-line-no">234</span><span id="line-234">         .present(Present.INLINE)</span>
+<span class="source-line-no">235</span><span id="line-235">         .visibleWhen(VisibilityRule.when("status").ne("SOLD"));</span>
+<span class="source-line-no">236</span><span id="line-236">   }</span>
+<span class="source-line-no">237</span><span id="line-237">}</span>
 
 
 
