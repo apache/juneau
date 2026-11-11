@@ -2582,6 +2582,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Extends the redacted-header set additively (keeps the built-in widened protections).</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#addRedactedQueryParams(java.util.Collection)" class="member-name-link">addRedactedQueryParams(Collection&lt;String&gt;)</a> - Method in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></dt>
+<dd>
+<div class="block">Extends the set of masked query parameter names additively (keeps the built-in protections).</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.Builder.html#addRedirectUri(java.net.URI...)" class="member-name-link">addRedirectUri(URI...)</a> - Method in class org.apache.juneau.rest.client.mcp.auth.<a href="org/apache/juneau/rest/client/mcp/auth/McpDynamicClientRegistrar.Builder.html" title="class in org.apache.juneau.rest.client.mcp.auth">McpDynamicClientRegistrar.Builder</a></dt>
 <dd>
 <div class="block">Adds one or more redirect URIs to register (accumulates across calls).</div>
@@ -28947,6 +28951,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Canonical set of header names commonly used to carry credentials, matched case-insensitively.</div>
 </dd>
+<dt><a href="org/apache/juneau/http/RedactedQueryParams.html#DEFAULT" class="member-name-link">DEFAULT</a> - Static variable in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedQueryParams.html" title="class in org.apache.juneau.http">RedactedQueryParams</a></dt>
+<dd>
+<div class="block">Canonical set of query parameter names commonly used to carry secrets, matched case-insensitively.</div>
+</dd>
 <dt><a href="org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html#DEFAULT" class="member-name-link">DEFAULT</a> - Static variable in interface org.apache.juneau.http.remote.<a href="org/apache/juneau/http/remote/RemoteUrlPolicy.AddressResolver.html" title="interface in org.apache.juneau.http.remote">RemoteUrlPolicy.AddressResolver</a></dt>
 <dd>
 <div class="block">The production resolver: real DNS resolution via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/net/InetAddress.html#getAllByName(java.lang.String)" title="class or interface in java.net" class="external-link"><code>InetAddress.getAllByName(String)</code></a>.</div>
@@ -51238,6 +51246,10 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns the redacted-header set as lowercased, immutable strings (test/inspection helper).</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/TransportRequest.html#getRedirectStripHeaders()" class="member-name-link">getRedirectStripHeaders()</a> - Method in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/TransportRequest.html" title="class in org.apache.juneau.rest.client">TransportRequest</a></dt>
+<dd>
+<div class="block">Returns the header names removed from this request before it is replayed against another origin.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html#getRedirectUri()" class="member-name-link">getRedirectUri()</a> - Method in class org.apache.juneau.rest.auth.oauth.flow.<a href="org/apache/juneau/rest/auth/oauth/flow/OAuthAuthorizationCodeFlow.html" title="class in org.apache.juneau.rest.auth.oauth.flow">OAuthAuthorizationCodeFlow</a></dt>
 <dd>
 <div class="block">Returns the redirect URI.</div>
@@ -66691,9 +66703,17 @@ loadScripts(document, 'script');</script>
 <dd>
 <div class="block">Returns <code>true</code> if the given header name is in <a href="org/apache/juneau/http/RedactedHeaders.html#DEFAULT"><code>RedactedHeaders.DEFAULT</code></a> (case-insensitive).</div>
 </dd>
+<dt><a href="org/apache/juneau/http/RedactedQueryParams.html#isSensitive(java.lang.String)" class="member-name-link">isSensitive(String)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedQueryParams.html" title="class in org.apache.juneau.http">RedactedQueryParams</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if the given query parameter name is in <a href="org/apache/juneau/http/RedactedQueryParams.html#DEFAULT"><code>RedactedQueryParams.DEFAULT</code></a> (case-insensitive).</div>
+</dd>
 <dt><a href="org/apache/juneau/http/RedactedHeaders.html#isSensitive(java.lang.String,java.util.Collection)" class="member-name-link">isSensitive(String, Collection&lt;String&gt;)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedHeaders.html" title="class in org.apache.juneau.http">RedactedHeaders</a></dt>
 <dd>
 <div class="block">Returns <code>true</code> if the given header name matches one of <code>names</code>, case-insensitively.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/RedactedQueryParams.html#isSensitive(java.lang.String,java.util.Collection)" class="member-name-link">isSensitive(String, Collection&lt;String&gt;)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedQueryParams.html" title="class in org.apache.juneau.http">RedactedQueryParams</a></dt>
+<dd>
+<div class="block">Returns <code>true</code> if the given query parameter name matches one of <code>names</code>, case-insensitively.</div>
 </dd>
 <dt><a href="org/apache/juneau/marshall/markdown/MarkdownParserSession.html#isSeparatorRow(java.lang.String)" class="member-name-link">isSeparatorRow(String)</a> - Method in class org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownParserSession.html" title="class in org.apache.juneau.marshall.markdown">MarkdownParserSession</a></dt>
 <dd>
@@ -98594,9 +98614,30 @@ loadScripts(document, 'script');</script>
  (bearer tokens, session cookies, API keys, and the like) before they are written somewhere
  observable, such as a log line or an echoed-back response body.</div>
 </dd>
+<dt><a href="org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#redactedQueryParams" class="member-name-link">redactedQueryParams</a> - Variable in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></dt>
+<dd>
+<div class="block">The set of query parameter names whose values are masked in the logged URI.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html#redactedQueryParams(java.util.Collection)" class="member-name-link">redactedQueryParams(Collection&lt;String&gt;)</a> - Method in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/BasicRestClientDebugFormatter.html" title="class in org.apache.juneau.rest.client">BasicRestClientDebugFormatter</a></dt>
+<dd>
+<div class="block">Overrides the set of query parameter names whose values are masked in the logged URI.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/RedactedQueryParams.html" class="type-name-link" title="class in org.apache.juneau.http">RedactedQueryParams</a> - Class in <a href="org/apache/juneau/http/package-summary.html">org.apache.juneau.http</a></dt>
+<dd>
+<div class="block">Utility for masking the values of query-string parameters that commonly carry secrets (passwords, tokens, API
+ keys) before a URI is written somewhere observable, such as a log line.</div>
+</dd>
 <dt><a href="org/apache/juneau/rest/server/ops/EchoMixin.Builder.html#redactHeader(java.lang.String)" class="member-name-link">redactHeader(String)</a> - Method in class org.apache.juneau.rest.server.ops.<a href="org/apache/juneau/rest/server/ops/EchoMixin.Builder.html" title="class in org.apache.juneau.rest.server.ops">EchoMixin.Builder</a></dt>
 <dd>
 <div class="block">Adds an additional header name to the redacted-header set.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/RedactedQueryParams.html#redactUri(java.lang.String)" class="member-name-link">redactUri(String)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedQueryParams.html" title="class in org.apache.juneau.http">RedactedQueryParams</a></dt>
+<dd>
+<div class="block">Masks the values of sensitive query parameters in a URI using <a href="org/apache/juneau/http/RedactedQueryParams.html#DEFAULT"><code>RedactedQueryParams.DEFAULT</code></a>.</div>
+</dd>
+<dt><a href="org/apache/juneau/http/RedactedQueryParams.html#redactUri(java.lang.String,java.util.Collection)" class="member-name-link">redactUri(String, Collection&lt;String&gt;)</a> - Static method in class org.apache.juneau.http.<a href="org/apache/juneau/http/RedactedQueryParams.html" title="class in org.apache.juneau.http">RedactedQueryParams</a></dt>
+<dd>
+<div class="block">Masks the values of query parameters whose names match <code>names</code> in a URI.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/auth/saml/SamlBinding.html#REDIRECT" class="member-name-link">REDIRECT</a> - Enum constant in enum class org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlBinding.html" title="enum class in org.apache.juneau.rest.server.auth.saml">SamlBinding</a></dt>
 <dd>
@@ -98624,6 +98665,15 @@ loadScripts(document, 'script');</script>
 <dt><a href="org/apache/juneau/rest/client/classic/RestClient.Builder.html#redirectStrategy(org.apache.http.client.RedirectStrategy)" class="member-name-link">redirectStrategy(RedirectStrategy)</a> - Method in class org.apache.juneau.rest.client.classic.<a href="org/apache/juneau/rest/client/classic/RestClient.Builder.html" title="class in org.apache.juneau.rest.client.classic">RestClient.Builder</a></dt>
 <dd>
 <div class="block">Assigns <a href="https://hc.apache.org/httpcomponents-client-4.5.x/current/httpclient/apidocs/org/apache/http/client/RedirectStrategy.html" title="class or interface in org.apache.http.client" class="external-link"><code>RedirectStrategy</code></a> instance.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/client/RestClient.Builder.html#redirectStripHeaders(java.lang.String...)" class="member-name-link">redirectStripHeaders(String...)</a> - Method in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/RestClient.Builder.html" title="class in org.apache.juneau.rest.client">RestClient.Builder</a></dt>
+<dd>
+<div class="block">Adds header names that are removed when a request is replayed against another origin by a redirect.</div>
+</dd>
+<dt><a href="org/apache/juneau/rest/client/TransportRequest.Builder.html#redirectStripHeaders(java.util.Collection)" class="member-name-link">redirectStripHeaders(Collection&lt;String&gt;)</a> - Method in class org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/TransportRequest.Builder.html" title="class in org.apache.juneau.rest.client">TransportRequest.Builder</a></dt>
+<dd>
+<div class="block">Adds header names to strip, besides <a href="org/apache/juneau/rest/client/RedirectSecurity.html#stripOnCrossOrigin()"><code>RedirectSecurity.stripOnCrossOrigin()</code></a>, when the request is replayed
+ against another origin.</div>
 </dd>
 <dt><a href="org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.PendingLogin.html#redirectTarget()" class="member-name-link">redirectTarget()</a> - Method in record class org.apache.juneau.rest.server.auth.oidc.rp.<a href="org/apache/juneau/rest/server/auth/oidc/rp/LoginStateStore.PendingLogin.html" title="class in org.apache.juneau.rest.server.auth.oidc.rp">LoginStateStore.PendingLogin</a></dt>
 <dd>
