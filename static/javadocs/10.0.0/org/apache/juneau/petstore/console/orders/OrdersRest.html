@@ -89,11 +89,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
+<dd><code>jakarta.servlet.Servlet</code>, <code>jakarta.servlet.ServletConfig</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="../../../console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></code>, <code><a href="../../../rest/server/config/BasicUniversalConfig.html" title="interface in org.apache.juneau.rest.server.config">BasicUniversalConfig</a></code>, <code><a href="../../../rest/server/config/DefaultConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultConfig</a></code>, <code><a href="../../../rest/server/config/DefaultHtmlConfig.html" title="interface in org.apache.juneau.rest.server.config">DefaultHtmlConfig</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-60">OrdersRest</a></span>
-<span class="extends-implements">extends <a href="../PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a></span></div>
+<span class="extends-implements">extends <a href="../PetstoreConsolePage.html" title="class in org.apache.juneau.petstore.console">PetstoreConsolePage</a>
+implements <a href="../../../console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></span></div>
 <div class="block">The Orders page and its endpoints: the server-mode datatable query over BeanQuery, the <code>approve</code> and
  <code>deliver</code> status transitions, and the cancel dialog form with its <code>DELETE</code>.
 
@@ -140,6 +141,9 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-jakarta.servlet.http.HttpServlet">Fields inherited from class&nbsp;jakarta.servlet.http.HttpServlet</h3>
 <code>LEGACY_DO_HEAD</code></div>
+<div class="inherited-list">
+<h3 id="fields-inherited-from-class-org.apache.juneau.console.views.RowDetailMixin">Fields inherited from interface&nbsp;org.apache.juneau.console.views.<a href="../../../console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></h3>
+<code><a href="../../../console/views/RowDetailMixin.html#ROW_ID">ROW_ID</a>, <a href="../../../console/views/RowDetailMixin.html#SEGMENT">SEGMENT</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -198,25 +202,30 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newForm()" class="member-name-link">newForm</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">The new-order wizard, step one: pick a pet that is for sale and an optional ship date.</div>
+<div class="block">The new-order dialog: pick a pet that is for sale and an optional ship date.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../rest/server/view/View.html" title="interface in org.apache.juneau.rest.server.view">View</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#page(org.apache.juneau.rest.server.RestRequest)" class="member-name-link">page</a><wbr>(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The Orders page.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/datatables/DataTablesResults.html" title="class in org.apache.juneau.console.datatables">DataTablesResults</a>&lt;<a href="../../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#query(org.apache.juneau.console.datatables.DataTablesRequest,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">query</a><wbr>(<a href="../../../console/datatables/DataTablesRequest.html" title="class in org.apache.juneau.console.datatables">DataTablesRequest</a>&nbsp;req,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#petRows(java.lang.Long)" class="member-name-link">petRows</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;orderId)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The Pet tab of the order row detail: the pet an order is for, as a one-row table.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/datatables/DataTablesResults.html" title="class in org.apache.juneau.console.datatables">DataTablesResults</a>&lt;<a href="../../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#query(org.apache.juneau.console.datatables.DataTablesRequest,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">query</a><wbr>(<a href="../../../console/datatables/DataTablesRequest.html" title="class in org.apache.juneau.console.datatables">DataTablesRequest</a>&nbsp;req,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;day,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;start,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;end)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Server-mode DataTables query over all orders.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#reviewForm(java.lang.String)" class="member-name-link">reviewForm</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;drafts)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">The new-order wizard, step two: the order about to be placed, read back from the first step's drafts.</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rowDetails()" class="member-name-link">rowDetails</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">The bean-backed details this resource serves.</div>
 </div>
 </div>
 </div>
@@ -236,6 +245,9 @@ loadScripts(document, 'script');</script>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<div class="inherited-list">
+<h3 id="methods-inherited-from-class-org.apache.juneau.console.views.RowDetailMixin">Methods inherited from interface&nbsp;org.apache.juneau.console.views.<a href="../../../console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></h3>
+<code><a href="../../../console/views/RowDetailMixin.html#rowDetail(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)">rowDetail</a>, <a href="../../../console/views/RowDetailMixin.html#rowDetailCounts(java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)">rowDetailCounts</a>, <a href="../../../console/views/RowDetailMixin.html#rowDetailIndex()">rowDetailIndex</a>, <a href="../../../console/views/RowDetailMixin.html#rowDetailTab(java.lang.String,java.lang.String,java.lang.String,org.apache.juneau.rest.server.RestResponse)">rowDetailTab</a>, <a href="../../../console/views/RowDetailMixin.html#validRowId(java.lang.String)">validRowId</a></code></div>
 </section>
 </li>
 </ul>
@@ -275,9 +287,39 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="rowDetails()">
+<h3>rowDetails</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../../console/views/RowDetail.html" title="class in org.apache.juneau.console.views">RowDetail</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-82">rowDetails</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../console/views/RowDetailMixin.html#rowDetails()">RowDetailMixin</a></code></span></div>
+<div class="block">The bean-backed details this resource serves.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../../../console/views/RowDetailMixin.html#rowDetails()">rowDetails</a></code>&nbsp;in interface&nbsp;<code><a href="../../../console/views/RowDetailMixin.html" title="interface in org.apache.juneau.console.views">RowDetailMixin</a></code></dd>
+<dt>Returns:</dt>
+<dd>The details.  Each must have a distinct key.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="petRows(java.lang.Long)">
+<h3>petRows</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../dto/Pet.html" title="class in org.apache.juneau.petstore.dto">Pet</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-102">petRows</a></span><wbr><span class="parameters">(<a href="../../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>("orderId")
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&nbsp;orderId)</span></div>
+<div class="block">The Pet tab of the order row detail: the pet an order is for, as a one-row table.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>orderId</code> - The order id.</dd>
+<dt>Returns:</dt>
+<dd>The pet.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If <code>orderId</code> is missing or names no order, or its pet is gone.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="query(org.apache.juneau.console.datatables.DataTablesRequest,java.lang.String,java.lang.String,java.lang.String)">
 <h3>query</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/datatables/DataTablesResults.html" title="class in org.apache.juneau.console.datatables">DataTablesResults</a>&lt;<a href="../../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-101">query</a></span><wbr><span class="parameters">(<a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/datatables/DataTablesResults.html" title="class in org.apache.juneau.console.datatables">DataTablesResults</a>&lt;<a href="../../dto/Order.html" title="class in org.apache.juneau.petstore.dto">Order</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-132">query</a></span><wbr><span class="parameters">(<a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../../../console/datatables/DataTablesRequest.html" title="class in org.apache.juneau.console.datatables">DataTablesRequest</a>&nbsp;req,
  <a href="../../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>("day") <a href="../../../commons/Schema.html" title="annotation interface in org.apache.juneau.commons">@Schema</a>(<a href="../../../commons/Schema.html#aev()">aev</a>=true)
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;day,
@@ -312,12 +354,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="newForm()">
 <h3>newForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-155">newForm</a></span>()</div>
-<div class="block">The new-order wizard, step one: pick a pet that is for sale and an optional ship date.
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-185">newForm</a></span>()</div>
+<div class="block">The new-order dialog: pick a pet that is for sale and an optional ship date.
 
  <p>
- The <code>review</code> button opens the stacked second step and carries these inputs to it as drafts.  That step's
- Confirm posts to <code>/console/orders</code>, as declared on the child action.</div>
+ The dialog submits to the ribbon item's endpoint.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>The modal, on the compact chrome.</dd>
@@ -325,27 +366,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="reviewForm(java.lang.String)">
-<h3>reviewForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-181">reviewForm</a></span><wbr><span class="parameters">(<a href="../../../http/Query.html" title="annotation interface in org.apache.juneau.http">@Query</a>("juneauDrafts")
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;drafts)</span></div>
-<div class="block">The new-order wizard, step two: the order about to be placed, read back from the first step's drafts.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>drafts</code> - The first step's inputs as JSON, carried by the dialog as <code>juneauDrafts</code>.</dd>
-<dt>Returns:</dt>
-<dd>The modal, on the compact chrome, whose form re-posts the validated values.</dd>
-<dt>Throws:</dt>
-<dd><code><a href="../../../http/response/BadRequest.html" title="class in org.apache.juneau.http.response">BadRequest</a></code> - If the drafts are missing, not JSON, or carry a bad ship date.</dd>
-<dd><code><a href="../../../http/response/NotFound.html" title="class in org.apache.juneau.http.response">NotFound</a></code> - If the pet does not exist.</dd>
-<dd><code><a href="../../../http/response/Conflict.html" title="class in org.apache.juneau.http.response">Conflict</a></code> - If the pet is not available.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="create(org.apache.juneau.rest.server.RestRequest,org.apache.juneau.marshall.collections.JsonMap)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-211">create</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-207">create</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Content.html" title="annotation interface in org.apache.juneau.http">@Content</a>
  <a href="../../../marshall/collections/JsonMap.html" title="class in org.apache.juneau.marshall.collections">JsonMap</a>&nbsp;body)</span></div>
 <div class="block">Places a new order.</div>
@@ -365,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="approve(org.apache.juneau.rest.server.RestRequest,long)">
 <h3>approve</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-266">approve</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-262">approve</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Approves a placed order.</div>
@@ -384,7 +407,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="deliver(org.apache.juneau.rest.server.RestRequest,long)">
 <h3>deliver</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-280">deliver</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-276">deliver</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Delivers an approved order.</div>
@@ -403,7 +426,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cancelForm(long)">
 <h3>cancelForm</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-292">cancelForm</a></span><wbr><span class="parameters">(<a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/widgets/ModalDef.html" title="class in org.apache.juneau.console.widgets">ModalDef</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-288">cancelForm</a></span><wbr><span class="parameters">(<a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">The cancel dialog form: a reason and whether to notify the customer.</div>
 <dl class="notes">
@@ -419,7 +442,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="cancel(org.apache.juneau.rest.server.RestRequest,long)">
 <h3>cancel</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-310">cancel</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../console/views/ActionResult.html" title="class in org.apache.juneau.console.views">ActionResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/petstore/console/orders/OrdersRest.html#line-306">cancel</a></span><wbr><span class="parameters">(<a href="../../../rest/server/RestRequest.html" title="class in org.apache.juneau.rest.server">RestRequest</a>&nbsp;req,
  <a href="../../../http/Path.html" title="annotation interface in org.apache.juneau.http">@Path</a>("id")
  long&nbsp;id)</span></div>
 <div class="block">Deletes (cancels) an order.</div>

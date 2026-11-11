@@ -365,451 +365,457 @@
 <span class="source-line-no">352</span><span id="line-352">         .attr("groomFileBytesUrl", file.bytesUrl);</span>
 <span class="source-line-no">353</span><span id="line-353">   }</span>
 <span class="source-line-no">354</span><span id="line-354"></span>
-<span class="source-line-no">355</span><span id="line-355">   private static TerminalDef terminal(String id, String terminalId, String title) {</span>
-<span class="source-line-no">356</span><span id="line-356">      var def = TerminalDef.forMixin(id, MOUNT, terminalId).title(title);</span>
-<span class="source-line-no">357</span><span id="line-357">      def.inputId = null; // Output only: the groom terminals take no keystrokes.</span>
-<span class="source-line-no">358</span><span id="line-358">      return def.validate();</span>
+<span class="source-line-no">355</span><span id="line-355">   /** @return The restock intro as a chrome-free fragment. */</span>
+<span class="source-line-no">356</span><span id="line-356">   @RestGet(path="/fragments/restock-help")</span>
+<span class="source-line-no">357</span><span id="line-357">   public View restockHelp() {</span>
+<span class="source-line-no">358</span><span id="line-358">      return FreemarkerView.of("fragments/restock-help.ftlh");</span>
 <span class="source-line-no">359</span><span id="line-359">   }</span>
 <span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   /**</span>
-<span class="source-line-no">362</span><span id="line-362">    * The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * &lt;p&gt;</span>
-<span class="source-line-no">365</span><span id="line-365">    * The dialog is the plain restock, so it asks only for counts and always runs with no wait and the default</span>
-<span class="source-line-no">366</span><span id="line-366">    * {@value #DEFAULT_HOLD_MS} ms hold.  The timing knobs ({@code slowMs}, {@code holdMs}) belong to the job-log card,</span>
-<span class="source-line-no">367</span><span id="line-367">    * which exists to demonstrate cancelling before and after the effect.</span>
-<span class="source-line-no">368</span><span id="line-368">    *</span>
-<span class="source-line-no">369</span><span id="line-369">    * @return The modal.</span>
-<span class="source-line-no">370</span><span id="line-370">    */</span>
-<span class="source-line-no">371</span><span id="line-371">   @RestGet(path="/restock-form")</span>
-<span class="source-line-no">372</span><span id="line-372">   public ModalDef restockForm() {</span>
-<span class="source-line-no">373</span><span id="line-373">      var form = FormDef.create();</span>
-<span class="source-line-no">374</span><span id="line-374">      for (var s : Species.values())</span>
-<span class="source-line-no">375</span><span id="line-375">         form.field(FormDef.Input.of(s.name(), s.name().charAt(0) + s.name().substring(1).toLowerCase() + " (0-50)", "text").value("0"));</span>
-<span class="source-line-no">376</span><span id="line-376">      return ModalDef.create("Restock the store").form(form)</span>
-<span class="source-line-no">377</span><span id="line-377">         .idempotencyKey(IdempotencyKey.mintSelfTargeted(ACTION).value()).selfTargeted(true);</span>
-<span class="source-line-no">378</span><span id="line-378">   }</span>
-<span class="source-line-no">379</span><span id="line-379"></span>
-<span class="source-line-no">380</span><span id="line-380">   /**</span>
-<span class="source-line-no">381</span><span id="line-381">    * @return Submitted jobs, newest first, with their current state.</span>
-<span class="source-line-no">382</span><span id="line-382">    */</span>
-<span class="source-line-no">383</span><span id="line-383">   @RestGet(path="/rows")</span>
-<span class="source-line-no">384</span><span id="line-384">   public List&lt;JsonMap&gt; rows() {</span>
-<span class="source-line-no">385</span><span id="line-385">      return submitted.stream().map(x -&gt; {</span>
-<span class="source-line-no">386</span><span id="line-386">         var row = new JsonMap(state(x.getString("jobId"))).append(x);</span>
-<span class="source-line-no">387</span><span id="line-387">         row.remove("idempotencyKey");</span>
-<span class="source-line-no">388</span><span id="line-388">         return row;</span>
-<span class="source-line-no">389</span><span id="line-389">      }).toList();</span>
-<span class="source-line-no">390</span><span id="line-390">   }</span>
-<span class="source-line-no">391</span><span id="line-391"></span>
-<span class="source-line-no">392</span><span id="line-392">   /**</span>
-<span class="source-line-no">393</span><span id="line-393">    * Submits a restock.</span>
-<span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    * @param req The request.</span>
-<span class="source-line-no">396</span><span id="line-396">    * @param res The response (202).</span>
-<span class="source-line-no">397</span><span id="line-397">    * @param json The restock body (see {@link Restock#of(JsonMap)}).</span>
-<span class="source-line-no">398</span><span id="line-398">    * @return The job ref (202), or a 429 {@code app:job-limit} refusal whose message names the running count, so a</span>
-<span class="source-line-no">399</span><span id="line-399">    *    JSON client such as the job-log card can show it.</span>
-<span class="source-line-no">400</span><span id="line-400">    * @throws BadRequest On a missing key, an out-of-range count, or a bad {@code slowMs} or {@code holdMs} (see</span>
-<span class="source-line-no">401</span><span id="line-401">    *    {@link Restock#of(JsonMap)}).</span>
-<span class="source-line-no">402</span><span id="line-402">    */</span>
-<span class="source-line-no">403</span><span id="line-403">   @RestPost(path="/restock")</span>
-<span class="source-line-no">404</span><span id="line-404">   public Object restock(RestRequest req, RestResponse res, @Content JsonMap json) {</span>
-<span class="source-line-no">405</span><span id="line-405">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">406</span><span id="line-406">      var body = Restock.of(json);</span>
-<span class="source-line-no">407</span><span id="line-407">      var k = body.idempotencyKey();</span>
-<span class="source-line-no">408</span><span id="line-408">      if (ib(k))</span>
-<span class="source-line-no">409</span><span id="line-409">         throw new BadRequest("Missing 'idempotencyKey'");</span>
-<span class="source-line-no">410</span><span id="line-410">      var key = IdempotencyKey.of(k, ACTION, k.equals(json.getString("targetId")) ? k : ACTION);</span>
-<span class="source-line-no">411</span><span id="line-411">      if (body.perSpecies().isEmpty())</span>
-<span class="source-line-no">412</span><span id="line-412">         throw new BadRequest("Nothing to restock");</span>
-<span class="source-line-no">413</span><span id="line-413">      body.perSpecies().forEach((s, n) -&gt; {</span>
-<span class="source-line-no">414</span><span id="line-414">         if (n == null || n &lt; 1 || n &gt; 50)</span>
-<span class="source-line-no">415</span><span id="line-415">            throw new BadRequest("Count for '%s' must be between 1 and 50", s);</span>
-<span class="source-line-no">416</span><span id="line-416">      });</span>
-<span class="source-line-no">417</span><span id="line-417">      var limit = Integer.getInteger(LIMIT_PROPERTY, 2);</span>
-<span class="source-line-no">418</span><span id="line-418">      var registry = asyncJobRegistry();</span>
-<span class="source-line-no">419</span><span id="line-419">      AsyncJob job;</span>
-<span class="source-line-no">420</span><span id="line-420">      synchronized (submitted) {</span>
-<span class="source-line-no">421</span><span id="line-421">         // Resolve the idempotency key first: a replay returns its existing job and never counts against the limit.</span>
-<span class="source-line-no">422</span><span id="line-422">         var prior = submitted.stream().filter(x -&gt; k.equals(x.getString("idempotencyKey"))).findFirst();</span>
-<span class="source-line-no">423</span><span id="line-423">         job = prior.flatMap(x -&gt; registry.get(x.getString("jobId"))).orElse(null);</span>
-<span class="source-line-no">424</span><span id="line-424">         if (job == null) {</span>
-<span class="source-line-no">425</span><span id="line-425">            prior.ifPresent(submitted::remove); // The job aged out of the registry; this is a fresh submission.</span>
-<span class="source-line-no">426</span><span id="line-426">            var created = registry.runningCount() &gt;= limit ? null : registry.tryCreate(key).orElse(null);</span>
-<span class="source-line-no">427</span><span id="line-427">            if (created == null)</span>
-<span class="source-line-no">428</span><span id="line-428">               return limitReached(res, registry.runningCount());</span>
-<span class="source-line-no">429</span><span id="line-429">            job = created;</span>
-<span class="source-line-no">430</span><span id="line-430">            submitted.addFirst(JsonMap.of("jobId", created.id(), "submitted", created.createdAt().toString(), "request", body.perSpecies(), "idempotencyKey", k));</span>
-<span class="source-line-no">431</span><span id="line-431">            while (submitted.size() &gt; MAX_SUBMITTED)</span>
-<span class="source-line-no">432</span><span id="line-432">               submitted.removeLast();</span>
-<span class="source-line-no">433</span><span id="line-433">            pool.execute(() -&gt; run(created, body, () -&gt; store().restock(body.perSpecies(), "job:restock:" + actor)));</span>
-<span class="source-line-no">434</span><span id="line-434">         }</span>
-<span class="source-line-no">435</span><span id="line-435">      }</span>
-<span class="source-line-no">436</span><span id="line-436">      res.setStatus(202);</span>
-<span class="source-line-no">437</span><span id="line-437">      return AsyncJobRef.of(job);</span>
-<span class="source-line-no">438</span><span id="line-438">   }</span>
-<span class="source-line-no">439</span><span id="line-439"></span>
-<span class="source-line-no">440</span><span id="line-440">   private static ActionResult limitReached(RestResponse res, int running) {</span>
-<span class="source-line-no">441</span><span id="line-441">      res.setStatus(429);</span>
-<span class="source-line-no">442</span><span id="line-442">      return ActionResult.refusal("app:job-limit").message(f("Job limit reached; '%s' running", running));</span>
-<span class="source-line-no">443</span><span id="line-443">   }</span>
-<span class="source-line-no">444</span><span id="line-444"></span>
-<span class="source-line-no">445</span><span id="line-445">   /**</span>
-<span class="source-line-no">446</span><span id="line-446">    * Runs one restock: the optional slow wait (cancellable, nothing changed yet), the restock itself, then the</span>
-<span class="source-line-no">447</span><span id="line-447">    * after-effect hold.  Every step stops as soon as the job has settled (a cancel or the hard timeout).</span>
-<span class="source-line-no">448</span><span id="line-448">    *</span>
-<span class="source-line-no">449</span><span id="line-449">    * @param job The job.</span>
-<span class="source-line-no">450</span><span id="line-450">    * @param body The restock.</span>
-<span class="source-line-no">451</span><span id="line-451">    * @param effect The restock itself; returns the added pets.</span>
-<span class="source-line-no">452</span><span id="line-452">    */</span>
-<span class="source-line-no">453</span><span id="line-453">   static void run(AsyncJob job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect) {</span>
-<span class="source-line-no">454</span><span id="line-454">      run(job, body, effect, () -&gt; null);</span>
-<span class="source-line-no">455</span><span id="line-455">   }</span>
-<span class="source-line-no">456</span><span id="line-456"></span>
-<span class="source-line-no">457</span><span id="line-457">   /**</span>
-<span class="source-line-no">458</span><span id="line-458">    * Same as {@link #run(AsyncJob, Restock, Supplier)}, but the success result carries a value, read after the</span>
-<span class="source-line-no">459</span><span id="line-459">    * effect: a row job returns its row's new state, which the card's {@code output} writes back into the row.</span>
-<span class="source-line-no">460</span><span id="line-460">    *</span>
-<span class="source-line-no">461</span><span id="line-461">    * @param job The job.</span>
-<span class="source-line-no">462</span><span id="line-462">    * @param body The restock.</span>
-<span class="source-line-no">463</span><span id="line-463">    * @param effect The restock itself; returns the added pets.</span>
-<span class="source-line-no">464</span><span id="line-464">    * @param value The success result's value.</span>
-<span class="source-line-no">465</span><span id="line-465">    */</span>
-<span class="source-line-no">466</span><span id="line-466">   static void run(AsyncJob job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect, Supplier&lt;Object&gt; value) {</span>
-<span class="source-line-no">467</span><span id="line-467">      try {</span>
-<span class="source-line-no">468</span><span id="line-468">         if (body.slowMs() &gt; 0) {</span>
-<span class="source-line-no">469</span><span id="line-469">            job.progress(f("Waiting %s ms before restocking", body.slowMs()));</span>
-<span class="source-line-no">470</span><span id="line-470">            if (! hold(job, body.slowMs()))</span>
-<span class="source-line-no">471</span><span id="line-471">               return;</span>
-<span class="source-line-no">472</span><span id="line-472">         }</span>
-<span class="source-line-no">473</span><span id="line-473">         // One lock acquisition, shared with cancel and the timeout: a job settled after the wait is left as it was.</span>
-<span class="source-line-no">474</span><span id="line-474">         if (! job.markEffectStarted())</span>
-<span class="source-line-no">475</span><span id="line-475">            return;</span>
-<span class="source-line-no">476</span><span id="line-476">         var total = body.perSpecies().values().stream().mapToInt(Integer::intValue).sum();</span>
-<span class="source-line-no">477</span><span id="line-477">         job.progress(f("Restocking %s pets", total));</span>
-<span class="source-line-no">478</span><span id="line-478">         var pets = effect.get();</span>
-<span class="source-line-no">479</span><span id="line-479">         pets.forEach(p -&gt; job.progress(f("Added %s", p.getName())));</span>
-<span class="source-line-no">480</span><span id="line-480">         if (hold(job, body.holdMs()))</span>
-<span class="source-line-no">481</span><span id="line-481">            job.complete(ActionResult.success(value.get()).message(f("Restocked %s pets", pets.size())));</span>
-<span class="source-line-no">482</span><span id="line-482">      } catch (InterruptedException e) {</span>
-<span class="source-line-no">483</span><span id="line-483">         Thread.currentThread().interrupt();</span>
-<span class="source-line-no">484</span><span id="line-484">         job.complete(ActionResult.unknown().message("Interrupted"));</span>
-<span class="source-line-no">485</span><span id="line-485">      } catch (RuntimeException e) {</span>
-<span class="source-line-no">486</span><span id="line-486">         job.complete(ActionResult.failure().message(e.getMessage()));</span>
-<span class="source-line-no">487</span><span id="line-487">      }</span>
-<span class="source-line-no">488</span><span id="line-488">   }</span>
-<span class="source-line-no">489</span><span id="line-489"></span>
-<span class="source-line-no">490</span><span id="line-490">   /** Sleeps in short steps; returns &lt;jk&gt;false&lt;/jk&gt; as soon as the job has settled. */</span>
-<span class="source-line-no">491</span><span id="line-491">   private static boolean hold(AsyncJob job, long ms) throws InterruptedException {</span>
-<span class="source-line-no">492</span><span id="line-492">      for (var left = ms; left &gt; 0; left -= SLOW_STEP_MS) {</span>
-<span class="source-line-no">493</span><span id="line-493">         if (job.isTerminal())</span>
-<span class="source-line-no">494</span><span id="line-494">            return false;</span>
-<span class="source-line-no">495</span><span id="line-495">         Thread.sleep(Math.min(SLOW_STEP_MS, left));</span>
-<span class="source-line-no">496</span><span id="line-496">      }</span>
-<span class="source-line-no">497</span><span id="line-497">      return ! job.isTerminal();</span>
-<span class="source-line-no">498</span><span id="line-498">   }</span>
-<span class="source-line-no">499</span><span id="line-499"></span>
-<span class="source-line-no">500</span><span id="line-500">   /**</span>
-<span class="source-line-no">501</span><span id="line-501">    * @param id The job id.</span>
-<span class="source-line-no">502</span><span id="line-502">    * @return {@code {state: RUNNING|DONE, result}}.</span>
-<span class="source-line-no">503</span><span id="line-503">    * @throws NotFound If the job is unknown or has aged out.</span>
-<span class="source-line-no">504</span><span id="line-504">    */</span>
-<span class="source-line-no">505</span><span id="line-505">   @RestGet(path="/{id}")</span>
-<span class="source-line-no">506</span><span id="line-506">   public JsonMap job(@Path("id") String id) {</span>
-<span class="source-line-no">507</span><span id="line-507">      if (asyncJobRegistry().get(id).isEmpty())</span>
-<span class="source-line-no">508</span><span id="line-508">         throw new NotFound("Unknown job '%s'", id);</span>
-<span class="source-line-no">509</span><span id="line-509">      return state(id);</span>
-<span class="source-line-no">510</span><span id="line-510">   }</span>
-<span class="source-line-no">511</span><span id="line-511"></span>
-<span class="source-line-no">512</span><span id="line-512">   private JsonMap state(String id) {</span>
-<span class="source-line-no">513</span><span id="line-513">      var j = asyncJobRegistry().get(id);</span>
-<span class="source-line-no">514</span><span id="line-514">      if (j.isEmpty())</span>
-<span class="source-line-no">515</span><span id="line-515">         return JsonMap.of("state", "EXPIRED");</span>
-<span class="source-line-no">516</span><span id="line-516">      return j.get().isTerminal()</span>
-<span class="source-line-no">517</span><span id="line-517">         ? JsonMap.of("state", "DONE", "result", j.get().result())</span>
-<span class="source-line-no">518</span><span id="line-518">         : JsonMap.of("state", "RUNNING");</span>
-<span class="source-line-no">519</span><span id="line-519">   }</span>
-<span class="source-line-no">520</span><span id="line-520"></span>
-<span class="source-line-no">521</span><span id="line-521">   @Override /* TerminalMixin */</span>
-<span class="source-line-no">522</span><span id="line-522">   public Optional&lt;TerminalSource&gt; terminalSource(String id, RestRequest req) {</span>
-<span class="source-line-no">523</span><span id="line-523">      return groomRuns().source(id); // The run id is an unguessable 128-bit secret; knowing it is the access rule.</span>
-<span class="source-line-no">524</span><span id="line-524">   }</span>
-<span class="source-line-no">525</span><span id="line-525"></span>
-<span class="source-line-no">526</span><span id="line-526">   /**</span>
-<span class="source-line-no">527</span><span id="line-527">    * The Groom dialog's form source.</span>
-<span class="source-line-no">528</span><span id="line-528">    *</span>
-<span class="source-line-no">529</span><span id="line-529">    * @return The modal.</span>
-<span class="source-line-no">530</span><span id="line-530">    */</span>
-<span class="source-line-no">531</span><span id="line-531">   @RestGet(path="/groom-form")</span>
-<span class="source-line-no">532</span><span id="line-532">   public ModalDef groomForm() {</span>
-<span class="source-line-no">533</span><span id="line-533">      var form = FormDef.create();</span>
-<span class="source-line-no">534</span><span id="line-534">      form.field(FormDef.Input.of("pet", "Pet name", "text").value("Rex"));</span>
-<span class="source-line-no">535</span><span id="line-535">      form.field(FormDef.Input.of("verbose", "Verbose (8000 extra lines)", "checkbox"));</span>
-<span class="source-line-no">536</span><span id="line-536">      return ModalDef.create("Groom a pet").form(form)</span>
-<span class="source-line-no">537</span><span id="line-537">         .idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM_JOB).value()).selfTargeted(true);</span>
-<span class="source-line-no">538</span><span id="line-538">   }</span>
-<span class="source-line-no">539</span><span id="line-539"></span>
-<span class="source-line-no">540</span><span id="line-540">   /**</span>
-<span class="source-line-no">541</span><span id="line-541">    * Starts a groom run.</span>
-<span class="source-line-no">542</span><span id="line-542">    *</span>
-<span class="source-line-no">543</span><span id="line-543">    * &lt;p&gt;</span>
-<span class="source-line-no">544</span><span id="line-544">    * Accepts the API form {@code {pet, verbose}} or the dialog form {@code {action, targetId, idempotencyKey,</span>
-<span class="source-line-no">545</span><span id="line-545">    * fields:{pet, verbose}}}; a resubmit with the same {@code idempotencyKey} returns the same run.</span>
-<span class="source-line-no">546</span><span id="line-546">    *</span>
-<span class="source-line-no">547</span><span id="line-547">    * @param json The body.</span>
-<span class="source-line-no">548</span><span id="line-548">    * @return The new run's row.</span>
-<span class="source-line-no">549</span><span id="line-549">    * @throws IOException If the run's temp file cannot be created.</span>
-<span class="source-line-no">550</span><span id="line-550">    */</span>
-<span class="source-line-no">551</span><span id="line-551">   @RestPost(path="/groom")</span>
-<span class="source-line-no">552</span><span id="line-552">   public ActionResult groom(@Content JsonMap json) throws IOException {</span>
-<span class="source-line-no">553</span><span id="line-553">      var fields = json.getMap("fields");</span>
-<span class="source-line-no">554</span><span id="line-554">      var src = fields != null ? fields : json;</span>
-<span class="source-line-no">555</span><span id="line-555">      var run = groomRuns().start(src.getString("pet"), isOn(src.get("verbose")), json.getString("idempotencyKey"));</span>
-<span class="source-line-no">556</span><span id="line-556">      return ActionResult.success(run.row()).message(f("Grooming %s", run.pet()));</span>
-<span class="source-line-no">557</span><span id="line-557">   }</span>
-<span class="source-line-no">558</span><span id="line-558"></span>
-<span class="source-line-no">559</span><span id="line-559">   private static boolean isOn(Object v) {</span>
-<span class="source-line-no">560</span><span id="line-560">      var s = v == null ? "" : String.valueOf(v);</span>
-<span class="source-line-no">561</span><span id="line-561">      return "true".equals(s) || "on".equals(s);</span>
-<span class="source-line-no">562</span><span id="line-562">   }</span>
-<span class="source-line-no">563</span><span id="line-563"></span>
-<span class="source-line-no">564</span><span id="line-564">   /**</span>
-<span class="source-line-no">565</span><span id="line-565">    * @return The groom runs, newest first.</span>
-<span class="source-line-no">566</span><span id="line-566">    */</span>
-<span class="source-line-no">567</span><span id="line-567">   @RestGet(path="/groom-rows")</span>
-<span class="source-line-no">568</span><span id="line-568">   public List&lt;JsonMap&gt; groomRows() {</span>
-<span class="source-line-no">569</span><span id="line-569">      return groomRuns().list().stream().map(GroomRuns.Run::row).toList();</span>
-<span class="source-line-no">570</span><span id="line-570">   }</span>
-<span class="source-line-no">571</span><span id="line-571"></span>
-<span class="source-line-no">572</span><span id="line-572">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">573</span><span id="line-573">   // Row jobs: a key bound to one row, issued by the server and checked on submit.</span>
-<span class="source-line-no">574</span><span id="line-574">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">575</span><span id="line-575"></span>
-<span class="source-line-no">576</span><span id="line-576">   /**</span>
-<span class="source-line-no">577</span><span id="line-577">    * @return One row per species: {@code {id, species, available}}.</span>
-<span class="source-line-no">578</span><span id="line-578">    */</span>
-<span class="source-line-no">579</span><span id="line-579">   @RestGet(path="/species")</span>
-<span class="source-line-no">580</span><span id="line-580">   public List&lt;JsonMap&gt; speciesRows() {</span>
-<span class="source-line-no">581</span><span id="line-581">      return Arrays.stream(Species.values()).map(this::speciesRow).toList();</span>
-<span class="source-line-no">582</span><span id="line-582">   }</span>
-<span class="source-line-no">583</span><span id="line-583"></span>
-<span class="source-line-no">584</span><span id="line-584">   /**</span>
-<span class="source-line-no">585</span><span id="line-585">    * A species row's detail panel.</span>
-<span class="source-line-no">586</span><span id="line-586">    *</span>
-<span class="source-line-no">587</span><span id="line-587">    * @param id The species name, for example {@code DOG}.</span>
-<span class="source-line-no">588</span><span id="line-588">    * @return {@code {contractVersion, fields:{available, lastRestock}}}.</span>
-<span class="source-line-no">589</span><span id="line-589">    * @throws NotFound If the species is unknown.</span>
-<span class="source-line-no">590</span><span id="line-590">    */</span>
-<span class="source-line-no">591</span><span id="line-591">   @RestGet(path="/species/{id}")</span>
-<span class="source-line-no">592</span><span id="line-592">   public JsonMap speciesDetail(@Path("id") String id) {</span>
-<span class="source-line-no">593</span><span id="line-593">      var s = species(id);</span>
-<span class="source-line-no">594</span><span id="line-594">      var last = lastRestock.get(s);</span>
-<span class="source-line-no">595</span><span id="line-595">      var fields = new JsonMap().append("available", available(s)).append("lastRestock", last == null ? null : last.toString());</span>
-<span class="source-line-no">596</span><span id="line-596">      return RowDetail.response(fields);</span>
-<span class="source-line-no">597</span><span id="line-597">   }</span>
-<span class="source-line-no">598</span><span id="line-598"></span>
-<span class="source-line-no">599</span><span id="line-599">   /**</span>
-<span class="source-line-no">600</span><span id="line-600">    * Issues a restock key bound to one species and the caller.</span>
-<span class="source-line-no">601</span><span id="line-601">    *</span>
-<span class="source-line-no">602</span><span id="line-602">    * &lt;p&gt;</span>
-<span class="source-line-no">603</span><span id="line-603">    * A POST, so it sits behind the console's CSRF boundary like every other console write; it changes nothing but the</span>
-<span class="source-line-no">604</span><span id="line-604">    * key ledger.</span>
-<span class="source-line-no">605</span><span id="line-605">    *</span>
-<span class="source-line-no">606</span><span id="line-606">    * @param req The request.</span>
-<span class="source-line-no">607</span><span id="line-607">    * @param id The species name.</span>
-<span class="source-line-no">608</span><span id="line-608">    * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</span>
-<span class="source-line-no">609</span><span id="line-609">    * @throws NotFound If the species is unknown.</span>
-<span class="source-line-no">610</span><span id="line-610">    */</span>
-<span class="source-line-no">611</span><span id="line-611">   @RestPost(path="/species/{id}/key")</span>
-<span class="source-line-no">612</span><span id="line-612">   public Map&lt;String,Object&gt; speciesKey(RestRequest req, @Path("id") String id) {</span>
-<span class="source-line-no">613</span><span id="line-613">      var s = species(id);</span>
-<span class="source-line-no">614</span><span id="line-614">      return JobKeyLedger.response(jobKeys().issue(RESTOCK_SPECIES, s.name(), ConsoleWrites.actor(req)));</span>
-<span class="source-line-no">615</span><span id="line-615">   }</span>
-<span class="source-line-no">616</span><span id="line-616"></span>
-<span class="source-line-no">617</span><span id="line-617">   /**</span>
-<span class="source-line-no">618</span><span id="line-618">    * Restocks one species from its row's detail panel.</span>
-<span class="source-line-no">619</span><span id="line-619">    *</span>
-<span class="source-line-no">620</span><span id="line-620">    * &lt;p&gt;</span>
-<span class="source-line-no">621</span><span id="line-621">    * The species is the path's {@code {id}}, which must equal the body's {@code targetId}, which the key must be bound</span>
-<span class="source-line-no">622</span><span id="line-622">    * to.  The body's {@code fields} supply only {@code count}; any other field (the panel's hidden {@code species}</span>
-<span class="source-line-no">623</span><span id="line-623">    * included) is ignored.  A replay of a claimed key returns the same job, or a {@link JobKeyLedger#SPENT_CODE}</span>
-<span class="source-line-no">624</span><span id="line-624">    * refusal once the registry has aged the job out.</span>
+<span class="source-line-no">361</span><span id="line-361">   private static TerminalDef terminal(String id, String terminalId, String title) {</span>
+<span class="source-line-no">362</span><span id="line-362">      var def = TerminalDef.forMixin(id, MOUNT, terminalId).title(title);</span>
+<span class="source-line-no">363</span><span id="line-363">      def.inputId = null; // Output only: the groom terminals take no keystrokes.</span>
+<span class="source-line-no">364</span><span id="line-364">      return def.validate();</span>
+<span class="source-line-no">365</span><span id="line-365">   }</span>
+<span class="source-line-no">366</span><span id="line-366"></span>
+<span class="source-line-no">367</span><span id="line-367">   /**</span>
+<span class="source-line-no">368</span><span id="line-368">    * The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.</span>
+<span class="source-line-no">369</span><span id="line-369">    *</span>
+<span class="source-line-no">370</span><span id="line-370">    * &lt;p&gt;</span>
+<span class="source-line-no">371</span><span id="line-371">    * The dialog is the plain restock, so it asks only for counts and always runs with no wait and the default</span>
+<span class="source-line-no">372</span><span id="line-372">    * {@value #DEFAULT_HOLD_MS} ms hold.  The timing knobs ({@code slowMs}, {@code holdMs}) belong to the job-log card,</span>
+<span class="source-line-no">373</span><span id="line-373">    * which exists to demonstrate cancelling before and after the effect.</span>
+<span class="source-line-no">374</span><span id="line-374">    *</span>
+<span class="source-line-no">375</span><span id="line-375">    * @return The modal.</span>
+<span class="source-line-no">376</span><span id="line-376">    */</span>
+<span class="source-line-no">377</span><span id="line-377">   @RestGet(path="/restock-form")</span>
+<span class="source-line-no">378</span><span id="line-378">   public ModalDef restockForm() {</span>
+<span class="source-line-no">379</span><span id="line-379">      var form = FormDef.create();</span>
+<span class="source-line-no">380</span><span id="line-380">      for (var s : Species.values())</span>
+<span class="source-line-no">381</span><span id="line-381">         form.field(FormDef.Input.of(s.name(), s.name().charAt(0) + s.name().substring(1).toLowerCase() + " (0-50)", "text").value("0"));</span>
+<span class="source-line-no">382</span><span id="line-382">      return ModalDef.create("Restock the store").form(form)</span>
+<span class="source-line-no">383</span><span id="line-383">         .idempotencyKey(IdempotencyKey.mintSelfTargeted(ACTION).value()).selfTargeted(true);</span>
+<span class="source-line-no">384</span><span id="line-384">   }</span>
+<span class="source-line-no">385</span><span id="line-385"></span>
+<span class="source-line-no">386</span><span id="line-386">   /**</span>
+<span class="source-line-no">387</span><span id="line-387">    * @return Submitted jobs, newest first, with their current state.</span>
+<span class="source-line-no">388</span><span id="line-388">    */</span>
+<span class="source-line-no">389</span><span id="line-389">   @RestGet(path="/rows")</span>
+<span class="source-line-no">390</span><span id="line-390">   public List&lt;JsonMap&gt; rows() {</span>
+<span class="source-line-no">391</span><span id="line-391">      return submitted.stream().map(x -&gt; {</span>
+<span class="source-line-no">392</span><span id="line-392">         var row = new JsonMap(state(x.getString("jobId"))).append(x);</span>
+<span class="source-line-no">393</span><span id="line-393">         row.remove("idempotencyKey");</span>
+<span class="source-line-no">394</span><span id="line-394">         return row;</span>
+<span class="source-line-no">395</span><span id="line-395">      }).toList();</span>
+<span class="source-line-no">396</span><span id="line-396">   }</span>
+<span class="source-line-no">397</span><span id="line-397"></span>
+<span class="source-line-no">398</span><span id="line-398">   /**</span>
+<span class="source-line-no">399</span><span id="line-399">    * Submits a restock.</span>
+<span class="source-line-no">400</span><span id="line-400">    *</span>
+<span class="source-line-no">401</span><span id="line-401">    * @param req The request.</span>
+<span class="source-line-no">402</span><span id="line-402">    * @param res The response (202).</span>
+<span class="source-line-no">403</span><span id="line-403">    * @param json The restock body (see {@link Restock#of(JsonMap)}).</span>
+<span class="source-line-no">404</span><span id="line-404">    * @return The job ref (202), or a 429 {@code app:job-limit} refusal whose message names the running count, so a</span>
+<span class="source-line-no">405</span><span id="line-405">    *    JSON client such as the job-log card can show it.</span>
+<span class="source-line-no">406</span><span id="line-406">    * @throws BadRequest On a missing key, an out-of-range count, or a bad {@code slowMs} or {@code holdMs} (see</span>
+<span class="source-line-no">407</span><span id="line-407">    *    {@link Restock#of(JsonMap)}).</span>
+<span class="source-line-no">408</span><span id="line-408">    */</span>
+<span class="source-line-no">409</span><span id="line-409">   @RestPost(path="/restock")</span>
+<span class="source-line-no">410</span><span id="line-410">   public Object restock(RestRequest req, RestResponse res, @Content JsonMap json) {</span>
+<span class="source-line-no">411</span><span id="line-411">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">412</span><span id="line-412">      var body = Restock.of(json);</span>
+<span class="source-line-no">413</span><span id="line-413">      var k = body.idempotencyKey();</span>
+<span class="source-line-no">414</span><span id="line-414">      if (ib(k))</span>
+<span class="source-line-no">415</span><span id="line-415">         throw new BadRequest("Missing 'idempotencyKey'");</span>
+<span class="source-line-no">416</span><span id="line-416">      var key = IdempotencyKey.of(k, ACTION, k.equals(json.getString("targetId")) ? k : ACTION);</span>
+<span class="source-line-no">417</span><span id="line-417">      if (body.perSpecies().isEmpty())</span>
+<span class="source-line-no">418</span><span id="line-418">         throw new BadRequest("Nothing to restock");</span>
+<span class="source-line-no">419</span><span id="line-419">      body.perSpecies().forEach((s, n) -&gt; {</span>
+<span class="source-line-no">420</span><span id="line-420">         if (n == null || n &lt; 1 || n &gt; 50)</span>
+<span class="source-line-no">421</span><span id="line-421">            throw new BadRequest("Count for '%s' must be between 1 and 50", s);</span>
+<span class="source-line-no">422</span><span id="line-422">      });</span>
+<span class="source-line-no">423</span><span id="line-423">      var limit = Integer.getInteger(LIMIT_PROPERTY, 2);</span>
+<span class="source-line-no">424</span><span id="line-424">      var registry = asyncJobRegistry();</span>
+<span class="source-line-no">425</span><span id="line-425">      AsyncJob job;</span>
+<span class="source-line-no">426</span><span id="line-426">      synchronized (submitted) {</span>
+<span class="source-line-no">427</span><span id="line-427">         // Resolve the idempotency key first: a replay returns its existing job and never counts against the limit.</span>
+<span class="source-line-no">428</span><span id="line-428">         var prior = submitted.stream().filter(x -&gt; k.equals(x.getString("idempotencyKey"))).findFirst();</span>
+<span class="source-line-no">429</span><span id="line-429">         job = prior.flatMap(x -&gt; registry.get(x.getString("jobId"))).orElse(null);</span>
+<span class="source-line-no">430</span><span id="line-430">         if (job == null) {</span>
+<span class="source-line-no">431</span><span id="line-431">            prior.ifPresent(submitted::remove); // The job aged out of the registry; this is a fresh submission.</span>
+<span class="source-line-no">432</span><span id="line-432">            var created = registry.runningCount() &gt;= limit ? null : registry.tryCreate(key).orElse(null);</span>
+<span class="source-line-no">433</span><span id="line-433">            if (created == null)</span>
+<span class="source-line-no">434</span><span id="line-434">               return limitReached(res, registry.runningCount());</span>
+<span class="source-line-no">435</span><span id="line-435">            job = created;</span>
+<span class="source-line-no">436</span><span id="line-436">            submitted.addFirst(JsonMap.of("jobId", created.id(), "submitted", created.createdAt().toString(), "request", body.perSpecies(), "idempotencyKey", k));</span>
+<span class="source-line-no">437</span><span id="line-437">            while (submitted.size() &gt; MAX_SUBMITTED)</span>
+<span class="source-line-no">438</span><span id="line-438">               submitted.removeLast();</span>
+<span class="source-line-no">439</span><span id="line-439">            pool.execute(() -&gt; run(created, body, () -&gt; store().restock(body.perSpecies(), "job:restock:" + actor)));</span>
+<span class="source-line-no">440</span><span id="line-440">         }</span>
+<span class="source-line-no">441</span><span id="line-441">      }</span>
+<span class="source-line-no">442</span><span id="line-442">      res.setStatus(202);</span>
+<span class="source-line-no">443</span><span id="line-443">      return AsyncJobRef.of(job);</span>
+<span class="source-line-no">444</span><span id="line-444">   }</span>
+<span class="source-line-no">445</span><span id="line-445"></span>
+<span class="source-line-no">446</span><span id="line-446">   private static ActionResult limitReached(RestResponse res, int running) {</span>
+<span class="source-line-no">447</span><span id="line-447">      res.setStatus(429);</span>
+<span class="source-line-no">448</span><span id="line-448">      return ActionResult.refusal("app:job-limit").message(f("Job limit reached; '%s' running", running));</span>
+<span class="source-line-no">449</span><span id="line-449">   }</span>
+<span class="source-line-no">450</span><span id="line-450"></span>
+<span class="source-line-no">451</span><span id="line-451">   /**</span>
+<span class="source-line-no">452</span><span id="line-452">    * Runs one restock: the optional slow wait (cancellable, nothing changed yet), the restock itself, then the</span>
+<span class="source-line-no">453</span><span id="line-453">    * after-effect hold.  Every step stops as soon as the job has settled (a cancel or the hard timeout).</span>
+<span class="source-line-no">454</span><span id="line-454">    *</span>
+<span class="source-line-no">455</span><span id="line-455">    * @param job The job.</span>
+<span class="source-line-no">456</span><span id="line-456">    * @param body The restock.</span>
+<span class="source-line-no">457</span><span id="line-457">    * @param effect The restock itself; returns the added pets.</span>
+<span class="source-line-no">458</span><span id="line-458">    */</span>
+<span class="source-line-no">459</span><span id="line-459">   static void run(AsyncJob job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect) {</span>
+<span class="source-line-no">460</span><span id="line-460">      run(job, body, effect, () -&gt; null);</span>
+<span class="source-line-no">461</span><span id="line-461">   }</span>
+<span class="source-line-no">462</span><span id="line-462"></span>
+<span class="source-line-no">463</span><span id="line-463">   /**</span>
+<span class="source-line-no">464</span><span id="line-464">    * Same as {@link #run(AsyncJob, Restock, Supplier)}, but the success result carries a value, read after the</span>
+<span class="source-line-no">465</span><span id="line-465">    * effect: a row job returns its row's new state, which the card's {@code output} writes back into the row.</span>
+<span class="source-line-no">466</span><span id="line-466">    *</span>
+<span class="source-line-no">467</span><span id="line-467">    * @param job The job.</span>
+<span class="source-line-no">468</span><span id="line-468">    * @param body The restock.</span>
+<span class="source-line-no">469</span><span id="line-469">    * @param effect The restock itself; returns the added pets.</span>
+<span class="source-line-no">470</span><span id="line-470">    * @param value The success result's value.</span>
+<span class="source-line-no">471</span><span id="line-471">    */</span>
+<span class="source-line-no">472</span><span id="line-472">   static void run(AsyncJob job, Restock body, Supplier&lt;List&lt;Pet&gt;&gt; effect, Supplier&lt;Object&gt; value) {</span>
+<span class="source-line-no">473</span><span id="line-473">      try {</span>
+<span class="source-line-no">474</span><span id="line-474">         if (body.slowMs() &gt; 0) {</span>
+<span class="source-line-no">475</span><span id="line-475">            job.progress(f("Waiting %s ms before restocking", body.slowMs()));</span>
+<span class="source-line-no">476</span><span id="line-476">            if (! hold(job, body.slowMs()))</span>
+<span class="source-line-no">477</span><span id="line-477">               return;</span>
+<span class="source-line-no">478</span><span id="line-478">         }</span>
+<span class="source-line-no">479</span><span id="line-479">         // One lock acquisition, shared with cancel and the timeout: a job settled after the wait is left as it was.</span>
+<span class="source-line-no">480</span><span id="line-480">         if (! job.markEffectStarted())</span>
+<span class="source-line-no">481</span><span id="line-481">            return;</span>
+<span class="source-line-no">482</span><span id="line-482">         var total = body.perSpecies().values().stream().mapToInt(Integer::intValue).sum();</span>
+<span class="source-line-no">483</span><span id="line-483">         job.progress(f("Restocking %s pets", total));</span>
+<span class="source-line-no">484</span><span id="line-484">         var pets = effect.get();</span>
+<span class="source-line-no">485</span><span id="line-485">         pets.forEach(p -&gt; job.progress(f("Added %s", p.getName())));</span>
+<span class="source-line-no">486</span><span id="line-486">         if (hold(job, body.holdMs()))</span>
+<span class="source-line-no">487</span><span id="line-487">            job.complete(ActionResult.success(value.get()).message(f("Restocked %s pets", pets.size())));</span>
+<span class="source-line-no">488</span><span id="line-488">      } catch (InterruptedException e) {</span>
+<span class="source-line-no">489</span><span id="line-489">         Thread.currentThread().interrupt();</span>
+<span class="source-line-no">490</span><span id="line-490">         job.complete(ActionResult.unknown().message("Interrupted"));</span>
+<span class="source-line-no">491</span><span id="line-491">      } catch (RuntimeException e) {</span>
+<span class="source-line-no">492</span><span id="line-492">         job.complete(ActionResult.failure().message(e.getMessage()));</span>
+<span class="source-line-no">493</span><span id="line-493">      }</span>
+<span class="source-line-no">494</span><span id="line-494">   }</span>
+<span class="source-line-no">495</span><span id="line-495"></span>
+<span class="source-line-no">496</span><span id="line-496">   /** Sleeps in short steps; returns &lt;jk&gt;false&lt;/jk&gt; as soon as the job has settled. */</span>
+<span class="source-line-no">497</span><span id="line-497">   private static boolean hold(AsyncJob job, long ms) throws InterruptedException {</span>
+<span class="source-line-no">498</span><span id="line-498">      for (var left = ms; left &gt; 0; left -= SLOW_STEP_MS) {</span>
+<span class="source-line-no">499</span><span id="line-499">         if (job.isTerminal())</span>
+<span class="source-line-no">500</span><span id="line-500">            return false;</span>
+<span class="source-line-no">501</span><span id="line-501">         Thread.sleep(Math.min(SLOW_STEP_MS, left));</span>
+<span class="source-line-no">502</span><span id="line-502">      }</span>
+<span class="source-line-no">503</span><span id="line-503">      return ! job.isTerminal();</span>
+<span class="source-line-no">504</span><span id="line-504">   }</span>
+<span class="source-line-no">505</span><span id="line-505"></span>
+<span class="source-line-no">506</span><span id="line-506">   /**</span>
+<span class="source-line-no">507</span><span id="line-507">    * @param id The job id.</span>
+<span class="source-line-no">508</span><span id="line-508">    * @return {@code {state: RUNNING|DONE, result}}.</span>
+<span class="source-line-no">509</span><span id="line-509">    * @throws NotFound If the job is unknown or has aged out.</span>
+<span class="source-line-no">510</span><span id="line-510">    */</span>
+<span class="source-line-no">511</span><span id="line-511">   @RestGet(path="/{id}")</span>
+<span class="source-line-no">512</span><span id="line-512">   public JsonMap job(@Path("id") String id) {</span>
+<span class="source-line-no">513</span><span id="line-513">      if (asyncJobRegistry().get(id).isEmpty())</span>
+<span class="source-line-no">514</span><span id="line-514">         throw new NotFound("Unknown job '%s'", id);</span>
+<span class="source-line-no">515</span><span id="line-515">      return state(id);</span>
+<span class="source-line-no">516</span><span id="line-516">   }</span>
+<span class="source-line-no">517</span><span id="line-517"></span>
+<span class="source-line-no">518</span><span id="line-518">   private JsonMap state(String id) {</span>
+<span class="source-line-no">519</span><span id="line-519">      var j = asyncJobRegistry().get(id);</span>
+<span class="source-line-no">520</span><span id="line-520">      if (j.isEmpty())</span>
+<span class="source-line-no">521</span><span id="line-521">         return JsonMap.of("state", "EXPIRED");</span>
+<span class="source-line-no">522</span><span id="line-522">      return j.get().isTerminal()</span>
+<span class="source-line-no">523</span><span id="line-523">         ? JsonMap.of("state", "DONE", "result", j.get().result())</span>
+<span class="source-line-no">524</span><span id="line-524">         : JsonMap.of("state", "RUNNING");</span>
+<span class="source-line-no">525</span><span id="line-525">   }</span>
+<span class="source-line-no">526</span><span id="line-526"></span>
+<span class="source-line-no">527</span><span id="line-527">   @Override /* TerminalMixin */</span>
+<span class="source-line-no">528</span><span id="line-528">   public Optional&lt;TerminalSource&gt; terminalSource(String id, RestRequest req) {</span>
+<span class="source-line-no">529</span><span id="line-529">      return groomRuns().source(id); // The run id is an unguessable 128-bit secret; knowing it is the access rule.</span>
+<span class="source-line-no">530</span><span id="line-530">   }</span>
+<span class="source-line-no">531</span><span id="line-531"></span>
+<span class="source-line-no">532</span><span id="line-532">   /**</span>
+<span class="source-line-no">533</span><span id="line-533">    * The Groom dialog's form source.</span>
+<span class="source-line-no">534</span><span id="line-534">    *</span>
+<span class="source-line-no">535</span><span id="line-535">    * @return The modal.</span>
+<span class="source-line-no">536</span><span id="line-536">    */</span>
+<span class="source-line-no">537</span><span id="line-537">   @RestGet(path="/groom-form")</span>
+<span class="source-line-no">538</span><span id="line-538">   public ModalDef groomForm() {</span>
+<span class="source-line-no">539</span><span id="line-539">      var form = FormDef.create();</span>
+<span class="source-line-no">540</span><span id="line-540">      form.field(FormDef.Input.of("pet", "Pet name", "text").value("Rex"));</span>
+<span class="source-line-no">541</span><span id="line-541">      form.field(FormDef.Input.of("verbose", "Verbose (8000 extra lines)", "checkbox"));</span>
+<span class="source-line-no">542</span><span id="line-542">      return ModalDef.create("Groom a pet").form(form)</span>
+<span class="source-line-no">543</span><span id="line-543">         .idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM_JOB).value()).selfTargeted(true);</span>
+<span class="source-line-no">544</span><span id="line-544">   }</span>
+<span class="source-line-no">545</span><span id="line-545"></span>
+<span class="source-line-no">546</span><span id="line-546">   /**</span>
+<span class="source-line-no">547</span><span id="line-547">    * Starts a groom run.</span>
+<span class="source-line-no">548</span><span id="line-548">    *</span>
+<span class="source-line-no">549</span><span id="line-549">    * &lt;p&gt;</span>
+<span class="source-line-no">550</span><span id="line-550">    * Accepts the API form {@code {pet, verbose}} or the dialog form {@code {action, targetId, idempotencyKey,</span>
+<span class="source-line-no">551</span><span id="line-551">    * fields:{pet, verbose}}}; a resubmit with the same {@code idempotencyKey} returns the same run.</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * @param json The body.</span>
+<span class="source-line-no">554</span><span id="line-554">    * @return The new run's row.</span>
+<span class="source-line-no">555</span><span id="line-555">    * @throws IOException If the run's temp file cannot be created.</span>
+<span class="source-line-no">556</span><span id="line-556">    */</span>
+<span class="source-line-no">557</span><span id="line-557">   @RestPost(path="/groom")</span>
+<span class="source-line-no">558</span><span id="line-558">   public ActionResult groom(@Content JsonMap json) throws IOException {</span>
+<span class="source-line-no">559</span><span id="line-559">      var fields = json.getMap("fields");</span>
+<span class="source-line-no">560</span><span id="line-560">      var src = fields != null ? fields : json;</span>
+<span class="source-line-no">561</span><span id="line-561">      var run = groomRuns().start(src.getString("pet"), isOn(src.get("verbose")), json.getString("idempotencyKey"));</span>
+<span class="source-line-no">562</span><span id="line-562">      return ActionResult.success(run.row()).message(f("Grooming %s", run.pet()));</span>
+<span class="source-line-no">563</span><span id="line-563">   }</span>
+<span class="source-line-no">564</span><span id="line-564"></span>
+<span class="source-line-no">565</span><span id="line-565">   private static boolean isOn(Object v) {</span>
+<span class="source-line-no">566</span><span id="line-566">      var s = v == null ? "" : String.valueOf(v);</span>
+<span class="source-line-no">567</span><span id="line-567">      return "true".equals(s) || "on".equals(s);</span>
+<span class="source-line-no">568</span><span id="line-568">   }</span>
+<span class="source-line-no">569</span><span id="line-569"></span>
+<span class="source-line-no">570</span><span id="line-570">   /**</span>
+<span class="source-line-no">571</span><span id="line-571">    * @return The groom runs, newest first.</span>
+<span class="source-line-no">572</span><span id="line-572">    */</span>
+<span class="source-line-no">573</span><span id="line-573">   @RestGet(path="/groom-rows")</span>
+<span class="source-line-no">574</span><span id="line-574">   public List&lt;JsonMap&gt; groomRows() {</span>
+<span class="source-line-no">575</span><span id="line-575">      return groomRuns().list().stream().map(GroomRuns.Run::row).toList();</span>
+<span class="source-line-no">576</span><span id="line-576">   }</span>
+<span class="source-line-no">577</span><span id="line-577"></span>
+<span class="source-line-no">578</span><span id="line-578">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">579</span><span id="line-579">   // Row jobs: a key bound to one row, issued by the server and checked on submit.</span>
+<span class="source-line-no">580</span><span id="line-580">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">581</span><span id="line-581"></span>
+<span class="source-line-no">582</span><span id="line-582">   /**</span>
+<span class="source-line-no">583</span><span id="line-583">    * @return One row per species: {@code {id, species, available}}.</span>
+<span class="source-line-no">584</span><span id="line-584">    */</span>
+<span class="source-line-no">585</span><span id="line-585">   @RestGet(path="/species")</span>
+<span class="source-line-no">586</span><span id="line-586">   public List&lt;JsonMap&gt; speciesRows() {</span>
+<span class="source-line-no">587</span><span id="line-587">      return Arrays.stream(Species.values()).map(this::speciesRow).toList();</span>
+<span class="source-line-no">588</span><span id="line-588">   }</span>
+<span class="source-line-no">589</span><span id="line-589"></span>
+<span class="source-line-no">590</span><span id="line-590">   /**</span>
+<span class="source-line-no">591</span><span id="line-591">    * A species row's detail panel.</span>
+<span class="source-line-no">592</span><span id="line-592">    *</span>
+<span class="source-line-no">593</span><span id="line-593">    * @param id The species name, for example {@code DOG}.</span>
+<span class="source-line-no">594</span><span id="line-594">    * @return {@code {contractVersion, fields:{available, lastRestock}}}.</span>
+<span class="source-line-no">595</span><span id="line-595">    * @throws NotFound If the species is unknown.</span>
+<span class="source-line-no">596</span><span id="line-596">    */</span>
+<span class="source-line-no">597</span><span id="line-597">   @RestGet(path="/species/{id}")</span>
+<span class="source-line-no">598</span><span id="line-598">   public JsonMap speciesDetail(@Path("id") String id) {</span>
+<span class="source-line-no">599</span><span id="line-599">      var s = species(id);</span>
+<span class="source-line-no">600</span><span id="line-600">      var last = lastRestock.get(s);</span>
+<span class="source-line-no">601</span><span id="line-601">      var fields = new JsonMap().append("available", available(s)).append("lastRestock", last == null ? null : last.toString());</span>
+<span class="source-line-no">602</span><span id="line-602">      return RowDetail.response(fields);</span>
+<span class="source-line-no">603</span><span id="line-603">   }</span>
+<span class="source-line-no">604</span><span id="line-604"></span>
+<span class="source-line-no">605</span><span id="line-605">   /**</span>
+<span class="source-line-no">606</span><span id="line-606">    * Issues a restock key bound to one species and the caller.</span>
+<span class="source-line-no">607</span><span id="line-607">    *</span>
+<span class="source-line-no">608</span><span id="line-608">    * &lt;p&gt;</span>
+<span class="source-line-no">609</span><span id="line-609">    * A POST, so it sits behind the console's CSRF boundary like every other console write; it changes nothing but the</span>
+<span class="source-line-no">610</span><span id="line-610">    * key ledger.</span>
+<span class="source-line-no">611</span><span id="line-611">    *</span>
+<span class="source-line-no">612</span><span id="line-612">    * @param req The request.</span>
+<span class="source-line-no">613</span><span id="line-613">    * @param id The species name.</span>
+<span class="source-line-no">614</span><span id="line-614">    * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</span>
+<span class="source-line-no">615</span><span id="line-615">    * @throws NotFound If the species is unknown.</span>
+<span class="source-line-no">616</span><span id="line-616">    */</span>
+<span class="source-line-no">617</span><span id="line-617">   @RestPost(path="/species/{id}/key")</span>
+<span class="source-line-no">618</span><span id="line-618">   public Map&lt;String,Object&gt; speciesKey(RestRequest req, @Path("id") String id) {</span>
+<span class="source-line-no">619</span><span id="line-619">      var s = species(id);</span>
+<span class="source-line-no">620</span><span id="line-620">      return JobKeyLedger.response(jobKeys().issue(RESTOCK_SPECIES, s.name(), ConsoleWrites.actor(req)));</span>
+<span class="source-line-no">621</span><span id="line-621">   }</span>
+<span class="source-line-no">622</span><span id="line-622"></span>
+<span class="source-line-no">623</span><span id="line-623">   /**</span>
+<span class="source-line-no">624</span><span id="line-624">    * Restocks one species from its row's detail panel.</span>
 <span class="source-line-no">625</span><span id="line-625">    *</span>
-<span class="source-line-no">626</span><span id="line-626">    * @param req The request.</span>
-<span class="source-line-no">627</span><span id="line-627">    * @param res The response (202, or 409 on a refusal).</span>
-<span class="source-line-no">628</span><span id="line-628">    * @param id The species name.</span>
-<span class="source-line-no">629</span><span id="line-629">    * @param json The action envelope {@code {action, targetId, idempotencyKey, fields:{count}}}.</span>
-<span class="source-line-no">630</span><span id="line-630">    * @return The job ref (202), a 409 refusal, or a 429 {@code app:job-limit} refusal.</span>
-<span class="source-line-no">631</span><span id="line-631">    * @throws NotFound If the species is unknown.</span>
-<span class="source-line-no">632</span><span id="line-632">    * @throws BadRequest If the envelope is malformed or {@code count} is not a whole number 1-50.</span>
-<span class="source-line-no">633</span><span id="line-633">    */</span>
-<span class="source-line-no">634</span><span id="line-634">   @RestPost(path="/species/{id}/restock")</span>
-<span class="source-line-no">635</span><span id="line-635">   public Object restockSpecies(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) {</span>
-<span class="source-line-no">636</span><span id="line-636">      var s = species(id);</span>
-<span class="source-line-no">637</span><span id="line-637">      var submit = RowJobSubmit.parse(json);</span>
-<span class="source-line-no">638</span><span id="line-638">      if (! s.name().equals(submit.targetId()))</span>
-<span class="source-line-no">639</span><span id="line-639">         return refused(res, RowJobSubmit.bindingRefusal());</span>
-<span class="source-line-no">640</span><span id="line-640">      var actor = ConsoleWrites.actor(req);</span>
-<span class="source-line-no">641</span><span id="line-641">      var ledger = jobKeys();</span>
-<span class="source-line-no">642</span><span id="line-642">      var registry = asyncJobRegistry();</span>
-<span class="source-line-no">643</span><span id="line-643">      AsyncJob job;</span>
-<span class="source-line-no">644</span><span id="line-644">      // The ledger's own monitor: the verify that reads the claim and the claim itself happen under one lock, so of</span>
-<span class="source-line-no">645</span><span id="line-645">      // two concurrent submits of one key the second sees the first's job and replays it instead of starting it again.</span>
-<span class="source-line-no">646</span><span id="line-646">      synchronized (ledger) {</span>
-<span class="source-line-no">647</span><span id="line-647">         var grant = submit.verify(ledger, RESTOCK_SPECIES, actor).orElse(null);</span>
-<span class="source-line-no">648</span><span id="line-648">         if (grant == null)</span>
-<span class="source-line-no">649</span><span id="line-649">            return refused(res, RowJobSubmit.bindingRefusal());</span>
-<span class="source-line-no">650</span><span id="line-650">         var claimed = grant.jobId().orElse(null);</span>
-<span class="source-line-no">651</span><span id="line-651">         if (claimed != null) {</span>
-<span class="source-line-no">652</span><span id="line-652">            var r = replay(claimed, registry);</span>
-<span class="source-line-no">653</span><span id="line-653">            res.setStatus(r instanceof ActionResult ? RowJobSubmit.REFUSAL_STATUS : 202);</span>
-<span class="source-line-no">654</span><span id="line-654">            return r;</span>
-<span class="source-line-no">655</span><span id="line-655">         }</span>
-<span class="source-line-no">656</span><span id="line-656">         // After the replay check: a replay answers its job even if this resubmit's fields have changed.</span>
-<span class="source-line-no">657</span><span id="line-657">         var body = new Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0,</span>
-<span class="source-line-no">658</span><span id="line-658">            Math.max(0, Math.min(speciesHold != null ? (int) speciesHold.value().toMillis() : Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));</span>
-<span class="source-line-no">659</span><span id="line-659">         var created = registry.runningCount() &gt;= Integer.getInteger(LIMIT_PROPERTY, 2) ? null : registry.tryCreate(grant.key()).orElse(null);</span>
-<span class="source-line-no">660</span><span id="line-660">         if (created == null)</span>
-<span class="source-line-no">661</span><span id="line-661">            return limitReached(res, registry.runningCount());</span>
-<span class="source-line-no">662</span><span id="line-662">         ledger.claim(grant.key(), created.id());</span>
-<span class="source-line-no">663</span><span id="line-663">         job = created;</span>
-<span class="source-line-no">664</span><span id="line-664">         remember(created, body);</span>
-<span class="source-line-no">665</span><span id="line-665">         pool.execute(() -&gt; run(created, body, () -&gt; restocked(s, body, actor), () -&gt; speciesRow(s)));</span>
-<span class="source-line-no">666</span><span id="line-666">      }</span>
-<span class="source-line-no">667</span><span id="line-667">      res.setStatus(202);</span>
-<span class="source-line-no">668</span><span id="line-668">      return AsyncJobRef.of(job);</span>
-<span class="source-line-no">669</span><span id="line-669">   }</span>
-<span class="source-line-no">670</span><span id="line-670"></span>
-<span class="source-line-no">671</span><span id="line-671">   /**</span>
-<span class="source-line-no">672</span><span id="line-672">    * A claimed key's replay: its job's ref, or a {@link JobKeyLedger#SPENT_CODE} refusal once the registry has reaped</span>
-<span class="source-line-no">673</span><span id="line-673">    * the job.  Never a second job: the key was spent on the first.</span>
-<span class="source-line-no">674</span><span id="line-674">    *</span>
-<span class="source-line-no">675</span><span id="line-675">    * @param jobId The job the key was claimed for.</span>
-<span class="source-line-no">676</span><span id="line-676">    * @param registry The registry.</span>
-<span class="source-line-no">677</span><span id="line-677">    * @return The {@link AsyncJobRef}, or the refusal.</span>
-<span class="source-line-no">678</span><span id="line-678">    */</span>
-<span class="source-line-no">679</span><span id="line-679">   static Object replay(String jobId, AsyncJobRegistry registry) {</span>
-<span class="source-line-no">680</span><span id="line-680">      return registry.get(jobId).&lt;Object&gt;map(AsyncJobRef::of)</span>
-<span class="source-line-no">681</span><span id="line-681">         .orElseGet(() -&gt; ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's job has aged out; fetch a new key"));</span>
-<span class="source-line-no">682</span><span id="line-682">   }</span>
-<span class="source-line-no">683</span><span id="line-683"></span>
-<span class="source-line-no">684</span><span id="line-684">   private List&lt;Pet&gt; restocked(Species s, Restock body, String actor) {</span>
-<span class="source-line-no">685</span><span id="line-685">      var pets = store().restock(body.perSpecies(), "job:restock-species:" + actor);</span>
-<span class="source-line-no">686</span><span id="line-686">      lastRestock.put(s, PetstoreSeed.now());</span>
-<span class="source-line-no">687</span><span id="line-687">      return pets;</span>
+<span class="source-line-no">626</span><span id="line-626">    * &lt;p&gt;</span>
+<span class="source-line-no">627</span><span id="line-627">    * The species is the path's {@code {id}}, which must equal the body's {@code targetId}, which the key must be bound</span>
+<span class="source-line-no">628</span><span id="line-628">    * to.  The body's {@code fields} supply only {@code count}; any other field (the panel's hidden {@code species}</span>
+<span class="source-line-no">629</span><span id="line-629">    * included) is ignored.  A replay of a claimed key returns the same job, or a {@link JobKeyLedger#SPENT_CODE}</span>
+<span class="source-line-no">630</span><span id="line-630">    * refusal once the registry has aged the job out.</span>
+<span class="source-line-no">631</span><span id="line-631">    *</span>
+<span class="source-line-no">632</span><span id="line-632">    * @param req The request.</span>
+<span class="source-line-no">633</span><span id="line-633">    * @param res The response (202, or 409 on a refusal).</span>
+<span class="source-line-no">634</span><span id="line-634">    * @param id The species name.</span>
+<span class="source-line-no">635</span><span id="line-635">    * @param json The action envelope {@code {action, targetId, idempotencyKey, fields:{count}}}.</span>
+<span class="source-line-no">636</span><span id="line-636">    * @return The job ref (202), a 409 refusal, or a 429 {@code app:job-limit} refusal.</span>
+<span class="source-line-no">637</span><span id="line-637">    * @throws NotFound If the species is unknown.</span>
+<span class="source-line-no">638</span><span id="line-638">    * @throws BadRequest If the envelope is malformed or {@code count} is not a whole number 1-50.</span>
+<span class="source-line-no">639</span><span id="line-639">    */</span>
+<span class="source-line-no">640</span><span id="line-640">   @RestPost(path="/species/{id}/restock")</span>
+<span class="source-line-no">641</span><span id="line-641">   public Object restockSpecies(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) {</span>
+<span class="source-line-no">642</span><span id="line-642">      var s = species(id);</span>
+<span class="source-line-no">643</span><span id="line-643">      var submit = RowJobSubmit.parse(json);</span>
+<span class="source-line-no">644</span><span id="line-644">      if (! s.name().equals(submit.targetId()))</span>
+<span class="source-line-no">645</span><span id="line-645">         return refused(res, RowJobSubmit.bindingRefusal());</span>
+<span class="source-line-no">646</span><span id="line-646">      var actor = ConsoleWrites.actor(req);</span>
+<span class="source-line-no">647</span><span id="line-647">      var ledger = jobKeys();</span>
+<span class="source-line-no">648</span><span id="line-648">      var registry = asyncJobRegistry();</span>
+<span class="source-line-no">649</span><span id="line-649">      AsyncJob job;</span>
+<span class="source-line-no">650</span><span id="line-650">      // The ledger's own monitor: the verify that reads the claim and the claim itself happen under one lock, so of</span>
+<span class="source-line-no">651</span><span id="line-651">      // two concurrent submits of one key the second sees the first's job and replays it instead of starting it again.</span>
+<span class="source-line-no">652</span><span id="line-652">      synchronized (ledger) {</span>
+<span class="source-line-no">653</span><span id="line-653">         var grant = submit.verify(ledger, RESTOCK_SPECIES, actor).orElse(null);</span>
+<span class="source-line-no">654</span><span id="line-654">         if (grant == null)</span>
+<span class="source-line-no">655</span><span id="line-655">            return refused(res, RowJobSubmit.bindingRefusal());</span>
+<span class="source-line-no">656</span><span id="line-656">         var claimed = grant.jobId().orElse(null);</span>
+<span class="source-line-no">657</span><span id="line-657">         if (claimed != null) {</span>
+<span class="source-line-no">658</span><span id="line-658">            var r = replay(claimed, registry);</span>
+<span class="source-line-no">659</span><span id="line-659">            res.setStatus(r instanceof ActionResult ? RowJobSubmit.REFUSAL_STATUS : 202);</span>
+<span class="source-line-no">660</span><span id="line-660">            return r;</span>
+<span class="source-line-no">661</span><span id="line-661">         }</span>
+<span class="source-line-no">662</span><span id="line-662">         // After the replay check: a replay answers its job even if this resubmit's fields have changed.</span>
+<span class="source-line-no">663</span><span id="line-663">         var body = new Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0,</span>
+<span class="source-line-no">664</span><span id="line-664">            Math.max(0, Math.min(speciesHold != null ? (int) speciesHold.value().toMillis() : Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));</span>
+<span class="source-line-no">665</span><span id="line-665">         var created = registry.runningCount() &gt;= Integer.getInteger(LIMIT_PROPERTY, 2) ? null : registry.tryCreate(grant.key()).orElse(null);</span>
+<span class="source-line-no">666</span><span id="line-666">         if (created == null)</span>
+<span class="source-line-no">667</span><span id="line-667">            return limitReached(res, registry.runningCount());</span>
+<span class="source-line-no">668</span><span id="line-668">         ledger.claim(grant.key(), created.id());</span>
+<span class="source-line-no">669</span><span id="line-669">         job = created;</span>
+<span class="source-line-no">670</span><span id="line-670">         remember(created, body);</span>
+<span class="source-line-no">671</span><span id="line-671">         pool.execute(() -&gt; run(created, body, () -&gt; restocked(s, body, actor), () -&gt; speciesRow(s)));</span>
+<span class="source-line-no">672</span><span id="line-672">      }</span>
+<span class="source-line-no">673</span><span id="line-673">      res.setStatus(202);</span>
+<span class="source-line-no">674</span><span id="line-674">      return AsyncJobRef.of(job);</span>
+<span class="source-line-no">675</span><span id="line-675">   }</span>
+<span class="source-line-no">676</span><span id="line-676"></span>
+<span class="source-line-no">677</span><span id="line-677">   /**</span>
+<span class="source-line-no">678</span><span id="line-678">    * A claimed key's replay: its job's ref, or a {@link JobKeyLedger#SPENT_CODE} refusal once the registry has reaped</span>
+<span class="source-line-no">679</span><span id="line-679">    * the job.  Never a second job: the key was spent on the first.</span>
+<span class="source-line-no">680</span><span id="line-680">    *</span>
+<span class="source-line-no">681</span><span id="line-681">    * @param jobId The job the key was claimed for.</span>
+<span class="source-line-no">682</span><span id="line-682">    * @param registry The registry.</span>
+<span class="source-line-no">683</span><span id="line-683">    * @return The {@link AsyncJobRef}, or the refusal.</span>
+<span class="source-line-no">684</span><span id="line-684">    */</span>
+<span class="source-line-no">685</span><span id="line-685">   static Object replay(String jobId, AsyncJobRegistry registry) {</span>
+<span class="source-line-no">686</span><span id="line-686">      return registry.get(jobId).&lt;Object&gt;map(AsyncJobRef::of)</span>
+<span class="source-line-no">687</span><span id="line-687">         .orElseGet(() -&gt; ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's job has aged out; fetch a new key"));</span>
 <span class="source-line-no">688</span><span id="line-688">   }</span>
 <span class="source-line-no">689</span><span id="line-689"></span>
-<span class="source-line-no">690</span><span id="line-690">   /**</span>
-<span class="source-line-no">691</span><span id="line-691">    * A groom run's detail panel.</span>
-<span class="source-line-no">692</span><span id="line-692">    *</span>
-<span class="source-line-no">693</span><span id="line-693">    * @param id The run id.</span>
-<span class="source-line-no">694</span><span id="line-694">    * @return {@code {contractVersion, fields:&lt;the run's row&gt;}}.</span>
-<span class="source-line-no">695</span><span id="line-695">    * @throws NotFound If the run is unknown.</span>
-<span class="source-line-no">696</span><span id="line-696">    */</span>
-<span class="source-line-no">697</span><span id="line-697">   @RestGet(path="/groom-runs/{id}")</span>
-<span class="source-line-no">698</span><span id="line-698">   public JsonMap groomRunDetail(@Path("id") String id) {</span>
-<span class="source-line-no">699</span><span id="line-699">      return RowDetail.response(groomRun(id).row());</span>
-<span class="source-line-no">700</span><span id="line-700">   }</span>
-<span class="source-line-no">701</span><span id="line-701"></span>
-<span class="source-line-no">702</span><span id="line-702">   /**</span>
-<span class="source-line-no">703</span><span id="line-703">    * Issues a regroom key bound to one groom run and the caller.</span>
-<span class="source-line-no">704</span><span id="line-704">    *</span>
-<span class="source-line-no">705</span><span id="line-705">    * @param req The request.</span>
-<span class="source-line-no">706</span><span id="line-706">    * @param id The run id.</span>
-<span class="source-line-no">707</span><span id="line-707">    * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</span>
-<span class="source-line-no">708</span><span id="line-708">    * @throws NotFound If the run is unknown.</span>
-<span class="source-line-no">709</span><span id="line-709">    */</span>
-<span class="source-line-no">710</span><span id="line-710">   @RestPost(path="/groom-runs/{id}/key")</span>
-<span class="source-line-no">711</span><span id="line-711">   public Map&lt;String,Object&gt; groomRunKey(RestRequest req, @Path("id") String id) {</span>
-<span class="source-line-no">712</span><span id="line-712">      var r = groomRun(id);</span>
-<span class="source-line-no">713</span><span id="line-713">      return JobKeyLedger.response(jobKeys().issue(REGROOM, r.id(), ConsoleWrites.actor(req)));</span>
-<span class="source-line-no">714</span><span id="line-714">   }</span>
-<span class="source-line-no">715</span><span id="line-715"></span>
-<span class="source-line-no">716</span><span id="line-716">   /**</span>
-<span class="source-line-no">717</span><span id="line-717">    * Grooms a run's pet again.</span>
-<span class="source-line-no">718</span><span id="line-718">    *</span>
-<span class="source-line-no">719</span><span id="line-719">    * &lt;p&gt;</span>
-<span class="source-line-no">720</span><span id="line-720">    * Ledger keys only, bound to the path's run: the pet comes from the server's run record, never the request.</span>
-<span class="source-line-no">721</span><span id="line-721">    * {@code /groom} stays the dialog's self-targeted endpoint; one endpoint taking both kinds of key would be only as</span>
-<span class="source-line-no">722</span><span id="line-722">    * strong as the self-targeted one.  A replay returns the same new run while it is kept, then a</span>
-<span class="source-line-no">723</span><span id="line-723">    * {@link JobKeyLedger#SPENT_CODE} refusal once the run list has evicted it; never a second run.</span>
+<span class="source-line-no">690</span><span id="line-690">   private List&lt;Pet&gt; restocked(Species s, Restock body, String actor) {</span>
+<span class="source-line-no">691</span><span id="line-691">      var pets = store().restock(body.perSpecies(), "job:restock-species:" + actor);</span>
+<span class="source-line-no">692</span><span id="line-692">      lastRestock.put(s, PetstoreSeed.now());</span>
+<span class="source-line-no">693</span><span id="line-693">      return pets;</span>
+<span class="source-line-no">694</span><span id="line-694">   }</span>
+<span class="source-line-no">695</span><span id="line-695"></span>
+<span class="source-line-no">696</span><span id="line-696">   /**</span>
+<span class="source-line-no">697</span><span id="line-697">    * A groom run's detail panel.</span>
+<span class="source-line-no">698</span><span id="line-698">    *</span>
+<span class="source-line-no">699</span><span id="line-699">    * @param id The run id.</span>
+<span class="source-line-no">700</span><span id="line-700">    * @return {@code {contractVersion, fields:&lt;the run's row&gt;}}.</span>
+<span class="source-line-no">701</span><span id="line-701">    * @throws NotFound If the run is unknown.</span>
+<span class="source-line-no">702</span><span id="line-702">    */</span>
+<span class="source-line-no">703</span><span id="line-703">   @RestGet(path="/groom-runs/{id}")</span>
+<span class="source-line-no">704</span><span id="line-704">   public JsonMap groomRunDetail(@Path("id") String id) {</span>
+<span class="source-line-no">705</span><span id="line-705">      return RowDetail.response(groomRun(id).row());</span>
+<span class="source-line-no">706</span><span id="line-706">   }</span>
+<span class="source-line-no">707</span><span id="line-707"></span>
+<span class="source-line-no">708</span><span id="line-708">   /**</span>
+<span class="source-line-no">709</span><span id="line-709">    * Issues a regroom key bound to one groom run and the caller.</span>
+<span class="source-line-no">710</span><span id="line-710">    *</span>
+<span class="source-line-no">711</span><span id="line-711">    * @param req The request.</span>
+<span class="source-line-no">712</span><span id="line-712">    * @param id The run id.</span>
+<span class="source-line-no">713</span><span id="line-713">    * @return {@code {contractVersion, action, targetId, idempotencyKey}}.</span>
+<span class="source-line-no">714</span><span id="line-714">    * @throws NotFound If the run is unknown.</span>
+<span class="source-line-no">715</span><span id="line-715">    */</span>
+<span class="source-line-no">716</span><span id="line-716">   @RestPost(path="/groom-runs/{id}/key")</span>
+<span class="source-line-no">717</span><span id="line-717">   public Map&lt;String,Object&gt; groomRunKey(RestRequest req, @Path("id") String id) {</span>
+<span class="source-line-no">718</span><span id="line-718">      var r = groomRun(id);</span>
+<span class="source-line-no">719</span><span id="line-719">      return JobKeyLedger.response(jobKeys().issue(REGROOM, r.id(), ConsoleWrites.actor(req)));</span>
+<span class="source-line-no">720</span><span id="line-720">   }</span>
+<span class="source-line-no">721</span><span id="line-721"></span>
+<span class="source-line-no">722</span><span id="line-722">   /**</span>
+<span class="source-line-no">723</span><span id="line-723">    * Grooms a run's pet again.</span>
 <span class="source-line-no">724</span><span id="line-724">    *</span>
-<span class="source-line-no">725</span><span id="line-725">    * @param req The request.</span>
-<span class="source-line-no">726</span><span id="line-726">    * @param res The response (409 on a refusal).</span>
-<span class="source-line-no">727</span><span id="line-727">    * @param id The run id.</span>
-<span class="source-line-no">728</span><span id="line-728">    * @param json The action envelope {@code {action, targetId, idempotencyKey}}.</span>
-<span class="source-line-no">729</span><span id="line-729">    * @return The new run's row, or a 409 refusal.</span>
-<span class="source-line-no">730</span><span id="line-730">    * @throws NotFound If the key is unclaimed and the run is unknown.</span>
-<span class="source-line-no">731</span><span id="line-731">    * @throws BadRequest If the envelope is malformed.</span>
-<span class="source-line-no">732</span><span id="line-732">    * @throws IOException If the new run's temp file cannot be created.</span>
-<span class="source-line-no">733</span><span id="line-733">    */</span>
-<span class="source-line-no">734</span><span id="line-734">   @RestPost(path="/groom-runs/{id}/regroom")</span>
-<span class="source-line-no">735</span><span id="line-735">   public ActionResult regroom(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) throws IOException {</span>
-<span class="source-line-no">736</span><span id="line-736">      var submit = RowJobSubmit.parse(json);</span>
-<span class="source-line-no">737</span><span id="line-737">      if (! id.equals(submit.targetId()))</span>
-<span class="source-line-no">738</span><span id="line-738">         return refused(res, RowJobSubmit.bindingRefusal());</span>
-<span class="source-line-no">739</span><span id="line-739">      var ledger = jobKeys();</span>
-<span class="source-line-no">740</span><span id="line-740">      // As restockSpecies: the claim is read and recorded under the ledger's lock.  The replay check comes before the</span>
-<span class="source-line-no">741</span><span id="line-741">      // run lookup, because GroomRuns evicts the oldest runs first and a replay must still answer once its target is gone.</span>
-<span class="source-line-no">742</span><span id="line-742">      synchronized (ledger) {</span>
-<span class="source-line-no">743</span><span id="line-743">         var grant = submit.verify(ledger, REGROOM, ConsoleWrites.actor(req)).orElse(null);</span>
-<span class="source-line-no">744</span><span id="line-744">         if (grant == null)</span>
-<span class="source-line-no">745</span><span id="line-745">            return refused(res, RowJobSubmit.bindingRefusal());</span>
-<span class="source-line-no">746</span><span id="line-746">         var claimed = grant.jobId().orElse(null);</span>
-<span class="source-line-no">747</span><span id="line-747">         if (claimed != null)</span>
-<span class="source-line-no">748</span><span id="line-748">            return groomRuns().get(claimed).map(x -&gt; ActionResult.success(x.row()).message(f("Grooming %s again", x.pet())))</span>
-<span class="source-line-no">749</span><span id="line-749">               .orElseGet(() -&gt; refused(res, ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's run has aged out; fetch a new key")));</span>
-<span class="source-line-no">750</span><span id="line-750">         var again = groomRuns().start(groomRun(id).pet(), false, grant.key().value());</span>
-<span class="source-line-no">751</span><span id="line-751">         ledger.claim(grant.key(), again.id());</span>
-<span class="source-line-no">752</span><span id="line-752">         return ActionResult.success(again.row()).message(f("Grooming %s again", again.pet()));</span>
-<span class="source-line-no">753</span><span id="line-753">      }</span>
-<span class="source-line-no">754</span><span id="line-754">   }</span>
-<span class="source-line-no">755</span><span id="line-755"></span>
-<span class="source-line-no">756</span><span id="line-756">   private static ActionResult refused(RestResponse res, ActionResult refusal) {</span>
-<span class="source-line-no">757</span><span id="line-757">      res.setStatus(RowJobSubmit.REFUSAL_STATUS);</span>
-<span class="source-line-no">758</span><span id="line-758">      return refusal;</span>
-<span class="source-line-no">759</span><span id="line-759">   }</span>
-<span class="source-line-no">760</span><span id="line-760"></span>
-<span class="source-line-no">761</span><span id="line-761">   private void remember(AsyncJob job, Restock body) {</span>
-<span class="source-line-no">762</span><span id="line-762">      synchronized (submitted) {</span>
-<span class="source-line-no">763</span><span id="line-763">         submitted.addFirst(JsonMap.of("jobId", job.id(), "submitted", job.createdAt().toString(), "request", body.perSpecies(), "idempotencyKey", body.idempotencyKey()));</span>
-<span class="source-line-no">764</span><span id="line-764">         while (submitted.size() &gt; MAX_SUBMITTED)</span>
-<span class="source-line-no">765</span><span id="line-765">            submitted.removeLast();</span>
-<span class="source-line-no">766</span><span id="line-766">      }</span>
-<span class="source-line-no">767</span><span id="line-767">   }</span>
-<span class="source-line-no">768</span><span id="line-768"></span>
-<span class="source-line-no">769</span><span id="line-769">   private JsonMap speciesRow(Species s) {</span>
-<span class="source-line-no">770</span><span id="line-770">      return JsonMap.of("id", s.name(), "species", s.name(), "available", available(s));</span>
-<span class="source-line-no">771</span><span id="line-771">   }</span>
-<span class="source-line-no">772</span><span id="line-772"></span>
-<span class="source-line-no">773</span><span id="line-773">   private long available(Species s) {</span>
-<span class="source-line-no">774</span><span id="line-774">      return store().getPets().stream().filter(p -&gt; p.getSpecies() == s &amp;&amp; p.getStatus() == PetStatus.AVAILABLE).count();</span>
-<span class="source-line-no">775</span><span id="line-775">   }</span>
-<span class="source-line-no">776</span><span id="line-776"></span>
-<span class="source-line-no">777</span><span id="line-777">   private static Species species(String id) {</span>
-<span class="source-line-no">778</span><span id="line-778">      for (var s : Species.values())</span>
-<span class="source-line-no">779</span><span id="line-779">         if (s.name().equals(id))</span>
-<span class="source-line-no">780</span><span id="line-780">            return s;</span>
-<span class="source-line-no">781</span><span id="line-781">      throw new NotFound("Unknown species '%s'", id);</span>
-<span class="source-line-no">782</span><span id="line-782">   }</span>
-<span class="source-line-no">783</span><span id="line-783"></span>
-<span class="source-line-no">784</span><span id="line-784">   private GroomRuns.Run groomRun(String id) {</span>
-<span class="source-line-no">785</span><span id="line-785">      return groomRuns().get(id).orElseThrow(() -&gt; new NotFound("Unknown groom run '%s'", id));</span>
-<span class="source-line-no">786</span><span id="line-786">   }</span>
-<span class="source-line-no">787</span><span id="line-787"></span>
-<span class="source-line-no">788</span><span id="line-788">   private static int count(JsonMap fields) {</span>
-<span class="source-line-no">789</span><span id="line-789">      var v = fields == null ? null : fields.get("count");</span>
-<span class="source-line-no">790</span><span id="line-790">      try {</span>
-<span class="source-line-no">791</span><span id="line-791">         var n = v == null ? 0 : Integer.parseInt(String.valueOf(v).trim());</span>
-<span class="source-line-no">792</span><span id="line-792">         if (n &gt;= 1 &amp;&amp; n &lt;= 50)</span>
-<span class="source-line-no">793</span><span id="line-793">            return n;</span>
-<span class="source-line-no">794</span><span id="line-794">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">795</span><span id="line-795">         // Not a whole number (a decimal included): falls through to the 400 below.</span>
-<span class="source-line-no">796</span><span id="line-796">      }</span>
-<span class="source-line-no">797</span><span id="line-797">      throw new BadRequest("Field 'count' must be a whole number between 1 and 50");</span>
-<span class="source-line-no">798</span><span id="line-798">   }</span>
-<span class="source-line-no">799</span><span id="line-799">}</span>
+<span class="source-line-no">725</span><span id="line-725">    * &lt;p&gt;</span>
+<span class="source-line-no">726</span><span id="line-726">    * Ledger keys only, bound to the path's run: the pet comes from the server's run record, never the request.</span>
+<span class="source-line-no">727</span><span id="line-727">    * {@code /groom} stays the dialog's self-targeted endpoint; one endpoint taking both kinds of key would be only as</span>
+<span class="source-line-no">728</span><span id="line-728">    * strong as the self-targeted one.  A replay returns the same new run while it is kept, then a</span>
+<span class="source-line-no">729</span><span id="line-729">    * {@link JobKeyLedger#SPENT_CODE} refusal once the run list has evicted it; never a second run.</span>
+<span class="source-line-no">730</span><span id="line-730">    *</span>
+<span class="source-line-no">731</span><span id="line-731">    * @param req The request.</span>
+<span class="source-line-no">732</span><span id="line-732">    * @param res The response (409 on a refusal).</span>
+<span class="source-line-no">733</span><span id="line-733">    * @param id The run id.</span>
+<span class="source-line-no">734</span><span id="line-734">    * @param json The action envelope {@code {action, targetId, idempotencyKey}}.</span>
+<span class="source-line-no">735</span><span id="line-735">    * @return The new run's row, or a 409 refusal.</span>
+<span class="source-line-no">736</span><span id="line-736">    * @throws NotFound If the key is unclaimed and the run is unknown.</span>
+<span class="source-line-no">737</span><span id="line-737">    * @throws BadRequest If the envelope is malformed.</span>
+<span class="source-line-no">738</span><span id="line-738">    * @throws IOException If the new run's temp file cannot be created.</span>
+<span class="source-line-no">739</span><span id="line-739">    */</span>
+<span class="source-line-no">740</span><span id="line-740">   @RestPost(path="/groom-runs/{id}/regroom")</span>
+<span class="source-line-no">741</span><span id="line-741">   public ActionResult regroom(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) throws IOException {</span>
+<span class="source-line-no">742</span><span id="line-742">      var submit = RowJobSubmit.parse(json);</span>
+<span class="source-line-no">743</span><span id="line-743">      if (! id.equals(submit.targetId()))</span>
+<span class="source-line-no">744</span><span id="line-744">         return refused(res, RowJobSubmit.bindingRefusal());</span>
+<span class="source-line-no">745</span><span id="line-745">      var ledger = jobKeys();</span>
+<span class="source-line-no">746</span><span id="line-746">      // As restockSpecies: the claim is read and recorded under the ledger's lock.  The replay check comes before the</span>
+<span class="source-line-no">747</span><span id="line-747">      // run lookup, because GroomRuns evicts the oldest runs first and a replay must still answer once its target is gone.</span>
+<span class="source-line-no">748</span><span id="line-748">      synchronized (ledger) {</span>
+<span class="source-line-no">749</span><span id="line-749">         var grant = submit.verify(ledger, REGROOM, ConsoleWrites.actor(req)).orElse(null);</span>
+<span class="source-line-no">750</span><span id="line-750">         if (grant == null)</span>
+<span class="source-line-no">751</span><span id="line-751">            return refused(res, RowJobSubmit.bindingRefusal());</span>
+<span class="source-line-no">752</span><span id="line-752">         var claimed = grant.jobId().orElse(null);</span>
+<span class="source-line-no">753</span><span id="line-753">         if (claimed != null)</span>
+<span class="source-line-no">754</span><span id="line-754">            return groomRuns().get(claimed).map(x -&gt; ActionResult.success(x.row()).message(f("Grooming %s again", x.pet())))</span>
+<span class="source-line-no">755</span><span id="line-755">               .orElseGet(() -&gt; refused(res, ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's run has aged out; fetch a new key")));</span>
+<span class="source-line-no">756</span><span id="line-756">         var again = groomRuns().start(groomRun(id).pet(), false, grant.key().value());</span>
+<span class="source-line-no">757</span><span id="line-757">         ledger.claim(grant.key(), again.id());</span>
+<span class="source-line-no">758</span><span id="line-758">         return ActionResult.success(again.row()).message(f("Grooming %s again", again.pet()));</span>
+<span class="source-line-no">759</span><span id="line-759">      }</span>
+<span class="source-line-no">760</span><span id="line-760">   }</span>
+<span class="source-line-no">761</span><span id="line-761"></span>
+<span class="source-line-no">762</span><span id="line-762">   private static ActionResult refused(RestResponse res, ActionResult refusal) {</span>
+<span class="source-line-no">763</span><span id="line-763">      res.setStatus(RowJobSubmit.REFUSAL_STATUS);</span>
+<span class="source-line-no">764</span><span id="line-764">      return refusal;</span>
+<span class="source-line-no">765</span><span id="line-765">   }</span>
+<span class="source-line-no">766</span><span id="line-766"></span>
+<span class="source-line-no">767</span><span id="line-767">   private void remember(AsyncJob job, Restock body) {</span>
+<span class="source-line-no">768</span><span id="line-768">      synchronized (submitted) {</span>
+<span class="source-line-no">769</span><span id="line-769">         submitted.addFirst(JsonMap.of("jobId", job.id(), "submitted", job.createdAt().toString(), "request", body.perSpecies(), "idempotencyKey", body.idempotencyKey()));</span>
+<span class="source-line-no">770</span><span id="line-770">         while (submitted.size() &gt; MAX_SUBMITTED)</span>
+<span class="source-line-no">771</span><span id="line-771">            submitted.removeLast();</span>
+<span class="source-line-no">772</span><span id="line-772">      }</span>
+<span class="source-line-no">773</span><span id="line-773">   }</span>
+<span class="source-line-no">774</span><span id="line-774"></span>
+<span class="source-line-no">775</span><span id="line-775">   private JsonMap speciesRow(Species s) {</span>
+<span class="source-line-no">776</span><span id="line-776">      return JsonMap.of("id", s.name(), "species", s.name(), "available", available(s));</span>
+<span class="source-line-no">777</span><span id="line-777">   }</span>
+<span class="source-line-no">778</span><span id="line-778"></span>
+<span class="source-line-no">779</span><span id="line-779">   private long available(Species s) {</span>
+<span class="source-line-no">780</span><span id="line-780">      return store().getPets().stream().filter(p -&gt; p.getSpecies() == s &amp;&amp; p.getStatus() == PetStatus.AVAILABLE).count();</span>
+<span class="source-line-no">781</span><span id="line-781">   }</span>
+<span class="source-line-no">782</span><span id="line-782"></span>
+<span class="source-line-no">783</span><span id="line-783">   private static Species species(String id) {</span>
+<span class="source-line-no">784</span><span id="line-784">      for (var s : Species.values())</span>
+<span class="source-line-no">785</span><span id="line-785">         if (s.name().equals(id))</span>
+<span class="source-line-no">786</span><span id="line-786">            return s;</span>
+<span class="source-line-no">787</span><span id="line-787">      throw new NotFound("Unknown species '%s'", id);</span>
+<span class="source-line-no">788</span><span id="line-788">   }</span>
+<span class="source-line-no">789</span><span id="line-789"></span>
+<span class="source-line-no">790</span><span id="line-790">   private GroomRuns.Run groomRun(String id) {</span>
+<span class="source-line-no">791</span><span id="line-791">      return groomRuns().get(id).orElseThrow(() -&gt; new NotFound("Unknown groom run '%s'", id));</span>
+<span class="source-line-no">792</span><span id="line-792">   }</span>
+<span class="source-line-no">793</span><span id="line-793"></span>
+<span class="source-line-no">794</span><span id="line-794">   private static int count(JsonMap fields) {</span>
+<span class="source-line-no">795</span><span id="line-795">      var v = fields == null ? null : fields.get("count");</span>
+<span class="source-line-no">796</span><span id="line-796">      try {</span>
+<span class="source-line-no">797</span><span id="line-797">         var n = v == null ? 0 : Integer.parseInt(String.valueOf(v).trim());</span>
+<span class="source-line-no">798</span><span id="line-798">         if (n &gt;= 1 &amp;&amp; n &lt;= 50)</span>
+<span class="source-line-no">799</span><span id="line-799">            return n;</span>
+<span class="source-line-no">800</span><span id="line-800">      } catch (NumberFormatException e) {</span>
+<span class="source-line-no">801</span><span id="line-801">         // Not a whole number (a decimal included): falls through to the 400 below.</span>
+<span class="source-line-no">802</span><span id="line-802">      }</span>
+<span class="source-line-no">803</span><span id="line-803">      throw new BadRequest("Field 'count' must be a whole number between 1 and 50");</span>
+<span class="source-line-no">804</span><span id="line-804">   }</span>
+<span class="source-line-no">805</span><span id="line-805">}</span>
 
 
 

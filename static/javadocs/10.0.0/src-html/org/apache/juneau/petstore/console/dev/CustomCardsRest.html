@@ -91,73 +91,85 @@
 <span class="source-line-no">078</span><span id="line-78">      return builder(req) ? twin(req, DevPageBuilders.cards()) : FreemarkerView.of("cards.ftlh");</span>
 <span class="source-line-no">079</span><span id="line-79">   }</span>
 <span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /** @return The kpi card's number: how many pets are available. */</span>
-<span class="source-line-no">082</span><span id="line-82">   @RestGet(path="/stats/available")</span>
-<span class="source-line-no">083</span><span id="line-83">   public JsonMap available() {</span>
-<span class="source-line-no">084</span><span id="line-84">      var n = store().getPets().stream().filter(p -&gt; p.getStatus() == PetStatus.AVAILABLE).count();</span>
-<span class="source-line-no">085</span><span id="line-85">      return new JsonMap().append("label", "Pets available").append("value", n);</span>
-<span class="source-line-no">086</span><span id="line-86">   }</span>
-<span class="source-line-no">087</span><span id="line-87"></span>
-<span class="source-line-no">088</span><span id="line-88">   /**</span>
-<span class="source-line-no">089</span><span id="line-89">    * Counts one species' pets by status, for the gauge.</span>
-<span class="source-line-no">090</span><span id="line-90">    *</span>
-<span class="source-line-no">091</span><span id="line-91">    * @param species The species name, case-insensitive.</span>
-<span class="source-line-no">092</span><span id="line-92">    * @return {@code {species, available, pending, sold}}.</span>
-<span class="source-line-no">093</span><span id="line-93">    * @throws BadRequest If the species is missing or unknown.</span>
-<span class="source-line-no">094</span><span id="line-94">    */</span>
-<span class="source-line-no">095</span><span id="line-95">   @RestGet(path="/inventory")</span>
-<span class="source-line-no">096</span><span id="line-96">   public JsonMap inventory(@Query("species") String species) {</span>
-<span class="source-line-no">097</span><span id="line-97">      if (species == null)</span>
-<span class="source-line-no">098</span><span id="line-98">         throw new BadRequest("Missing 'species'");</span>
-<span class="source-line-no">099</span><span id="line-99">      Species s;</span>
-<span class="source-line-no">100</span><span id="line-100">      try {</span>
-<span class="source-line-no">101</span><span id="line-101">         s = Species.valueOf(species.toUpperCase(Locale.ROOT));</span>
-<span class="source-line-no">102</span><span id="line-102">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">103</span><span id="line-103">         throw new BadRequest(e, "Unknown species '%s'", species);</span>
-<span class="source-line-no">104</span><span id="line-104">      }</span>
-<span class="source-line-no">105</span><span id="line-105">      var counts = new EnumMap&lt;PetStatus,Long&gt;(PetStatus.class);</span>
-<span class="source-line-no">106</span><span id="line-106">      for (var st : PetStatus.values())</span>
-<span class="source-line-no">107</span><span id="line-107">         counts.put(st, 0L);</span>
-<span class="source-line-no">108</span><span id="line-108">      store().getPets().stream().filter(p -&gt; p.getSpecies() == s).forEach(p -&gt; counts.merge(p.getStatus(), 1L, Long::sum));</span>
-<span class="source-line-no">109</span><span id="line-109">      return new JsonMap().append("species", s.name())</span>
-<span class="source-line-no">110</span><span id="line-110">         .append("available", counts.get(PetStatus.AVAILABLE))</span>
-<span class="source-line-no">111</span><span id="line-111">         .append("pending", counts.get(PetStatus.PENDING))</span>
-<span class="source-line-no">112</span><span id="line-112">         .append("sold", counts.get(PetStatus.SOLD));</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   /** @return One {@link #inventory(String)} row per species, in enum order, for the stock bands chart. */</span>
-<span class="source-line-no">116</span><span id="line-116">   @RestGet(path="/inventory/all")</span>
-<span class="source-line-no">117</span><span id="line-117">   public JsonList inventoryAll() {</span>
-<span class="source-line-no">118</span><span id="line-118">      var rows = new JsonList();</span>
-<span class="source-line-no">119</span><span id="line-119">      Arrays.stream(Species.values()).forEach(s -&gt; rows.add(inventory(s.name())));</span>
-<span class="source-line-no">120</span><span id="line-120">      return rows;</span>
-<span class="source-line-no">121</span><span id="line-121">   }</span>
-<span class="source-line-no">122</span><span id="line-122"></span>
-<span class="source-line-no">123</span><span id="line-123">   /** @return One row {@code {id, price}} per pet, by id, for the zoomable prices chart. */</span>
-<span class="source-line-no">124</span><span id="line-124">   @RestGet(path="/prices")</span>
-<span class="source-line-no">125</span><span id="line-125">   public JsonList prices() {</span>
-<span class="source-line-no">126</span><span id="line-126">      var rows = new JsonList();</span>
-<span class="source-line-no">127</span><span id="line-127">      store().getPets().stream().sorted(Comparator.comparingLong(Pet::getId))</span>
-<span class="source-line-no">128</span><span id="line-128">         .forEach(p -&gt; rows.add(new JsonMap().append("id", p.getId()).append("price", p.getPrice())));</span>
-<span class="source-line-no">129</span><span id="line-129">      return rows;</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Serves the page-local script.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @param res The response.</span>
-<span class="source-line-no">136</span><span id="line-136">    * @throws IOException If the bundled script can't be read.</span>
-<span class="source-line-no">137</span><span id="line-137">    */</span>
-<span class="source-line-no">138</span><span id="line-138">   @RestGet(path="/petstore-cards.js")</span>
-<span class="source-line-no">139</span><span id="line-139">   public void script(RestResponse res) throws IOException {</span>
-<span class="source-line-no">140</span><span id="line-140">      try (var in = CustomCardsRest.class.getResourceAsStream("petstore-cards.js")) {</span>
-<span class="source-line-no">141</span><span id="line-141">         if (in == null)</span>
-<span class="source-line-no">142</span><span id="line-142">            throw new IllegalStateException("Missing classpath resource 'petstore-cards.js' beside " + CustomCardsRest.class.getName());</span>
-<span class="source-line-no">143</span><span id="line-143">         res.setContentType("text/javascript;charset=utf-8");</span>
-<span class="source-line-no">144</span><span id="line-144">         res.getWriter().write(new String(in.readAllBytes(), UTF_8));</span>
-<span class="source-line-no">145</span><span id="line-145">      }</span>
-<span class="source-line-no">146</span><span id="line-146">   }</span>
-<span class="source-line-no">147</span><span id="line-147">}</span>
+<span class="source-line-no">081</span><span id="line-81">   /** @return The Card API controls as a chrome-free fragment. */</span>
+<span class="source-line-no">082</span><span id="line-82">   @RestGet(path="/fragments/toolbar")</span>
+<span class="source-line-no">083</span><span id="line-83">   public View toolbar() {</span>
+<span class="source-line-no">084</span><span id="line-84">      return FreemarkerView.of("fragments/cards-toolbar.ftlh");</span>
+<span class="source-line-no">085</span><span id="line-85">   }</span>
+<span class="source-line-no">086</span><span id="line-86"></span>
+<span class="source-line-no">087</span><span id="line-87">   /** @return The card-type notes as a chrome-free fragment. */</span>
+<span class="source-line-no">088</span><span id="line-88">   @RestGet(path="/fragments/how")</span>
+<span class="source-line-no">089</span><span id="line-89">   public View how() {</span>
+<span class="source-line-no">090</span><span id="line-90">      return FreemarkerView.of("fragments/cards-how.ftlh");</span>
+<span class="source-line-no">091</span><span id="line-91">   }</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   /** @return The kpi card's number: how many pets are available. */</span>
+<span class="source-line-no">094</span><span id="line-94">   @RestGet(path="/stats/available")</span>
+<span class="source-line-no">095</span><span id="line-95">   public JsonMap available() {</span>
+<span class="source-line-no">096</span><span id="line-96">      var n = store().getPets().stream().filter(p -&gt; p.getStatus() == PetStatus.AVAILABLE).count();</span>
+<span class="source-line-no">097</span><span id="line-97">      return new JsonMap().append("label", "Pets available").append("value", n);</span>
+<span class="source-line-no">098</span><span id="line-98">   }</span>
+<span class="source-line-no">099</span><span id="line-99"></span>
+<span class="source-line-no">100</span><span id="line-100">   /**</span>
+<span class="source-line-no">101</span><span id="line-101">    * Counts one species' pets by status, for the gauge.</span>
+<span class="source-line-no">102</span><span id="line-102">    *</span>
+<span class="source-line-no">103</span><span id="line-103">    * @param species The species name, case-insensitive.</span>
+<span class="source-line-no">104</span><span id="line-104">    * @return {@code {species, available, pending, sold}}.</span>
+<span class="source-line-no">105</span><span id="line-105">    * @throws BadRequest If the species is missing or unknown.</span>
+<span class="source-line-no">106</span><span id="line-106">    */</span>
+<span class="source-line-no">107</span><span id="line-107">   @RestGet(path="/inventory")</span>
+<span class="source-line-no">108</span><span id="line-108">   public JsonMap inventory(@Query("species") String species) {</span>
+<span class="source-line-no">109</span><span id="line-109">      if (species == null)</span>
+<span class="source-line-no">110</span><span id="line-110">         throw new BadRequest("Missing 'species'");</span>
+<span class="source-line-no">111</span><span id="line-111">      Species s;</span>
+<span class="source-line-no">112</span><span id="line-112">      try {</span>
+<span class="source-line-no">113</span><span id="line-113">         s = Species.valueOf(species.toUpperCase(Locale.ROOT));</span>
+<span class="source-line-no">114</span><span id="line-114">      } catch (IllegalArgumentException e) {</span>
+<span class="source-line-no">115</span><span id="line-115">         throw new BadRequest(e, "Unknown species '%s'", species);</span>
+<span class="source-line-no">116</span><span id="line-116">      }</span>
+<span class="source-line-no">117</span><span id="line-117">      var counts = new EnumMap&lt;PetStatus,Long&gt;(PetStatus.class);</span>
+<span class="source-line-no">118</span><span id="line-118">      for (var st : PetStatus.values())</span>
+<span class="source-line-no">119</span><span id="line-119">         counts.put(st, 0L);</span>
+<span class="source-line-no">120</span><span id="line-120">      store().getPets().stream().filter(p -&gt; p.getSpecies() == s).forEach(p -&gt; counts.merge(p.getStatus(), 1L, Long::sum));</span>
+<span class="source-line-no">121</span><span id="line-121">      return new JsonMap().append("species", s.name())</span>
+<span class="source-line-no">122</span><span id="line-122">         .append("available", counts.get(PetStatus.AVAILABLE))</span>
+<span class="source-line-no">123</span><span id="line-123">         .append("pending", counts.get(PetStatus.PENDING))</span>
+<span class="source-line-no">124</span><span id="line-124">         .append("sold", counts.get(PetStatus.SOLD));</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126"></span>
+<span class="source-line-no">127</span><span id="line-127">   /** @return One {@link #inventory(String)} row per species, in enum order, for the stock bands chart. */</span>
+<span class="source-line-no">128</span><span id="line-128">   @RestGet(path="/inventory/all")</span>
+<span class="source-line-no">129</span><span id="line-129">   public JsonList inventoryAll() {</span>
+<span class="source-line-no">130</span><span id="line-130">      var rows = new JsonList();</span>
+<span class="source-line-no">131</span><span id="line-131">      Arrays.stream(Species.values()).forEach(s -&gt; rows.add(inventory(s.name())));</span>
+<span class="source-line-no">132</span><span id="line-132">      return rows;</span>
+<span class="source-line-no">133</span><span id="line-133">   }</span>
+<span class="source-line-no">134</span><span id="line-134"></span>
+<span class="source-line-no">135</span><span id="line-135">   /** @return One row {@code {id, price}} per pet, by id, for the zoomable prices chart. */</span>
+<span class="source-line-no">136</span><span id="line-136">   @RestGet(path="/prices")</span>
+<span class="source-line-no">137</span><span id="line-137">   public JsonList prices() {</span>
+<span class="source-line-no">138</span><span id="line-138">      var rows = new JsonList();</span>
+<span class="source-line-no">139</span><span id="line-139">      store().getPets().stream().sorted(Comparator.comparingLong(Pet::getId))</span>
+<span class="source-line-no">140</span><span id="line-140">         .forEach(p -&gt; rows.add(new JsonMap().append("id", p.getId()).append("price", p.getPrice())));</span>
+<span class="source-line-no">141</span><span id="line-141">      return rows;</span>
+<span class="source-line-no">142</span><span id="line-142">   }</span>
+<span class="source-line-no">143</span><span id="line-143"></span>
+<span class="source-line-no">144</span><span id="line-144">   /**</span>
+<span class="source-line-no">145</span><span id="line-145">    * Serves the page-local script.</span>
+<span class="source-line-no">146</span><span id="line-146">    *</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param res The response.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @throws IOException If the bundled script can't be read.</span>
+<span class="source-line-no">149</span><span id="line-149">    */</span>
+<span class="source-line-no">150</span><span id="line-150">   @RestGet(path="/petstore-cards.js")</span>
+<span class="source-line-no">151</span><span id="line-151">   public void script(RestResponse res) throws IOException {</span>
+<span class="source-line-no">152</span><span id="line-152">      try (var in = CustomCardsRest.class.getResourceAsStream("petstore-cards.js")) {</span>
+<span class="source-line-no">153</span><span id="line-153">         if (in == null)</span>
+<span class="source-line-no">154</span><span id="line-154">            throw new IllegalStateException("Missing classpath resource 'petstore-cards.js' beside " + CustomCardsRest.class.getName());</span>
+<span class="source-line-no">155</span><span id="line-155">         res.setContentType("text/javascript;charset=utf-8");</span>
+<span class="source-line-no">156</span><span id="line-156">         res.getWriter().write(new String(in.readAllBytes(), UTF_8));</span>
+<span class="source-line-no">157</span><span id="line-157">      }</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159">}</span>
 
 
 

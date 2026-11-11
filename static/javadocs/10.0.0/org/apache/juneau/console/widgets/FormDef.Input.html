@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations"><a href="../../commons/bean/BeanType.html" title="annotation interface in org.apache.juneau.commons.bean">@BeanType</a>(<a href="../../commons/bean/BeanType.html#properties()">properties</a>="name,label,type,required,value,options,pattern,maxLength,help,actionId")
-</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.html#line-102">FormDef.Input</a></span>
+</span><span class="modifiers">public static class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.html#line-109">FormDef.Input</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A single typed form input painted client-side with <code>createElement</code> (never <code>innerHTML</code>).</div>
 <dl class="notes">
@@ -162,7 +162,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#type" class="member-name-link">type</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">One of <code>text</code>, <code>textarea</code>, <code>password</code>, <code>checkbox</code>, <code>toggle</code>, <code>select</code>, <code>action</code>.</div>
+<div class="block">One of <code>text</code>, <code>textarea</code>, <code>password</code>, <code>checkbox</code>, <code>toggle</code>, <code>select</code>, <code>date</code>, <code>action</code>.</div>
 </div>
 <div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#value" class="member-name-link">value</a></code></div>
@@ -274,70 +274,70 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="name">
 <h3>name</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-140">name</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-147">name</a></span></div>
 <div class="block">The submit-body key for this field (e.g. <code>resolution</code>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="label">
 <h3>label</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-143">label</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-150">label</a></span></div>
 <div class="block">The label shown next to the control.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="type">
 <h3>type</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-146">type</a></span></div>
-<div class="block">One of <code>text</code>, <code>textarea</code>, <code>password</code>, <code>checkbox</code>, <code>toggle</code>, <code>select</code>, <code>action</code>.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-153">type</a></span></div>
+<div class="block">One of <code>text</code>, <code>textarea</code>, <code>password</code>, <code>checkbox</code>, <code>toggle</code>, <code>select</code>, <code>date</code>, <code>action</code>.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="required">
 <h3>required</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-149">required</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-156">required</a></span></div>
 <div class="block">When <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html#TRUE" title="class or interface in java.lang" class="external-link"><code>Boolean.TRUE</code></a>, the control is required.  Omitted from the wire otherwise.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="value">
 <h3>value</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-152">value</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-159">value</a></span></div>
 <div class="block">Optional prefill, applied via <code>.value</code> / <code>.checked</code> (never <code>innerHTML</code>).</div>
 </section>
 </li>
 <li>
 <section class="detail" id="options">
 <h3>options</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="FormDef.Input.Option.html" title="class in org.apache.juneau.console.widgets">FormDef.Input.Option</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-155">options</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="FormDef.Input.Option.html" title="class in org.apache.juneau.console.widgets">FormDef.Input.Option</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-162">options</a></span></div>
 <div class="block">The options for a <code>select</code> field, in display order; omitted from the wire otherwise.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="pattern">
 <h3>pattern</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-158">pattern</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-165">pattern</a></span></div>
 <div class="block">An optional client validation regexp for <code>text</code>/<code>textarea</code>; omitted from the wire otherwise.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="maxLength">
 <h3>maxLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-161">maxLength</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-168">maxLength</a></span></div>
 <div class="block">An optional client max-length for <code>text</code>/<code>textarea</code>; omitted from the wire otherwise.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="help">
 <h3>help</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-164">help</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-171">help</a></span></div>
 <div class="block">An optional help hint painted with <code>textContent</code>; omitted from the wire otherwise.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="actionId">
 <h3>actionId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-170">actionId</a></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-177">actionId</a></span></div>
 <div class="block">The enclosing view's row-action id an <code>action</code> button opens; omitted from the wire otherwise.  See
  <a href="ActionRef.html" title="class in org.apache.juneau.console.widgets"><code>ActionRef</code></a> for the typed reference the builder accepts.</div>
 </section>
@@ -353,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Input</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-103">Input</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-110">Input</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -367,7 +367,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.String,java.lang.String,java.lang.String)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-184">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-191">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;type)</span></div>
 <div class="block">Creates a typed form input.</div>
@@ -377,7 +377,7 @@ loadScripts(document, 'script');</script>
    <jk>null</jk> or blank.</dd>
 <dd><code>label</code> - The visible label.  Must not be <jk>null</jk> or blank.</dd>
 <dd><code>type</code> - One of <code>text</code>, <code>textarea</code>, <code>password</code>, <code>checkbox</code>, <code>toggle</code>, <code>select</code>,
-   <code>action</code>.  <jk>null</jk> or blank defaults to <code>text</code>.</dd>
+   <code>date</code>, <code>action</code>.  <jk>null</jk> or blank defaults to <code>text</code>.</dd>
 <dt>Returns:</dt>
 <dd>A new <a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets"><code>FormDef.Input</code></a>.</dd>
 <dt>Throws:</dt>
@@ -389,7 +389,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="required()">
 <h3>required</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-204">required</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-211">required</a></span>()</div>
 <div class="block">Marks this input required.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -400,7 +400,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="required(boolean)">
 <h3>required</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-215">required</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-222">required</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span></div>
 <div class="block">Sets whether this input is required.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -413,7 +413,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value(java.lang.String)">
 <h3>value</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-226">value</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-233">value</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the optional prefill.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -426,7 +426,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="options(org.apache.juneau.console.widgets.FormDef.Input.Option...)">
 <h3>options</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-238">options</a></span><wbr><span class="parameters">(<a href="FormDef.Input.Option.html" title="class in org.apache.juneau.console.widgets">FormDef.Input.Option</a>...&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-245">options</a></span><wbr><span class="parameters">(<a href="FormDef.Input.Option.html" title="class in org.apache.juneau.console.widgets">FormDef.Input.Option</a>...&nbsp;value)</span></div>
 <div class="block">Sets the <code>select</code> options (replacing any existing).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -441,7 +441,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="option(java.lang.String,java.lang.String)">
 <h3>option</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-259">option</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-266">option</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;label)</span></div>
 <div class="block">Adds one <code>select</code> option.</div>
 <dl class="notes">
@@ -458,7 +458,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="pattern(java.lang.String)">
 <h3>pattern</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-272">pattern</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-279">pattern</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the client validation regexp (<code>text</code>/<code>textarea</code> only).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -471,7 +471,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="maxLength(int)">
 <h3>maxLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-283">maxLength</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-290">maxLength</a></span><wbr><span class="parameters">(int&nbsp;value)</span></div>
 <div class="block">Sets the client max-length (<code>text</code>/<code>textarea</code> only).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -484,7 +484,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="help(java.lang.String)">
 <h3>help</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-294">help</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-301">help</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the help hint (painted with <code>textContent</code>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -497,7 +497,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="actionId(java.lang.String)">
 <h3>actionId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-305">actionId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-312">actionId</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Sets the enclosing view's row-action id this <code>action</code> button opens.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -510,7 +510,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="action(org.apache.juneau.console.widgets.ActionRef)">
 <h3>action</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-317">action</a></span><wbr><span class="parameters">(<a href="ActionRef.html" title="class in org.apache.juneau.console.widgets">ActionRef</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FormDef.Input.html" title="class in org.apache.juneau.console.widgets">FormDef.Input</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/console/widgets/FormDef.Input.html#line-324">action</a></span><wbr><span class="parameters">(<a href="ActionRef.html" title="class in org.apache.juneau.console.widgets">ActionRef</a>&nbsp;value)</span></div>
 <div class="block">Sets the <code>action</code> target from an <a href="ActionRef.html" title="class in org.apache.juneau.console.widgets"><code>ActionRef</code></a> (stores <a href="ActionRef.html#id"><code>ActionRef.id</code></a>).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
