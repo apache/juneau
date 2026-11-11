@@ -1062,6 +1062,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		private boolean detectLeaks;
 		private boolean executorServiceShutdownOnClose;
 		private boolean ignoreErrors;
+		private Set<String> redirectStripHeaders = new LinkedHashSet<>();
 		private boolean keepHttpClientOpen;
 		private boolean logToConsole;
 		private boolean pooled;
@@ -2661,6 +2662,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		.build();
 		 * </p>
 		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='warn'>
+		 * 		The redirect credential guard (which removes credential headers such as <c>Authorization</c> and <c>Cookie</c>
+		 * 		from requests replayed to a different origin) is installed when this class builds the client.
+		 * 		It cannot be installed on a client that has already been built, so a client supplied through this method
+		 * 		follows redirects with whatever redirect behavior it was configured with.
+		 * 		Disable redirects on the supplied client, or use {@link #httpClientBuilder(HttpClientBuilder)} instead.
+		 * </ul>
+		 *
 		 * @param value The {@link HttpClient} to be used to handle all HTTP communications with the target server.
 		 * 	<br>Can be <jk>null</jk> (a default client will be created).
 		 * @return This object.
@@ -2708,12 +2718,43 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		/**
 		 * Assigns {@link HttpProcessor} instance.
 		 *
+		 * <p>
+		 * <b>Note:</b>
+		 * Replacing the HTTP processor replaces the interceptor chain, which means the redirect credential guard
+		 * (see {@link #redirectStripHeaders(String...)}) is not installed.
+		 * Apply your own redirect policy when using a custom processor.
+		 *
 		 * @param httpprocessor New property value.
 		 * @return This object.
 		 * @see HttpClientBuilder#setHttpProcessor(HttpProcessor)
 		 */
 		public Builder httpProcessor(HttpProcessor httpprocessor) {
 			httpClientBuilder().setHttpProcessor(httpprocessor);
+			return this;
+		}
+
+		/**
+		 * Adds header names that are removed from a request when it is replayed against a different origin as the
+		 * result of a redirect.
+		 *
+		 * <p>
+		 * The names are added to the default set (<c>Authorization</c>, <c>Cookie</c>, <c>Set-Cookie</c>,
+		 * <c>Proxy-Authorization</c>, <c>X-API-Key</c>); they do not replace it.
+		 * Header names are matched case-insensitively.
+		 * A redirect is cross-origin when the scheme, host or port differs, or when it downgrades from <c>https</c> to
+		 * <c>http</c>.
+		 *
+		 * <p>
+		 * This setting has no effect when a prebuilt client is supplied with {@link #httpClient(CloseableHttpClient)}.
+		 *
+		 * @param names The additional header names.  <jk>null</jk> or blank values are ignored.
+		 * @return This object.
+		 */
+		public Builder redirectStripHeaders(String...names) {
+			if (names != null)
+				for (var n : names)
+					if (n != null && ! n.isBlank())
+						redirectStripHeaders.add(n);
 			return this;
 		}
 
@@ -6036,7 +6077,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			httpClientBuilder().setConnectionManager(connectionManager);
 			// Prevent the default redirect executor from replaying caller-set credential headers (Authorization,
 			// Cookie, etc.) to a redirect target on a different origin or a downgraded scheme.
-			httpClientBuilder().addInterceptorLast(new RedirectCredentialGuard());
+			httpClientBuilder().addInterceptorLast(new RedirectCredentialGuard(redirectStripHeaders));
 			return httpClientBuilder().build();
 		}
 

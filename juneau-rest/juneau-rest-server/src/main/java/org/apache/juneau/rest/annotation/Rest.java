@@ -793,6 +793,11 @@ public @interface Rest {
 	 * 	<li class='note'>
 	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		For <c>multipart/form-data</c> requests, the individual part size limits, the maximum request size and the
+	 * 		file-size threshold are enforced by the servlet container through its
+	 * 		<c>MultipartConfigElement</c> configuration.
+	 * 		This setting additionally rejects a multipart request whose declared or cumulative parsed size exceeds the limit.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

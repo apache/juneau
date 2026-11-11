@@ -40,7 +40,8 @@ import jakarta.servlet.http.*;
  */
 @Rest(
 	path="/testThirdPartyProxy",
-	callLogger=BasicDisabledCallLogger.class
+	callLogger=BasicDisabledCallLogger.class,
+	renderResponseStackTraces="true"
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
 @SuppressWarnings({"serial"})

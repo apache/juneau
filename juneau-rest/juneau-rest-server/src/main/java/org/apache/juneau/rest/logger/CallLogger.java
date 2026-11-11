@@ -109,6 +109,7 @@ public class CallLogger {
 		CallLoggingDetail requestDetail, responseDetail;
 		Level level;
 		Set<String> redactedHeaders = new LinkedHashSet<>(RedactedHeaders.DEFAULT);
+		Set<String> redactedQueryParams = new LinkedHashSet<>(RedactedHeaders.DEFAULT_QUERY_PARAMS);
 
 		/**
 		 * Constructor.
@@ -439,6 +440,41 @@ public class CallLogger {
 			redactedHeaders.add(value);
 			return this;
 		}
+
+		/**
+		 * Replaces the redacted query-parameter set with the supplied values.
+		 *
+		 * <p>
+		 * The values of these parameters are replaced with <js>"[REDACTED]"</js> when the query string is written at
+		 * {@link CallLoggingDetail#HEADER HEADER}/{@link CallLoggingDetail#ENTITY ENTITY} detail.
+		 * Parameter names are matched case-insensitively.  The default is {@link RedactedHeaders#DEFAULT_QUERY_PARAMS}.
+		 * Pass an empty array to disable query-parameter redaction.
+		 *
+		 * @param values The query parameter names to redact.  Can be <jk>null</jk> (equivalent to an empty array);
+		 * 	<jk>null</jk> or blank elements are skipped.
+		 * @return This object.
+		 */
+		public Builder redactedQueryParams(String...values) {
+			redactedQueryParams.clear();
+			if (values != null)
+				for (var v : values)
+					if (v != null && ! v.isBlank())
+						redactedQueryParams.add(v);
+			return this;
+		}
+
+		/**
+		 * Adds an additional query parameter name to the redacted query-parameter set.
+		 *
+		 * @param value The query parameter name to redact (case-insensitive).  Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 */
+		public Builder redactQueryParam(String value) {
+			if (isBlank(value))
+				throw new IllegalArgumentException("Argument 'value' must not be null or blank");
+			redactedQueryParams.add(value);
+			return this;
+		}
 	}
 
 	/** Represents no logger */
@@ -534,7 +570,7 @@ public class CallLogger {
 	private final Predicate<HttpServletRequest> enabledTest;
 	private final Level level;
 	private final CallLoggingDetail requestDetail, responseDetail;
-	private final Set<String> redactedHeaders;
+	private final Set<String> redactedHeaders, redactedQueryParams;
 
 	/**
 	 * Constructor.
@@ -555,6 +591,7 @@ public class CallLogger {
 		this.responseDetail = builder.responseDetail;
 		this.level = builder.level;
 		this.redactedHeaders = Set.copyOf(builder.redactedHeaders);
+		this.redactedQueryParams = Set.copyOf(builder.redactedQueryParams);
 	}
 
 	/**
@@ -573,6 +610,7 @@ public class CallLogger {
 		this.responseDetail = builder.responseDetail;
 		this.level = builder.level;
 		this.redactedHeaders = Set.copyOf(builder.redactedHeaders);
+		this.redactedQueryParams = Set.copyOf(builder.redactedQueryParams);
 	}
 
 	/**
@@ -628,7 +666,7 @@ public class CallLogger {
 		if (reqd != STATUS_LINE || resd != STATUS_LINE) {
 
 			if (reqd.isOneOf(HEADER, ENTITY)) {
-				var qs = req.getQueryString();
+				var qs = RedactedHeaders.redactQueryString(req.getQueryString(), redactedQueryParams);
 				if (nn(qs))
 					sb.append('?').append(qs);
 			}

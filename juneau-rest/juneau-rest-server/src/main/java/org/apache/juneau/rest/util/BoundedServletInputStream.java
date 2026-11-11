@@ -107,11 +107,19 @@ public class BoundedServletInputStream extends ServletInputStream {
 
 	@Override /* Overridden from InputStream */
 	public int read(byte[] b, int off, int len) throws IOException {
+		if (len == 0)
+			return 0;
+		if (remain <= 0) {
+			// At the limit: end-of-stream is fine, but any further data is over the limit.
+			if (is.read() == -1)
+				return -1;
+			throw ioex("Input limit exceeded.  See @Rest(maxInput).");
+		}
 		long numBytes = Math.min(len, remain);
 		int r = is.read(b, off, (int)numBytes);
 		if (r == -1)
 			return -1;
-		decrement(numBytes);
+		decrement(r);
 		return r;
 	}
 

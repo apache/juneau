@@ -211,6 +211,21 @@ public class Mutaters {
 			var oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
 			var oc2i = info(oc2);
 
+			// Resolve class names without initializing the named class, so that parsing a class name never
+			// triggers its static initializer as a side effect.
+			if (oc2 == Class.class) {
+				return new Mutater<String,Object>() {
+					@Override
+					public Object mutate(Object outer, String in) {
+						try {
+							return Class.forName(in, false, Mutaters.class.getClassLoader());
+						} catch (Exception e) {
+							throw toRex(e);
+						}
+					}
+				};
+			}
+
 			// @formatter:off
 			final var createMethod = oc2i.getPublicMethod(
 				x -> x.isStatic()

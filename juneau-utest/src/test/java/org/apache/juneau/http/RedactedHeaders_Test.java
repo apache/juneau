@@ -52,4 +52,16 @@ class RedactedHeaders_Test extends TestBase {
 		assertEquals(RedactedHeaders.REDACTED, RedactedHeaders.redact("X-Trace-Token", "abc", names));
 		assertEquals("Bearer secret", RedactedHeaders.redact("Authorization", "Bearer secret", names));
 	}
+
+	@Test void b01_queryStringRedaction() {
+		var d = RedactedHeaders.DEFAULT_QUERY_PARAMS;
+		assertEquals("a=1&password=[REDACTED]&b=2", RedactedHeaders.redactQueryString("a=1&password=hunter2&b=2", d));
+		assertEquals("Access_Token=[REDACTED]", RedactedHeaders.redactQueryString("Access_Token=abc", d));
+		assertEquals("pass%77ord=[REDACTED]", RedactedHeaders.redactQueryString("pass%77ord=abc", d));
+		assertEquals("flag&x=", RedactedHeaders.redactQueryString("flag&x=", d));
+		assertEquals("a=1&&b=2", RedactedHeaders.redactQueryString("a=1&&b=2", d));
+		assertEquals("password=abc", RedactedHeaders.redactQueryString("password=abc", Set.of()));
+		assertNull(RedactedHeaders.redactQueryString(null, d));
+		assertEquals("my=[REDACTED]", RedactedHeaders.redactQueryString("my=1", Set.of("MY")));
+	}
 }

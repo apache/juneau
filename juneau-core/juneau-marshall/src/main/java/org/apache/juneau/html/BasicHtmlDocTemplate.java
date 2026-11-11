@@ -371,7 +371,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
 		var addSpace = Flag.create();
 		for (var s : session.getStylesheet())
-			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
+			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(cssString(session.resolveUri(session.resolveScriptStyle(s)))).q().appendln(";");
 		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 		for (var s : session.getStyle())
@@ -379,5 +379,25 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		session.forEachWidget(x -> {
 			w.sIf(addSpace.getAndSet()).appendln(3, session.resolveScriptStyle(x.getStyle(session.getVarResolver())));
 		});
+	}
+
+	/**
+	 * Percent-encodes the characters that could end the quoted CSS string or the enclosing <xt>&lt;style&gt;</xt> element.
+	 *
+	 * @param s The URI.  Can be <jk>null</jk>.
+	 * @return The URI that is safe to place inside a double-quoted CSS string.
+	 */
+	private static String cssString(String s) {
+		if (s == null)
+			return "";
+		var sb = new StringBuilder(s.length());
+		for (var i = 0; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '"' || c == '\\' || c == '<' || c == '>' || c < 0x20 || c == 0x7f)
+				sb.append('%').append(String.format("%02X", (int)c));
+			else
+				sb.append(c);
+		}
+		return sb.toString();
 	}
 }

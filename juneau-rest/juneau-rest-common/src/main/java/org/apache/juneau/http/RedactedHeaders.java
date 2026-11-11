@@ -93,4 +93,50 @@ public final class RedactedHeaders {
 	public static String redact(String name, String value, Collection<String> names) {
 		return isSensitive(name, names) ? REDACTED : value;
 	}
+
+	/**
+	 * Default query parameter names whose values are replaced with {@link #REDACTED} when a query string is logged.
+	 *
+	 * <p>
+	 * Names are matched case-insensitively.
+	 */
+	public static final Set<String> DEFAULT_QUERY_PARAMS = Set.of(
+		"password", "passwd", "secret", "token", "access_token", "api_key", "apikey", "key", "authorization", "auth",
+		"session", "sessionid", "code", "client_secret");
+
+	/**
+	 * Returns the specified query string with the values of the named parameters replaced with {@link #REDACTED}.
+	 *
+	 * <p>
+	 * Parameter names are URL-decoded and matched case-insensitively.  Parameters that have no value are left as-is.
+	 *
+	 * @param queryString The raw query string (without the leading <js>'?'</js>).  Can be <jk>null</jk>.
+	 * @param names The parameter names to redact.  Can be <jk>null</jk> (nothing is redacted).
+	 * @return The redacted query string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public static String redactQueryString(String queryString, Collection<String> names) {
+		if (queryString == null || names == null || names.isEmpty())
+			return queryString;
+		var sb = new StringBuilder(queryString.length());
+		var parts = queryString.split("&", -1);
+		for (var pi = 0; pi < parts.length; pi++) {
+			var part = parts[pi];
+			if (pi > 0)
+				sb.append('&');
+			var i = part.indexOf('=');
+			if (i == -1) {
+				sb.append(part);
+				continue;
+			}
+			var n = part.substring(0, i);
+			String decoded;
+			try {
+				decoded = java.net.URLDecoder.decode(n, java.nio.charset.StandardCharsets.UTF_8);
+			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+				decoded = n;
+			}
+			sb.append(n).append('=').append(isSensitive(decoded.trim(), names) ? REDACTED : part.substring(i + 1));
+		}
+		return sb.toString();
+	}
 }

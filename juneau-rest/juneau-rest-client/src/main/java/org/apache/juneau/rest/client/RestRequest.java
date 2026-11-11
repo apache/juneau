@@ -1971,10 +1971,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				request2.setEntity(entity);
 			}
 
+			var previousOrigin = RedirectCredentialGuard.enter(context);
 			try {
 				response = client.createResponse(this, client.run(target, request, context), parser);
-			} catch (Exception e) {
-				throw e;
+			} finally {
+				RedirectCredentialGuard.exit(context, previousOrigin);
 			}
 
 			if (isDebug() || client.logRequests == DetailLevel.FULL)

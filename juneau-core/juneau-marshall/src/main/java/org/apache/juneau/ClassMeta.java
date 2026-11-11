@@ -1214,6 +1214,15 @@ public class ClassMeta<T> extends ClassInfoTyped<T> {
 			return t;
 		}
 
+		if (inner() == Class.class) {
+			// Resolve without initializing the named class.
+			try {
+				return (T)Class.forName(arg, false, ClassMeta.class.getClassLoader());
+			} catch (ClassNotFoundException | LinkageError e) {
+				throw new ExecutableException(e);
+			}
+		}
+
 		if (fromStringMethod.isPresent())
 			return (T)fromStringMethod.get().invoke(null, arg);
 

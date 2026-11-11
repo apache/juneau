@@ -56,4 +56,28 @@ class MsgPackParser_MaxLength_Test extends TestBase {
 		var r = MsgPackParser.DEFAULT.parse(is("C4 02 61 62"), Object.class);
 		assertNotNull(r);
 	}
+
+	@Test void b01_arrayOversizedDeclaredCountRejected() {
+		// array32 header (0xDD) declaring 16 MiB + 1 elements; a ~5-byte input must not drive element accumulation.
+		assertThrowsWithMessage(Exception.class, "exceeds maximum",
+			() -> MsgPackParser.DEFAULT.parse(is("DD 01 00 00 01"), Object.class));
+	}
+
+	@Test void b02_mapOversizedDeclaredCountRejected() {
+		// map32 header (0xDF) declaring 16 MiB + 1 entries.
+		assertThrowsWithMessage(Exception.class, "exceeds maximum",
+			() -> MsgPackParser.DEFAULT.parse(is("DF 01 00 00 01"), Object.class));
+	}
+
+	@Test void b03_arrayCountAboveIntRangeRejected() {
+		// array32 header declaring 0xFFFFFFFF elements (would be negative as an int).
+		assertThrowsWithMessage(Exception.class, "exceeds",
+			() -> MsgPackParser.DEFAULT.parse(is("DD FF FF FF FF"), Object.class));
+	}
+
+	@Test void b04_smallArrayAccepted() throws Exception {
+		// fixarray of 2 elements: 1, 2.
+		var r = MsgPackParser.DEFAULT.parse(is("92 01 02"), Object.class);
+		assertNotNull(r);
+	}
 }

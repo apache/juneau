@@ -195,7 +195,16 @@ public class MsgPackParserSession extends InputStreamParserSession {
 
 		var o = (Object)null;
 		DataType dt = is.readDataType();
-		int length = (int)is.readLength();
+		var rawLength = is.readLength();
+		// 32-bit lengths are unsigned (up to 2^32-1); a value in [2^31, 2^32-1] would truncate to a negative int.
+		if (rawLength > Integer.MAX_VALUE)
+			throw new ParseException(this, "MessagePack length {0} exceeds the maximum supported size of {1}.", rawLength, Integer.MAX_VALUE);
+		int length = (int)rawLength;
+
+		// Bound a declared array/map element count before any elements are accumulated into a container.
+		// Byte/string lengths are bounded in readBinary().
+		if (dt == ARRAY || dt == MAP)
+			is.checkLength(length, dt == ARRAY ? "array" : "map");
 
 		if (dt != DataType.NULL) {
 			if (dt == BOOLEAN)

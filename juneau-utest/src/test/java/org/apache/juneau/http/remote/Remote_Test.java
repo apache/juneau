@@ -306,7 +306,7 @@ class Remote_Test extends TestBase {
 		assertEquals("qux",x.getX4());
 	}
 
-	@Rest(path="/C4")
+	@Rest(path="/C4", renderResponseStackTraces="true")
 	@SuppressWarnings("unused")
 	public static class C4a implements BasicJson5Config {
 		@RestOp
