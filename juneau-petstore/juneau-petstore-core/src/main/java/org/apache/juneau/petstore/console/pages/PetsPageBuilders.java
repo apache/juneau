@@ -128,21 +128,24 @@ public final class PetsPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec sold() {
-		return PageSpec.create().toolkit("views", "datatables-buttons")
-			.table(TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")
+		return PageSpec.create().toolkit("views", "datatables-buttons").table(soldTable(), "Sold pets");
+	}
+
+	static TableSpec soldTable() {
+		return TableSpec.create("sold").rowType("Pet").dataMode(DataMode.CLIENT).dataUrl("/console/pets/sold/rows")
 				.columnConfig(true)
 				.detail(RowDetails.soldPet())
 				.columns(
-					Column.create("id").label("Id"),
-					Column.create("name").label("Name"),
-					Column.create("species").label("Species").render(PillRenders.species()),
-					Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)))
+					Column.create("id").label("Id").searchType(SearchType.NUMERIC),
+					Column.create("name").label("Name").searchType(SearchType.TEXT),
+					Column.create("species").label("Species").render(PillRenders.species()).searchType(SearchType.ENUM),
+					Column.create("price").label("Price (USD)").render(Render.of("decimal").meta("places", 2)).searchType(SearchType.NUMERIC))
 				.ribbon(Ribbons.standard()
 					.filter(RibbonItem.optionGroup("species",
 						RibbonItem.option("dogs").title("Dogs").symbol("paw_print").column("species").value("$eq(DOG)"),
 						RibbonItem.option("cats").title("Cats").symbol("shapes").column("species").value("$eq(CAT)"))
 						.title("Species"))
-					.build()), "Sold pets");
+					.build());
 	}
 
 	/**

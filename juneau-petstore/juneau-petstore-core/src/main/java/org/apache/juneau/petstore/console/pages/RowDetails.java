@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.console.pages;
 
 import java.util.function.*;
 
+import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.console.views.*;
 import org.apache.juneau.console.views.TableSpec.*;
 import org.apache.juneau.petstore.console.users.UsersRest.*;
@@ -145,17 +146,17 @@ public final class RowDetails {
 	private static TableSpec ordersView(String id, String dataUrl) {
 		return TableSpec.create(id).rowType("Order").dataMode(DataMode.CLIENT).dataUrl(dataUrl)
 			.columns(
-				Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}"),
-				Column.create("shipDate").label("Ship date").render("date"),
-				Column.create("status").label("Status").render(PillRenders.orderStatus()));
+				Column.create("id").label("Order").href("/console/pets/{petId}/orders/{id}").searchType(SearchType.NUMERIC),
+				Column.create("shipDate").label("Ship date").render("date").searchType(SearchType.TEXT),
+				Column.create("status").label("Status").render(PillRenders.orderStatus()).searchType(SearchType.ENUM));
 	}
 
 	private static TableSpec historyView() {
 		return TableSpec.create("pets-history").rowType("AuditEntry").dataMode(DataMode.CLIENT).dataUrl("/console/pets/history/rows")
 			.columns(
-				Column.create("at").label("When").render("timestamp"),
-				Column.create("actor").label("Actor"),
-				Column.create("action").label("Action").render(PillRenders.auditAction()),
-				Column.create("detail").label("Detail"));
+				Column.create("at").label("When").render("timestamp").searchType(SearchType.TEXT),
+				Column.create("actor").label("Actor").searchType(SearchType.TEXT),
+				Column.create("action").label("Action").render(PillRenders.auditAction()).searchType(SearchType.ENUM),
+				Column.create("detail").label("Detail").searchType(SearchType.TEXT));
 	}
 }

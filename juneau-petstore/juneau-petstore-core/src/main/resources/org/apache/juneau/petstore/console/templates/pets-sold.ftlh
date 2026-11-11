@@ -20,12 +20,12 @@
   dataMode: 'client',
   dataUrl: '/console/pets/sold/rows',
   columnConfig: true,
-  detail: {"mode":"bean","endpoint":"/console/pets/row-detail/soldPet/{id}","title":"{name}","columns":3,"labels":{"price":"Price (USD)","id":"Id","name":"Name","species":"Species"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","name","species","price"]},{"id":"orders","kind":"table","title":"Orders","nested":{"contractVersion":"2","parentScopeParam":"petId","view":{"id":"sold-orders","columns":[{"data":"id","title":"Order","render":{"id":"linked"},"href":"/console/pets/{petId}/orders/{id}"},{"data":"shipDate","title":"Ship date","render":{"id":"date"}},{"data":"status","title":"Status","render":{"id":"pill","meta":{"tones":{"PLACED":"info","APPROVED":"warning","DELIVERED":"success"}}}}]},"meta":{"contractVersion":"5","id":"sold-orders","dataUrl":"/console/pets/orders/rows","dataMode":"client","rowType":"Order","columns":[{"data":"id","title":"Order","render":{"id":"linked"},"href":"/console/pets/{petId}/orders/{id}"},{"data":"shipDate","title":"Ship date","render":{"id":"date"}},{"data":"status","title":"Status","render":{"id":"pill","meta":{"tones":{"PLACED":"info","APPROVED":"warning","DELIVERED":"success"}}}}]}},"count":"rows"}]},
+  detail: {"mode":"bean","endpoint":"/console/pets/row-detail/soldPet/{id}","title":"{name}","columns":3,"labels":{"price":"Price (USD)","id":"Id","name":"Name","species":"Species"},"tabs":[{"id":"details","kind":"fields","title":"Details","fields":["id","name","species","price"]},{"id":"orders","kind":"table","title":"Orders","nested":{"contractVersion":"2","parentScopeParam":"petId","view":{"id":"sold-orders","columns":[{"data":"id","title":"Order","render":{"id":"linked"},"href":"/console/pets/{petId}/orders/{id}","searchType":"numeric"},{"data":"shipDate","title":"Ship date","render":{"id":"date"},"searchType":"text"},{"data":"status","title":"Status","render":{"id":"pill","meta":{"tones":{"PLACED":"info","APPROVED":"warning","DELIVERED":"success"}}},"searchType":"enum"}]},"meta":{"contractVersion":"5","id":"sold-orders","dataUrl":"/console/pets/orders/rows","dataMode":"client","rowType":"Order","columns":[{"data":"id","title":"Order","render":{"id":"linked"},"href":"/console/pets/{petId}/orders/{id}","searchType":"numeric"},{"data":"shipDate","title":"Ship date","render":{"id":"date"},"searchType":"text"},{"data":"status","title":"Status","render":{"id":"pill","meta":{"tones":{"PLACED":"info","APPROVED":"warning","DELIVERED":"success"}}},"searchType":"enum"}]}},"count":"rows"}]},
   columns: [
-    { key: 'id', label: 'Id' },
-    { key: 'name', label: 'Name' },
-    { key: 'species', label: 'Species', render: { id: 'pill', meta: { categorical: true, categories: { DOG: 1, CAT: 2, BIRD: 4, FISH: 6, SNAKE: 7, RABBIT: 9, MOUSE: 10 } } } },
-    { key: 'price', label: 'Price (USD)', render: { id: 'decimal', meta: { places: 2 } } }
+    { key: 'id', label: 'Id', searchType: 'numeric' },
+    { key: 'name', label: 'Name', searchType: 'text' },
+    { key: 'species', label: 'Species', render: { id: 'pill', meta: { categorical: true, categories: { DOG: 1, CAT: 2, BIRD: 4, FISH: 6, SNAKE: 7, RABBIT: 9, MOUSE: 10 } } }, searchType: 'enum' },
+    { key: 'price', label: 'Price (USD)', render: { id: 'decimal', meta: { places: 2 } }, searchType: 'numeric' }
   ],
   ribbon: [
     { type: 'search', id: 'search', group: 'search' },

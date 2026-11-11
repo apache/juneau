@@ -19,6 +19,7 @@ package org.apache.juneau.console.views;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.logging.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.beanquery.*;
@@ -112,6 +113,8 @@ public final class TableSpec implements Handled<TableSpec> {
 	private static final Set<String> URL_STATE_BUILTINS = Set.of("day", "ids", "window");
 	private static final Pattern ID_PATTERN = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 
+	private static final Logger LOG = Logger.getLogger(TableSpec.class.getName());
+
 	private final String id;
 	private String rowType;
 	private String dataUrl;
@@ -119,6 +122,7 @@ public final class TableSpec implements Handled<TableSpec> {
 	private final List<JsonMap> defaultOrder = new ArrayList<>();
 	private final List<Column> columns = new ArrayList<>();
 	private SearchOperatorSet operators;
+	private boolean noSearchTypesWarned;
 	private final List<RibbonItem> ribbon = new ArrayList<>();
 	private final List<JsonMap> rowClassRules = new ArrayList<>();
 	private final List<RowAction> rowActions = new ArrayList<>();
@@ -794,6 +798,19 @@ public final class TableSpec implements Handled<TableSpec> {
 			if (c.searchable() && dataMode == DataMode.SERVER && c.operators() == null && operators == null)
 				throw isex("TableSpec '%s' column '%s' sets searchType but dataMode is '%s' and the table "
 					+ "declares no operators.", id, c.name(), dataMode.wire());
+		warnIfSearchWithoutTypes();
+	}
+
+	// Dev-mode aid: a SERVER table with the search box but no typed column falls back to popover help that advertises
+	// operators the server rejects.  Logged once per table; never throws and never runs outside dev mode.
+	private void warnIfSearchWithoutTypes() {
+		if (noSearchTypesWarned || dataMode != DataMode.SERVER || ! Boolean.getBoolean("juneau.console.devMode"))
+			return;
+		if (ribbon.stream().noneMatch(i -> "search".equals(i.toMap().get("type"))) || columns.stream().anyMatch(Column::searchable))
+			return;
+		noSearchTypesWarned = true;
+		LOG.log(Level.WARNING, () -> "TableSpec '" + id + "' is SERVER mode with search on but no column declares a search type or operators; "
+			+ "the column-search help will advertise operators the server rejects.");
 	}
 
 	/**

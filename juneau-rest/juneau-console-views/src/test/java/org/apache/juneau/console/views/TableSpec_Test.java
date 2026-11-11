@@ -20,6 +20,7 @@ import static org.apache.juneau.bct.BctAssertions.assertSize;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.console.widgets.Op;
@@ -147,5 +148,57 @@ class TableSpec_Test extends TestBase {
 			var ex = assertThrows(IllegalArgumentException.class, () -> t.columnSearchHelpUrl(bad));
 			assertTrue(ex.getMessage().startsWith("TableSpec 'slo' columnSearchHelpUrl must be an http(s) URL"), ex.getMessage());
 		}
+	}
+
+	private static final class Capture extends Handler {
+		final List<String> messages = new ArrayList<>();
+		@Override public void publish(LogRecord r) { messages.add(r.getLevel() + ": " + r.getMessage()); }
+		@Override public void flush() { /* no-op */ }
+		@Override public void close() { /* no-op */ }
+	}
+
+	private static List<String> validateLogs(boolean dev, TableSpec t, int times) {
+		var log = Logger.getLogger(TableSpec.class.getName());
+		var cap = new Capture();
+		var useParent = log.getUseParentHandlers();
+		var prop = System.getProperty("juneau.console.devMode");
+		log.setUseParentHandlers(false);
+		log.addHandler(cap);
+		if (dev)
+			System.setProperty("juneau.console.devMode", "true");
+		else
+			System.clearProperty("juneau.console.devMode");
+		try {
+			for (var n = 0; n < times; n++)
+				t.validate();
+		} finally {
+			log.removeHandler(cap);
+			log.setUseParentHandlers(useParent);
+			if (prop == null)
+				System.clearProperty("juneau.console.devMode");
+			else
+				System.setProperty("juneau.console.devMode", prop);
+		}
+		return cap.messages;
+	}
+
+	private static TableSpec serverSearchTable(Column c) {
+		return TableSpec.create("srv").dataUrl("/q").dataMode(TableSpec.DataMode.SERVER).ribbon(RibbonItem.search()).columns(c);
+	}
+
+	@Test void z01_devWarning_firesOncePerTableInDevMode() {
+		var t = serverSearchTable(Column.create("a"));
+		var logs = validateLogs(true, t, 2);
+		assertEquals(1, logs.size());
+		assertTrue(logs.get(0).startsWith("WARNING: TableSpec 'srv'"), logs.get(0));
+	}
+
+	@Test void z02_devWarning_silentOutsideDevMode() {
+		assertTrue(validateLogs(false, serverSearchTable(Column.create("a")), 1).isEmpty());
+	}
+
+	@Test void z03_devWarning_silentWhenAColumnIsTyped() {
+		var t = serverSearchTable(Column.create("a").searchType(org.apache.juneau.commons.beanquery.SearchType.TEXT)).operators(org.apache.juneau.commons.beanquery.SearchOperatorSet.standard());
+		assertTrue(validateLogs(true, t, 1).isEmpty());
 	}
 }

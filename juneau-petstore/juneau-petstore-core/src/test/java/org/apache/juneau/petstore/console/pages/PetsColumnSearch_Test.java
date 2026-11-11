@@ -43,4 +43,24 @@ class PetsColumnSearch_Test extends TestBase {
 			assertNotNull(column(n).getString("searchType"), n);
 		assertNull(column("tags").getString("searchType"));
 	}
+
+	@Test void a03_soldColumnsAreSearchable() {
+		var body = PetsPageBuilders.soldTable().toCardBody();
+		for (var c : body.getList("columns").elements(JsonMap.class))
+			assertNotNull(c.getString("searchType"), c.getString("key"));
+	}
+
+	@Test void a04_nestedOrdersAndHistoryColumnsAreSearchable() {
+		var detail = PetsPageBuilders.petsTable().toCardBody().getMap("detail");
+		var seen = 0;
+		for (var tab : detail.getList("tabs").elements(JsonMap.class)) {
+			if (! "table".equals(tab.getString("kind")))
+				continue;
+			for (var c : tab.getMap("nested").getMap("meta").getList("columns").elements(JsonMap.class)) {
+				assertNotNull(c.getString("searchType"), tab.getString("id") + "." + c.getString("data"));
+				seen++;
+			}
+		}
+		assertEquals(7, seen);
+	}
 }
